@@ -1,0 +1,9 @@
+/* reset */
+.bvc2-card,
+.bvc2-card .bvc2-card-head,
+.bvc2-card .bvc2-card-body{box-sizing:border-box;}
+
+.bvc2-card{width:100%; height:100%; border:1px solid #ebeef5; border-radius:4px; background-color:#FFF; position:relative; overflow: auto}
+.bvc2-card-head{width:100%; height:60px; line-height:59px; box-sizing:border-box; border-bottom:1px solid #EBEEF5; padding:0 10px;}
+.bvc2-card-head.no-border{border-bottom:transparent;}
+.bvc2-card-body{position:absolute; top:60px; left:0; right:0; bottom:0;}

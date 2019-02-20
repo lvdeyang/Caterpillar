@@ -1,0 +1,75 @@
+<div id="fh5co-tours" class="fh5co-section-gray" style="padding-top:4em; padding-bottom:0;">
+    <style type="text/css">
+        .square {width:100%; position:relative;}
+        .square:after {content:""; display:block; padding-bottom:100%;}
+        .content {position:absolute; left:0; top:0; width:100%; height:100%; padding:10px; overflow:hidden;}
+        .content>img{width:100%; height:100%; border:1px solid #ddd;}
+
+        #fh5co-tours .thumbnail{border:0; padding:0; position:relative; bottom:10px;}
+        #fh5co-tours .thumbnail .content.active>img{border-color:#d33724;}
+    </style>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+
+                <div class="col-md-6">
+                    {@if pictures && pictures.length>0}
+                        <div class="square picture-show">
+                            <div class="content">
+                                <img src="${pictures[0].image}">
+                            </div>
+                        </div>
+                        {@each pictures as picture, index}
+                            <div class="col-md-2 thumbnail">
+                                <div class="square">
+                                    <div class="content {@if parseInt(index)===0}active{@/if}">
+                                        <img src="${picture.image}">
+                                    </div>
+                                </div>
+                            </div>
+                        {@/each}
+                    {@/if}
+                </div>
+                <div class="col-md-6">
+                    <div style="padding-top:10px; padding-left:3em;">
+                        <h3 class="title" style="margin-bottom:10px; color:#333;">${product.name}</h3>
+                        {@if product.tags && product.tags.length>0}
+                            <div class="tag" style="margin-bottom:20px;">
+                                {@each product.tags as tag}
+                                    <span style="display:inline-block; padding:2px 8px; font-size:12px; background-color:#d33724; color:#fff; margin-right:10px;">${tag}</span>
+                                {@/each}
+                            </div>
+                        {@/if}
+                        <div class="summary" style="margin-bottom:20px; color:#333;">${product.position}</div>
+                        <div style="padding-left:20px; padding-top:10px; padding-bottom:10px; margin-bottom:20px; font-size:12px; border:1px solid #eee; background-color:#f5f3ef;">
+                            {@each infos as info}
+                                <div class="price" style="margin-bottom:5px; color:#333;">
+                                    {@if info.title === '价格'}
+                                        ${info.title}：<span style="font-size:18px; color:#d33724;">${info.content}</span>
+                                    {@else}
+                                        ${info.title}：${info.content}
+                                    {@/if}
+                                </div>
+                            {@/each}
+                        </div>
+                        <div class="table table-basket" style="width: 90px;">
+                            <div class="input-group input-group-sm input-spinner">
+                                <span class="btn input-group-addon minus" style="border-radius:0;">
+                                    <i class="icon-squared-minus"></i>
+                                 </span>
+                                <input type="text" class="form-control" readonly="" value="1">
+                                <span class="btn input-group-addon plus" style="border-radius:0;">
+                                    <i class="icon-squared-plus"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary btn-outline btn-lg" id="pay-now" style="padding:5px 10px; margin-right:20px; font-size:14px; border-radius:0;">立即购买 <i class="icon-paypal"></i></a>
+                            <a class="btn btn-primary btn-outline btn-lg" id="add-basket" style="padding:5px 10px; margin-right:20px; font-size:14px; border-radius:0;">加入购物车 <i class="icon-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

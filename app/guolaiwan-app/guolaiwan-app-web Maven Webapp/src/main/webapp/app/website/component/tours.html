@@ -1,0 +1,31 @@
+<div id="fh5co-tours" class="fh5co-section-gray">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center heading-section animate-box">
+                <h3>${title}</h3>
+                {@if summary}<p>${summary}</p>{@/if}
+            </div>
+        </div>
+        <div class="row">
+            {@if items && items.length>0}
+                {@each items as item}
+                    <div class="col-md-4 col-sm-6 fh5co-tours animate-box" data-animate-effect="fadeIn">
+                        <div data-hash="${info}${item.id}"><img src="${item.image}" class="img-responsive">
+                            <div class="desc">
+                                <span></span>
+                                <input class="product-id" type="hidden" value="${item.id}"/>
+                                <h3>${item.title}</h3>
+                                {@if item.subTitle}<span>${item.subTitle}</span>{@/if}
+                                <span class="price">${item.price}元</span>
+                                <a class="btn btn-primary btn-outline button-book-now" data-hash="${info}${item.id}">${bookButton} <i class="icon-arrow-right22"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                {@/each}
+            {@/if}
+            <div class="col-md-12 text-center animate-box">
+                <p><a class="btn btn-primary btn-outline btn-lg" data-hash="#/more">${moreButton.text} <i class="icon-arrow-right22"></i></a></p>
+            </div>
+        </div>
+    </div>
+</div>

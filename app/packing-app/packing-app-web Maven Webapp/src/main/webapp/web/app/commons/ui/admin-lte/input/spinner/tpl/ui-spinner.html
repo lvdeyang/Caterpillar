@@ -1,0 +1,21 @@
+<div class="ui-spinner {@if style}${style}{@/if}">
+    <style type="text/css">
+        .ui-spinner{width:100%; position:relative;}
+        .ui-spinner .form-control{width:100%; border-radius:4px;}
+        .ui-spinner .input-btn{position:absolute; height:100%; width:17px; background-color:#fff; right:0; top:0; transition:border 0.1s linear; border-radius:0 4px 4px 0; border:1px solid #d2d6de;}
+        .ui-spinner .input-btn>button{text-align:center; background:#fff; border:0px; padding:0; float:left;}
+        .ui-spinner .input-btn>button:focus, .ui-spinner .input-btn>button:focus:active, .ui-spinner .input-btn>button:active{outline:none;}
+        .ui-spinner .input-btn>.btn-add{border-radius:0 4px 0 0;}
+        .ui-spinner .input-btn>.btn-add>i{position:relative; bottom:3px;}
+        .ui-spinner .input-btn>.btn-minus{border-radius:0 0 4px 0;}
+        .ui-spinner .input-btn>.btn-minus>i{position:relative; bottom:2px;}
+        .ui-spinner button.btn-add{display:inline-block; height:50%; width:100%; border-bottom:1px solid #d2d6de; float:left;}
+        .ui-spinner button.btn-minus{display:inline-block; width:100%; height:50%;}
+        .ui-spinner .form-control:focus+.input-btn{border-left-color:#3c8dbc;}
+    </style>
+    <input type="text" class="form-control" value="${init}"/>
+    <span class="input-btn">
+        <button class="btn btn-add"><i class="fa fa-caret-up"></i></button>
+        <button class="btn btn-minus"><i class="fa fa-caret-down"></i></button>
+    </span>
+</div>

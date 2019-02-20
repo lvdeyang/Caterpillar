@@ -1,0 +1,23 @@
+<div class="bvc2-tree-meeting-member">
+    <div class="bvc2-tree-meeting-member-search">
+        <el-input placeholder="过滤器"  size="mini" clearable>
+            <span slot="prefix" class="el-input__icon el-icon-search"></span>
+        </el-input>
+    </div>
+    <div class="bvc2-tree-meeting-member-data">
+
+        <el-tree
+                :data="data"
+                node-key="key"
+                :default-checked-keys="checked"
+                :default-expanded-keys="defaultExpanded"
+                :props="defaultProps"
+
+                :default-expand-all="defaultExpandAll"
+                :render-content="renderContent"
+                @node-expand="nodeExpand"
+                @node-collapse="nodeCollapse"
+                >
+        </el-tree>
+    </div>
+</div>

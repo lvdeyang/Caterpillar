@@ -1,0 +1,92 @@
+<aside class="main-sidebar">
+    <section class="sidebar">
+
+        <!-- 用户模块 -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p>${chapman.chapmanname}</p>
+                <a><i class="fa fa-circle text-success"></i> 在线</a>
+            </div>
+        </div>
+
+        <!-- 搜索模块 -->
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+        </form>
+
+        <!-- 导航菜单 -->
+        <ul class="sidebar-menu">
+
+            <li class="header">站内导航</li>
+
+            <!-- 首页 -->
+            <li class="active">
+                <a data-hash="#/home">
+                    <i class="fa fa-home" style="font-size:17px; position:relative;top:1px; right:2px;"></i><span>首页</span>
+                </a>
+            </li>
+
+            <!-- 素材 -->
+            <li class="treeview">
+                <a>
+                    <i class="fa  fa-file-image-o"></i><span>素材</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a data-hash="#/source-picture"><i class="fa fa-circle-o"></i>图片</a></li>
+                    <li><a data-hash="#/source-video"><i class="fa fa-circle-o"></i>视频</a></li>
+                    <li><a data-hash="#/source-audio"><i class="fa fa-circle-o"></i>语音</a></li>
+                </ul>
+            </li>
+
+            <!-- 商品 -->
+            <li>
+                <a>
+                    <i class="fa fa-bitcoin"></i><span>商品</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    <ul class="treeview-menu">
+                        <li><a data-hash="#/product-scenery"><i class="fa fa-circle-o"></i>景点</a></li>
+                        <li><a data-hash="#/product-restaurant"><i class="fa fa-circle-o"></i>餐饮</a></li>
+                        <li><a data-hash="#/product-service"><i class="fa fa-circle-o"></i>服务</a></li>
+                    </ul>
+                </a>
+            </li>
+
+            <!-- 货架 -->
+            <li class="active">
+                <a data-hash="#/shelve">
+                    <i class="fa fa-home" style="font-size:17px; position:relative;top:1px; right:2px;"></i><span>货架</span>
+                </a>
+            </li>
+
+            <!-- 统计 -->
+            <li class="treeview">
+                <a>
+                    <i class="fa fa-pie-chart"></i><span>统计</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a data-hash="#/statistics-order"><i class="fa fa-circle-o"></i>订单统计</a></li>
+                    <li><a data-hash="#/statistics-user"><i class="fa fa-circle-o"></i>用户统计</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </section>
+
+</aside>

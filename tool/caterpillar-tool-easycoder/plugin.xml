@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution objectClass="org.eclipse.core.resources.IProject" 
+      					  id="caterpillar-tool-easycoder.contribution1">
+         <menu label="Caterpillar工具" 
+         	   path="additions" 
+         	   id="caterpillar-tool-easycoder.popup-menu.caterpillar-tool">
+            <separator name="project-convert"></separator>
+         </menu>
+         <action
+               class="pub.caterpillar.tool.easycoder.project.convert.simple.SimpleProjectConverterAction"
+               enablesFor="1"
+               id="caterpillar-tool-easycoder.simple-project-converter-action"
+               label="一键转换simple工程"
+               menubarPath="caterpillar-tool-easycoder.popup-menu.caterpillar-tool/project-convert">
+         </action>
+         <action label="一键转换web工程" 
+         		 class="pub.caterpillar.tool.easycoder.project.convert.web.WebProjectConverterAction"
+               	 menubarPath="caterpillar-tool-easycoder.popup-menu.caterpillar-tool/project-convert"
+               	 enablesFor="1"
+                id="caterpillar-tool-easycoder.web-project-converter-action">
+         </action>
+         <action
+               class="pub.caterpillar.tool.easycoder.project.convert.springboot.simple.SpringBootSimpleProjectConverterAction"
+               enablesFor="1"
+               id="caterpillar-tool-easycoder.springboot-simple-project-converter-action"
+               label="一键转换springboot-simple工程"
+               menubarPath="caterpillar-tool-easycoder.popup-menu.caterpillar-tool/project-convert">
+         </action>
+         <action
+               class="pub.caterpillar.tool.easycoder.project.convert.springboot.web.SpringBootWebProjectConverterAction"
+               enablesFor="1"
+               id="caterpillar-tool-easycoder.springboot-web-project-converter-action"
+               label="一键转换springboot-web工程"
+               menubarPath="caterpillar-tool-easycoder.popup-menu.caterpillar-tool/project-convert">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

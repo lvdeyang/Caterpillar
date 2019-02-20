@@ -1,0 +1,18 @@
+
+<el-transfer
+        class="bvc2-transfer-source-target"
+        ref="transfer"
+        v-model="value"
+        style="text-align: left"
+        :data="data"
+        :props="defaultProps"
+        :titles="['可选设备-通道','已选设备-通道']"
+        :button-texts="['删除设备','添加设备']"
+        :render-content="renderContent"
+        @change="changeSource"
+
+        >
+
+</el-transfer>
+
+

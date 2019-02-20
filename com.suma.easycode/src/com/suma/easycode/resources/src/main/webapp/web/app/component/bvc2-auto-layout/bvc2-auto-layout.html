@@ -1,0 +1,89 @@
+<div class="bvc2-auto-layout">
+    <div class="bvc2-auto-layout-tool-bar">
+        <div class="bvc2-auto-layout-tool-bar-wrapper">
+            <span class="tool-bar-item">
+                <el-select size="small" v-model="layout.column" @change="columnChange">
+                    <el-option
+                            v-for="columnOption in options.columnOptions"
+                            :key="columnOption.value"
+                            :label="columnOption.label"
+                            :value="columnOption.value"/>
+                </el-select>
+            </span>
+            <span class="tool-bar-item-times">&times;</span>
+            <span class="tool-bar-item">
+                <el-select size="small" v-model="layout.row" @change="rowChange">
+                    <el-option
+                            v-for="rowOption in options.rowOptions"
+                            :key="rowOption.value"
+                            :label="rowOption.label"
+                            :value="rowOption.value"/>
+                </el-select>
+            </span>
+            <span class="tool-bar-title">{{(!config.name?'无':config.name) + '-' + (!video.name?'无':video.name)}}</span>
+            <span class="tool-bar-item">
+                <el-select size="small" v-model="mode">
+                    <el-option
+                            v-for="modeOption in options.modeOptions"
+                            :key="modeOption.value"
+                            :label="modeOption.label"
+                            :value="modeOption.value" />
+                </el-select>
+            </span>
+        </div>
+    </div>
+    <div class="bvc2-auto-layout-wrapper">
+        <div class="bvc2-auto-layout-container"></div>
+    </div>
+    <div class="bvc2-auto-layout-buttons">
+        <table>
+            <tr>
+                <td v-if="config.__businessType==='scheme'" :class="style.play.isLoading?'disabled':''" @click="play">
+                    <el-button type="text" :loading="style.play.isLoading">
+                        <span :style="style.play.isLoading?'display:none':''" class="button-icon icon-play"></span>
+                        执行
+                    </el-button>
+                </td>
+                <td :class="style.forward.isLoading?'disabled':''" @click="forward">
+                    <el-button type="text" :loading="style.forward.isLoading">
+                        <span :style="style.forward.isLoading?'display:none':''" class="button-icon icon-external-link"></span>
+                        转发
+                    </el-button>
+                </td>
+                <!--v-if="group.type==='监控室'"-->
+                <td :class="style.startRecord.isLoading?'disabled':''" @click="startRecord">
+                    <el-button type="text" :loading="style.startRecord.isLoading">
+                        <span :style="style.startRecord.isLoading?'display:none':''" class="button-icon icon-facetime-video"></span>
+                        开始录制
+                    </el-button>
+                </td>
+                <td :class="style.stopRecord.isLoading?'disabled':''" @click="stopRecord">
+                    <el-button type="text" :loading="style.stopRecord.isLoading">
+                        <span :style="style.stopRecord.isLoading?'display:none':''" class="button-icon icon-facetime-video"></span>
+                        停止录制
+                    </el-button>
+                </td>
+                <td :class="style.reset.isLoading?'disabled':''" @click="reset">
+                    <el-button type="text" :loading="style.reset.isLoading">
+                        <span :style="style.reset.isLoading?'display:none':''" class="button-icon icon-undo"></span>
+                        重置
+                    </el-button>
+                </td>
+                <td :class="style.saveScheme.isLoading?'disabled':''" @click="save">
+                    <el-button type="text" :loading="style.saveScheme.isLoading">
+                        <span :style="style.saveScheme.isLoading?'display:none':''" class="button-icon icon-save"></span>
+                        保存
+                    </el-button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <bvc2-dialog-set-forward
+            ref="setForward"
+            :members="members"
+            :values="values"
+            :roles="roles"
+            :roleValues="roleValues"
+            ></bvc2-dialog-set-forward>
+</div>

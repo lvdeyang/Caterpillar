@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"  
+	xmlns:mvc="http://www.springframework.org/schema/mvc"  
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+
+	<!-- 
+		**************
+		*** 包扫描器   ***
+		**************
+	 -->
+
+    <!-- 自动扫描的包名 
+    <context:component-scan base-package="**.controller, pub.caterpillar.mvc.**.aop" ></context:component-scan>
+    -->
+    
+    <!-- 
+		**************
+		***配置拦截器 ***
+		**************
+	 -->
+    
+    <!-- 拦截器 (这个方式会拦截静态资源)
+    <mvc:interceptors>
+    	<mvc:interceptor>
+    		<mvc:mapping path="/**"/>
+			<bean class="pub.caterpillar.mvc.interceptor.ExampleInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>-->
+	
+	<!-- 模块管理器 -->
+	<bean class="pub.caterpillar.fragment.core.module.tool.CaterpillarModuleManager"></bean>
+	
+	<!-- 模块初始化 -->
+	<bean class="pub.caterpillar.fragment.core.module.CoreModule"></bean>
+	
+	<!-- 建立静态资源映射 -->
+	<mvc:resources mapping="/web/**" location="/web/" cache-period="31556926"/>  
+	
+</beans> 

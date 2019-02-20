@@ -1,0 +1,88 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+        /* 页面紧凑 */
+        #picture-body .box-header{position:relative; z-index:2;}
+        #picture-list{position:relative; bottom:20px;}
+        /* 面包屑 */
+        #picture-body .content-header{float:left; padding:0 10px;}
+        #picture-body .breadcrumb{position:static; top:0; padding:0;}
+        /* 隐藏展示切换 */
+        #picture-body .hidden{display:none;}
+        /* 任务列表 */
+        #task-list td:first-child{width:10px;}
+        #task-list td:last-child{width:100px; text-align:left; font-size:12px;}
+        #task-list td:nth-child(4){width:40px;}
+        #task-list td:nth-child(3){width:30%;}
+        #task-list td{vertical-align:middle;}
+        #task-list .progress{margin:0;}
+        #task-list .box-body{max-height:300px; overflow-y:auto;}
+        #task-list .task-play, #task-list .task-pause{padding:0 2px;}
+        #task-list .task-remove{padding:0 2px; position:relative; top:1px;}
+        #task-list .task-play, #task-list .task-pause,#task-list .task-remove{color:#333;}
+        #task-list .task-play:hover, #task-list .task-pause:hover,#task-list .task-remove:hover{color:#00acd6;}
+    </style>
+
+    <section id="picture-body" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <div>
+                            <button type="button" class="button-upload btn btn-info margin"><i class="fa fa-upload" /> 上传</button>
+                            <input type="file" id="target-picture" multiple class="hidden" />
+                            <button type="button" class="button-add btn btn-default margin"><i class="fa fa-folder-o" /> 新建文件夹</button>
+                            <div class="btn-group margin">
+                                <button type="button" class="button-download btn btn-default" disabled><i class="fa fa-download" /> 下载</button>
+                                <button type="button" class="button-remove btn btn-default" disabled><i class="fa fa-trash-o" /> 删除</button>
+                                <button type="button" class="button-rename btn btn-default" disabled>重命名</button>
+                                <button type="button" class="button-move btn btn-default" disabled>移动到</button>
+                            </div>
+                            <div class="btn-group margin pull-right">
+                                <button type="button" class="button-task btn btn-default" data-toggle="tooltip" data-placement="bottom" title="任务列表"><i class="fa fa-tasks" /><!-- 任务列表 --></button>
+                                <button class="button-view tiled btn btn-default" data-toggle="tooltip" data-placement="bottom" title="平铺展示"><i class="fa fa-th-large"/><!-- 平铺 --></button>
+                                <!--<button class="button-view list btn btn-default hidden"><i class="fa fa-list" />列表</button>-->
+                            </div>
+                        </div>
+                        <div class="content-header">
+                            <ol class="breadcrumb">
+                                <li><a>返回上一级</a></li>
+                                <li><a>根目录</a></li>
+                                <li class="active">新建文件夹</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div id="picture-list" class="box-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 任务列表 -->
+        <div id="task-list" class="col-lg-4 col-md-6 col-sm-8 col-xs-12" style="padding:0; position:fixed; right:0; bottom:0; box-shadow:0 0 10px #ccc;">
+            <div class="box box-info" style="margin:0; display:none;">
+                <div class="box-header with-border" style="padding:15px 10px;">
+                    <h3 class="box-title"><span class="task-num">0</span>个上传任务</h3>
+                    <div class="box-tools pull-right" style="top:10px;">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <table class="table table-condensed">
+                        <tbody>
+                            <!-- 任务列表 -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer text-center" style="padding:13px 10px; border:0;">
+                    <!--<a href="javascript:void(0)" class="button-upload-start btn btn-info btn-xs" style="margin-right:10px;">开始上传</a>
+                    <a href="javascript:void(0)" class="btn btn-danger btn-xs" disabled>清空任务</a>-->
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

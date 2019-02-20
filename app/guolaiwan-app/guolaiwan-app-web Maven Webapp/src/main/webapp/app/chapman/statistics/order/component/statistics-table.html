@@ -1,0 +1,65 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #statistics-table th, #statistics-table td{vertical-align:middle;}
+        #statistics-table th.center, #statistics-table td.center{text-align:center;}
+        #statistics-table th.left, #statistics-table td.left{text-align:left;}
+        #statistics-table th.right, #statistics-table td.right{text-align:right;}
+        /* 文字颜色 */
+        #statistics-table td a{color:#333; cursor:pointer;}
+        #statistics-table td a:hover{color:#00acd6;}
+
+        #statistics-table .operation a{font-size:18px; margin-right:10px;}
+        #statistics-table .operation a.last{margin-right:0;}
+    </style>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">${title}</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <th>订单编号</th>
+                        <th>商品名称</th>
+                        <th>商品类型</th>
+                        <th>订购数量</th>
+                        <th>总价</th>
+                        <th>订单状态</th>
+                        <th>买家</th>
+                        <th style="width:150px;">下单日期</th>
+                        </thead>
+                        <tbody>
+                        {@if statistics && statistics.length>0}
+                        {@each statistics as statistic}
+                        <tr>
+                            <td>${statistic.orderId}</td>
+                            <td>${statistic.product}</td>
+                            <td>${statistic.productType}</td>
+                            <td>${statistic.num}</td>
+                            <td>${statistic.count}</td>
+                            <td>${statistic.status}</td>
+                            <td>${statistic.buyer}</td>
+                            <td>${statistic.orderTime}</td>
+                        </tr>
+                        {@/each}
+                        {@/if}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

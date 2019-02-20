@@ -1,0 +1,24 @@
+<div class="bvc2-tab">
+    <!--<div class="bvc2-tab-active-bar" :style="barStyle"></div>-->
+    <div class="bvc2-tab-left">
+        <a><span class="icon-caret-left"></span></a>
+    </div>
+    <div class="bvc2-tab-middle">
+        <el-tooltip v-for="video in config.videos" :key="random + '-'+video.id" class="item" effect="dark" :content="video.name" placement="bottom">
+            <a :class="itemClass(video)"  @click="clickItem(video, $event)">
+                {{video.name}}
+                <span class="el-icon-close item-icon-close" @click.stop="removeItem"></span>
+            </a>
+        </el-tooltip>
+    </div>
+    <div class="bvc2-tab-right">
+        <div class="bvc2-tab-right-left">
+            <el-tooltip class="item" effect="dark" content="添加媒体" placement="bottom">
+                <a class="bvc2-tab-item-plus" @click="addItem"><span class="el-icon-plus item-icon-plus"></span></a>
+            </el-tooltip>
+        </div>
+        <div class="bvc2-tab-right-right">
+            <a><span class="icon-caret-right"></span></a>
+        </div>
+    </div>
+</div>

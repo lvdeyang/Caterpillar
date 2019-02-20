@@ -1,0 +1,27 @@
+<div class="bvc2-layout-table-destination">
+    <div class="bvc2-layout-table-destination-header">
+        <div class="bvc2-layout-table-destination-header-title">
+            <span class="icon-table bvc2-layout-table-destination-header-title-icon"></span>
+            <span class="bvc2-layout-table-destination-header-title-text">目的设备</span>
+        </div>
+        <div class="bvc2-layout-table-destination-header-search">
+            <el-input placeholder="过滤器" size="mini" clearable>
+                <span slot="prefix" class="el-input__icon el-icon-search"></span>
+            </el-input>
+        </div>
+    </div>
+    <div class="bvc2-layout-table-destination-data">
+        <div class="bvc2-layout-table-destination-data-wrapper">
+            <el-table height="100%" :data="data">
+                <el-table-column prop="device" label="设备名称"></el-table-column>
+                <el-table-column prop="folder" label="文件夹" width="200"></el-table-column>
+                <el-table-column sortable prop="role" label="角色" width="80"></el-table-column>
+                <el-table-column fixed="right" label="操作" width="50">
+                    <el-tooltip slot-scope="scope" class="item" effect="dark" content="删除目的设备" placement="right">
+                        <el-button type="text"><span class="icon-trash icon-large"></span></el-button>
+                    </el-tooltip>
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
+</div>

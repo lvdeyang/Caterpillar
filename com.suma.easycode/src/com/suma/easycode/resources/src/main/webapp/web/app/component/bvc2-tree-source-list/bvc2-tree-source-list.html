@@ -1,0 +1,20 @@
+<div class="bvc2-tree-source-list">
+    <div class="bvc2-tree-source-list-data">
+        <el-tree
+                ref="tree"
+                :data="data"
+
+                node-key="key"
+                :default-checked-keys="checked"
+                :default-expand-all="defaultExpandAll"
+                :props="defaultProps"
+
+                show-checkbox
+                :render-content="renderContent"
+                @node-expand="nodeExpand"
+                @node-collapse="nodeCollapse"
+                >
+        </el-tree>
+    </div>
+
+</div>

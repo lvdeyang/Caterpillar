@@ -1,0 +1,37 @@
+<div class="register">
+    <div class="container">
+        <h3 class="animated wow zoomIn" data-wow-delay=".5s">用户注册</h3>
+        <div class="login-form-grids">
+
+            <input id="username" type="text" placeholder="用户名" required />
+
+            <input id="email" type="email" placeholder="邮箱" required />
+
+            <input id="password" type="password" placeholder="密码" required />
+
+            <input id="confirmPass" type="password" placeholder="确认密码" required />
+
+            <div style="margin-top:1em; position:relative; height:40px;">
+                <div style="position:absolute; left:0; top:0; right:160px; bottom:0;">
+                    <input id="code" type="text" placeholder="验证码" required>
+                </div>
+                <img id="codeImage" src="${BASEPATH}verify/code/get/150/38?${new Date().getTime()}" style="float:right; border:1px solid #DBDBDB;"/>
+            </div>
+
+            <div class="register-check-box">
+                <div class="check">
+                    <label class="checkbox"><input id="checkbox-accept" type="checkbox" name="checkbox"><i> </i>我已仔细阅读并接受过来玩注册条款</label>
+                </div>
+            </div>
+
+            <div id="message"></div>
+
+            <button class="btn" id="button-regist" style="border-radius:0;" disabled>注册</button>
+
+        </div>
+        <div class="register-home animated wow slideInUp" data-wow-delay=".5s">
+            <a href="${BASEPATH}website/home" style="margin-right:20px;">返回首页</a>
+            <a data-hash="#/login">立即登录</a>
+        </div>
+    </div>
+</div>

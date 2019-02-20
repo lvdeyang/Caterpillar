@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd"
+	>
+	<!-- 扫描的Spring的注解  这个东西配置在base里了-->
+	<context:component-scan base-package="**.dao"/>
+		
+	<!-- 使用阿里巴巴数据源 -->
+	<bean id="druid_dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+	    <property name="url" value="${jdbc.url}" />
+	    <property name="username" value="${jdbc.username}" />
+	    <property name="password" value="${jdbc.password}" />
+	     
+	    <property name="filters" value="stat" />
+	 
+	    <property name="maxActive" value="20" />
+	    <property name="initialSize" value="1" />
+	    <property name="maxWait" value="60000" />
+	    <property name="minIdle" value="1" />
+	 
+	    <property name="timeBetweenEvictionRunsMillis" value="60000" />
+	    <property name="minEvictableIdleTimeMillis" value="300000" />
+	 
+	    <property name="validationQuery" value="SELECT 'x'" />
+	    <property name="testWhileIdle" value="true" />
+	    <property name="testOnBorrow" value="false" />
+	    <property name="testOnReturn" value="false" />
+	     
+	    <property name="poolPreparedStatements" value="true" />
+	    <property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
+	</bean>
+	
+	<!-- 定义hibernate4的SessionFactory -->
+		<bean id="hibernate4_sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 依赖注入上面定义的数据源dataSource -->
+		<property name="dataSource">
+			<ref bean="druid_dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					${hibernate.dialect}
+				</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.autoReconnect">${hibernate.autoReconnect}</prop>
+				<!-- hibernate4变更  -->
+				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
+				<prop key="hibernate.connection.release_mode">${hibernate.connection.release_mode}</prop>
+				<!-- hibernate4新增  -->
+				<prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
+			</props>
+		</property>
+		<!-- 注册hibernate的ORM映射文件 -->
+		<property name="packagesToScan">
+			<list>
+				<!-- <value>com.suma.**.po.</value> -->
+				<!-- 注册所有po包下的实体类（解决包名影响配置文件复用性问题） -->
+				<value>**.po.</value>
+			</list>
+		</property>
+
+	</bean>
+	
+	<!--装配hibernateTemplate实例，jdbc数据库操作的模板类，可注入到dao类中执行sql语句,如果用不上可以去掉
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="druid_dataSource" />
+		</property>
+	</bean>
+	-->
+	
+	<!-- 定义hibernate4的事务管理器 -->
+	<bean id="hibernate4_transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="hibernate4_sessionFactory" />
+		</property>
+		<!-- 支持嵌套事务  -->
+		<property name="nestedTransactionAllowed" value= "true" />
+		<!--   全局回滚     -->
+		<property name="globalRollbackOnParticipationFailure" value="false" />
+	</bean>
+	
+	<!-- 定义Advice，Advic是Joinpoint上执行的动作，定义传播特性、回滚策略、只读事务、隔离级别 -->
+  	<tx:advice id="transactionAdvice" transaction-manager="hibernate4_transactionManager" >
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="count*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="load*" propagation="REQUIRED" read-only="true" /> 
+			<tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+		</tx:attributes>
+	</tx:advice>  
+	
+	<!-- 给Dao层做事务切面,service层用@Transactional标签 控制,这样Dao层也能在Control层使用-->
+	<aop:config proxy-target-class="true" expose-proxy="true">
+		<aop:pointcut  id="allDaoMethod" expression="execution(public * pub.caterpillar.orm.dao.AbstractBaseDao+.*(..))"  />
+		<aop:pointcut  id="allService" expression="execution(public * *..service.*Service.*(..))"  />
+		<aop:pointcut  id="allController" expression="execution(public * *..controller.*Controller.*(..))"  />
+		<aop:advisor advice-ref="transactionAdvice" pointcut-ref="allDaoMethod"/>
+		<aop:advisor advice-ref="transactionAdvice" pointcut-ref="allService"/>
+		<aop:advisor advice-ref="transactionAdvice" pointcut-ref="allController"/>
+	</aop:config>  
+
+	<!-- 用注解来实现事务管理 -->
+ 	<tx:annotation-driven transaction-manager="hibernate4_transactionManager" proxy-target-class="true" /> 
+ 	
+ 	<!-- 解决view层懒加载访问报错问题
+	<bean id="openSessionInViewInterceptor" class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">
+        <property name="sessionFactory" ref="hibernate4_sessionFactory"/>
+   	</bean>
+   	-->
+	
+</beans>

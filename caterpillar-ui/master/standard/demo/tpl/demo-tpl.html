@@ -1,0 +1,48 @@
+<!--
+========================================================================
+ * plugin-demo.html: version 1.0.0
+ * 模板
+ * ========================================================================
+ * created by lvdeyang
+ * 2017年01月08日
+ * ========================================================================
+-->
+<ul class="plugin-demo">
+    <style type="text/css">
+        /*******************
+         ****** reset ******
+         *******************/
+        .plugin-demo>div{box-sizing:border-box;}
+
+        /*******************
+         ****** base *******
+         *******************/
+        .plugin-demo{border:1px solid #eee; margin:auto; position:relative; top:20px;}
+        .plugin-demo li{border-bottom:1px solid #eee; cursor:pointer; list-style:none; transition:all 0.1s ease-in;}
+        .plugin-demo li:last-child{border-bottom:0;}
+
+
+        /*******************
+         ****** size *******
+         *******************/
+        .plugin-demo{width:200px;}
+        .plugin-demo li{line-height:2.5em;}
+
+
+        /*******************
+         ****** theme ******
+         *******************/
+        .plugin-demo li:hover{background-color: #91ffb8; color:#fff;}
+    </style>
+
+    {@each items as item, index}
+
+        {@if parseInt(index) === 0}
+            <li class="active">${item.name}</li>
+        {@else}
+            <li>${item.name}</li>
+        {@/if}
+
+    {@/each}
+
+</ul>

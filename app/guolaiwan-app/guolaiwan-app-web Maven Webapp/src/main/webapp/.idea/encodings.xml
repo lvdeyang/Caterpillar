@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/admin/category/page-category.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/component/alert.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/component/callout.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/component/checkgroup.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/component/foot.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/component/header.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/component/modal.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/component/rightbar.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/component/sidebar.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/error/page-error.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/home/page-home.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/layout/page-layout.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/main.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/menu/page-menu.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/admin/tag/page-tag.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/component/alert.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/component/callout.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/component/checkgroup.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/component/foot.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/component/header.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/component/modal.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/component/rightbar.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/component/sidebar.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/error/page-error.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/home/page-home.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/main.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/product/restaurant/page-product-restaurant.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/product/scenery/page-product-scenery-detail.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/product/scenery/page-product-scenery-gd.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/product/scenery/page-product-scenery-schedule.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/product/scenery/page-product-scenery-source.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/product/scenery/page-product-scenery-timeline.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/product/scenery/page-product-scenery.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/product/service/page-product-service.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/shelve/component/table.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/shelve/page-shelve.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/source/audio/page-source-audio.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/source/picture/component/task.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/source/picture/page-source-picture.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/source/video/page-source-video.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/statistics/order/page-statistics-order.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/chapman/statistics/user/page-statistics-user.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/commons/commons.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/spa/context.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/spa/page.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/user/chapman/page-chapman.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/user/login/component/login.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/user/login/page-login.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/user/main.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/user/regist/component/regist.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/user/regist/page-regist.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/basket/component/basket.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/basket/component/order.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/basket/page-basket.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/component/hero.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/component/timeline.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/component/tours.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/home/page-home.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/info/component/body.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/info/page-info.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/website/main.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lib/admin-lte/js/layout.js" charset="UTF-8" />
+  </component>
+</project>

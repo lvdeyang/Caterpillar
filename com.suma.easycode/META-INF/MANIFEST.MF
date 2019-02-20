@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Easycode
+Bundle-SymbolicName: com.suma.easycode;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.suma.easycode.Activator
+Bundle-Vendor: SUMA
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core;bundle-version="3.11.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/freemarker-2.3.28.jar,
+ .

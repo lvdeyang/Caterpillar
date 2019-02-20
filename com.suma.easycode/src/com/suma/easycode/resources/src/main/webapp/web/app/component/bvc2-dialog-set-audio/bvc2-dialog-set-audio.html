@@ -1,0 +1,18 @@
+<el-dialog
+        class="bvc2-dialog-set-audio"
+        width="693px"
+        style="line-height: 0; text-align: center"
+        title="设置全局音频"
+        :visible.sync="audioVisible">
+
+    <bvc2-transfer-audio-target
+            ref="transferAudio"
+            :members="members"
+            :values="values"
+            ></bvc2-transfer-audio-target>
+
+    <div slot="footer" class="dialog-footer">
+        <el-button @click="audioVisible=false">取 消</el-button>
+        <el-button type="primary" style="width:70px;" @click="saveAudio" :loading="style.saveAudio.isLoading">{{style.saveAudio.text}}</el-button>
+    </div>
+</el-dialog>

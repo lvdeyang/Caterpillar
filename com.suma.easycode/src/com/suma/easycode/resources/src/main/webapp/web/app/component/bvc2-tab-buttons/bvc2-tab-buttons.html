@@ -1,0 +1,40 @@
+<div class="bvc2-tab-buttons">
+    <el-tooltip class="item" effect="dark" content="开始会议" placement="bottom">
+        <el-button class="bvc2-tab-button" :type="group.status==='START'?'success':'primary'" :style="style.startSession.isLoading?'padding-left:5px':''"  @click="startSession" :loading="style.startSession.isLoading">
+            <span :class="style.startSession.icon" style="position:relative; left:2px;" :style="startSessionDisplay"></span>
+        </el-button>
+    </el-tooltip>
+    <el-tooltip class="item" effect="dark" content="停止会议" placement="bottom">
+        <el-button class="bvc2-tab-button" :type="group.status==='START'?'danger':'primary'" :style="style.stopSession.isLoading?'padding-left:5px':''" @click="stopSession" :loading="style.stopSession.isLoading">
+            <span :class="style.stopSession.icon" :style="stopSessionDisplay"></span>
+        </el-button>
+    </el-tooltip>
+    <el-tooltip v-if="group.type==='会议室'" class="item" effect="dark" :content="recordTip" placement="bottom">
+        <el-button class="bvc2-tab-button" :type="recordStatus" :style="style.sessionRecord.isLoading?'padding-left:5px':''" @click="sessionRecord" :loading="style.sessionRecord.isLoading">
+            <span :class="style.sessionRecord.icon" style="position:relative; left:1px;" :style="sessionRecordDisplay"></span>
+        </el-button>
+    </el-tooltip>
+    <el-tooltip class="item" effect="dark" content="音频控制" placement="bottom">
+        <el-button class="bvc2-tab-button" type="primary" :style="style.setVolume.isLoading?'padding-left:5px':''" @click="setVolume" :loading="style.setVolume.isLoading">
+            <span :class="style.setVolume.icon" style="position:relative; left:1px;" :style="setVolumeDisplay"></span>
+        </el-button>
+    </el-tooltip>
+    <el-tooltip class="item" effect="dark" content="转发查询" placement="bottom">
+        <el-button class="bvc2-tab-button" type="primary" :style="style.queryForward.isLoading?'padding-left:5px':''" @click="queryForward" :loading="style.queryForward.isLoading">
+            <span :class="style.queryForward.icon" :style="queryForwardDisplay"></span>
+        </el-button>
+    </el-tooltip>
+    <!--<el-tooltip class="item" effect="dark" content="保存议程" placement="bottom">
+        <el-button class="bvc2-tab-button" type="primary" :style="style.saveAgenda.isLoading?'padding-left:5px':''" @click="saveAgenda" :loading="style.saveAgenda.isLoading">
+            <span :class="style.saveAgenda.icon" :style="saveAgendaDisplay"></span>
+        </el-button>
+    </el-tooltip>-->
+    <div class="bvc2-dialog-set-audio">
+        <bvc2-dialog-set-audio
+                ref="setAudio"
+                :members="members"
+                :values="values"
+                :group="group"
+                ></bvc2-dialog-set-audio>
+    </div>
+</div>

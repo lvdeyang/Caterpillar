@@ -1,0 +1,43 @@
+<div id="fh5co-tours" class="fh5co-section-gray">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center heading-section animate-box">
+                <h3>已完成的订单</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 animate-box table-responsive" data-animate-effect="fadeIn">
+                <table class="table table-hover table-basket">
+                    <thead>
+                    <tr>
+                        <th class="center" style="width:200px;">
+                            订单明细号
+                        </th>
+                        <th class="center">商品</th>
+                        <th class="center" style="width:100px;">金额（元）</th>
+                        <th class="center" style="width:100px;">商家</th>
+                        <th class="center" style="width:100px;">状态</th>
+                        <th class="center" style="width:100px;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {@if orders && orders.length>0}
+                            {@each orders as order}
+                                <tr>
+                                    <td class="left">${order.uuid}</td>
+                                    <td>
+                                        <span class="product-image"><img src="${order.image}" /></span><span class="introduction" style="margin-left:20px;">${order.introduction}</span> &times;<span>${order.num}</span>
+                                    </td>
+                                    <td class="center price">${order.count}</td>
+                                    <td class="center">${order.chapman}</td>
+                                    <td class="center count">${order.status}</td>
+                                    <td class="center operation"><button class="btn btn-xs button-remove"><i class="icon-trash"></i> 详情</button></td>
+                                </tr>
+                            {@/each}
+                        {@/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

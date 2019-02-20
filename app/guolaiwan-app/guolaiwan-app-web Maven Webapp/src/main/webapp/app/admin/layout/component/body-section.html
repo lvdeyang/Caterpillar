@@ -1,0 +1,109 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+
+        /* 页面紧凑 */
+        #section-body .box-header{position:relative; z-index:2;}
+
+        /* 面包屑 */
+        #section-body .content-header{float:left; padding:0 10px;}
+        #section-body .breadcrumb{position:static; top:0; padding:0;}
+        #section-body .breadcrumb a{color:#333; cursor:pointer;}
+        #section-body .breadcrumb a:hover{color:#00acd6;}
+
+        /* 隐藏展示切换 */
+        #section-body .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #section-table th, #section-table td{vertical-align:middle;}
+        #section-table th.center, #section-table td.center{text-align:center;}
+        #section-table th.left, #section-table td.left{text-align:left;}
+        #section-table th.right, #section-table td.right{text-align:right;}
+        /* 文字颜色 */
+        #section-table td a{color:#333; cursor:pointer;}
+        #section-table td a:hover{color:#00acd6;}
+
+        #section-table .operation a{font-size:18px; margin-right:10px;}
+        #section-table .operation a.last{margin-right:0;}
+
+    </style>
+
+    <section id="section-body" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <div>
+                            <button type="button" class="button-add btn btn-info margin"><i class="fa fa-folder-o" /> 添加版块</button>
+                            <button type="button" class="button-remove btn btn-warning margin" disabled><i class="fa fa-trash-o" /> 删除版块</button>
+                        </div>
+                        <div class="content-header">
+                            <ol class="breadcrumb">
+                                <li><a class="scenerys-show"><i class="fa fa-list-ul"></i> 布局列表</a></li>
+                                <li><a class="details-show">${layout}</a></li>
+                                <li class="active">${page}</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div id="section-list" class="box-body">
+
+                        <table id="section-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:20px;">
+                                        <input type="checkbox" name="section" class="flat-red checkall" />
+                                    </th>
+                                    <th class="center">版块标题</th>
+                                    <th class="center">版块简介</th>
+                                    <th class="center" style="width:100px;">版块类型</th>
+                                    <th class="center" style="width:100px">版块样式</th>
+                                    <th class="center">备注</th>
+                                    <th class="center" style="width:200px;">修改日期</th>
+                                    <th style="width:80px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {@if sections && sections.length>0}
+                                {@each sections as section}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="section" class="flat-red" value="${section.id}"/>
+                                        </td>
+                                        <td>
+                                            <a class="filter-show">${section.title}</a>
+                                        </td>
+                                        <td>
+                                            ${section.summary}
+                                        </td>
+                                        <td class="center">
+                                            ${section.type}
+                                        </td>
+                                        <td class="center">
+                                            ${section.template}
+                                        </td>
+                                        <td>
+                                            ${section.remarks}
+                                        </td>
+                                        <td class="center">
+                                            ${section.updateTime}
+                                        </td>
+                                        <td class="operation center">
+                                            <a class="edit" data-toggle="tooltip" data-placement="bottom" title="编辑版块"><i class="fa fa-edit"></i></a>
+                                            <a class="last remove" data-toggle="tooltip" data-placement="bottom" title="删除版块"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                {@/each}
+                            {@/if}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

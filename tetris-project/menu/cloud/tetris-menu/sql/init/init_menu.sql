@@ -1,5 +1,0 @@
-#初始化菜单
-INSERT INTO tetris_menu (id, uuid, title, link, icon, style, is_group, parent_id, menu_id_path, serial, auto_generation) VALUES(1, '1', '系统运维', '', 'icon-cogs', 'position:relative; top:2px;', 1, null, null, 1, 1);
-INSERT INTO tetris_menu (id, uuid, title, link, icon, style, is_group, parent_id, menu_id_path, serial, auto_generation) VALUES(2, '2', '菜单管理', 'http://localhost:8083/index#/page-menu', 'icon-circle-blank', 'position:relative; top:1px;', 0, 1, '/1', 1, 1);
-INSERT INTO tetris_menu (id, uuid, title, link, icon, style, is_group, parent_id, menu_id_path, serial, auto_generation) VALUES(3, '3', '用户管理', 'http://localhost:8084/index#/page-user', 'icon-circle-blank', 'position:relative; top:1px;', 0, 1, '/1', 2, 1);
-INSERT INTO tetris_menu (id, uuid, title, link, icon, style, is_group, parent_id, menu_id_path, serial, auto_generation) VALUES(4, '4', '系统角色', 'http://localhost:8084/index#/page-system-role', 'icon-circle-blank', 'position:relative; top:1px;', 0, 1, '/1', 3, 1);

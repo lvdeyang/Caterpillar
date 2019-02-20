@@ -1,0 +1,83 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+        /* 页面紧凑 */
+        #tag-body .box-header{position:relative; z-index:2;}
+        #menu-list{position:relative; bottom:20px;}
+        /* 面包屑 */
+        #tag-body .content-header{float:left; padding:0 10px;}
+        #tag-body .breadcrumb{position:static; top:0; padding:0;}
+        #tag-body .breadcrumb a{color:#333; cursor:pointer;}
+        #tag-body .breadcrumb a:hover{color:#00acd6;}
+        /* 隐藏展示切换 */
+        #tag-body .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #tag-body th, #tag-body td{vertical-align:middle;}
+        #tag-body th.center, #tag-body td.center{text-align:center;}
+        #tag-body th.left, #tag-body td.left{text-align:left;}
+        #tag-body th.right, #tag-body td.right{text-align:right;}
+        /* 文字颜色 */
+        #tag-body td a{color:#333; cursor:pointer;}
+        #tag-body td a:hover{color:#00acd6;}
+
+        #tag-body .operation a{font-size:18px; margin-right:10px;}
+        #tag-body .operation a.last{margin-right:0;}
+    </style>
+    <section id="tag-body" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <div>
+                            <button type="button" class="button-add btn btn-info margin"><i class="fa fa-folder-o" /> 新建栏目</button>
+                            <button type="button" class="button-remove btn btn-warning margin" disabled><i class="fa fa-trash-o" /> 删除栏目</button>
+                        </div>
+                        <div class="content-header">
+                            <ol class="breadcrumb">
+                                <li><a>返回上一级</a></li>
+                                <li><a>根目录</a></li>
+                                <li class="active">新建文件夹</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div id="tag-list" class="box-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="center" style="width:20px;">
+                                        <input type="checkbox" name="category" class="flat-red checkall" />
+                                    </th>
+                                    <th class="center">栏目名称</th>
+                                    <th class="center" style="width:200px;">创建时间</th>
+                                    <th style="width:80px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {@if categories && categories.length>0}
+                                    {@each categories as category}
+                                        <tr>
+                                            <td style="width:20px;">
+                                                <input type="checkbox" name="category" class="flat-red" value="${category.id}"/>
+                                            </td>
+                                            <td>${category.name}</td>
+                                            <td class="center" style="width:200px;">${category.updateTime}</td>
+                                            <td class="operation center">
+                                                <a class="edit" data-toggle="tooltip" data-placement="bottom" title="编辑栏目"><i class="fa fa-edit"></i></a>
+                                                <a class="last remove" data-toggle="tooltip" data-placement="bottom" title="删除栏目"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    {@/each}
+                                {@/if}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

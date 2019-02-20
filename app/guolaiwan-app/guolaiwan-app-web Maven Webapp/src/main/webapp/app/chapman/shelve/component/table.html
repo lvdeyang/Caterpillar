@@ -1,0 +1,25 @@
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th class="center">商品名称</th>
+        <th class="center">地理位置</th>
+        <th class="center" style="width:200px;">创建时间</th>
+        <th style="width:80px;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {@if products && products.length>0}
+        {@each products as product}
+            <tr>
+                <input type="hidden" class="product-id" value="${product.id}" />
+                <td>${product.introduction}</td>
+                <td>${product.position}</td>
+                <td class="center" style="width:200px;">${product.updateTime}</td>
+                <td class="operation center">
+                    <a class="off-shelve" data-toggle="tooltip" data-placement="bottom" title="下架"><i class="fa fa-level-down"></i></a>
+                </td>
+            </tr>
+        {@/each}
+    {@/if}
+    </tbody>
+</table>

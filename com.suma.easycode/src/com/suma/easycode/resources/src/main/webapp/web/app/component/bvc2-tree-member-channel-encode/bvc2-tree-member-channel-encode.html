@@ -1,0 +1,24 @@
+<div class="bvc2-tree-member-channel-encode">
+    <div class="bvc2-tree-member-channel-encode">
+
+        <el-tree
+                ref="tree"
+                :data="data"
+
+                node-key="key"
+                :default-checked-keys="checked"
+                :default-expand-all="defaultExpandAll"
+                :props="defaultProps"
+
+                :render-content="renderContent"
+                @node-expand="nodeExpand"
+                @node-collapse="nodeCollapse"
+                draggable
+                :allow-drop="allowDrop"
+                :allow-drag="allowDrag"
+                @node-drag-start="handleDragStart"
+                >
+        </el-tree>
+    </div>
+
+</div>

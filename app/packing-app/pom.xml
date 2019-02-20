@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+	    <groupId>pub.caterpillar.java</groupId>
+	    <artifactId>caterpillar-base</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>packing-app</artifactId>
+    <packaging>pom</packaging>
+    <name>packing-app</name>
+    <description>packing-app</description>
+    
+    <build>
+	    <plugins>
+	        <plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		            <source>${java.version}</source>
+		            <target>${java.version}</target>
+		            <encoding>${file.encoding}</encoding>
+		        </configuration>
+	        </plugin>
+	    </plugins>
+    </build>
+    
+    <dependencies>
+    	<dependency>
+		  	<groupId>pub.caterpillar.java</groupId>
+		  	<artifactId>caterpillar-mvc</artifactId>
+		  	<version>${caterpillar-mvc.version}</version>
+	  	</dependency>
+	  	
+	  	<dependency>
+		  	<groupId>pub.caterpillar.java</groupId>
+		  	<artifactId>caterpillar-orm</artifactId>
+		  	<version>${caterpillar-orm.version}</version>
+	  	</dependency>
+	  	
+	  	<dependency>
+		  	<groupId>pub.caterpillar.java</groupId>
+		  	<artifactId>caterpillar-cache</artifactId>
+		  	<version>${caterpillar-cache.version}</version>
+	  	</dependency>
+	  	
+    </dependencies>
+    
+  	<modules>
+    	<module>packing-app-web</module>
+    	<module>packing-app-business</module>
+  	</modules>
+  	
+</project>

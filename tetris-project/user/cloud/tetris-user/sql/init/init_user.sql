@@ -1,2 +1,0 @@
-#初始化系统管理员
-INSERT INTO TETRIS_USER(ID, UUID, AUTO_GENERATION, NICKNAME, USERNAME, PASSWORD) VALUES(1, '1', 1, 'admin', 'admin', 'admin');

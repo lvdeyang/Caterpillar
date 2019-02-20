@@ -1,0 +1,6 @@
+<div class="bvc2-layout-buttons">
+    <div class="bvc2-layout-button" v-for="(button, index) in buttons" :data-index="index" @click="layoutChange">
+        <div class="bvc2-layout-button-icon"></div>
+        <div class="bvc2-layout-button-text">{{button.text}}</div>
+    </div>
+</div>

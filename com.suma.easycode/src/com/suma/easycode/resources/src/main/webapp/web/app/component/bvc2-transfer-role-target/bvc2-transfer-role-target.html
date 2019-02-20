@@ -1,0 +1,15 @@
+
+<el-transfer
+        class="bvc2-transfer-role-target"
+        ref="transfer"
+        v-model="value"
+        style="text-align: left"
+        :data="data"
+        :props="defaultProps"
+        :titles="['可选角色-通道','已选角色-通道']"
+        :button-texts="['删除角色','添加角色']"
+        @change="changeRole"
+
+        ></el-transfer>
+
+

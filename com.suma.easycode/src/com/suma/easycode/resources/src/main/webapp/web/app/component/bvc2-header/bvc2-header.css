@@ -1,0 +1,73 @@
+/* reset */
+.bvc2-header,
+.bvc2-header div,
+.bvc2-header span,
+.bvc2-header a{box-sizing:border-box;}
+.bvc2-header a{text-decoration:none;}
+
+/* base */
+.bvc2-header{width:100%; padding-left:15px; padding-right:15px; position:relative;}
+.bvc2-header>.left,
+.bvc2-header>.middle,
+.bvc2-header>.right{height:100%; text-align:center;}
+.bvc2-header>.left,
+.bvc2-header>.right{width:240px;}
+.bvc2-header>.middle,
+.bvc2-header>.right{position:absolute;}
+.bvc2-header>.middle{left:255px; right:255px; top:0;}
+.bvc2-header>.right{top:0; right:10px;}
+
+.bvc2-header .suma-logo,
+.bvc2-header .bvc-name{display:inline-block; float:left;}
+.bvc2-header .suma-logo{width:110px; position:relative; bottom:5px; margin-right:10px;}
+
+.bvc2-header-link{display:inline-block; width:90px; cursor:pointer;}
+.bvc2-header-link-icon,
+.bvc2-header-link-text{display:block; width:100%; position:relative;}
+
+.bvc2-header-per{display:inline-block; margin-right:5px;}
+.bvc2-header-per-icon{display:inline-block; width:32px; height:32px; margin-right:5px;}
+.bvc2-header-bell,
+.bvc2-header-full-ent{display:inline-block; width:40px; text-align:center; cursor:pointer;}
+.bvc2-header-bell-icon,
+.bvc2-header-full-ent-icon{display:inline-block; width:24px; height:24px;}
+.bvc2-header-per-icon,
+.bvc2-header-bell-icon,
+.bvc2-header-full-ent-icon{position:relative;}
+.bvc2-header-per-icon{top:10px;}
+.bvc2-header-bell-icon{top:7px;}
+.bvc2-header-full-ent-icon{top:6px;}
+
+.bvc2-header-bell{position:relative;}
+.bvc2-header-bell-mark{display:none; width:17px; height:17px; background-color:#E32B2F; color:#FFF; font-size:12px; border-radius:100%; position:absolute; top:28px; right:3px; line-height:16px;}
+.bvc2-header-bell-mark.active{display:inline-block;}
+
+/* theme */
+.bvc2-header{background-color:#23272B; border-bottom:2px solid #299EDE;}
+.bvc2-header .suma-logo{background-image:url(images/suma-logo.png);}
+.bvc2-header-per-icon{background-image:url(images/top-per.png);}
+.bvc2-header-bell-icon{background-image:url(images/top-bell.png);}
+.bvc2-header-full-ent-icon{background-image:url(images/top-ful-ent.png);}
+.bvc2-header .bvc-name{color:#FFF;}
+
+.bvc2-header-link-icon,
+.bvc2-header-link-text{color:#FFF;}
+
+.bvc2-header-link.active{background-color:#299EDE;}
+
+/* size */
+.bvc2-header{height:92px;}
+.bvc2-header>.left,
+.bvc2-header>.middle,
+.bvc2-header>.right{line-height:90px;}
+.bvc2-header .suma-logo,
+.bvc2-header .bvc-name{height:90px;}
+.bvc2-header .bvc-name{font-size:20px; font-weight:700;}
+
+.bvc2-header-link{height:90px;}
+.bvc2-header-link-icon{height:70px; line-height:70px; font-size:40px;}
+.bvc2-header-link-text{height:20px; line-height:20px; font-size:14px; bottom:10px;}
+
+.bvc2-header-per,
+.bvc2-header-bell,
+.bvc2-header-full-ent{height:90px; line-height:90px;}

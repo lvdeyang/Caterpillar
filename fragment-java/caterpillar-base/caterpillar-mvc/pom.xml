@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+	    <groupId>pub.caterpillar.java</groupId>
+	    <artifactId>caterpillar-base</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>caterpillar-mvc</artifactId>
+    <name>caterpillar-mvc</name>
+    
+    <dependencies>
+    
+    	<!-- servlet api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		  
+		<!-- spring mvc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+		<!-- jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		
+		<!-- jstl -->
+		<dependency>
+	      	<groupId>javax.servlet</groupId>
+	      	<artifactId>jstl</artifactId>
+	      	<version>1.2</version>
+	    </dependency>
+		
+		<!-- fileupload -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.3.2</version>
+		</dependency>
+		
+		<!-- caterpillar-commons -->
+		<dependency>
+			<groupId>pub.caterpillar.java</groupId>
+			<artifactId>caterpillar-commons</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+    </dependencies>
+    
+  	<build>
+	    <plugins>
+	    
+	        <plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		            <source>${java.version}</source>
+		            <target>${java.version}</target>
+		            <encoding>${file.encoding}</encoding>
+		        </configuration>
+	        </plugin>
+            
+	    </plugins>
+    </build>
+  	
+</project>

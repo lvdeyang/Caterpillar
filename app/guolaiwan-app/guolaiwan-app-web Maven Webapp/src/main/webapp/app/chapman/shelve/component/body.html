@@ -1,0 +1,64 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+        /* 页面紧凑 */
+        #menu-body .box-header{position:relative; z-index:2;}
+        #menu-list{position:relative; bottom:20px;}
+        /* 面包屑 */
+        #menu-body .content-header{float:left; padding:0 10px;}
+        #menu-body .breadcrumb{position:static; top:0; padding:0;}
+        #menu-body .breadcrumb a{color:#333; cursor:pointer;}
+        #menu-body .breadcrumb a:hover{color:#00acd6;}
+        /* 隐藏展示切换 */
+        #menu-body .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #menu-body th, #menu-body td{vertical-align:middle;}
+        #menu-body th.center, #menu-body td.center{text-align:center;}
+        #menu-body th.left, #menu-body td.left{text-align:left;}
+        #menu-body th.right, #menu-body td.right{text-align:right;}
+        /* 文字颜色 */
+        #menu-body td a{color:#333; cursor:pointer;}
+        #menu-body td a:hover{color:#00acd6;}
+
+        #menu-body .operation a{font-size:18px; margin-right:10px;}
+        #menu-body .operation a.last{margin-right:0;}
+    </style>
+    <section id="menu-body" class="content">
+        <div class="row">
+            <div class="col-xs-2">
+                <div class="box box-info">
+                    <div class="box-header">类目列表</div>
+                    <div class="box-body" style="min-height:876px; overflow:auto;">
+                        <div id="menu-tree" style="padding:10px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-10">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <!--<div>
+                            <button type="button" class="button-add btn btn-info margin"><i class="fa fa-folder-o" /> 新建菜单</button>
+                            <button type="button" class="button-remove btn btn-warning margin" disabled><i class="fa fa-trash-o" /> 删除菜单</button>
+                        </div>
+                        <div class="content-header">
+                            <ol class="breadcrumb">
+                                <li><a>返回上一级</a></li>
+                                <li><a>根目录</a></li>
+                                <li class="active">新建文件夹</li>
+                            </ol>
+                        </div>-->
+                        <span id="menu-name"></span>
+                    </div>
+                    <div id="menu-list" class="box-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

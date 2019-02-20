@@ -1,0 +1,85 @@
+<ehcache 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="../config/ehcache.xsd"
+    name="platformEhCache"
+    >
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <!--
+    Mandatory Default Cache configuration. These settings will be applied to caches
+    created programmtically using CacheManager.add(String cacheName)
+    
+     maxElementsInMemory="10000"				** 最大缓存对象数
+     eternal="false"							** 数据是否永久     false则TTI TTL有效        
+     timeToIdleSeconds="120"					** TTI 数据钝化时间,两次访问最大间隔时间大于此值,则元素删除
+     timeToLiveSeconds="120"					** TTL 数据生存时间,元素从构建到消失的最大时间       TTI  TTL 共同生效
+     overflowToDisk="true"						** 内存不足时,启用磁盘
+     maxElementsOnDisk="10000000"				** 
+     diskPersistent="false"						**
+     diskExpiryThreadIntervalSeconds="120"		**
+     memoryStoreEvictionPolicy="LRU"			** 缓存淘汰算法
+    -->
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            maxElementsOnDisk="10000000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            >
+    </defaultCache>
+    <cache
+            name="common"
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            maxElementsOnDisk="10000000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            >
+    </cache>
+            
+    <!-- 登录记录缓存 锁定10分钟 -->
+    <cache name="passwordRetryCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="authorizationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="authenticationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="shiro-activeSessionCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+</ehcache>

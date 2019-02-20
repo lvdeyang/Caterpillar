@@ -1,0 +1,78 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+
+        /* 页面紧凑 */
+        #packing-user-chapman .box-header{position:relative; z-index:2;}
+
+        /* 面包屑 */
+        #packing-user-chapman .content-header{float:left; padding:0 10px;}
+        #packing-user-chapman .breadcrumb{position:static; top:0; padding:0;}
+        #packing-user-chapman .breadcrumb a{color:#333; cursor:pointer;}
+        #packing-user-chapman .breadcrumb a:hover{color:#00acd6;}
+
+        /* 隐藏展示切换 */
+        #packing-user-chapman .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #packing-user-chapman-table th, #packing-user-chapman-table td{vertical-align:middle;}
+        #packing-user-chapman-table th.center, #packing-user-chapman-table td.center{text-align:center;}
+        #packing-user-chapman-table th.left, #packing-user-chapman-table td.left{text-align:left;}
+        #packing-user-chapman-table th.right, #packing-user-chapman-table td.right{text-align:right;}
+        /* 文字颜色 */
+        #packing-user-chapman-table td a{color:#333; cursor:pointer;}
+        #packing-user-chapman-table td a:hover{color:#00acd6;}
+
+        #packing-user-chapman-table .operation a{font-size:18px; margin-right:10px;}
+        #packing-user-chapman-table .operation a.last{margin-right:0;}
+
+    </style>
+
+    <section id="packing-user-chapman" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <table id="packing-user-chapman-table" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width:20px;">
+                                <input type="checkbox" name="packing-user-chapman" class="flat-red checkall" />
+                            </th>
+                            <th class="center">车牌号</th>
+                            <th class="center">手机号码</th>
+                            <th class="center" style="width:200px;">修改日期</th>
+                            <th style="width:80px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {@if types && users.length>0}
+                        {@each users as user}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="packing-user-chapman" class="flat-red" value="${user.id}"/>
+                                </td>
+                                <td>
+                                    ${user.region + user.license}
+                                </td>
+                                <td>
+                                    ${user.mobile}
+                                </td>
+                                <td class="center">
+                                    ${user.updateTime}
+                                </td>
+                                <td class="operation center">
+                                    <!--<a class="edit" data-toggle="tooltip" data-placement="bottom" title="编辑设备类型"><i class="fa fa-edit"></i></a>-->
+                                    <a class="last notice" data-toggle="tooltip" data-placement="bottom" title="通知车主"><i class="fa fa-mobile-phone"></i></a>
+                                </td>
+                            </tr>
+                        {@/each}
+                    {@/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>

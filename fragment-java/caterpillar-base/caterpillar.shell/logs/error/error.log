@@ -1,0 +1,4 @@
+2017-08-03 11:40:11  [ main:1 ] - [ ERROR ]  测试一个异常！
+ [ERROR] 2017-08-03 11:40:58 063 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+测试一个异常！
+ 

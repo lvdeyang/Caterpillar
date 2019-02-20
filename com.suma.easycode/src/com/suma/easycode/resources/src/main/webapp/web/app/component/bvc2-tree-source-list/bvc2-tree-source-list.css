@@ -1,0 +1,5 @@
+.bvc2-tree-source-list{width:100%; height:100%; position:relative;}
+.bvc2-tree-source-list-search{width:120px; position:absolute; right:10px; top:-44px; line-height:normal;}
+.bvc2-tree-source-list-search input{border-radius:14px}
+.bvc2-tree-source-list-data{width:100%; height:100%; overflow:auto;}
+.bvc2-tree-node-custom{font-size:14px;}

@@ -1,0 +1,35 @@
+<div class="login">
+    <div class="container">
+
+        <h3 class="animated wow zoomIn" data-wow-delay=".5s">登录</h3>
+
+        <div class="login-form-grids animated wow slideInUp" data-wow-delay=".5s" style="position:relative;">
+
+            <input id="username" type="text" placeholder="用户名" required />
+
+            <input id="password" type="password" placeholder="密码" required />
+
+            <div style="margin-top:1em; position:relative; height:40px;">
+                <div style="position:absolute; left:0; top:0; right:160px; bottom:0;">
+                    <input id="code" type="text" placeholder="验证码" required>
+                </div>
+                <img id="codeImage" src="${BASEPATH}verify/code/get/150/38?${new Date().getTime()}" style="float:right; border:1px solid #DBDBDB;"/>
+            </div>
+
+            <div class="forgot">
+                <a>忘记密码？</a>&nbsp;<a data-hash="#/regist">注册</a>
+            </div>
+
+            <div id="message"></div>
+
+            <button class="btn" id="button-login" style="border-radius:0;">登录</button>
+
+        </div>
+
+        <div class="register-home animated wow slideInUp" data-wow-delay=".5s">
+            <a href="${BASEPATH}website/home">返回首页</a>
+        </div>
+
+    </div>
+    <div id="demo"></div>
+</div>

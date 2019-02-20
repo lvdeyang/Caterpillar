@@ -1,0 +1,99 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+
+        /* 页面紧凑 */
+        #layout-body .box-header{position:relative; z-index:2;}
+
+        /* 面包屑 */
+        #layout-body .content-header{float:left; padding:0 10px;}
+        #layout-body .breadcrumb{position:static; top:0; padding:0;}
+        #layout-body .breadcrumb a{color:#333; cursor:pointer;}
+        #layout-body .breadcrumb a:hover{color:#00acd6;}
+
+        /* 隐藏展示切换 */
+        #layout-body .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #layout-table th, #layout-table td{vertical-align:middle;}
+        #layout-table th.center, #layout-table td.center{text-align:center;}
+        #layout-table th.left, #layout-table td.left{text-align:left;}
+        #layout-table th.right, #layout-table td.right{text-align:right;}
+        /* 文字颜色 */
+        #layout-table td a{color:#333; cursor:pointer;}
+        #layout-table td a:hover{color:#00acd6;}
+
+        #layout-table .operation a{font-size:18px; margin-right:10px;}
+        #layout-table .operation a.last{margin-right:0;}
+
+    </style>
+
+    <section id="layout-body" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <div>
+                            <button type="button" class="button-add btn btn-info margin"><i class="fa fa-folder-o" /> 新建布局</button>
+                            <button type="button" class="button-remove btn btn-warning margin" disabled><i class="fa fa-trash-o" /> 删除布局</button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+
+                        <table id="layout-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:20px;">
+                                        <input type="checkbox" name="layout" class="flat-red checkall" />
+                                    </th>
+                                    <th class="center">名称</th>
+                                    <th class="center" style="width:100px">主题</th>
+                                    <th class="center" style="width:100px;">是否可用</th>
+                                    <th class="center">备注</th>
+                                    <th class="center" style="width:200px;">修改日期</th>
+                                    <th style="width:80px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {@if layouts && layouts.length>0}
+                                {@each layouts as layout}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="layout" class="flat-red" value="${layout.id}"/>
+                                        </td>
+                                        <td>
+                                            <a class="page-show">${layout.name}</a>
+                                        </td>
+                                        <td>
+                                            ${layout.theme}
+                                        </td>
+                                        <td class="center">
+                                            ${layout.enable}
+                                        </td>
+                                        <td>
+                                            ${layout.remarks}
+                                        </td>
+                                        <td class="center">
+                                            ${layout.updateTime}
+                                        </td>
+                                        <td class="operation center">
+                                            <a class="toggle" data-toggle="tooltip" data-placement="bottom" title="状态切换"><i class="fa {@if layout.enable==='是'}fa-toggle-on{@else}fa-toggle-off{@/if}"></i></a>
+                                            <a class="edit" data-toggle="tooltip" data-placement="bottom" title="编辑布局"><i class="fa fa-edit"></i></a>
+                                            <a class="last remove" data-toggle="tooltip" data-placement="bottom" title="删除布局"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                {@/each}
+                            {@/if}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

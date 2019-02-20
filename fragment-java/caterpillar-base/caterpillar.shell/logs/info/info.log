@@ -1,0 +1,15 @@
+2017-08-03 11:40:11  [ main:0 ] - [ INFO ]  离屏渲染： 开启
+2017-08-03 11:40:11  [ main:1 ] - [ ERROR ]  测试一个异常！
+2017-08-03 11:40:12  [ main:255 ] - [ INFO ]  CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-03 11:40:58 060 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[ERROR] 2017-08-03 11:40:58 063 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+测试一个异常！
+[INFO] 2017-08-03 11:40:58 315 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:53)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110

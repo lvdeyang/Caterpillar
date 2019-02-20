@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>HTML5本地存储之本地数据库篇</title>
+    <style>
+        .addDiv{
+            border: 2px dashed #ccc;
+            width:400px;
+            text-align:center;
+        }
+        th {
+            font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+            color: #4f6b72;
+            border-right: 1px solid #C1DAD7;
+            border-bottom: 1px solid #C1DAD7;
+            border-top: 1px solid #C1DAD7;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 6px 6px 6px 12px;
+        }
+        td {
+            border-right: 1px solid #C9DAD7;
+            border-bottom: 1px solid #C9DAD7;
+            background: #fff;
+            padding: 6px 6px 6px 12px;
+            color: #4f6b72;
+        }
+    </style>
+</head>
+<body onload="loadAll()">
+<div class="addDiv">
+    <label for="user_name">姓名：</label>
+    <input type="text" id="user_name" name="user_name" class="text"/>
+    <br/>
+    <label for="mobilephone">手机：</label>
+    <input type="text" id="mobilephone" name="mobilephone"/>
+    <br/>
+    <label for="mobilephone">公司：</label>
+    <input type="text" id="company" name="company"/>
+    <br/>
+    <input type="button" onclick="save()" value="新增记录"/>
+</div>
+<br/>
+<div id="list">
+</div>
+</body>
+<script type="text/javascript">
+    //打开数据库
+    var db = openDatabase('contactdb','','local database demo',204800);
+
+    //保存数据
+    function save(){
+        var user_name = document.getElementById("user_name").value;
+        var mobilephone = document.getElementById("mobilephone").value;
+        var company = document.getElementById("company").value;
+        //创建时间
+        var time = new Date().getTime();
+        db.transaction(function(tx){
+            tx.executeSql('insert into contact values(?,?,?,?)',[user_name,mobilephone,company,time],onSuccess,onError);
+        });
+    }
+    //sql语句执行成功后执行的回调函数
+    function onSuccess(tx,rs){
+        alert("操作成功");
+        loadAll();
+    }
+    //sql语句执行失败后执行的回调函数
+    function onError(tx,error){
+        alert("操作失败，失败信息："+ error.message);
+    }
+
+    //将所有存储在sqlLite数据库中的联系人全部取出来
+    function loadAll(){
+        var list = document.getElementById("list");
+        db.transaction(function(tx){
+            //如果数据表不存在，则创建数据表
+            tx.executeSql('create table if not exists contact(name text,phone text,company text,createtime INTEGER)',[]);
+            //查询所有联系人记录
+            tx.executeSql('select * from contact',[],function(tx,rs){
+                if(rs.rows.length>0){
+                    var result = "<table>";
+                    result += "<tr><th>序号</th><th>姓名</th><th>手机</th><th>公司</th><th>添加时间</th><th>操作</th></tr>";
+                    for(var i=0;i<rs.rows.length;i++){
+                        var row = rs.rows.item(i);
+                        //转换时间，并格式化输出
+                        var time = new Date();
+                        time.setTime(row.createtime);
+                        var timeStr = time.format("yyyy-MM-dd hh:mm:ss");
+                        //拼装一个表格的行节点
+                        result += "<tr><td>"+(i+1)+"</td><td>"+row.name+"</td><td>"+row.phone+"</td><td>"+row.company+"</td><td>"+timeStr+"</td><td><input type='button' value='删除' onclick='del("+row.phone+")'/></td></tr>";
+                    }
+                    list.innerHTML = result;
+                }else{
+                    list.innerHTML = "目前数据为空，赶紧开始加入联系人吧";
+                }
+            });
+        });
+    }
+
+    Date.prototype.format = function(format)
+    {
+        var o = {
+            "M+" : this.getMonth()+1, //month
+            "d+" : this.getDate(),    //day
+            "h+" : this.getHours(),   //hour
+            "m+" : this.getMinutes(), //minute
+            "s+" : this.getSeconds(), //second
+            "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+            "S" : this.getMilliseconds() //millisecond
+        }
+        if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+                (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        for(var k in o)if(new RegExp("("+ k +")").test(format))
+            format = format.replace(RegExp.$1,
+                    RegExp.$1.length==1 ? o[k] :
+                            ("00"+ o[k]).substr((""+ o[k]).length));
+        return format;
+    }
+
+    //删除联系人信息
+    function del(phone){
+        db.transaction(function(tx){
+            //注意这里需要显示的将传入的参数phone转变为字符串类型
+            tx.executeSql('delete from contact where phone=?',[String(phone)],onSuccess,onError);
+        });
+    }
+</script>
+</html>

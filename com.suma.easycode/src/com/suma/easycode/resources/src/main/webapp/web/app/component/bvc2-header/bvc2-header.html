@@ -1,0 +1,29 @@
+<div class="bvc2-header">
+    <div class="left">
+        <span class="suma-logo"></span>
+        <span class="bvc-name">融合通信平台</span>
+    </div>
+    <div class="middle">
+        <a v-for="link in links" :class="link.isActive?'bvc2-header-link active':'bvc2-header-link'" :href="link.href">
+            <span :class="'bvc2-header-link-icon ' + link.icon" v-if="link.icon"></span>
+            <span class="bvc2-header-link-icon" v-else>标</span>
+            <span class="bvc2-header-link-text">{{link.text}}</span>
+        </a>
+    </div>
+    <div class="right">
+        <span class="bvc2-header-per">
+            <span class="bvc2-header-per-icon"></span>
+            <el-dropdown trigger="click" @command="handleCommand">
+                <span class="el-dropdown-link">
+                    {{user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="0">个人中心</el-dropdown-item>
+                    <el-dropdown-item command="1">注销登录</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </span>
+        <a class="bvc2-header-bell"><span class="bvc2-header-bell-icon"></span><span class="bvc2-header-bell-mark">1</span></a>
+        <a class="bvc2-header-full-ent"><span class="bvc2-header-full-ent-icon"></span></a>
+    </div>
+</div>

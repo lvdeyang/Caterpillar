@@ -1,0 +1,231 @@
+<div class="fh5co-hero">
+    <div class="fh5co-overlay"></div>
+    <div class="fh5co-cover" data-stellar-background-ratio="0.5" style="background-image: url(dist/images/cover_bg_1.jpg);">
+        <div class="desc">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-5 col-md-5">
+                        <div class="tabulation animate-box">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#flights" aria-controls="flights" role="tab" data-toggle="tab">约车</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#hotels" aria-controls="hotels" role="tab" data-toggle="tab">酒店</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#packages" aria-controls="packages" role="tab" data-toggle="tab">服务</a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="flights">
+                                    <div class="row">
+                                        <div class="col-xxs-12 col-xs-6 mt">
+                                            <div class="input-field">
+                                                <label for="from">出发地:</label>
+                                                <input type="text" class="form-control" id="from-place" placeholder="唐山、廊坊、石家庄"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt">
+                                            <div class="input-field">
+                                                <label for="from">目的地:</label>
+                                                <input type="text" class="form-control" id="to-place" placeholder="唐山、廊坊、石家庄"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt alternate">
+                                            <div class="input-field">
+                                                <label for="date-start">开始日期:</label>
+                                                <input type="text" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt alternate">
+                                            <div class="input-field">
+                                                <label for="date-end">结束日期:</label>
+                                                <input type="text" class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mt">
+                                            <section>
+                                                <label for="class">车型:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="" disabled selected>两箱</option>
+                                                    <option value="economy">三箱</option>
+                                                    <option value="first">SUV</option>
+                                                    <option value="business">越野</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt">
+                                            <section>
+                                                <label for="class">容量:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="1" disabled selected>2</option>
+                                                    <option value="2">4</option>
+                                                    <option value="3">6</option>
+                                                    <option value="4">8</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt">
+                                            <section>
+                                                <label for="class">价格:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="1" disabled selected>100元/天</option>
+                                                    <option value="2">100-300元/天</option>
+                                                    <option value="3">300-500元/天</option>
+                                                    <option value="4">500元以上</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <input type="submit" class="btn btn-primary btn-block" value="立即查询">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div role="tabpanel" class="tab-pane" id="hotels">
+                                    <div class="row">
+                                        <div class="col-xxs-12 col-xs-12 mt">
+                                            <div class="input-field">
+                                                <label for="from">地点:</label>
+                                                <input type="text" class="form-control" id="from-place" placeholder="唐山、廊坊、石家庄"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt alternate">
+                                            <div class="input-field">
+                                                <label for="date-start">开始日期:</label>
+                                                <input type="text" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt alternate">
+                                            <div class="input-field">
+                                                <label for="date-end">结束日期:</label>
+                                                <input type="text" class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mt">
+                                            <section>
+                                                <label for="class">星级:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="" disabled selected>大众</option>
+                                                    <option value="1">三星</option>
+                                                    <option value="2">四星</option>
+                                                    <option value="3">五星</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt">
+                                            <section>
+                                                <label for="class">价格区间:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="1" disabled selected>100元以下</option>
+                                                    <option value="2">100-300元/天</option>
+                                                    <option value="3">300-500元/天</option>
+                                                    <option value="4">500元以上</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt">
+                                            <section>
+                                                <label for="class">房间型号:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="" disabled selected>单人</option>
+                                                    <option value="economy">双人房</option>
+                                                    <option value="first">三人房</option>
+                                                    <option value="business">豪华客房</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <input type="submit" class="btn btn-primary btn-block" value="立即查询">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div role="tabpanel" class="tab-pane" id="packages">
+                                    <div class="row">
+                                        <div class="col-xxs-12 col-xs-12 mt">
+                                            <div class="input-field">
+                                                <label for="from">服务项目:</label>
+                                                <input type="text" class="form-control" id="from-place" placeholder="按摩、桑拿、汗蒸"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt alternate">
+                                            <div class="input-field">
+                                                <label for="date-start">开始时间:</label>
+                                                <input type="text" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt alternate">
+                                            <div class="input-field">
+                                                <label for="date-end">结束时间:</label>
+                                                <input type="text" class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mt">
+                                            <section>
+                                                <label for="class">星级:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="" disabled selected>大众</option>
+                                                    <option value="1">三星</option>
+                                                    <option value="2">四星</option>
+                                                    <option value="3">五星</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt">
+                                            <section>
+                                                <label for="class">成人数目:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="" disabled selected>0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xxs-12 col-xs-6 mt">
+                                            <section>
+                                                <label for="class">儿童数目:</label>
+                                                <select class="cs-select cs-skin-border">
+                                                    <option value="" disabled selected>0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                </select>
+                                            </section>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <input type="submit" class="btn btn-primary btn-block" value="立即查询">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="desc2 animate-box">
+                        <div class="col-sm-7 col-sm-push-1 col-md-7 col-md-push-1">
+                            <p>站长推荐</p>
+                            <h2>海南三亚-蜈支洲-天堂-天涯5日游</h2>
+                            <h3>爆款12万人出游，纯玩0购物，全程连住180海景，24H专车接机，暑期总动员</h3>
+                            <span class="price">2658元起</span>
+                            <!-- <p><a class="btn btn-primary btn-lg" href="#">Get Started</a></p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+

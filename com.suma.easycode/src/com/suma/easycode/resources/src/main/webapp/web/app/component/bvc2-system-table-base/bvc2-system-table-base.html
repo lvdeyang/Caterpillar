@@ -1,0 +1,226 @@
+<div class="bvc2-system-table-base">
+    <div class="bvc2-system-table-base-head">
+        <div class="bvc2-system-table-base-head-wrapper">
+            <el-button class="bvc2-system-table-base-head-button" type="primary" @click="create">
+                <span class="bvc2-system-table-base-head-button-icon icon-plus"></span>
+                {{buttoncreate}}
+            </el-button>
+            <el-button class="bvc2-system-table-base-head-button" type="danger" @click="removeAll">
+                <span class="bvc2-system-table-base-head-button-icon icon-trash"></span>
+                {{buttonremove}}
+            </el-button>
+            <div v-if="search" :class="breadcrumb?'bvc2-system-table-base-search with-breadcrumb':'bvc2-system-table-base-search'">
+                <el-input placeholder="请输入内容" class="input-with-select">
+                    <el-select value="1" slot="prepend" placeholder="请选择">
+                        <el-option label="餐厅名" value="1"></el-option>
+                        <el-option label="订单号" value="2"></el-option>
+                        <el-option label="用户电话" value="3"></el-option>
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+            </div>
+            <div v-if="breadcrumb" class="bvc2-system-table-base-breadcrumb">
+                <div class="bvc2-system-table-base-breadcrumb-wrapper">
+                    <el-breadcrumb separator="/">
+                        <el-breadcrumb-item v-for="item in breadcrumb" :key="keyGenerator('b')"><a :href="item.href">{{item.label}}</a></el-breadcrumb-item>
+                    </el-breadcrumb>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bvc2-system-table-base-data">
+        <el-table
+                ref="multipleTable"
+                :data="rows"
+                :highlight-current-row="highlight"
+                tooltip-effect="dark"
+                height="100%"
+                style="width: 100%"
+                @row-click="handleRowClick"
+                @selection-change="handleSelectionChange">
+
+            <el-table-column
+                 type="selection"
+                 width="55">
+            </el-table-column>
+
+            <el-table-column
+                    :key="keyGenerator('column')"
+                    :label="column.label"
+                    :width="column.width"
+                    v-for="column in columns"
+                    >
+                <template slot-scope="scope">
+                    <template v-if="scope.row.__rowStatus==='create' || scope.row.__rowStatus==='edit'">
+                        <template v-if="column.type==='simple'">
+                            <el-input
+                                    v-if="column.editable===false"
+                                    v-model="scope.row[column.prop]"
+                                    placeholder="请输入内容"
+                                    disabled></el-input>
+                            <el-input
+                                    v-else
+                                    v-model="scope.row[column.prop]"
+                                    placeholder="请输入内容"></el-input>
+                        </template>
+
+                        <template v-else-if="column.type==='date'">
+                            <el-date-picker
+                                    v-model="scope.row[column.prop]"
+                                    align="right"
+                                    type="date"
+                                    placeholder="选择日期">
+                            </el-date-picker>
+                        </template>
+
+                        <template v-else-if="column.type==='dateTime'">
+                            <el-date-picker
+                                v-model="scope.row[column.prop]"
+                                align="right"
+                                type="datetime"
+                                placeholder="选择日期时间">
+                            </el-date-picker>
+                        </template>
+
+                        <template v-else-if="column.type==='select'">
+                            <el-select v-if="column.hidden" v-model="scope.row[column.hidden]" placeholder="请选择" @change="columnSelectChange(scope.row, column)">
+                                <el-option
+                                        v-for="item in column.options"
+                                        :key="keyGenerator('options')"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-select v-else v-model="scope.row[column.prop]" placeholder="请选择" @change="columnSelectChange(scope.row, column)">
+                                <el-option
+                                        v-for="item in column.options"
+                                        :key="keyGenerator('options')"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </template>
+
+                        <template v-else-if="column.type==='color'">
+                            <el-color-picker v-model="scope.row[column.prop]"></el-color-picker>
+                        </template>
+
+                        <template v-else-if="column.type==='multiple'">
+                            <el-transfer v-model="scope.row[column.prop]" :data="column.data"></el-transfer>
+                        </template>
+
+                        <template v-else-if="column.type==='entity'">
+                            <div class="bvc2-system-table-cell-entity">
+                                <div class="bvc2-system-table-cell-entity-tags">
+                                    <el-tag style="margin-right:5px;" :key="column.prop + '_' + entity[column.entity.value]" size="small" v-for="entity in scope.row[column.prop]">{{entity[column.entity.label]}}</el-tag>
+                                </div>
+                                <el-button class="bvc2-system-table-cell-entity-button" type="primary" plain icon="el-icon-setting" size="small" @click="entityCellEdit(scope.row, column, $event)"></el-button>
+                            </div>
+                        </template>
+
+                        <template v-if="column.type==='html'">
+                            <!-- 这个地方的dom每次都会新建, 组件中引起行变化时都会发射row-changed事件 -->
+                            <div class="bvc2-system-table-cell-html-wrapper-outer">
+                                <div class="bvc2-system-table-cell-html-wrapper-inner" :style="{'height':column.height, 'line-height':column.height}">
+                                    <span :class="column.selector" :style="column.style" :data-pk="scope.row[pk]"></span>
+                                    <el-button v-if="column.editable" class="bvc2-system-table-cell-html-edit" type="primary" plain icon="el-icon-setting" size="small" @click="htmlCellEdit(scope.row, column, $event)"></el-button>
+                                </div>
+                            </div>
+                        </template>
+
+                    </template>
+
+                    <template v-else-if="scope.row.__rowStatus==='normal' || !scope.row.__rowStatus">
+                        <template v-if="column.type==='html'">
+                            <!-- 这个地方的dom每次都会新建, 组件中引起行变化时都会发射row-changed事件 -->
+                            <div class="bvc2-system-table-cell-html-wrapper-outer">
+                                <div class="bvc2-system-table-cell-html-wrapper-inner" :style="{'height':column.height, 'line-height':column.height}">
+                                    <span :class="column.selector" :style="column.style" :data-pk="scope.row[pk]"></span>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else-if="column.type==='entity'">
+                            <span>
+                                <el-tag style="margin-right:5px; margin-top:2px; margin-bottom:2px;" :key="column.prop + '_' + entity[column.entity.value]" size="small" v-for="entity in scope.row[column.prop]">{{entity[column.entity.label]}}</el-tag>
+                            </span>
+                        </template>
+                        <template v-else>
+                            <template v-if="column.format">{{column.format(scope.row[column.prop])}}</template>
+                            <template v-else>{{scope.row[column.prop]}}</template>
+                        </template>
+                    </template>
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" :width="optionsWidth">
+                <template slot-scope="scope">
+                    <template v-if="scope.row.__rowStatus==='create'">
+                        <el-tooltip v-for="button in buttons.create" class="item" effect="dark" :content="button.label" placement="bottom" :key="keyGenerator('create')">
+                            <el-button type="text" style="padding:0;" @click.stop="rowButtonClick($event, scope, button.click)"><span :class="button.icon + ' icon-large'" :style="button.iconStyle"></span></el-button>
+                        </el-tooltip>
+                    </template>
+                    <template v-else-if="scope.row.__rowStatus==='edit'">
+                        <el-tooltip v-for="button in buttons.edit" class="item" effect="dark" :content="button.label" placement="bottom" :key="keyGenerator('edit')">
+                            <el-button type="text" style="padding:0;" @click.stop="rowButtonClick($event, scope, button.click)"><span :class="button.icon + ' icon-large'" :style="button.iconStyle"></span></el-button>
+                        </el-tooltip>
+                    </template>
+                    <template v-else-if="scope.row.__rowStatus==='normal' || !scope.row.__rowStatus">
+                        <el-tooltip v-for="button in buttons.normal" class="item" effect="dark" :content="button.label" placement="bottom" :key="keyGenerator('normal')">
+                            <el-button type="text" style="padding:0;" @click.stop="rowButtonClick($event, scope, button.click)"><span :class="button.icon + ' icon-large'" :style="button.iconStyle"></span></el-button>
+                        </el-tooltip>
+                    </template>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="bvc2-system-table-base-foot">
+        <div class="bvc2-system-table-base-foot-page">
+            <el-pagination
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[100, 200, 300, 400]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
+            </el-pagination>
+        </div>
+    </div>
+    <!-- 表格弹框 -->
+    <el-dialog
+            :width="dialog.column.entity.table.width"
+            :title="dialog.title"
+            :visible.sync="dialog.entityEditorVisible">
+        <div class="bvc2-system-table-dialog-table-wrapper">
+            <el-table
+                    :data="dialog.data"
+                    ref="dialogTable"
+                    tooltip-effect="dark"
+                    height="100%"
+                    style="width:100%"
+                    @selection-change="handleDialogTableSelectionChange">
+
+                <el-table-column
+                    type="selection"
+                    width="55">
+                </el-table-column>
+
+                <el-table-column
+                        v-for="column in dialog.column.entity.table.columns"
+                        :key="keyGenerator('column')"
+                        :label="column.label"
+                        :width="column.width">
+                    <template slot-scope="scope">
+                        {{scope.row[column.prop]}}
+                    </template>
+                </el-table-column>
+
+            </el-table>
+        </div>
+
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialog.entityEditorVisible = false">取消</el-button>
+            <el-button type="primary" @click="handleDialogOk">确定</el-button>
+        </span>
+    </el-dialog>
+</div>

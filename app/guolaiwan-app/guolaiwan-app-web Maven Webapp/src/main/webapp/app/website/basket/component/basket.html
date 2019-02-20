@@ -1,0 +1,62 @@
+<div id="fh5co-tours" class="fh5co-section-gray">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center heading-section animate-box">
+                <h3>购物车</h3>
+                <p>亲，您已经选择了以下商品，在下单之前请确认商品信息以及数量，以免造成不必要的麻烦</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 animate-box table-responsive" data-animate-effect="fadeIn">
+                <table class="table table-hover table-basket">
+                    <thead>
+                        <tr>
+                            <th class="center" style="width:40px;">
+                                <input type="checkbox" name="basket-item" class="flat-red checkall" checked />
+                            </th>
+                            <th class="center">商品</th>
+                            <th class="center" style="width:100px;">单价（元）</th>
+                            <th class="center" style="width:100px;">数量</th>
+                            <th class="center" style="width:100px;">总计（元）</th>
+                            <th class="center" style="width:80px;">优惠</th>
+                            <th class="center" style="width:80px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {@if baskets && baskets.length>0}
+                            {@each baskets as basket}
+                                <tr>
+                                    <td class="center">
+                                        <input type="checkbox" name="basket-item" class="flat-red" value="${basket.id}" checked />
+                                    </td>
+                                    <td>
+                                        <span class="product-image"><img src="${basket.image}" /></span><span class="introduction" style="margin-left:20px;">${basket.introduction}</span>
+                                    </td>
+                                    <td class="center price" data-price="${basket.price}">${basket.price}</td>
+                                    <td class="center">
+                                        <div class="input-group input-group-sm input-spinner">
+                                            <span class="btn input-group-addon minus {@if basket.num===1}disabled{@/if}">
+                                                <i class="icon-squared-minus"></i>
+                                             </span>
+                                            <input type="text" class="form-control" readonly value="${basket.num}" />
+                                            <span class="btn input-group-addon plus">
+                                                <i class="icon-squared-plus"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="center count">${basket.count}</td>
+                                    <td class="center">-</td>
+                                    <td class="center operation"><button class="btn btn-xs button-remove"><i class="icon-trash"></i> 删除</button></td>
+                                </tr>
+                            {@/each}
+                        {@/if}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12 text-center animate-box">
+                <a class="btn btn-primary btn-outline btn-lg pull-right" id="basket-pay-now">立即支付 <i class="icon-paypal"></i></a>
+                <h3 class="pull-right" style="line-height:47px; margin-right:20px;">总价：<span id="price-total">0</span>元</h3>
+            </div>
+        </div>
+    </div>
+</div>

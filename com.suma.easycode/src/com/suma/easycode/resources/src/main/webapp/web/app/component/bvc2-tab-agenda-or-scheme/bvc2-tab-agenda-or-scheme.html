@@ -1,0 +1,12 @@
+<div class="bvc2-table-agenda-or-scheme bvc2-card">
+    <div class="bvc2-card-head" style="position:relative;">
+        <el-radio-group v-model="currentTab" size="small">
+            <el-radio-button label="agenda">会议议程</el-radio-button>
+            <el-radio-button label="scheme">会议方案</el-radio-button>
+        </el-radio-group>
+    </div>
+    <div class="bvc2-card-body">
+        <bvc2-table-agenda v-if="currentTab === 'agenda'" :group="group" @config-agenda="configAgenda" @run-agenda="runAgenda"></bvc2-table-agenda>
+        <bvc2-table-scheme v-if="currentTab === 'scheme'" :group="group" @config-scheme="configScheme"></bvc2-table-scheme>
+    </div>
+</div>

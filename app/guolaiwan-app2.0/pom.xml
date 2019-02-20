@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>pub.caterpillar.java</groupId>
+		<artifactId>caterpillar-base</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>guolaiwan-app</groupId>
+	<artifactId>guolaiwan-app</artifactId>
+	<packaging>pom</packaging>
+	<name>guolaiwan-app</name>
+	<description>guolaiwan-app</description>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${file.encoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>pub.caterpillar.java</groupId>
+			<artifactId>caterpillar-mvc</artifactId>
+			<version>${caterpillar-mvc.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pub.caterpillar.java</groupId>
+			<artifactId>caterpillar-orm</artifactId>
+			<version>${caterpillar-orm.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pub.caterpillar.java</groupId>
+			<artifactId>caterpillar-cache</artifactId>
+			<version>${caterpillar-cache.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pub.caterpillar.java</groupId>
+			<artifactId>caterpillar-weixin-api</artifactId>
+			<version>${caterpillar-weixin-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.0-rc5</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+  			<groupId>com.aliyun</groupId>
+  			<artifactId>aliyun-java-sdk-core</artifactId>
+  		<version>3.2.8</version> <!-- 注：如提示报错，先升级基础包版，无法解决可联系技术支持 -->
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<modules>
+		<module>guolaiwan-app-web</module>
+		<module>guolaiwan-app-business</module>
+	</modules>
+
+</project>

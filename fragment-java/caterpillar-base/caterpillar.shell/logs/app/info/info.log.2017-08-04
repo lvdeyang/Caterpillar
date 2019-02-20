@@ -1,0 +1,528 @@
+[INFO] 2017-08-04 14:38:10 832 method: pub.caterpillar.shell.jcef.App.main(App.java:20)
+G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\target\classes;G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\lib\jar\gluegen-rt-natives-windows-amd64.jar;G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\lib\jar\gluegen-rt.jar;G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\lib\jar\jcef.jar;G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\lib\jar\jogl-all-natives-windows-amd64.jar;G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\lib\jar\jogl-all.jar;G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\lib\jar\sqlite-jdbc-3.19.3.jar;D:\maven\repository\log4j\log4j\1.2.17\log4j-1.2.17.jar;D:\maven\repository\org\slf4j\slf4j-api\1.7.21\slf4j-api-1.7.21.jar;D:\maven\repository\org\slf4j\slf4j-log4j12\1.7.21\slf4j-log4j12-1.7.21.jar;D:\maven\repository\org\springframework\spring-core\4.2.5.RELEASE\spring-core-4.2.5.RELEASE.jar;D:\maven\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;D:\maven\repository\org\springframework\spring-context\4.2.5.RELEASE\spring-context-4.2.5.RELEASE.jar;D:\maven\repository\org\springframework\spring-context-support\4.2.5.RELEASE\spring-context-support-4.2.5.RELEASE.jar;D:\maven\repository\org\springframework\spring-test\4.2.5.RELEASE\spring-test-4.2.5.RELEASE.jar;D:\maven\repository\org\springframework\spring-beans\4.2.5.RELEASE\spring-beans-4.2.5.RELEASE.jar;D:\maven\repository\org\springframework\spring-aop\4.2.5.RELEASE\spring-aop-4.2.5.RELEASE.jar;D:\maven\repository\aopalliance\aopalliance\1.0\aopalliance-1.0.jar;D:\maven\repository\org\springframework\spring-tx\4.2.5.RELEASE\spring-tx-4.2.5.RELEASE.jar;D:\maven\repository\org\springframework\spring-expression\4.2.5.RELEASE\spring-expression-4.2.5.RELEASE.jar;D:\maven\repository\org\springframework\spring-aspects\4.2.5.RELEASE\spring-aspects-4.2.5.RELEASE.jar;D:\maven\repository\org\aspectj\aspectjweaver\1.8.8\aspectjweaver-1.8.8.jar
+[INFO] 2017-08-04 14:38:10 847 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+离屏渲染： 开启
+[ERROR] 2017-08-04 14:38:10 847 method: pub.caterpillar.shell.jcef.App.main(App.java:47)
+测试一个异常！
+[INFO] 2017-08-04 14:38:11 440 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:53)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 14:39:25 316 method: pub.caterpillar.shell.jcef.App.main(App.java:20)
+/G:/java/myEclipse/workspaces/work_caterpillar/Caterpillar/fragment-java/caterpillar-base/caterpillar.shell/target/classes/
+[INFO] 2017-08-04 14:39:25 316 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+离屏渲染： 开启
+[ERROR] 2017-08-04 14:39:25 316 method: pub.caterpillar.shell.jcef.App.main(App.java:47)
+测试一个异常！
+[INFO] 2017-08-04 14:39:25 503 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:53)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 14:40:44 539 method: pub.caterpillar.shell.jcef.App.main(App.java:20)
+/G:/java/myEclipse/workspaces/work_caterpillar/Caterpillar/fragment-java/caterpillar-base/caterpillar.shell/target/classes/
+[INFO] 2017-08-04 14:40:44 539 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+离屏渲染： 开启
+[ERROR] 2017-08-04 14:40:44 539 method: pub.caterpillar.shell.jcef.App.main(App.java:47)
+测试一个异常！
+[INFO] 2017-08-04 14:40:44 726 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:53)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 14:41:06 479 method: pub.caterpillar.shell.jcef.App.main(App.java:20)
+/G:/java/myEclipse/workspaces/work_caterpillar/Caterpillar/fragment-java/caterpillar-base/caterpillar.shell/target/classes/
+[INFO] 2017-08-04 14:41:06 479 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+离屏渲染： 开启
+[ERROR] 2017-08-04 14:41:06 479 method: pub.caterpillar.shell.jcef.App.main(App.java:47)
+测试一个异常！
+[INFO] 2017-08-04 14:41:06 635 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:53)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 14:41:13 718 method: pub.caterpillar.shell.jcef.App.main(App.java:20)
+/G:/java/myEclipse/workspaces/work_caterpillar/Caterpillar/fragment-java/caterpillar-base/caterpillar.shell/target/classes/
+[INFO] 2017-08-04 14:41:13 718 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+离屏渲染： 开启
+[ERROR] 2017-08-04 14:41:13 718 method: pub.caterpillar.shell.jcef.App.main(App.java:47)
+测试一个异常！
+[INFO] 2017-08-04 14:41:13 890 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:53)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 15:17:59 808 method: pub.caterpillar.shell.jcef.App.main(App.java:20)
+G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell
+[INFO] 2017-08-04 15:17:59 812 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+离屏渲染： 开启
+[ERROR] 2017-08-04 15:17:59 812 method: pub.caterpillar.shell.jcef.App.main(App.java:47)
+测试一个异常！
+[INFO] 2017-08-04 15:17:59 952 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:53)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 15:43:15 403 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[ERROR] 2017-08-04 15:43:15 408 method: pub.caterpillar.shell.jcef.App.main(App.java:45)
+测试一个异常！
+[INFO] 2017-08-04 15:43:15 827 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 15:43:59 332 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 15:43:59 528 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 15:44:27 697 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 15:44:35 826 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 15:53:07 340 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 15:53:07 729 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 15:53:20 594 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 15:53:34 698 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 15:54:51 661 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 15:54:54 585 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 15:55:58 563 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 15:55:58 800 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:01:20 582 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:01:20 912 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:02:06 543 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:02:06 682 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:61)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:20:45 003 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:20:45 170 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:58)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:20:45 171 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 16:20:45 246 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:27)
+自定义协议 client://
+[INFO] 2017-08-04 16:20:45 302 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 16:22:20 279 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:22:20 556 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:22:20 566 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: NEW
+[INFO] 2017-08-04 16:22:20 568 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 16:22:20 584 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:27)
+自定义协议 client://
+[INFO] 2017-08-04 16:22:20 716 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 16:26:58 777 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:26:59 281 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:26:59 299 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: NEW
+[INFO] 2017-08-04 16:26:59 301 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 16:26:59 311 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:27)
+自定义协议 client://
+[INFO] 2017-08-04 16:26:59 458 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 16:27:23 925 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:27:24 131 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:27:24 134 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 16:27:24 155 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:27)
+自定义协议 client://
+[INFO] 2017-08-04 16:27:24 193 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 16:31:41 641 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:31:41 938 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:31:41 948 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: NEW
+[INFO] 2017-08-04 16:31:41 951 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 16:31:41 960 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:27)
+自定义协议 client://
+[INFO] 2017-08-04 16:31:42 211 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 16:43:35 157 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:43:35 376 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:43:35 378 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 16:43:35 432 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:27)
+自定义协议 client://
+[INFO] 2017-08-04 16:43:35 524 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 16:51:16 380 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 16:51:16 662 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 16:51:16 674 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: NEW
+[INFO] 2017-08-04 16:51:16 677 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 16:51:16 696 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:27)
+自定义协议 client://
+[INFO] 2017-08-04 16:51:16 761 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:57)
+CefApp: INITIALIZED
+[ERROR] 2017-08-04 16:51:18 605 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501836678594 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 16:51:24 424 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501836684412 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 16:51:48 557 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501836708554 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 16:51:50 429 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501836710427 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 16:53:21 967 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501836801966 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 16:53:26 330 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501836806329 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 16:57:57 202 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501837077201 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[INFO] 2017-08-04 17:23:30 935 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:23:31 071 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:23:31 073 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:23:31 097 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:36)
+自定义协议 client://
+[INFO] 2017-08-04 17:23:31 154 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 17:31:50 719 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:31:50 848 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:31:50 850 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:31:50 861 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:36)
+自定义协议 client://
+[INFO] 2017-08-04 17:31:50 884 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZED
+[ERROR] 2017-08-04 17:31:53 906 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501839113900 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 17:31:59 937 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501839119936 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 17:32:08 967 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501839128955 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 17:32:46 566 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501839166564 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[INFO] 2017-08-04 17:36:12 726 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:36:12 865 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:36:12 866 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: NEW
+[INFO] 2017-08-04 17:36:12 869 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:36:12 878 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:36)
+自定义协议 client://
+[INFO] 2017-08-04 17:36:12 920 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZED
+[ERROR] 2017-08-04 17:36:14 129 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\tests.html (系统找不到指定的文件。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[INFO] 2017-08-04 17:36:29 467 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:36:29 753 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:36:29 758 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: NEW
+[INFO] 2017-08-04 17:36:29 761 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:36:29 779 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:36)
+自定义协议 client://
+[INFO] 2017-08-04 17:36:29 932 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 17:38:06 465 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:38:06 727 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:38:06 731 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: NEW
+[INFO] 2017-08-04 17:38:06 733 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:38:06 764 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:37)
+自定义协议 client://
+[INFO] 2017-08-04 17:38:06 831 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 17:40:17 267 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:40:17 428 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:40:17 435 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: NEW
+[INFO] 2017-08-04 17:40:17 438 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:40:17 450 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:37)
+自定义协议 client://
+[INFO] 2017-08-04 17:40:17 485 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZED
+[ERROR] 2017-08-04 17:40:19 748 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501839619742 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 17:40:23 749 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501839623747 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[ERROR] 2017-08-04 17:40:26 992 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501839626990 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[INFO] 2017-08-04 17:47:22 146 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:47:22 567 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:47:22 571 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: NEW
+[INFO] 2017-08-04 17:47:22 573 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:47:22 586 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:36)
+自定义协议 client://
+[INFO] 2017-08-04 17:47:22 719 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZED
+[ERROR] 2017-08-04 17:47:24 409 method: pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:143)
+资源加载失败！
+java.io.FileNotFoundException: G:\java\myEclipse\workspaces\work_caterpillar\Caterpillar\fragment-java\caterpillar-base\caterpillar.shell\webroot\verify\code\get\150\38?1501840044404 (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.loadContent(ClientSchemeHandler.java:132)
+	at pub.caterpillar.shell.jcef.handler.ClientSchemeHandler.processRequest(ClientSchemeHandler.java:80)
+[INFO] 2017-08-04 17:48:14 983 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:48:15 226 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:48:15 229 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:48:15 241 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:36)
+自定义协议 client://
+[INFO] 2017-08-04 17:48:15 271 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 17:48:46 261 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:48:46 575 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:48:46 584 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: NEW
+[INFO] 2017-08-04 17:48:46 587 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:48:46 591 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:36)
+自定义协议 client://
+[INFO] 2017-08-04 17:48:46 659 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:66)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 17:52:37 846 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 17:52:37 989 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 17:52:37 992 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 17:52:38 003 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:37)
+自定义协议 client://
+[INFO] 2017-08-04 17:52:38 031 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 18:16:54 817 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 18:16:54 941 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 18:16:54 943 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 18:16:54 945 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:37)
+自定义协议 client://
+[INFO] 2017-08-04 18:16:54 979 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZED
+[INFO] 2017-08-04 18:21:06 781 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-04 18:21:06 979 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-04 18:21:06 987 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: NEW
+[INFO] 2017-08-04 18:21:06 989 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: INITIALIZING
+[INFO] 2017-08-04 18:21:06 991 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:38)
+自定义协议 client://
+[INFO] 2017-08-04 18:21:07 068 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: INITIALIZED

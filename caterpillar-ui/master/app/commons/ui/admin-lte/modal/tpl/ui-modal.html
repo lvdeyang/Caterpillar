@@ -1,0 +1,26 @@
+<div class="modal {@if type}${type}{@/if} {@if status}${status}{@/if}">
+    <style type="text/css">
+        .modal.confirm .modal-content{border-radius:0;}
+        .modal.confirm .modal-header{border-bottom:0;}
+        .modal.confirm .modal-body{color:#333;}
+        .modal.confirm .modal-footer{padding:0; border-top:0;}
+        .modal.confirm .modal-footer button{width:50%; border-radius:0; border-width:1px !important; margin:0;}
+        .modal.confirm .modal-footer button:last-child{border-left:0 !important;}
+    </style>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">$${title}</h4>
+            </div>
+            <div class="modal-body" style="{@if height && height!=='auto'}height:${height}px; overflow-y:auto;{@/if}">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">${close}</button>
+                <button type="button" class="btn {@if type==='confirm'}btn-default{@else}btn-primary{@/if} btn-save">${save}</button>
+            </div>
+        </div>
+    </div>
+</div>

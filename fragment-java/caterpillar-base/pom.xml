@@ -1,0 +1,147 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>pub.caterpillar.java</groupId>
+    <artifactId>caterpillar-base</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>caterpillar-base</name>
+    
+    <dependencies>
+  
+  		<!-- junit -->
+	    <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- log -->
+		<dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+	
+		<!-- spring -->
+	    <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+	    <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+	    <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+    
+    </dependencies>
+    
+    <build>
+	    <plugins>
+	        <plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		            <source>${java.version}</source>
+		            <target>${java.version}</target>
+		            <encoding>${file.encoding}</encoding>
+		        </configuration>
+	        </plugin>
+	    </plugins>
+    </build>
+    
+    <modules>
+	  	<module>caterpillar-orm</module>
+	  	<module>caterpillar-communication</module>
+	  	<module>caterpillar-cache</module>
+	  	<module>caterpillar-executor</module>
+	  	<module>caterpillar-mvc</module>
+	  	<module>caterpillar-commons</module>
+	  	<!-- <module>caterpillar-weixin-api</module> -->
+	  	<!-- <module>guolaiwan-app</module> -->
+	  	<!-- <module>caterpillar.shell</module> -->
+    </modules>
+    
+    <properties>
+	  	<caterpillar-base.version>0.0.1-SNAPSHOT</caterpillar-base.version>
+	  	<caterpillar-commons.version>0.0.1-SNAPSHOT</caterpillar-commons.version>
+	  	<caterpillar-weixin-api.version>0.0.1-SNAPSHOT</caterpillar-weixin-api.version>
+	  	<caterpillar-cache.version>0.0.1-SNAPSHOT</caterpillar-cache.version>
+	  	<caterpillar-communication.version>0.0.1-SNAPSHOT</caterpillar-communication.version>
+	  	<caterpillar-executor.version>0.0.1-SNAPSHOT</caterpillar-executor.version>
+	  	<caterpillar-mvc.version>0.0.1-SNAPSHOT</caterpillar-mvc.version>
+	  	<caterpillar-orm.version>0.0.1-SNAPSHOT</caterpillar-orm.version>
+	  	<caterpillar-web-base.version>0.0.1-SNAPSHOT</caterpillar-web-base.version>
+	  	<caterpillar-web-ds.version>0.0.1-SNAPSHOT</caterpillar-web-ds.version>
+	  	<caterpillar-web-main.version>0.0.1-SNAPSHOT</caterpillar-web-main.version>
+	  	<caterpillar-web-oc.version>0.0.1-SNAPSHOT</caterpillar-web-oc.version>
+	  	<caterpillar-web-pe.version>0.0.1-SNAPSHOT</caterpillar-web-pe.version>
+	  	<caterpillar-web-qd.version>0.0.1-SNAPSHOT</caterpillar-web-qd.version>
+	  	<caterpillar-web-ur.version>0.0.1-SNAPSHOT</caterpillar-web-ur.version>
+	  	<guolaiwan-app.version>0.0.1-SNAPSHOT</guolaiwan-app.version>
+	  	<guolaiwan-app-web.version>0.0.1-SNAPSHOT</guolaiwan-app-web.version>
+	  	<guolaiwan-app-business.version>0.0.1-SNAPSHOT</guolaiwan-app-business.version>
+	  	<java.version>1.8</java.version>
+	  	<servlet.version>3.0</servlet.version>
+	  	<file.encoding>utf-8</file.encoding>
+    </properties>
+    
+</project>

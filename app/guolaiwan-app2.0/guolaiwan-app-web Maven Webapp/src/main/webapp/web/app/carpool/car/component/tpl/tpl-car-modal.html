@@ -1,0 +1,61 @@
+<section data-type="text/component">
+
+    <!-- 缁勪欢鏍峰紡 -->
+    <style type="text/css">
+
+        /* 鎼滅储妗嗘牱寮忚鐩� */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 鍗曞厓鏍煎眳涓� */
+        #car-window-table th, #car-window-table td{vertical-align:middle;}
+        #car-window-table th.center, #car-window-table td.center{text-align:center;}
+        #car-window-table th.left, #car-window-table td.left{text-align:left;}
+        #car-window-table th.right, #car-window-table td.right{text-align:right;}
+        /* 鏂囧瓧棰滆壊 */
+        #car-window-table td a{color:#333; cursor:pointer;}
+        #car-window-table td a:hover{color:#00acd6;}
+
+        #car-window-table .operation a{font-size:18px; margin-right:10px;}
+        #car-window-table .operation a.last{margin-right:0;}
+
+    </style>
+
+    <table id="car-window-table" class="table table-hover">
+    	<thead>
+            <tr>
+                <th style="width:20px;">
+                	{@if mode === 'multiple'}
+                    	<input type="checkbox" name="car" class="flat-red checkall" />
+                    {@/if}
+                </th>
+                <th class="center">车型</th>
+                <th class="center">车牌号</th>
+                <th class="center" style="width:200px;">修改日期</th>
+            </tr>
+        </thead>
+        <tbody>
+        {@if cars && cars.length>0}
+            {@each cars as car}
+                <tr>
+                    <td>
+                    	{@if mode === 'multiple'}
+                        	<input type="checkbox" name="car" class="flat-red" value="${car.id}"/>
+                        {@else if mode === 'single'}
+                        	<input type="radio" name="car" class="flat-red" value="${car.id}"/>
+                        {@/if}
+                    </td>
+                    <td>
+                        ${car.type}
+                    </td>
+                    <td>
+                        ${car.plateNumber}
+                    </td>
+                    <td class="center">
+                        ${car.updateTime}
+                    </td>
+                </tr>
+            {@/each}
+        {@/if}
+        </tbody>
+    </table>
+</section>

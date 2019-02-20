@@ -1,0 +1,33 @@
+<el-dialog
+        class="bvc2-dialog-auto-layout"
+        width="30%"
+        title="编辑布局"
+        :visible.sync="show"
+        @open="open">
+    <div class="bvc2-dialog-auto-layout-editor"></div>
+    <div class="bvc2-dialog-auto-layout-tool-bar">
+        <span class="tool-bar-item">
+            <el-select size="mini" v-model="layout.column" @change="columnChange">
+                <el-option
+                        v-for="columnOption in options.columnOptions"
+                        :key="columnOption.value"
+                        :label="columnOption.label"
+                        :value="columnOption.value"/>
+            </el-select>
+        </span>
+        <span class="tool-bar-item-times">&times;</span>
+        <span class="tool-bar-item">
+            <el-select size="mini" v-model="layout.row" @change="rowChange">
+                <el-option
+                        v-for="rowOption in options.rowOptions"
+                        :key="rowOption.value"
+                        :label="rowOption.label"
+                        :value="rowOption.value"/>
+            </el-select>
+        </span>
+    </div>
+    <div slot="footer" class="dialog-footer">
+        <el-button @click="show=false">取消</el-button>
+        <el-button type="primary" @click="layoutOk">确定</el-button>
+    </div>
+</el-dialog>

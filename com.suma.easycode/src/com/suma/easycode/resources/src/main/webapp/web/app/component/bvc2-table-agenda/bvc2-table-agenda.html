@@ -1,0 +1,94 @@
+<div class="bvc2-table-agenda">
+    <div class="bvc2-table-agenda-search">
+        <el-input placeholder="过滤器" size="mini" clearable>
+            <span slot="prefix" class="el-input__icon el-icon-search"></span>
+        </el-input>
+    </div>
+    <div class="bvc2-table-agenda-data">
+        <div class="bvc2-table-agenda-data-wrapper">
+            <el-table height="100%" :data="rows">
+                <el-table-column sortable label="议程名称">
+                    <el-tooltip slot-scope="scope" class="item" effect="dark" :content="scope.row.remark" placement="right">
+                        <span>{{scope.row.name}}</span>
+                    </el-tooltip>
+                </el-table-column>
+                <el-table-column prop="audioOperation" label="音频处理"></el-table-column>
+                <el-table-column fixed="right" label="操作" width="160">
+                    <span slot-scope="scope">
+                        <el-tooltip class="item" effect="dark" content="执行议程" placement="bottom">
+                            <el-button type="text" @click="runAgenda(scope.row)"><span class="icon-play icon-large"></span></el-button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="设置议程" placement="bottom">
+                            <el-button type="text" @click="configAgenda(scope.row)"><span class="icon-cog icon-large"></span></el-button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="议程音频" placement="bottom">
+                            <el-button v-if="scope.row.audioOperation === '自定义'" type="text" @click="agendaAudio(scope.row)"><span class="icon-headphones icon-large"></span></el-button>
+                            <el-button v-if="scope.row.audioOperation != '自定义'" type="text" disabled><span class="icon-headphones icon-large"></span></el-button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="删除议程" placement="bottom">
+                            <el-button type="text" @click="removeAgenda(scope.row)"><span class="icon-trash icon-large"></span></el-button>
+                        </el-tooltip>
+                    </span>
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
+    <div class="bvc2-table-agenda-footer">
+        <div  class="bvc2-table-agenda-footer-wrapper">
+            <el-button size="mini" class="bvc2-table-agenda-add" @click="addAgenda"><span class="icon-plus" style="margin-right:5px;"></span>添加议程</el-button>
+            <span class="bvc2-table-agenda-page">
+                <el-pagination
+                        background
+                        :page-size="pageSize"
+                        :current-page.sync="currentPage"
+                        :pager-count="5"
+                        layout="pager"
+                        :total="total">
+                </el-pagination>
+            </span>
+        </div>
+    </div>
+    <el-dialog
+            title="添加议程"
+            :visible.sync="form.dialogVisible"
+            width="30%">
+        <el-form label-position="left" :model="form">
+            <el-form-item label="议程名称" :label-width="form.labelWidth">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="音频处理">
+                <el-radio-group v-model="form.audioOperation">
+                    <el-radio label="自定义"></el-radio>
+                    <el-radio label="保持状态"></el-radio>
+                    <el-radio label="静音"></el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="议程详情" :label-width="form.labelWidth">
+                <el-input type="textarea" :rows="4" v-model="form.remark"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="form.dialogVisible=false">取 消</el-button>
+            <el-button type="primary" @click="saveAgenda">确 定</el-button>
+        </span>
+    </el-dialog>
+
+    <el-dialog
+            class="bvc2-dialog-set-agenda-audio"
+            width="693px"
+            style="line-height: 0; text-align: center"
+            :title="audioStyle.titleProp"
+            :visible.sync="audioStyle.audioSingleVisible">
+
+        <bvc2-transfer-audio-target
+                ref="transferSingleAudio"
+                :members="audioStyle.members"
+                :values="audioStyle.values"
+                ></bvc2-transfer-audio-target>
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="audioStyle.audioSingleVisible=false">取 消</el-button>
+            <el-button type="primary" style="width:70px;" @click="saveAudio()" :loading="audioStyle.saveAudio.isLoading">{{audioStyle.saveAudio.text}}</el-button>
+        </div>
+    </el-dialog>
+</div>

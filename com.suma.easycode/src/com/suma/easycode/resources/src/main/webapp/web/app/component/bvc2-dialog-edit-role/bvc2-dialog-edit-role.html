@@ -1,0 +1,50 @@
+<div class="bvc2-dialog-edit-role">
+    <el-dialog
+            class="bvc2-dialog-edit-role"
+            width="835px"
+            style="line-height: 0; text-align: center"
+            title="编辑角色"
+            :visible.sync="roleVisible">
+
+        <el-row :gutter="50" type="flex">
+            <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
+                <el-table
+                    ref="$chooseRole"
+                    :data="roleData"
+                    style="width:100%"
+                    height="289px"
+                    :border=true
+                    :highlight-current-row=true
+                    @row-click="clickRole">
+
+                    <el-table-column
+                        header-align="center"
+                        prop="name"
+                        label="角色">
+
+                    </el-table-column>
+
+                </el-table>
+            </el-col>
+            <el-col :xs="18" :sm="18" :md="18" :lg="18" :xl="18">
+                <el-transfer
+                        ref="$transferRole"
+                        v-model="value"
+                        style="text-align: left"
+                        :data="deviceData"
+                        :props="defaultProps"
+                        :titles="['设备列表', '角色已选设备']"
+                        :button-texts="['移出角色', '加入角色']"
+                        @change="changeMember">
+
+                </el-transfer>
+            </el-col>
+        </el-row>
+
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="roleVisible = false">取 消</el-button>
+            <el-button type="primary" style="width:70px;" @click="saveRole" >保 存</el-button>
+        </div>
+    </el-dialog>
+</div>

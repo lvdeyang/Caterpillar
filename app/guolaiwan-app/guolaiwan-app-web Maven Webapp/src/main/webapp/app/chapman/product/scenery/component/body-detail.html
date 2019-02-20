@@ -1,0 +1,108 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+
+        /* 页面紧凑 */
+        #scenery-detail-body .box-header{position:relative; z-index:2;}
+
+        /* 面包屑 */
+        #scenery-detail-body .content-header{float:left; padding:0 10px;}
+        #scenery-detail-body .breadcrumb{position:static; top:0; padding:0;}
+        #scenery-detail-body .breadcrumb a{color:#333; cursor:pointer;}
+        #scenery-detail-body .breadcrumb a:hover{color:#00acd6;}
+
+        /* 隐藏展示切换 */
+        #scenery-detail-body .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #scenery-detail-table th, #scenery-detail-table td{vertical-align:middle;}
+        #scenery-detail-table th.center, #scenery-detail-table td.center{text-align:center;}
+        #scenery-detail-table th.left, #scenery-detail-table td.left{text-align:left;}
+        #scenery-detail-table th.right, #scenery-detail-table td.right{text-align:right;}
+        /* 文字颜色 */
+        #scenery-detail-table td a{color:#333; cursor:pointer;}
+        #scenery-detail-table td a:hover{color:#00acd6;}
+
+        #scenery-detail-table .operation a{font-size:18px; margin-right:10px;}
+        #scenery-detail-table .operation a.last{margin-right:0;}
+
+    </style>
+
+    <section id="scenery-detail-body" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <div>
+                            <button type="button" class="button-add btn btn-info margin"><i class="fa fa-folder-o" /> 新建景点项目</button>
+                            <button type="button" class="button-remove btn btn-warning margin" disabled><i class="fa fa-trash-o" /> 删除景点项目</button>
+                        </div>
+                        <div class="content-header">
+                            <ol class="breadcrumb">
+                                <li><a class="scenerys-show"><i class="fa fa-list-ul"></i> 景点列表</a></li>
+                                <li class="active">${scenery}</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div id="scenery-detail-list" class="box-body">
+
+                        <table id="scenery-detail-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:20px;">
+                                        <input type="checkbox" name="scenery-detail" class="flat-red checkall" />
+                                    </th>
+                                    <th class="center">标题</th>
+                                    <th class="center">描述</th>
+                                    <th class="center" style="width:100px;">类型</th>
+                                    <th class="center" style="width:150px">渲染样式</th>
+                                    <th class="right" style="width:100px">渲染顺序</th>
+                                    <th class="center" style="width:200px;">修改日期</th>
+                                    <th style="width:80px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {@if details && details.length>0}
+                                {@each details as detail}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="scenery-detail" class="flat-red" value="${detail.id}"/>
+                                        </td>
+                                        <td>
+                                            ${detail.title}
+                                        </td>
+                                        <td>
+                                            ${detail.introduction}
+                                        </td>
+                                        <td>
+                                            ${detail.type}
+                                        </td>
+                                        <td>
+                                            {@if detail.css}<span style="${detail.css}">${detail.styleName}</span>{@/if}
+                                        </td>
+                                        <td class="center">
+                                            ${detail.index}
+                                        </td>
+                                        <td class="center">
+                                            ${detail.updateTime}
+                                        </td>
+                                        <td class="operation center">
+                                            <a class="edit" data-toggle="tooltip" data-placement="bottom" title="编辑明细"><i class="fa fa-edit"></i></a>
+                                            <a class="last remove" data-toggle="tooltip" data-placement="bottom" title="删除明细"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                {@/each}
+                            {@/if}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

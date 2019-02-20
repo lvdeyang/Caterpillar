@@ -1,0 +1,19 @@
+<div class="ui-select {@if style}${style}{@/if}">
+    <style type="text/css">
+        .ui-select{width:100%; height:auto; position:relative; background:#fff; border-radius:4px;}
+        .ui-select input[readonly]{background:transparent; position:relative; z-index:2; padding-right:34px; width:100%; border-radius:4px;}
+        .ui-select .select-add{position:absolute; z-index:1; right:0; top:0; padding:6px 12px; font-size:14px; text-align:center; border:1px solid transparent; background:transparent;}
+        .ui-select .select-add:focus, .ui-select .select-add:focus:active, .ui-select .select-add:active{outline:none;}
+        .ui-select .dropdown-menu{width:100%; border-radius:0; border-color:#3c8dbc; margin:0; transition:all 0.2s linear; max-height:300px; overflow-y:auto; border-radius:4px;}
+        .ui-select li.active a{color:#fff !important;}
+    </style>
+    <input type="text" class="form-control" readonly data-toggle="dropdown" placeholder="请选择..." {@if active}data-value="${active.key}" value="${active.value}{@/if}">
+    <button class="select-add">
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <ul class="dropdown-menu">
+        {@each options as option}
+            <li data-value="${option.key}" {@if option.selected===true}class="active"{@/if}><a>$${option.value}</a></li>
+        {@/each}
+    </ul>
+</div>

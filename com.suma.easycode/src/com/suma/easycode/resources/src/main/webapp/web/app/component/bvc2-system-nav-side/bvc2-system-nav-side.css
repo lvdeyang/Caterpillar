@@ -1,0 +1,17 @@
+/* reset */
+.bvc2-system-nav-side .el-scrollbar__wrap{overflow:auto!important;}
+.bvc2-system-nav-side-menu:not(.el-menu--collapse){width:250px; min-height:100%;}
+.bvc2-system-nav-side .el-menu{border-right:0;}
+
+.bvc2-system-nav-side{width:251px; height:100%; position:relative; border-right:1px solid #e6e6e6; transition:all .3s cubic-bezier(.645,.045,.355,1);}
+.bvc2-system-nav-side.collapse{width:65px;}
+.bvc2-system-nav-side-menus{position:absolute; top:0; left:0; bottom:50px; right:0;}
+.bvc2-system-nav-side-slide{width:100%; height:50px; position:absolute; bottom:0; background-color:#fff;
+                                border-top:1px solid #e6e6e6; transition:all .3s cubic-bezier(.645,.045,.355,1);
+                                line-height:50px; text-align:center; cursor:pointer;}
+.bvc2-system-nav-side-slide>span{line-height:normal; font-size:24px; transition:all .3s cubic-bezier(.645,.045,.355,1);}
+.bvc2-system-nav-side-slide:hover{box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);}
+
+.bvc2-system-nav-side a{text-decoration:none; color:#303133;}
+.bvc2-system-nav-side .el-menu-item.is-active a{color:#409EFF;}
+.bvc2-system-nav-side .el-menu-item.is-active{background-color:#ecf5ff;}

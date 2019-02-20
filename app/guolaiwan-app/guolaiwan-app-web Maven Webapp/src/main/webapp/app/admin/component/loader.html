@@ -1,0 +1,44 @@
+<div class="loading">
+    <style>
+        @-webkit-keyframes line-spin-fade-loader {
+            50%{opacity:0.3;}
+            100%{opacity:1;}
+        }
+        @keyframes line-spin-fade-loader {
+            50%{opacity:0.3;}
+            100%{opacity:1;}
+        }
+
+        .loading{width:100%; height:100%; position:absolute; left:0; top:0; background-color:#000; opacity:.5; display:flex; z-index:500;}
+        .loading.hidden{display:none;}
+        .loading .loading-wrapper{margin:auto; /*position:relative; right:4px; top:12px;*/}
+        .loading .loading-wrapper>span{font-size:12px; position:relative; left:9px; bottom:20px; color:#eee;}
+
+        .loading .loader{box-sizing:border-box; display:flex; flex:0 1 auto; flex-direction:column; flex-grow:1; flex-shrink:0; flex-basis:25%; width:50px; height:50px; align-items:center; justify-content:center; position:relative; left:5px; bottom:10px;}
+        .loading .line-spin-fade-loader{position:relative;}
+        .loading .line-spin-fade-loader>div{background-color:#fff; width:4px; height:35px; border-radius:2px; margin:2px; -webkit-animation-fill-mode:both; animation-fill-mode:both; position:absolute; width:3px; height:9px;}
+        .loading .line-spin-fade-loader>div:nth-child(1){top:4px; left:-3px; -webkit-animation:line-spin-fade-loader 0.8s 0.12s infinite ease-in-out; animation:line-spin-fade-loader 0.8s 0.12s infinite ease-in-out;}
+        .loading .line-spin-fade-loader>div:nth-child(2){top:0.63636px; left:3.63636px; -webkit-transform:rotate(-45deg); -ms-transform:rotate(-45deg); transform:rotate(-45deg); -webkit-animation:line-spin-fade-loader 0.8s 0.24s infinite ease-in-out; animation:line-spin-fade-loader 0.8s 0.24s infinite ease-in-out;}
+        .loading .line-spin-fade-loader>div:nth-child(3){top:-6px; left:7px; -webkit-transform:rotate(90deg); -ms-transform:rotate(90deg); transform:rotate(90deg); -webkit-animation:line-spin-fade-loader 0.8s 0.36s infinite ease-in-out; animation:line-spin-fade-loader 0.8s 0.36s infinite ease-in-out;}
+        .loading .line-spin-fade-loader>div:nth-child(4){top:-12.63636px; left:3.63636px; -webkit-transform:rotate(45deg); -ms-transform:rotate(45deg); transform:rotate(45deg); -webkit-animation:line-spin-fade-loader 0.8s 0.48s infinite ease-in-out; animation:line-spin-fade-loader 0.8s 0.48s infinite ease-in-out;}
+        .loading .line-spin-fade-loader>div:nth-child(5){top:-16px; left:-3px; -webkit-animation:line-spin-fade-loader 0.8s 0.6s infinite ease-in-out; animation:line-spin-fade-loader 0.8s 0.6s infinite ease-in-out;}
+        .loading .line-spin-fade-loader>div:nth-child(6){top:-12.63636px; left:-9.63636px; -webkit-transform:rotate(-45deg); -ms-transform:rotate(-45deg); transform:rotate(-45deg); -webkit-animation:line-spin-fade-loader 0.8s 0.72s infinite ease-in-out; animation:line-spin-fade-loader 0.8s 0.72s infinite ease-in-out;}
+        .loading .line-spin-fade-loader>div:nth-child(7){top:-6px; left:-13px; -webkit-transform:rotate(90deg); -ms-transform:rotate(90deg); transform:rotate(90deg); -webkit-animation:line-spin-fade-loader 0.8s 0.84s infinite ease-in-out; animation:line-spin-fade-loader 0.8s 0.84s infinite ease-in-out;}
+        .loading .line-spin-fade-loader>div:nth-child(8){top:0.63636px; left:-9.63636px; -webkit-transform:rotate(45deg); -ms-transform:rotate(45deg); transform:rotate(45deg); -webkit-animation:line-spin-fade-loader 0.8s 0.96s infinite ease-in-out; animation:line-spin-fade-loader 0.8s 0.96s infinite ease-in-out;}
+    </style>
+    <div class="loading-wrapper">
+        <div class="loader">
+            <div class="loader-inner line-spin-fade-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <span>加载中...</span>
+    </div>
+</div>

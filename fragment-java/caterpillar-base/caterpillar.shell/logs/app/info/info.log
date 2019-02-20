@@ -1,0 +1,78 @@
+[INFO] 2017-08-06 10:20:38 411 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-06 10:20:38 552 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-06 10:20:38 552 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: INITIALIZING
+[INFO] 2017-08-06 10:20:38 567 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:38)
+自定义协议 client://
+[INFO] 2017-08-06 10:20:38 599 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: INITIALIZED
+[INFO] 2017-08-06 10:25:27 192 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-06 10:25:27 307 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-06 10:25:27 310 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: INITIALIZING
+[INFO] 2017-08-06 10:25:27 320 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:38)
+自定义协议 client://
+[INFO] 2017-08-06 10:25:27 342 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: INITIALIZED
+[INFO] 2017-08-06 10:25:45 340 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-06 10:25:45 482 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-06 10:25:45 483 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: INITIALIZING
+[INFO] 2017-08-06 10:25:45 493 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:38)
+自定义协议 client://
+[INFO] 2017-08-06 10:25:45 515 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:68)
+CefApp: INITIALIZED
+[INFO] 2017-08-06 10:26:53 787 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-06 10:26:53 907 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-06 10:26:53 909 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZING
+[INFO] 2017-08-06 10:26:53 919 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:37)
+自定义协议 client://
+[INFO] 2017-08-06 10:26:53 943 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZED
+[INFO] 2017-08-06 10:30:45 491 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-06 10:30:45 748 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-06 10:30:45 750 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZING
+[INFO] 2017-08-06 10:30:45 768 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:37)
+自定义协议 client://
+[INFO] 2017-08-06 10:30:45 791 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZED
+[INFO] 2017-08-06 10:31:03 737 method: pub.caterpillar.shell.jcef.App.main(App.java:43)
+离屏渲染： 开启
+[INFO] 2017-08-06 10:31:03 860 method: pub.caterpillar.shell.jcef.window.JCEFWindow.<init>(JCEFWindow.java:59)
+CEF版本:
+JCEF Version = 3.2623.137
+CEF Version = 3.2623.1401
+Chromium Version = 49.0.2623.110
+[INFO] 2017-08-06 10:31:03 862 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZING
+[INFO] 2017-08-06 10:31:03 875 method: pub.caterpillar.shell.jcef.handler.AppHandler.onRegisterCustomSchemes(AppHandler.java:37)
+自定义协议 client://
+[INFO] 2017-08-06 10:31:03 899 method: pub.caterpillar.shell.jcef.handler.AppHandler.stateHasChanged(AppHandler.java:67)
+CefApp: INITIALIZED

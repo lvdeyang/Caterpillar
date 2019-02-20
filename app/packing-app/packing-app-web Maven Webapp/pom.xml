@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+	    <groupId>pub.caterpillar.java</groupId>
+	    <artifactId>packing-app</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>packing-app-web</artifactId>
+    <packaging>war</packaging>
+    <name>packing-app-web Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+    
+    <build>
+	    <plugins>
+	        <plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		            <source>${java.version}</source>
+		            <target>${java.version}</target>
+		            <encoding>${file.encoding}</encoding>
+		        </configuration>
+	        </plugin>
+	    </plugins>
+    </build>
+    
+    <dependencies>
+    	<dependency>
+    		<groupId>pub.caterpillar.java</groupId>
+    		<artifactId>packing-app-business</artifactId>
+    		<version>0.0.1-SNAPSHOT</version>
+    	</dependency>
+    	
+    	<dependency>
+    		<groupId>pub.caterpillar.fragment</groupId>
+    		<artifactId>caterpillar-fragment-skeleton</artifactId>
+    		<version>0.0.1-SNAPSHOT</version>
+    	</dependency>
+    	
+    	<dependency>
+    		<groupId>pub.caterpillar.fragment</groupId>
+    		<artifactId>caterpillar-fragment-security</artifactId>
+    		<version>0.0.1-SNAPSHOT</version>
+    	</dependency>
+    	
+    	<!-- 云片通讯服务 -->
+    	<dependency>
+		    <groupId>com.yunpian.sdk</groupId>
+		    <artifactId>yunpian-java-sdk</artifactId>
+		    <version>1.2.5</version>
+		</dependency>
+		
+		<!-- 云片依赖 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.21</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpasyncclient</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpasyncclient-cache</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+    </dependencies>
+    
+</project>

@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+	    <groupId>pub.caterpillar.java</groupId>
+	    <artifactId>caterpillar-base</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>caterpillar-commons</artifactId>
+    <name>caterpillar-commons</name>
+    
+    <dependencies>
+  
+  		<!-- commons lang -->
+  		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+  
+	  	<!-- json -->
+	  	<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.8</version>
+		</dependency>
+		
+		<!-- ehcache 
+		<dependency>
+		    <groupId>net.sf.ehcache</groupId>
+		    <artifactId>ehcache</artifactId>
+		    <version>2.10.1</version>
+		</dependency>
+		-->
+		
+		<!-- log -->
+	  	<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+	  	<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.5</version>
+		</dependency>
+	  	
+	  	<!-- java mail -->
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>javax.mail-api</artifactId>
+		    <version>1.5.6</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>javax.mail</artifactId>
+		    <version>1.5.6</version>
+		</dependency>
+		
+		<!-- zxing二维码 -->
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>core</artifactId>
+		    <version>3.3.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>javase</artifactId>
+		    <version>3.3.1</version>
+		</dependency>
+  	
+    </dependencies>
+    
+    <build>
+	    <plugins>
+	        <plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		            <source>${java.version}</source>
+		            <target>${java.version}</target>
+		            <encoding>${file.encoding}</encoding>
+		        </configuration>
+	        </plugin>
+	    </plugins>
+    </build>
+    
+</project>

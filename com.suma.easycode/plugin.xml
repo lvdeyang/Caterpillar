@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaElement"
+            id="com.suma.easycode.contribution1">
+         <menu
+               label="Sumavision"
+               path="additions"
+               id="com.suma.easycode.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="转换为TetrisWeb工程"
+               class="com.suma.easycode.popup.actions.ChangeProjectAction"
+               menubarPath="com.suma.easycode.menu1/group1"
+               enablesFor="1"
+               id="com.suma.easycode.changeProjectAction">
+         </action>
+         <action
+               class="com.suma.easycode.popup.actions.GenerateAction"
+               enablesFor="1"
+               id="com.suma.easycode.GenerateAction"
+               label="生成代码"
+               menubarPath="com.suma.easycode.menu1/group1">
+               <!-- <enablement> 
+		           <objectState
+		                 name="firstName"
+		                 value="David"> 
+		           </objectState> -->
+		           <!--<objectClass name="org.eclipse.core.resources.IFolder"/>
+		        </enablement> -->
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

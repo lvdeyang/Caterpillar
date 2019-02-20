@@ -1,0 +1,60 @@
+<div class="bvc2-table-scheme">
+    <div class="bvc2-table-scheme-search">
+        <el-input placeholder="过滤器" size="mini" clearable>
+            <span slot="prefix" class="el-input__icon el-icon-search"></span>
+        </el-input>
+    </div>
+    <div class="bvc2-table-scheme-data">
+        <div class="bvc2-table-scheme-data-wrapper">
+            <el-table height="100%" :data="rows">
+                <el-table-column sortable label="方案名称">
+                    <el-tooltip slot-scope="scope" class="item" effect="dark" :content="scope.row.remark" placement="right">
+                        <span>{{scope.row.name}}</span>
+                    </el-tooltip>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="120">
+                    <span slot-scope="scope">
+                        <el-tooltip class="item" effect="dark" content="设置方案" placement="bottom">
+                            <el-button type="text" @click="configScheme(scope.row)"><span class="icon-cog icon-large"></span></el-button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="删除方案" placement="bottom">
+                            <el-button type="text" @click="removeScheme(scope.row)"><span class="icon-trash icon-large"></span></el-button>
+                        </el-tooltip>
+                    </span>
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
+    <div class="bvc2-table-scheme-footer">
+        <div  class="bvc2-table-scheme-footer-wrapper">
+            <el-button size="mini" class="bvc2-table-scheme-add" @click="addScheme"><span class="icon-plus" style="margin-right:5px;"></span>添加方案</el-button>
+            <span class="bvc2-table-scheme-page">
+                <el-pagination
+                        background
+                        :page-size="pageSize"
+                        :current-page.sync="currentPage"
+                        :pager-count="5"
+                        layout="pager"
+                        :total="total">
+                </el-pagination>
+            </span>
+        </div>
+    </div>
+    <el-dialog
+            title="添加方案"
+            :visible.sync="form.dialogVisible"
+            width="30%">
+        <el-form label-position="left" :model="form">
+            <el-form-item label="方案名称" :label-width="form.labelWidth">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="方案详情" :label-width="form.labelWidth">
+                <el-input type="textarea" :rows="4" v-model="form.remark"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="form.dialogVisible=false">取消</el-button>
+            <el-button type="primary" @click="saveScheme">确定</el-button>
+        </span>
+    </el-dialog>
+</div>

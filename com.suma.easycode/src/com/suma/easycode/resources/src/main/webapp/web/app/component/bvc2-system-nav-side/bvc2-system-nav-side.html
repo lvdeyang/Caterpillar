@@ -1,0 +1,52 @@
+<div :class="isCollapse?'bvc2-system-nav-side collapse':'bvc2-system-nav-side'">
+    <div class="bvc2-system-nav-side-menus">
+        <el-scrollbar style="height:100%; background-color:#fff;">
+            <el-menu class="bvc2-system-nav-side-menu"
+                     :default-active="active"
+                     :collapse="isCollapse">
+
+                <template v-for="menu in menus">
+                    <template v-if="menu.subs && menu.subs.length>0">
+                        <el-submenu :index="menu.id">
+                            <template slot="title">
+                                <i :class="menu.icon" :style="menu.style"></i>
+                                <span slot="title">{{menu.title}}</span>
+                            </template>
+                            <template v-for="sub0 in menu.subs">
+                                <template v-if="sub0.subs && sub0.subs.length>0">
+                                    <el-submenu :index="sub0.id">
+                                        <template slot="title">
+                                            <i :class="sub0.icon" :style="sub0.style"></i>
+                                            <span slot="title">{{sub0.title}}</span>
+                                        </template>
+                                        <template v-for="sub1 in sub0.subs">
+                                            <el-menu-item :index="sub1.id" @click="menuClick(sub1)">
+                                                <i :class="sub1.icon" :style="sub1.style"></i>
+                                                <span slot="title">{{sub1.title}}</span>
+                                            </el-menu-item>
+                                        </template>
+                                    </el-submenu>
+                                </template>
+                                <template v-elese>
+                                    <el-menu-item :index="sub0.id" @click="menuClick(sub0)">
+                                        <i :class="sub0.icon" :style="sub0.style"></i>
+                                        <span slot="title">{{sub0.title}}</span>
+                                    </el-menu-item>
+                                </template>
+                            </template>
+                        </el-submenu>
+                    </template>
+                    <template v-else>
+                        <el-menu-item :index="menu.id" @click="menuClick(menu)">
+                            <i :class="menu.icon" :style="menu.style"></i>
+                            <span slot="title">{{menu.title}}</span>
+                        </el-menu-item>
+                    </template>
+                </template>
+            </el-menu>
+        </el-scrollbar>
+    </div>
+    <div class="bvc2-system-nav-side-slide" @click="toggleCollapse">
+        <span :class="isCollapse?'el-icon-d-arrow-right':'el-icon-d-arrow-left'"></span>
+    </div>
+</div>

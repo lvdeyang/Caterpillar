@@ -1,0 +1,103 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+
+        /* 页面紧凑 */
+        #scenery-body .box-header{position:relative; z-index:2;}
+        /* 隐藏展示切换 */
+        #scenery-body .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #scenery-table th, #scenery-table td{vertical-align:middle;}
+        #scenery-table th.center, #scenery-table td.center{text-align:center;}
+        #scenery-table th.left, #scenery-table td.left{text-align:left;}
+        #scenery-table th.right, #scenery-table td.right{text-align:right;}
+        /* 文字颜色 */
+        #scenery-table td a{color:#333; cursor:pointer;}
+        #scenery-table td a:hover{color:#00acd6;}
+
+        #scenery-table .operation{position:relative;}
+        #scenery-table .operation a{font-size:18px; margin-right:10px;}
+        #scenery-table .operation a.last{margin-right:0;}
+        #scenery-table .operation ul{left:inherit; right:0;}
+        #scenery-table .operation ul a{font-size:14px; margin-right:0;}
+
+    </style>
+
+    <section id="scenery-body" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <div>
+                            <button type="button" class="button-add btn btn-info margin"><i class="fa fa-folder-o" /> 新建景点</button>
+                            <button type="button" class="button-remove btn btn-warning margin" disabled><i class="fa fa-trash-o" /> 删除景点</button>
+                        </div>
+                    </div>
+                    <div id="scenery-list" class="box-body">
+
+                        <table id="scenery-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:20px;">
+                                        <input type="checkbox" name="scenery" class="flat-red checkall" />
+                                    </th>
+                                    <th class="center">景点名称</th>
+                                    <th class="center">景点描述</th>
+                                    <th class="center" style="width:25%;">地理位置</th>
+                                    <th class="center" style="width:100px;">价格</th>
+                                    <th class="center" style="width:150px;">修改日期</th>
+                                    <th style="width:100px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {@if scenerys && scenerys.length>0}
+                                    {@each scenerys as scenery}
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="scenery" class="flat-red" value="${scenery.id}"/>
+                                            </td>
+                                            <td>
+                                                <a class="sub-product-show" data-toggle="tooltip" data-placement="bottom" title="子商品">${scenery.name}</a>
+                                            </td>
+                                            <td>
+                                                ${scenery.introduction}
+                                            </td>
+                                            <td>
+                                                <a class="map-show">${scenery.position}</a>
+                                            </td>
+                                            <td>
+                                                ${scenery.price}
+                                            </td>
+                                            <td class="center">
+                                                ${scenery.updateTime}
+                                            </td>
+                                            <td class="operation center">
+                                                <a class="on-shelve" data-placement="bottom" title="商品上架"><i class="fa fa-level-up"></i></a>
+                                                <a class="properties" data-toggle="dropdown" data-placement="bottom" title="商品属性"><i class="fa fa-list"></i></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a data-hash="#/product-detail/${scenery.id}">商品扩展信息</a></li>
+                                                    <li><a data-hash="#/product-source/${scenery.id}">资源列表</a></li>
+                                                    <li><a data-hash="#/product-gd/${scenery.id}">图文详情</a></li>
+                                                    <li><a data-hash="#/product-timeline/${scenery.id}">进度图（流程图）</a></li>
+                                                    <li><a data-hash="#/product-schedule/${scenery.id}">排期表</a></li>
+                                                </ul>
+                                                <a class="edit" data-placement="bottom" title="编辑景点"><i class="fa fa-edit"></i></a>
+                                                <a class="last remove" data-placement="bottom" title="删除景点"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    {@/each}
+                                {@/if}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

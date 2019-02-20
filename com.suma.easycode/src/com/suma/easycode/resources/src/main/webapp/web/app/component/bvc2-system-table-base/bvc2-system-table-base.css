@@ -1,0 +1,41 @@
+/* reset */
+.bvc2-system-table-base,
+.bvc2-system-table-base div,
+.bvc2-system-table-base td,
+.bvc2-system-table-base th,
+.bvc2-system-table-base span{box-sizing:border-box;}
+.bvc2-system-table-base .cell{overflow:visible!important;}
+
+.bvc2-system-table-base{width:100%; height:100%; position:relative;}
+.bvc2-system-table-base-head{height:59px; line-height:59px; position:absolute; top:-59px; padding:0 10px; width:100%;}
+.bvc2-system-table-base-head-wrapper{height:100%; width:100%; position:relative;}
+
+.bvc2-system-table-base-head-button{padding:10px!important;}
+.bvc2-system-table-base-head-button-icon{margin-right:5px;}
+
+.bvc2-bvc2-system-table-base-title{position:absolute; left:300px; top:0; bottom:0; right:400px; text-align:left; line-height:59px; white-space:nowrap;}
+
+.bvc2-system-table-base-search{width:300px; float:right;}
+.bvc2-system-table-base-search.with-breadcrumb{display:inline-block; margin-left:10px; float:none;}
+.bvc2-system-table-base-search .el-select{width:100px;}
+.bvc2-system-table-base-search .el-input-group__prepend{border-top-left-radius:20px; border-bottom-left-radius:20px;}
+.bvc2-system-table-base-search .el-input-group__append{border-top-right-radius:20px; border-bottom-right-radius:20px;}
+
+.bvc2-system-table-base-breadcrumb{position:absolute; display:inline-block; width:auto; right:0; top:0; bottom:0; line-height:59px;}
+.bvc2-system-table-base-breadcrumb-wrapper{display:inline-block;}
+
+.bvc2-system-table-base-data{width:100%; position:absolute; left:0; top:0; bottom:60px;}
+.bvc2-system-table-cell-html-wrapper-outer{line-height:normal; position:relative;}
+.bvc2-system-table-cell-html-wrapper-inner{position:absolute; top:-24px; width:100%;}
+.bvc2-system-table-cell-html-edit{padding:8px; position:absolute; top:7px; right:0; font-size:18px;}
+.bvc2-system-table-base-foot{width:100%; height:60px; line-height:59px; position:absolute; bottom:0; left:0;}
+
+.bvc2-system-table-cell-entity{width:100%; height:40px; position:relative;}
+.bvc2-system-table-cell-entity-tags{position:absolute; left:0; right:40px; bottom:0; top:0; line-height:38px; border:1px solid #dcdfe6;
+                                         border-right:0; border-top-left-radius:4px; border-bottom-left-radius:4px; padding:0 8px; overflow:hidden;
+                                         background-color:#fff;}
+.bvc2-system-table-cell-entity-button{width:40px; height:40px; position:absolute; right:0; top:0; border-top-left-radius:0; border-bottom-left-radius:0; padding:8px; font-size:18px;}
+
+.bvc2-system-table-base-foot-page{line-height:normal; height:32px; display:inline-block; float:right; position:relative; top:14px; right:10px;}
+
+.bvc2-system-table-dialog-table-wrapper{width:100%; max-height:450px;}

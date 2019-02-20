@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd"
+	>
+	
+	<!-- 启用Aspectj的支持 使用CGLIB (true) -->			
+	<aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+	
+	<!-- 扫描所有的dao包以及service包（解决包名影响配置文件复用性问题） -->
+	<context:component-scan base-package="**.service, **.check"/>
+	
+	<!-- 启用AOP注解 ,不过最好还是配置文件
+ 	<bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator" >
+		<property name="proxyTargetClass" value="true" />
+		<property name="optimize" value="true" />
+	</bean> -->
+	
+	<!-- 配置日志  --> 
+    <bean id="log4jInitialization" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">  
+    	<property name="targetClass" value="org.springframework.util.Log4jConfigurer" />  
+        <property name="targetMethod" value="initLogging" />  
+        <property name="arguments">  
+            <list>  
+            	<value>classpath:properties/log/log4j.properties</value>
+            </list>  
+        </property>  
+    </bean>
+	
+	<!-- property加载器 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="order" value="1" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+		<list>
+			<value>classpath*:properties/jdbc/jdbc.properties</value>
+		</list>
+		</property>
+	</bean>
+	
+	<!-- 上下文环境 -->
+	<bean class="pub.caterpillar.commons.context.SpringContext" lazy-init="false" >
+		<property name="locale" value="US" />
+	</bean>
+	
+	<!-- 内存序列 -->
+	<bean class="pub.caterpillar.commons.util.sequence.MemorySequence"></bean>
+	
+</beans>

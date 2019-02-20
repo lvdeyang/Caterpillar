@@ -1,0 +1,79 @@
+<section data-type="text/component">
+    <!-- 组件样式单 -->
+    <style type="text/css">
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        /* 单元格居中 */
+        #picture-table th, #picture-table td{text-align:left; vertical-align:middle;}
+        /* 文件夹图标 */
+        #picture-table td.type.folder>i{font-size:28px; color:#FFD659; position:relative; top:1px;}
+        /* 图片图标 */
+        #picture-table td.type.picture>i{font-size:20px; position:relative; left:4px; top:2px;}
+        /* 文字颜色 */
+        #picture-table a{color:#333; cursor:pointer;}
+        #picture-table a:hover{color:#00acd6;}
+    </style>
+
+    <table id="picture-table" class="table table-hover">
+        <thead>
+            <tr>
+                <th style="width:20px;">
+                    <input type="checkbox" name="picture" class="flat-red checkall" />
+                </th>
+                <th style="width:20px;"></th>
+                <th>文件名</th>
+                <th style="width:20%;">大小</th>
+                <th style="width:20%;">修改日期</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {@if folders && folders.length>0}
+                {@each folders as folder}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="picture" class="flat-red" value="${folder.id}" />
+                            <!--<input type="hidden" value="${folder.uuid}"/>-->
+                        </td>
+                        <td class="type folder">
+                            <i class="fa fa-folder" class="target-type-folder" />
+                        </td>
+                        <td>
+                            <a>${folder.name}</a>
+                        </td>
+                        <td>
+                            -
+                        </td>
+                        <td>
+                            ${folder.updateTime}
+                        </td>
+                    </tr>
+                {@/each}
+            {@/if}
+
+            {@if pictures && pictures.length>0}
+                {@each pictures as picture}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="picture" class="flat-red" value="${picture.id}" />
+                            <!--<input type="hidden" value="${picture.uuid}"/>-->
+                        </td>
+                        <td class="type picture">
+                            <i class="fa fa-file-picture-o" class="target-type-picture" />
+                        </td>
+                        <td>
+                            <a>${picture.name}</a>
+                        </td>
+                        <td>
+                            ${picture.size}
+                        </td>
+                        <td>
+                            ${picture.updateTime}
+                        </td>
+                    </tr>
+                {@/each}
+            {@/if}
+
+        </tbody>
+    </table>
+</section>
