@@ -66,8 +66,10 @@ import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.dao.DistributePolicyDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
+import com.guolaiwan.bussiness.distribute.dao.RegionDao;
 import com.guolaiwan.bussiness.distribute.po.DistributePolicy;
 import com.guolaiwan.bussiness.distribute.po.DistributeProduct;
+import com.guolaiwan.bussiness.distribute.po.RegionPo;
 
 import pub.caterpillar.mvc.controller.BaseController;
 
@@ -1096,6 +1098,8 @@ public class ProductController extends BaseController {
 		return mv;
 	}
 
+	@Autowired
+	private RegionDao conn_region;
 	// 查询所有分销产品
 	@ResponseBody
 	@RequestMapping(value = "/distributeProductList.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -1106,6 +1110,12 @@ public class ProductController extends BaseController {
 			List<DistributeProduct> listpo = conn_distributeProduct.queryOnlineByRegion(0l);
 			List<DistributeProductVO> listvo = DistributeProductVO.getConverter(DistributeProductVO.class)
 					.convert(listpo, DistributeProductVO.class);
+			for (DistributeProductVO distributeProductVO : listvo) {
+				RegionPo regionPo=conn_region.get(distributeProductVO.getRegionId());
+				ProductPO productPO=conn_product.get(distributeProductVO.getProduct_id());
+				distributeProductVO.setRegionName(regionPo==null?"商户":regionPo.getName());
+				distributeProductVO.setProductName(productPO.getProductName());
+			}
 
 			map.put("data", listvo);
 			map.put("code", "0");
@@ -1117,6 +1127,13 @@ public class ProductController extends BaseController {
 					.queryOnlineByMerchant(getMerchantInfo().getMerchantId());
 			List<DistributeProductVO> listvo = DistributeProductVO.getConverter(DistributeProductVO.class)
 					.convert(listpo, DistributeProductVO.class);
+			for (DistributeProductVO distributeProductVO : listvo) {
+				RegionPo regionPo=conn_region.get(distributeProductVO.getRegionId());
+				ProductPO productPO=conn_product.get(distributeProductVO.getProduct_id());
+				distributeProductVO.setRegionName(regionPo==null?"商户":regionPo.getName());
+				distributeProductVO.setProductName(productPO.getProductName());
+			}
+
 
 			map.put("data", listvo);
 			map.put("code", "0");
