@@ -31,48 +31,7 @@
 			class="layui-icon" style="line-height:30px">ဂ</i></a>
 	</div>
 	<div id="prosel" class="x-body">
-		<form class="layui-form">
-			模块名称：
-			<div class="layui-input-inline">
-				<select name="modularCode" id="modularCode" lay-filter="filter">
-					<option value=""></option>
-					<c:forEach items="${modulars}" var="modular">
-						<option value="${modular.modularCode}">${modular.modularName}</option>
-					</c:forEach>
-				</select>
-			</div>
-			分类名称：
-			<div class="layui-input-inline">
-				<select name="classCode" id="classCode">
-					<option value=""></option>
-					<c:forEach items="${Classes}" var="Class">
-						<option value="${Class.classCode}">${Class.className}</option>
-					</c:forEach>
-				</select>
-			</div>
-			产品名称：
-			<div class="layui-input-inline">
-				<input class="layui-input" name="productName">
-			</div>
-			商家名称：
-			<div class="layui-input-inline">
-				<input class="layui-input" name="shopName">
-			</div>
-			审核状态：
-			<div class="layui-input-inline">
-				<select name="productAuditstates" id="productAuditstates">
-					<option value=""></option>
-					<option value="C">草稿</option>
-					<option value="D">待审核</option>
-					<option value="N">未通过</option>
-					<option value="T">审核通过</option>
-				</select>
-			</div>
-			<div align="right" class="layui-input-inline">
-				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
-				<button class="layui-btn" lay-filter="getPro" lay-submit>搜索</button>
-			</div>
-		</form>
+		
 	</div>
 	<!--  -->
 	<div class="x-body">
@@ -81,18 +40,16 @@
 			onclick="policy_add('添加政策','../addPolicy?id=${productId}','500','600')">
 			<i class="layui-icon">&#xe608;</i>添加
 		</button>
-		<button class="layui-btn layui-btn-danger" onclick="delAll()">
-			<i class="layui-icon">&#xe640;</i>批量删除
-		</button>
+		
 		<span class="x-right" style="line-height:40px">系统中共有：<span
-			id="count">${count}</span>个商品
+			id="count">${count}</span>条数据
 		</span> </xblock>
 		<table id="productList" lay-filter="productList"></table>
 	</div>
 	<!-- 操作引擎模板 -->
 	<script type="text/html" id="procaozuoTpl">
  <a title="详情" href="javascript:;" onclick="product_info('产品详情','info','{{d.uuid}}','','510')" style="text-decoration:none;display:none;"><i class="layui-icon">&#xe62d;</i></a>
- <a title="删除" href="javascript:;" onclick="pro_del(this,'{{ d.uuid }}')" style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a>
+ <a title="删除" href="javascript:;" onclick="pro_del(this,'{{ d.id }}')" style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a>
  <a title="套餐" href="javascript:;" onclick="full_show('产品套餐','package','{{ d.id }}','','510')" style="text-decoration:none;display:none;"><i class="layui-icon">&#xe857;</i></a>
 </script>
 
@@ -203,6 +160,31 @@
 				] ]
 			});
 		}
+	
+	    
+	    
+	    function pro_del(obj,id,name){
+                layer.confirm('确认要删除吗？',function(index){
+                  layer.close(index);
+                  layer.load();
+                  //发异步删除数据
+                  $.ajax({
+                    type:"get",
+                    url:"../poliDel/"+id,
+                    data:{},
+                    success:function(msg){
+                  	 if(msg=="success"){
+                        layer.closeAll("loading");
+                  		  $(obj).parents("tr").remove();
+                  		  layer.msg('已删除!',{icon:1,time:1000});
+                  	 }
+                    }
+                  }) 
+                });
+            }
+	    
+	
+	
 	
 		function getProductListByf(data) {
 			table.render({

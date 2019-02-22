@@ -531,7 +531,7 @@ public class NEWDistributorController {
 		for (DistributePolicy distributePolicy : policys) {
 			if(distributePolicy.getCount()==count){
 				
-				return distributePolicy;
+				return distributePolicy.getPrice();
 			}
 		}
 		return null;

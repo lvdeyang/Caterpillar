@@ -31,48 +31,7 @@
 			class="layui-icon" style="line-height:30px">ဂ</i></a>
 	</div>
 	<div id="prosel" class="x-body">
-		<form class="layui-form">
-			模块名称：
-			<div class="layui-input-inline">
-				<select name="modularCode" id="modularCode" lay-filter="filter">
-					<option value=""></option>
-					<c:forEach items="${modulars}" var="modular">
-						<option value="${modular.modularCode}">${modular.modularName}</option>
-					</c:forEach>
-				</select>
-			</div>
-			分类名称：
-			<div class="layui-input-inline">
-				<select name="classCode" id="classCode">
-					<option value=""></option>
-					<c:forEach items="${Classes}" var="Class">
-						<option value="${Class.classCode}">${Class.className}</option>
-					</c:forEach>
-				</select>
-			</div>
-			产品名称：
-			<div class="layui-input-inline">
-				<input class="layui-input" name="productName">
-			</div>
-			商家名称：
-			<div class="layui-input-inline">
-				<input class="layui-input" name="shopName">
-			</div>
-			审核状态：
-			<div class="layui-input-inline">
-				<select name="productAuditstates" id="productAuditstates">
-					<option value=""></option>
-					<option value="C">草稿</option>
-					<option value="D">待审核</option>
-					<option value="N">未通过</option>
-					<option value="T">审核通过</option>
-				</select>
-			</div>
-			<div align="right" class="layui-input-inline">
-				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
-				<button class="layui-btn" lay-filter="getPro" lay-submit>搜索</button>
-			</div>
-		</form>
+		
 	</div>
 	<!--  -->
 	<div class="x-body">
@@ -181,14 +140,14 @@
 						type : 'checkbox'
 					}
 					, {
-						field : 'disProId',
-						title : 'ID',
+						field : 'productName',
+						title : '商品',
 						sort : true,
-						width : 60
+						width : 200
 					}
 					, {
-						field : 'distributorId',
-						title : '分销ID',
+						field : 'distributorName',
+						title : '商户',
 						sort : true
 					}
 					, {
@@ -217,19 +176,19 @@
 					, {
 						field : 'proleft',
 						title : '剩余数量',
-						width : 200,
+						width : 180,
 						sort : true
 					}
 					, {
-						field : 'regionId',
-						title : '区域ID',
-						width : 200,
+						field : 'regionName',
+						title : '区域',
+						width : 100,
 						sort : true
 					}
 					, {
 						field : 'sellPrice',
 						title : '售价',
-						width : 200,
+						width : 80,
 						sort : true
 					}
 					, {

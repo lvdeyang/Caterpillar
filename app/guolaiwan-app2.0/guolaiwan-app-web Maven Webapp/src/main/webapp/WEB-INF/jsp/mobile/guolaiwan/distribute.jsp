@@ -597,7 +597,8 @@ html, body {
 					html.push('	<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+data[i].pic+'" alt="">');
 					html.push('</div>');
 					html.push('<div class="weui-media-box__bd">');
-					html.push('	<h4 style="width:50%;float:left" class="weui-media-box__title">'+data[i].name+'</h4><h4 style="width:50%;float:right;text-align:right" class="weui-media-box__title">$140</h4>');
+					html.push('	<h4 style="width:50%;float:left" class="weui-media-box__title">'+data[i].name+'</h4><h4 style="width:50%;float:right;text-align:right" class="weui-media-box__title">￥'+
+					data[i].price+'</h4>');
 					html.push('	<p style="width:100%;height:15px" class="weui-media-box__desc">'+data[i].name+'</p>');
 					html.push('	<p style="width:100%" class="weui-media-box__desc"><div style="float:right;margin-right:4px;">分销</div></p>');
 					html.push('</div>');

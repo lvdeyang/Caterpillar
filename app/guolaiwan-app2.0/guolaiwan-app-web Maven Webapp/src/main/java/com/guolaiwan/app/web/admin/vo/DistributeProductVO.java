@@ -10,6 +10,8 @@ public class DistributeProductVO extends AbstractBaseVO<DistributeProductVO, Dis
 	private long disProId;
 
 	private long distributorId;
+	
+	private String distributorName;
 
 	private DistributorType distributorType;
 
@@ -30,6 +32,17 @@ public class DistributeProductVO extends AbstractBaseVO<DistributeProductVO, Dis
 	private String productName;
 	
 	private String regionName;
+    
+	
+	
+	
+	public String getDistributorName() {
+		return distributorName;
+	}
+
+	public void setDistributorName(String distributorName) {
+		this.distributorName = distributorName;
+	}
 
 	public long getDisProId() {
 		return disProId;

@@ -66,9 +66,11 @@ import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.dao.DistributePolicyDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
+import com.guolaiwan.bussiness.distribute.dao.DistributorDao;
 import com.guolaiwan.bussiness.distribute.dao.RegionDao;
 import com.guolaiwan.bussiness.distribute.po.DistributePolicy;
 import com.guolaiwan.bussiness.distribute.po.DistributeProduct;
+import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 import com.guolaiwan.bussiness.distribute.po.RegionPo;
 
 import pub.caterpillar.mvc.controller.BaseController;
@@ -595,8 +597,8 @@ public class ProductController extends BaseController {
 		distributeProduct.setDistributorId(productPO.getProductMerchantID());
 		distributeProduct.setDistributorType(DistributorType.PROVINCE);
 		distributeProduct.setProduct(productPO);
-		distributeProduct.setProleft(1000000);
-		distributeProduct.setPrice(140);
+		distributeProduct.setProleft(10000);
+		distributeProduct.setPrice(productPO.getProductPrice());
 		distributeProduct.setRegionId(0l);
 		distributeProduct.setOnline(1);
 		conn_distributeProduct.save(distributeProduct);
@@ -1100,6 +1102,8 @@ public class ProductController extends BaseController {
 
 	@Autowired
 	private RegionDao conn_region;
+	@Autowired
+	private DistributorDao conn_distributor;
 	// 查询所有分销产品
 	@ResponseBody
 	@RequestMapping(value = "/distributeProductList.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -1112,9 +1116,11 @@ public class ProductController extends BaseController {
 					.convert(listpo, DistributeProductVO.class);
 			for (DistributeProductVO distributeProductVO : listvo) {
 				RegionPo regionPo=conn_region.get(distributeProductVO.getRegionId());
-				ProductPO productPO=conn_product.get(distributeProductVO.getProduct_id());
+				ProductPO productPO=conn_product.get(distributeProductVO.getDisProId());
+				MerchantPO merchantPO=conn_merchant.get(distributeProductVO.getDistributorId());
 				distributeProductVO.setRegionName(regionPo==null?"商户":regionPo.getName());
 				distributeProductVO.setProductName(productPO.getProductName());
+				distributeProductVO.setDistributorName(merchantPO.getShopName());
 			}
 
 			map.put("data", listvo);
@@ -1129,9 +1135,11 @@ public class ProductController extends BaseController {
 					.convert(listpo, DistributeProductVO.class);
 			for (DistributeProductVO distributeProductVO : listvo) {
 				RegionPo regionPo=conn_region.get(distributeProductVO.getRegionId());
-				ProductPO productPO=conn_product.get(distributeProductVO.getProduct_id());
+				ProductPO productPO=conn_product.get(distributeProductVO.getDisProId());
+				MerchantPO merchantPO=conn_merchant.get(distributeProductVO.getDistributorId());
 				distributeProductVO.setRegionName(regionPo==null?"商户":regionPo.getName());
 				distributeProductVO.setProductName(productPO.getProductName());
+				distributeProductVO.setDistributorName(merchantPO.getShopName());
 			}
 
 
@@ -1272,6 +1280,16 @@ public class ProductController extends BaseController {
 		
 		return "success";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/poliDel/{id}")
+	public String deletePoli(@PathVariable long id){
+
+		conn_distributePolicy.delete(id);
+		
+		return "success";
+	}
+	
 	
 	// 详情页面
 	@ResponseBody
