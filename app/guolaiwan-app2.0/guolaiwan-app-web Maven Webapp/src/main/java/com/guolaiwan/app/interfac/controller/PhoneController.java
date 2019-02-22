@@ -3015,8 +3015,10 @@ public class PhoneController extends WebBaseControll {
 		
 		if (_order.getActivityId() != 0) {
 			ActivityRelPO activityRelPO = conn_activityRel.get(_order.getActivityId());
-			_order.setProductPrice(
-					new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+			if(activityRelPO!=null){
+				_order.setProductPrice(
+						new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+			}
 		}
 		dataMap.put("order", _order);
 		return success(dataMap);
