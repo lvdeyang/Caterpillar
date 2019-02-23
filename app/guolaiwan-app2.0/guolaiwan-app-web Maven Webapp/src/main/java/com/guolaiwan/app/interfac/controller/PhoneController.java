@@ -2728,8 +2728,11 @@ public class PhoneController extends WebBaseControll {
 					}
 					if (orderInfoVO.getActivityId() != 0) {
 						ActivityRelPO activityRelPO = conn_activityRel.get(orderInfoVO.getActivityId());
-						orderInfoVO.setProductPrice(
-								new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+						if(activityRelPO!=null){
+							orderInfoVO.setProductPrice(
+									new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+						}
+						
 					}
 				}
 				orders = orderingOrders;
