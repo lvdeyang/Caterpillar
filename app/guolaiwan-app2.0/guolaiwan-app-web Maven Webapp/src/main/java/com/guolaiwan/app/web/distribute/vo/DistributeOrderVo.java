@@ -43,7 +43,7 @@ public class DistributeOrderVo extends AbstractBaseVO<DistributeOrderVo, Distrib
 		.setContractVideoUrl(entity.getContractVideoUrl())
 		.setRejectReason(entity.getRejectReason())
 		.setPrice(entity.getPrice())
-		.setApplicationDate(df.format(entity.getApplicationDate()));
+		.setApplicationDate(entity.getApplicationDate()!=null?df.format(entity.getApplicationDate()):"");
 
 		return this;
 	}
