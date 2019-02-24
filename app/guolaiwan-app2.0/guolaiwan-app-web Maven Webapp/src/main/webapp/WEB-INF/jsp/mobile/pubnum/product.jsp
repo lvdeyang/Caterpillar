@@ -1414,7 +1414,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">套餐选择</label></div>
 			    <div class="weui-cell__bd" style="width:80%;">
-			      <select class="weui-select" id="comboList" name="select1">
+			      <select id="comboList" style="width:130px;height:25px;line-height:25px" name="select1">
 		         
 		          </select>
 			    </div>
@@ -1426,7 +1426,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">物流选择</label></div>
 			    <div class="weui-cell__bd" style="width:80%;">
-			      <select class="weui-select" id="logisticsList" name="select1">
+			      <select id="logisticsList" style="width:130px;height:25px;line-height:25px" name="select1">
 		         
 		          </select>
 			    </div>

@@ -601,6 +601,8 @@ html, body {
 			data = parseAjaxResult(data);
 			if(data === -1) return;
 			if(data){
+			   var html=[];
+			   html.push('<option value="0">全部</option>');
 			   var classes=data[0].children;
 			   var items=[];
 			   var item1={};
@@ -612,14 +614,16 @@ html, body {
 			      item.title=classes[i].className;
 			      item.value=classes[i].classCode;
 			      items.push(item);
+			      html.push('<option value="'+classes[i].classCode+'">'+classes[i].className+'</option>')
 			   }
-			    $("#classes").select({
+			   $("#classes").append(html.join(''));
+			    /*$("#classes").select({
 				  title: "选择分类",
 				  items: items,
 				  onClose:function(e){
 				     getMerchants(e.data.values);
 				  }
-				});
+				});*/
 				
 				getMerchants(0);
 				
@@ -627,7 +631,10 @@ html, body {
 			
 		});
 		
-		
+		$(document).on('change','#classes',function(){
+		   getMerchants($(this).val());
+		   
+		});
 		
 		
 		function getMerchants(classId){
@@ -769,7 +776,8 @@ html, body {
 			<div class="weui-cell" style="font-size:14px;">
 		        <div class="weui-cell__hd"><label for="name" class="weui-label">选择分类</label></div>
 		        <div class="weui-cell__bd">
-		          <input class="weui-input" style="width: 100px" id="classes" type="text" value="全部" readonly="" data-values="0">
+		          <!-- <input class="weui-input" style="width: 100px" id="classes" type="text" value="全部" readonly="" data-values="0"> -->
+		          <select id="classes" style="width:100px;height:30px;line-height:30px"></select>
 		        </div>
 	       </div>
 		</div>

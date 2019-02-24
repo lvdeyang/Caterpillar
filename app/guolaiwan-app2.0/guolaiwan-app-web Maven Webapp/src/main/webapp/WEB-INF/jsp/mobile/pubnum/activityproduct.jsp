@@ -1175,7 +1175,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">物流选择</label></div>
 			    <div class="weui-cell__bd" style="width:80%;">
-			      <select class="weui-select" id="logisticsList" name="select1">
+			      <select style="width:130px;height:25px;line-height:25px"  id="logisticsList" name="select1">
 		         
 		          </select>
 			    </div>
