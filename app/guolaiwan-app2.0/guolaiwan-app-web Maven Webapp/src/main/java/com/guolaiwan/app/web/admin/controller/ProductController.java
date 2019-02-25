@@ -241,6 +241,15 @@ public class ProductController extends BaseController {
 		String remarks=request.getParameter("remarks");
 		String notes=request.getParameter("notes");
 		String traffic=request.getParameter("traffic");
+		
+		
+		String regionFirst=request.getParameter("regionFirst");
+		String regionSecond=request.getParameter("regionSecond");
+		String regionThird=request.getParameter("regionThird");
+		
+		product.setRegionId(Long.parseLong(regionFirst));
+		
+		
 		if(traffic!=null&&!traffic.isEmpty()){
 			product.setTraffic(traffic);	
 		}
@@ -600,6 +609,7 @@ public class ProductController extends BaseController {
 		distributeProduct.setProleft(10000);
 		distributeProduct.setPrice(productPO.getProductPrice());
 		distributeProduct.setRegionId(0l);
+		distributeProduct.setProRegionId(productPO.getRegionId());
 		distributeProduct.setOnline(1);
 		conn_distributeProduct.save(distributeProduct);
 		return "success";
@@ -1368,5 +1378,16 @@ public class ProductController extends BaseController {
 	    conn_productcombo.save(comboPO);
 		return "success";
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/regions",method = RequestMethod.GET,produces = "application/json; charset=utf-8")
+	public Map<String, Object> regionList(long parentId)throws Exception{
+        List<RegionPo> regionPos=conn_region.findByField("parentId", parentId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("data", regionPos);		
+		return map;
+	}
+	
 	
 }

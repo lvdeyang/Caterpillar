@@ -76,12 +76,21 @@ public class NEWDistributorController {
 	private DistributorDao conn_distributor;
 	@Autowired
 	private RegionDao conn_region;
-	@RequestMapping(value = "/distribute/index/{region}")
+	@RequestMapping(value = "/distribute/index/{region}/{proRegion}")
 	public ModelAndView distributeIndex(
-			HttpServletRequest request,@PathVariable long region) throws Exception{
+			HttpServletRequest request,@PathVariable long region,@PathVariable long proRegion) throws Exception{
 		ModelAndView mv = null;
         mv = new ModelAndView("mobile/guolaiwan/distribute");
         HttpSession session=request.getSession();
+        if(proRegion==0){
+        	 RegionPo regionPo=conn_region.get(Long.parseLong(session.getAttribute("region")+""));
+        	 while(regionPo.getParentId()!=0){
+        		 regionPo=conn_region.get(regionPo.getParentId());
+        	 }
+        	 mv.addObject("proRegion",regionPo.getId());
+        }else{
+        	 mv.addObject("proRegion",proRegion);
+        }
         if(region==0l){
         	 mv.addObject("region",session.getAttribute("region"));
         }else{
@@ -265,19 +274,21 @@ public class NEWDistributorController {
 	
 	@RequestMapping(value = "/purchase/index")
 	public ModelAndView purchaseIndex(
-			HttpServletRequest request) throws Exception{
+			HttpServletRequest request,long proRegion) throws Exception{
 		ModelAndView mv = null;
         mv = new ModelAndView("mobile/guolaiwan/purchase");
+        mv.addObject("proRegion", proRegion);
 		return mv;
 	}
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/purchase/list", method = RequestMethod.GET)
-	public Object puchaseIndex(HttpServletRequest request) throws Exception{
+	public Object puchaseIndex(HttpServletRequest request,long proRegion) throws Exception{
 		
 		HttpSession session=request.getSession();
 		long regionId=Long.parseLong(session.getAttribute("region").toString());
-		List<DistributeProduct> products=conn_dispro.queryOnlineByRegion(regionId);
+		RegionPo regionPo=conn_region.get(regionId);
+		List<DistributeProduct> products=conn_dispro.queryOnlineByRegionAndpregion(regionPo.getParentId(),proRegion);
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {
@@ -478,6 +489,18 @@ public class NEWDistributorController {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/deleteorder/index/{orderId}")
+	public ModelAndView deleteOrderIndex(
+			HttpServletRequest request,@PathVariable long orderId) throws Exception{
+		ModelAndView mv = null;
+        mv = new ModelAndView("mobile/guolaiwan/my-order");
+        conn_order.delete(orderId);
+        HttpSession session=request.getSession();
+        mv.addObject("distributorId", session.getAttribute("distributorId"));
+		return mv;
+	}
+	
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/order/doCheck")
@@ -656,12 +679,12 @@ public class NEWDistributorController {
 	
 	@ResponseBody
 	@JsonBody
-	@RequestMapping(value = "/query/recoments/{regionId}", method = RequestMethod.GET)
-	public Object queryRecomments(HttpServletRequest request,@PathVariable long regionId) throws Exception{
+	@RequestMapping(value = "/query/recoments/{regionId}/{proRegionId}", method = RequestMethod.GET)
+	public Object queryRecomments(HttpServletRequest request,@PathVariable long regionId,@PathVariable long proRegionId) throws Exception{
 		
 		RegionPo regionPo=conn_region.get(regionId);
 		List<DistributeProduct> products=new ArrayList<DistributeProduct>();
-	    products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(), RecommendType.SWIPER);
+	    products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(),proRegionId,RecommendType.SWIPER);
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {
@@ -671,10 +694,10 @@ public class NEWDistributorController {
 	}
 	@ResponseBody
 	@JsonBody
-	@RequestMapping(value = "/query/secrecoments/{regionId}", method = RequestMethod.GET)
-	public Object querySecondRecomments(HttpServletRequest request,@PathVariable long regionId) throws Exception{
+	@RequestMapping(value = "/query/secrecoments/{regionId}/{proRegionId}", method = RequestMethod.GET)
+	public Object querySecondRecomments(HttpServletRequest request,@PathVariable long regionId,@PathVariable long proRegionId) throws Exception{
 		RegionPo regionPo=conn_region.get(regionId);
-		List<DistributeProduct> products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(), RecommendType.DMODEL);
+		List<DistributeProduct> products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(),proRegionId, RecommendType.DMODEL);
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {
@@ -684,10 +707,10 @@ public class NEWDistributorController {
 	}
 	@ResponseBody
 	@JsonBody
-	@RequestMapping(value = "/query/thirdcoments/{regionId}", method = RequestMethod.GET)
-	public Object queryThirdRecomments(HttpServletRequest request,@PathVariable long regionId) throws Exception{
+	@RequestMapping(value = "/query/thirdcoments/{regionId}/{proRegionId}", method = RequestMethod.GET)
+	public Object queryThirdRecomments(HttpServletRequest request,@PathVariable long regionId,@PathVariable long proRegionId) throws Exception{
 		RegionPo regionPo=conn_region.get(regionId);
-		List<DistributeProduct> products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(), RecommendType.DLIST);
+		List<DistributeProduct> products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(),proRegionId, RecommendType.DLIST);
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {
@@ -756,10 +779,10 @@ public class NEWDistributorController {
 		String orderNo=id+"";
 		Long userId=Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user= conn_user.get(userId);
-		
+		Double amount=order.getPrice()*order.getCount();
 		YuebaWxPayConstants.set("http://"+WXContants.Website+"/pubnum/wxreport/payreport", WxConfig.appId, WxConfig.appsrcret);
 		//统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
-		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, Integer.parseInt((order.getPrice()*order.getCount())+""), "192.165.56.64", user.getUserOpenID());
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, amount.intValue(), "192.165.56.64", user.getUserOpenID());
 		//生成包含prepay_id的map，map传入前端
 		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
 		//将订单号放入map，用以支付后处理

@@ -88,6 +88,7 @@ public class PubnumReportController extends WebBaseControll {
 				}
 				product.setProleft(order.getCount());
 				product.setRegionId(order.getRegion());
+				product.setProRegionId(oldDistributeProduct.getProRegionId());
 				product.setProduct(oldDistributeProduct.getProduct());
 				oldDistributeProduct.getProduct().getDistributeProduct().add(product);
 				conn_dispro.save(product);

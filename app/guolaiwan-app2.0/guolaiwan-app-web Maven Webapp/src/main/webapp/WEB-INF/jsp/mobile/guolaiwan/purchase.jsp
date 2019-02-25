@@ -64,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>分销采购</title>
+<title>区域首页</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -464,7 +464,7 @@ html, body {
 	
 	    function getList(){
 	        $('#proList').children().remove();
-	        var _uriQuery = window.BASEPATH + 'distributor/purchase/list';
+	        var _uriQuery = window.BASEPATH + 'distributor/purchase/list?proRegion=${proRegion}';
 				
 			$.get(_uriQuery, null, function(data){
 				data = parseAjaxResult(data);
@@ -507,7 +507,7 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">分销商主页</div>
+				<div class="header-content">区域主页</div>
 			</div>
 		</div>
 		<div class="content">

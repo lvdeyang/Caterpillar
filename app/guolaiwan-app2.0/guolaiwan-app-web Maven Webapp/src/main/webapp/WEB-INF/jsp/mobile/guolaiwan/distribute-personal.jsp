@@ -613,7 +613,7 @@ html, body {
 					      卖出订单
 					    </p>
 					  </a>
-					    <a href="<%=basePath%>/distributor/distribute/index/0" class="weui-grid js_grid">
+					    <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
 					    <div class="weui-grid__icon">
 					      <img src="lib/images/icon_nav_msg.png" alt="">
 					    </div>
