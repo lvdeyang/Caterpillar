@@ -776,13 +776,13 @@ public class NEWDistributorController {
 
 		DistributorOrder order=conn_order.get(id);
 		
-		String orderNo=id+"";
+		String orderNo="distribute-"+id;
 		Long userId=Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user= conn_user.get(userId);
 		Double amount=order.getPrice()*order.getCount();
 		YuebaWxPayConstants.set("http://"+WXContants.Website+"/pubnum/wxreport/payreport", WxConfig.appId, WxConfig.appsrcret);
 		//统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
-		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, amount.intValue(), "192.165.56.64", user.getUserOpenID());
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, 1, "192.165.56.64", user.getUserOpenID());
 		//生成包含prepay_id的map，map传入前端
 		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
 		//将订单号放入map，用以支付后处理

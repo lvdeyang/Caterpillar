@@ -71,7 +71,8 @@ public class PubnumReportController extends WebBaseControll {
 			if(resultcode.equals("SUCCESS")){
 				//获取订单号
 				String tradeNum=respData.get("out_trade_no");
-				DistributorOrder order=conn_order.get(Long.parseLong(tradeNum));
+				String[] tradeNums=tradeNum.split("-");
+				DistributorOrder order=conn_order.get(Long.parseLong(tradeNums[1]));
 				order.setStatus(DistributorOrderStatus.PAYED);
 				conn_order.save(order);
 

@@ -2711,7 +2711,15 @@ public class PhoneController extends WebBaseControll {
 				List<OrderInfoPO> orderingOrderpos = conn_order.getOrdersByState(userId, OrderStateType.NOTPAY);
 				List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
 						OrderInfoVO.class);
+			    List<OrderInfoVO> checkOrders=new ArrayList<OrderInfoVO>();
 				for (OrderInfoVO orderInfoVO : orderingOrders) {
+					if(!orderInfoVO.getOrderBookDate().equals("")){
+						Date bookDate=DateUtil.parse(orderInfoVO.getOrderBookDate(),"yyyy年MM月dd日 HH:mm:ss");
+					    long between=DateUtil.daysBetween(bookDate, new Date());
+					    if(between/(60*60*1000*24)<1){
+					    	continue;
+					    }
+					}
 					orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
 					if(orderInfoVO.getComboId()!=0){
 						ProductComboPO comboPO=conn_combo.get(orderInfoVO.getComboId());
@@ -2734,8 +2742,9 @@ public class PhoneController extends WebBaseControll {
 						}
 						
 					}
+					checkOrders.add(orderInfoVO);
 				}
-				orders = orderingOrders;
+				orders = checkOrders;
 				break;
 
 			case 2:// 已支付
