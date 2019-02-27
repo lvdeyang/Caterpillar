@@ -106,7 +106,7 @@ public class GateTcpServer extends IoHandlerAdapter {
 					idNum=valueEle.getValue();
 				}else if(indexEle.getValue().equals("Photo")){
 					//身份证
-					photo=baseConvertStr(valueEle.getValue());
+					photo=valueEle.getValue();
 				}
 			}
 			//这里比对照片和身份证验单 刘岫琳
@@ -114,19 +114,6 @@ public class GateTcpServer extends IoHandlerAdapter {
 		}
 
 	}
-
-	
-	private  String baseConvertStr(String str) {
-        if(null != str){
-            Base64.Decoder decoder = Base64.getDecoder();
-            try {
-                return new String(decoder.decode(str.getBytes()), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                return null;
-            }
-        }
-        return null;
-    }
 	
 	public void SendMessage(String message, IoSession ioSession) throws UnsupportedEncodingException {
 		IoSession session = ioSession;
