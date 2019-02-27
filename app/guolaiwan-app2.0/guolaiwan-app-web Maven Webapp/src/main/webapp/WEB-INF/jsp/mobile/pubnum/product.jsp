@@ -662,7 +662,12 @@ input[type="datetime-local"]:before{
 		
 		function initCombos(data,price){
 		   var html=[];
-		   html.push('<option value="0">标准(￥'+price+')</option>');
+		   if(data.length==0){
+		   		html.push('<option value="0">标准(￥'+price+')</option>');
+		   }else{
+		        $('#total').html((data[0].comboprice/100).toFixed(2));
+		   }
+		   
 		   for(var i=0;i<data.length;i++){
 		      html.push('<option value="'+data[i].id+'-'+(data[i].comboprice/100).toFixed(2)+'">'+data[i].combo+'(￥'+(data[i].comboprice/100).toFixed(2)+')</option>');
 		   }
