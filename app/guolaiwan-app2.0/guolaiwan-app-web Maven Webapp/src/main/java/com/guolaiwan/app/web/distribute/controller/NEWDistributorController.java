@@ -137,6 +137,27 @@ public class NEWDistributorController {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/delete")
+	public ModelAndView delete(
+			HttpServletRequest request,Long disId) throws Exception{
+		ModelAndView mv = null;
+        mv = new ModelAndView("mobile/guolaiwan/apply-distributor");
+        
+        conn_distributor.delete(disId);
+        
+        SysConfigPO sys=conn_sys.getSysConfig();
+    	DistributorPo distributorPo=new DistributorPo();
+    	distributorPo.setId(0l);
+    	mv.addObject("distributor",distributorPo);
+    	mv.addObject("region",0);
+		mv.addObject("city",0);
+		mv.addObject("country",0);
+        mv.addObject("weburl",sys.getWebUrl());
+       
+		return mv;
+	}
+	
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/region/first", method = RequestMethod.GET)
