@@ -365,6 +365,7 @@ public class PhoneController extends WebBaseControll {
 		case "PRODUCT":
 			List<ProductPO> products = conn_product.appfindByCom(comIdL, name, page, pageSize);
 			List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
+			List<ProductVO> retProductVOs=new ArrayList<ProductVO>();
 			for (ProductVO productVO : _products) {
 				ActivityRelPO relPO = conn_activityRel.getActivityRelByProductId(productVO.getId());
 				if (relPO != null) {
@@ -382,6 +383,8 @@ public class PhoneController extends WebBaseControll {
 					}
 					productVO.setActivityReId(relPO.getId());
 					productVO.setIsSurpport(relPO.getSurpportBuy());
+					ProductVO origProductVO=(ProductVO) productVO.clone();
+					retProductVOs.add(origProductVO);
 				} else {
 					productVO.setActivityReId(0);
 					productVO.setIsSurpport(0);
@@ -394,6 +397,7 @@ public class PhoneController extends WebBaseControll {
 					productVO.setShopLatitude(shopJson.getString("shopLatitude"));
 					productVO.setShopLongitude(shopJson.getString("shopLongitude"));
 				}
+				retProductVOs.add(productVO);
 			}
 			int count1 = conn_product.appCountByCom(comIdL, name);
 			dataMap.put("count", count1);
@@ -971,6 +975,7 @@ public class PhoneController extends WebBaseControll {
 		// 商品
 		List<ProductPO> products = conn_product.getProductsByMer(merchantID, page, pageSize);
 		List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
+		List<ProductVO> retProductVOs=new ArrayList<ProductVO>();
 		int count = conn_product.countProductsByMer(merchantID);
 		for (ProductVO productVO : _products) {
 			ActivityRelPO relPO = conn_activityRel.getActivityRelByProductId(productVO.getId());
@@ -986,14 +991,17 @@ public class PhoneController extends WebBaseControll {
 				}
 				productVO.setActivityReId(relPO.getId());
 				productVO.setIsSurpport(relPO.getSurpportBuy());
+				ProductVO origProductVO=(ProductVO) productVO.clone();
+				retProductVOs.add(origProductVO);
 			} else {
 				productVO.setActivityReId(0);
 				productVO.setIsSurpport(0);
 			}
 
 			productVO.setProductShowPic(sysConfig.getWebUrl() + productVO.getProductShowPic()); // 显示图片
+			retProductVOs.add(productVO);
 		}
-		dataMap.put("products", _products);
+		dataMap.put("products", retProductVOs);
 		dataMap.put("count", count);
 		return success(dataMap);
 	}
