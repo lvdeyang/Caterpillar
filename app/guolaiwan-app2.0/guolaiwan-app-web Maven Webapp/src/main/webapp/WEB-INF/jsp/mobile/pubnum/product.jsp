@@ -831,7 +831,7 @@ input[type="datetime-local"]:before{
 	       });
         }
 		function initDatePrice(){
-		      var number = parseInt($input.val() || "0") - 1
+		      var number = parseInt($('#proCount').val());
 			  var startDate=$('#startDate').val();
 			  var endDate=$('#endDate').val();
 			  var daycount=1;
