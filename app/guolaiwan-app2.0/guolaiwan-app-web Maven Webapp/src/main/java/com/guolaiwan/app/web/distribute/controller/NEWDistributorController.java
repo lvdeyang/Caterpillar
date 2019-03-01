@@ -663,7 +663,7 @@ public class NEWDistributorController {
 	@RequestMapping(value = "/query/dispro/{distributorId}", method = RequestMethod.GET)
 	public Object queryDistributeProduct(HttpServletRequest request,@PathVariable Long distributorId) throws Exception{
 
-		List<DistributeProduct> products=conn_dispro.queryOnlineByDistributor(distributorId);
+		List<DistributeProduct> products=conn_dispro.queryAllByDistributor(distributorId);
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {

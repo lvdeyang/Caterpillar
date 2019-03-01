@@ -2754,8 +2754,8 @@ public class PhoneController extends WebBaseControll {
 				for (OrderInfoVO orderInfoVO : orderingOrders) {
 					if(!orderInfoVO.getOrderBookDate().equals("")){
 						Date bookDate=DateUtil.parse(orderInfoVO.getOrderBookDate(),"yyyy年MM月dd日 HH:mm:ss");
-					    long between=DateUtil.daysBetween(bookDate, new Date());
-					    if(between/(60*60*1000*24)<1){
+					    long between=DateUtil.daysBetween(new Date(),bookDate);
+					    if(between<1){
 					    	continue;
 					    }
 					}

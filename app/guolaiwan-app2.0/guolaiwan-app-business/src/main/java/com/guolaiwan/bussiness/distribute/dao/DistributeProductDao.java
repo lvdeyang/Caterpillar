@@ -30,7 +30,11 @@ public class DistributeProductDao extends AbstractBaseDao<DistributeProduct> {
 		hql.andBy("online", Condition.eq, 1);
 		return this.findByHql(hql);
 	}
-	
+	public List<DistributeProduct> queryAllByDistributor(Long distributorId){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("distributorId", Condition.eq, distributorId);
+		return this.findByHql(hql);
+	}
 	public List<DistributeProduct> queryOnlineByDistributor(Long distributorId){
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("distributorId", Condition.eq, distributorId);

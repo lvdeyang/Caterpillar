@@ -73,6 +73,9 @@ public class PubnumReportController extends WebBaseControll {
 				String tradeNum=respData.get("out_trade_no");
 				String[] tradeNums=tradeNum.split("-");
 				DistributorOrder order=conn_order.get(Long.parseLong(tradeNums[1]));
+				if(order.getStatus().equals(DistributorOrderStatus.PAYED)){
+					return "";
+				}
 				order.setStatus(DistributorOrderStatus.PAYED);
 				conn_order.save(order);
 
@@ -87,6 +90,7 @@ public class PubnumReportController extends WebBaseControll {
 				}else if(oldDistributeProduct.getDistributorType().equals(DistributorType.CITY)){
 					product.setDistributorType(DistributorType.COUNTY);
 				}
+				product.setPrice(order.getPrice());
 				product.setProleft(order.getCount());
 				product.setRegionId(order.getRegion());
 				product.setProRegionId(oldDistributeProduct.getProRegionId());
