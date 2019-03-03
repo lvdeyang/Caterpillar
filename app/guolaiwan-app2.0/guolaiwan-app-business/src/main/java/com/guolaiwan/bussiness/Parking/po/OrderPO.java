@@ -14,7 +14,7 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Table(name = "t_order_table")
 public class OrderPO extends AbstractBasePO {
 	//订单id
-	private int orderId;
+	private long orderId;
 	//停车 层
 	private String parkingLayer;
 	// 停车 区
@@ -33,16 +33,11 @@ public class OrderPO extends AbstractBasePO {
 	private int overTime;
 	//是否过期
 	private int expire;
-	/**
-	 * 用户id  订单
-	 */
-	public int getOrderId() {
+	
+	public long getOrderId() {
 		return orderId;
 	}
-	/**
-	 * 用户id 订单
-	 */
-	public void setOrderId(int orderId) {
+	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
 	/**

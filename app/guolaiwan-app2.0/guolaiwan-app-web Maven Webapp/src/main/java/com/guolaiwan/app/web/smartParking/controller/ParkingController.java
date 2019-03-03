@@ -25,10 +25,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.publicnum.vo.RoomVo;
+import com.guolaiwan.app.web.smartParking.vo.AttractionsVo;
 import com.guolaiwan.app.web.smartParking.vo.OrderVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
+import com.guolaiwan.bussiness.Parking.dao.AttractionsDao;
 import com.guolaiwan.bussiness.Parking.dao.OrderDao;
 import com.guolaiwan.bussiness.Parking.dao.VehicleDao;
+import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
@@ -44,8 +47,6 @@ public class ParkingController  extends WebBaseControll{
 	private UserInfoDAO conn_user;
 	@Autowired
 	private  VehicleDao par_king;
-	@Autowired
-	private  OrderDao or_der;
 
 
 
@@ -124,13 +125,6 @@ public class ParkingController  extends WebBaseControll{
 	}
 
 
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	/*****************************************************************************************************/
