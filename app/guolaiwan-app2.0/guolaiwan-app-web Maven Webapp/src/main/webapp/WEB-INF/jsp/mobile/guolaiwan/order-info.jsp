@@ -523,10 +523,12 @@ html, body {
 				    <a id="pay" style="position:fixed;bottom:0;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">支付</a>   
 				</c:if>
 				<c:if test="${order.status=='NOTPASSED'}"> 
-				    <a id="modify" style="position:fixed;bottom:0;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">重新申请</a>		
+				    <a id="modify" style="position:fixed;bottom:50px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">重新申请</a>		
+				    <a id="delete" style="position:fixed;bottom:0;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消订单</a>		
 				</c:if>
 				<c:if test="${order.status=='CHECKED'}"> 
-				    <a id="resubmit" style="position:fixed;bottom:0;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">重新申请</a>   
+				    <a id="resubmit" style="position:fixed;bottom:50px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">重新申请</a>   
+				    <a id="delete" style="position:fixed;bottom:0;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消申请</a>		
 				</c:if>				
 	            
 			</div>
@@ -554,6 +556,12 @@ html, body {
 			        location.href=window.BASEPATH + 'distributor/pay/index/${order.id}'; 
 			    }
 			}); */
+	    });
+	    
+	    $(document).on('click','#delete',function(){
+	    
+	       location.href = window.BASEPATH + 'distributor/deleteorder/index/${order.id}';
+
 	    });
 	    $(document).on('click','#resubmit',function(){
 	       location.href = window.BASEPATH + 'distributor/recheckproduct/index/${order.id}';

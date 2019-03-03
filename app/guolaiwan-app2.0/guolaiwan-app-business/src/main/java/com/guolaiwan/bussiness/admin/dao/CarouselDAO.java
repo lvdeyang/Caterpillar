@@ -98,6 +98,7 @@ public class CarouselDAO extends AbstractBaseDao<CarouselPO>{
 	public List<CarouselPO> getCarouselByComId(long comId){
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("comId", Condition.eq, comId);
+		hql.andBy("enable",Condition.eq,1);
 		hql.orderBy("sort", true);
 		List<CarouselPO> list = findByHql(hql);
 		return list;

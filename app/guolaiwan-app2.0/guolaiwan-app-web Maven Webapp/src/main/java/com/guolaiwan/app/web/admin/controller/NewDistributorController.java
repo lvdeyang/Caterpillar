@@ -45,7 +45,7 @@ public class NewDistributorController extends BaseController {
 	public ModelAndView home(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		// 公司下的商品的数量
-		int count = conn_distributorDao.countByCom(0l);
+		int count = conn_distributorDao.countAll();
 		// 获取所有模块和子模块
 		List<ModularPO> modulars = conn_modular.findAll();
 		List<ModularClassPO> Classes = conn_modularClass.findAll();
@@ -61,7 +61,7 @@ public class NewDistributorController extends BaseController {
 	@RequestMapping(value = "/protorList.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	public Map<String, Object> getProList(int page, int limit) throws Exception {
 		long comId = getLoginInfo().getComId();
-		int count = conn_distributorDao.countByCom(0l);
+		int count = conn_distributorDao.countAll();
 		List<DistributorPo> listpo = conn_distributorDao.findByCom(0l, page, limit);
 		List<DistributorVo> listvo = DistributorVo.getConverter(DistributorVo.class).convert(listpo,
 				DistributorVo.class);

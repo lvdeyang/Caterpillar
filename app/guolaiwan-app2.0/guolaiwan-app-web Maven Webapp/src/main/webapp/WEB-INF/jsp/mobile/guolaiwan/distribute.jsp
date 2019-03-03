@@ -521,24 +521,28 @@ html, body {
 			    var html=[];
 				for(var i=0; i<data.length; i++){
 				    var cssclass='';
-				    if(data[i].id=='${region}'){
+				    if(data[i].id=='${proRegion}'){
 				    	cssclass='current';
 				    	$('#currentRegion').html(data[i].name);
 				    	$('#currentSecRegion').html(data[i].name);
-				    	$('#currentSecRegion').attr('reId',data[i].id);
-				    	$(document).on('click','#currentSecRegion',function(){
-				            location.href=window.BASEPATH + 'distributor/purchase/index/';
-				         });
+				    	$('#currentSecRegionTd').attr('reId',data[i].id);
+				    	
 				    }
-					html.push('<a class="region '+cssclass+'" id="region-'+data[i].id+'" href="'+window.BASEPATH + 'distributor/distribute/index/'+data[i].id+'">'+data[i].name+'</a> ');
+					html.push('<a class="region '+cssclass+'" id="region-'+data[i].id+'" href="'+
+					window.BASEPATH + 'distributor/distribute/index/${region}/'+data[i].id+'">'+data[i].name+'</a> ');
 				}
 				$('#distributeList').append(html.join(''));
 			}
 			
 		});
 		
+		$(document).on('click','#currentSecRegionTd',function(){
+		    var id=$(this).attr('reId');
+			location.href=window.BASEPATH + 'distributor/purchase/index?proRegion='+id;
+		});
+		
 		//获取所有一级推荐
-      var _uriRecomment = window.BASEPATH + 'distributor/query/recoments/'+${region};
+      var _uriRecomment = window.BASEPATH + 'distributor/query/recoments/${region}/${proRegion}';
 		
 		$.get(_uriRecomment, null, function(data){
 			data = parseAjaxResult(data);
@@ -558,7 +562,7 @@ html, body {
 		});
 	
 		//获取所有二级推荐
-      var _uriSecRecomment = window.BASEPATH + 'distributor/query/secrecoments/'+${region};
+      var _uriSecRecomment = window.BASEPATH + 'distributor/query/secrecoments/${region}/${proRegion}';
 		
 		$.get(_uriSecRecomment, null, function(data){
 			data = parseAjaxResult(data);
@@ -582,7 +586,7 @@ html, body {
 		
 		
 			//获取所有三级推荐
-      var _uriThirdRecomment = window.BASEPATH + 'distributor/query/thirdcoments/'+${region};
+      var _uriThirdRecomment = window.BASEPATH + 'distributor/query/thirdcoments/${region}/${proRegion}';
 	  //var _uriThirdRecomment = window.BASEPATH + 'distributor/query/thirdcoments/1';
 		
 		$.get(_uriThirdRecomment, null, function(data){
@@ -597,7 +601,8 @@ html, body {
 					html.push('	<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+data[i].pic+'" alt="">');
 					html.push('</div>');
 					html.push('<div class="weui-media-box__bd">');
-					html.push('	<h4 style="width:50%;float:left" class="weui-media-box__title">'+data[i].name+'</h4><h4 style="width:50%;float:right;text-align:right" class="weui-media-box__title">$140</h4>');
+					html.push('	<h4 style="width:50%;float:left" class="weui-media-box__title">'+data[i].name+'</h4><h4 style="width:50%;float:right;text-align:right" class="weui-media-box__title">￥'+
+					data[i].price+'</h4>');
 					html.push('	<p style="width:100%;height:15px" class="weui-media-box__desc">'+data[i].name+'</p>');
 					html.push('	<p style="width:100%" class="weui-media-box__desc"><div style="float:right;margin-right:4px;">分销</div></p>');
 					html.push('</div>');
@@ -645,7 +650,7 @@ html, body {
 		    </div>
 		    
 		    <table id="columnTable">
-		        <tr><td style="border-top-left-radius:10px;" rowspan="2"><span id="currentSecRegion">河北<</span>全部景点</td><td id="col0"></td><td style="border-top-right-radius:10px;" id="col1"></td></tr>
+		        <tr><td id="currentSecRegionTd" style="border-top-left-radius:10px;" rowspan="2"><span id="currentSecRegion">河北<</span>全部景点</td><td id="col0"></td><td style="border-top-right-radius:10px;" id="col1"></td></tr>
 		        <tr><td id="col2"></td><td id="col3"></td></tr>
 		        <tr><td id="col4" style="border-bottom-left-radius:10px;"></td><td id="col5"></td><td style="border-bottom-right-radius:10px;" id="col6"></td></tr>
 

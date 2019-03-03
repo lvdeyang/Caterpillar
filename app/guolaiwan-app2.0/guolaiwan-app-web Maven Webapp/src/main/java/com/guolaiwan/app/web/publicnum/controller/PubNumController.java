@@ -1295,6 +1295,13 @@ public class PubNumController extends WebBaseControll {
 					} else {
 						vo.setProductPrice(df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
 					}
+				}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+					if (activityRelPO.getPrice() > 0) {
+						vo.setProductPrice(df.format(Double.parseDouble(activityRelPO.getPrice() + "") / 100));
+					} else {
+						vo.setProductPrice(
+									df.format(Double.parseDouble(Long.parseLong(vo.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+					}
 				}
 				vo.setActivityReId(activityRelPO.getId());
 				vo.setIsSurpport(activityRelPO.getSurpportBuy());

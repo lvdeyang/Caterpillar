@@ -29,7 +29,9 @@ public class AddressVO extends AbstractBaseVO<AddressVO, AddressPO> {
 	private String consigneeAlias;
 	// 是否为默认地址:1代表TRUE,0代表FALSE
 	private int defaultAddress;
-
+	private String idNum;
+	
+	private String photo;
 
 	public long getUserId() {
 		return userId;
@@ -187,7 +189,35 @@ public class AddressVO extends AbstractBaseVO<AddressVO, AddressPO> {
 		.setConsigneePhone(entity.getConsigneePhone())
 		.setConsigneeEmail(entity.getConsigneeEmail())
 		.setConsigneeAlias(entity.getConsigneeAlias())
+		.setIdNum(entity.getIdNum())
 		.setDefaultAddress(entity.getDefaultAddress());
 		return this;
 	}
+
+
+
+	public String getIdNum() {
+		return idNum;
+	}
+
+
+
+	public AddressVO setIdNum(String idNum) {
+		this.idNum = idNum;
+		return this;
+	}
+
+
+
+	public String getPhoto() {
+		return photo;
+	}
+
+
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+	
+	
 }

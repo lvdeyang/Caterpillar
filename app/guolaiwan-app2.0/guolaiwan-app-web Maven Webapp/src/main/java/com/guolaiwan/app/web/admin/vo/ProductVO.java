@@ -13,7 +13,7 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 
 import pub.caterpillar.mvc.converter.AbstractBaseVO;
 
-public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> {
+public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements Cloneable{
 
 
 	//绑定模块
@@ -148,6 +148,13 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> {
 	private int isSurpport;
 	
 	private int isactivityproduct;
+	
+	@Override
+    public Object clone() throws CloneNotSupportedException {
+        ProductVO productVO = (ProductVO)super.clone();
+        return productVO;
+    }
+	
 	
 	//获取收藏列表专用，收藏的是否是活动产品标识
 	public int getisactivityproduct() {

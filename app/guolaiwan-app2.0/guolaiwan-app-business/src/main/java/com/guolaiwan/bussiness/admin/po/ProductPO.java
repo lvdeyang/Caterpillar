@@ -175,6 +175,8 @@ public class ProductPO extends AbstractBasePO {
 
 	// 关联分销商商品
 	private List<DistributorProductPO> distributorProduct;
+	
+	private long regionId;
 
 	public boolean isFlag() {
 		return flag;
@@ -586,6 +588,14 @@ public class ProductPO extends AbstractBasePO {
 
 	public void setTraffic(String traffic) {
 		this.traffic = traffic;
+	}
+
+	public long getRegionId() {
+		return regionId;
+	}
+
+	public void setRegionId(long regionId) {
+		this.regionId = regionId;
 	}
 	
 	

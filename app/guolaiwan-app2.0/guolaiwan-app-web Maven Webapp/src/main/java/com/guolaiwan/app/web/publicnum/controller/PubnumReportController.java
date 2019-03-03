@@ -71,7 +71,11 @@ public class PubnumReportController extends WebBaseControll {
 			if(resultcode.equals("SUCCESS")){
 				//获取订单号
 				String tradeNum=respData.get("out_trade_no");
-				DistributorOrder order=conn_order.get(Long.parseLong(tradeNum));
+				String[] tradeNums=tradeNum.split("-");
+				DistributorOrder order=conn_order.get(Long.parseLong(tradeNums[1]));
+				if(order.getStatus().equals(DistributorOrderStatus.PAYED)){
+					return "";
+				}
 				order.setStatus(DistributorOrderStatus.PAYED);
 				conn_order.save(order);
 
@@ -86,8 +90,10 @@ public class PubnumReportController extends WebBaseControll {
 				}else if(oldDistributeProduct.getDistributorType().equals(DistributorType.CITY)){
 					product.setDistributorType(DistributorType.COUNTY);
 				}
+				product.setPrice(order.getPrice());
 				product.setProleft(order.getCount());
 				product.setRegionId(order.getRegion());
+				product.setProRegionId(oldDistributeProduct.getProRegionId());
 				product.setProduct(oldDistributeProduct.getProduct());
 				oldDistributeProduct.getProduct().getDistributeProduct().add(product);
 				conn_dispro.save(product);

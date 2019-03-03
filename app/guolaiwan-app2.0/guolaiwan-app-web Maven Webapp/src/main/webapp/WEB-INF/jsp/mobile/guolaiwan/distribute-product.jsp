@@ -480,8 +480,8 @@ html, body {
 			$.get(_uriGetpolicyPrice, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
-			    if(data && data.length>0){
-			       $('#product_price').val(data.price);
+			    if(data){
+			       $('#product_price').html(data);
 			    }
 			    
 			});
@@ -613,7 +613,8 @@ html, body {
 			            </c:forEach>
 		            </select>
             	</div>
-            	<div style="width:100px;float:left;height:44px;line-height:44px;">单价：<span id="product_price">120</span>元</div>
+            	<div style="width:100px;float:left;height:44px;line-height:44px;">单价：
+            	<span id="product_price">${product.policys[0].price}</span>元</div>
             </div>
             
               <div class="weui-cells__title"><br>上传合同:<input type="hidden" name="contractPicUrl" id="selContractPic" /></div>

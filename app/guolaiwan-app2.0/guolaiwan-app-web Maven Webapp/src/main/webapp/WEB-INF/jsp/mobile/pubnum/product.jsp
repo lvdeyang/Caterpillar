@@ -533,6 +533,14 @@ html, body {
    color:#FFF;
    font-size:11px;
 }
+
+input[type="datetime-local"]:before{
+    content: attr(placeholder);
+    color:red;
+}
+::-webkit-input-placeholder {
+    color:red;
+}
 </style>
 
 </head>
@@ -548,7 +556,19 @@ html, body {
 	rel="stylesheet" />
 <script type="text/javascript">
 
+
 	$(function() {
+	
+	  $(document).on('focus','.mydate',function(){
+	      $(this).removeAttr('placeholder');
+	  });
+	  $(document).on('blur','.mydate',function(){
+	      if($(this).val()==''){
+	        $(this).addAttr('placeholder');
+	      }
+	  });
+	
+	
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -642,7 +662,12 @@ html, body {
 		
 		function initCombos(data,price){
 		   var html=[];
-		   html.push('<option value="0">标准(￥'+price+')</option>');
+		   if(data.length==0){
+		   		html.push('<option value="0">标准(￥'+price+')</option>');
+		   }else{
+		        $('#total').html((data[0].comboprice/100).toFixed(2));
+		   }
+		   
 		   for(var i=0;i<data.length;i++){
 		      html.push('<option value="'+data[i].id+'-'+(data[i].comboprice/100).toFixed(2)+'">'+data[i].combo+'(￥'+(data[i].comboprice/100).toFixed(2)+')</option>');
 		   }
@@ -806,7 +831,7 @@ html, body {
 	       });
         }
 		function initDatePrice(){
-		      var number = parseInt($input.val() || "0") - 1
+		      var number = parseInt($('#proCount').val());
 			  var startDate=$('#startDate').val();
 			  var endDate=$('#endDate').val();
 			  var daycount=1;
@@ -1372,7 +1397,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">预定日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			       <input id="bookDate" class="weui-input" type="datetime-local" placeholder=""> 
+			       <input id="bookDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
@@ -1382,7 +1407,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">入住日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="startDate" class="weui-input" type="datetime-local" placeholder=""> 
+			    	<input id="startDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
 			      
 			    </div>
 			    <div class="weui-cell__bd"></div>
@@ -1393,7 +1418,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">离店日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="endDate" class="weui-input" type="datetime-local" placeholder=""> 
+			    	<input id="endDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
@@ -1414,7 +1439,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">套餐选择</label></div>
 			    <div class="weui-cell__bd" style="width:80%;">
-			      <select class="weui-select" id="comboList" name="select1">
+			      <select id="comboList" style="width:130px;height:25px;line-height:25px" name="select1">
 		         
 		          </select>
 			    </div>
@@ -1426,7 +1451,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">物流选择</label></div>
 			    <div class="weui-cell__bd" style="width:80%;">
-			      <select class="weui-select" id="logisticsList" name="select1">
+			      <select id="logisticsList" style="width:130px;height:25px;line-height:25px" name="select1">
 		         
 		          </select>
 			    </div>

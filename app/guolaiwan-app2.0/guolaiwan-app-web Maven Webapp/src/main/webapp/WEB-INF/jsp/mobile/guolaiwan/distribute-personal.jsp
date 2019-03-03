@@ -475,7 +475,9 @@ html, body {
 		$(document).on('click','#modDis',function(){
 		   location.href=window.BASEPATH + 'distributor/apply/index?disId=${distributorId}';
 		});
-        
+        $(document).on('click','#delDis',function(){
+           location.href=window.BASEPATH + 'distributor/delete?disId=${distributorId}';
+        });
 	
 	});
 </script>
@@ -570,8 +572,8 @@ html, body {
 				
 				</div>
 				
-				<a id="modDis" style="position:fixed;bottom:0;margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
-				
+				<a id="modDis" style="position:fixed;bottom:0;margin-top:10px;width:46%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
+				<a id="delDis" style="position:fixed;bottom:0;margin-top:10px;width:46%;margin-left:50%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消申请</a>
 		    </c:if>
 		   
 			<c:if test="${status=='PASSED'}">
@@ -613,7 +615,7 @@ html, body {
 					      卖出订单
 					    </p>
 					  </a>
-					    <a href="<%=basePath%>/distributor/distribute/index/0" class="weui-grid js_grid">
+					    <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
 					    <div class="weui-grid__icon">
 					      <img src="lib/images/icon_nav_msg.png" alt="">
 					    </div>

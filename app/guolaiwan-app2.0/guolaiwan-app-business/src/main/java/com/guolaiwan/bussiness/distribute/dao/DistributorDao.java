@@ -54,13 +54,7 @@ public class DistributorDao extends AbstractBaseDao<DistributorPo> {
 		return allcount;
 	}
 
-	// 获得所有分销商
-	public int countByCom(long region) {
-		CountHql chql = this.newCountHql();
-		chql.andBy("region", Condition.eq, region);
-		int count = countByHql(chql);
-		return count;
-	}
+	
 
 	// 获取某个公司下的所有产品
 	public List<DistributorPo> findByCom(long comId, int pageNum, int pageSize) {

@@ -365,9 +365,19 @@ public class PhoneController extends WebBaseControll {
 		case "PRODUCT":
 			List<ProductPO> products = conn_product.appfindByCom(comIdL, name, page, pageSize);
 			List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
+			List<ProductVO> retProductVOs=new ArrayList<ProductVO>();
 			for (ProductVO productVO : _products) {
+				JSONObject shopJson = JSON.parseObject(productVO.getProductMerchantJson());
 				ActivityRelPO relPO = conn_activityRel.getActivityRelByProductId(productVO.getId());
 				if (relPO != null) {
+					ProductVO origProductVO=(ProductVO) productVO.clone();
+					origProductVO.setProductShowPic(sysConfig.getWebUrl() + origProductVO.getProductShowPic());
+					origProductVO.setProductMorePic(split(origProductVO.getProductMorePic(), sysConfig.getWebUrl()));
+					if (shopJson != null && !shopJson.equals("")) {
+						origProductVO.setShopLatitude(shopJson.getString("shopLatitude"));
+						origProductVO.setShopLongitude(shopJson.getString("shopLongitude"));
+					}
+					retProductVOs.add(origProductVO);
 					ActivityPO activityPO = conn_activity.get(relPO.getActivityId());
 					String price = productVO.getProductPrice();
 					if (activityPO.getType().equals(ActivityType.FIXEDPRICE)) {
@@ -379,14 +389,22 @@ public class PhoneController extends WebBaseControll {
 										df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
 							}
 						}
+					}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+						if (relPO.getPrice() > 0) {
+							productVO.setProductPrice(df.format(Double.parseDouble(relPO.getPrice() + "") / 100));
+						} else {
+							productVO.setProductPrice(
+										df.format(Double.parseDouble(Long.parseLong(productVO.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+						}
 					}
 					productVO.setActivityReId(relPO.getId());
 					productVO.setIsSurpport(relPO.getSurpportBuy());
+					
 				} else {
 					productVO.setActivityReId(0);
 					productVO.setIsSurpport(0);
 				}
-				JSONObject shopJson = JSON.parseObject(productVO.getProductMerchantJson());
+				
 
 				productVO.setProductShowPic(sysConfig.getWebUrl() + productVO.getProductShowPic());
 				productVO.setProductMorePic(split(productVO.getProductMorePic(), sysConfig.getWebUrl()));
@@ -394,10 +412,11 @@ public class PhoneController extends WebBaseControll {
 					productVO.setShopLatitude(shopJson.getString("shopLatitude"));
 					productVO.setShopLongitude(shopJson.getString("shopLongitude"));
 				}
+				retProductVOs.add(productVO);
 			}
 			int count1 = conn_product.appCountByCom(comIdL, name);
 			dataMap.put("count", count1);
-			dataMap.put("products", _products);
+			dataMap.put("products", retProductVOs);
 			break;
        
 		default:
@@ -971,10 +990,14 @@ public class PhoneController extends WebBaseControll {
 		// 商品
 		List<ProductPO> products = conn_product.getProductsByMer(merchantID, page, pageSize);
 		List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
+		List<ProductVO> retProductVOs=new ArrayList<ProductVO>();
 		int count = conn_product.countProductsByMer(merchantID);
 		for (ProductVO productVO : _products) {
 			ActivityRelPO relPO = conn_activityRel.getActivityRelByProductId(productVO.getId());
 			if (relPO != null) {
+				ProductVO origProductVO=(ProductVO) productVO.clone();
+				origProductVO.setProductShowPic(sysConfig.getWebUrl() + origProductVO.getProductShowPic()); // 显示图片
+				retProductVOs.add(origProductVO);
 				ActivityPO activityPO = conn_activity.get(relPO.getActivityId());
 				String price = productVO.getProductPrice();
 				if (activityPO.getType().equals(ActivityType.FIXEDPRICE)) {
@@ -983,17 +1006,26 @@ public class PhoneController extends WebBaseControll {
 					} else {
 						productVO.setProductPrice(df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
 					}
+				}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+					if (relPO.getPrice() > 0) {
+						productVO.setProductPrice(df.format(Double.parseDouble(relPO.getPrice() + "") / 100));
+					} else {
+						productVO.setProductPrice(
+									df.format(Double.parseDouble(Long.parseLong(productVO.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+					}
 				}
 				productVO.setActivityReId(relPO.getId());
 				productVO.setIsSurpport(relPO.getSurpportBuy());
+				
 			} else {
 				productVO.setActivityReId(0);
 				productVO.setIsSurpport(0);
 			}
 
 			productVO.setProductShowPic(sysConfig.getWebUrl() + productVO.getProductShowPic()); // 显示图片
+			retProductVOs.add(productVO);
 		}
-		dataMap.put("products", _products);
+		dataMap.put("products", retProductVOs);
 		dataMap.put("count", count);
 		return success(dataMap);
 	}
@@ -1341,6 +1373,13 @@ public class PhoneController extends WebBaseControll {
 				_product.setProductPrice(df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
 			}
 
+		}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+			if (activityPro.getPrice() > 0) {
+				_product.setProductPrice(df.format(Double.parseDouble(activityPro.getPrice() + "") / 100));
+			} else {
+				_product.setProductPrice(
+							df.format(Double.parseDouble(Long.parseLong(_product.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+			}
 		}
 
 		Date date = new Date();
@@ -2711,7 +2750,15 @@ public class PhoneController extends WebBaseControll {
 				List<OrderInfoPO> orderingOrderpos = conn_order.getOrdersByState(userId, OrderStateType.NOTPAY);
 				List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
 						OrderInfoVO.class);
+			    List<OrderInfoVO> checkOrders=new ArrayList<OrderInfoVO>();
 				for (OrderInfoVO orderInfoVO : orderingOrders) {
+					if(!orderInfoVO.getOrderBookDate().equals("")){
+						Date bookDate=DateUtil.parse(orderInfoVO.getOrderBookDate(),"yyyy年MM月dd日 HH:mm:ss");
+					    long between=DateUtil.daysBetween(new Date(),bookDate);
+					    if(between<1){
+					    	continue;
+					    }
+					}
 					orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
 					if(orderInfoVO.getComboId()!=0){
 						ProductComboPO comboPO=conn_combo.get(orderInfoVO.getComboId());
@@ -2728,11 +2775,15 @@ public class PhoneController extends WebBaseControll {
 					}
 					if (orderInfoVO.getActivityId() != 0) {
 						ActivityRelPO activityRelPO = conn_activityRel.get(orderInfoVO.getActivityId());
-						orderInfoVO.setProductPrice(
-								new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+						if(activityRelPO!=null){
+							orderInfoVO.setProductPrice(
+									new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+						}
+						
 					}
+					checkOrders.add(orderInfoVO);
 				}
-				orders = orderingOrders;
+				orders = checkOrders;
 				break;
 
 			case 2:// 已支付
@@ -3015,8 +3066,10 @@ public class PhoneController extends WebBaseControll {
 		
 		if (_order.getActivityId() != 0) {
 			ActivityRelPO activityRelPO = conn_activityRel.get(_order.getActivityId());
-			_order.setProductPrice(
-					new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+			if(activityRelPO!=null){
+				_order.setProductPrice(
+						new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+			}
 		}
 		dataMap.put("order", _order);
 		return success(dataMap);

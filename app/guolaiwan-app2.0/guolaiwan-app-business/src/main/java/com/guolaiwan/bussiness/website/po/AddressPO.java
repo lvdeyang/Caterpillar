@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.website.po;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -34,6 +35,9 @@ public class AddressPO extends AbstractBasePO {
 	// 是否为默认地址:1代表TRUE,0代表FALSE
 	private int defaultAddress;
 	
+	private String idNum;
+	
+	private String photo;
 	
 	public long getUserId() {
 		return userId;
@@ -100,6 +104,19 @@ public class AddressPO extends AbstractBasePO {
 	}
 	public void setDefaultAddress(int defaultAddress) {
 		this.defaultAddress = defaultAddress;
+	}
+	public String getIdNum() {
+		return idNum;
+	}
+	public void setIdNum(String idNum) {
+		this.idNum = idNum;
+	}
+	@Column(columnDefinition="BLOB")
+	public String getPhoto() {
+		return photo;
+	}
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 	
 	

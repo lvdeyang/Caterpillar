@@ -125,6 +125,28 @@
     				</div> -->
                 
             
+            <div class="layui-form-item">
+			    <label class="layui-form-label">地区选择</label>
+			    <div class="layui-input-inline">
+			      <select name="regionFirst" id="regionFirst">
+			        
+			      </select>
+			    </div>
+			    <div style="display:none;" class="layui-input-inline">
+			      <select name="regionSecond" id="regionSecond">
+			        
+			      </select>
+			    </div>
+			    <div style="display:none;" class="layui-input-inline">
+			      <select name="regionThird" id="regionThird">
+			       
+			      </select>
+			    </div>
+			    
+			</div>
+            
+            
+            
  				                
                <div class="layui-form-item">
                	<div class="layui-inline">
@@ -497,6 +519,62 @@
               ,layer = layui.layer
               ,laydate = layui.laydate;
    
+           
+           function renderForm(){
+			  layui.use('form', function(){
+			   var form = layui.form;//高版本建议把括号去掉，有的低版本，需要加()
+			   form.render();
+			  });
+			 }
+           
+           function getRegions(level){
+                var parid=0;
+                if(level==2){
+                  parid=$('#regionFirst').val();
+                  $('#regionSecond').children().remove();
+                  $('#regionThird').children().remove();
+                }else if(level==3){
+                  parid=$('#regionSecond').val();
+                  $('#regionThird').children().remove();
+                }else if(level==1){
+                    $('#regionFirst').children().remove();
+                    $('#regionSecond').children().remove();
+                    $('#regionThird').children().remove();
+                }
+                $.ajax({
+              	  type:"get",
+         			  url:"regions?parentId="+parid,
+                    data:{},
+                    success:function(data){
+                       var html=[];
+                       html.push('<option value="0">请选择</option>')
+                       for(var i=0;i<data.data.length;i++){
+                          html.push('<option value="'+data.data[i].id+'">'+data.data[i].name+'</option>');
+                       }
+                       if(level==1){
+                          $('#regionFirst').append(html.join(''));
+                       }else if(level==2){
+                          $('#regionSecond').append(html.join(''));
+                       }else{
+                          $('#regionThird').append(html.join(''));
+                       }
+                       renderForm();
+                    }
+                    
+                }); 
+           }
+               
+           getRegions(1);
+           
+           $('#regionFirst').change(function(){
+           
+              getRegions(2);
+           });
+           $('#regionSecond').change(function(){
+           
+              getRegions(3);
+           });
+           
               
            form.on('checkbox(selOn)', function (data) {
                 var strs=[];

@@ -492,7 +492,7 @@ html, body {
 					    html.push('<tr>');
 					 }
      
-		             html.push('<td style="padding:10px;">');
+		             html.push('<td style="padding:10px;width:50%">');
                      html.push('<image style=" width:100%;height:100px;" class="proImage" src="'+data[i].pic+'"/>');
                      html.push('<p><'+data[i].name+'></p>');
                      html.push('<div class="operation">');
@@ -502,6 +502,7 @@ html, body {
                      +'<a href="javascript:void(0)" class="offsell" id="offsell-'+data[i].id+'">线下销售</a>');
                      html.push('</div>');
                      html.push('</td>');
+                     
                     if(i%2==1){
                        html.push('</tr>');
                     }
@@ -530,7 +531,7 @@ html, body {
 					    html.push('<tr>');
 					 }
      
-		             html.push('<td style="padding:10px;">');
+		             html.push('<td style="padding:10px;width:50%">');
                      html.push('<image style=" width:100%;height:100px;" class="proImage" src="'+data[i].pic+'"/>');
                      html.push('<p><'+data[i].name+'></p>');
                      html.push('<div class="operation">');

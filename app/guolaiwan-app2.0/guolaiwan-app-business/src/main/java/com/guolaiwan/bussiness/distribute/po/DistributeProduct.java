@@ -34,6 +34,7 @@ public class DistributeProduct extends AbstractBasePO {
 	private RecommendType recommendType;
 	private int online;
 	private long regionId;
+	private long proRegionId;
 	
 	
 	
@@ -108,6 +109,12 @@ public class DistributeProduct extends AbstractBasePO {
 	}
 	public void setSellPrice(double sellPrice) {
 		this.sellPrice = sellPrice;
+	}
+	public long getProRegionId() {
+		return proRegionId;
+	}
+	public void setProRegionId(long proRegionId) {
+		this.proRegionId = proRegionId;
 	}
 	 
 }
