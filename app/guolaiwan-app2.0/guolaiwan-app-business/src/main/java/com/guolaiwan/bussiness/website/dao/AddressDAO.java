@@ -1,10 +1,12 @@
 package com.guolaiwan.bussiness.website.dao;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
@@ -63,5 +65,19 @@ public class AddressDAO extends AbstractBaseDao<AddressPO>{
 		List<AddressPO> list = findByHql(hql);
 		return list;
 	}
+	
+	 
+    /**
+     * 通过用户身份证 查询地址信息列表信息
+     * @param idNum  用户身份证号
+     * @return
+     * @throws ParseException
+     */
+	public List<AddressPO>  getAddressIdsByIdNum(String idNum) throws ParseException{
+	   QueryHql hql =   this.newQueryHql();
+	   hql.andBy("idNum", Condition.eq,idNum);
+	   return findByHql(hql);
+	}
+	
 	
 }
