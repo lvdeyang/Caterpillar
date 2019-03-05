@@ -1052,6 +1052,7 @@ html, body {
 			params.district=addresses[2];
 			params.consigneeAddress=$('#moreAddress').val();
 			params.addressphone=$('#addressphone').val();
+			params.idNum=$('#idNum').val();
 			params.consigneeName=$('#name').val();
 			$.post(_uriAdd, $.toJSON(params), function(data){
 				data = parseAjaxResult(data);
@@ -1251,6 +1252,12 @@ html, body {
 									<input id="name" class="weui-input" type="text" placeholder="">
 								</div>
 							</div>
+							<div class="weui-cell">
+							    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
+							    <div class="weui-cell__bd" style="border:1px solid #CCC">
+							      <input id="idNum" class="weui-input" type="text" placeholder="">
+							    </div>
+							 </div>
 							<div class="weui-cell">
 								<div class="weui-cell__hd">
 									<label class="weui-label">手机号</label>

@@ -1936,7 +1936,7 @@ public class PhoneController extends WebBaseControll {
 		String consigneeAddress = pageObject.getString("consigneeAddress");// 详细地址
 		String phone = pageObject.getString("addressphone");
 		String consigneeName = pageObject.getString("consigneeName");// 收货人
-
+        String idNum=pageObject.getString("idNum");
 		// 获取用户
 		UserInfoPO user = conn_user.get(userId);
 		if (user == null) {
@@ -1954,6 +1954,9 @@ public class PhoneController extends WebBaseControll {
 		address.setDistrict(district);// 区
 		address.setConsigneeAddress(consigneeAddress);// 详细地址
 		address.setUserId(userId);
+		if(idNum!=null){
+			address.setIdNum(idNum);
+		}
 		if (count == 0) {
 			address.setDefaultAddress(1); // 默认地址
 		}
