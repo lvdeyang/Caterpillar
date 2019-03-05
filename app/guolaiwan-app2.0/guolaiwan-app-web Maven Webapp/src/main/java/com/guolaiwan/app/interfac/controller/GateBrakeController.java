@@ -62,7 +62,7 @@ public class GateBrakeController {
 		String orderNo=params.getString("CodeVal");
 		// 获取订单
 		if("Q".equals(codeType)){
-			orderInfoPO = orderDao.getOrderByNo(orderNo);
+			orderInfoPO = orderDao.get(Long.parseLong(orderNo));
 			//二维码验单 刘岫琳
 			if(orderInfoPO != null && orderInfoPO.getProductId() == productId){
 				// 判断订单状态:支付完成&&支付成功
