@@ -84,44 +84,49 @@ public class GateBrakeController {
 				}
 			}else{
 				ret.put("Status", 0);
-				ret.put("StatusDesc", "订单信息不对！");
+				ret.put("StatusDesc", "订单信息有误，请核对！");
 			}
 		}else if("I".equals(codeType)){
 			//身份证验单 刘岫琳
 			List<AddressPO> addressPOs = addressDao.getAddressIdsByIdNum(orderNo);
-			List<Long> ids = new ArrayList<Long>();
-			for (AddressPO po : addressPOs) {
-				ids.add(po.getId());
-			}
-			List<OrderInfoPO> orderInfoList = orderDao.getOrdersByIds(ids);
-			if(orderInfoList != null && orderInfoList.size() > 0){
-				for (OrderInfoPO orderPO : orderInfoList) {
-					long productIdOrder = orderPO.getProductId();
-					if(productIdOrder == productId){
-						if(!OrderStateType.PAYFINISH.equals(orderPO.getOrderState())
-								&& !OrderStateType.PAYSUCCESS.equals(orderPO.getOrderState())){
-							ret.put("Status", 0);
-							ret.put("StatusDesc", "该订单状态是" + orderPO.getOrderState());
+			if(addressPOs != null && addressPOs.size() > 0){
+				List<Long> ids = new ArrayList<Long>();
+				for (AddressPO po : addressPOs) {
+					ids.add(po.getId());
+				}
+				List<OrderInfoPO> orderInfoList = orderDao.getOrdersByIds(ids);
+				if(orderInfoList != null && orderInfoList.size() > 0){
+					for (OrderInfoPO orderPO : orderInfoList) {
+						long productIdOrder = orderPO.getProductId();
+						if(productIdOrder == productId){
+							if(!OrderStateType.PAYFINISH.equals(orderPO.getOrderState())
+									&& !OrderStateType.PAYSUCCESS.equals(orderPO.getOrderState())){
+								ret.put("Status", 0);
+								ret.put("StatusDesc", "该订单状态是" + orderPO.getOrderState());
+							}else{
+								// 修改订单状态、验单时间
+								orderPO.setOrderState(OrderStateType.TESTED);
+								Date date = new Date();
+								orderPO.setYdDate(date);
+								orderDao.saveOrUpdate(orderPO);
+								// 返回信息
+								long productNum = orderPO.getProductNum();
+								ret.put("Status", 1);
+								ret.put("TurnGateTimes", productNum);
+								ret.put("StatusDesc", "验票成功："+productNum+"人");
+							}
 						}else{
-							// 修改订单状态、验单时间
-							orderPO.setOrderState(OrderStateType.TESTED);
-							Date date = new Date();
-							orderPO.setYdDate(date);
-							orderDao.saveOrUpdate(orderPO);
-							// 返回信息
-							long productNum = orderPO.getProductNum();
-							ret.put("Status", 1);
-							ret.put("TurnGateTimes", productNum);
-							ret.put("StatusDesc", "验票成功："+productNum+"人");
+							ret.put("Status", 0);
+							ret.put("StatusDesc", "订单信息有误，请核对！");
 						}
-					}else{
-						ret.put("Status", 0);
-						ret.put("StatusDesc", "此订单不属于本景点！");
 					}
+				}else{
+					ret.put("Status", 0);
+					ret.put("StatusDesc", "无订单信息！");
 				}
 			}else{
 				ret.put("Status", 0);
-				ret.put("StatusDesc", "订单信息不对！");
+				ret.put("StatusDesc", "无订单信息！");
 			}
 		}
 		//返回json
