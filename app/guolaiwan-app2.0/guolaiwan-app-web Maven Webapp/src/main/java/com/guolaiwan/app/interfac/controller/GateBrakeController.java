@@ -1,33 +1,50 @@
 package com.guolaiwan.app.interfac.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
+import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.LivePO;
+import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.website.dao.AddressDAO;
+import com.guolaiwan.bussiness.website.po.AddressPO;
 
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
+import pub.caterpillar.orm.hql.QueryHql;
 
 @Controller
 @RequestMapping("/gatesvr")
 public class GateBrakeController {
+	
+	@Autowired
+	private OrderInfoDAO orderDao;
+	@Autowired
+	private AddressDAO addressDao;
+	
 	//验单二维码，身份证
 	@ResponseBody
 	@RequestMapping(value = "/CheckCode", method = RequestMethod.POST)//id为0时使用备源
 	public Object checkCode(HttpServletRequest request) throws Exception{
 		HttpServletRequestParser parser = new HttpServletRequestParser(request);
 		JSONObject params = parser.parseJSON();
+		OrderInfoPO orderInfoPO = null;
+		Map<String, Object> ret=new HashMap<String, Object>(); 
 	    //接收json
 		//票号值	CodeVal	string	可为二维码值，IC卡卡号，身份证号码等
 		//票号类型	CodeType	string	"Q"代表二维码；
@@ -43,10 +60,74 @@ public class GateBrakeController {
 		long productId=params.getLong("ViewId");
 		String codeType=params.getString("CodeType");
 		String orderNo=params.getString("CodeVal");
-		if(codeType.equals("Q")){
+		// 获取订单
+		if("Q".equals(codeType)){
+			orderInfoPO = orderDao.get(Long.parseLong(orderNo));
 			//二维码验单 刘岫琳
-		}else if(codeType.equals("I")){
+			if(orderInfoPO != null && orderInfoPO.getProductId() == productId){
+				// 判断订单状态:支付完成&&支付成功
+				if(!OrderStateType.PAYFINISH.equals(orderInfoPO.getOrderState())
+						&& !OrderStateType.PAYSUCCESS.equals(orderInfoPO.getOrderState())){
+					ret.put("Status", 0);
+					ret.put("StatusDesc", "该订单状态是" + orderInfoPO.getOrderState().getName());
+				}else{
+					// 修改订单状态、验单时间
+					orderInfoPO.setOrderState(OrderStateType.TESTED);
+					Date date = new Date();
+					orderInfoPO.setYdDate(date);
+					orderDao.saveOrUpdate(orderInfoPO);
+					// 返回信息
+					long productNum = orderInfoPO.getProductNum();
+					ret.put("Status", 1);
+					ret.put("StatusDesc", "验票成功："+productNum+"人");
+					ret.put("TurnGateTimes", productNum);
+				}
+			}else{
+				ret.put("Status", 0);
+				ret.put("StatusDesc", "订单信息有误，请核对！");
+			}
+		}else if("I".equals(codeType)){
 			//身份证验单 刘岫琳
+			List<AddressPO> addressPOs = addressDao.getAddressIdsByIdNum(orderNo);
+			if(addressPOs != null && addressPOs.size() > 0){
+				List<Long> ids = new ArrayList<Long>();
+				for (AddressPO po : addressPOs) {
+					ids.add(po.getId());
+				}
+				List<OrderInfoPO> orderInfoList = orderDao.getOrdersByIds(ids);
+				if(orderInfoList != null && orderInfoList.size() > 0){
+					for (OrderInfoPO orderPO : orderInfoList) {
+						long productIdOrder = orderPO.getProductId();
+						if(productIdOrder == productId){
+							if(!OrderStateType.PAYFINISH.equals(orderPO.getOrderState())
+									&& !OrderStateType.PAYSUCCESS.equals(orderPO.getOrderState())){
+								ret.put("Status", 0);
+								ret.put("StatusDesc", "该订单状态是" + orderPO.getOrderState().getName());
+							}else{
+								// 修改订单状态、验单时间
+								orderPO.setOrderState(OrderStateType.TESTED);
+								Date date = new Date();
+								orderPO.setYdDate(date);
+								orderDao.saveOrUpdate(orderPO);
+								// 返回信息
+								long productNum = orderPO.getProductNum();
+								ret.put("Status", 1);
+								ret.put("TurnGateTimes", productNum);
+								ret.put("StatusDesc", "验票成功："+productNum+"人");
+							}
+						}else{
+							ret.put("Status", 0);
+							ret.put("StatusDesc", "订单信息有误，请核对！");
+						}
+					}
+				}else{
+					ret.put("Status", 0);
+					ret.put("StatusDesc", "无订单信息！");
+				}
+			}else{
+				ret.put("Status", 0);
+				ret.put("StatusDesc", "无订单信息！");
+			}
 		}
 		//返回json
 		//验票状态	Status	是	Int	验票状态 
@@ -63,10 +144,10 @@ public class GateBrakeController {
 		//编号	Number	否	String	人员编号或证件号码等
 		//部门	DeptName	否	String	人员部门或单位
 		//照片地址	PhotoAdd	否	String	可浏览的Http照片地址
-		Map<String, Object> ret=new HashMap<String, Object>(); 
-		ret.put("Status", 1);
-		ret.put("StatusDesc", "验票成功：2人");
-		ret.put("TurnGateTimes", 2);
+		
+//		ret.put("Status", 1);
+//		ret.put("StatusDesc", "验票成功：2人");
+//		ret.put("TurnGateTimes", 2);
         return ret;
 	}
 	
