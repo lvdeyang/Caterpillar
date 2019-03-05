@@ -16,7 +16,7 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Table(name = "t_attractionsparking_table")
 public class AttractionsParkingPO extends AbstractBasePO {
 	// 景区id
-	private  int attractionsId;
+	private  long attractionsId;
 	//停车场名称
 	private  String  parkingName;
 	//停车场图片
@@ -39,16 +39,78 @@ public class AttractionsParkingPO extends AbstractBasePO {
 	private String regulations;
 	//罚款倍数
 	private  int fineMultiple;
+
+	//停车费用
+	private  int cost;
+	//停车场时间
+	private String stoppingTime;
+
+	//停车场电话
+	private String phone;
+
+
+
+
+
+
+
+	/**
+	 * 停车费用
+	 * @return
+	 */
+
+	public int getCost() {
+		return cost;
+	}
+
+	/**
+	 * 停车费用
+	 * @return
+	 */
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
+	public void setAttractionsId(long attractionsId) {
+		this.attractionsId = attractionsId;
+	}
+	/**
+	 * 停车场时间
+	 * @return
+	 */
+	public String getStoppingTime() {
+		return stoppingTime;
+	}
+	/**
+	 * 停车场时间
+	 * @return
+	 */
+	public void setStoppingTime(String stoppingTime) {
+		this.stoppingTime = stoppingTime;
+	}
+	/**
+	 * 停车场电话
+	 * @return
+	 */
+	public String getPhone() {
+		return phone;
+	}
+	/**
+	 * 停车场电话
+	 * @return
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	/**
 	 * @return 景区id
 	 */
-	public int getAttractionsId() {
+	public Long getAttractionsId() {
 		return attractionsId;
 	}
 	/**
 	 * @param 景点id
 	 */
-	public void setAttractionsId(int attractionsId) {
+	public void setAttractionsId(Long attractionsId) {
 		this.attractionsId = attractionsId;
 	}
 
@@ -133,7 +195,7 @@ public class AttractionsParkingPO extends AbstractBasePO {
 	/**
 	 * 景区规定条例 
 	 */
-	@Column(length=255)
+	@Column(length=3000)
 	public void setParkingDistrict(String parkingDistrict) {
 		this.parkingDistrict = parkingDistrict;
 	}

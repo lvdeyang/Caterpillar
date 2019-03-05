@@ -39,7 +39,7 @@ import com.guolaiwan.bussiness.admin.po.UserInfoPO;
  *
  */
 @Controller
-@RequestMapping("/cce")
+@RequestMapping("/quit")
 public class SmartParkingController  extends WebBaseControll{
 
 	@Autowired
@@ -60,7 +60,7 @@ public class SmartParkingController  extends WebBaseControll{
 	@ResponseBody
 	@RequestMapping(value = "/query", method = RequestMethod.POST)
 	public Map<String, Object> AddInformation(HttpServletRequest request) throws Exception {
-		long userId = 	(Long) request.getSession().getAttribute("userId");
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
 		Map<String, Object> dataMap = new HashMap<String, Object>(); 
 		List<VehiclePO> userByid = par_king.getNumber(userId);
 		for (VehiclePO vehiclePO : userByid) {
@@ -87,12 +87,12 @@ public class SmartParkingController  extends WebBaseControll{
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
 	public Map<String, Object> setState(HttpServletRequest request) throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		long userId = 	(Long) request.getSession().getAttribute("userId");	
-		List<OrderPO> userByid = or_der.getOrder(userId);
-		for (OrderPO OrderPO : userByid) {
-			dataMap.put("orderStatus", OrderPO.getOrderStatus());
-			dataMap.put("expire", OrderPO.getExpire());
+		long userId = 	(long) request.getSession().getAttribute("userId");	
+		 List<OrderPO> userByid = or_der.getOrder(userId);
+		for (OrderPO orderPO : userByid) {
+			dataMap.put("orderStatus", orderPO.getOrderStatus());
 		}
+		
 		return success(dataMap);
 	}
 
@@ -105,16 +105,52 @@ public class SmartParkingController  extends WebBaseControll{
 
 	
 	
+
+	/**
+	 * 查询   车位层数   区
+	 * 是否过期
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+/*	@ResponseBody
+	@RequestMapping(value = "/order", method = RequestMethod.POST)
+	public Map<String, Object> setTier(HttpServletRequest request) throws Exception {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		long userId = 	(long) request.getSession().getAttribute("userId");	
+		 List<OrderPO> userByid = or_der.getOrder(userId);
+		for (OrderPO orderPO : userByid) {
+			dataMap.put("orderStatus", orderPO.getOrderStatus());
+		}
+		
+		return success(dataMap);
+	}*/
+
+
 	
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
 
 
 
+	/*****************************************************************************************************/
 	//转到jsp文件
 	@RequestMapping(value = "/merchant/smartparking")
 	public ModelAndView merchantIndex(HttpServletRequest request,HttpSession session) throws Exception {

@@ -7,6 +7,7 @@
 			+ path + "/";
 	String weburl = WXContants.Website;
 %>
+
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 <html>
@@ -122,11 +123,6 @@
 	height: 100px;
 }
 
-.main select {
-	font-weight: bold;
-	border: 1px solid #CDCDCD;
-}
-
 .main input {
 	border: 1px solid #CDCDCD;
 }
@@ -143,8 +139,11 @@
 }
 
 .btn {
-	color: white;
 	border-radius: 5%;
+}
+
+.btn a {
+	color: white;
 }
 
 .main1 {
@@ -157,6 +156,36 @@
 	margin: 5px auto 0px;
 	width: 244px;
 	overflow: auto;
+}
+
+#img_car {
+	position: absolute;
+	top: 15%;
+	right: 40%;
+}
+
+#img_navigation {
+	position: absolute;
+	top: 40%;
+	right: 65%;
+}
+
+#img_order {
+	position: absolute;
+	top: 40%;
+	right: 15%;
+}
+
+#img_parking {
+	position: absolute;
+	top: 69%;
+	right: 40%;
+}
+
+#img_Renewal {
+	position: absolute;
+	top: 42%;
+	right: 40%;
 }
 
 html {
@@ -174,7 +203,9 @@ html {
 <script type="text/javascript">
 
 	$(function() {
-		var _uriYd = window.BASEPATH + '/smart/usere';
+	
+	 
+		var _uriYd = window.BASEPATH + 'smart/usere';
 		$.post(_uriYd, null, function(data) {
 			data = parseAjaxResult(data);
 			/* data.userNickname  */
@@ -186,29 +217,103 @@ html {
 			html.push('<p id="username">' + data.userNickname + '</p>');
 			$('.phone').append(html.join(''));
 		});
+		
+		 var _uri = window.BASEPATH + 'quit/query';
+		 $.post(_uri, null, function(data) {
+			data = parseAjaxResult(data);
+		   var html = [];
+		   	html.push('<p class="input1" style="width:200px;height:30px;line-height:30px;border:none;outline:none;">' + data.userHeadimg + '</p>'); 
+	        /*  html.push('<input class="input1" style="width:200px;height:30px;line-height:30px;border:none;outline:none;" type="text" name="test"  value="'+data.userHeadimg+'" />');  */
+			$('.main1').append(html.join(''));
+			
+			var htm = [];
+			htm.push('<p class="input2" style="width:200px;height:30px;line-height:30px;border:none;outline:none;">' + data.userNickname + '</p>'); 
+			$('.main2').append(htm.join(''));
+			
+		})	;	
 
 
-		$(document).on('click', '.btn', function() {
-			var _uriYd = window.BASEPATH + 'smart/setVehicle';
-			var params = {};
-			params.parking = $(".input1").val();
-			params.parNumber = $(".s").val();
-			var re = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
-			if ($(".input1").val().search(re)) {
-			       alert("请输入正确车牌");
-				return false;
-			} else {
-				$.post(_uriYd, $.toJSON(params), function(data) {
-				});
-				window.location.href="quit/merchant/smartparking";
+
+		var _uri = window.BASEPATH + 'quit/order';
+		$.post(_uri, null, function(data) {
+			 data = parseAjaxResult(data);
+			if (data.orderStatus == "未使用") {
+				var navigation = document.getElementById('img_navigation');
+				navigation.onclick = function() {
+					var Navigation = document.getElementById('test1');
+					Navigation.src = 'lib/images/daohang.png';
+					alert("我是导航页面")
+				};
+				var order = document.getElementById('img_order');
+			   	order.onclick = function() {
+					var Order = document.getElementById('test1');
+					Order.src = 'lib/images/dingdan.png';
+					alert("我是订单页面")
+			};  
+				var parking = document.getElementById('img_parking');
+				parking.onclick = function() {
+					var Parking = document.getElementById('test1');
+					Parking.src = 'lib/images/tingche.png';
+					alert("我是停车页面")
+				};
 			}
+			
+			//进入导航界面
+			if (data.orderStatus == "正在使用") {
+				var navigation = document.getElementById('img_navigation');
+				navigation.onclick = function() {
+					var Navigation = document.getElementById('test1');
+					Navigation.src = 'lib/images/daohang.png';
+					alert("我是导航页面")
+				};
+				 //进入停车界面
+				var parking = document.getElementById('img_parking');
+				parking.onclick = function() {
+					var Parking = document.getElementById('test1');
+					Parking.src = 'lib/images/tingche.png';
+					alert("我是停车页面")
+				};
+                //进入续费界面
+				var renew = document.getElementById('img_Renewal');
+				renew.onclick = function() {
+					var Renew = document.getElementById('test1');
+					Renew.src = 'lib/images/xufei.png';
+					alert("我是续费页面")
+				};
+				 var order = document.getElementById('img_order');
+			   	order.onclick = function() {
+					var Order = document.getElementById('test1');
+					Order.src = 'lib/images/dingdan.png';
+					alert("我是订单页面")
+			};  
+				
+			};
+				
 
-		});
-
-
-	});
-
+			
+        //进入订单界面
+        if(data.orderStatus == "已使用"){
+            var order = document.getElementById('img_order');
+			   	order.onclick = function() {
+					var Order = document.getElementById('test1');
+					Order.src = 'lib/images/dingdan.png';
+					alert("我是订单页面")
+			}
+        };
 	
+	
+		//进入找车位界面
+		var parkingspace = document.getElementById('img_car');
+		parkingspace.onclick = function() {
+			var Parkingspace = document.getElementById('test1');
+			Parkingspace.src = 'lib/images/chewei.png';
+			alert("我是找车位页面")
+			window.location.href="vice/merchant/scenic";
+		};
+		 
+	});
+	
+});
 </script>
 
 
@@ -226,32 +331,43 @@ html {
 			<div class="main1" style="border-bottom:1px solid #CCCCCC;">
 				<img class="img4"
 					style="float: left;width: 30px;height: 30px;margin: 0 auto;"
-					src=" lib/images/4.png" /> <input class="input1"
-					style="width:200px;height:30px;line-height: 30px;border:none;outline:none;font-weight: bold;font-size:16px;"
-					type="text" name="test" id="" value="" placeholder="请输入车牌号"
-					maxlength="7" />
+					src=" lib/images/4.png" />
+
 			</div>
 
 			<div class="main2" style="border-bottom:1px solid #CCCCCC">
 				<img class="img3"
 					style="float: left;width: 30px;height: 30px;margin: 0 auto;"
-					src="lib/images/che.png" /> 
-					<select class="s"style="height:30px;line-height: 30px;width: 202px;border: 0;outline: none;font-weight: bold;font-size:16px;>
-					<option style="width:200px ">请选择</option>
-					<option style="width:200px ">小型车</option>
-					<option style="width:200px ">中型车</option>
-					<option style="width:200px ">大型车</option>
-                  </select>
-                   
-				</div>
-				 <button class="btn"style="width: 202px;height: 35px;margin: 15px auto;background-color: #02A1E9";>保存
-					</button>
-			</div>
-		</div>
+					src="lib/images/che.png" />
 
-		<div class="banner img">
-			<img class="img-responsive" src="lib/images/wu.jpg" />
+
+
+
+			</div>
+			<button class="btn"
+				style="width: 202px;height: 35px;margin: 15px auto;background-color: #02A1E9";>
+				<a href="smart/merchant/parking">退出</a>
+			</button>
 		</div>
+	</div>
+
+	<div class="banner ">
+		<img src="lib/images/zhuanpan.png " class="img-responsive1 "
+			id="test1" alt=" ">
+		<div id="img_car" style="width:20%;height: 20%;border-radius:50%"
+			onclick="data()"></div>
+		<!--我要找车位-->
+		<div id="img_navigation"
+			style="width:20%;height: 20%;border-radius:50%;"></div>
+		<!--导航-->
+		<div id="img_order" style="width:20%;height: 20%;border-radius:50%;"></div>
+		<!--订单详情-->
+		<div id="img_parking" style="width:20%;height: 20%;border-radius:50%;"></div>
+		<!--正在停车-->
+		<div id="img_Renewal" style="width:20%;height: 20%;border-radius:50%;"></div>
+		<!--续费-->
+	</div>
 </body>
 
 </html>
+
