@@ -528,6 +528,7 @@ html, body {
 			params.province=addresses[0];
 			params.city=addresses[1];
 			params.district=addresses[2];
+			params.idNum=$('#idNum').val();
 			params.consigneeAddress=$('#moreAddress').val();
 			params.addressphone=$('#addressphone').val();
 			params.consigneeName=$('#name').val();
@@ -572,6 +573,12 @@ html, body {
 			    <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
 			    <div class="weui-cell__bd" style="border:1px solid #CCC">
 			      <input id="name" class="weui-input" type="text" placeholder="">
+			    </div>
+			  </div>
+			  <div class="weui-cell">
+			    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
+			    <div class="weui-cell__bd" style="border:1px solid #CCC">
+			      <input id="idNum" class="weui-input" type="text" placeholder="">
 			    </div>
 			  </div>
 			  <div class="weui-cell">
