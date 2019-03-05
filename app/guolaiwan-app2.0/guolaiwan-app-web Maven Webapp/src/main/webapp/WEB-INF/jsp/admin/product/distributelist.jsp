@@ -36,8 +36,7 @@
 	<!--  -->
 	<div class="x-body">
 		<xblock>
-		<button class="layui-btn"
-			onclick="product_add('添加商品','addProduct','500','600')">
+		<button class="layui-btn">
 			<i class="layui-icon">&#xe608;</i>添加
 		</button>
 		<button class="layui-btn layui-btn-danger" onclick="delAll()">
