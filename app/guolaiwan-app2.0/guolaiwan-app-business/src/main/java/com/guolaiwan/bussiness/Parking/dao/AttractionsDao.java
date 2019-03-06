@@ -99,6 +99,12 @@ public class AttractionsDao  extends AbstractBaseDao<AttractionsParkingPO> {
     	   hql.andBy("id",Condition.eq, uid);
     	   return findByHql(hql);
        }
+
+
+	public List<AttractionsParkingPO> GetListbyPage(String parkingName, int pagecurr, int i) {
+		return null;
+
+	}
        
       
 
