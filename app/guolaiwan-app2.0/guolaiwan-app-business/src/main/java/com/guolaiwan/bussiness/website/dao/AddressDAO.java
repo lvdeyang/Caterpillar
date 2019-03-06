@@ -51,6 +51,15 @@ public class AddressDAO extends AbstractBaseDao<AddressPO>{
 		return addresses;
 	}
 
+	public List<AddressPO> getByUserIdAndDelFlg(long userId,int delFlg){
+		QueryHql hql = this.newQueryHql(); 
+		hql.andBy("userId", Condition.eq, userId);
+		hql.andBy("delFlg", Condition.eq, delFlg);
+		List<AddressPO> addresses = this.findByHql(hql);
+		if(addresses==null||addresses.size()==0) return null;
+		return addresses;
+	}
+	
 	public List<AddressPO> getAddressByUserId(long userId){
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("userId", Condition.eq, userId);

@@ -2055,7 +2055,7 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/address/list", method = RequestMethod.GET)
 	public Map<String, Object> addressList(HttpServletRequest request, Long userId) throws Exception {
-		List<AddressPO> addresses = conn_address.getByUserId(userId);
+		List<AddressPO> addresses = conn_address.getByUserIdAndDelFlg(userId,0);
 		List<AddressVO> _addresses = AddressVO.getConverter(AddressVO.class).convert(addresses, AddressVO.class);
 		return success(_addresses);
 	}
@@ -2079,7 +2079,9 @@ public class PhoneController extends WebBaseControll {
 		if (polist.size() <= 0) {
 			return null;
 		}
-		conn_address.delete(polist.get(0));
+		polist.get(0).setDelFlg(1);
+		conn_address.save(polist.get(0));
+		//conn_address.delete(polist.get(0));
 		return success();
 	}
 
