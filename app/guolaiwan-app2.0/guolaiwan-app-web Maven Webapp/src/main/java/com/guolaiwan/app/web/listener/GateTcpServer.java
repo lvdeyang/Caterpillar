@@ -56,8 +56,6 @@ import org.jdom2.input.SAXBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSONObject;
-import com.guolaiwan.app.web.admin.Utils.Base64Util;
-import com.guolaiwan.app.web.admin.Utils.FileUtil;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
