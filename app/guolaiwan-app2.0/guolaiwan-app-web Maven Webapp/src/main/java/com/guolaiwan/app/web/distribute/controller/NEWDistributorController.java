@@ -82,6 +82,21 @@ public class NEWDistributorController {
 		ModelAndView mv = null;
         mv = new ModelAndView("mobile/guolaiwan/distribute");
         HttpSession session=request.getSession();
+
+		if(session.getAttribute("distributorId")==null){
+		
+			mv = new ModelAndView("redirect:/distributor/app/login/0");
+			return mv;
+		}else{
+			DistributorPo distributorPo=conn_distributor.get(Long.parseLong(session.getAttribute("distributorId")+""));
+			
+            if(!distributorPo.getStatus().equals(DistributorApplyStatus.PASSED)){
+            	mv = new ModelAndView("redirect:/distributor/app/login/0");
+    			return mv;
+			}
+		}
+        
+        
         if(proRegion==0){
         	 RegionPo regionPo=conn_region.get(Long.parseLong(session.getAttribute("region")+""));
         	 while(regionPo.getParentId()!=0){
@@ -323,16 +338,19 @@ public class NEWDistributorController {
 	public ModelAndView productIndex(
 			HttpServletRequest request,@PathVariable long productId) throws Exception{
 		ModelAndView mv = null;
+		HttpSession session=request.getSession();
         mv = new ModelAndView("mobile/guolaiwan/distribute-product");
         DistributeProductVo vo=new DistributeProductVo();
         DistributeProduct po=conn_dispro.get(productId);
+        DistributorPo distributorPo=conn_distributor.get(po.getDistributorId());
         vo.set(po);
+        vo.setTel(distributorPo.getPhone());
         SysConfigPO sys=conn_sys.getSysConfig();
         vo.setPic(sys.getWebUrl()+vo.getPic());
         mv.addObject("product",vo);
         List<RegionPo> regionPos=conn_region.findAll();
         mv.addObject("regions",regionPos);
-        HttpSession session=request.getSession();
+       
         RegionPo regionPo=conn_region.get(Long.parseLong(session.getAttribute("region").toString()));
         mv.addObject("orderId","null");
         mv.addObject("myregion",regionPo);

@@ -615,14 +615,14 @@ html, body {
 					      卖出订单
 					    </p>
 					  </a>
-					    <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
+					    <!-- <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
 					    <div class="weui-grid__icon">
 					      <img src="lib/images/icon_nav_msg.png" alt="">
 					    </div>
 					    <p class="weui-grid__label">
 					      分销首页
 					    </p>
-					  </a>
+					  </a> -->
 					   <!-- <a href="javascript:void(0)" class="weui-grid js_grid">
 					    <div class="weui-grid__icon">
 					      <img src="lib/images/icon_nav_msg.png" alt="">
