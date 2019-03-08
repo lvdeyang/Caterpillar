@@ -620,6 +620,7 @@ input[type="datetime-local"]:before{
 			    	$('#startdiv').show();
 			    	$('#enddiv').show();
 			    	$('#selRoomDiv').show();
+			    	$('#logisticDiv').hide();
 			    }else if(data.product.productModularCode=='0003'||data.product.productModularCode=='0001')
 			    {
 			    	$('#choosediv').show();
@@ -1449,7 +1450,7 @@ input[type="datetime-local"]:before{
 			  </div>
 			</div>
 			
-			<div style="font-size:12px;float:left;width:100%;overflow-x:scroll">
+			<div id="logisticDiv"  style="font-size:12px;float:left;width:100%;overflow-x:scroll">
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">物流选择</label></div>
 			    <div class="weui-cell__bd" style="width:80%;">

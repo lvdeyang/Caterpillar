@@ -572,8 +572,8 @@ html, body {
 				
 				</div>
 				
-				<a id="modDis" style="position:fixed;bottom:0;margin-top:10px;width:46%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
-				<a id="delDis" style="position:fixed;bottom:0;margin-top:10px;width:46%;margin-left:50%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消申请</a>
+				<a id="modDis" style="margin-top:10px;width:46%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
+				<a id="delDis" style="margin-top:10px;width:46%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消申请</a>
 		    </c:if>
 		   
 			<c:if test="${status=='PASSED'}">
