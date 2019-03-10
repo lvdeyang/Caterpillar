@@ -493,6 +493,9 @@ public class WXPay {
     public Map<String, String> refund(Map<String, String> reqData) throws Exception {
         return this.refund(reqData, this.config.getHttpConnectTimeoutMs(), this.config.getHttpReadTimeoutMs());
     }
+    public Map<String, String> package1(Map<String, String> reqData) throws Exception {
+        return this.package1(reqData, this.config.getHttpConnectTimeoutMs(), this.config.getHttpReadTimeoutMs());
+    }
 
 
     /**
@@ -513,6 +516,13 @@ public class WXPay {
         else {
             url = WXPayConstants.REFUND_URL_SUFFIX;
         }
+        String respXml = this.requestWithCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
+        return this.processResponseXml(respXml);
+    }
+    
+    public Map<String, String> package1(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
+        String url="/mmpaymkttransfers/sendredpack";
+        
         String respXml = this.requestWithCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
     }

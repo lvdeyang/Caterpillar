@@ -121,6 +121,7 @@ import pub.caterpillar.communication.http.client.HttpClient;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
 import pub.caterpillar.weixin.constants.WXContants;
+import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
 
 //portal
 @Controller
@@ -1754,5 +1755,65 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/gateway");
 		return mv;
 	}
+	
+	@RequestMapping(value = "/package1", method = RequestMethod.GET)
+	public ModelAndView package1(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+
+			GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+
+			Map<String, String> reqData = new HashMap<String, String>();
+			HttpSession session = request.getSession();
+			UserInfoPO user=conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
+			
+			reqData.put("mch_billno",DateUtil.format(new Date(),"yyyyMMddHHmmss")+buildRandom(4));
+			/** 用户openid */
+			reqData.put("re_openid","opVUYv_4GAy8GhpOWKMO2eqt-j0A");
+		    /** 付款金额 */
+			reqData.put("total_amount","100");
+			reqData.put("wxappid", WXContants.AppId);
+		    /** 红包发放总人数 */
+			//reqData.put("total_num","1");
+		    /** 红包祝福语 */
+			reqData.put("wishing","test");
+		    /** 调用接口的机器Ip地址 */
+			//reqData.put("client_ip","192.165.56.64");
+		    /** 活动名称 */
+		    String activityName = "test";
+		    reqData.put("act_name",activityName);
+		    /** 备注 */
+		    //reqData.put("remark","test");
+		    reqData.put("send_name","test");
+			Map<String, String> resData = wxPay.package1(reqData); // 生成二维码数据
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/package");
+		return  mv;
+	}
+	
+	
+	public  int buildRandom(int length) {
+        int num = 1;
+        double random = Math.random();
+        if (random < 0.1) {
+            random = random + 0.1;
+        }
+        for (int i = 0; i < length; i++) {
+            num = num * 10;
+        }
+        return (int) ((random * num));
+    }
+
+
+
+	
 	
 }
