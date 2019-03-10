@@ -15,9 +15,6 @@
 		   menuHtml.push('<div id="index" class="bottomMenu weui-navbar__item weui_bar__item_on">');
 		   menuHtml.push('<span class="icon-home"></span>主页');
 		   menuHtml.push('</div>');
-		   menuHtml.push('<div id="order" class="bottomMenu weui-navbar__item">');
-		   menuHtml.push('<span class="icon-file-alt"></span>订单');
-		   menuHtml.push('</div>');
 		   menuHtml.push('<div id="person" class="bottomMenu weui-navbar__item">');
 		   menuHtml.push('<span class="icon-user"></span>个人');
 		   menuHtml.push('</div>');
@@ -29,20 +26,19 @@
     	
     	$(document).on('click','.bottomMenu',function(){
     	  if(this.id=='index'){
-    	     location.href=window.BASEPATH + 'pubnum/index';
-    	  }else if(this.id=='order'){
-    	     location.href=window.BASEPATH + 'pubnum/order/list';
+    	     location.href=window.BASEPATH + 'distributor/distribute/index/0/0';
     	  }else if(this.id=="person"){
-    	     location.href=window.BASEPATH + 'pubnum/personal/index';
+    	     location.href=window.BASEPATH + 'distributor/app/login/0';
     	  }
     	  
     	
     	});
     	
 		var href=location.href;
-		if(href.indexOf('pubnum/product/index')==-1&&
-		   href.indexOf('pubnum/address/edit')==-1){
-		   //initMenu();
+		if(href.indexOf('distributor/product/index')==-1&&
+		   href.indexOf('distributor/off/sell')==-1&&
+		   href.indexOf("distributor/offorder/edit")==-1){
+		   initMenu();
 		}
 		
 		

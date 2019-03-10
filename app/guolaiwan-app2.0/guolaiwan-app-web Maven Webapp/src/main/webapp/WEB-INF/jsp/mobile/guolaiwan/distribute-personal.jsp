@@ -572,8 +572,8 @@ html, body {
 				
 				</div>
 				
-				<a id="modDis" style="position:fixed;bottom:0;margin-top:10px;width:46%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
-				<a id="delDis" style="position:fixed;bottom:0;margin-top:10px;width:46%;margin-left:50%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消申请</a>
+				<a id="modDis" style="margin-top:10px;width:46%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
+				<a id="delDis" style="margin-top:10px;width:46%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消申请</a>
 		    </c:if>
 		   
 			<c:if test="${status=='PASSED'}">
@@ -615,14 +615,14 @@ html, body {
 					      卖出订单
 					    </p>
 					  </a>
-					    <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
+					    <!-- <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
 					    <div class="weui-grid__icon">
 					      <img src="lib/images/icon_nav_msg.png" alt="">
 					    </div>
 					    <p class="weui-grid__label">
 					      分销首页
 					    </p>
-					  </a>
+					  </a> -->
 					   <!-- <a href="javascript:void(0)" class="weui-grid js_grid">
 					    <div class="weui-grid__icon">
 					      <img src="lib/images/icon_nav_msg.png" alt="">

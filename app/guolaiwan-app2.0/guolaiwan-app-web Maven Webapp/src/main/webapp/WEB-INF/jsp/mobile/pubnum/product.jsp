@@ -620,6 +620,7 @@ input[type="datetime-local"]:before{
 			    	$('#startdiv').show();
 			    	$('#enddiv').show();
 			    	$('#selRoomDiv').show();
+			    	$('#logisticDiv').hide();
 			    }else if(data.product.productModularCode=='0003'||data.product.productModularCode=='0001')
 			    {
 			    	$('#choosediv').show();
@@ -1306,6 +1307,7 @@ input[type="datetime-local"]:before{
 				   
 					 html.push('<div class="weui-media-box weui-media-box_text mailAddress" id="mailadd-'+data[i].id+'">');
 			         html.push('<h4 class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）<span style="font-size:12px;color:red" class=" icon-share-alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击支付</span></h4>');
+			         html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
 			         html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('</div>');
 				}
@@ -1448,7 +1450,7 @@ input[type="datetime-local"]:before{
 			  </div>
 			</div>
 			
-			<div style="font-size:12px;float:left;width:100%;overflow-x:scroll">
+			<div id="logisticDiv"  style="font-size:12px;float:left;width:100%;overflow-x:scroll">
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">物流选择</label></div>
 			    <div class="weui-cell__bd" style="width:80%;">
@@ -1551,9 +1553,10 @@ input[type="datetime-local"]:before{
 							</div>
 							<div class="weui-cell">
 							    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
-							    <div class="weui-cell__bd" style="border:1px solid #CCC">
+							    <div class="weui-cell__bd">
 							      <input id="idNum" class="weui-input" type="text" placeholder="">
 							    </div>
+							    
 							 </div>
 							<div class="weui-cell">
 								<div class="weui-cell__hd">

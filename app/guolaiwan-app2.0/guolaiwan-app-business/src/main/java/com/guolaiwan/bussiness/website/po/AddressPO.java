@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.bytedeco.javacpp.RealSense.intrinsics;
+
 import pub.caterpillar.orm.po.AbstractBasePO;
 
 @Entity
@@ -38,6 +40,8 @@ public class AddressPO extends AbstractBasePO {
 	private String idNum;
 	
 	private String photo;
+	
+	private int delFlg;
 	
 	public long getUserId() {
 		return userId;
@@ -117,6 +121,12 @@ public class AddressPO extends AbstractBasePO {
 	}
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+	public int getDelFlg() {
+		return delFlg;
+	}
+	public void setDelFlg(int delFlg) {
+		this.delFlg = delFlg;
 	}
 	
 	
