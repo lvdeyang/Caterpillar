@@ -490,7 +490,7 @@ html, body {
 </head>
 
 <!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
+<jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script type="text/javascript">
 
@@ -530,7 +530,7 @@ html, body {
 			$.post(_uriAdd, $.toJSON(params), function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
-                location.href=window.BASEPATH + 'distributor/offorder/index';
+                location.href=window.BASEPATH + 'distributor/off/sell?proId=${proId}';
 
 				
 			});

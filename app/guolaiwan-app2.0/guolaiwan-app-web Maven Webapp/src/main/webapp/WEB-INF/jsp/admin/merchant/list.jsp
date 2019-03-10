@@ -132,7 +132,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  
               //工具
                //分类删除
-              table.on('tool(merchantList)',function(obj){                                  
+              table.on('tool(merchantList)',function(obj){                                      
                   var data = obj.data;
                   if(obj.event === 'detail'){
                       layer.msg('ID：'+ data.id + ' 的查看操作');

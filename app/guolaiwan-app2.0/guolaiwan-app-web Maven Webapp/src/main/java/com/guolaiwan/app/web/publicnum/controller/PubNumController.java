@@ -354,7 +354,9 @@ public class PubNumController extends WebBaseControll {
 	@JsonBody
 	@RequestMapping(value = "/delAddress", method = RequestMethod.GET)
 	public Object delAddress(HttpServletRequest request, Long addressId) throws Exception {
-		conn_address.delete(addressId);
+		AddressPO addressPO=conn_address.get(addressId);
+		addressPO.setDelFlg(1);
+		conn_address.save(addressPO);
 		return success();
 	}
 

@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.bytedeco.javacpp.RealSense.intrinsics;
-import org.bytedeco.javacpp.opencv_core.RefOrVoid.type;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
@@ -479,4 +477,16 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO>{
 		return result;
 	}
 	
+	//根据身份证获的地址Id列表中的UserId查询订单列表信息
+	public List<OrderInfoPO> getOrdersByIds(List<Long> ids){
+		if (ids==null||ids.isEmpty()) {
+			return null;
+		}
+		QueryHql hql = this.newQueryHql();
+		hql.andIn("mailAddress", ids);
+		List<OrderInfoPO> c = this.findByHql(hql);
+		if(c==null || c.size()<=0) return null;
+		return c;
+	}
+
 }

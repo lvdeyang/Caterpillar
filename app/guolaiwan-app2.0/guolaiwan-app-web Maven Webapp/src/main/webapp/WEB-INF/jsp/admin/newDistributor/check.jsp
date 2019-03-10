@@ -36,14 +36,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label">合同图片</label>
 				<div class="layui-input-block">
-					<img style="width:300px;height:200px" src="http://localhost:8080/file/${distributor.contractPicUrl}"/>
+					<img style="width:300px;height:200px" src="${distributor.contractPicUrl}"/>
 				</div>
 			</div>
 			
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label">合同视频</label>
 				<div class="layui-input-block">
-					<video style="width:300px;height:200px" src="http://localhost:8080/file/${distributor.contractVideo}" autoplay controls="controlss"/>
+					<video style="width:300px;height:200px" src="${distributor.contractUrl}" autoplay controls="controlss"/>
 				</div>
 			</div>
   			

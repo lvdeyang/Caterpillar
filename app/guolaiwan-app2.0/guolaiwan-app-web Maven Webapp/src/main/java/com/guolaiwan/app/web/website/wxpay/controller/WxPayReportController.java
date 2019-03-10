@@ -95,7 +95,7 @@ public class WxPayReportController extends WebBaseControll {
 						rIds=bundleOrder.getOrderStr().split("A");
 						
 					}
-					for (String ridStr : rIds) {
+					for (String ridStr : rIds) { //退款
 						OrderInfoPO order = conn_orderInfo.get(Long.parseLong(ridStr));
 						order.setOrderState(OrderStateType.REFUNDED);
 						conn_orderInfo.save(order);
@@ -129,7 +129,7 @@ public class WxPayReportController extends WebBaseControll {
 						String ydNO = ydNoCode(orderId);
 						order.setYdNO(ydNO);
 						//支付状态、减库存
-						order.setOrderState(OrderStateType.PAYSUCCESS);
+						order.setOrderState(OrderStateType.PAYSUCCESS);  
 						ProductPO product = conn_product.get(order.getProductId());
 						if(product != null){
 							//long productNum = order.getProductNum();

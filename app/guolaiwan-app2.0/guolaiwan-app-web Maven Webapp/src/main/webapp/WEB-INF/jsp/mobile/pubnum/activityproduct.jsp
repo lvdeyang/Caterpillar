@@ -1052,6 +1052,7 @@ html, body {
 			params.district=addresses[2];
 			params.consigneeAddress=$('#moreAddress').val();
 			params.addressphone=$('#addressphone').val();
+			params.idNum=$('#idNum').val();
 			params.consigneeName=$('#name').val();
 			$.post(_uriAdd, $.toJSON(params), function(data){
 				data = parseAjaxResult(data);
@@ -1085,6 +1086,7 @@ html, body {
 				   
 					 html.push('<div class="weui-media-box weui-media-box_text mailAddress" id="mailadd-'+data[i].id+'">');
 			         html.push('<h4 class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）<span style="font-size:12px;color:red" class=" icon-share-alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击支付</span></h4>');
+			         html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
 			         html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('</div>');
 				}
@@ -1251,6 +1253,12 @@ html, body {
 									<input id="name" class="weui-input" type="text" placeholder="">
 								</div>
 							</div>
+							<div class="weui-cell">
+							    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
+							    <div class="weui-cell__bd">
+							      <input id="idNum" class="weui-input" type="text" placeholder="">
+							    </div>
+							 </div>
 							<div class="weui-cell">
 								<div class="weui-cell__hd">
 									<label class="weui-label">手机号</label>

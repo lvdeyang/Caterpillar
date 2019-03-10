@@ -521,6 +521,7 @@ html, body {
 				     }
 					 html.push('<div class="weui-media-box weui-media-box_text">');
 			         html.push('<h4 class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）</h4>');
+			         html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
 			         html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('<p style="margin-top:5px;" class="weui-media-box__desc"><a style="font-size:15px;font-weight:bold;color:red" href="javascript:void(0)" class="icon-trash del" id="del-'+data[i].id+'"></a>&nbsp;&nbsp;<a href="javascript:void(0)" style="display:none;" class="'+defClass+' setDef" id="setDef-'+data[i].id+'"></a></p>');
 			         
