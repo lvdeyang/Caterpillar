@@ -14,12 +14,31 @@ public class CarPositionPO  extends AbstractBasePO{
 	private  Long attractionsId;
 	// 车位 经度
 	private String  longitude;
-	//车位 纬度
+	//车位 图
 	private String latitude;
-	//车位层数
+	//车位层
 	private String number;
 	//车位那区
 	private String  district;
+	//车位状态  未使用 正在使用
+	private String state;
+	
+	
+	
+	/**
+	 * 车位状态  未使用 正在使用
+	 * @return
+	 */
+	public String getState() {
+		return state;
+	}
+	/**
+	 * 车位状态  未使用 正在使用
+	 * @return
+	 */
+	public void setState(String state) {
+		this.state = state;
+	}
 	/**
 	 * 景区停车场id
 	 * @return

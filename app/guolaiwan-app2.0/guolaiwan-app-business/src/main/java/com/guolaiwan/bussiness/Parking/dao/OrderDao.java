@@ -34,26 +34,23 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
            
 	}
        
-     /*  *//**
-        * 通过用户id 查询    订单信息
+       /**
+        * 通过用户id 查询    订单信息 景区id
         * @param userId 用户id
         * @param  
         * @param 
         * @return
         * @throws ParseException
-        *//*
-       public List<OrderPO>  getStatus(Long userId) throws ParseException{
-    	   QueryHql hql =   this.newQueryHql();
+        */
+       public List<OrderPO>  getOrderform(Long userId,Long attractionsId) throws ParseException{
+    	   QueryHql hql = newQueryHql();
     	   hql.andBy("orderId", Condition.eq,userId);
+    	   hql.andBy("attractionsId", Condition.eq,attractionsId);
     	   return findByHql(hql);
+    	   
        }
-	
-	*/
-	
-	
-	
-	
-	
+       
+    
 	
 	
 }

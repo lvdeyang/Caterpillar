@@ -121,6 +121,7 @@ import pub.caterpillar.communication.http.client.HttpClient;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
 import pub.caterpillar.weixin.constants.WXContants;
+import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
 
 //portal
 @Controller
@@ -1754,5 +1755,6 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/gateway");
 		return mv;
 	}
+
 	
 }

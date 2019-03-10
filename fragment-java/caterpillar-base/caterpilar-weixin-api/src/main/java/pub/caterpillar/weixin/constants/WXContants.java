@@ -25,6 +25,6 @@ public class WXContants {
     
     //本地运行时使用修改
     //public final static boolean istest=true;
-    public final static boolean istest=false;
+    public final static boolean istest=true;
     
 }

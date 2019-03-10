@@ -174,9 +174,9 @@ html {
 			var htm = [];
 			for (var i = 0; i < data.length; i++) {
 				htm.push('<div class="main">');
-				htm.push('<img class="main_pic" id="main_pic"style="width:40%;height:130px; margin:20px 10px 20px;" src="'+data[i].parkingImg+'" />');
+				htm.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><img class="main_pic" id="main_pic"style="width:40%;height:130px; margin:20px 10px 20px;" src="'+data[i].parkingImg+'" /></a>');
 				htm.push('<div class="main_pid style="width:100%;height:50%;float:right;overflow:hidden;">');
-				htm.push('<p style="font-weight: bold;font-size:1rem;">' + data[i].parkingName + '</p>');
+				htm.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><p style="font-weight: bold;font-size:1rem; color:#333;">' + data[i].parkingName + '</p></a>');
 				htm.push('<p style="font-size:0.7rem;margin:0 0 5px;overflow:hidden;">总车位：' + data[i].commonParking + '<span></span>剩余车位：<span>' + data[i].usedParking + '</span></p>');
 				htm.push('<p style="font-size:0.7rem;lor:#BDBDBD; ">' + data[i].position + '  <span> 充电柱: ' + data[i].chargingColumn + '</span></p>');
 				htm.push('<p style="font-size:0.7rem;color:#BDBDBD; "> 地址 ：<span>' + data[i].address + '</span></p>');
@@ -248,17 +248,20 @@ html {
 		$(document).on('click',".btn",function() {	
 	     	$("body.main").remove();
 		    $(".main").remove();
-		    var uri = window.BASEPATH + 'vice/parking';
+		    var uri = window.BASEPATH + 'vice/query';
 		     var params = {};
-		    params.parking = $("#txt1").val();
+		    params.input = $("#txt1").val();
 	     	$.post(uri, $.toJSON(params), function(data) {
 			data = parseAjaxResult(data);
+			if(data.length == 0 ){
+			alert("无此景点");
+			}
 			var ht = [];
 			for (var i = 0; i < data.length; i++) {
 				ht.push('<div class="main">');
-				ht.push('<img class="main_pic" id="main_pic"style="width:40%;height:130px; margin:20px 10px 20px;" src="'+data[i].parkingImg+'" />');
+				ht.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><img class="main_pic" id="main_pic"style="width:40%;height:130px; margin:20px 10px 20px;" src="'+data[i].parkingImg+'" /></a>');
 				ht.push('<div class="main_pid style="width:100%;height:50%;float:right;overflow:hidden;">');
-				ht.push('<p style="font-weight: bold;font-size:1rem;">' + data[i].parkingName + '</p>');
+				ht.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><p style="font-weight: bold;font-size:1rem;color:#333;">' + data[i].parkingName + '</p></a>');
 				ht.push('<p style="font-size:0.7rem;margin:0 0 5px;overflow:hidden;">总车位：' + data[i].commonParking + '<span></span>剩余车位：<span>' + data[i].usedParking + '</span></p>');
 				ht.push('<p style="font-size:0.7rem;lor:#BDBDBD; ">' + data[i].position + '  <span> 充电柱: ' + data[i].chargingColumn + '</span></p>');
 				ht.push('<p style="font-size:0.7rem;color:#BDBDBD; "> 地址 ：<span>' + data[i].address + '</span></p>');
@@ -270,13 +273,16 @@ html {
 			$('body').append(ht.join(''));
 				return false;
 			});
+			
+	
+			
 		
 		});
 	
 	
 </script>
 <body>
-
+<div id="container"></div> 
 	<div id="div_header">
 
 		<!--表单的autocomplete="off"属性设置可以阻止浏览器默认的提示框-->
@@ -305,6 +311,6 @@ html {
 				></p>
 		</div> -->
 	</div>
-
+  
 </body>
 </html>

@@ -73,6 +73,7 @@ public class ParkingController  extends WebBaseControll{
 		for (UserInfoPO userInfoPO : user) {
 			dataMap.put("userHeadimg", userInfoPO.getUserHeadimg());
 			dataMap.put("userNickname", userInfoPO.getUserNickname());
+			dataMap.put("userPhone", userInfoPO.getUserPhone());
 		}
 		return success(dataMap);
 	}
