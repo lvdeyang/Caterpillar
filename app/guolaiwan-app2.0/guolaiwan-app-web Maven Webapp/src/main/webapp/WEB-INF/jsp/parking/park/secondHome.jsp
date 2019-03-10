@@ -348,8 +348,7 @@ html {
 	<div class="banner ">
 		<img src="lib/images/zhuanpan.png " class="img-responsive1 "
 			id="test1" alt=" ">
-		<div id="img_car" style="width:20%;height: 20%;border-radius:50%"
-			onclick="data()"></div>
+		<div id="img_car" style="width:20%;height: 20%;border-radius:50%"onclick="data()"></div>
 		<!--我要找车位-->
 		<div id="img_navigation"
 			style="width:20%;height: 20%;border-radius:50%;"></div>
