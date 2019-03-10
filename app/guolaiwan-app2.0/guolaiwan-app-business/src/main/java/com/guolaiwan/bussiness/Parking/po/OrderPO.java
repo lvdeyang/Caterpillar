@@ -13,10 +13,16 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Entity
 @Table(name = "t_order_table")
 public class OrderPO extends AbstractBasePO {
-	//订单id
+	//用户 订单id
 	private long orderId;
-	//停车 层
+	//景区id
+	private long attractionsId;
+	//停车场层
 	private String parkingLayer;
+	//停车场 名称
+	private String parkingName;
+	//停车场营业时间
+	private String Time;
 	// 停车 区
 	private String  parkingDistrict;
 	//车位编号
@@ -27,13 +33,57 @@ public class OrderPO extends AbstractBasePO {
 	private String bookingTime;
 	//到期时间
 	private String dueTime;
-	//订单状态         // 未使用 正在使用 已使用
+	//订单状态         // 未支付  已支付   已过期
 	private String orderStatus;
 	//是否超时
 	private int overTime;
-	//是否过期
-	private int expire;
+
 	
+	
+	
+	
+	/**
+	 * 景区id
+	 * @return
+	 */
+	public long getAttractionsId() {
+		return attractionsId;
+	}
+	/**
+	 * 景区id
+	 * @return
+	 */
+	public void setAttractionsId(long attractionsId) {
+		this.attractionsId = attractionsId;
+	}
+	/**
+	 * 车场名称
+	 * @return
+	 */
+	public String getParkingName() {
+		return parkingName;
+	}
+	/**
+	 * 车场名称
+	 * @return
+	 */
+	public void setParkingName(String parkingName) {
+		this.parkingName = parkingName;
+	}
+	/**
+	 * 停车场 营业时间
+	 * @return
+	 */
+	public String getTime() {
+		return Time;
+	}
+	/**
+	 * 停车场 营业时间
+	 * @return
+	 */
+	public void setTime(String time) {
+		Time = time;
+	}
 	public long getOrderId() {
 		return orderId;
 	}
@@ -152,18 +202,6 @@ public class OrderPO extends AbstractBasePO {
 		this.overTime = overTime;
 	}
 
-	/**
-	 * 订单是否已过期  0未过期 1已过期
-	 */
-	public int getExpire() {
-		return expire;
-	}
 
-	/**
-	 * 订单是否已过期  0未过期 1已过期
-	 */
-	public void setExpire(int expire) {
-		this.expire = expire;
-	}
 
 }

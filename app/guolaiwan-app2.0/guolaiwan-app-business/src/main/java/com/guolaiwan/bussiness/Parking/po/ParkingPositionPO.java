@@ -16,36 +16,36 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Table(name = "t_parkingposition_table")
 public class ParkingPositionPO extends AbstractBasePO{
 	// 景区 车位id
-	private int positionId;
+	private long positionId;
 	//车位编号
-	private int positionNumber;
+	private long positionNumber;
 	// 车位信息   大小车位
 	private String positionInformation;
 	//使用情况 0无车 1有车
-	private int useCondition;
+	private long useCondition;
 
 	/**
 	 * 景区 id  车位
 	 */
-	public int getPositionId() {
+	public long getPositionId() {
 		return positionId;
 	}
 	/**
 	 * 景区  id 车位
 	 */
-	public void setPositionId(int positionId) {
+	public void setPositionId(long positionId) {
 		this.positionId = positionId;
 	}
 	/**
 	 * 车位编号
 	 */
-	public int getPositionNumber() {
+	public long getPositionNumber() {
 		return positionNumber;
 	}
 	/**
 	 * 车位编号
 	 */
-	public void setPositionNumber(int positionNumber) {
+	public void setPositionNumber(long positionNumber) {
 		this.positionNumber = positionNumber;
 	}
 	/**
@@ -63,13 +63,13 @@ public class ParkingPositionPO extends AbstractBasePO{
 	/**
 	 * 使用情况 0无车 1有车
 	 */
-	public int getUseCondition() {
+	public long getUseCondition() {
 		return useCondition;
 	}
 	/**
 	 * 使用情况 0无车 1有车
 	 */
-	public void setUseCondition(int useCondition) {
+	public void setUseCondition(long useCondition) {
 		this.useCondition = useCondition;
 	}
 

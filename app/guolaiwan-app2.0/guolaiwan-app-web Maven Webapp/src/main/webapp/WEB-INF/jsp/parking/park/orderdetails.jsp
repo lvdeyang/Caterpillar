@@ -67,108 +67,87 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 <meta name=”viewport” content=”width=device-width, initial-scale=1″ />
-
-
-
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <title></title>
-    <style type="text/css">
-			* {
-				margin: 0px;
-				padding: 0px;
-				
-			}
-			
-			.header {
-				width: 100%;
-			
-				border-bottom:solid 1px #959595;
-			}
-			.main li{
-				list-style: none;
-				list-style-type:decimal;
-                list-style-position:inside;
-                font-size: 14px;
-                font-weight: bold;
-                
-			}
-			
-			html {
-				height: 100%;
-			}
-			
-		    .btn{
-		    	position:fixed;
-                 top:93%;
-               /*  z-index: -1;*/         
-		    }
-			
-		</style>
+ <style type="text/css">
+ html,body{
+   height:100%;
+   } 
+ </style>
   </head>
-  <!-- 公共脚本引入 -->
+    <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script>
-  $(function() {
-      var uri = window.BASEPATH + 'vice/details';
-         var para = {};
-		  para.uid = ${param.useid};
-		 $.post(uri, $.toJSON(para), function(data) {
+  <script>
+   $(function() {
+    	var _uriYd = window.BASEPATH + '/smart/usere';
+		$.post(_uriYd, null, function(data) {
 			data = parseAjaxResult(data);
-			alert(data.status);
-		    if("已支付"==data.status){
-		    alert("11");
-		     window.location.href="pubnum/index"
-		    }
-	     });
-  
-  
-  
-      	var _uri = window.BASEPATH + 'vice/regu';
-      	   var params = {};
-		  params.uid = ${param.useid};
-		 $.post(_uri, $.toJSON(params), function(data) {
-			data = parseAjaxResult(data);
-			var htm = [];
-				htm.push('<li>'+data.regulations+'</li>');
-			$('#ol').append(htm.join('')); 
 			var html = [];
-				html.push('<p style="font-size: 16px;font-weight: bold; margin: 50px 0px 20px 15px;">'+data.parkingName+'管理条例</p>');
-			$('.header').append(html.join('')); 
-			  });
-			
-			
-		   $(document).on('click','.btn1', function() {
-     window.location.href="vice/merchant/scenic";
-      });  	
-		   $(document).on('click','.btn2', function() {
-     window.location.href="vice/merchant/parking?useid="+${param.useid};
-      });  	
-			
-      });
-  
-</script>
+			html.push('	<span>'+data.userNickname+'</span>  <span>'+data.userPhone+'</span>');
+			$('.pic').append(html.join(''));
+	
+		 var _url = window.BASEPATH + 'quit/query';
+		 $.post(_url, null, function(data) {
+			data = parseAjaxResult(data);
+		   	var htm = [];
+		    htm.push('<span>'+data.userHeadimg+'</span>     <span>'+data.userNickname+'</span> ');
+			$('.pid').append(htm.join(''));  
+		});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		});
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      $(".btn").bind("click", function () {   
+      window.location.href="vice/merchant/cance";
+        });  
+        });  
+  </script>
   <body>
-		<script type="text/javascript">
-		</script>
-		
-		<div class="header">
-		</div>
-
-		
-		<div class="main">
-		<ol id ="ol"; style="margin: 20px 15px;">
-			
-		</ol>
-		 <div id="kong"style="height:40px;width: 100%;">
-	    	
-	    </div>
-		</div>	
-	    <div class="btn" style="text-align: center;width: 100%;">
-    <button class="btn1" style="background-color: white;width: 45%;height: 40px;border-radius: 25px;color: #F5820B;border-color: #F5820A;outline:none;font-size: 18px;">拒绝</button>
-     <button class="btn2" style="background-color: #F5820B;width: 45%;height: 40px;border-radius: 25px;color:white;border:none;outline:none;font-size: 18px;">同意</button>
-	    </div>
+   <div class="header" style="width:100%;">
+     <p class="pic" style="padding:20px 0 10px 15px;font-weight: bold;">  </p>
+     <p class="pid" style="margin:0px 0 10px 15px;font-weight: bold;"> </p>
+   </div>
+   <div class="header_in" style="background-color: #EEEEEE;width:100%;height:auto;overflow: hidden;border-radius:10px;">
+   
+    <p style="margin:0 0 10px 15px;font-size:14px;">遵化清东陵停车场</p>
+       <p style="margin-left:15px;font-size:12px;color:#777777;">停车位：<span style="color:#F99161;">一层 A区 007</span></p>
+       <p style="margin-left:15px;font-size:12px;color:#777777;display: inline-block;">购买时长：<span style="color:#F99161;">24</span>  小时</p>
+       <p style="display: inline-block;font-size:14px;float:right;margin-right:20px;">总费用 ￥<span style="color:#F99161;">60</span></p>
+     <div class="header_on" style="border-bottom: solid 1px #959595;width:95%;margin:7px auto;"></div>
+     <p style="font-size:12px;float:left;margin-left:15px">入场：<span>2019年3月6日15：50</span></p>
+     <p style="font-size:12px;float:right;margin-right:15px;;">离场：<span>2019年3月7日15：50</span></p>
+       <div class="img" style="text-align:center;height:40%;clear: both;padding-top:15px;">
+       <img alt="" src="lib/images/2.jpg" style="width:30%;height:100%;">
+       </div>
+       <p style="text-align:center;font-size:14px;">订单编号：<span>123456789632</span></p>
+       <p style="color:#777777;text-align:center;font-size:10px;">扫描二维码即可进入停车场</p>
+       <button class="btn" style="width:100%;height:35px;background-color:#D5D5D5;color:red;border:none;outline:none;">取消订单</button>
+   </div>
+   <div class="footer" style="padding-top:10%;">
+     <p>温馨提示：</p>
+      <ol style="font-size:12px;margin: 20px 15px;">
+      <li>预订成功后<span style="color:red;">15 分钟内可免费取消，</span>约定入场时间内未入场，订单将自动计费。</li>
+      <li>超出车费预定时间前30分钟，系统给车主推送提示离场信息。若车主超时间，则按照三倍费用自动计算。</li>
+      <li>停车费以出停车场费用为标准。</li>
+      </ol>
+   </div>
   </body>
 </html>

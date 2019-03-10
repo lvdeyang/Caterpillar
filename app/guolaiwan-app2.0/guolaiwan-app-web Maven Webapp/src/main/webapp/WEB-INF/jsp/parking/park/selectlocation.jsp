@@ -125,19 +125,57 @@
 	overflow: hidden;
 }
 
-html {
+#container {
+	width: 100%;
+	height: 430PX;
+	margin-bottom: 2px;
+	margin-top: 2px;
+}
+
+.amap-mcode {
+	display: none;
+}
+
+.chewei {
+	background-color: #919191;
+	width: 8%;
+	height: 15%;
+}
+
+.car {
+	background-color: #06B02B;
+	width: 8%;
+	height: 15%;
+}
+
+.red {
+	background-color: red;
+	width: 8%;
+	height: 15%;
+}
+
+html, body {
 	height: 100%;
+	background-color: #FFFCED;
 }
 </style>
 </head>
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
+<script type="text/javascript"
+	src="https://webapi.amap.com/maps?v=1.4.13&key=ff4672efcfc6279cbe3b2815dd70a1ec"></script>
+<script
+	src="https://webapi.amap.com/maps?v=1.4.13&key=ff4672efcfc6279cbe3b2815dd70a1ec"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript">
- 	$(function() {
  	
- 		var tak = null;
+ 
+ 	$(function() {
+        var tak = null;
+        var stall = null;
+ 	    var qu =null;	
+        var char = null;
  		var _uri = window.BASEPATH + 'vice/Information';
  		var params = {};
 		params.uid = ${param.useid};
@@ -145,11 +183,10 @@ html {
 			data = parseAjaxResult(data);
 		   	var htm = [];
 			for (var i = 0; i < data.length; i++) {
-				htm.push('<option class="lo" value="'+data[i]+'">'+data[i]+'</option>');
-			  tak = data[0]
+				htm.push('<option class="value" value="'+data[i]+'">'+data[i]+'</option>');
+			    tak = data[0];
 				}
 				$('.lou').append(htm.join('')); 
-			
 			
 		var _ur = window.BASEPATH + 'vice/tier';
  		var param = {};
@@ -159,21 +196,61 @@ html {
 			data = parseAjaxResult(data);
 		   	var htm = [];
 			for (var i = 0; i < data.length; i++) {
-				htm.push('	<option style="text-align:center;">'+data[i]+'</option>');
+				htm.push('	<option class="opt" style="text-align:center;">'+data[i]+'</option>');
+				qu = data[0];
 				}
 				$('.qu').append(htm.join(''));  
+						
+		 // 根据  层数 查询车位图
+		var _utli = window.BASEPATH + 'vice/Informap';
+		 var parm = {};
+		 parm.uid = ${param.useid};
+		 parm.ceng =  tak;
+		 parm.qu = qu;
+		 $.post(_utli,$.toJSON(parm), function(data) {
+			data = parseAjaxResult(data);
+		   	var htm = []; 
+	       	htm.push(''+data.long+'');
+		   $('.banner').append(htm.join(''));  
+		   
+		   
+		// 更改车位 颜色
+		 var  _take = window.BASEPATH + 'vice/truck';
+		 var  parame= {};
+		 parame.uid = ${param.useid};
+		 $.post(_take,$.toJSON(parame), function(data) {
+			data = parseAjaxResult(data);
+		  for (var i = 0; i < data.length; i++) {
+			if(data[i].positionInformation == char){
+			 $('#'+data[i].positionNumber+'').removeClass('chewei').addClass('car');
+			}
+			if(data[i].useCondition == "1"){
+			 $("#"+data[i].positionNumber+'').removeClass('car').addClass('red');
+			} 	
+		   } 
+		}); 
 		});
+		});
+		    $(document).on('click', '.car', function() {
+		      $("#"+lu+"").css({
+			  "background-color":"#06B02B",
+			  });
+			    stall =  $(this).attr("id");
+			   lu = stall;
+			  $("#"+stall+"").css({
+			  "background-color":"#18b4ed",
+			  });
+		  }); 
+	 	}); 
 	
-		});
-		
 		 var _ur = window.BASEPATH + 'quit/query';
 		 $.post(_ur, null, function(data) {
 			data = parseAjaxResult(data);
+			char = data.userNickname;
 		   	var htm = [];
-		htm.push('<span style="font-size: 0.7rem;">'+data.userHeadimg+'车主您好，已经为您筛选出'+data.userNickname+'车位，请直接点击车位预约</span>');
-				$('#car').append(htm.join(''));  
+		    htm.push('<span style="font-size: 0.7rem;">'+data.userHeadimg+'车主您好，已经为您筛选出'+data.userNickname+'车位，请直接点击车位预约</span>');
+			$('#car').append(htm.join(''));  
 		});
-	
 	
 	
 		 var _ur = window.BASEPATH + 'vice/hours';
@@ -186,15 +263,7 @@ html {
 	       	htm.push('<p style="text-align:center;font-size: 0.3rem;">热线服务：<span style="font-size: 0.3rem;">'+data.phone+'</span></p>');
 		   $('.footer_in').append(htm.join(''));  
 		});
-	
-	 
-		
-		
- 	
- 	
- 	
- 	
- 	
+
 
       $(document).on('change', '.lou', function() {
         var _ur = window.BASEPATH + 'vice/tier';
@@ -206,15 +275,62 @@ html {
 			data = parseAjaxResult(data);
 		   	var htm = [];
 			for (var i = 0; i < data.length; i++) {
-				htm.push('	<option style="text-align:center;">'+data[i]+'</option>');
+				htm.push('<option  style="text-align:center;">'+data[i]+'</option>');
 				}
 				$('.qu').append(htm.join(''));  
 		});
      }); 
- 	
- 	
- 	
+     
+     
+     
+    var lu =null;
+	var carid = null;
+    $(document).on('change', '.lou,#qu1', function() {
+    lu = null;
+    $(".banner").empty();
+	// 根据  层数 查询车位图
+	var _utli = window.BASEPATH + 'vice/Informap';
+		 var parm = {};
+		 parm.uid = ${param.useid};
+		 parm.ceng =  $(".lou").val();
+		 parm.qu =  $(".qu").val();
+		 $.post(_utli,$.toJSON(parm), function(data) {
+			data = parseAjaxResult(data);
+			carid = data.id;
+		   	var htm = []; 
+	       	htm.push(''+data.long+'');
+		   $('.banner').append(htm.join(''));  
+		// 更改车位 颜色
+		 var  _take = window.BASEPATH + 'vice/truck';
+		 var  parame= {};
+		 parame.uid = carid;
+		 $.post(_take,$.toJSON(parame), function(data) {
+			data = parseAjaxResult(data);
+			 for (var i = 0; i < data.length; i++) {
+			if(data[i].positionInformation == char){
+			 $('#'+data[i].positionNumber+'').removeClass('chewei').addClass('car');
+			}
+			if(data[i].useCondition == "1"){
+			 $("#"+data[i].positionNumber+'').removeClass('car').addClass('red');
+			} 	
+		   } 
+		}); 
+		});
+		 // 更改车位  点击 颜色
+		    $(document).on('click', '.car', function() {
+		      $("#"+lu+"").css({
+			  "background-color":"#06B02B",
+			  });
+			   stall =  $(this).attr("id");
+			   lu = stall;
+			  $("#"+stall+"").css({
+			  "background-color":"#18b4ed",
+			  });
+		  }); 
+     }); 
+ 	 
  	 $(document).on('click', '.but', function() {
+ 	if(stall != null){
  	 var _ur = window.BASEPATH + 'vice/save';
  		var param = {};
 		param.uid = ${param.useid};
@@ -222,70 +338,76 @@ html {
 		param.qu = $(".qu").val();
 		// 区
 		param.time = $("#time").val();
+		param.stall = stall;
 		 $.post(_ur, $.toJSON(param), function(data) {
-	
+	          data = parseAjaxResult(data);
+		      window.location.href="vice/merchant/payment?id="+data.uid;
+		
 		 });
- 	 
- 			window.location.href="vice/merchant/payment";
- 		});
- 	
-       });
+	} else{
+	alert("请选择车位!");
+	}
+ 	});
+});
        
      
          
        
        
-       
-  /* var options=$("#test option:select");  //获取选中的项
 
-   alert(options.val());   //拿到选中项的值 */
-
-  /*  alert(options.text());   //拿到选中项的文本 */
  
  </script>
 <body>
 	<div class="header">
 		<div class="header_in"
 			style="width:100%; margin: 0 auto;text-align: center;">
-			<span style="text-align: center;color: white;">楼层：</span> 
-			<select class="lou" id="test" style="color: white;touch-action: none;height:40px;text-align: center; line-height:30%;width:auto;border: 0;outline: none;background-color: orange;text-align-last: center;">
-				
-        </select>
-       <span style="margin: 0 10%;color: white; overflow:hidden;">|</span>
-       <span  style="text-align: center;color: white;overflow:hidden; ">区域：</span>
-        <select class="qu" style="color: white;touch-action: none;height:40px;text-align: center; line-height: 30px;width:auto;border: 0;outline: none;background-color: orange;text-align-last: center;">
-					
-				</select>
-			</div>
+			<span style="text-align: center;color: white;">楼层：</span> <select
+				class="lou" id="test"
+				style="color: white;touch-action: none;height:40px;text-align: center; line-height:30%;width:auto;border: 0;outline: none;background-color: orange;text-align-last: center;">
 
+			</select> <span style="margin: 0 10%;color: white; overflow:hidden;">|</span>
+			<span style="text-align: center;color: white;overflow:hidden; ">区域：</span>
+			<select class="qu" id="qu1"
+				style="color: white;touch-action: none;height:40px;text-align: center; line-height: 30px;width:auto;border: 0;outline: none;background-color: orange;text-align-last: center;">
+
+			</select>
 		</div>
-        <div class="main" style="width: 100%;height: 60px;">
-           <div class="main_in">
-           	 <div class="main_a" style="height:20px;width:20px; background-color: #06B02B;float: left;overflow:hidden;border-radius:2px ;"></div>
-              <span class="main_aa">可预订</span>
-           </div>
-           <div class="main_on">
-           	 <div class="main_b" style="height:20px;width:20px; background-color: red;float: left;overflow:hidden;border-radius:2px ;"></div>
-               <span class="main_bb">已预订</span>
-           </div>
-           <div class="main_cn">
-        <div class="main_c" style="height:20px;width:20px; background-color: #919191;float: left;overflow:hidden;border-radius:2px ;"></div>
-               <span class="main_cc">不可预订</span>
-           </div> 
-        </div>
-        <div class="banner" id="banner"style="width: 100%;height:300px;background-color: deeppink;margin: 15px auto 50px;">
-        	
-        </div>
-        <div class="footer">
-        	<p  id="car"  style="margin: 0 15px;font-size: 0.7rem;text-align: center;font-weight: bold;"></p>
-           <div class="footer_in" style="margin: 20px auto;">
-     
-           </div>
-           
-        </div>
-        <div class="btn" style="margin: 0 auto;text-align: center;">
-        	<button class="but" style="background-color: #F39801;color: white;width: 80%;height: 50px;border-radius: 5px;border: none;outline: none;font-size: 0.9rem;">立即预定</button>
-        </div>
-	</body>
 
-	</html>
+	</div>
+	<div class="main" style="width: 100%;height: 60px;">
+		<div class="main_in">
+			<div class="main_a"
+				style="height:20px;width:20px; background-color: #06B02B;float: left;overflow:hidden;border-radius:2px ;"></div>
+			<span class="main_aa">可预订</span>
+		</div>
+		<div class="main_on">
+			<div class="main_b"
+				style="height:20px;width:20px; background-color: red;float: left;overflow:hidden;border-radius:2px ;"></div>
+			<span class="main_bb">已预订</span>
+		</div>
+		<div class="main_cn">
+			<div class="main_c"
+				style="height:20px;width:20px; background-color: #919191;float: left;overflow:hidden;border-radius:2px ;"></div>
+			<span class="main_cc">不可预订</span>
+		</div>
+	</div>
+	<div class="banner" id="banner"
+		style="width: 99%;height:45%;margin: 15px auto 50px;overflow:hidden;position: relative; border:1px #F39801 dashed;">
+
+
+	</div>
+	<div class="footer">
+		<p id="car"
+			style="margin: 0 15px;font-size: 0.7rem;text-align: center;font-weight: bold;"></p>
+		<div class="footer_in" style="margin: 20px auto;"></div>
+
+	</div>
+	<div class="btn" style="margin: 0 auto;text-align: center;">
+		<button class="but"
+			style="background-color: #F39801;color: white;width: 80%;height: 50px;border-radius: 5px;border: none;outline: none;font-size: 0.9rem;">立即预定</button>
+	</div>
+
+
+</body>
+
+</html>

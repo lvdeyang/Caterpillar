@@ -237,7 +237,7 @@ html {
 		var _uri = window.BASEPATH + 'quit/order';
 		$.post(_uri, null, function(data) {
 			 data = parseAjaxResult(data);
-			if (data.orderStatus == "未使用") {
+			if (data.orderStatus == "未支付") {
 				var navigation = document.getElementById('img_navigation');
 				navigation.onclick = function() {
 					var Navigation = document.getElementById('test1');
@@ -250,16 +250,10 @@ html {
 					Order.src = 'lib/images/dingdan.png';
 					alert("我是订单页面")
 			};  
-				var parking = document.getElementById('img_parking');
-				parking.onclick = function() {
-					var Parking = document.getElementById('test1');
-					Parking.src = 'lib/images/tingche.png';
-					alert("我是停车页面")
-				};
 			}
 			
 			//进入导航界面
-			if (data.orderStatus == "正在使用") {
+			if (data.orderStatus == "已支付") {
 				var navigation = document.getElementById('img_navigation');
 				navigation.onclick = function() {
 					var Navigation = document.getElementById('test1');
@@ -292,7 +286,7 @@ html {
 
 			
         //进入订单界面
-        if(data.orderStatus == "已使用"){
+        if(data.orderStatus == "已过期"){
             var order = document.getElementById('img_order');
 			   	order.onclick = function() {
 					var Order = document.getElementById('test1');
