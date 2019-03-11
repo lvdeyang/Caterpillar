@@ -67,7 +67,7 @@
 <title>关注领红包</title>
 
 <!-- 公共样式引用 -->
-<jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
+
 
 <style type="text/css">
 a {
@@ -489,26 +489,10 @@ html, body {
 
 </head>
 
-<!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 
 <script type="text/javascript">
 
-	$(function() {
-	  window.BASEPATH = '<%=basePath%>';
-	  var parseAjaxResult = function(data){
-			if(data.status !== 200){
-				$.toptip('data.message', 'error');
-				return -1;
-			}else{
-				return data.data;		
-			}
-	  };
-		
-
 	
-	
-	});
 </script>
 
 
@@ -525,7 +509,8 @@ html, body {
 		</div>
 		<div class="content">
 	
-			
+			<div style="color:red;margin-top:10px;margin-left:15px;" id="result">${status}</div>
+			<a style="margin-left:15px;font-size:12px;color:red" href="http://www.guolaiwan.net/guolaiwan/pubnum/index">>>进入微官网</a>
 		</div>
 	</div>
 </body>

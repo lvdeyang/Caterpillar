@@ -52,6 +52,8 @@ public class UserInfoPO extends AbstractBasePO {
     
     private String childId;//景区导览点id
     
+    private int firstTime;//0表示是，1表示不是
+    
     
 	public String getChildId() {
 		return childId;
@@ -147,6 +149,12 @@ public class UserInfoPO extends AbstractBasePO {
 	}
 	public void setCollections(List<CollectionPO> collections) {
 		this.collections = collections;
+	}
+	public int getFirstTime() {
+		return firstTime;
+	}
+	public void setFirstTime(int firstTime) {
+		this.firstTime = firstTime;
 	}
 	
 	
