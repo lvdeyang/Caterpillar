@@ -315,15 +315,17 @@ public class LuckDrawController extends WebBaseControll {
 		ex.export(out);
 	}
 	
-	
+	private long amount=200000;
     @RequestMapping("/sendRedPacket")
     public ModelAndView sendRedPacket(HttpServletRequest request){
     	ModelAndView mv = new ModelAndView("luckdraw/package");
-    	if(true){
+    	if(amount<=0){
     		mv.addObject("status","感谢关注,红包已经被抢完~");
     		return mv;
     	}
-		
+    	Random random=new Random();
+		int thisturn=random.nextInt(800)+1;
+		amount-=thisturn;
     	HttpSession session = request.getSession();
         UserInfoPO userInfoPO =conn_userinfo.get(Long.parseLong(session.getAttribute("userId").toString()));
     	if(userInfoPO.getFirstTime()==1){
@@ -347,7 +349,7 @@ public class LuckDrawController extends WebBaseControll {
             //发给谁，该用户的openid
             String openid = userInfoPO.getUserOpenID();
             //红包的值，最低100分
-            Integer redValue = 100;
+            Integer redValue = thisturn;
             //开始发送红包
 
             SortedMap<Object, Object> parameters = new TreeMap<Object, Object>();
