@@ -575,7 +575,9 @@ public class PhoneController extends WebBaseControll {
 			for (ColumnPO cpo : columns) {
 				List<MerchantPO> mers = conn_merchant.getMerchantById(cpo.getMerchantId());
 				if (mers != null && !mers.isEmpty()) {
-					merchants.add(mers.get(0));
+					if(mers.get(0).getShopAuditState().equals(ShopAuditStateType.T)){
+						merchants.add(mers.get(0));
+					}
 				}
 			}
 			List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants,

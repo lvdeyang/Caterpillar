@@ -602,7 +602,7 @@ html, body {
 			    <script type="text/javascript" charset="utf-8" src="http://yuntv.letv.com/player/live/blive.js"></script>
 			    <script>
 			        var player = new CloudLivePlayer();
-			        player.init({activityId:"A20181110000000w"});
+			        player.init({activityId:"A201903110000040"});
 			    </script>
 			</div>
 			

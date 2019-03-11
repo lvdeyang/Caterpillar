@@ -319,7 +319,11 @@ public class LuckDrawController extends WebBaseControll {
     @RequestMapping("/sendRedPacket")
     public ModelAndView sendRedPacket(HttpServletRequest request){
     	ModelAndView mv = new ModelAndView("luckdraw/package");
-    	
+    	if(true){
+    		mv.addObject("status","感谢关注,红包已经被抢完~");
+    		return mv;
+    	}
+		
     	HttpSession session = request.getSession();
         UserInfoPO userInfoPO =conn_userinfo.get(Long.parseLong(session.getAttribute("userId").toString()));
     	if(userInfoPO.getFirstTime()==1){
