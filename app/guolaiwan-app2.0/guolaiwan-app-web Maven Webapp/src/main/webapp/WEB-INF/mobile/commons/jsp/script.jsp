@@ -34,10 +34,13 @@
     	
     	});
     	
+    	
 		var href=location.href;
 		if(href.indexOf('distributor/product/index')==-1&&
 		   href.indexOf('distributor/off/sell')==-1&&
-		   href.indexOf("distributor/offorder/edit")==-1){
+		   href.indexOf("distributor/offorder/edit")==-1&&
+		   href.indexOf("distributor/order/check")==-1&&
+		   href.indexOf("distributor/order/checkadmin")==-1){
 		   initMenu();
 		}
 		
