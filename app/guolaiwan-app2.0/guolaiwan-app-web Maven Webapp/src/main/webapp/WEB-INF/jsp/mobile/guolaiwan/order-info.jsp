@@ -520,7 +520,7 @@ html, body {
 				
 				</div>
 				<c:if test="${order.status=='PASSED'}"> 
-				    <a id="pay" style="position:fixed;bottom:0;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">支付</a>   
+				    <a id="pay" style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">支付</a>   
 				</c:if>
 				<c:if test="${order.status=='NOTPASSED'}"> 
 				    <a id="modify" style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">重新申请</a>		

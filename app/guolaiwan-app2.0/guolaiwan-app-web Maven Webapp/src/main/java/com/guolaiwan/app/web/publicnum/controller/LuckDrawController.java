@@ -315,7 +315,7 @@ public class LuckDrawController extends WebBaseControll {
 		ex.export(out);
 	}
 	
-	private long amount=200000;
+	private long amount=0;
     @RequestMapping("/sendRedPacket")
     public ModelAndView sendRedPacket(HttpServletRequest request){
     	ModelAndView mv = new ModelAndView("luckdraw/package");
