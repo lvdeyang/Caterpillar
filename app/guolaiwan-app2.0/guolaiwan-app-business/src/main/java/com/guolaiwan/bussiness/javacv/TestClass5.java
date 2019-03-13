@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.javacv;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -68,8 +69,10 @@ public class TestClass5 {
         // 颜色  
         Scalar scalar1 = new Scalar(0, 255, 255, 0);   
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Mat logo = opencv_imgcodecs.imread("D:\\smartvideo片源\\cctv台标\\cctv1.jpg");
-
+        Mat logo = opencv_imgcodecs.imread("D:\\logo.png");
+        if(logo.empty()){
+        	System.out.println("read error");
+        }
 		while ((frame = grabber.grab()) != null) {
 
 			Mat mat = converter.convertToMat(frame);
@@ -77,11 +80,11 @@ public class TestClass5 {
             	continue;
             }
 			// 加文字水印，opencv_imgproc.putText（图片，水印文字，文字位置，字体，字体大小，字体颜色，字体粗度，文字反锯齿，是否翻转文字）
-			opencv_imgproc.putText(mat, "cao da xi shi sha x", point1, opencv_imgproc.CV_FONT_HERSHEY_TRIPLEX, 0.8, scalar1, 2,
+			opencv_imgproc.putText(mat, "CCT GUO LAI WAN", point1, opencv_imgproc.CV_FONT_HERSHEY_TRIPLEX, 0.8, scalar1, 2,
 					20, false);
 			
 			Mat ROI = mat.apply(new Rect(100, 100, logo.cols(), logo.rows()));
-			opencv_core.addWeighted(logo, 0.5, logo, 0.5, 0.0, ROI);
+			opencv_core.addWeighted(ROI, 0.5, logo, 0.5, 0.0, ROI);
 			
 			// 在窗口显示处理后的图像，Frame frame=converter.convert(mat);
             if(count==3000){
