@@ -16,6 +16,7 @@ public class LiveRecordPO extends AbstractBasePO{
 	private String recordName;
 	private long liveId;
 	private long subLiveId;
+	private String subLiveName;
 	private Date startTime;
 	private Date endTime;
 	public String getLocalPath() {
@@ -41,6 +42,13 @@ public class LiveRecordPO extends AbstractBasePO{
 	}
 	public void setSubLiveId(long subLiveId) {
 		this.subLiveId = subLiveId;
+	}
+	
+	public String getSubLiveName() {
+		return subLiveName;
+	}
+	public void setSubLiveName(String subLiveName) {
+		this.subLiveName = subLiveName;
 	}
 	public String getRecordName() {
 		return recordName;

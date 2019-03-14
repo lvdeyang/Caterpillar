@@ -22,9 +22,9 @@ public class WXContants {
     public final static String AppKey = "21232f297a57a5a743894a0e4a801fc3";
     public final static String Website ="www.guolaiwan.net";
 
-    
     //本地运行时使用修改
     //public final static boolean istest=true;
+
     public final static boolean istest=false;
     
 }
