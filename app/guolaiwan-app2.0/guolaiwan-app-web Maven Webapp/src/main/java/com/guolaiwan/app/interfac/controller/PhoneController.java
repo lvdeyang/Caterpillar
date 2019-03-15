@@ -6576,12 +6576,15 @@ public class PhoneController extends WebBaseControll {
 			ProfessionalLivePO professionalLivePO = new ProfessionalLivePO();
 			professionalLivePO.setLiveId(liveId);
 			professionalLivePO.setBroadcastCamera(newBroadCastCamera);
-			conn_professionalLiveDao.saveOrUpdate(findResultProfessionalLivePO);
+			conn_professionalLiveDao.saveOrUpdate(professionalLivePO);
 		} else {
 			// 数据库里有liveId对应的数据，不插！
 			oldBroadCastCamera = findResultProfessionalLivePO.getBroadcastCamera();
 			findResultProfessionalLivePO.setLiveId(liveId);
+			findResultProfessionalLivePO.setLiveName("");
 			findResultProfessionalLivePO.setBroadcastCamera(newBroadCastCamera);
+			findResultProfessionalLivePO.setLiveStatusType("STOP");
+			findResultProfessionalLivePO.setLiveType("PROFESSIONAL_LIVE");
 			conn_professionalLiveDao.saveOrUpdate(findResultProfessionalLivePO);
 		}
 		 // 进行切流
