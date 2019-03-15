@@ -836,7 +836,7 @@ public class ProductController extends BaseController {
 	   
 	    dispro.getProduct().getDistributeProduct().remove(dispro);
 	    conn_product.save(dispro.getProduct());
-	    
+	    conn_distributeProduct.delete(dispro);
 		return "success";
 	}
 

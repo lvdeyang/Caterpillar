@@ -296,8 +296,9 @@
                     success:function(msg){
                   	 if(msg=="success"){
                         layer.closeAll("loading");
-                  		  $(obj).parents("tr").remove();
+                  		  
                   		  layer.msg('已删除!',{icon:1,time:1000});
+                  		  $(".layui-laypage-btn").click();
                   	 }
                     }
                   }) 
