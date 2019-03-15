@@ -80,7 +80,7 @@ public class TestClass5 {
             	continue;
             }
 			// 加文字水印，opencv_imgproc.putText（图片，水印文字，文字位置，字体，字体大小，字体颜色，字体粗度，文字反锯齿，是否翻转文字）
-			opencv_imgproc.putText(mat, "CCT GUO LAI WAN", point1, opencv_imgproc.CV_FONT_HERSHEY_TRIPLEX, 0.8, scalar1, 2,
+			opencv_imgproc.putText(mat, "liuzhipeng sb", point1, opencv_imgproc.CV_FONT_HERSHEY_TRIPLEX, 0.8, scalar1, 2,
 					20, false);
 			
 			Mat ROI = mat.apply(new Rect(100, 100, logo.cols(), logo.rows()));
