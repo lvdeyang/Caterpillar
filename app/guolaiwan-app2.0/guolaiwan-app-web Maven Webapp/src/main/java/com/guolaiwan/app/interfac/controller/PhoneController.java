@@ -2234,7 +2234,7 @@ public class PhoneController extends WebBaseControll {
 
 		if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
 			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
-			payMoney = payMoney * bet;
+			payMoney = payMoney * (bet+1);
 			orderAllMoney = payMoney;
 		}
 
@@ -2461,7 +2461,7 @@ public class PhoneController extends WebBaseControll {
 
 		if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
 			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
-			payMoney = payMoney * bet;
+			payMoney = payMoney * (bet+1);
 			orderAllMoney = payMoney;
 		}
 
