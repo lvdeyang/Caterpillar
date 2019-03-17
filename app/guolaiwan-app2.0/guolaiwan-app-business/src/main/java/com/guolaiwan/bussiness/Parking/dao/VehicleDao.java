@@ -46,15 +46,28 @@ public class VehicleDao extends AbstractBaseDao<VehiclePO> {
      * @return
      * @throws ParseException
      */
+       public List<VehiclePO>  getNumber(String numbe,Long userId) throws ParseException{
+    	   QueryHql hql =   this.newQueryHql();
+    	   hql.andBy("vehicleid", Condition.eq,userId);
+    	   hql.andBy("number", Condition.eq,numbe);
+    	  return findByHql(hql);
+	}
+       /**
+        * 通过用户id 查询    用户信息
+        * @param userId 用户id
+        * @param number 用户车牌
+        * @param type 用户车型
+        * @return
+        * @throws ParseException
+        */
        public List<VehiclePO>  getNumber(Long userId) throws ParseException{
     	   QueryHql hql =   this.newQueryHql();
     	   hql.andBy("vehicleid", Condition.eq,userId);
-    	  return findByHql(hql);
-	}
+    	   hql.orderBy("updateTime", false);
+    	   return findByHql(hql);
+       }
        
-    
-       
-       
+  
        
        
       

@@ -200,7 +200,7 @@ public class PubNumController extends WebBaseControll {
 			nickname = EmojiFilter.filterEmoji(userInfo.getString("nickname"));
 			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
 		} else {
-			openid = "test2018";
+			openid = "opVUYv6B2eIPzpj4yCJBonei5yMg";
 		}
 		/**/
 		// 测试
@@ -464,6 +464,31 @@ public class PubNumController extends WebBaseControll {
 		map.put("orderNo", orderNo);
 		return map;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/prev/paypark/{id}")
+	public Object prevPaypark(@PathVariable String id, String cip, HttpServletRequest request) throws Exception {
+		String orderNo = "park-"+id;
+		int payMoney=0;
+		
+		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
+		//payMoney+=orderInfoPO.getPayMoney();
+		
+
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		UserInfoPO user = conn_user.get(userId);
+		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/payreportpark", WxConfig.appId,
+				WxConfig.appsrcret);
+		// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo,1,
+				"192.165.56.64", user.getUserOpenID());
+		// 生成包含prepay_id的map，map传入前端
+		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
+		// 将订单号放入map，用以支付后处理
+		map.put("orderNo", orderNo);
+		return map;
+	}
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/prev/paybasket/{id}/{nums}")

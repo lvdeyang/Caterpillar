@@ -86,14 +86,19 @@ public class SmartParkingController  extends WebBaseControll{
 	@ResponseBody
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
 	public Map<String, Object> setState(HttpServletRequest request) throws Exception {
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		long userId = 	(long) request.getSession().getAttribute("userId");	
-		 List<OrderPO> userByid = or_der.getOrder(userId);
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		String vehicle = null;
+		List<VehiclePO> userBy = par_king.getNumber(userId);
+		for (VehiclePO vehiclePO : userBy) {
+			vehicle =  vehiclePO.getNumber();
+		}
+		List<String> listHasCup=new ArrayList<String>();
+		 List<OrderPO> userByid = or_der.getOrder(userId,vehicle);
 		for (OrderPO orderPO : userByid) {
-			dataMap.put("orderStatus", orderPO.getOrderStatus());
+			listHasCup.add(orderPO.getOrderStatus());
 		}
 		
-		return success(dataMap);
+		return success(listHasCup);
 	}
 
 

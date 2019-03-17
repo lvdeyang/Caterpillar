@@ -368,7 +368,11 @@ html, body {
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript">
-
+ var name = null;
+ var cheng = null;
+ var qu = null;
+ var number = null;
+ var sign = null; //车牌
 	$(function() {
 	  
 		window.BASEPATH = 'http://localhost:8080/guolaiwan-app-web/';
@@ -437,29 +441,8 @@ html, body {
 		});
 
 
-
-
-		var prepay_id;
-		var paySign;
-		var appId;
-		var timeStamp;
-		var nonceStr;
-		var packageStr;
-		var signType;
-		var orderNo;
-
-		function onBridgeReady() {
-			WeixinJSBridge.invoke(
-				'getBrandWCPayRequest', {
-					"appId" : appId, //公众号名称，由商户传入
-					"timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
-					"nonceStr" : nonceStr,  //随机串
-					"package" : packageStr,
-					"signType" : signType, //微信签名方式：
-					"paySign" : paySign //微信签名
-				}
-			);
-		}
+        
+		
 
 
 
@@ -471,21 +454,25 @@ html, body {
     
 
 
-
- 
+      
+    
 	   var uri = window.BASEPATH + 'vice/seleorder';
          var para = {};
-		  para.uid = ${param.id};
+		  para.uid = ${param.uid};
 		 $.post(uri, $.toJSON(para), function(data) {
 			data = parseAjaxResult(data);
+			orderId=data.id;
 			var html = [];
+			cheng = data.cheng;
+			qu = data.qu;
+			number = data.number;
 			html.push('<span>'+data.cheng+'</span> <span>'+data.qu+'</span> <span>'+data.number+' 号车位</span>');
 			$('.header_in').append(html.join('')); 
 		  
 			var htm = [];
 			htm.push('<span>'+data.time+'</span>');
 			$('.header_aa').append(htm.join('')); 
-		  
+		   name = data.name;
 			var ht = [];
 			ht.push('<span>'+data.name+'</span>');
 			$('.header_bb').append(ht.join('')); 
@@ -496,6 +483,7 @@ html, body {
 		 $.post(_uri, null, function(data) {
 			data = parseAjaxResult(data);
 		   var html = [];
+		   sign = data.userHeadimg;
 		   	html.push('<span style="color:#F4984C">'+data.userHeadimg+'</span>'); 
 			$('#head').append(html.join(''));
 		   var htm = [];
@@ -507,22 +495,163 @@ html, body {
 		
 		 var _util = window.BASEPATH + 'vice/selecost';
 		  var param = {};
-		  param.uid = ${param.id};
+		  param.uid = ${param.uid};
+		  param.qu = qu;
 		 $.post(_util, $.toJSON(param), function(data) {
 			data = parseAjaxResult(data);
 		   var html = [];
 		   	html.push('<span  style="color:#E80003;"><span id="qian">'+data.cost+'</span>元/小时 ></span>'); 
 			$('#nkname').append(html.join(''));
-		})	;	
-
-
-
-
-
-
-
-
+		});	
 	});
+	
+	
+		   function test() {
+						
+							var startdiv = document.getElementById("startdiv").style.display;
+							var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
+							var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
+							if (sDate >= eDate) {
+								$.toast("离场时间不能小于进场时间", "forbidden");
+								return false;
+							}
+							if (sDate < new Date) {
+								$.toast("请输入正确的入场时间", "forbidden");
+								return false;
+							}
+					
+							if (startdiv != "none") {
+								if ($("#startDate").val() == '') {
+									$.toast("请选择入场日期", "forbidden");
+									return false;
+								} else if ($("#endDate").val() == '') {
+									$.toast("请选择离场日期", "forbidden");
+									return false;
+								}
+								$("#btn").click(function() {
+									var _uti = window.BASEPATH + 'vice/number';
+									var para = {};
+									para.number = number;
+									para.qu = qu;
+									para.cheng = cheng;
+									para.uid = ${param.uid};
+									$.post(_uti, $.toJSON(para), function(data) {
+									    if(data.data.condition != 1 ){
+									    
+									    
+									    payPublic(orderId);
+									    
+									    
+									    // 支付 判断 成功 
+									    
+									    
+									  
+									    /*var _util = window.BASEPATH + 'vice/message';
+										var param = {};
+										var uid =${param.uid};
+										param.sDate =  $("#startDate").val();
+										param.eDate =  $("#endDate").val();
+										param.inner = demoP.innerHTML;
+										param.Text =  num4.innerText;
+										param.mark =  sign;
+										param.uid =  uid;
+										$.post(_util, $.toJSON(param), function(data) {    
+										});	*/
+									   
+									    
+									   //    失败
+									       // 提示支付失败
+									      // window.location.href = "vice/merchant/parking";
+									    
+									   }else{
+									   alert("您好你预订的车位已被购买,请您从新选择车位");
+									   }
+									});	
+					       
+								});
+					
+							}
+					
+							var demoP = document.getElementById("spa");
+							demoP.innerHTML = (parseInt(eDate - sDate) / 1000 / 60 / 60).toFixed(2);
+							
+							var num1 = document.getElementById('spa').innerText;
+							var num2 = document.getElementById('qian').innerText;
+							//应付金额
+							var num3 = document.getElementById("jin");
+							num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+							//总额
+							var num4 = document.getElementById("zong");
+							num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+				}
+				
+		var orderId=0;
+		var prepay_id;
+		var paySign;
+		var appId;
+		var timeStamp;
+		var nonceStr;
+		var packageStr;
+		var signType;
+		var orderNo;	
+		
+			
+		function payPublic(orderId){
+			$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId, null, function(data){
+				prepay_id = data.prepay_id;
+		        paySign = data.paySign;
+		        appId = data.appId;
+		        timeStamp = data.timeStamp;
+		        nonceStr = data.nonceStr;
+		        packageStr = data.packageStr;
+		        signType = data.signType;
+		        orderNo = data.orderNo;
+		        callpay();
+			});
+		}
+		
+	
+		function onBridgeReady(){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		                
+
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
+		                alert("交易取消");  
+	
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
+		                alert(res.err_desc); 
+
+		            }  
+		        }
+		    );
+		}
+		function callpay(){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady();
+		    }
+		}
+				
+				
+	
 </script>
 
 
@@ -557,7 +686,7 @@ html, body {
 	<div class="header_an" style="width:100%;margin:0 auto;height:40px;">
 		<p style="float:left;overflow:auto;margin-left:27px;line-height:40px;">费用说明:</p>
 		<p id="nkname"
-			style="float:right;overflow:auto;line-height:40px;;margin-right:15px"">
+style="float:right;overflow:auto;line-height:40px;margin-right:15px;">
 
 		</p>
 	</div>
@@ -602,49 +731,7 @@ html, body {
 					<label class="weui-label">离场日期 :</label>
 				</div>
 				<div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-					<input id="endDate" class="weui-input" type="datetime-local"
-						onchange="test()" placeholder="">
-					<script type="text/javascript">
-						function test() {
-							var startdiv = document.getElementById("startdiv").style.display;
-							var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
-							var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
-							if (sDate >= eDate) {
-								$.toast("离场时间不能小于进场时间", "forbidden");
-								return false;
-							}
-							if (sDate < new Date) {
-								$.toast("请输入正确的入场时间", "forbidden");
-								return false;
-							}
-					
-							if (startdiv != "none") {
-								if ($("#startDate").val() == '') {
-									$.toast("请选择入场日期", "forbidden");
-									return false;
-								} else if ($("#endDate").val() == '') {
-									$.toast("请选择离场日期", "forbidden");
-									return false;
-								}
-								$("#btn").click(function() {
-									window.location.href = "vice/merchant/order";
-					
-								});
-					
-							}
-					
-							var demoP = document.getElementById("spa");
-							demoP.innerHTML = (parseInt(eDate - sDate) / 1000 / 60 / 60).toFixed(2);
-							var num1 = document.getElementById('spa').innerText;
-							var num2 = document.getElementById('qian').innerText;
-							//应付金额
-							var num3 = document.getElementById("jin");
-							num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
-							//总额
-							var num4 = document.getElementById("zong");
-							num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
-						}
-					</script>
+					<input id="endDate" class="weui-input" type="datetime-local" onchange="test()" />
 				</div>
 				<div class="weui-cell__bd"></div>
 			</div>

@@ -57,7 +57,7 @@ public class AttractionsDao extends AbstractBaseDao<AttractionsParkingPO> {
 	}
 
 	/**
-	 * 根据Id查询景区条例 所有
+	 * 根据Id查询景区条例 所有 和车牌
 	 * 
 	 * @param userId
 	 *            用户id
@@ -72,6 +72,27 @@ public class AttractionsDao extends AbstractBaseDao<AttractionsParkingPO> {
 		return findByHql(hql);
 	}
 
+	
+	/**
+	 * 根据Id查询景区条例 所有 和车牌
+	 * 
+	 * @param userId
+	 *            用户id
+	 * @param
+	 * @param
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<AttractionsParkingPO> getUid(Long uid,String vehicle) throws ParseException {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("id", Condition.eq, uid);
+		hql.andBy("platenumber", Condition.eq,vehicle);
+		return findByHql(hql);
+	}
+	
+	
+	
+	
 	/**
 	 * 根据输入 模糊 查询景区名称
 	 * 

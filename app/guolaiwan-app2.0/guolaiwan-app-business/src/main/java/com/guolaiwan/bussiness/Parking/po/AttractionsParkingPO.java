@@ -32,7 +32,7 @@ public class AttractionsParkingPO extends AbstractBasePO {
 	private String chargingColumn;
 	// 景区停车层
 	private String parkingLayer;
-	// 景区停车区
+	// 景区停车 经纬度
 	private String parkingDistrict;
 	// 停车场条例
 	private String regulations;
