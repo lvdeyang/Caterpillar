@@ -1,8 +1,6 @@
 package com.guolaiwan.app.web.admin.vo;
 
 import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
-import com.guolaiwan.bussiness.admin.po.ChildPicAndContentPO;
-import com.guolaiwan.bussiness.admin.po.live.LiveOrderPO;
 import com.guolaiwan.bussiness.admin.po.live.SubLivePO;
 
 import pub.caterpillar.mvc.converter.AbstractBaseVO;
@@ -12,13 +10,11 @@ public class SubLiveVO extends AbstractBaseVO<SubLiveVO, SubLivePO>{
 	private String liveName;
 	private long liveId;
 	private int inuse = 0;
+	private String recordState = "STOP";
 	private int cameraNumber = 0;
 	private String pubName;
 	private LiveStatusType status;
-    private LiveOrderPO liveOrderPO;
-    
-    
-
+ 
 	public String getLiveName() {
 		return liveName;
 	}
@@ -53,6 +49,22 @@ public class SubLiveVO extends AbstractBaseVO<SubLiveVO, SubLivePO>{
 
 	public SubLiveVO setInuse(int inuse) {
 		this.inuse = inuse;
+		return this;
+	}
+
+	
+	
+
+
+
+	public String getRecordState() {
+		return recordState;
+	}
+
+
+
+	public SubLiveVO setRecordState(String recordState) {
+		this.recordState = recordState;
 		return this;
 	}
 
@@ -96,8 +108,6 @@ public class SubLiveVO extends AbstractBaseVO<SubLiveVO, SubLivePO>{
 	}
 
 
-
-
 	@Override
 	public SubLiveVO set(SubLivePO entity) throws Exception {
 		this.setId(entity.getId())
@@ -106,6 +116,7 @@ public class SubLiveVO extends AbstractBaseVO<SubLiveVO, SubLivePO>{
 		.setLiveName(entity.getLiveName())
 		.setLiveId(entity.getLiveId())
 		.setInuse(entity.getInuse())
+		.setRecordState(entity.getRecordState())
 		.setCameraNumber(entity.getCameraNumber())
 		.setPubName(entity.getPubName())
 		.setStatus(entity.getStatus());

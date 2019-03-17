@@ -64,10 +64,10 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>商户主页</title>
+<title>关注领红包</title>
 
 <!-- 公共样式引用 -->
-<jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
+
 
 <style type="text/css">
 a {
@@ -489,109 +489,28 @@ html, body {
 
 </head>
 
-<!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
-<script src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+
 <script type="text/javascript">
 
-	$(function() {
-	  window.BASEPATH = '<%=basePath%>';
-	  var parseAjaxResult = function(data){
-			if(data.status !== 200){
-				$.toptip('data.message', 'error');
-				return -1;
-			}else{
-				return data.data;		
-			}
-	  };
-		$('#addressphone').val('${phone}');
-		var auto='${auto}';
-		if(auto=='auto'){
-		
-		  $('#password').val('******');
-		}
-	  
-      
-      $(document).on('click','#login',function(){
-          if($('#addressphone').val()==''){
-              $.toast('请输入手机号',"forbidden");
-              return false;
-          }
-          if($('#password').val()==''){
-              $.toast('请输入密码',"forbidden");
-              return false;
-          }
-          var _urilogin = window.BASEPATH + 'pubnum/admin/login';
-	      var param={};
-	      param.phone=$('#addressphone').val();
-	      param.password=$('#password').val();	
-	      param.auto='${auto}';	
-		  $.post(_urilogin, $.toJSON(param), function(data){
-				
-				//if(data.status != 200) {
-				//   $.toast(data.message,"forbidden");
-				//}else{
-				   location.href=window.BASEPATH + 'pubnum/admin/index';
-				//}
-		  });
-      });
-      
-     
 	
-	});
-	
-	
-	
-	
-
 </script>
 
 
 
 <body>
 	<div id="page">
-		
-		<div class="content">
-			<div class="weui-msg">
-			  <div class="weui-msg__icon-area"><image style="width:100px;height:100px;" src="lib/images/logo.jpg"/></div>
-			  <div class="weui-msg__text-area">
-			    <h2 class="weui-msg__title">商户登录</h2>
-			    <p class="weui-msg__desc">商户请登录<a href="javascript:void(0);"></a></p>
-			  </div>
-			  
-			  
-			  <div class="weui-cells weui-cells_form">
-				  <div class="weui-cell">
-				    <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
-				    <div class="weui-cell__bd">
-				      <input id="addressphone" class="weui-input" type="text"  value="${userName}">
-				    </div>
-				  </div>
-				  <div class="weui-cell">
-				    <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
-				    <div class="weui-cell__bd">
-				      <input id="password" class="weui-input" type="password"  value="${password}">
-				    </div>
-				  </div>
-			  </div>
-			  
-			  
-			  <div class="weui-msg__opr-area">
-			    <p class="weui-btn-area">
-			      <a id="login" href="javascript:void(0);" class="weui-btn weui-btn_primary">登录系统</a>
-			     
-			    </p>
-			  </div>
-			  <div class="weui-msg__extra-area">
-			    <div class="weui-footer">
-			      <p class="weui-footer__links">
-			        <a href="javascript:void(0);" class="weui-footer__link"></a>
-			      </p>
-			      <p class="weui-footer__text"></p>
-			    </div>
-			  </div>
+		<!-- 主页 -->
+		<div class="header">
+			<div class="wrapper">
+				<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
+				<div class="header-content">关注领红包</div>
 			</div>
-			
+		</div>
+		<div class="content">
+	
+			<div style="color:red;margin-top:10px;margin-left:15px;" id="result">${status}</div>
+			<a style="margin-left:15px;font-size:12px;color:red" href="http://www.guolaiwan.net/guolaiwan/pubnum/index">>>进入微官网</a>
 		</div>
 	</div>
 </body>

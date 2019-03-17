@@ -25,6 +25,8 @@ public class SubLivePO extends AbstractBasePO {
 	private long liveId;
 	//是否使用
 	private int inuse = 0;
+	//录制状态
+	private String recordState = "STOP";
 	//机位编号
 	private int cameraNumber = 0;
 	//发布名称
@@ -43,7 +45,12 @@ public class SubLivePO extends AbstractBasePO {
 	
 	
 	
-	
+	public String getRecordState() {
+		return recordState;
+	}
+	public void setRecordState(String recordState) {
+		this.recordState = recordState;
+	}
 	public long getLiveId() {
 		return liveId;
 	}

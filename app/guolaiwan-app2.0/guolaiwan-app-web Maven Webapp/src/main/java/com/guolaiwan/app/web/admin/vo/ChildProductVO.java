@@ -64,6 +64,7 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 	
 	private int isTaught; // 是否讲解(Taught)
 	
+	
 	public String getChineseContent() {
 		return chineseContent;
 	}

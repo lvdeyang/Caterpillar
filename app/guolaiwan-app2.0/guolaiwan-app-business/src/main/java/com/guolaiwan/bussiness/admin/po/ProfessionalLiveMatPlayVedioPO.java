@@ -12,7 +12,7 @@ public class ProfessionalLiveMatPlayVedioPO extends AbstractBasePO{
 
 	private static final long serialVersionUID = -8668971705694355738L;
 	private long liveId;
-	private String vedioUrl;
+	private String vedioPath;
 	
 	public long getLiveId() {
 		return liveId;
@@ -20,12 +20,13 @@ public class ProfessionalLiveMatPlayVedioPO extends AbstractBasePO{
 	public void setLiveId(long liveId) {
 		this.liveId = liveId;
 	}
-	public String getVedioUrl() {
-		return vedioUrl;
+	public String getVedioPath() {
+		return vedioPath;
 	}
-	public void setVedioUrl(String vedioUrl) {
-		this.vedioUrl = vedioUrl;
+	public void setVedioPath(String vedioPath) {
+		this.vedioPath = vedioPath;
 	}
+	
 	
 	
 	

@@ -38,8 +38,10 @@ import com.guolaiwan.app.web.distribute.vo.DistributeProductVo;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
+import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
@@ -333,6 +335,8 @@ public class NEWDistributorController {
 		return vos;
 	}
 	
+	@Autowired
+	private MerchantDAO conn_merchant;
 	
 	@RequestMapping(value = "/product/index/{productId}")
 	public ModelAndView productIndex(
@@ -342,9 +346,15 @@ public class NEWDistributorController {
         mv = new ModelAndView("mobile/guolaiwan/distribute-product");
         DistributeProductVo vo=new DistributeProductVo();
         DistributeProduct po=conn_dispro.get(productId);
-        DistributorPo distributorPo=conn_distributor.get(po.getDistributorId());
         vo.set(po);
-        vo.setTel(distributorPo.getPhone());
+        if(po.getDistributorType().equals(DistributorType.PROVINCE)){
+        	MerchantPO merchantPO=conn_merchant.get(po.getDistributorId());
+        	vo.setTel(merchantPO.getShopTel());
+        }else{
+        	DistributorPo distributorPo=conn_distributor.get(po.getDistributorId());
+            vo.setTel(distributorPo.getPhone());
+        }
+        
         SysConfigPO sys=conn_sys.getSysConfig();
         vo.setPic(sys.getWebUrl()+vo.getPic());
         mv.addObject("product",vo);

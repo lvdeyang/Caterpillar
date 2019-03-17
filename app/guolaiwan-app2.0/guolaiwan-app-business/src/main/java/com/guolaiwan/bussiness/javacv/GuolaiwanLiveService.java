@@ -13,7 +13,7 @@ import com.sun.tools.classfile.Dependencies.Recorder;
 public class GuolaiwanLiveService {
 
 	private GuolaiwanSender sender;
-	private Map<String,GuolaiwanGetter> getters=new HashMap<String, GuolaiwanGetter>();
+	private Map<String,GuolaiwanGetter> getters = new HashMap<String, GuolaiwanGetter>();
 	private int width;
 	private int height;
 
@@ -27,7 +27,6 @@ public class GuolaiwanLiveService {
         return instance;
     }*/
 	
-	
     public void init(String pubName,int width,int height) {
 		// TODO Auto-generated constructor stub
     	this.width=width;
@@ -35,9 +34,17 @@ public class GuolaiwanLiveService {
     	sender=new GuolaiwanSender(pubName, width, height);
 	}
     
-    public void addGetter(String pubName){
-    	GuolaiwanGetter getter = new GuolaiwanGetter(pubName, width, height,sender);
-    	getters.put(pubName,getter);
+    //机位开直播调用
+    public void addGetter(String subLivePubName){
+    	GuolaiwanGetter getter = new GuolaiwanGetter(subLivePubName, width, height,sender);
+    	getters.put(subLivePubName,getter);
+    	getter.start();
+    }
+    
+    //导播上传成功后调用
+    public void addMatPlayGetter(String liveId,String matPlayVideoPath){
+    	GuolaiwanGetter getter = new GuolaiwanGetter(liveId,matPlayVideoPath,width, height,sender);
+    	getters.put(liveId,getter);
     	getter.start();
     }
     
@@ -56,13 +63,12 @@ public class GuolaiwanLiveService {
 		}
     }
     
-    public void switchLive(String oldSubName, String newSubName){
+    public void switchLive(String oldSubLivePubName, String newSubLivePubName){
     	//这里可能有先后问题，但是看测试效果，不把精力浪费在几乎不存在的事情上
-    	if(getters.get(oldSubName)!=null){
-    		getters.get(oldSubName).setUsed(false);
+    	if(getters.get(oldSubLivePubName) != null){
+    		getters.get(oldSubLivePubName).setUsed(false);
     	}
-    	
-    	getters.get(newSubName).setUsed(true);
+    	getters.get(newSubLivePubName).setUsed(true);
     }
 	
 }
