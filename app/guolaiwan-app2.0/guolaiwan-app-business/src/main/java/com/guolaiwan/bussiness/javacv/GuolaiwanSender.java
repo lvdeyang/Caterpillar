@@ -37,14 +37,14 @@ public class GuolaiwanSender{
 		}
 	}
 
-	public void send(Frame frame,String name){
+	public void send(Frame frame,String name,long times){
 		
 		try {
 			if(!istart){
 				recorder.start();
 				istart=true;
 			}
-			recorder.setTimestamp(frame.timestamp);
+			recorder.setTimestamp(times);
 			recorder.record(frame);
 		    
 		} catch (Exception e) {
