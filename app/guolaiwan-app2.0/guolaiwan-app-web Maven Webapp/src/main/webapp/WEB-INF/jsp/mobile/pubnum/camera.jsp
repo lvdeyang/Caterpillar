@@ -1,9 +1,11 @@
+<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	String weburl=WXContants.Website;
 %>
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
@@ -64,7 +66,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>搜索主页</title>
+<title>人脸采集</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -439,233 +441,118 @@ html, body {
 	top: 0;
 	text-align: center;
 }
-.weui-navbar__item.weui-bar__item--on{
- color:red;
- background:#f1f1f1;
-}
-</style>
 
+</style>
+<link href="lib/video.css" rel="stylesheet">
 </head>
 
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
-
+<script type="text/javascript" src="lib/video.js"></script>
+<script type="text/javascript" src="lib/video-hls.js"></script>
+<script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript">
 
-	$(function() {
-	  window.BASEPATH = '<%=basePath%>';
-	  var parseAjaxResult = function(data){
-			if(data.status !== 200){
-				$.toptip('data.message', 'error');
-				return -1;
-			}else{
-				return data.data;		
-			}
-	  };
-	  
- 		if($("#searchInput").val()!=''){
-        	getMerchant(1); 
-        	getProduct(1);
+ 
+        function choosePic() {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    getLocalData(localIds[0]);
+                }
+            });
         }
-        if($('#selType').val()==2){
-        
-            $('#tab-2').click();
-        }else{
-            $('#tab-1').click();
+		
+        function getLocalData(localid) {
+			//获取本地图片资源
+            wx.getLocalImgData({
+                localId: localid, // 图片的localID
+                success: function (res) {
+                    var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+                    $('#im').attr('src','data:image/png;base64,'+localData);
+                    //开始绑定
+                    /*$.ajax({
+                        url: "${pageContext.request.contextPath}/wechat/bindface",
+                        type: "post",
+                        data: {
+                            img: localData
+                        },
+                        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+                        async: true,
+                        success: function (data) {
+                          
+                        }
+                    })*/
+                }
+            });
+ 
         }
-		//获取所有一级推荐
-	    $(document).on('click','#tab-1',function(){
-	        $('#selType').val(1);
-		});	 	
- 		$(document).on('click','#tab-2',function(){
- 		    $('#selType').val(2);
-		});	 	
-        
-	
-		function getProduct(page){
-		    var _uriproduct = window.BASEPATH + 'phoneApp/search';
-		    var params={};
-		    params.page=page;
-		    params.comId="001";
-		    params.type="PRODUCT";
-		    params.name=$('#searchInput').val();
-			$.post(_uriproduct, $.toJSON(params), function(data){
+ 
+        $(document).ready(function () {
+            var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+            var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			$.get(_uri, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
 				if(data){
-				   $('#product_table').children().remove();
-				   var pros=data.products;
-				   var html=[];
-				   for(var i=0;i<pros.length;i++){
-				       if(i%2==0){
-				          html.push('<tr>');
-				       }
-	                     html.push('<td style="padding:10px;width:50%">');
-		                 html.push('<image style=" width:100%;height:100px;"  relData="'+pros[i].activityReId+"-"+
-	                     pros[i].isSurpport+'" data="'+pros[i].productModularCode+'"  src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'"/>');
-		                 html.push('<p style="font-size:12px">'+pros[i].productName+'￥'+pros[i].productPrice+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+pros[i].productOldPrice+'</span></p>');
-		                 html.push('</td>');
-	                     if(pros.length==1){
-	                       html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
-	                     }
-	                  if(i%2==1){
-				          html.push('</tr>');
-				      }
-				   
-				   }
-				   if(pros.length==0){
-				     	html.push("<tr style='width:100%'><td style='width:100%;font-size:12px;text-align:center'>暂无数据</td></tr>");
-				   }
-				   $('#product_table').append(html.join(''));
-				   
-				   
-				}
-			});
+				    
+					share=data;
+					wx.config({
+			            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            appId : share.appId, // 必填，公众号的唯一标识
+			            timestamp : share.timestamp, // 必填，生成签名的时间戳
+			            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+			            signature : share.signature,// 必填，签名，见附录1
+			            jsApiList : ['chooseImage',
+		                        'previewImage',
+		                        'uploadImage',
+		                        'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	       	        });
+                }
+            }); 
+            
+            
+             wx.ready(function () {
+		                wx.checkJsApi({
+		                    jsApiList: [
+		                        'chooseImage',
+		                        'previewImage',
+		                        'uploadImage',
+		                        'downloadImage'
+		                    ],
+		                    success: function (res) {
+		                      
+		                        if (res.checkResult.getLocation == false) {
+		                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+		                            return;
+		                        }else{
+		                            choosePic();
+		                        }
+		                    }
+		                });
+		            });
+		            wx.error(function(res){
+		                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+		                alert("验证失败，请重试！");
+		                wx.closeWindow();
+		            });
+		 
 
-		}
-		
-		
-		function getMerchant(page){
-		    var _uriproduct = window.BASEPATH + 'phoneApp/search';
-		
-		    var params={};
-		    params.page=page;
-		    params.comId="001";
-		    params.type="MERCHANT";
-		    params.name=$('#searchInput').val();
-			$.post(_uriproduct, $.toJSON(params), function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data){
-				   $('#merchant_table').children().remove()
-				   var pros=data.merchants;
-				   var html=[];
-				   for(var i=0;i<pros.length;i++){
-				       if(i%2==0){
-				          html.push('<tr>');
-				       }
-	                     html.push('<td style="padding:10px;width:50%">');
-		                 html.push('<image style=" width:100%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" id="pro-'+pros[i].id+'"/>');
-		                 html.push('<p style="font-size:12px">'+pros[i].shopName+'</p>');
-		                 html.push('</td>');
-	                     if(pros.length==1){
-	                       html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
-	                     }
-	                  if(i%2==1){
-				          html.push('</tr>');
-				      }
-				   
-				   }
-				   if(pros.length==0){
-				     	html.push("<tr style='width:100%'><td style='width:100%;font-size:12px;text-align:center'>暂无数据</td></tr>");
-				   }
-				   $('#merchant_table').append(html.join(''));
-				   
-				   
-				}
-			});
+             
 
-		}
-		
-	
-	
-	   $(document).on('click','.product',function(){
-	       var codes=this.id.split('-');
-	       var data=$(this).attr('data');
-	       var relData=$(this).attr('relData');
-	       var relDatas=relData.split('-');
-	       if(relDatas[0]==0&&relDatas[1]==0){
-		       if(data=='2021'){
-		          location.href=window.BASEPATH + 'pubnum/product/index/line?id='+codes[1];
-		       }else{
-		          location.href=window.BASEPATH + 'pubnum/product/index?id='+codes[1];
-		       }
-	       
-	       }else{
-	       
-	          if(relDatas[1]==0){
-	            location.href=window.BASEPATH + 'pubnum/product/index/'+codes[1];
-	          }else{
-	          
-	            location.href=window.BASEPATH + 'pubnum/product/index/surpport/'+relDatas[0]+'/0';
-	          }
-	       }
-	   });
-	   $(document).on('click','.merchant',function(){
-	      var ids=this.id.split('-');
-	      location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+ids[1];
-	   });
-	
-	});
+
+        });
 </script>
 
 
 
 <body>
 	<div id="page">
-		<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-				<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div>
-		<div class="content">
-			
-			<div style="height:60px;" class="weui-search-bar" id="searchBar">
-			  <form class="weui-search-bar__form" action="pubnum/search/post" method="post">
-			    <input type="hidden" name="type" id="selType" value="${type}"/>
-			    <div class="weui-search-bar__box">
-			      <i  id="search" class="weui-icon-search" style="line-height:50px;"></i>
-			      <input style="height:40px" type="search" name="searchContent" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="" value="${content }">
-			      <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
-			    </div>
-			    <label class="weui-search-bar__label" id="searchText">
-			      <i class="weui-icon-search"></i>
-			      <span style="line-height: 45px;">搜索</span>
-			    </label>
-			  </form>
-			  <a style="line-height:40px;" href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
-			</div>
-			
-			
-			<div class="weui-tab">
-			  <div class="weui-navbar">
-			    <a id="tab-1" onclick="return false" class="weui-navbar__item weui-bar__item--on" href="#tab1">
-			      商品
-			    </a>
-			    <a id="tab-2" onclick="return false"  class="weui-navbar__item" href="#tab2">
-			      商家
-			    </a>
-
-			  </div>
-
-             <div class="weui-tab__bd" style="padding-bottom:50px">
-			    <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
-			       <table id="product_table" style="margin-top:15px;width:100%">
-                  
-                    </table>
-				   
-			    </div>
-			    <div id="tab2" class="weui-tab__bd-item">
-			       <table id="merchant_table" style="margin-top:15px;width:100%">
-                  
-                    </table>
-				   
-			    </div>			
-		
-			  </div>
-		   
-		    
-		    
-		   
-		    
-		    
-		    
-		   
-		    
-		</div>
+		<image style="width:50px;height:50px;" id="im"></image>
 	</div>
 </body>
 

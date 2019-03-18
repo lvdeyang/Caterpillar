@@ -59,7 +59,7 @@ public class ParkManagementController extends BaseController {
 			strMap.put("parkingName", parkingName);
 			listpo = attractionsDao.findByPageC(strMap, page, limit);
 		} else {
-			listpo = attractionsDao.getByAttractionsId(getMerchantInfo().getMerchantId());
+			listpo = attractionsDao.getByAttractionsId(getMerchantInfo().getComId());
 		}
 		int allcount = attractionsDao.CountByPageC(strMap);
 		List<AttractionsParkingVO> listvo = AttractionsParkingVO.getConverter(AttractionsParkingVO.class)
@@ -91,10 +91,10 @@ public class ParkManagementController extends BaseController {
 		if (getLoginInfo() != null) {
 			fileUserId = getLoginInfo().getComId();
 		} else {
-			fileUserId = getMerchantInfo().getMerchantId();
+			fileUserId = getMerchantInfo().getComId();
 		}
 		String folderName = "/id_" + fileUserId; // 文件名
-		String path = conn_sysConfig.getSysConfig().getFolderUrl() + folderName;
+		String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/lib/images/park" + folderName;
 		// 文件名
 		String fileName = file.getOriginalFilename();
 		String newName = d.getTime() + fileName.substring(fileName.lastIndexOf(".")); // 时间戳+后缀名
@@ -159,12 +159,12 @@ public class ParkManagementController extends BaseController {
 		if (getLoginInfo() != null) {
 			fileUserId = getLoginInfo().getComId();
 		} else {
-			fileUserId = getMerchantInfo().getMerchantId();
+			fileUserId = getMerchantInfo().getComId();
 		}
 		if (file.getSize() > 0) { // 修改图片
 			Date d = new Date();
 			String folderName = "/id_" + fileUserId; // 文件名
-			String path = conn_sysConfig.getSysConfig().getFolderUrl() + folderName;
+			String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/lib/images/park" + folderName;
 			// 文件名
 			String fileName = file.getOriginalFilename();
 			String newName = d.getTime() + fileName.substring(fileName.lastIndexOf(".")); // 时间戳+后缀名
