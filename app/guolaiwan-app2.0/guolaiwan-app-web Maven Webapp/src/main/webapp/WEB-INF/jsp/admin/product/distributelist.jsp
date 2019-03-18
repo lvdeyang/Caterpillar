@@ -39,9 +39,7 @@
 		<button class="layui-btn">
 			<i class="layui-icon">&#xe608;</i>添加
 		</button>
-		<button class="layui-btn layui-btn-danger" onclick="delAll()">
-			<i class="layui-icon">&#xe640;</i>批量删除
-		</button>
+		
 		<span class="x-right" style="line-height:40px">系统中共有：<span
 			id="count">${count}</span>个商品
 		</span> </xblock>
@@ -279,7 +277,34 @@
 					layer.closeAll("loading");
 				}
 			});
+			
+			
+		
+			
 		}
+		
+		
+			function pro_del(obj,id,name){
+                layer.confirm('确认要删除吗？',function(index){
+                  layer.close(index);
+                  layer.load();
+                  //发异步删除数据
+                  $.ajax({
+                    type:"post",
+                    url:"disprodel.do",
+                    data:{"uuid":id},
+                    success:function(msg){
+                  	 if(msg=="success"){
+                        layer.closeAll("loading");
+                  		  
+                  		  layer.msg('已删除!',{icon:1,time:1000});
+                  		  $(".layui-laypage-btn").click();
+                  	 }
+                    }
+                  }) 
+                });
+            }
+		
 	</script>
 </body>
 </html>

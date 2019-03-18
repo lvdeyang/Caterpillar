@@ -16,13 +16,15 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Table(name="t_sys_professionallive")
 public class ProfessionalLivePO extends AbstractBasePO{
 
-	private static final long serialVersionUID = 3202755754687349687L;
+	private static final long serialVersionUID = 1872593417889760016L;
+	
 	private long liveId;
 	private String liveName;
-	private String liveStatusType;
-	private String liveType = "PROFESSIONAL_LIVE";
 	//主播机位 1-6 为机位 7为垫播 0为未设置机位
 	private int broadcastCamera = 0;
+	private String liveStatusType;
+	private String liveType = "PROFESSIONAL_LIVE";
+	
 	
 	public long getLiveId() {
 		return liveId;

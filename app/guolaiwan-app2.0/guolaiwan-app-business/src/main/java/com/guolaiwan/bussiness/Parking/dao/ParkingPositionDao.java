@@ -34,6 +34,27 @@ public class ParkingPositionDao extends AbstractBaseDao<ParkingPositionPO>{
  	   return findByHql(hql);
     }
     
+    /**
+     *  根据查询车位   id 编号 修改 车位状态  
+     * @param userId 用户id
+     * @param  
+     * @param 
+     * @return
+     * @throws ParseException
+     */
+    public List<ParkingPositionPO>  getNumber(Long uid,int number) throws ParseException{
+    	QueryHql hql = this.newQueryHql();
+    	hql.andBy("positionId",Condition.eq, uid);
+    	hql.andBy("positionNumber",Condition.eq, number);
+    	return findByHql(hql);
+    }
+    
+
+    
+    
+
+    
+    
 
 	public List<ParkingPositionPO> getInformation(int pageNum, int pageSize) throws ParseException {
 		QueryHql hql = this.newQueryHql();

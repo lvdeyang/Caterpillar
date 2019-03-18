@@ -94,6 +94,7 @@ public class ParkingController  extends WebBaseControll{
 	@RequestMapping(value = "/setVehicle", method = RequestMethod.POST)
 	public int IncreaseInformation(HttpServletRequest request) throws Exception {
 		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		Map<String, Object> dataMap = new HashMap<String, Object>();
 		String param = getRequestJson(request);
 		if (param.indexOf("\\") >= 0) {
 			param = param.replaceAll("\\\\", "");
@@ -106,8 +107,7 @@ public class ParkingController  extends WebBaseControll{
 		if (pageObject != null && pageObject.size() > 0) {
 			String number = pageObject.getString("parking");
 			String type = pageObject.getString("parNumber");
-
-			List<VehiclePO> userByid = par_king.getNumber(userId);
+			List<VehiclePO> userByid = par_king.getNumber(number,userId);
 			if (userByid.size() == 0) {
 				VehiclePO veh = new VehiclePO();
 				veh.setVehicleid(userId);
@@ -123,6 +123,43 @@ public class ParkingController  extends WebBaseControll{
 			}
 		}
 		return 0;
+	}
+	
+	
+	
+	
+	
+	/*****************************************************************************************************/
+
+	
+	
+	
+	/**
+	 *   根据用户id    添加车牌 车型
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/setVeh", method = RequestMethod.POST)
+	public Map<String, Object> IncreaseInforma(HttpServletRequest request) throws Exception {
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		if (pageObject != null && pageObject.size() > 0) {
+			String number = pageObject.getString("parking");
+			String type = pageObject.getString("parNumber");
+			List<VehiclePO> userByid = par_king.getNumber(number,userId);
+			for (VehiclePO vehiclePO : userByid) {	
+			dataMap.put("carid",vehiclePO.getId() );
+			}
+		}
+		return success(dataMap);
 	}
 
 

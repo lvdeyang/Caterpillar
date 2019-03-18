@@ -13,6 +13,8 @@ public class ProfessionalLiveDirectorPO extends AbstractBasePO{
 	
 	private long liveId;
 	private int inUse;
+	//机位直播时是否可以关闭
+	private String cameraCanClose = "YES";
 	public long getLiveId() {
 		return liveId;
 	}
@@ -25,7 +27,12 @@ public class ProfessionalLiveDirectorPO extends AbstractBasePO{
 	public void setInUse(int inUse) {
 		this.inUse = inUse;
 	}
-	
+	public String getCameraCanClose() {
+		return cameraCanClose;
+	}
+	public void setCameraCanClose(String cameraCanClose) {
+		this.cameraCanClose = cameraCanClose;
+	}
 	
 	
 }

@@ -70,84 +70,127 @@
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <title></title>
- <style type="text/css">
- html,body{
-   height:100%;
-   } 
- </style>
-  </head>
-    <!-- 公共脚本引入 -->
+<style type="text/css">
+html, body {
+	height: 100%;
+}
+</style>
+</head>
+<!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-  <script>
+<script>
    $(function() {
+   var vehicle = null;
     	var _uriYd = window.BASEPATH + '/smart/usere';
 		$.post(_uriYd, null, function(data) {
 			data = parseAjaxResult(data);
 			var html = [];
 			html.push('	<span>'+data.userNickname+'</span>  <span>'+data.userPhone+'</span>');
 			$('.pic').append(html.join(''));
-	
+		});
 		 var _url = window.BASEPATH + 'quit/query';
 		 $.post(_url, null, function(data) {
 			data = parseAjaxResult(data);
 		   	var htm = [];
+		   	vehicle = data.userHeadimg;
 		    htm.push('<span>'+data.userHeadimg+'</span>     <span>'+data.userNickname+'</span> ');
 			$('.pid').append(htm.join(''));  
+		   
+		var _ur = window.BASEPATH + 'vice/selePay';
+	    var  parame= {};
+		parame.uid = ${param.uid}; 
+		parame.vehicle = vehicle; 
+		 $.post(_ur, $.toJSON(parame), function(data) {
+			data = parseAjaxResult(data);
+		   	var htm = [];
+				htm.push('<span">'+data.parkingName+'</span>');
+				$('#marg').append(htm.join(''));  
+				
+		   	var html = [];
+				html.push('<span style="color:#F99161;">'+data.parkingLayer+' '+data.parkingDistrict+' '+data.parkingNumber+'</span>');
+				$('#mag1').append(html.join(''));  
+	
+		   	var html1 = [];
+				html1.push('<span style="color:#F99161;">'+data.stoppingTime+' </span> 小时');
+				$('#mag2').append(html1.join(''));  
+	
+		   	var html3 = [];
+				html3.push('<span style="color:#F99161;">'+data.parkingCost+'</span> ');
+				$('#mag3').append(html3.join(''));  
+	
+		   	var html4 = [];
+				html4.push('<span>'+data.bookingTime+'</span> ');
+				$('#mag4').append(html4.join(''));  
+	
+		   	var html5 = [];
+				html5.push('<span>'+data.dueTime+'</span> ');
+				$('#mag5').append(html5.join(''));  
 		});
+		   
+	 });
+    
 	
 	
-	
-	
-	
-	
-	
-	
-	
+		 var _url = window.BASEPATH + 'vice/long';
+		 $.post(_url, null, function(data) {
+		 data = parseAjaxResult(data);
+		 var ht = [];
+		ht.push(' <img alt="" src="lib/images/145.png" style="width:60%;height:100%;">');
+		$('.img').append(ht.join(''));  
 		});
     
     
     
     
-    
-    
-    
-    
-    
-      $(".btn").bind("click", function () {   
-      window.location.href="vice/merchant/cance";
-        });  
-        });  
+	   $(".btn").bind("click", function () {   
+		   
+	     window.location.href="vice/merchant/cance?uid="+${param.uid}; 
+		});  
+   });  
   </script>
-  <body>
-   <div class="header" style="width:100%;">
-     <p class="pic" style="padding:20px 0 10px 15px;font-weight: bold;">  </p>
-     <p class="pid" style="margin:0px 0 10px 15px;font-weight: bold;"> </p>
-   </div>
-   <div class="header_in" style="background-color: #EEEEEE;width:100%;height:auto;overflow: hidden;border-radius:10px;">
-   
-    <p style="margin:0 0 10px 15px;font-size:14px;">遵化清东陵停车场</p>
-       <p style="margin-left:15px;font-size:12px;color:#777777;">停车位：<span style="color:#F99161;">一层 A区 007</span></p>
-       <p style="margin-left:15px;font-size:12px;color:#777777;display: inline-block;">购买时长：<span style="color:#F99161;">24</span>  小时</p>
-       <p style="display: inline-block;font-size:14px;float:right;margin-right:20px;">总费用 ￥<span style="color:#F99161;">60</span></p>
-     <div class="header_on" style="border-bottom: solid 1px #959595;width:95%;margin:7px auto;"></div>
-     <p style="font-size:12px;float:left;margin-left:15px">入场：<span>2019年3月6日15：50</span></p>
-     <p style="font-size:12px;float:right;margin-right:15px;;">离场：<span>2019年3月7日15：50</span></p>
-       <div class="img" style="text-align:center;height:40%;clear: both;padding-top:15px;">
-       <img alt="" src="lib/images/2.jpg" style="width:30%;height:100%;">
-       </div>
-       <p style="text-align:center;font-size:14px;">订单编号：<span>123456789632</span></p>
-       <p style="color:#777777;text-align:center;font-size:10px;">扫描二维码即可进入停车场</p>
-       <button class="btn" style="width:100%;height:35px;background-color:#D5D5D5;color:red;border:none;outline:none;">取消订单</button>
-   </div>
-   <div class="footer" style="padding-top:10%;">
-     <p>温馨提示：</p>
-      <ol style="font-size:12px;margin: 20px 15px;">
-      <li>预订成功后<span style="color:red;">15 分钟内可免费取消，</span>约定入场时间内未入场，订单将自动计费。</li>
-      <li>超出车费预定时间前30分钟，系统给车主推送提示离场信息。若车主超时间，则按照三倍费用自动计算。</li>
-      <li>停车费以出停车场费用为标准。</li>
-      </ol>
-   </div>
-  </body>
+<body>
+	<div class="header" style="width:100%;">
+		<p class="pic" style="padding:20px 0 10px 15px;font-weight: bold;">
+		</p>
+		<p class="pid" style="margin:0px 0 10px 15px;font-weight: bold;">
+		</p>
+	</div>
+	<div class="header_in"
+		style="background-color: #EEEEEE;width:100%;height:auto;overflow: hidden;border-radius:10px;">
+
+		<p id="marg" style="margin:0 0 10px 15px;font-size:14px;"></p>
+		<p id="mag1" style="margin-left:15px;font-size:12px;color:#777777;">停车位：</p>
+		<p id="mag2"
+			style="margin-left:15px;font-size:12px;color:#777777;display: inline-block;">购买时长：
+			</p>
+		<p id="mag3"
+			style="display: inline-block;font-size:14px;float:right;margin-right:20px;">总费用
+			￥</p>
+		<div class="header_on"
+			style="border-bottom: solid 1px #959595;width:95%;margin:7px auto;"></div>
+		<p id="mag4" style="font-size:12px;float:left;margin-left:15px">入场：</p>
+		<p id="mag5" style="font-size:12px;float:right;margin-right:15px;;">离场：</p>
+		<div class="img"
+			style="text-align:center;height:40%;clear: both;padding-top:15px;">
+
+		</div>
+		<p style="text-align:center;font-size:14px;">
+			订单编号：<span>123456789632</span>
+		</p>
+		<p style="color:#777777;text-align:center;font-size:10px;">扫描二维码即可进入停车场</p>
+		<button class="btn"
+			style="width:100%;height:35px;background-color:#D5D5D5;color:red;border:none;outline:none;">取消订单</button>
+	</div>
+	<div class="footer" style="padding-top:10%;">
+		<p>温馨提示：</p>
+		<ol style="font-size:12px;margin: 20px 15px;">
+			<li>预订成功后<span style="color:red;">15 分钟内可免费取消，</span>约定入场时间内未入场，订单将自动计费。
+			</li>
+			<li>超出车费预定时间前30分钟，系统给车主推送提示离场信息。若车主超时间，则按照三倍费用自动计算。</li>
+			<li>停车费以出停车场费用为标准。</li>
+		</ol>
+	</div>
+</body>
 </html>

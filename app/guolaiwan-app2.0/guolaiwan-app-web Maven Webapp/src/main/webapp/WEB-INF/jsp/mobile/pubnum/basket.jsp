@@ -820,7 +820,7 @@ html, body {
 			        startDate = Date.parse(startDate);
 			        endDate = Date.parse(endDate);
 			        var dateSpan = endDate - startDate;
-			        iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
+			        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
 			        if(iDays>0){
 			          daycount=iDays;
 			        }

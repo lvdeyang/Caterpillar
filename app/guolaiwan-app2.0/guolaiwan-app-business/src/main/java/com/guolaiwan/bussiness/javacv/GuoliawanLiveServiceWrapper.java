@@ -23,8 +23,8 @@ import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 
 public class GuoliawanLiveServiceWrapper {
-	private int width = 360;//分辨率
-	private int height = 640;
+	private int width = 640;//分辨率
+	private int height = 360;
 	private Map<String, GuolaiwanLiveService> serviceMap = new HashMap<String, GuolaiwanLiveService>();
 	private Map<String, GuolaiwanRecordService> recordMap = new HashMap<String, GuolaiwanRecordService>();
 	//修改代码得问老黄
@@ -39,19 +39,16 @@ public class GuoliawanLiveServiceWrapper {
         return instance;
     }
 	
-	public void startLive(String pubName,String subName) {
-		//GuolaiwanLiveService service = new GuolaiwanLiveService();
-		//service.init(pubName, width, height);
+	public void startLive(String pubName,String subLivePubName) {
 		//替换以上代码
 		if(mGuolaiwanLiveService == null){
 			mGuolaiwanLiveService = new GuolaiwanLiveService();
 			mGuolaiwanLiveService.init(pubName, width, height);
 		}
-		mGuolaiwanLiveService.switchLive(null, subName);
+		mGuolaiwanLiveService.switchLive(null, subLivePubName);
 	}
-
-	public void startSubLive(String pubName, String subName) {
-		//以下新增代码
+	
+	public void startSubLive(String pubName, String subLivePubName) {
 		if(mGuolaiwanLiveService == null){
 			mGuolaiwanLiveService = new GuolaiwanLiveService();
 			mGuolaiwanLiveService.init(pubName, width, height);
@@ -59,32 +56,46 @@ public class GuoliawanLiveServiceWrapper {
         if(serviceMap.get(pubName) == null){
         	serviceMap.put(pubName, mGuolaiwanLiveService);
         }
-		//以上为新增代码
-		serviceMap.get(pubName).addGetter(subName);
+		serviceMap.get(pubName).addGetter(subLivePubName);
 	}
-
-	public void stopSubLive(String pubName, String subName) {
-		serviceMap.get(pubName).removeGetter(subName);
+	
+	public void startMatPlay(String pubName, String liveId,String matPlayVideoPath){
+		if(mGuolaiwanLiveService == null){
+			mGuolaiwanLiveService = new GuolaiwanLiveService();
+			mGuolaiwanLiveService.init(pubName, width, height);
+		}
+        if(serviceMap.get(pubName) == null){
+        	serviceMap.put(pubName, mGuolaiwanLiveService);
+        }
+		serviceMap.get(pubName).addMatPlayGetter(liveId, matPlayVideoPath);
 	}
-
+	
 	public void stopLive(String pubName) {
 		serviceMap.get(pubName).destory();
 		serviceMap.remove(pubName);
 	}
+	
+	public void stopSubLive(String pubName, String subName) {
+		serviceMap.get(pubName).removeGetter(subName);
+	}
+
+	public void stopMatPlay(String pubName, String liveId){
+		serviceMap.get(pubName).removeGetter(liveId);
+	}
 
 	public void switchSubLive(String pubName,String oldsubName, String subName) {
-		serviceMap.get(pubName).switchLive(oldsubName, subName);;
+		serviceMap.get(pubName).switchLive(oldsubName, subName);
 	}
 	
 	// path为存储路径，以文件名结束（/video/live/ceshi.mp4）
-	public void startRecord(String pubName, String path) {
-		GuolaiwanRecordService service = new GuolaiwanRecordService(pubName, path, width, height);
+	public void startRecord(String subivePubName, String path) {
+		GuolaiwanRecordService service = new GuolaiwanRecordService(subivePubName, path, width, height);
 		service.start();
-		recordMap.put(pubName, service);
+		recordMap.put(subivePubName, service);
 	}
 
-	public void stopRecord(String pubName) {
-		recordMap.get(pubName).destory();
+	public void stopRecord(String subivePubName) {
+		recordMap.get(subivePubName).destory();
 	}
 
 	public void getImage(String pubName, String path) {

@@ -528,11 +528,11 @@ html, body {
 	      param.auto='${auto}';	
 		  $.post(_urilogin, $.toJSON(param), function(data){
 				
-				if(data.status != 200) {
-				   $.toast(data.message,"forbidden");
-				}else{
+				//if(data.status != 200) {
+				//   $.toast(data.message,"forbidden");
+				//}else{
 				   location.href=window.BASEPATH + 'pubnum/admin/index';
-				}
+				//}
 		  });
       });
       

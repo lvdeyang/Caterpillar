@@ -203,8 +203,8 @@ html {
 <script type="text/javascript">
 
 	$(function() {
-	
-	 
+
+
 		var _uriYd = window.BASEPATH + 'smart/usere';
 		$.post(_uriYd, null, function(data) {
 			data = parseAjaxResult(data);
@@ -217,97 +217,123 @@ html {
 			html.push('<p id="username">' + data.userNickname + '</p>');
 			$('.phone').append(html.join(''));
 		});
-		
-		 var _uri = window.BASEPATH + 'quit/query';
-		 $.post(_uri, null, function(data) {
+
+		var _uri = window.BASEPATH + 'quit/query';
+		$.post(_uri, null, function(data) {
 			data = parseAjaxResult(data);
-		   var html = [];
-		   	html.push('<p class="input1" style="width:200px;height:30px;line-height:30px;border:none;outline:none;">' + data.userHeadimg + '</p>'); 
-	        /*  html.push('<input class="input1" style="width:200px;height:30px;line-height:30px;border:none;outline:none;" type="text" name="test"  value="'+data.userHeadimg+'" />');  */
+			var html = [];
+			html.push('<p class="input1" style="width:200px;height:30px;line-height:30px;border:none;outline:none;">' + data.userHeadimg + '</p>');
+			/*  html.push('<input class="input1" style="width:200px;height:30px;line-height:30px;border:none;outline:none;" type="text" name="test"  value="'+data.userHeadimg+'" />');  */
 			$('.main1').append(html.join(''));
-			
+
 			var htm = [];
-			htm.push('<p class="input2" style="width:200px;height:30px;line-height:30px;border:none;outline:none;">' + data.userNickname + '</p>'); 
+			htm.push('<p class="input2" style="width:200px;height:30px;line-height:30px;border:none;outline:none;">' + data.userNickname + '</p>');
 			$('.main2').append(htm.join(''));
-			
-		})	;	
+
+		})	;
 
 
 
 		var _uri = window.BASEPATH + 'quit/order';
 		$.post(_uri, null, function(data) {
-			 data = parseAjaxResult(data);
-			if (data.orderStatus == "未支付") {
-				var navigation = document.getElementById('img_navigation');
-				navigation.onclick = function() {
-					var Navigation = document.getElementById('test1');
-					Navigation.src = 'lib/images/daohang.png';
-					alert("我是导航页面")
-				};
+			data = parseAjaxResult(data);
+			for(var i=0; i<data.length;i++){
+			if (data[i] == "未支付") {
 				var order = document.getElementById('img_order');
-			   	order.onclick = function() {
+				order.onclick = function() {
 					var Order = document.getElementById('test1');
 					Order.src = 'lib/images/dingdan.png';
-					alert("我是订单页面")
-			};  
+					window.location.href = "vice/merchant/information";
+				/* 	alert("我是订单页面") */
+				};
 			}
-			
-			//进入导航界面
-			if (data.orderStatus == "已支付") {
-				var navigation = document.getElementById('img_navigation');
+        if (data[i] == "正在停车" ) {
+        var navigation = document.getElementById('img_navigation');
 				navigation.onclick = function() {
 					var Navigation = document.getElementById('test1');
 					Navigation.src = 'lib/images/daohang.png';
-					alert("我是导航页面")
+					window.location.href = "vice/merchant/navigation";
+					 alert("我是导航页面") 
 				};
-				 //进入停车界面
+				//进入停车界面
 				var parking = document.getElementById('img_parking');
 				parking.onclick = function() {
 					var Parking = document.getElementById('test1');
 					Parking.src = 'lib/images/tingche.png';
-					alert("我是停车页面")
+					window.location.href = "vice/merchant/parkings";
+					 alert("我是停车页面") 
 				};
-                //进入续费界面
+				//进入续费界面
 				var renew = document.getElementById('img_Renewal');
 				renew.onclick = function() {
 					var Renew = document.getElementById('test1');
 					Renew.src = 'lib/images/xufei.png';
-					alert("我是续费页面")
+					window.location.href = "vice/merchant/renewal";
+				/* 	alert("我是续费页面") */
 				};
-				 var order = document.getElementById('img_order');
-			   	order.onclick = function() {
+				var order = document.getElementById('img_order');
+				order.onclick = function() {
 					var Order = document.getElementById('test1');
 					Order.src = 'lib/images/dingdan.png';
-					alert("我是订单页面")
-			};  
-				
-			};
-				
+					window.location.href = "vice/merchant/information";
+					/* alert("我是订单页面") */
+				};
+        
+        }
 
-			
-        //进入订单界面
-        if(data.orderStatus == "已过期"){
-            var order = document.getElementById('img_order');
-			   	order.onclick = function() {
+			//进入导航界面
+			if (data[i]  == "已支付"  ) {
+				var navigation = document.getElementById('img_navigation');
+				navigation.onclick = function() {
+					var Navigation = document.getElementById('test1');
+					Navigation.src = 'lib/images/daohang.png';
+					window.location.href = "vice/merchant/navigation";
+					
+					/* alert("我是导航页面") */
+				};
+				//进入续费界面
+				var renew = document.getElementById('img_Renewal');
+				renew.onclick = function() {
+					var Renew = document.getElementById('test1');
+					Renew.src = 'lib/images/xufei.png';
+					window.location.href = "vice/merchant/renewal";
+					/* alert("我是续费页面") */
+				};
+				var order = document.getElementById('img_order');
+				order.onclick = function() {
 					var Order = document.getElementById('test1');
 					Order.src = 'lib/images/dingdan.png';
-					alert("我是订单页面")
-			}
-        };
-	
-	
-		//进入找车位界面
-		var parkingspace = document.getElementById('img_car');
-		parkingspace.onclick = function() {
-			var Parkingspace = document.getElementById('test1');
-			Parkingspace.src = 'lib/images/chewei.png';
-			alert("我是找车位页面")
-			window.location.href="vice/merchant/scenic";
-		};
-		 
+					window.location.href = "vice/merchant/information";
+					/* alert("我是订单页面") */
+				};
+			};
+
+
+
+			//进入订单界面
+			if (data[i]  == "已过期") {
+				var order = document.getElementById('img_order');
+				order.onclick = function() {
+					var Order = document.getElementById('test1');
+					Order.src = 'lib/images/dingdan.png';
+					window.location.href = "vice/merchant/information";
+					/* alert("我是订单页面") */
+				}
+			};
+      }
+
+			//进入找车位界面
+			var parkingspace = document.getElementById('img_car');
+			parkingspace.onclick = function() {
+				var Parkingspace = document.getElementById('test1');
+				Parkingspace.src = 'lib/images/chewei.png';
+				/* alert("我是找车位页面") */
+				window.location.href = "vice/merchant/scenic";
+			};
+
+		});
+
 	});
-	
-});
 </script>
 
 
@@ -340,7 +366,7 @@ html {
 			</div>
 			<button class="btn"
 				style="width: 202px;height: 35px;margin: 15px auto;background-color: #02A1E9";>
-				<a href="smart/merchant/parking">退出</a>
+				<a href="smart/merchant/parking?sal=1">退出</a>
 			</button>
 		</div>
 	</div>

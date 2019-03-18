@@ -1,46 +1,209 @@
 package com.guolaiwan.app.web.smartParking.vo;
 
+import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
+import com.guolaiwan.bussiness.Parking.po.OrderPO;
 
+import pub.caterpillar.mvc.converter.AbstractBaseVO;
 
-public class OrderVo {
+public class OrderVo  extends AbstractBaseVO<OrderVo, OrderPO>{
 
-	//订单id
-	private int orderId;
-	//停车 层
+	//用户 订单id
+	private long orderId;
+	//景区id
+	private long attractionsId;
+	//停车场层
 	private String parkingLayer;
+	//停车场 名称
+	private String parkingName;
+	//订单 二维码编号
+	private String Time;
 	// 停车 区
 	private String  parkingDistrict;
 	//车位编号
-	private String parkingNumber;
+	private int parkingNumber;
 	//停车费用
-	private int  parkingCost;
+	private Double  parkingCost;
+	//停车总时间
+	private Double  stoppingTime;
 	//预订时间
 	private String bookingTime;
 	//到期时间
 	private String dueTime;
-	//订单状态  
+	//订单状态         // 未支付  已支付   已过期  申请退款 正在退款 退款完成
 	private String orderStatus;
+	//退款理由         
+	private String refund;
+	//车牌号
+	private String platenumber;
+	//超时金额
+	private double overTimeMoney;
+
 	//是否超时
 	private int overTime;
-	//是否过期
-	private int expire;
+
+	@Override
+	public OrderVo set(OrderPO entity) throws Exception {
+	this	.setAttractionsId(entity.getAttractionsId())
+	.setOrderId(entity.getOrderId())
+	.setParkingLayer(entity.getParkingLayer())
+	.setParkingName(entity.getParkingName())
+	.setTime(entity.getTime())
+	.setParkingDistrict(entity.getParkingDistrict())
+	.setParkingNumber(entity.getParkingNumber())
+	.setParkingCost(entity.getParkingCost())
+	.setStoppingTime(entity.getStoppingTime())
+	.setBookingTime(entity.getBookingTime())
+	.setDueTime(entity.getDueTime())
+	.setOrderStatus(entity.getOrderStatus())
+	.setRefund(entity.getRefund())
+	.setPlatenumber(entity.getPlatenumber())
+	.setOverTimeMoney(entity.getOverTimeMoney())
+	.setOverTime(entity.getOverTime());
+
+	return this;
+	}
 	
 	
 	
 	
 	
 	
+
 	/**
-	 * 用户id  订单
+	 * 超时金额
+	 * @return
 	 */
-	public int getOrderId() {
-		return orderId;
+	public double getOverTimeMoney() {
+		return overTimeMoney;
+	}
+
+	/**
+	 * 超时金额
+	 * @return 
+	 * @return
+	 */
+	public OrderVo setOverTimeMoney(double overTimeMoney) {
+		this.overTimeMoney = overTimeMoney;
+		return this;
+	}
+
+	/**
+	 * 车牌号
+	 * @return
+	 */
+	public String getPlatenumber() {
+		return platenumber;
+	}
+
+	/**
+	 * 车牌号
+	 * @return 
+	 * @return
+	 */
+	public OrderVo setPlatenumber(String platenumber) {
+		this.platenumber = platenumber;
+		return this;
+	}
+
+
+	/**
+	 * 退款理由
+	 * @return
+	 */
+	public String getRefund() {
+		return refund;
+	}
+
+
+	/**
+	 * 退款理由
+	 * @return 
+	 * @return
+	 */
+	public OrderVo setRefund(String refund) {
+		this.refund = refund;
+		return this;
+	}
+
+
+
+
+
+
+	/**
+	 * 停车时间
+	 * @return
+	 */
+	public Double getStoppingTime() {
+		return stoppingTime;
+	}	
+
+
+
+	/**
+	 * 停车时间
+	 * @return 
+	 * @return
+	 */
+	public OrderVo setStoppingTime(Double stoppingTime) {
+		this.stoppingTime = stoppingTime;
+		return this;
+	}
+
+	/**
+	 * 景区id
+	 * @return
+	 */
+	public long getAttractionsId() {
+		return attractionsId;
 	}
 	/**
-	 * 用户id 订单
+	 * 景区id
+	 * @return 
+	 * @return
 	 */
-	public void setOrderId(int orderId) {
+	public OrderVo setAttractionsId(long attractionsId) {
+		this.attractionsId = attractionsId;
+		return this;
+	}
+	/**
+	 * 车场名称
+	 * @return
+	 */
+	public String getParkingName() {
+		return parkingName;
+	}
+	/**
+	 * 车场名称
+	 * @return 
+	 * @return
+	 */
+	public OrderVo setParkingName(String parkingName) {
+		this.parkingName = parkingName;
+		return this;
+	}
+	/**
+	 * 停车场 营业时间
+	 * @return
+	 */
+	public String getTime() {
+		return Time;
+	}
+	/**
+	 * 停车场 营业时间
+	 * @return 
+	 * @return
+	 */
+	public OrderVo setTime(String time) {
+		Time = time;
+		return this;
+	}
+	public long getOrderId() {
+		return orderId;
+	}
+	public OrderVo setOrderId(long orderId) {
 		this.orderId = orderId;
+		return this;
 	}
 	/**
 	 * 停车 层
@@ -50,9 +213,11 @@ public class OrderVo {
 	}
 	/**
 	 * 停车 层
+	 * @return 
 	 */
-	public void setParkingLayer(String parkingLayer) {
+	public OrderVo setParkingLayer(String parkingLayer) {
 		this.parkingLayer = parkingLayer;
+		return this;
 	}
 
 	/**
@@ -64,38 +229,50 @@ public class OrderVo {
 
 	/**
 	 * 停车 区
+	 * @return 
 	 */
-	public void setParkingDistrict(String parkingDistrict) {
+	public OrderVo setParkingDistrict(String parkingDistrict) {
 		this.parkingDistrict = parkingDistrict;
+		return this;
 	}
 
 
 	/**
 	 * 车位编号
 	 */
-	public String getParkingNumber() {
+	public int getParkingNumber() {
 		return parkingNumber;
 	}
 
 	/**
 	 * 车位编号
+	 * @return 
 	 */
-	public void setParkingNumber(String parkingNumber) {
+	public OrderVo setParkingNumber(int parkingNumber) {
 		this.parkingNumber = parkingNumber;
+		return this;
 	}
 
 	/**
 	 * 停车费用
 	 */
-	public int getParkingCost() {
+	public Double getParkingCost() {
 		return parkingCost;
 	}
-
 	/**
 	 * 停车费用
+	 * @return 
 	 */
-	public void setParkingCost(int parkingCost) {
+	public OrderVo setParkingCost(Double parkingCost) {
 		this.parkingCost = parkingCost;
+		return this;
+	}
+
+
+
+	public OrderVo setParkingCost(double parkingCost) {
+		this.parkingCost = parkingCost;
+		return this;
 	}
 
 	/**
@@ -107,9 +284,11 @@ public class OrderVo {
 
 	/**
 	 * 预订时间
+	 * @return 
 	 */
-	public void setBookingTime(String bookingTime) {
+	public OrderVo setBookingTime(String bookingTime) {
 		this.bookingTime = bookingTime;
+		return this;
 	}
 
 	/**
@@ -121,10 +300,12 @@ public class OrderVo {
 
 	/**
 	 * 到期时间
+	 * @return 
 	 */
-	public void setDueTime(String dueTime) {
+	public OrderVo setDueTime(String dueTime) {
 		this.dueTime = dueTime;
-	}
+		return this;
+}
 
 	/**
 	 * 订单状态
@@ -135,9 +316,11 @@ public class OrderVo {
 
 	/**
 	 * 订单状态
+	 * @return 
 	 */
-	public void setOrderStatus(String orderStatus) {
+	public OrderVo setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
+		return this;
 	}
 
 	/**
@@ -149,25 +332,12 @@ public class OrderVo {
 
 	/**
 	 * 是否超过预订时间  0未超出  1已超出
+	 * @return 
 	 */
-	public void setOverTime(int overTime) {
+	public OrderVo setOverTime(int overTime) {
 		this.overTime = overTime;
+		return this;
 	}
-
-	/**
-	 * 订单是否已过期  0未过期 1已过期
-	 */
-	public int getExpire() {
-		return expire;
-	}
-
-	/**
-	 * 订单是否已过期  0未过期 1已过期
-	 */
-	public void setExpire(int expire) {
-		this.expire = expire;
-	}
-
 
 
 
