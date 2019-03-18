@@ -1,65 +1,77 @@
 package com.guolaiwan.bussiness.admin.enumeration;
 
 public enum OrderSource {
-	//网页
+	// 网页
 	WEBPAGE("WEBPAGE"),
-	//直播来源
+	// 直播来源
 	LIVE("LIVE"),
-	//分销线下
+	// 分销线下
 	DISTRIBUTORUNLINE("DISTRIBUTORUNLINE"),
-	//公众号
+	// 公众号
 	PUBLICADDRESS("PUBLICADDRESS"),
-	//线下
+	// 线下
 	UNLINE("UNLINE"),
-	//APP
+	// APP
 	APP("APP");
-
-
-
-
 
 	private String name;
 
-	private OrderSource(String name){
+	private OrderSource(String name) {
 		this.name = name;
 	}
 
-	public String getName(){
+	public String getName() {
 		return this.name;
 	}
 
-	public static OrderSource fromName(String name) throws Exception{
-		if("WEBPAGE".equals(name)){
+	public static OrderSource fromName(String name) throws Exception {
+		if ("WEBPAGE".equals(name)) {
 			return WEBPAGE;
-		}else if("直播".equals(name)){
+		} else if ("直播".equals(name)) {
 			return LIVE;
-		}else if("App".equals(name)){
+		} else if ("App".equals(name)) {
 			return APP;
-		}else if("分销线下".equals(name)){
+		} else if ("分销线下".equals(name)) {
 			return DISTRIBUTORUNLINE;
-		}else if("线下".equals(name)){
+		} else if ("线下".equals(name)) {
 			return UNLINE;
-		}else if ("公众号".equals(name)) {
+		} else if ("公众号".equals(name)) {
 			return PUBLICADDRESS;
-		}else {
-			throw new Exception("错误的订单来源："+name);
+		} else {
+			throw new Exception("错误的订单来源：" + name);
 		}
 	}
 
-	public static OrderSource fromString(String s) throws Exception{
-		if("WEBPAGE".equals(s)){
+	public static OrderSource fromString(String s) throws Exception {
+		if ("WEBPAGE".equals(s)) {
 			return WEBPAGE;
-		}else if("LIVE".equals(s)){
+		} else if ("LIVE".equals(s)) {
 			return LIVE;
-		}else if("APP".equals(s)){
+		} else if ("APP".equals(s)) {
 			return APP;
-		}else if("PUBLICADDRESS".equals(s)){
-		    return PUBLICADDRESS;
-		}else{
-			throw new Exception("错误的订单来源："+s);
+		} else if ("PUBLICADDRESS".equals(s)) {
+			return PUBLICADDRESS;
+		} else {
+			throw new Exception("错误的订单来源：" + s);
+		}
+	}
+
+	public static String fromStr2Name(String s) throws Exception {
+		if ("WEBPAGE".equals(s)) {
+			return "网页";
+		} else if ("LIVE".equals(s)) {
+			return "直播";
+		} else if ("APP".equals(s)) {
+			return "APP";
+		} else if ("PUBLICADDRESS".equals(s)) {
+			return "公众号";
+		} else if ("DISTRIBUTORUNLINE".equals(s)) {
+			return "线下分销";
+		} else if ("UNLINE".equals(s)) {
+			return "线下";
+		} else {
+			throw new Exception("错误的订单来源：" + s);
 		}
 	}
 
 }
-
-
