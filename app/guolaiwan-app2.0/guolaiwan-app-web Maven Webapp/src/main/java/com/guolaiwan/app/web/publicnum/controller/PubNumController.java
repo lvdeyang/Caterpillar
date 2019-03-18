@@ -1780,6 +1780,13 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/gateway");
 		return mv;
 	}
+	
+	@RequestMapping(value = "/camera")
+	public ModelAndView camera(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/camera");
+		return mv;
+	}
 
 	
 }

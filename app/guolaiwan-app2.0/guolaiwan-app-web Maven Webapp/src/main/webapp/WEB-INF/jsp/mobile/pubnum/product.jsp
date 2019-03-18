@@ -586,6 +586,7 @@ input[type="datetime-local"]:before{
 	  var phone='';
       var iscollect=0;
       var qq="";
+      var productModular=0;
 		//获取所有一级推荐
       var _uriRecomment = window.BASEPATH + 'phoneApp/productInfo?productId=${id}&userId=${userId}';
 		
@@ -600,6 +601,7 @@ input[type="datetime-local"]:before{
 			    var demo = 11.50*3;
 			    var demo1 = demo%1;
 			    var pics=data.product.productMorePic.split(',');
+			    productModular=data.product.productModularCode;
 				for(var i=0; i<pics.length; i++){
 					html.push('<div style="height:200px;" class="swiper-slide"><img style="height:200px" src="'+pics[i]+'" alt=""></div>');
 				}
@@ -1120,9 +1122,67 @@ input[type="datetime-local"]:before{
 	    });
 		
 		
-		$(document).on('click','.mailAddress',function(){
+		//$(document).on('click','.mailAddress',function(){
+		$(document).on('click','#buynow',function(){
+		    if(productModular!='0001'){
+		    	dobuy();
+		    	return;
+		    }
+		    
+		    //人脸采集部分
+		    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+            var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			$.get(_uri, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				    
+					share=data;
+					wx.config({
+			            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            appId : share.appId, // 必填，公众号的唯一标识
+			            timestamp : share.timestamp, // 必填，生成签名的时间戳
+			            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+			            signature : share.signature,// 必填，签名，见附录1
+			            jsApiList : ['chooseImage',
+		                        'previewImage',
+		                        'uploadImage',
+		                        'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	       	        });
+                }
+            }); 
+            
+            
+             wx.ready(function () {
+		                wx.checkJsApi({
+		                    jsApiList: [
+		                        'chooseImage',
+		                        'previewImage',
+		                        'uploadImage',
+		                        'downloadImage'
+		                    ],
+		                    success: function (res) {
+		                      
+		                        if (res.checkResult.getLocation == false) {
+		                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+		                            return;
+		                        }else{
+		                            choosePic();
+		                        }
+		                    }
+		                });
+		            });
+		            wx.error(function(res){
+		                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+		                alert("验证失败，请重试！");
+		                wx.closeWindow();
+		            });
+		});
+		
+		function dobuy(){
 		    $.closePopup();
-		    var ids=this.id.split('-');
+		    var ids=$('input[type^=radio]:checked').attr('id').split('-');
 		    var param={};
 			param.productId=${id};
 			param.productNum=$('#proCount').val();
@@ -1161,10 +1221,53 @@ input[type="datetime-local"]:before{
 					
 
 			});
-			
-
-
-		});
+		
+		}
+		
+		
+		function choosePic() {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    getLocalData(localIds[0]);
+                }
+            });
+        }
+		
+        function getLocalData(localid) {
+			//获取本地图片资源
+            wx.getLocalImgData({
+                localId: localid, // 图片的localID
+                success: function (res) {
+                    var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+                    $('#im').attr('src','data:image/png;base64,'+localData);
+                    dobuy();
+                    //开始绑定
+                    /*$.ajax({
+                        url: "${pageContext.request.contextPath}/wechat/bindface",
+                        type: "post",
+                        data: {
+                            img: localData
+                        },
+                        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+                        async: true,
+                        success: function (data) {
+                          
+                        }
+                    })*/
+                }
+            });
+ 
+        }
+		
+		
+		
+		
+		
+		
 		
 		
 		var prepay_id;
@@ -1304,13 +1407,20 @@ input[type="datetime-local"]:before{
 			if(data && data.length>0){
 			    var html=[];
 				for(var i=0; i<data.length; i++){
-				   
+				     var chkattr='';
+				     if(i==0){
+				         chkattr='checked="checked"';
+				     }
 					 html.push('<div class="weui-media-box weui-media-box_text mailAddress" id="mailadd-'+data[i].id+'">');
-			         html.push('<h4 class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）<span style="font-size:12px;color:red" class=" icon-share-alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击支付</span></h4>');
+					 html.push('<input style="float:left;height:27px;width:20px"  type="radio" name="radio1" class="" id="radio-'+data[i].id+'" '+chkattr+'>');
+			         html.push('<h4 style="width:80%;margin-left:35px;" class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）</h4>');
 			         html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
 			         html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('</div>');
 				}
+				
+				
+				
 				$('#addressList').children().remove();
 			    $('#addressList').append(html.join(''));
 			}
@@ -1518,23 +1628,19 @@ input[type="datetime-local"]:before{
 					<div id="addressFitst">
 
 						<div class="weui-cells__title" style="color:red;font-weight:bold">点击地址选择或添加新联系人</div>
+						<a id="addAddress"
+								style="width:96%;font-size:14px;margin-left:2%;background-color:#18b4ed;height:30px;line-height:30px;margin-top:0"
+								href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a>
 						<div class="weui-panel__bd" id="addressList"
 							style="padding-bottom:40px;"></div>
 
-						<!-- 						<a id="addAddress"
-							style="width:96%;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 添加地址</a> <a
-							id="cancelAddress"
-							style="width:96%;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 取消购买</a> -->
-
 						<div style="width:100%;height:40px;">
 							<a id="cancelAddress"
-								style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
-								href="javascript:;" class="weui-btn weui-btn_primary">取消购买</a> <a
-								id="addAddress"
-								style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
-								href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a>
+								style="width:47%;font-size:14px;margin-left:2%;float:left;height:40px;line-height:40px;"
+								href="javascript:;" class="weui-btn weui-btn_warn">取消购买</a> <a
+								id="buynow"
+								style="width:47%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
+								href="javascript:;" class="weui-btn weui-btn_primary">立即购买</a>
 						</div>
 					</div>
 
