@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.javacv;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import org.bytedeco.javacpp.avcodec;
@@ -11,24 +12,14 @@ import pub.caterpillar.weixin.constants.WXContants;
 
 public class GuolaiwanGetter extends Thread {
     private FFmpegFrameGrabber grabber;
-    
-    public FFmpegFrameGrabber getCurrGrabber(){
-    	return grabber;
-    }
-    //共享时间戳使用
-    private FFmpegFrameGrabber baseGrabber;
-    public void setBaseGrabber(FFmpegFrameGrabber baseGrabber) {
-		this.baseGrabber = baseGrabber;
-	}
-
-	private boolean isRun=true;
+    private boolean isRun=true;
     private boolean isUsed=false;
     private GuolaiwanSender sender;
-    private FFmpegFrameRecorder recorder;
+    private Frame currentframe;
+    private long currentTimestamp = -1;
     //垫播pubName使用liveId,机位直播pubName使用subLivePubName
     private String pubName;
 	public GuolaiwanGetter(String pubName,int width,int height, GuolaiwanSender sender) {
-		// TODO Auto-generated constructor stub
 	    this.sender=sender;
 	    this.pubName=pubName;
 		try {
@@ -43,7 +34,6 @@ public class GuolaiwanGetter extends Thread {
 	
 	//垫播用
 	public GuolaiwanGetter(String liveId,String matPlayVideoPath,int width,int height, GuolaiwanSender sender) {
-		// TODO Auto-generated constructor stub
 	    this.sender=sender;
 	    this.pubName=liveId;
 		try {
@@ -59,29 +49,21 @@ public class GuolaiwanGetter extends Thread {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		try {
 			while (isRun) {
-				Frame frame;
-				Frame baseframe = null;
-					frame = grabber.grab();
-					if(baseGrabber != null){
-						baseframe = baseGrabber.grab();
+				//Frame frame;
+				currentframe = grabber.grab();
+				if (currentframe == null) {
+					continue;
+				}
+				if(isUsed){
+					if(currentTimestamp != -1){
+						currentframe.timestamp = currentTimestamp;
+						System.out.println("切换是的时间戳:" + currentTimestamp);
 					}
-					if (frame == null) {
-						continue;
-					}
-					if(isUsed){
-						if(baseframe != null){
-							//baseframe不为null说明在这个机位开始直播之前已经有机位直播
-							//因此需要共享时间戳
-							sender.send(frame,this.pubName,baseframe.timestamp);
-						}else {
-							//为空说明之前没有机位开直播因此当前机位时间戳需要被共享
-							//因此baseGrabber为null,在创建对象时未执行setBaseGrabber()
-							sender.send(frame,this.pubName,frame.timestamp);
-						}
-					}
+					sender.send(currentframe,this.pubName);
+					System.out.println("时间戳:" + currentframe.timestamp);
+				}
 			}
 			grabber.stop();
 			grabber.release();
@@ -91,13 +73,21 @@ public class GuolaiwanGetter extends Thread {
 		}	
 	}
 	
-	public void setUsed(boolean isUsed){
+	public void setUsed(boolean isUsed,Frame frame){
+		if(frame != null){
+			currentTimestamp = frame.timestamp;
+		}
 		this.isUsed=isUsed;
+	}
+	
+	public Frame getCurrentFrame(){
+		return currentframe;
 	}
 	
 	public void destory(){
 		isRun=false;
 		//grabber stop在run方法中
+		currentTimestamp = -1;
 	}
     
 }
