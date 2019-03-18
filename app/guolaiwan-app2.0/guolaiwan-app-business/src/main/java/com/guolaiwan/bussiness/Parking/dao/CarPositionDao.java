@@ -55,6 +55,22 @@ public class CarPositionDao  extends AbstractBaseDao<CarPositionPO>  {
     	return findByHql(hql);
     }
     
+    /**
+     * 根据id   层数  区数   获取id
+     * @param userId 用户id
+     * @param  
+     * @param 
+     * @return
+     * @throws ParseException
+     */
+    public List<CarPositionPO>  getAmend(long uid,String parkingLayer,String district) throws ParseException{
+    	QueryHql hql =   this.newQueryHql();
+    	hql.andBy("attractionsId",Condition.eq,uid );
+    	hql.andBy("number",Condition.eq,parkingLayer);
+    	hql.andBy("district",Condition.eq,district);
+    	return findByHql(hql);
+    }
+    
     
     
     

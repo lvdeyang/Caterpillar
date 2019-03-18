@@ -15,14 +15,15 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 public class ParkingPositionPO extends AbstractBasePO {
 	
 	// 车位信息   大小车位
-
 	private Long positionId;
 	// 车位编号
 	private int positionNumber;
 	// 车位信息 大小车位
-
 	private String positionInformation;
-
+	//车位层
+	private String number;
+	//车位那区
+	private String  district;
 
 	// 使用情况 0无车 1有车
 	private int useCondition;
@@ -85,5 +86,37 @@ public class ParkingPositionPO extends AbstractBasePO {
 	public void setUseCondition(int useCondition) {
 		this.useCondition = useCondition;
 	}
+
+	/**
+	 * 层
+	 * @return
+	 */
+	public String getNumber() {
+		return number;
+	}
+	/**
+	 * 层
+	 * @return
+	 */
+	public void setNumber(String number) {
+		this.number = number;
+	}
+	/**
+	 * 区
+	 * @return
+	 */
+	public String getDistrict() {
+		return district;
+	}
+	/**
+	 * 区
+	 * @return
+	 */
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+	
+	
+	
 
 }

@@ -67,115 +67,90 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 <meta name=”viewport” content=”width=device-width, initial-scale=1″ />
-
-
-
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <title></title>
-    <style type="text/css">
-			* {
-				margin: 0px;
-				padding: 0px;
-				
-			}
-			
-			.header {
-				width: 100%;
-			
-				border-bottom:solid 1px #959595;
-			}
-			.main li{
-				list-style: none;
-				list-style-type:decimal;
-                list-style-position:inside;
-                font-size: 14px;
-                font-weight: bold;
-                
-			}
-			
-			html {
-				height: 100%;
-			}
-			
-		    .btn{
+ <style type="text/css">
+ html,body{
+    background:url(lib/images/beijing.jpg)no-repeat center ;
+        background-size:cover;
+        width:100%;
+        height:100%;
+   } 
+   
+   .header_in{
+    background:url(lib/images/beijing2.png)no-repeat center ;
+        background-size:cover;
+        width:100%;
+        height:100%;
+   }
+   .header_in p{
+   font-size:14px;
+    font-weight: bold;
+   }
+   .btn{
 		    	position:fixed;
-                 top:93%;
+                 top:88%;
                /*  z-index: -1;*/         
 		    }
-			
-		</style>
+ </style>
   </head>
-  <!-- 公共脚本引入 -->
+   <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script>
-  $(function() {
-      var uri = window.BASEPATH + 'vice/details';
-         var para = {};
-		  para.uid = ${param.useid};
-		 $.post(uri, $.toJSON(para), function(data) {
+ <script>
+    $(function() {
+    // 更改车位 颜色
+		 var  _take = window.BASEPATH + 'quit/query';
+		 $.post(_take,null, function(data) {
 			data = parseAjaxResult(data);
-			for(var i = 0; i<data.length; i++){
-				alert(data[i]);
-			 if("已支付"==data[i] ){
-		     window.location.href="vice/merchant/order?uid="+${param.useid};
-		    }
-			 if("正在停车"==data[i] ){
-		     window.location.href="vice/merchant/parkings";
-		    }
-		    
-		    
-			}
-		   
-	     });
-  
-  
-  
-      	var _uri = window.BASEPATH + 'vice/regu';
-      	   var params = {};
-		  params.uid = ${param.useid};
-		 $.post(_uri, $.toJSON(params), function(data) {
-			data = parseAjaxResult(data);
+			var userHeadimg = data.userHeadimg;
+		   var  _take = window.BASEPATH + 'vice/allmessage';
+		  var para = {};
+		  para.Headimg = userHeadimg;
+		 $.post(_take,$.toJSON(para), function(data) {
+		 data = parseAjaxResult(data);  
+			for(var i=0;i<data.length/2;i++){     
 			var htm = [];
-				htm.push('<li>'+data.regulations+'</li>');
-			$('#ol').append(htm.join('')); 
-			var html = [];
-				html.push('<p style="font-size: 16px;font-weight: bold; margin: 50px 0px 20px 15px;">'+data.parkingName+'管理条例</p>');
-			$('.header').append(html.join('')); 
-			  });
+			htm.push('<div class="header" style="height:30%;">');
+			htm.push('<div class="header_in" style="width:100%;height:auto;padding-top:8%;">');
+			htm.push('<img class="img4"style="width: 8%;height:8%;display: inline-block;margin-left:11%; vertical-align: middle;"src=" lib/images/che1.png" />');
+			htm.push('<p style="display: inline-block;margin-left:1px;color:#ffffff;">'+userHeadimg+'</p>');
+			htm.push('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data[i*2]+'&tocoord='+data[i*2+1]+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><img class="img" style="float:right;width: 16%;height:8%;margin-right:10%;"src=" lib/images/daohang1.png"/> </a>');
 			
-			
-		   $(document).on('click','.btn1', function() {
-     window.location.href="vice/merchant/scenic?car=";
-      });  	
-		   $(document).on('click','.btn2', function() {
-     window.location.href="vice/merchant/parking?useid="+${param.useid};
-      });  	
-			
-      });
-  
-</script>
-  <body>
-		<script type="text/javascript">
-		</script>
-		
-		<div class="header">
-		</div>
+			htm.push('<p style="margin:10% 0 0 20%;color:#ffffff;">'+data[i*2]+'</p>');
+			htm.push('<img class="img4"style="width: 6%;height:6%;display: inline-block;margin-left:12%; vertical-align: middle;"src=" lib/images/dizhi.png" />');
+			htm.push('<p style="padding:0 0 10% 2%;font-size:12px;color:#ffffff;display: inline-block;">地址：<span>遵化市石门镇六盘营村西</span></p>')
+			htm.push('</div> ');
+			htm.push('<div class="header_on" style="border-bottom: solid 2px #6D82EB;width:100%;"></div>');
+			htm.push('</div>');	
+			$("body").append(htm.join(''));   
+			}	
+		});
+    }); 
 
-		
-		<div class="main">
-		<ol id ="ol"; style="margin: 20px 15px;">
-			
-		</ol>
-		 <div id="kong"style="height:40px;width: 100%;">
-	    	
-	    </div>
-		</div>	
-	    <div class="btn" style="text-align: center;width: 100%;">
-    <button class="btn1" style="background-color: white;width: 45%;height: 40px;border-radius: 25px;color: #F5820B;border-color: #F5820A;outline:none;font-size: 18px;">拒绝</button>
-     <button class="btn2" style="background-color: #F5820B;width: 45%;height: 40px;border-radius: 25px;color:white;border:none;outline:none;font-size: 18px;">同意</button>
-	    </div>
+	
+    });  
+ </script>
+  <body>
+  
+   
+   
+  <!--  
+    <div class="main">
+   <div class="header_in" style="width:100%;height:auto;padding-top:8%;">
+   <img class="img4"style="width: 8%;height:8%;display: inline-block;margin-left:11%; vertical-align: middle;"src=" lib/images/che.png" />
+  
+   <p style="display: inline-block;margin-left:1px;">冀 B5555</p>
+   <img class="img" style="float:right;width: 16%;height:8%;margin-right:10%;"src=" lib/images/hang.png" />
+   <p style="margin-left:20%;">清东陵停车场</p>
+   <p style="font-size:12px;color:#B6B6B6;margin-left:20%;">地址：<span>遵化市石门镇六盘营村西</span></p>
+   </div>  
+   <div class="header_on" style="border-bottom: solid 10px #DCDCDC;width:100%;margin:10px auto 0;"></div>   
+   </div>
+     -->
+   
+  
   </body>
 </html>

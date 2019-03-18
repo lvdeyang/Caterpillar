@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 
 import javax.persistence.Table;
 
+import org.bytedeco.javacpp.RealSense.intrinsics;
+
 import pub.caterpillar.orm.po.AbstractBasePO;
 /**
  * 
@@ -21,27 +23,106 @@ public class OrderPO extends AbstractBasePO {
 	private String parkingLayer;
 	//停车场 名称
 	private String parkingName;
-	//停车场营业时间
+	//订单 二维码编号
 	private String Time;
 	// 停车 区
 	private String  parkingDistrict;
 	//车位编号
-	private String parkingNumber;
+	private int parkingNumber;
 	//停车费用
-	private int  parkingCost;
+	private Double  parkingCost;
+	//停车总时间
+	private Double  stoppingTime;
 	//预订时间
 	private String bookingTime;
 	//到期时间
 	private String dueTime;
-	//订单状态         // 未支付  已支付   已过期
+	//订单状态         // 未支付  已支付   已过期  申请退款 正在退款 退款完成
 	private String orderStatus;
+	//退款理由         
+	private String refund;
+	//车牌号
+	private String platenumber;
+	//超时金额
+	private double overTimeMoney;
+
 	//是否超时
 	private int overTime;
 
-	
-	
-	
-	
+
+	/**
+	 * 超时金额
+	 * @return
+	 */
+	public double getOverTimeMoney() {
+		return overTimeMoney;
+	}
+
+	/**
+	 * 超时金额
+	 * @return
+	 */
+	public void setOverTimeMoney(double overTimeMoney) {
+		this.overTimeMoney = overTimeMoney;
+	}
+
+	/**
+	 * 车牌号
+	 * @return
+	 */
+	public String getPlatenumber() {
+		return platenumber;
+	}
+
+	/**
+	 * 车牌号
+	 * @return
+	 */
+	public void setPlatenumber(String platenumber) {
+		this.platenumber = platenumber;
+	}
+
+
+	/**
+	 * 退款理由
+	 * @return
+	 */
+	public String getRefund() {
+		return refund;
+	}
+
+
+	/**
+	 * 退款理由
+	 * @return
+	 */
+	public void setRefund(String refund) {
+		this.refund = refund;
+	}
+
+
+
+
+
+
+	/**
+	 * 停车时间
+	 * @return
+	 */
+	public Double getStoppingTime() {
+		return stoppingTime;
+	}	
+
+
+
+	/**
+	 * 停车时间
+	 * @return
+	 */
+	public void setStoppingTime(Double stoppingTime) {
+		this.stoppingTime = stoppingTime;
+	}
+
 	/**
 	 * 景区id
 	 * @return
@@ -121,28 +202,33 @@ public class OrderPO extends AbstractBasePO {
 	/**
 	 * 车位编号
 	 */
-	public String getParkingNumber() {
+	public int getParkingNumber() {
 		return parkingNumber;
 	}
 
 	/**
 	 * 车位编号
 	 */
-	public void setParkingNumber(String parkingNumber) {
+	public void setParkingNumber(int parkingNumber) {
 		this.parkingNumber = parkingNumber;
 	}
 
 	/**
 	 * 停车费用
 	 */
-	public int getParkingCost() {
+	public Double getParkingCost() {
 		return parkingCost;
 	}
-
 	/**
 	 * 停车费用
 	 */
-	public void setParkingCost(int parkingCost) {
+	public void setParkingCost(Double parkingCost) {
+		this.parkingCost = parkingCost;
+	}
+
+
+
+	public void setParkingCost(double parkingCost) {
 		this.parkingCost = parkingCost;
 	}
 

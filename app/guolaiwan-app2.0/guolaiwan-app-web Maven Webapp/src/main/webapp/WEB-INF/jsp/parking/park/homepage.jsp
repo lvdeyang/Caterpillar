@@ -174,6 +174,15 @@ html {
 <script type="text/javascript">
 
 	$(function() {
+	var _uri = window.BASEPATH + 'quit/query';
+	var sal = ${param.sal}
+		$.post(_uri, null, function(data) {
+			data = parseAjaxResult(data);
+          if(data.userHeadimg != null &&  sal != 1){
+          window.location.href="quit/merchant/smartparking";
+          }
+		});
+	
 		var _uriYd = window.BASEPATH + '/smart/usere';
 		$.post(_uriYd, null, function(data) {
 			data = parseAjaxResult(data);
@@ -199,8 +208,16 @@ html {
 				return false;
 			} else {
 				$.post(_uriYd, $.toJSON(params), function(data) {
+				  var _uriY = window.BASEPATH + 'smart/setVeh';
+			      var param = {};
+					param.parking = $(".input1").val();
+			      $.post(_uriY, $.toJSON(param), function(data) {
+			      	data = parseAjaxResult(data);
+			    
+ 			      window.location.href="quit/merchant/smartparking?car="+data.carid;
+ 			});
 				});
-				window.location.href="quit/merchant/smartparking";
+				
 			}
 
 		});
@@ -235,8 +252,8 @@ html {
 			<div class="main2" style="border-bottom:1px solid #CCCCCC">
 				<img class="img3"
 					style="float: left;width: 30px;height: 30px;margin: 0 auto;"
-					src="lib/images/che.png" /> 
-					<select class="s"style="height:30px;line-height: 30px;width: 202px;border: 0;outline: none;font-weight: bold;font-size:16px;>
+					src="lib/images/che.png" /> <select class="s"
+					style="height:30px;line-height: 30px;width: 202px;border: 0;outline: none;font-weight: bold;font-size:16px;>
 					<option style="width:200px ">请选择</option>
 					<option style="width:200px ">小型车</option>
 					<option style="width:200px ">中型车</option>

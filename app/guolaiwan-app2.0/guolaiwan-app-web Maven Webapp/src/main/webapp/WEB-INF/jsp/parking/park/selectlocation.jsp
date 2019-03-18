@@ -176,6 +176,7 @@ html, body {
         var stall = null;
  	    var qu =null;	
         var char = null;
+        var id = null;
  		var _uri = window.BASEPATH + 'vice/Information';
  		var params = {};
 		params.uid = ${param.useid};
@@ -209,6 +210,7 @@ html, body {
 		 parm.qu = qu;
 		 $.post(_utli,$.toJSON(parm), function(data) {
 			data = parseAjaxResult(data);
+			id = data.id;
 		   	var htm = []; 
 	       	htm.push(''+data.long+'');
 		   $('.banner').append(htm.join(''));  
@@ -217,7 +219,7 @@ html, body {
 		// 更改车位 颜色
 		 var  _take = window.BASEPATH + 'vice/truck';
 		 var  parame= {};
-		 parame.uid = ${param.useid};
+		 parame.uid = id;
 		 $.post(_take,$.toJSON(parame), function(data) {
 			data = parseAjaxResult(data);
 		  for (var i = 0; i < data.length; i++) {
@@ -285,7 +287,7 @@ html, body {
      
     var lu =null;
 	var carid = null;
-    $(document).on('change', '.lou,#qu1', function() {
+    $(document).on('change', '.lou', function() {
     lu = null;
     $(".banner").empty();
 	// 根据  层数 查询车位图
@@ -293,13 +295,46 @@ html, body {
 		 var parm = {};
 		 parm.uid = ${param.useid};
 		 parm.ceng =  $(".lou").val();
-		 parm.qu =  $(".qu").val();
+		 parm.qu =  "A区";
 		 $.post(_utli,$.toJSON(parm), function(data) {
 			data = parseAjaxResult(data);
 			carid = data.id;
 		   	var htm = []; 
 	       	htm.push(''+data.long+'');
 		   $('.banner').append(htm.join(''));  
+		   test();
+	    
+		});
+     }); 
+     
+    var lu =null;
+	var carid = null;
+    $(document).on('change', '#qu1', function() {
+    lu = null;
+    $(".banner").empty();
+	// 根据  层数 查询车位图
+	var _utli = window.BASEPATH + 'vice/Informap';
+		 var parm = {};
+		 parm.uid = ${param.useid};
+		 parm.ceng =  $(".lou").val();
+		 parm.qu =   $("#qu1").val();
+		 $.post(_utli,$.toJSON(parm), function(data) {
+			data = parseAjaxResult(data);
+			carid = data.id;
+		   	var htm = []; 
+	       	htm.push(''+data.long+'');
+		   $('.banner').append(htm.join(''));  
+		   test();
+	    
+		});
+		
+     }); 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	  function test(){
+ 	  	   
 		// 更改车位 颜色
 		 var  _take = window.BASEPATH + 'vice/truck';
 		 var  parame= {};
@@ -315,8 +350,8 @@ html, body {
 			} 	
 		   } 
 		}); 
-		});
-		 // 更改车位  点击 颜色
+ 	  
+     // 更改车位  点击 颜色
 		    $(document).on('click', '.car', function() {
 		      $("#"+lu+"").css({
 			  "background-color":"#06B02B",
@@ -327,11 +362,22 @@ html, body {
 			  "background-color":"#18b4ed",
 			  });
 		  }); 
-     }); 
+ }
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
  	 
  	 $(document).on('click', '.but', function() {
  	if(stall != null){
- 	 var _ur = window.BASEPATH + 'vice/save';
+ 	    var _ur = window.BASEPATH + 'vice/save';
  		var param = {};
 		param.uid = ${param.useid};
 		param.ceng = $(".lou").val();
@@ -340,9 +386,7 @@ html, body {
 		param.time = $("#time").val();
 		param.stall = stall;
 		 $.post(_ur, $.toJSON(param), function(data) {
-	          data = parseAjaxResult(data);
-		      window.location.href="vice/merchant/payment?id="+data.uid;
-		
+		      window.location.href="vice/merchant/payment?uid="+${param.useid};
 		 });
 	} else{
 	alert("请选择车位!");
