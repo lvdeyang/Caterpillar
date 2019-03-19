@@ -2287,6 +2287,12 @@ public class PhoneController extends WebBaseControll {
 		// 预订日期
 		// order.setOrderBookDate(date);
 
+		String photo=request.getParameter("photo");
+		String idNum=request.getParameter("idNum");
+		order.setPhoto(photo);
+		order.setIdNum(idNum);
+		
+		
 		// 订单来源
 		order.setOrderType(OrderType.MERCHANT);
 		if (pageObject.getString("source") != null) {
@@ -2515,6 +2521,12 @@ public class PhoneController extends WebBaseControll {
 		// // 预订日期
 		// order.setOrderBookDate(date);
 
+		
+		String photo=request.getParameter("photo");
+		String idNum=request.getParameter("idNum");
+		order.setPhoto(photo);
+		order.setIdNum(idNum);
+		
 		if (pageObject.getString("source") != null) {
 			order.setSource(OrderSource.fromString(pageObject.getString("source")));
 		} else {

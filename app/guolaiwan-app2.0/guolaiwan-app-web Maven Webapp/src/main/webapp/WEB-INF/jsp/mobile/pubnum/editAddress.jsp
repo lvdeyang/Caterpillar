@@ -575,7 +575,7 @@ html, body {
 			      <input id="name" class="weui-input" type="text" placeholder="">
 			    </div>
 			  </div>
-			  <div class="weui-cell">
+			  <div class="weui-cell" style="display:none;">
 			    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
 			    <div class="weui-cell__bd" style="border:1px solid #CCC">
 			      <input id="idNum" class="weui-input" type="text" placeholder="">
