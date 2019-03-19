@@ -15,8 +15,6 @@ public class GuolaiwanGetter extends Thread {
     private boolean isRun=true;
     private boolean isUsed=false;
     private GuolaiwanSender sender;
-    private Frame currentframe;
-    private long currentTimestamp = -1;
     //垫播pubName使用liveId,机位直播pubName使用subLivePubName
     private String pubName;
 	public GuolaiwanGetter(String pubName,int width,int height, GuolaiwanSender sender) {
@@ -51,18 +49,12 @@ public class GuolaiwanGetter extends Thread {
 	public void run() {
 		try {
 			while (isRun) {
-				//Frame frame;
-				currentframe = grabber.grab();
+				Frame currentframe = grabber.grab();
 				if (currentframe == null) {
 					continue;
 				}
 				if(isUsed){
-					if(currentTimestamp != -1){
-						currentframe.timestamp = currentTimestamp;
-						System.out.println("切换是的时间戳:" + currentTimestamp);
-					}
 					sender.send(currentframe,this.pubName);
-					System.out.println("时间戳:" + currentframe.timestamp);
 				}
 			}
 			grabber.stop();
@@ -73,21 +65,13 @@ public class GuolaiwanGetter extends Thread {
 		}	
 	}
 	
-	public void setUsed(boolean isUsed,Frame frame){
-		if(frame != null){
-			currentTimestamp = frame.timestamp;
-		}
+	public void setUsed(boolean isUsed){
 		this.isUsed=isUsed;
-	}
-	
-	public Frame getCurrentFrame(){
-		return currentframe;
 	}
 	
 	public void destory(){
 		isRun=false;
 		//grabber stop在run方法中
-		currentTimestamp = -1;
 	}
     
 }

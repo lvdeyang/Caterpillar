@@ -57,15 +57,13 @@ public class GuolaiwanLiveService {
     }
     
     public void switchLive(String oldSubLivePubName, String newSubLivePubName){
-    	Frame frame = null;
     	//这里可能有先后问题，但是看测试效果，不把精力浪费在几乎不存在的事情上
     	if(getters.get(oldSubLivePubName) != null){
     		GuolaiwanGetter oldGetter = getters.get(oldSubLivePubName);
-    		frame = oldGetter.getCurrentFrame();
-    		oldGetter.setUsed(false,null);
+    		oldGetter.setUsed(false);
     	}
     	GuolaiwanGetter newGetter = getters.get(newSubLivePubName);
-    	newGetter.setUsed(true,frame);
+    	newGetter.setUsed(true);
     }
 	
 }
