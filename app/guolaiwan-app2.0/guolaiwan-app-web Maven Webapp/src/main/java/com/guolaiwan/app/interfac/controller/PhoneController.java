@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -2287,10 +2288,14 @@ public class PhoneController extends WebBaseControll {
 		// 预订日期
 		// order.setOrderBookDate(date);
 
-		String photo=request.getParameter("photo");
-		String idNum=request.getParameter("idNum");
-		order.setPhoto(photo);
-		order.setIdNum(idNum);
+		String photo=pageObject.getString("photo");
+		String idNum=pageObject.getString("idNum");
+		if(photo!=null){
+			order.setPhoto(URLDecoder.decode(photo));
+		}
+		if(idNum!=null){
+			order.setIdNum(idNum);
+		}
 		
 		
 		// 订单来源
@@ -2522,10 +2527,15 @@ public class PhoneController extends WebBaseControll {
 		// order.setOrderBookDate(date);
 
 		
-		String photo=request.getParameter("photo");
-		String idNum=request.getParameter("idNum");
-		order.setPhoto(photo);
-		order.setIdNum(idNum);
+		String photo=pageObject.getString("photo");
+		String idNum=pageObject.getString("idNum");
+		if(photo!=null){
+			order.setPhoto(URLDecoder.decode(photo));
+		}
+		if(idNum!=null){
+			order.setIdNum(idNum);
+		}
+		
 		
 		if (pageObject.getString("source") != null) {
 			order.setSource(OrderSource.fromString(pageObject.getString("source")));

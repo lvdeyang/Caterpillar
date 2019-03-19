@@ -2,6 +2,7 @@ package com.guolaiwan.bussiness.admin.po;
 
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -600,7 +601,7 @@ public class OrderInfoPO extends AbstractBasePO {
 		this.roomStatusId = roomStatusId;
 	}
 	@Lob
-    @Column(columnDefinition="text")
+	@Column(length = 16777216)
 	public String getPhoto() {
 		return photo;
 	}

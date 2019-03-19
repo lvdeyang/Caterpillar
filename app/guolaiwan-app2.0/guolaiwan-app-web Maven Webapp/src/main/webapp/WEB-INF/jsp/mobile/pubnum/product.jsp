@@ -1062,7 +1062,7 @@ input[type="datetime-local"]:before{
 			param.roomName=$('#selRoom').val();
 			param.logisticsId=$('#logisticsList').val();
 			param.comboId=$('#comboList').val().split('-')[0];
-			param.photo=photo;
+			param.photo=encodeURIComponent(photo);
 			param.idNum=$('#orderIdNum').val();
 			
 				var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${id}+'&count='+$('#proCount').val();
@@ -1237,7 +1237,7 @@ input[type="datetime-local"]:before{
 			param.roomName=$('#selRoom').val();
 			param.logisticsId=$('#logisticsList').val();
 		    param.comboId=$('#comboList').val().split('-')[0];
-		    param.photo=photo;
+		    param.photo=encodeURIComponent(photo);
 		    param.idNum=$('#orderIdNum').val();
 			var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${id}+'&count='+$('#proCount').val();
 			$.get(chkStockUrl, null, function(data){
@@ -1737,7 +1737,7 @@ input[type="datetime-local"]:before{
 								</div>
 							</div>
 						  <div class="weui-cells__title">上传照片</div>
-                          <image id="uploadImage" src="<%=basePath%>/lib/fishimages/example.jpg" style="padding:15px;width:100%;height:200px;"></image>
+                          <image id="uploadImage" src="<%=basePath%>/lib/fishimages/example.jpg" style="padding:15px;width:100%;height:250px;"></image>
                           <a id="confirmPhoto"
 							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
 							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
