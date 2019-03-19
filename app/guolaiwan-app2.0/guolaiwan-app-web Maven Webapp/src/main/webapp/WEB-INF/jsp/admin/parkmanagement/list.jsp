@@ -53,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<table class="layui-table" id="parkList" lay-filter="parkListFilter"></table>
 
 <script id="parkingNameTpl" type="text/html">      
-	<a href="parklist?parking={{ d.uuid }}">{{ d.parkingName }}</a>
+	<a style="color:blue" title="添加车位" href="parklist?parking={{ d.uuid }}">{{ d.parkingName }}</a>
 </script>
 <script type="text/html" id="parkingImgTpl">
 	<a href="javascript:show_pic('caImg{{d.id}}')"><img id="caImg{{d.id}}" src="<%=basePath%>{{ d.parkingImg}}" alt="" style="width:35px;height:35px;"></a>
