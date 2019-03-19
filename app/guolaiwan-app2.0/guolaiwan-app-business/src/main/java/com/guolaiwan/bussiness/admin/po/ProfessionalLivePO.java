@@ -22,7 +22,7 @@ public class ProfessionalLivePO extends AbstractBasePO{
 	private String liveName;
 	//主播机位 1-6 为机位 7为垫播 0为未设置机位
 	private int broadcastCamera = 0;
-	private String liveStatusType;
+	private String liveStatusType = "STOP";
 	private String liveType = "PROFESSIONAL_LIVE";
 	
 	

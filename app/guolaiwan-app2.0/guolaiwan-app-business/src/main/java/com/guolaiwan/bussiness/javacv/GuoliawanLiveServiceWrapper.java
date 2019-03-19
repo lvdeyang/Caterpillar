@@ -27,8 +27,6 @@ public class GuoliawanLiveServiceWrapper {
 	private int height = 360;
 	private Map<String, GuolaiwanLiveService> serviceMap = new HashMap<String, GuolaiwanLiveService>();
 	private Map<String, GuolaiwanRecordService> recordMap = new HashMap<String, GuolaiwanRecordService>();
-	//修改代码得问老黄
-	GuolaiwanLiveService mGuolaiwanLiveService;
 	
 	private static GuoliawanLiveServiceWrapper instance;
     private GuoliawanLiveServiceWrapper() {}
@@ -40,33 +38,24 @@ public class GuoliawanLiveServiceWrapper {
     }
 	
 	public void startLive(String pubName,String subLivePubName) {
-		//替换以上代码
-		if(mGuolaiwanLiveService == null){
-			mGuolaiwanLiveService = new GuolaiwanLiveService();
-			mGuolaiwanLiveService.init(pubName, width, height);
-		}
-		mGuolaiwanLiveService.switchLive(null, subLivePubName);
+		serviceMap.get(pubName).switchLive(null, subLivePubName);
 	}
 	
 	public void startSubLive(String pubName, String subLivePubName) {
-		if(mGuolaiwanLiveService == null){
-			mGuolaiwanLiveService = new GuolaiwanLiveService();
-			mGuolaiwanLiveService.init(pubName, width, height);
+		if(serviceMap.get(pubName) == null){
+			GuolaiwanLiveService guolaiwanLiveService = new GuolaiwanLiveService();
+			guolaiwanLiveService.init(pubName, width, height);
+			serviceMap.put(pubName, guolaiwanLiveService);
 		}
-        if(serviceMap.get(pubName) == null){
-        	serviceMap.put(pubName, mGuolaiwanLiveService);
-        }
 		serviceMap.get(pubName).addGetter(subLivePubName);
 	}
 	
 	public void startMatPlay(String pubName, String liveId,String matPlayVideoPath){
-		if(mGuolaiwanLiveService == null){
-			mGuolaiwanLiveService = new GuolaiwanLiveService();
-			mGuolaiwanLiveService.init(pubName, width, height);
+		if(serviceMap.get(pubName) == null){
+			GuolaiwanLiveService guolaiwanLiveService = new GuolaiwanLiveService();
+			guolaiwanLiveService.init(pubName, width, height);
+			serviceMap.put(pubName, guolaiwanLiveService);
 		}
-        if(serviceMap.get(pubName) == null){
-        	serviceMap.put(pubName, mGuolaiwanLiveService);
-        }
 		serviceMap.get(pubName).addMatPlayGetter(liveId, matPlayVideoPath);
 	}
 	
