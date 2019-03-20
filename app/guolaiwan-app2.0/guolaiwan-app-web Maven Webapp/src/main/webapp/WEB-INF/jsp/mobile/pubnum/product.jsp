@@ -588,6 +588,7 @@ input[type="datetime-local"]:before{
       var qq="";
       var productModular=0;
       var photo='';
+      var ifFace=0;
 		//获取所有一级推荐
       var _uriRecomment = window.BASEPATH + 'phoneApp/productInfo?productId=${id}&userId=${userId}';
 		
@@ -644,6 +645,7 @@ input[type="datetime-local"]:before{
 			    generateComment(data.comments , data.userimgs , data.useridlist)
 			    iscollect=data.product.ifcollection;
 			    qq=data.product.ifcollection;
+			    ifFace=data.product.ifFace;
 			    if(iscollect==1){
 			    
 			       $('#fav').html('取消收藏');
@@ -698,7 +700,7 @@ input[type="datetime-local"]:before{
 			    }
 			    if(sDate < new Date)
 			    {
-			    	$.toast("请输入正确的入住时间", "forbidden");
+			    	$.toast("入住时间不能小于当前时间", "forbidden");
 				     return false;
 			    }
 			  
@@ -1009,12 +1011,12 @@ input[type="datetime-local"]:before{
 			    }
 			    if(sDate < new Date)
 			    {
-			    	$.toast("请输入正确的入住时间", "forbidden");
+			    	$.toast("入住时间不能早于当前时间", "forbidden");
 				     return false;
 			    }
 			    if(bDate < new Date)
 			    {
-			    	$.toast("请输入正确的预定时间", "forbidden");
+			    	$.toast("预定时间不能早于当前时间", "forbidden");
 				     return false;
 			    }
 			  if(bookdiv!="none")  
@@ -1035,7 +1037,7 @@ input[type="datetime-local"]:before{
 			  }
 		
 		
-		      if(productModular!='0001'){
+		      if(ifFace==0||productModular!='0001'){
 		         joinBasket();
 		      }else{
 		         $('#selAddress').popup(); 
@@ -1200,7 +1202,7 @@ input[type="datetime-local"]:before{
 		
 		//$(document).on('click','.mailAddress',function(){
 		$(document).on('click','#buynow',function(){
-		    if(productModular!='0001'){
+		    if(ifFace==0||productModular!='0001'){
 		    	dobuy();
 		    	return;
 		    }else{
@@ -1727,15 +1729,11 @@ input[type="datetime-local"]:before{
 
 					</div>
                     <div class="modDiv" id="cameraDiv" style="display:none;">
+                          <div class="weui-cells__title">身份证</div>
                           <div class="weui-cell">
-								<div class="weui-cell__hd">
-									<label class="weui-label">身份证</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input style="border:1px solid #CCC" id="orderIdNum" class="weui-input" type="text"
+								<input style="border:1px solid black;" id="orderIdNum" class="weui-input" type="text"
 										placeholder="">
-								</div>
-							</div>
+						  </div>
 						  <div class="weui-cells__title">上传照片</div>
                           <image id="uploadImage" src="<%=basePath%>/lib/fishimages/example.jpg" style="padding:15px;width:100%;height:250px;"></image>
                           <a id="confirmPhoto"
