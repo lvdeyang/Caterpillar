@@ -559,6 +559,11 @@ input[type="datetime-local"]:before{
 
 	$(function() {
 	
+	  $("#bookDate").datetimePicker();
+	  $("#startDate").datetimePicker();
+	  $("#endDate").datetimePicker();
+	
+	
 	  $(document).on('focus','.mydate',function(){
 	      $(this).removeAttr('placeholder');
 	  });
@@ -1101,12 +1106,12 @@ input[type="datetime-local"]:before{
 		    }
 		    if(sDate < new Date)
 		    {
-		    	$.toast("请输入正确的入住时间", "forbidden");
+		    	$.toast("入住时间不能早于当前时间", "forbidden");
 			     return false;
 		    }
 		    if(bDate < new Date)
 		    {
-		    	$.toast("请输入正确的预定时间", "forbidden");
+		    	$.toast("预定时间不能早于当前时间", "forbidden");
 			     return false;
 		    }
 			  if(bookdiv!="none")  
@@ -1537,7 +1542,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">预定日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			       <input id="bookDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
+			       <input id="bookDate" class="weui-input mydate" type="text" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
@@ -1547,7 +1552,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">入住日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="startDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
+			    	<input id="startDate" class="weui-input mydate" type="text" placeholder="请选择"> 
 			      
 			    </div>
 			    <div class="weui-cell__bd"></div>
@@ -1558,7 +1563,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">离店日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="endDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
+			    	<input id="endDate" class="weui-input mydate" type="text" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
