@@ -132,8 +132,30 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 	
 	private String logisticsName;
 	
+	private String photo;
+	private String idNum;
+	
+
 	
 	
+	
+	public String getPhoto() {
+		return photo;
+	}
+
+	public OrderInfoVO setPhoto(String photo) {
+		this.photo = photo;
+		return this;
+	}
+
+	public String getIdNum() {
+		return idNum;
+	}
+
+	public OrderInfoVO setIdNum(String idNum) {
+		this.idNum = idNum;
+		return this;
+	}
 
 	public String getComboName() {
 		return comboName;
@@ -681,6 +703,8 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 		.setLogisticsContent(entity.getLogisticsContent())
 		.setLogisticsId(entity.getLogisticsId())
 		.setComboId(entity.getComboId())
+		.setPhoto(entity.getPhoto())
+		.setIdNum(entity.getIdNum())
 		.setSettleDate(SettleDate);
 		return this;
 

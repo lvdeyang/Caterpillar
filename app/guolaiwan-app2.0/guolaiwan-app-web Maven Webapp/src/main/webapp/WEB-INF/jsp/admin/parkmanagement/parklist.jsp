@@ -131,6 +131,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					{field: 'id', title: 'ID', width: 80, sort: true}
 					,{field: 'positionNumber', title: '车位编号', width: 120, sort: true}
 					,{field: 'positionInformation', title: '车位信息'}
+					,{field: 'district', title: '车位区域'}
+					,{field: 'number', title: '车位层数'}
 					,{field: 'useCondition', title: '使用情况',templet:'#isUsedTpl',sort: true}
 					,{field: 'parkingName', title: '所属停车场',templet:'#parkingNameTpl'}
 					,{field: 'address', title: '所属停车场地址',templet:'#addressTpl'}

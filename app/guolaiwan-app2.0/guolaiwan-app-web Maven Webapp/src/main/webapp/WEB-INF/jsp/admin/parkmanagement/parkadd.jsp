@@ -39,6 +39,18 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 车位区域 </label>
+				<div class="layui-input-block">
+					<input type="text" name="district" id="district" required placeholder="请输入车位所在区域" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 车位层数 </label>
+				<div class="layui-input-block">
+					<input type="text" name="number" id="number" required placeholder="请输入车位所在层数" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 使用情况 </label>
 				<div class="layui-input-block">
 					<select name="useCondition" id="useCondition" required>
@@ -84,14 +96,18 @@
 		}
 		// 验证商户登录名称是否重复
 		$("#positionNumber").blur(function() {
-			var url = "verifypositionnumber.do";
-			var param = {"positionNumber":$(this).val(),"positionId":$("#positionid").val()};
-			$.post(url,param,function(result) {
-			 	if (result=="has") {
-			 		layer.msg("车位编号已存在，请更换！", {icon: 5,time:1000});
-			 		$("#positionNumber").val("");
-			 	}
-			});
+			var val = $(this).val()
+			if(val){
+				var url = "verifypositionnumber.do";
+				var param = {"positionNumber":val,"positionId":$("#positionid").val()};
+				$.post(url,param,function(result) {
+				 	if (result=="has") {
+				 		layer.msg("车位编号已存在，请更换！", {icon: 5,time:1000});
+				 		$("#positionNumber").val("");
+				 		$("#positionNumber").focus();
+				 	}
+				});
+			}
 		});
         // 添加   
         function add(data,message) {

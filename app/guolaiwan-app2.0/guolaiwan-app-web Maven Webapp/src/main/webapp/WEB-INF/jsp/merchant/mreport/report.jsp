@@ -43,8 +43,11 @@ String weburl=WXContants.Website;
 	.origin{
 		width:19%;height:25%;position:absolute;left:2%;top:39%;z-index:150;
 	}
-	.park{
+	.parkContainer{
 		width:20%;height:25%;position:absolute;left:2%;top:72%;z-index:150;
+	}
+	.park{
+		width:100%;height:100%;
 	}
 	.top_title{
 		box-sizing: border-box; width: 100%; height: 40px; padding-left: 16px; position:absolute; left: 0; top: 25px;
@@ -524,6 +527,15 @@ div.warp_con:not(.active)>span{
 			</iframe>
 		</li>
 	</div>
+	<div style="z-index:190;width:300px;height:100px;">
+		 <div id="m-weather" class="m-weather f14 fr">
+              <a id="weaher-info" href="https://tianqi.qq.com/" target="_blank">
+                <div id="ipWeather" class="w-city fl"></div>
+                <div id="weatherIcon" class="w-icon fl"></div>
+                <div id="weatherTemperature" class="w-du fl"></div>
+              </a>
+		</div>
+	</div>
 	
 	<!-- l -->
 	<div id="distribute" class="distribute" ></div>
@@ -540,7 +552,10 @@ div.warp_con:not(.active)>span{
 		</div>
 	</div>
       
-	<div id="park" class="park" ></div>
+	<div class="parkContainer">
+		<span id="park_sp"></span>
+		<div id="park" class="park"></div>
+	</div>
 	
 	<!-- c -->
 	<div  class="num" >
@@ -643,6 +658,7 @@ div.warp_con:not(.active)>span{
 <script type="text/javascript" src="<%= request.getContextPath() %>/layui/lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/lib/require.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/lib/echart/dist/echarts.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/lib/echart/dist/echarts-all.js"></script>
 
 <!-- 时间 -->
 <script type="text/javascript">
@@ -661,6 +677,11 @@ div.warp_con:not(.active)>span{
 	var nameOrderArr = new Array();
 	var dataArr = new Array();
 	
+	var parkArr = new Array();
+	var parkNameArr = new Array();
+	
+	var mapArr = new Array();
+	
 	$(function(){
 	
 		// 获取时间
@@ -673,16 +694,16 @@ div.warp_con:not(.active)>span{
 		getDistribute();
 		// 获取客源地统计
 		getOrigin();
-		// TODO 获取停车信息
-		// getParking();
+		// 获取停车信息
+		getParking();
 		
 		// 获取用户数量等
 		getUserInfo();
 		// 获取人物画像-age
 		getAge();
 		getGender();
-		// TODO 获取地图
-		// getMap();
+		// 获取地图
+		getMap();
 		// 获取游客趋势
 		getPeople();
 		
@@ -868,6 +889,29 @@ div.warp_con:not(.active)>span{
 		});
 	}
 // 获取客源地统计------END
+// 获取停车场
+	function getParking(){
+		$.ajax({
+			url: "getpark"+"?id=1",
+			type: "get",
+			async: false,// 是否异步执行
+			cache: false,
+			beforeSend: function(xmlHttp) {
+				xmlHttp.setRequestHeader("If-Modified-Since", "0");
+				xmlHttp.setRequestHeader("Cache-Control", "no-cache");
+			},
+			success: function(result) {
+				if(result){
+					parkArr = result.list;
+					parkNameArr.push("总停车位：" + result.total);
+					for(var i=0;i<parkArr.length; i++){
+						parkNameArr.push(parkArr[i].name);
+					}
+				}
+			}
+		});
+	}
+// 获取停车场统计------END
 // 获取人物画像统计
 	function getAge(){
 		$.ajax({
@@ -940,10 +984,8 @@ div.warp_con:not(.active)>span{
 			}
 		});
 	}
-// 获取游客趋势-------END
-
-		
-// TODO 获取交易量
+// 获取游客趋势-------END	
+// 获取交易量
 	function getDealInfo(){
 		$.ajax({
 			url: "getdealinfo"+"?id=2",
@@ -1001,7 +1043,25 @@ div.warp_con:not(.active)>span{
 		});
 	}
 // 获取OrderInfoEchart 交易e-----------END
-
+// 获取map
+	function getMap(){
+		$.ajax({
+			url: "getmap"+"?id=2",
+			type: "get",
+			async: false,// 是否异步执行
+			cache: false,
+			beforeSend: function(xmlHttp) {
+				xmlHttp.setRequestHeader("If-Modified-Since", "0");
+				xmlHttp.setRequestHeader("Cache-Control", "no-cache");
+			},
+			success: function(result) {
+				if(result){
+					mapArr = result.mapData;
+				}
+			}
+		});
+	}
+// 获取map------------END
 </script>
 
 
@@ -1113,7 +1173,7 @@ div.warp_con:not(.active)>span{
 		         orient : 'vertical',
 		         x: '70%',
 		         y: '25%',
-		         data:['新能源电动车','小型车','中型车','大型车'], 
+		         data: parkNameArr, 
 		         textStyle:{
                     color: '#FFF'//字体颜色
                  }
@@ -1124,10 +1184,10 @@ div.warp_con:not(.active)>span{
 		     calculable : false,
 		     series : [
 		         {
-		             name:'访问来源',
+		             name:'停车信息',
 		             type:'pie',
 		             radius : ['40%', '60%'],
-		             center : ['35%', "55%"],
+		             center : ['35%', "50%"],
 		             itemStyle : {
 		                  normal : {
 		                     label : {
@@ -1148,12 +1208,7 @@ div.warp_con:not(.active)>span{
 		                     }
 		                 }
 		             },
-		             data:[
-		                 {value:335, name:'新能源电动车'},
-		                 {value:310, name:'小型车'},
-		                 {value:234, name:'中型车'},
-		                 {value:135, name:'大型车'}
-		             ]
+		             data: parkArr
 		         }
 		     ]
 		 };
@@ -1298,63 +1353,42 @@ div.warp_con:not(.active)>span{
 		    title : {
 		        text: '',
 		    },
+		    dataRange: {
+		        orient: 'horizontal',
+		        min: 0,
+		        max: 10000,
+		        x: '48%',
+		        // text:['高','低'],           // 文本，默认为数值文本
+		        splitNumber:0,
+		    }, 
 		    toolbox: {
-		        show : false,
-		        orient: 'vertical',
-		        x:'right',
-		        y:'center',
-		        feature : {
-		            mark : {show: true},
-		            dataView : {show: true, readOnly: false}
-		        }
+                show: false,
 		    },
+		    tooltip : {
+	            trigger: 'item',
+	            formatter: '{a} <br/>{b} : {c}',
+	            showDelay: 0,
+	            backgroundColor: 'rgba(0,0,0,0.8)',
+                borderColor: 'skyblue',
+                borderRadius: 5,
+                borderWidth: 1,
+                padding: [10,15,10,15],
+            },
 		    series : [
 		        {
-		            name: '2011全国GDP分布',
+		            name: '游客分布',
 		            type: 'map',
 		            mapType: 'china',
 		            zoom: 0.8, 
 		            mapLocation: {
 		                x: 'right'
 		            },
-		            selectedMode : 'multiple',
+		            selectedMode : 'single',
 		            itemStyle:{
 		                normal:{label:{show:true}},
 		                emphasis:{label:{show:true}},
 		            },
-		            data:[
-		                {name:'西藏', value:605.83},
-		                {name:'青海', value:1670.44},
-		                {name:'宁夏', value:2102.21},
-		                {name:'海南', value:2522.66},
-		                {name:'甘肃', value:5020.37},
-		                {name:'贵州', value:5701.84},
-		                {name:'新疆', value:6610.05},
-		                {name:'云南', value:8893.12},
-		                {name:'重庆', value:10011.37},
-		                {name:'吉林', value:10568.83},
-		                {name:'山西', value:11237.55},
-		                {name:'天津', value:11307.28},
-		                {name:'江西', value:11702.82},
-		                {name:'广西', value:11720.87},
-		                {name:'陕西', value:12512.3},
-		                {name:'黑龙江', value:12582},
-		                {name:'内蒙古', value:14359.88},
-		                {name:'安徽', value:15300.65},
-		                {name:'北京', value:16251.93},
-		                {name:'福建', value:17560.18},
-		                {name:'上海', value:19195.69},
-		                {name:'湖北', value:19632.26},
-		                {name:'湖南', value:19669.56},
-		                {name:'四川', value:21026.68},
-		                {name:'辽宁', value:22226.7},
-		                {name:'河北', value:24515.76},
-		                {name:'河南', value:26931.03},
-		                {name:'浙江', value:32318.85},
-		                {name:'山东', value:45361.85},
-		                {name:'江苏', value:49110.27},
-		                {name:'广东', value:53210.28}
-		            ]
+		            data: mapArr,
 		        }
 		    ],
 		    animation: false

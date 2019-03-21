@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.guolaiwan.app.web.admin.vo.OrderInfoEchartVO;
+import com.guolaiwan.app.web.admin.vo.ParkEchartVO;
+import com.guolaiwan.bussiness.Parking.dao.ParkingPositionDao;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
@@ -42,6 +45,8 @@ public class ReportController extends BaseController {
 	private OrderInfoDAO orderInfoDAO;
 	@Autowired
 	private CompanyDAO companyDAO;
+	@Autowired
+	private ParkingPositionDao parkingPositionDao;
 
 	@RequestMapping(value = "/index")
 	public ModelAndView index(HttpServletRequest request) throws Exception {
@@ -367,4 +372,102 @@ public class ReportController extends BaseController {
 		result.put("name", nameList);
 		return result;
 	}
+
+	/**
+	 * 获取停车场数据
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getpark")
+	public Map<String, Object> getPark(HttpServletRequest request) throws Exception {
+		// TODO low code 优化SQL或逻辑代码
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, ParkEchartVO> data = new HashMap<String, ParkEchartVO>();
+		long id = Long.parseLong(request.getParameter("id"));
+		List<Object> obj = parkingPositionDao.getParkInfo(id);
+		List<ParkEchartVO> temp = new ArrayList<ParkEchartVO>();
+		if (obj != null && obj.size() > 0) {
+			JSONArray orderInfoArr = (JSONArray) JSONArray.toJSON(obj);
+			for (Object object : orderInfoArr) {
+				JSONArray objec = (JSONArray) JSONArray.toJSON(object);
+				String veh = objec.getString(0);
+				Integer used = objec.getInteger(1);
+				Integer count = objec.getInteger(2);
+				ParkEchartVO po = new ParkEchartVO();
+				po.setName(veh);
+				po.setValue(count);
+				po.setUsed(used);
+				temp.add(po);
+			}
+		}
+		if (temp != null && temp.size() > 0) {
+			for (ParkEchartVO vo : temp) {
+				if (vo.getUsed() == 0) {
+					if (data.containsKey("剩余车位")) {
+						Integer count = data.get("剩余车位").getValue() + 1;
+						data.get("剩余车位").setValue(count);
+						data.get("剩余车位").setName("剩余车位");
+					} else {
+						ParkEchartVO v = new ParkEchartVO();
+						v.setName("剩余车位");
+						v.setUsed(0);
+						v.setValue(1);
+						data.put("剩余车位", v);
+					}
+				} else {
+					data.put(vo.getName(), vo);
+				}
+			}
+		}
+		List<ParkEchartVO> res = new ArrayList<ParkEchartVO>();
+		Iterator<ParkEchartVO> it = data.values().iterator();
+		while (it.hasNext()) {
+			res.add(it.next());
+		}
+		result.put("total", obj.size());
+		result.put("list", res);
+		return result;
+	}
+
+	/**
+	 * 获取地图
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getmap")
+	public Map<String, Object> getMap(HttpServletRequest request) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		long id = Long.parseLong(request.getParameter("id"));
+		// TODO 地名匹配问题需修改
+		List<Object> list = orderInfoDAO.findOrdersByStateByOrigin(OrderStateType.TESTED.getFiled(), id);
+		List<Map<String, Object>> listVO = new ArrayList<Map<String, Object>>();
+		if (list != null && list.size() > 0) {
+			JSONArray orderInfoArr = (JSONArray) JSONArray.toJSON(list);
+			for (Object object : orderInfoArr) {
+				JSONArray objec = (JSONArray) JSONArray.toJSON(object);
+				Integer count = objec.getInteger(0);
+				String name = objec.getString(1);
+				Map<String, Object> data = new HashMap<String, Object>();
+				if (name.contains("省") || name.contains("市")) {
+					name = name.substring(0, name.length() - 1);
+				} else if (name.contains("内蒙古")) {
+					name = "内蒙古";
+				} else if (name.contains("黑龙江")) {
+					name = "黑龙江";
+				}
+				data.put("value", count);
+				data.put("name", name);
+				listVO.add(data);
+			}
+		}
+		result.put("mapData", listVO);
+		return result;
+	}
+
 }

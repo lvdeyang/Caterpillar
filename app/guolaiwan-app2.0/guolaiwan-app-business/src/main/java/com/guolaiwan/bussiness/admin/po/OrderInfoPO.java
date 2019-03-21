@@ -2,9 +2,12 @@ package com.guolaiwan.bussiness.admin.po;
 
 import java.util.Date;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
@@ -138,6 +141,9 @@ public class OrderInfoPO extends AbstractBasePO {
 	
 	private long comboId;
 	
+	private String idNum;
+	
+	private String photo;
 	
 	
 	public long getLogisticsId() {
@@ -593,6 +599,23 @@ public class OrderInfoPO extends AbstractBasePO {
 
 	public void setRoomStatusId(long roomStatusId) {
 		this.roomStatusId = roomStatusId;
+	}
+	@Lob
+	@Column(length = 16777216)
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public String getIdNum() {
+		return idNum;
+	}
+
+	public void setIdNum(String idNum) {
+		this.idNum = idNum;
 	}
 
 
