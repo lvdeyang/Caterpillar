@@ -151,11 +151,12 @@ public class NEWCommercialSettlementController extends BaseController {
 		DecimalFormat df = new DecimalFormat("0.00");
 		double allprice = 0, orderallmoney = 0, allpaymoney = 0, givemoney = 0, tichengmoney = 0;
 		for (int i = 0; i < orderInfoVOs.size(); i++) {
-
-			if ((orderInfoPOs.get(i).getOrderState() == OrderStateType.TESTED||
-					orderInfoPOs.get(i).getOrderState() == OrderStateType.RECEIPT||
-					orderInfoPOs.get(i).getOrderState() == OrderStateType.COMMENTED
-					)&& orderInfoVOs.get(i).getSettleDate().equals(balanceVOs.get(0).getSettleDate())) {
+            String[] oBDates=orderInfoVOs.get(i).getSettleDate().split(" ");
+            String[] bBDates=balanceVOs.get(0).getSettleDate().split(" ");
+			if ((orderInfoPOs.get(i).getOrderState().equals(OrderStateType.TESTED)||
+					orderInfoPOs.get(i).getOrderState().equals(OrderStateType.RECEIPT)||
+					orderInfoPOs.get(i).getOrderState().equals(OrderStateType.COMMENTED)
+					)&& oBDates[0].equals(bBDates[0])) {
 				Object[] obj = new Object[headers.length];
 				obj[1] = orderInfoVOs.get(i).getOrderNO();
 				obj[2] = orderInfoVOs.get(i).getShopName();
@@ -176,7 +177,7 @@ public class NEWCommercialSettlementController extends BaseController {
                     	double accrued = (double)productPO.getProductCommissionPrice() / 100;
     					double accruedmoney = 0;
     					if (productPO.getProductCommissionCode() == 1) {
-    						accruedmoney = productPO.getProductCommissionPrice() * orderInfoVOs.get(i).getProductNum()
+    						accruedmoney = productPO.getProductCommissionPrice() * (orderInfoVOs.get(i).getProductNum()==0?1:orderInfoVOs.get(i).getProductNum())
     								/ 100;
     					} else {
     						accruedmoney = productPO.getProductCommissionPrice()
@@ -197,7 +198,7 @@ public class NEWCommercialSettlementController extends BaseController {
 					if (orderInfoPOs.get(i).getActivityId() != 0) {
 						accrued=0;
 					} else if (productPO.getProductCommissionCode() == 1) {
-						accruedmoney = productPO.getProductCommissionPrice() * orderInfoVOs.get(i).getProductNum()
+						accruedmoney = productPO.getProductCommissionPrice() * (orderInfoVOs.get(i).getProductNum()==0?1:orderInfoVOs.get(i).getProductNum())
 								/ 100;
 					} else {
 						accruedmoney = productPO.getProductCommissionPrice()
