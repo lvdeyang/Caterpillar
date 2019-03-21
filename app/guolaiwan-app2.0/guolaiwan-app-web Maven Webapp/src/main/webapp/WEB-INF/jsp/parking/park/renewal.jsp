@@ -99,107 +99,118 @@ html, body {
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
-     leng = null;
+      leng = null;
     $(function(){ 
 			
         var _uti = window.BASEPATH + 'vice/theorder';
 	    $.post(_uti, null, function(data) {  
 	      	data = parseAjaxResult(data);
-	        for(var i=0; i<data.length ; i++){
-	        var html = [];
-			html.push('<option   style="text-align:center;">'+data[i].parkingName+'</option>');
-			$('#sect').append(html.join('')); 
-	        }
-		  });	 
-    
-    
-    
-	    var _util = window.BASEPATH + 'vice/feeparking';
-		$.post(_util, null, function(data) {  
-		  	data = parseAjaxResult(data);
-		  	
-		     window.id = data.id; // 表单id
-		     window.trime = data.time; // 表单id
-			var obj = document.getElementById("vehicle");
-            obj.innerText= data.vehicle; 
-            var html = [];
-			html.push('<span style="font-size:22px;">'+data.cost+'</span> 元');
-			$('#cost').append(html.join('')); 
+		    for(var i=0; i<data.length ; i++){
+		        var html = [];
+		        window.parkingName = data[0].parkingName;
+				html.push('<option   style="text-align:center;">'+data[i].parkingName+'</option>');
+				$('#sect').append(html.join('')); 
+			}
 			
-          var _uti = window.BASEPATH + 'vice/renew';
-          var param = {};
-		  param.attid =   data.uid;
-		  param. Layer =   data. parkingLayer;
-		  param.District =   data.parkingDistrict;
-	    $.post(_uti, $.toJSON(param), function(data) {  
-	      	data = parseAjaxResult(data);
-	        var objt = document.getElementById("spa");
-            objt.innerText= data.cost; 
-		  });	 
-		  
-		  
-		 
-		 var hours = window.BASEPATH + 'vice/ hours';
-         var para = {};
-         para.id = data.uid;
-	     $.post(hours, $.toJSON(para), function(data) {  
-	      	data = parseAjaxResult(data);
-	        var objt = document.getElementById("stoppingTime");
-            objt.innerText= data.stoppingTime; 
-		  });	  
-		
-		 var parking = window.BASEPATH + 'vice/ seleparkingMoney';
-		/*  para.id = data.uid; */
-		 var objt = {};
-		  objt.id =   window.id;
-	     $.post(parking, $.toJSON(objt), function(data) {  
-	      	data = parseAjaxResult(data);
-	      	window.length =  data.leng;
-	        if(data.money >0){
-	        var objt = document.getElementById("chao");
-            objt.innerText= data.money; 
-            var num1 = document.getElementById('spa').innerText;
-    		var num2 = document.getElementById('sele').value;
-    		var num3 = document.getElementById("jin");
-    		var num4 = document.getElementById("chao").innerText;
-    		num3.innerText=(parseFloat(num1)*parseFloat(num2)+parseFloat(num4));
-            }
-		  });	   
-	});	
-	
+			
+		   var _util = window.BASEPATH + 'vice/vehiclename';
+           var patam = {};
+		   patam.tion = window.parkingName;
+	       $.post(_util, $.toJSON(patam), function(data) {  
+			  	data = parseAjaxResult(data);
+			  	window.id = data.id; // 表单id
+			    window.trime = data.time; // 表单id
+			    window.attid = data.uid; // 景区id
+			  	
+			  	$("#cost").empty();
+			    var objt = document.getElementById("chao");
+		        objt.innerText= 0; 
+		        
+				var obj = document.getElementById("vehicle");
+	            obj.innerText= data.vehicle; 
+	            
+	            var txt = document.getElementById("time"); //time
+	            txt.innerText= data.time;
+	        
+	            var html = [];
+				html.push('<span style="font-size:22px;">'+data.cost+'</span> 元');
+				$('#cost').append(html.join('')); 
+				
+	            var _uti = window.BASEPATH + 'vice/renew';
+	            var param = {};
+			    param.attid =   data.uid;
+			    param. Layer =   data. parkingLayer;
+			    param.District =   data.parkingDistrict;
+		    $.post(_uti, $.toJSON(param), function(data) {  
+		      	data = parseAjaxResult(data);
+		        var objt = document.getElementById("spa");
+	            objt.innerText= data.cost; 
+			  });	 
+			  
+			    var hours = window.BASEPATH + 'vice/ hours';
+	            var para = {};
+	            para.id = data.uid;
+		     $.post(hours, $.toJSON(para), function(data) {  
+		      	data = parseAjaxResult(data);
+		        var objt = document.getElementById("stoppingTime");
+	            objt.innerText= data.stoppingTime; 
+			  });	  
+			
+			    var parking = window.BASEPATH + 'vice/ seleparkingMoney';
+			    var objt = {};
+			    objt.id =   window.id;
+		     $.post(parking, $.toJSON(objt), function(data) {  
+		      	data = parseAjaxResult(data);
+		      	window.length =  data.leng;
+		        if(data.money >0){
+			        var objt = document.getElementById("chao");
+		            objt.innerText= data.money; 
+		            var num1 = document.getElementById('spa').innerText;
+		    		var num2 = document.getElementById('sele').value;
+		    		var num3 = document.getElementById("jin");
+		    		var num4 = document.getElementById("chao").innerText;
+		            window.money = parseFloat(num1)*parseFloat(num2)+parseFloat(num4);
+		    		num3.innerText=(parseFloat(num1)*parseFloat(num2)+parseFloat(num4));
+	            }
+			 });	   
+	     });			
+	 });	 
+    	
 });
  
        
         
       $(document).on('click', '#btn', function() {
-     
+         var text  = window.money;
+         var orderId  = window.id;
+         var uid =  window.attid;
 	     var parking = window.BASEPATH + 'vice/ seleparkingMoney';
 		 var objt = {};
-		 objt.id =   window.id;
+		 objt.id = id;
 	     $.post(parking,$.toJSON(objt), function(data) {  
-	     data = parseAjaxResult(data);
-	     var _ut = window.BASEPATH + 'vice/addmoney';
-	    /*  if(支付成功){ */
-	     var para = {};
-	     if(data.leng>0){
-	     para.length = data.leng;
-	     }else{
-	      para.length = 0;
-	     }
-	     para.sele = $("#sele").val();
-	     para.money =  window.money;
-	     para.id =  window.id;
-	     $.post(_ut,$.toJSON(para), function(data) {  
-	      		data = parseAjaxResult(data);
-	      			alert("续费成功");
-	      	   window.location.href="vice/merchant/renewal";
-		  });	
-	      /* }else{
-	      刷新
-	      } */
-		  
-		    
-		});	   
+	    	 data = parseAjaxResult(data);
+	    	 alert(orderId);
+	    	 alert(window.money);
+	    	 alert(uid);
+		     payPublic(orderId,text,uid);
+		     
+		    var _ut = window.BASEPATH + 'vice/addmoney'
+		    var para = {};
+		     if(data.leng>0){
+		    	 para.length = data.leng;
+		     }else{
+		      	para.length = 0;
+		     }
+		     para.sele = $("#sele").val();
+		     para.money =  window.money;
+		     para.id =  window.id;
+		     $.post(_ut,$.toJSON(para), function(data) {  
+		      	data = parseAjaxResult(data);
+		      	alert("续费成功");
+		      	window.location.href="vice/merchant/renewal";
+			  });	 
+		     
+		});	  
 	});                       
 
 
@@ -214,11 +225,12 @@ html, body {
 
 
    function t(){
-   var num1 = document.getElementById('spa').innerText;
-    var num2 = document.getElementById('sele').value;
-    var num3 = document.getElementById("jin");
-    var num4 = document.getElementById("chao").innerText;
-   window.money = num3.innerText=(parseFloat(num1)*parseFloat(num2)+parseFloat(num4));
+	    var num1 = document.getElementById('spa').innerText;
+	    var num2 = document.getElementById('sele').value;
+	    var num3 = document.getElementById("jin");
+	    var num4 = document.getElementById("chao").innerText;
+	    window.money = parseFloat(num1)*parseFloat(num2)+parseFloat(num4);
+	    num3.innerText=(parseFloat(num1)*parseFloat(num2)+parseFloat(num4));
    }
    
    
@@ -248,27 +260,30 @@ html, body {
 				   s = s + 60
 				}
 				return i
-
 			}
    } 
    
    
     $(document).on('change', '#sect', function() {
-        alert()
-         var _util = window.BASEPATH + 'vice/appand';
+         
+         var x = document.getElementById("sele");
+              x.selectedIndex = 0;
+    
+         var _util = window.BASEPATH + 'vice/vehiclename';
          var objt = {};
 		 objt.tion =   $(this).val();
 		$.post(_util, $.toJSON(objt), function(data) {  
 		    $("#cost").empty();
 		    var objt = document.getElementById("chao");
 	        objt.innerText= 0; 
+	        var num3 = document.getElementById("jin");
+	        num3.innerText= 0;
 	        
 		  	data = parseAjaxResult(data);
 		    window.id = data.id; // 表单id
 		    window.trime = data.time; // 表单id
 	        var txt = document.getElementById("time"); //time
 	        txt.innerText= data.time;
-	        
 	        
 			var obj = document.getElementById("vehicle");
             obj.innerText= data.vehicle; 
@@ -277,12 +292,11 @@ html, body {
 			html.push('<span id="span" style="font-size:22px;">'+data.cost+'</span> 元');
 			$('#cost').append(html.join('')); 
 			
-			
             var _uti = window.BASEPATH + 'vice/renew';
             var param = {};
 		    param.attid =   data.uid;
-		    param. Layer =   data. parkingLayer;
-		    param.District =   data.parkingDistrict;
+		    param. Layer =  data. parkingLayer;
+		    param.District = data.parkingDistrict;
 		    
 	    $.post(_uti, $.toJSON(param), function(data) {  
 		      	data = parseAjaxResult(data);
@@ -301,9 +315,9 @@ html, body {
 		  });	  
 		
 		
-		 var parking = window.BASEPATH + 'vice/ seleparkingMoney';
-		 var objt = {};
-		 objt.id =   window.id;
+		    var parking = window.BASEPATH + 'vice/ seleparkingMoney';
+		    var objt = {};
+		    objt.id =   window.id;
 	     $.post(parking, $.toJSON(objt), function(data) {  
 	      	data = parseAjaxResult(data);
 	      	window.length =  data.leng;
@@ -314,14 +328,82 @@ html, body {
 	    		var num2 = document.getElementById('sele').value;
 	    		var num3 = document.getElementById("jin");
 	    		var num4 = document.getElementById("chao").innerText;
+	    		 window.money = parseFloat(num1)*parseFloat(num2)+parseFloat(num4);
 	    		num3.innerText=(parseFloat(num1)*parseFloat(num2)+parseFloat(num4));
             }
 		  });	   
 		});	
      }); 
-
-             
-             
+  		
+  	/* 	
+  		var orderId=0;  //订单 用户id
+		var text;  // 钱
+		var prepay_id;
+		var paySign; 
+		var appId;   
+		var timeStamp;   
+		var nonceStr;  
+		var packageStr;  
+		var signType; 
+		var orderNo;	
+		
+		function payPublic(orderId,text,uid){
+		    text =  text*100;	
+	        var site = "payreportrenew";		
+		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+text+"/"+uid+"/"+site, null, function(data){
+				prepay_id = data.prepay_id;
+		        paySign = data.paySign;
+		        appId = data.appId;
+		        timeStamp = data.timeStamp;
+		        nonceStr = data.nonceStr;
+		        packageStr = data.packageStr;
+		        signType = data.signType;
+		        orderNo = data.orderNo;
+		        callpay();
+			});
+		}
+		
+	
+		function onBridgeReady(){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		             alert("交易成功");  
+	                 window.location.href = "vice/merchant/parking";
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
+		             alert("交易取消");  
+	                 window.location.href = "vice/merchant/parking";
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
+		                alert(res.err_desc); 
+                     window.location.href = "vice/merchant/parking";
+                       
+		            }  
+		        }
+		    );
+		}
+		function callpay(){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady();
+		    }
+		} */
+				
 			
 		  
 </script>
@@ -338,7 +420,7 @@ html, body {
 
 
 		<p id="cost"
-			style='display: inline-block;position: absolute;top:10%;left:50%;margin-left:-25px'>
+			style='display: inline-block;position: absolute;top:10%;left:46%;margin-left:-25px'>
 
 		</p>
 
@@ -383,7 +465,7 @@ html, body {
 			<p style="display: inline-block;font-weight: bold;font-size:18px;">续费时长：</p>
 			<select id="sele" onchange="t()"
 				style="text-align:center; height:30px;line-height: 30px;width:20%;border: 0;outline: none;font-weight: bold;font-size:14spx;background:#E5E5E5;border-radius:5px;z-index: 999;">
-				<option>0</option>
+				<option value="0";>0</option>
 				<option>1</option>
 				<option>2</option>
 				<option>3</option>

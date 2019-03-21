@@ -37,37 +37,23 @@ public class OrderVo  extends AbstractBaseVO<OrderVo, OrderPO>{
 	private String platenumber;
 	//超时金额
 	private double overTimeMoney;
+	//超时时间
+    private double overTime;
+	//二维码路径
+	private String path;
 
-	//是否超时
-	private int overTime;
+	
+	
+	
 
-	@Override
-	public OrderVo set(OrderPO entity) throws Exception {
-	this	.setAttractionsId(entity.getAttractionsId())
-	.setOrderId(entity.getOrderId())
-	.setParkingLayer(entity.getParkingLayer())
-	.setParkingName(entity.getParkingName())
-	.setTime(entity.getTime())
-	.setParkingDistrict(entity.getParkingDistrict())
-	.setParkingNumber(entity.getParkingNumber())
-	.setParkingCost(entity.getParkingCost())
-	.setStoppingTime(entity.getStoppingTime())
-	.setBookingTime(entity.getBookingTime())
-	.setDueTime(entity.getDueTime())
-	.setOrderStatus(entity.getOrderStatus())
-	.setRefund(entity.getRefund())
-	.setPlatenumber(entity.getPlatenumber())
-	.setOverTimeMoney(entity.getOverTimeMoney())
-	.setOverTime(entity.getOverTime());
-
-	return this;
+	public double getOverTime() {
+		return overTime;
 	}
-	
-	
-	
-	
-	
-	
+
+	public OrderVo setOverTime(double overTime) {
+		this.overTime = overTime;
+		return this;
+	}
 
 	/**
 	 * 超时金额
@@ -323,22 +309,46 @@ public class OrderVo  extends AbstractBaseVO<OrderVo, OrderPO>{
 		return this;
 	}
 
-	/**
-	 * 是否超过预订时间
-	 */
-	public int getOverTime() {
-		return overTime;
+    /**
+     * 二维码路径
+     * @return
+     */
+	public String getPath() {
+		return path;
 	}
 
-	/**
-	 * 是否超过预订时间  0未超出  1已超出
-	 * @return 
-	 */
-	public OrderVo setOverTime(int overTime) {
-		this.overTime = overTime;
-		return this;
+	 /**
+	  * 二维码路径
+	  * @return
+	  */
+	public void setPath(String path) {
+		this.path = path;
 	}
 
+	
+	@Override
+	public OrderVo set(OrderPO entity) throws Exception {
+	this.setOverTime(entity.getOverTime())
+	.setId(entity.getId())
+	.setAttractionsId(entity.getAttractionsId())
+	.setOrderId(entity.getOrderId())
+	.setParkingLayer(entity.getParkingLayer())
+	.setParkingName(entity.getParkingName())
+	.setTime(entity.getTime())
+	.setParkingDistrict(entity.getParkingDistrict())
+	.setParkingNumber(entity.getParkingNumber())
+	.setParkingCost(entity.getParkingCost())
+	.setStoppingTime(entity.getStoppingTime())
+	.setBookingTime(entity.getBookingTime())
+	.setDueTime(entity.getDueTime())
+	.setOrderStatus(entity.getOrderStatus())
+	.setRefund(entity.getRefund())
+	.setPlatenumber(entity.getPlatenumber())
+	.setOverTimeMoney(entity.getOverTimeMoney())
+	.setPath(entity.getPath())
+	;
+	return this;
+	}
 
 
 }
