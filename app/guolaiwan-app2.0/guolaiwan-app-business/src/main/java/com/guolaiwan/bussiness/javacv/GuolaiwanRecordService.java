@@ -17,6 +17,9 @@ public class GuolaiwanRecordService extends Thread {
 		grabber = new FFmpegFrameGrabber("rtmp://"+WXContants.Website+"/live/" + subivePubName);
 		recorder = new FFmpegFrameRecorder(path, width, height, 1);
 		recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+		recorder.setFormat("flv"); // rtmp的类型
+		recorder.setFrameRate(25);
+		recorder.setGopSize(25);
 		System.out.println(subivePubName + "录制  grabber start");
 	}
 
