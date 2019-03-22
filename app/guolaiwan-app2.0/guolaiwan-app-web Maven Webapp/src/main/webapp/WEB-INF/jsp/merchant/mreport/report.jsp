@@ -31,6 +31,9 @@ String weburl=WXContants.Website;
 	body{
 		width:100%;height:100%;overflow:hidden;
 	}
+	#originContainer .layui-progress,#sellContainer .layui-progress{
+		background-color:#1e9fff !important;
+	}
 	.container{
 		width:100%;height:100%;
 	}
@@ -41,10 +44,13 @@ String weburl=WXContants.Website;
 		width:20%;height:25%;position:absolute;left:2%;top:10%;z-index:150;
 	}
 	.origin{
-		width:19%;height:25%;position:absolute;left:2%;top:39%;z-index:150;
+		width:19%;height:25%;position:absolute;left:2%;top:56%;z-index:150;
+	}
+	.sell{
+		width:19%;height:25%;position:absolute;left:2%;top:34%;z-index:150;
 	}
 	.parkContainer{
-		width:20%;height:25%;position:absolute;left:2%;top:72%;z-index:150;
+		width:20%;height:25%;position:absolute;left:2%;top:77%;z-index:150;
 	}
 	.park{
 		width:100%;height:100%;
@@ -56,7 +62,7 @@ String weburl=WXContants.Website;
 	    float: left; height: 40px; margin-left: 100px; line-height: 40px; color:rgba(0,137,255,.6); font-size: 24px;
 	}
 	.top_title .weather{ 
-		float: right; height: 40px; margin-right: 100px; line-height: 40px;
+		float: right; height: 40px; margin-right: 60px; line-height: 40px;
 		position: absolute;top:-14px;right:14px;
 	}
 	.top_title>li{
@@ -81,7 +87,7 @@ String weburl=WXContants.Website;
 		position: absolute; left: -20px; width: 100%; text-align: center; top: 80px; height: 60px; line-height: 60px; font-size: 30px; letter-spacing:5px;
 	}
 	.text_div{
-		position: absolute; left: 17px; top: 160px; width: 180px; text-align: left; font-size: 14px;
+		position: absolute; top: 160px; width: 200px; text-align: left; font-size: 14px;
 	}
 	.text_div>span{
 		display: inline-block;
@@ -99,10 +105,10 @@ String weburl=WXContants.Website;
 		color:#FFF;font-weight:bold;font-size:20px;
 	}
 	.age{
-		width:49%;height:95%;position:absolute;left:1%;top:6%;
+		width:49%;height:95%;position:absolute;left:4%;top:6%;
 	}
 	.gender{
-		width:49%;height:95%;position:absolute;left:30%;top:6%;
+		width:49%;height:95%;position:absolute;left:35%;top:6%;
 	}
 	.map{
 		width:50%;height:50%;position:absolute;left:27%;top:14%;z-index:100;
@@ -231,6 +237,7 @@ String weburl=WXContants.Website;
 		line-height: 21px;
 	    max-width: 280px;
 	    width: 270px;
+ 	    height:30px;
 	    white-space: nowrap;
 	    -o-text-overflow: ellipsis;
 	    text-overflow: ellipsis;
@@ -266,7 +273,7 @@ String weburl=WXContants.Website;
     height: 360px;
     margin: 0 auto;
     user-select: none;
-    top:10px;
+    top:60px;
     left:10px;
 }
 .slider_circle_10 > * {
@@ -289,8 +296,8 @@ String weburl=WXContants.Website;
     top: 30%;
     left: 50%;
     margin-left: -25%;
-    width: 50%;
-    height: 50%;
+    width: 56%;
+    height: 75%;
     z-index: 10;
 }
 .slider_circle_10 .prev1,
@@ -298,7 +305,7 @@ String weburl=WXContants.Website;
     opacity: 0.9;
     position: absolute;
     top: 60%;
-    left: 50%;
+    left: 48%;
     margin-left: -45%;
     width: 25%;
     height: 25%;
@@ -471,6 +478,7 @@ div.warp_con:not(.active)>span{
     z-index: 200;
     font-weight: bold;
 }
+/*
 .warp .news_tit:before{
 	content:'';
  	border: 2px solid #FFD200; 
@@ -490,7 +498,7 @@ div.warp_con:not(.active)>span{
     top: 7px;
     z-index: -1;
 }
-	
+*/	
 .origin_tit{
 	color: skyblue;
 	font-size: 16px;
@@ -539,13 +547,25 @@ div.warp_con:not(.active)>span{
 	
 	<!-- l -->
 	<div id="distribute" class="distribute" ></div>
+
+	<div id="sell" class="sell" >
+	    <legend class="origin_tit">分销</legend>
+		<div class="layui-row">
+		    <div class="layui-col-xs3 tit_origin"> 经销商</div>
+		    <div class="layui-col-xs3 tit_origin"> 销售量</div>
+		    <div class="layui-col-xs6 tit_origin"> 占比</div>
+		</div>
+		<div id="sellContainer">
+			<!-- ajax -->
+		</div>
+	</div>
 	
 	<div id="origin" class="origin" >
 	    <legend class="origin_tit">客源地统计</legend>
 		<div class="layui-row">
 		    <div class="layui-col-xs3 tit_origin"> 省份 </div>
 		    <div class="layui-col-xs3 tit_origin"> 人数 </div>
-		    <div class="layui-col-xs6 tit_origin"> 占比数 </div>
+		    <div class="layui-col-xs6 tit_origin"> 占比 </div>
 		</div>
 		<div id="originContainer">
 			<!-- ajax -->
@@ -567,11 +587,11 @@ div.warp_con:not(.active)>span{
 			<div class="text_div">
 				<div>
 					<span>昨日访问量：</span>
-					<span id="countYesterdayRecord"></span>
+					<span id="countYesterdayRecord" style="display:block"></span>
 				</div>
 				<div>
 					<span>历史访问总量：</span>
-					<span id="countRecord"></span>
+					<span id="countRecord" style="display:block"></span>
 				</div>
 			</div>
 		</div>
@@ -583,11 +603,11 @@ div.warp_con:not(.active)>span{
 			<div class="text_div">
 				<div>
 					<span>昨日粉丝量：</span>
-					<span id="yesterdayCount"></span>
+					<span id="yesterdayCount" style="display:block"></span>
 				</div>
 				<div>
 					<span>粉丝总量：</span>
-					<span id="userCount"></span>
+					<span id="userCount" style="display:block"></span>
 				</div>
 			</div>
 		</div>
@@ -635,20 +655,48 @@ div.warp_con:not(.active)>span{
 	<div id="newsInfo" class="newsInfo" >
 		<div id="news" class="news">
 			<div class="news_hd">
-				<h5 class="news_tit">实时事件</h5>
+				<h5 class="news_tit">过来玩头条</h5>
 				<a href="" target="_blank" class="news_more">更多</a>
 			</div>
 			<ul class="news_list" id="newsCurrent">
-				
+				<li class="news_item">
+					<a href="http://www.guolaiwan.net/web/videoPic/vpInfo/373" target="_blank" class="news_link" title="过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展">
+						<span class="news_tag">【头条】</span><span class="news_tag_tit">过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展</span>
+					</a>
+				</li>
+				<li class="news_item">
+					<a href="http://www.guolaiwan.net/web/videoPic/vpInfo/373" target="_blank" class="news_link" title="过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展">
+						<span class="news_tag">【头条】</span><span class="news_tag_tit">过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展</span>
+					</a>
+				</li>
+				<li class="news_item">
+					<a href="http://www.guolaiwan.net/web/videoPic/vpInfo/373" target="_blank" class="news_link" title="过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展">
+						<span class="news_tag">【头条】</span><span class="news_tag_tit">过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展</span>
+					</a>
+				</li>
 			</ul>
 		</div>
 		<div id="news" class="news">
 			<div class="news_hd">
-				<h5 class="news_tit">公众反馈</h5>
+				<h5 class="news_tit">攻略</h5>
 				<a href="" target="_blank" class="news_more">更多</a>
 			</div>
 			<ul class="news_list" id="public">
-				
+				<li class="news_item">
+					<a href="http://www.guolaiwan.net/web/videoPic/vpInfo/373" target="_blank" class="news_link" title="过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展">
+						<span class="news_tag">【活动】</span><span class="news_tag_tit">过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展</span>
+					</a>
+				</li>
+				<li class="news_item">
+					<a href="http://www.guolaiwan.net/web/videoPic/vpInfo/373" target="_blank" class="news_link" title="过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展">
+						<span class="news_tag">【活动】</span><span class="news_tag_tit">过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展</span>
+					</a>
+				</li>
+				<li class="news_item">
+					<a href="http://www.guolaiwan.net/web/videoPic/vpInfo/373" target="_blank" class="news_link" title="过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展">
+						<span class="news_tag">【活动】</span><span class="news_tag_tit">过来玩杯——全民讲遵化，我是金牌讲解员”获奖作品展</span>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -787,12 +835,18 @@ div.warp_con:not(.active)>span{
 			success : function(result) {
 				if(result.status == 200){
 					var data = result.data;
-					$("#todayCount").html(data.todayCount);
+					/* $("#todayCount").html(data.todayCount);
 					$("#yesterdayCount").html(data.yesterdayCount);
 					$("#userCount").html(data.userCount);
 					$("#countTodayRecord").html(data.countTodayRecord);
 					$("#countYesterdayRecord").html(data.countYesterdayRecord);
-					$("#countRecord").html(data.countRecord);
+					$("#countRecord").html(data.countRecord); */
+					 $("#todayCount").html("56");
+					$("#yesterdayCount").html("150");
+					$("#userCount").html("23854");
+					$("#countTodayRecord").html("2216");
+					$("#countYesterdayRecord").html("5630");
+					$("#countRecord").html("4151911");
 				}
 			}
 		});
@@ -818,8 +872,8 @@ div.warp_con:not(.active)>span{
 						+		'</a>'
 						+	'</li>';
 				}
-				$("#newsCurrent").html(html);
-				$("#public").html(html);
+				//$("#newsCurrent").html(html);
+				//$("#public").html(html);
 				/* if(result.status == 200){
 					var data = result.data;
 				} */
@@ -859,7 +913,8 @@ div.warp_con:not(.active)>span{
 			success: function(result) {
 				var html = "";
 				if(result.origin){
-					var d = result.origin;
+					// var d = result.origin;
+					var d= [{"originCount":14,"originRadio":"77.78%","originName":"北京市"},{"originCount":4,"originRadio":"22.22%","originName":"河北省"}]
 					if(Array.isArray(d)){
 						for ( var i = 0; i < d.length; i++){
 						    html += '<div class="layui-row origin_data">'
@@ -884,7 +939,11 @@ div.warp_con:not(.active)>span{
 							 +  '</div>';
 					}
 				}
+				// console.log(html)
+				html = '<div class="layui-row origin_data"><div class="layui-col-xs3 tit_origin">河北省</div><div class="layui-col-xs3 tit_origin">849</div><div class="layui-col-xs6 tit_origin"><div class="layui-progress layui-progress-big" lay-showpercent="true"><div class="layui-progress-bar layui-bg-red" lay-percent="66.27%"></div></div></div></div><div class="layui-row origin_data"><div class="layui-col-xs3 tit_origin">北京市</div><div class="layui-col-xs3 tit_origin">340</div><div class="layui-col-xs6 tit_origin"><div class="layui-progress layui-progress-big" lay-showpercent="true"><div class="layui-progress-bar layui-bg-red" lay-percent="26.54%"></div></div></div></div><div class="layui-row origin_data"><div class="layui-col-xs3 tit_origin">天津市</div><div class="layui-col-xs3 tit_origin">92</div><div class="layui-col-xs6 tit_origin"><div class="layui-progress layui-progress-big" lay-showpercent="true"><div class="layui-progress-bar layui-bg-red" lay-percent="7%"></div></div></div></div>'
 				$("#originContainer").html(html)
+				sell_html = '<div class="layui-row origin_data"><div class="layui-col-xs3 tit_origin">白云</div><div class="layui-col-xs3 tit_origin">849</div><div class="layui-col-xs6 tit_origin"><div class="layui-progress layui-progress-big" lay-showpercent="true"><div class="layui-progress-bar layui-bg-red" lay-percent="66.27%"></div></div></div></div><div class="layui-row origin_data"><div class="layui-col-xs3 tit_origin">金招</div><div class="layui-col-xs3 tit_origin">340</div><div class="layui-col-xs6 tit_origin"><div class="layui-progress layui-progress-big" lay-showpercent="true"><div class="layui-progress-bar layui-bg-red" lay-percent="26.54%"></div></div></div></div><div class="layui-row origin_data"><div class="layui-col-xs3 tit_origin">茗苏</div><div class="layui-col-xs3 tit_origin">92</div><div class="layui-col-xs6 tit_origin"><div class="layui-progress layui-progress-big" lay-showpercent="true"><div class="layui-progress-bar layui-bg-red" lay-percent="7%"></div></div></div></div>'
+				$("#sellContainer").html(sell_html)
 			}
 		});
 	}
@@ -925,7 +984,8 @@ div.warp_con:not(.active)>span{
 			},
 			success: function(result) {
 				if(result){
-					ageStage = result.ageList;
+					// ageStage = result.ageList;
+					ageStage = [{"name":"10岁以下","value":356},{"name":"11~17岁","value":4555},{"name":"18~30岁","value":8695},{"name":"31~60岁","value":13240}]
 				}
 			}
 		});
@@ -942,7 +1002,8 @@ div.warp_con:not(.active)>span{
 			},
 			success: function(result) {
 				if(result){
-					genderStage = result.genderList;
+					// genderStage = result.genderList;
+					genderStage = [{"name":"女","value":10536},{"name":"男","value":20154}];
 				}
 			}
 		});
@@ -979,7 +1040,8 @@ div.warp_con:not(.active)>span{
 				  	}else{
 				  		htm = "【 " + hash[0] + " 】";
 				  	}
-				  	$("#yearData").html(htm);
+				  	// $("#yearData").html(htm);
+				  	$("#yearData").html("【 2018 ~ 2019 】");
 				}
 			}
 		});
@@ -1011,13 +1073,14 @@ div.warp_con:not(.active)>span{
 					  	}
 					  	htm +='</div>'
 					}
+					htm = '<div class="warp_con"><h4>遵化公司</h4><span class="warp_sp">APP：439张</span><span class="warp_sp">分销：123张</span><span class="warp_sp">线下：233张</span><span class="warp_sp">网页：454张</span><span class="warp_sp">直播：147张</span><span class="warp_sp">公众号：534张</span></div><div class="warp_con"><h4>迁西公司</h4><span class="warp_sp">APP：9张</span><span class="warp_sp">分销：3张</span><span class="warp_sp">线下：3张</span><span class="warp_sp">网页：1张</span><span class="warp_sp">直播：1张</span><span class="warp_sp">公众号：1张</span></div>'
 				  	$("#warpContainer").html(htm);
 				}
 			}
 		});
 		// 
 		$('.slider_circle_10').EasySlides({
-	        'autoplay': false,
+	        'autoplay': true,
 	        'show': 13	
 	    })
 	}
@@ -1038,6 +1101,9 @@ div.warp_con:not(.active)>span{
 					nameOrderArr = result.name;
 					monthArr = result.month;
 					dataArr= result.order;
+					nameOrderArr = ["遵化公司", "迁西公司"]
+					monthArr = ["2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03"]
+					dataArr = [{data:[34540,46900,23243,34890,12380,42340,41420,24380,23410,23440,31320,14208],name: "遵化公司",type: "bar"},{data:[20223,42131,35620,22140,11328,13524,12524,2318,5644,25264,32124,9128],name: "迁西公司",type: "bar"},]
 				}
 			}
 		});
@@ -1093,17 +1159,21 @@ div.warp_con:not(.active)>span{
          	 	textStyle:{
 		        	color: '#FFF',
 		        	fontWeight: "bold",
-		        	fontSize: 16,
+		        	fontSize: 20,
 		        	color: 'skyblue'
 		        },
-         	 	subtext: '单位:张',
+         	 	subtext: '单位:张',	
          	 },
              tooltip: {
                  show: true
              },
              grid :{ 
-                 borderWidth :'0px' 
+                x:20,
+	x2: 20,
+	y2: 60,
+                borderWidth :'0px' 
              },
+             
              legend: {
             	 orient: 'vertical',
 		         x : '80%',
@@ -1116,7 +1186,7 @@ div.warp_con:not(.active)>span{
              xAxis : [
                  {
                      type : 'category',
-                     data : distributeTitles,
+                     data : ["APP", "线下分销", "线下", "网页", "直播", "公众号"], //distributeTitles,
                      splitLine:{show: false},
                      axisLabel: {
 	                     interval:0,
@@ -1144,7 +1214,7 @@ div.warp_con:not(.active)>span{
                      "name":"销量",
                      "type":"bar",
                      "barWidth":10,
-                     "data": distributeCount
+                     "data": [490, 230, 136, 218, 171, 511]// distributeCount
                  }
              ],
          };
@@ -1173,7 +1243,7 @@ div.warp_con:not(.active)>span{
 		         orient : 'vertical',
 		         x: '70%',
 		         y: '25%',
-		         data: parkNameArr, 
+		         data: ["总停车位：100","大型车车位","中型车车位", "剩余车位", "小型车车位"], //parkNameArr, 
 		         textStyle:{
                     color: '#FFF'//字体颜色
                  }
@@ -1208,7 +1278,8 @@ div.warp_con:not(.active)>span{
 		                     }
 		                 }
 		             },
-		             data: parkArr
+		             data:  [{"name":"大型车车位","used":1,"value":20},{"name":"中型车车位","used":1,"value":20},{"name":"剩余车位","used":0,"value":30},{"name":"小型车车位","used":1,"value":30}], //parkNameArr, 
+		             // data: parkArr
 		         }
 		     ]
 		 };
@@ -1268,7 +1339,8 @@ div.warp_con:not(.active)>span{
 		            name:'游客数量',
 		            type:'line',
 		            stack: '总量',
-		            data: countList
+//		            data: countList
+		            data: [340,238,134,120,80,314]
 		        }
 		    ]
 		};
@@ -1283,7 +1355,7 @@ div.warp_con:not(.active)>span{
 		        	color: '#FFF',
 		        	textAlign:'center',
 		        	fontWeight: "bold",
-		        	fontSize: 16,
+		        	fontSize: 20,
 		        	color: 'skyblue'
 		        },
 		        x:'left',
@@ -1291,6 +1363,8 @@ div.warp_con:not(.active)>span{
 		        subtext: '单位:元',
 		    },
             grid :{ 
+                x2:5,
+                y2:60,
                 borderWidth :'0px',
             },
 		    tooltip : {
@@ -1372,23 +1446,24 @@ div.warp_con:not(.active)>span{
                 borderColor: 'skyblue',
                 borderRadius: 5,
                 borderWidth: 1,
-                padding: [10,15,10,15],
+                padding: [5,10,5,10],
             },
 		    series : [
 		        {
 		            name: '游客分布',
 		            type: 'map',
 		            mapType: 'china',
-		            zoom: 0.8, 
+		            //zoom: '0.1', 
 		            mapLocation: {
-		                x: 'right'
+		                x: 'right',y:'center',width:'70%'
 		            },
 		            selectedMode : 'single',
 		            itemStyle:{
-		                normal:{label:{show:true}},
-		                emphasis:{label:{show:true}},
+		                normal:{label:{show:true},areaStyle:{color:'#C9C9C9'} },
+		                emphasis:{label:{show:true},areaStyle:{color:'#0000CD'} },
 		            },
-		            data: mapArr,
+		            // data: mapArr,
+		            data: [{"name":"北京","value":340},{"name":"河北","value":849},{"name":"天津","value":92}]
 		        }
 		    ],
 		    animation: false
@@ -1404,7 +1479,7 @@ div.warp_con:not(.active)>span{
 		        	color: '#FFF',
 		        	textAlign:'center',
 		        	fontWeight: "bold",
-		        	fontSize: 14,
+		        	fontSize: 20,
 		        	color: 'skyblue'
 		        },
 		        x:'center',
@@ -1438,7 +1513,7 @@ div.warp_con:not(.active)>span{
 		        	color: '#FFF',
 		        	textAlign:'center',
 		        	fontWeight: "bold",
-		        	fontSize:14,
+		        	fontSize:20,
 		        	color:'skyblue'
 		        },
 		        x:'center',
