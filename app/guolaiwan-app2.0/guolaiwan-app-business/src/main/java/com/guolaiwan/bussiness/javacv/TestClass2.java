@@ -14,15 +14,15 @@ public class TestClass2 {
 
 		String outputFile = "D:\\216A45.mp4";
 		
-		//GuoliawanLiveServiceWrapper wrapper=new GuoliawanLiveServiceWrapper();
-		//wrapper.startRecord(inputFile, outputFile);
+		GuoliawanLiveServiceWrapper wrapper=GuoliawanLiveServiceWrapper.getInstance();
+		wrapper.startRecord(inputFile, outputFile);
 		try {
 			Thread.sleep(30000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//wrapper.stopRecord(inputFile);
+		wrapper.stopRecord(inputFile);
         
 	}
 
