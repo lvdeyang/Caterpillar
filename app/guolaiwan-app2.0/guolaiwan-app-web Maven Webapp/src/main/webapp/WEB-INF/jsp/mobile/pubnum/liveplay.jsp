@@ -601,7 +601,7 @@ html, body {
 			<div id="player" style="width:100%;height:250px;display:none;">
 			    <script type="text/javascript" charset="utf-8" src="http://yuntv.letv.com/player/live/blive.js"></script>
 			    <script>
-			        var leshiyunId='${leshiyunId}';
+			        var leshiyunId='${live.leshiyunId}';
 			        var player = new CloudLivePlayer();
 			        player.init({activityId:leshiyunId});
 			    </script>
