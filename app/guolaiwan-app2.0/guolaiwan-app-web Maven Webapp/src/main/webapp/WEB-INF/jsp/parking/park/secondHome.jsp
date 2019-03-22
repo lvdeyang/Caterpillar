@@ -306,6 +306,13 @@ html {
 					window.location.href = "vice/merchant/information";
 					/* alert("我是订单页面") */
 				};
+				var parking = document.getElementById('img_parking');
+				parking.onclick = function() {
+					var Parking = document.getElementById('test1');
+					Parking.src = 'lib/images/tingche.png';
+					window.location.href = "vice/merchant/parkings";
+					 alert("我是停车页面") 
+				};
 			};
 
 

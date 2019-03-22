@@ -156,12 +156,10 @@ public class SceneryListController  extends WebBaseControll{
 		}
 		JSONObject pageObject = JSON.parseObject(param);
 		Long uid = pageObject.getLong("uid");   //
-		List<AttractionsParkingPO> attractions = Attra_ctions.getUid(uid);
-		for (AttractionsParkingPO attractionsParkingPO : attractions) {
-			dataMap.put("regulations", attractionsParkingPO.getRegulations());
-			dataMap.put("parkingName", attractionsParkingPO.getParkingName());
+		AttractionsParkingPO attractions = Attra_ctions.getUid(uid);
+			dataMap.put("regulations", attractions.getRegulations());
+			dataMap.put("parkingName", attractions.getParkingName());
 
-		}
 		return success(dataMap);
 	}
 
@@ -354,11 +352,13 @@ public class SceneryListController  extends WebBaseControll{
 		}
 		JSONObject pageObject = JSON.parseObject(param);
 		Long uid = pageObject.getLong("id");   
+		System.out.println(uid);
 		List<AttractionsParkingPO> userName =  Attra_ctions.getBusinessHours(uid);
 		for (AttractionsParkingPO attractionsParkingPO : userName) {
 			dataMap.put("stoppingTime", attractionsParkingPO.getStoppingTime());
 			dataMap.put("phone", attractionsParkingPO.getPhone());
 		}
+		System.out.println(dataMap);
 		return success(dataMap);
 	}
 
@@ -432,7 +432,7 @@ public class SceneryListController  extends WebBaseControll{
 		String ceng = pageObject.getString("ceng");  
 		String qu = pageObject.getString("qu"); 
 		int  stall =  Integer.parseInt(pageObject.getString("stall")); // 车位 
-		List<AttractionsParkingPO> attractions = Attra_ctions.getUid(uid);
+		AttractionsParkingPO attractions = Attra_ctions.getUid(uid);
 		String name = null;
 		//停车场时间
 		String time = null;
@@ -440,10 +440,8 @@ public class SceneryListController  extends WebBaseControll{
 		for (VehiclePO vehiclePO : userBy) {
 			vehicle =  vehiclePO.getNumber();
 		}
-		for (AttractionsParkingPO attractionsParkingPO : attractions) {
-			name   =  	attractionsParkingPO.getParkingName();
-			time  =attractionsParkingPO.getStoppingTime();
-		}
+			name   =  	attractions.getParkingName();
+			time  =attractions.getStoppingTime();
 		List<OrderPO> userByid = Order.getOrderform(userId,uid,vehicle);
 		if (userByid.size() == 0) {
 			OrderPO odp = new OrderPO();
@@ -454,7 +452,7 @@ public class SceneryListController  extends WebBaseControll{
 			odp.setParkingDistrict(qu);
 			odp.setParkingNumber(stall);
 			odp.setAttractionsId(uid);
-			odp.setParkingCost(0);
+			odp.setParkingCost(0); 
 			odp.setPlatenumber(vehicle);
 			Order.save(odp);
 			dataMap.put("uid", odp.getId());
@@ -529,10 +527,9 @@ public class SceneryListController  extends WebBaseControll{
 		for (CarPositionPO carPositionPO : userName) {
 		id = carPositionPO.getId();
 		}
-		List<ParkingPositionPO> userNam =  Parking_Position.getNumber(id,number);// 车位   用户id
-	    for (ParkingPositionPO parkingPositionPO : userNam) {
-	    	dataMap.put("condition",parkingPositionPO.getUseCondition());
-		}
+		ParkingPositionPO userNam =  Parking_Position.getNumber(id,number);// 车位   用户id
+	    	dataMap.put("condition",userNam.getUseCondition());
+	    System.out.println(dataMap);
 		return success(dataMap);
 	}
 
@@ -657,16 +654,12 @@ public class SceneryListController  extends WebBaseControll{
 			district = 	order.getParkingDistrict();
 			
 		}
-		List<CarPositionPO> userName =  Car_Position.getAmend(uid,parkingLayer,district);
-		for (CarPositionPO carPositionPO : userName) {
-		id = carPositionPO.getId();
-		}
+		CarPositionPO userName =  Car_Position.getAmend(uid,parkingLayer,district);
+		id = userName.getId();
 		
-		List<ParkingPositionPO> getTruck  =  Parking_Position.getNumber(id,parkingNumber);
-		for (ParkingPositionPO parkingPositionPO : getTruck) {
-		 	parkingPositionPO.setUseCondition(1);
-		 	Parking_Position.saveOrUpdate(parkingPositionPO);
-		}
+		ParkingPositionPO getTruck  =  Parking_Position.getNumber(id,parkingNumber);
+			getTruck.setUseCondition(1);
+		 	Parking_Position.saveOrUpdate(getTruck);
 		
 		return "";
 	}
@@ -789,6 +782,7 @@ public class SceneryListController  extends WebBaseControll{
 	
 	
 
+
 	/** 根据用户id 查询 订单
 	 * @return
 	 **/
@@ -806,12 +800,12 @@ public class SceneryListController  extends WebBaseControll{
 		List<String> listHasCup=new ArrayList<String>();
 		List<OrderPO> userByid = Order.getOrderform(userId,"已支付",Headimg);
 		for (OrderPO orderPO : userByid) {
-			List<AttractionsParkingPO> userName =  Attra_ctions.getUid(orderPO.getAttractionsId());
-			 for (AttractionsParkingPO attractionsParkingPO : userName) {
-				 listHasCup.add(attractionsParkingPO.getParkingName());
-				 listHasCup.add(attractionsParkingPO.getParkingDistrict());
-			}
+			AttractionsParkingPO userName =  Attra_ctions.getUid(orderPO.getAttractionsId());
+				 listHasCup.add(userName.getParkingName());
+				 listHasCup.add(userName.getParkingDistrict());
+				 listHasCup.add(userName.getAddress());
 		}
+		System.out.println(listHasCup);
 		return success(listHasCup);
 	}
 
@@ -836,7 +830,7 @@ public class SceneryListController  extends WebBaseControll{
 			vehicle =  vehiclePO.getNumber();
 		}
 		dataMap.put("vehicle", vehicle);
-		List<OrderPO> userByid = Order.getOrderform(userId,"正在停车",vehicle);
+		List<OrderPO> userByid = Order.getOrderform(userId,"已支付",vehicle);
 		for (OrderPO orderPO : userByid) {
 			dataMap.put("name", orderPO.getPlatenumber());
 			dataMap.put("number", orderPO.getParkingNumber());
@@ -849,6 +843,7 @@ public class SceneryListController  extends WebBaseControll{
 			dataMap.put("parkingDistrict", orderPO.getParkingDistrict());
 			dataMap.put("id", orderPO.getId());
 		}
+		System.out.println(dataMap);
 		return success(dataMap);
 	}
 	
@@ -962,17 +957,15 @@ public class SceneryListController  extends WebBaseControll{
 			vehicle =  vehiclePO.getNumber();
 			type = vehiclePO.getType();
 		}
-		OrderPO userByid = Order.getOrder(userId,"正在停车",vehicle);
+		OrderPO userByid = Order.getOrder(userId,"已支付",vehicle);
 		if(userByid != null){
 			Time = userByid.getDueTime();
 			attactionid = userByid.getAttractionsId();
 			district = userByid.getParkingDistrict();
 			parkingLayer = userByid.getParkingLayer();
 		}
-		List<AttractionsParkingPO> attractions = Attra_ctions.getUid(attactionid);
-		for (AttractionsParkingPO attractionsParkingPO : attractions) {
-			fineMultiple = attractionsParkingPO.getFineMultiple();
-		}
+		AttractionsParkingPO attractions = Attra_ctions.getUid(attactionid);
+			fineMultiple = attractions.getFineMultiple();
 	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    try
 	    {
@@ -1051,10 +1044,8 @@ public class SceneryListController  extends WebBaseControll{
 			district = userByid.getParkingDistrict();
 			parkingLayer = userByid.getParkingLayer();
 		}
-		List<AttractionsParkingPO> attractions = Attra_ctions.getUid(attactionid);
-		for (AttractionsParkingPO attractionsParkingPO : attractions) {
-			fineMultiple = attractionsParkingPO.getFineMultiple();
-		}
+	    AttractionsParkingPO attractions = Attra_ctions.getUid(attactionid);
+		fineMultiple = attractions.getFineMultiple();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try
 		{

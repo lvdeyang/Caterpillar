@@ -65,6 +65,7 @@ public class ParkingController  extends WebBaseControll{
 	@RequestMapping(value = "/usere", method = RequestMethod.POST)
 	public Map<String, Object> Information(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		long userId = 	(Long) request.getSession().getAttribute("userId");
+		System.out.println("用户Id" + userId);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<UserInfoPO> user = conn_user.getUserByUid(userId);
 		if (user == null) {

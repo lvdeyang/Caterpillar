@@ -176,7 +176,7 @@ html {
 				htm.push('<div class="main">');
 				htm.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><img class="main_pic" id="main_pic"style="width:40%;height:130px; margin:20px 10px 20px;" src="'+data[i].parkingImg+'" /></a>');
 				htm.push('<div class="main_pid style="width:100%;height:50%;float:right;overflow:hidden;">');
-				htm.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><p style="font-weight: bold;font-size:1rem; color:#333;">' + data[i].parkingName + '</p></a>');
+				htm.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><p style="font-weight: bold;font-size:0.8rem; color:#333;">' + data[i].parkingName + '</p></a>');
 				htm.push('<p style="font-size:0.7rem;margin:0 0 5px;overflow:hidden;">总车位：' + data[i].commonParking + '<span></span>剩余车位：<span>' + data[i].usedParking + '</span></p>');
 				htm.push('<p style="font-size:0.7rem;lor:#BDBDBD; ">' + data[i].position + '  <span> 充电柱: ' + data[i].chargingColumn + '</span></p>');
 				htm.push('<p style="font-size:0.7rem;color:#BDBDBD; "> 地址 ：<span>' + data[i].address + '</span></p>');
@@ -261,7 +261,7 @@ html {
 				ht.push('<div class="main">');
 				ht.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><img class="main_pic" id="main_pic"style="width:40%;height:130px; margin:20px 10px 20px;" src="'+data[i].parkingImg+'" /></a>');
 				ht.push('<div class="main_pid style="width:100%;height:50%;float:right;overflow:hidden;">');
-				ht.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><p style="font-weight: bold;font-size:1rem;color:#333;">' + data[i].parkingName + '</p></a>');
+				ht.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><p style="font-weight: bold;font-size:0.8rem;color:#333;">' + data[i].parkingName + '</p></a>');
 				ht.push('<p style="font-size:0.7rem;margin:0 0 5px;overflow:hidden;">总车位：' + data[i].commonParking + '<span></span>剩余车位：<span>' + data[i].usedParking + '</span></p>');
 				ht.push('<p style="font-size:0.7rem;lor:#BDBDBD; ">' + data[i].position + '  <span> 充电柱: ' + data[i].chargingColumn + '</span></p>');
 				ht.push('<p style="font-size:0.7rem;color:#BDBDBD; "> 地址 ：<span>' + data[i].address + '</span></p>');
