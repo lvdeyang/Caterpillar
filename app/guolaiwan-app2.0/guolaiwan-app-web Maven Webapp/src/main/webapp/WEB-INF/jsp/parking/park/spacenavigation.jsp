@@ -111,17 +111,16 @@
 		  para.Headimg = userHeadimg;
 		 $.post(_take,$.toJSON(para), function(data) {
 		 data = parseAjaxResult(data);  
-			for(var i=0;i<data.length/2;i++){     
+			for(var i=0;i<data.length/3;i++){     
 			var htm = [];
 			htm.push('<div class="header" style="height:30%;">');
 			htm.push('<div class="header_in" style="width:100%;height:auto;padding-top:8%;">');
 			htm.push('<img class="img4"style="width: 8%;height:8%;display: inline-block;margin-left:11%; vertical-align: middle;"src=" lib/images/che1.png" />');
 			htm.push('<p style="display: inline-block;margin-left:1px;color:#ffffff;">'+userHeadimg+'</p>');
-			htm.push('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data[i*2]+'&tocoord='+data[i*2+1]+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><img class="img" style="float:right;width: 16%;height:8%;margin-right:10%;"src=" lib/images/daohang1.png"/> </a>');
-			
-			htm.push('<p style="margin:10% 0 0 20%;color:#ffffff;">'+data[i*2]+'</p>');
+			htm.push('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data[i*3]+'&tocoord='+data[i*3+1]+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><img class="img" style="float:right;width: 16%;height:8%;margin-right:10%;"src=" lib/images/daohang1.png"/> </a>');
+			htm.push('<p style="margin:10% 0 0 20%;color:#ffffff;">'+data[i*3]+'</p>');
 			htm.push('<img class="img4"style="width: 6%;height:6%;display: inline-block;margin-left:12%; vertical-align: middle;"src=" lib/images/dizhi.png" />');
-			htm.push('<p style="padding:0 0 10% 2%;font-size:12px;color:#ffffff;display: inline-block;">地址：<span>遵化市石门镇六盘营村西</span></p>')
+			htm.push('<p style="padding:0 0 10% 2%;font-size:12px;color:#ffffff;display: inline-block;">地址：<span>'+data[i*3+2]+'</span></p>');
 			htm.push('</div> ');
 			htm.push('<div class="header_on" style="border-bottom: solid 2px #6D82EB;width:100%;"></div>');
 			htm.push('</div>');	

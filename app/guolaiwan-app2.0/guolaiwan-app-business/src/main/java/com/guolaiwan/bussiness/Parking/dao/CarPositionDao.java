@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
 import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
+import com.guolaiwan.bussiness.Parking.po.OrderPO;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
@@ -63,12 +64,14 @@ public class CarPositionDao  extends AbstractBaseDao<CarPositionPO>  {
      * @return
      * @throws ParseException
      */
-    public List<CarPositionPO>  getAmend(long uid,String parkingLayer,String district) throws ParseException{
+    public CarPositionPO  getAmend(long uid,String parkingLayer,String district) throws ParseException{
     	QueryHql hql =   this.newQueryHql();
     	hql.andBy("attractionsId",Condition.eq,uid );
     	hql.andBy("number",Condition.eq,parkingLayer);
     	hql.andBy("district",Condition.eq,district);
-    	return findByHql(hql);
+    	 List<CarPositionPO> findByHql = findByHql(hql);
+        if(findByHql == null || findByHql.size() ==0) return null;
+   	    return findByHql.get(0);
     }
     
     

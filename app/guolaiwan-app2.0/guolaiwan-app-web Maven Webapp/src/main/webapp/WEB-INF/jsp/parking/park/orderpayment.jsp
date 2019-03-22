@@ -536,17 +536,10 @@ html, body {
 									para.cheng = cheng;
 									para.uid = ${param.uid};
 									$.post(_uti, $.toJSON(para), function(data) {
+									    alert(data.data.condition);
 									    if(data.data.condition != 1 ){
-									    
-									    
-									    payPublic(orderId);
-									    
-									    
-									    // 支付 判断 成功 
-									    
-									    
 									  
-									    /*var _util = window.BASEPATH + 'vice/message';
+									    var _util = window.BASEPATH + 'vice/message';
 										var param = {};
 										var uid =${param.uid};
 										param.sDate =  $("#startDate").val();
@@ -556,13 +549,8 @@ html, body {
 										param.mark =  sign;
 										param.uid =  uid;
 										$.post(_util, $.toJSON(param), function(data) {    
-										});	*/
-									   
-									    
-									   //    失败
-									       // 提示支付失败
-									      // window.location.href = "vice/merchant/parking";
-									    
+										   window.location.href = "vice/merchant/order?uid="+${param.uid};
+										});	
 									   }else{
 									   alert("您好你预订的车位已被购买,请您从新选择车位");
 									   }
@@ -584,7 +572,7 @@ html, body {
 							var num4 = document.getElementById("zong");
 							num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
 				}
-				
+		/* 		
 		var orderId=0;
 		var prepay_id;
 		var paySign;
@@ -649,7 +637,7 @@ html, body {
 		        onBridgeReady();
 		    }
 		}
-				
+				 */
 				
 	
 </script>

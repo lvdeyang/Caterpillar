@@ -15,7 +15,6 @@ public class ClassPO extends AbstractBasePO{
     //分组
     private long classGroup;
     
-    
 	public String getClassName() {
 		return className;
 	}
@@ -34,7 +33,4 @@ public class ClassPO extends AbstractBasePO{
 	public void setClassGroup(long classGroup) {
 		this.classGroup = classGroup;
 	}
-	
-	
-	
 }

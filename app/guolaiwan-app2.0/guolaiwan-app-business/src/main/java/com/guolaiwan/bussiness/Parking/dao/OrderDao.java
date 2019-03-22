@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
+import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
 import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
@@ -79,8 +80,33 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   hql.andBy("attractionsId", Condition.eq,attractionsId);
     	   hql.andBy("platenumber", Condition.eq,vehicle);
     	   return findByHql(hql);
-    	   
        }
+       
+       /**
+        * 通过用户id  景区id 查询信息
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public OrderPO  getform(Long userId,Long attractionsId,String vehicle) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   hql.andBy("orderId", Condition.eq,userId);
+    	   hql.andBy("attractionsId", Condition.eq,attractionsId);
+    	   hql.andBy("platenumber", Condition.eq,vehicle);
+    	   List<OrderPO> findByHql = findByHql(hql);
+           if(findByHql == null || findByHql.size() ==0) return null;
+      	    return findByHql.get(0);
+       }
+       
+       
+       
+       
+       
+       
+       
+       
        
        
        /**
@@ -203,17 +229,17 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
        
        
        /**
-        * 通过用户id   订单状态  查询订单信息
+        * 通过用户id  车牌  查询订单信息
         * @param userId 用户id
         * @param  
         * @param 
         * @return
         * @throws ParseException
         */
-       public List<OrderPO>  getOrderform(Long userId,String sal) throws ParseException{
+       public List<OrderPO>  getOrderfor(Long userId,String vehicle) throws ParseException{
     	   QueryHql hql = newQueryHql();
     	   hql.andBy("orderId", Condition.eq,userId);
-    	   hql.andBy("orderStatus", Condition.eq,sal);
+    	   hql.andBy("platenumber", Condition.eq,vehicle);
     	   return findByHql(hql);
     	   
        }

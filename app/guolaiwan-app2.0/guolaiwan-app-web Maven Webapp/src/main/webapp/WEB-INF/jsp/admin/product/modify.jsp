@@ -256,6 +256,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+ 						是否人脸：
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="ifFace" lay-skin="switch" id="ifFace" lay-text="ON|OFF" lay-filter="switchTest" value="${product.ifFace}">
+                        <div class="layui-unselect	layui-form-switch" lay-skin="_switch" >
+                        	<em>OFF</em>
+                        	<i></i>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="layui-form-item">
                 	<div class="layui-inline">
@@ -507,6 +519,9 @@
             //是否显示
             if($("#productIsShow").val()=="1"){
              		$("#productIsShow").prop("checked",true);
+            }
+            if($("#ifFace").val()=="1"){
+             		$("#ifFace").prop("checked",true);
             }
             //是否前端推荐
             if($("#productListRecommend").val()=="1"){

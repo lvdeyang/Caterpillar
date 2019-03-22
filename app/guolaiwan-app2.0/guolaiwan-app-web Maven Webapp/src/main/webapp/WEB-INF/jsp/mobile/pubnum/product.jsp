@@ -559,6 +559,11 @@ input[type="datetime-local"]:before{
 
 	$(function() {
 	
+	  $("#bookDate").datetimePicker();
+	  $("#startDate").datetimePicker();
+	  $("#endDate").datetimePicker();
+	
+	
 	  $(document).on('focus','.mydate',function(){
 	      $(this).removeAttr('placeholder');
 	  });
@@ -587,6 +592,8 @@ input[type="datetime-local"]:before{
       var iscollect=0;
       var qq="";
       var productModular=0;
+      var photo='';
+      var ifFace=0;
 		//获取所有一级推荐
       var _uriRecomment = window.BASEPATH + 'phoneApp/productInfo?productId=${id}&userId=${userId}';
 		
@@ -643,6 +650,7 @@ input[type="datetime-local"]:before{
 			    generateComment(data.comments , data.userimgs , data.useridlist)
 			    iscollect=data.product.ifcollection;
 			    qq=data.product.ifcollection;
+			    ifFace=data.product.ifFace;
 			    if(iscollect==1){
 			    
 			       $('#fav').html('取消收藏');
@@ -697,7 +705,7 @@ input[type="datetime-local"]:before{
 			    }
 			    if(sDate < new Date)
 			    {
-			    	$.toast("请输入正确的入住时间", "forbidden");
+			    	$.toast("入住时间不能小于当前时间", "forbidden");
 				     return false;
 			    }
 			  
@@ -734,9 +742,9 @@ input[type="datetime-local"]:before{
 					   }
 					   $('#roomList').children().remove();
 					   $('#roomList').append(html.join(''));
-					   $('#addressFitst').hide();
+					   $('.modDiv').hide();
 					   $('#roomList').show();
-					   $('#addressSecond').hide();
+					   
 					
 				}
 			});
@@ -992,76 +1000,96 @@ input[type="datetime-local"]:before{
 			}
 		});
 		
+		var buyOrbasketFlg=0;//0:buy,1:basket;
+		
 		$(document).on('click','#addOrder',function(){
-		var param={};
-		param.productId=${id};
-		param.productNum=$('#proCount').val();
-		param.userId=${userId};
-		param.paytype='WEICHAT';
-		param.source="PUBLICADDRESS";
-		param.bookDate=$('#bookDate').val();
-		param.startDate=$('#startDate').val();
-		param.endDate=$('#endDate').val();
-		param.source="PUBLICADDRESS";
-		param.roomId=$('#selRoomId').val();
-		param.roomName=$('#selRoom').val();
-		param.logisticsId=$('#logisticsList').val();
-		param.comboId=$('#comboList').val().split('-')[0];
-		var bookdiv =document.getElementById("bookdiv").style.display;       
-		var startdiv =document.getElementById("startdiv").style.display;  
-		var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "//"));
-		var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
-   		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));		
-   		if(sDate >= eDate)
-	    {
-		     $.toast("离店时间不能小于开始时间", "forbidden");
-		     return false;
-	    }
-	    if(sDate < new Date)
-	    {
-	    	$.toast("请输入正确的入住时间", "forbidden");
-		     return false;
-	    }
-	    if(bDate < new Date)
-	    {
-	    	$.toast("请输入正确的预定时间", "forbidden");
-		     return false;
-	    }
-		  if(bookdiv!="none")  
-		  {
-			  if($("#bookDate").val()==''){
-			  	$.toast("请选择预定日期", "forbidden");
-			  	return false;
+		
+				var bookdiv =document.getElementById("bookdiv").style.display;       
+				var startdiv =document.getElementById("startdiv").style.display;  
+				var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "//"));
+				var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
+		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));		
+		   		if(sDate >= eDate)
+			    {
+				     $.toast("离店时间不能小于开始时间", "forbidden");
+				     return false;
+			    }
+			    if(sDate < new Date)
+			    {
+			    	$.toast("入住时间不能早于当前时间", "forbidden");
+				     return false;
+			    }
+			    if(bDate < new Date)
+			    {
+			    	$.toast("预定时间不能早于当前时间", "forbidden");
+				     return false;
+			    }
+			  if(bookdiv!="none")  
+			  {
+				  if($("#bookDate").val()==''){
+				  	$.toast("请选择预定日期", "forbidden");
+				  	return false;
+				  }
+			  }else if(startdiv!="none")
+			  {
+			  	if($("#startDate").val()=='')	{
+			  		$.toast("请选择入住日期", "forbidden");
+			  		return false;
+			  	}else if($("#endDate").val()==''){
+			  		$.toast("请选择离店日期", "forbidden");
+			  		return false;
+			  	}     
 			  }
-		  }else if(startdiv!="none")
-		  {
-		  	if($("#startDate").val()=='')	{
-		  		$.toast("请选择入住日期", "forbidden");
-		  		return false;
-		  	}else if($("#endDate").val()==''){
-		  		$.toast("请选择离店日期", "forbidden");
-		  		return false;
-		  	}     
-		  }
-			var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${id}+'&count='+$('#proCount').val();
-		    
-			$.get(chkStockUrl, null, function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-				if(data.stock==0){
-				   $.toast("抱歉，库存不足", "forbidden");
-				   return;
-				}	
-				var _uriPay = window.BASEPATH + 'phoneApp/joinBasket';
-			    $.post(_uriPay, $.toJSON(param), function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					$.toast("已加入购物车");
-				});
-			});
-			
+		
+		
+		      if(ifFace==0||productModular!='0001'){
+		         joinBasket();
+		      }else{
+		         $('#selAddress').popup(); 
+		         $('.modDiv').hide();
+		         $('#cameraDiv').show();
+		         buyOrbasketFlg=1;
+		      }
+		
 
 		});
+		
+		function joinBasket(){
+		    var param={};
+			param.productId=${id};
+			param.productNum=$('#proCount').val();
+			param.userId=${userId};
+			param.paytype='WEICHAT';
+			param.source="PUBLICADDRESS";
+			param.bookDate=$('#bookDate').val();
+			param.startDate=$('#startDate').val();
+			param.endDate=$('#endDate').val();
+			param.source="PUBLICADDRESS";
+			param.roomId=$('#selRoomId').val();
+			param.roomName=$('#selRoom').val();
+			param.logisticsId=$('#logisticsList').val();
+			param.comboId=$('#comboList').val().split('-')[0];
+			param.photo=encodeURIComponent(photo);
+			param.idNum=$('#orderIdNum').val();
+			
+				var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${id}+'&count='+$('#proCount').val();
+			    
+				$.get(chkStockUrl, null, function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+					if(data.stock==0){
+					   $.toast("抱歉，库存不足", "forbidden");
+					   return;
+					}	
+					var _uriPay = window.BASEPATH + 'phoneApp/joinBasket';
+				    $.post(_uriPay, $.toJSON(param), function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+						$.toast("已加入购物车");
+					});
+				});
+		}
+		
 		
 		$(document).on('click','#buy',function(){
 			/* mizhu.alert('', '这是alert效果');  */   
@@ -1078,12 +1106,12 @@ input[type="datetime-local"]:before{
 		    }
 		    if(sDate < new Date)
 		    {
-		    	$.toast("请输入正确的入住时间", "forbidden");
+		    	$.toast("入住时间不能早于当前时间", "forbidden");
 			     return false;
 		    }
 		    if(bDate < new Date)
 		    {
-		    	$.toast("请输入正确的预定时间", "forbidden");
+		    	$.toast("预定时间不能早于当前时间", "forbidden");
 			     return false;
 		    }
 			  if(bookdiv!="none")  
@@ -1093,8 +1121,9 @@ input[type="datetime-local"]:before{
 				  	return false;
 				  }else{
          			$('#selAddress').popup(); 
+         			$('.modDiv').hide();
          			$('#addressFitst').show();
-					$('#roomList').hide();
+					
 				  }
 			  }else if(startdiv!="none")
 			  {
@@ -1106,13 +1135,15 @@ input[type="datetime-local"]:before{
 			  		return false;
 			  	}else{
          			$('#selAddress').popup(); 
+         			$('.modDiv').hide();
          			$('#addressFitst').show();
-					$('#roomList').hide();
+					
 			  	}      
 			  }else{
 			  	$('#selAddress').popup(); 
+			  	$('.modDiv').hide();
 			  	$('#addressFitst').show();
-				$('#roomList').hide();
+				
 			  }
               
         });
@@ -1121,14 +1152,7 @@ input[type="datetime-local"]:before{
 	  
 	    });
 		
-		
-		//$(document).on('click','.mailAddress',function(){
-		$(document).on('click','#buynow',function(){
-		    if(productModular!='0001'){
-		    	dobuy();
-		    	return;
-		    }
-		    
+		$(document).on('click','#uploadImage',function(){
 		    //人脸采集部分
 		    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
             var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
@@ -1155,29 +1179,52 @@ input[type="datetime-local"]:before{
             
             
              wx.ready(function () {
-		                wx.checkJsApi({
-		                    jsApiList: [
-		                        'chooseImage',
-		                        'previewImage',
-		                        'uploadImage',
-		                        'downloadImage'
-		                    ],
-		                    success: function (res) {
-		                      
-		                        if (res.checkResult.getLocation == false) {
-		                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
-		                            return;
-		                        }else{
-		                            choosePic();
-		                        }
-		                    }
-		                });
-		            });
-		            wx.error(function(res){
-		                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-		                alert("验证失败，请重试！");
-		                wx.closeWindow();
-		            });
+                wx.checkJsApi({
+                    jsApiList: [
+                        'chooseImage',
+                        'previewImage',
+                        'uploadImage',
+                        'downloadImage'
+                    ],
+                    success: function (res) {
+                      
+                        if (res.checkResult.getLocation == false) {
+                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                            return;
+                        }else{
+                            choosePic();
+                        }
+                    }
+                });
+            });
+            wx.error(function(res){
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                alert("验证失败，请重试！");
+                wx.closeWindow();
+            });
+		
+		});
+		
+		//$(document).on('click','.mailAddress',function(){
+		$(document).on('click','#buynow',function(){
+		    if(ifFace==0||productModular!='0001'){
+		    	dobuy();
+		    	return;
+		    }else{
+		       $('.modDiv').hide();
+		       $('#cameraDiv').show();
+		       buyOrbasketFlg=0;
+		    }
+		});
+		
+		$(document).on('click','#confirmPhoto',function(){
+		    $.closePopup();
+		    if(buyOrbasketFlg==1){
+		       joinBasket();
+		    }else{
+		       dobuy();
+		    }
+		    
 		});
 		
 		function dobuy(){
@@ -1197,6 +1244,8 @@ input[type="datetime-local"]:before{
 			param.roomName=$('#selRoom').val();
 			param.logisticsId=$('#logisticsList').val();
 		    param.comboId=$('#comboList').val().split('-')[0];
+		    param.photo=encodeURIComponent(photo);
+		    param.idNum=$('#orderIdNum').val();
 			var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${id}+'&count='+$('#proCount').val();
 			$.get(chkStockUrl, null, function(data){
 					data = parseAjaxResult(data);
@@ -1231,6 +1280,7 @@ input[type="datetime-local"]:before{
                 sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
                 sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
                 success: function (res) {
+                    $.toast("照片处理中...", "loading");
                     var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
                     getLocalData(localIds[0]);
                 }
@@ -1243,29 +1293,12 @@ input[type="datetime-local"]:before{
                 localId: localid, // 图片的localID
                 success: function (res) {
                     var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
-                    $('#im').attr('src','data:image/png;base64,'+localData);
-                    dobuy();
-                    //开始绑定
-                    /*$.ajax({
-                        url: "${pageContext.request.contextPath}/wechat/bindface",
-                        type: "post",
-                        data: {
-                            img: localData
-                        },
-                        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
-                        async: true,
-                        success: function (data) {
-                          
-                        }
-                    })*/
+                    $('#uploadImage').attr('src','data:image/png;base64,'+localData);
+                    photo=localData;
                 }
             });
  
         }
-		
-		
-		
-		
 		
 		
 		
@@ -1346,8 +1379,7 @@ input[type="datetime-local"]:before{
 		}
 		//编辑地址
 		$(document).on('click','#addAddress',function(){
-		    $('#addressFitst').hide();
-		    $('#roomList').hide();
+		    $('.modDiv').hide();
 		    $('#addressSecond').show();
 		
 		});
@@ -1378,9 +1410,9 @@ input[type="datetime-local"]:before{
 			$.post(_uriAdd, $.toJSON(params), function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
+				$('.modDiv').hide();
 				$('#addressFitst').show();
-		        $('#addressSecond').hide();
-		        $('#roomList').hide();
+		        
                 getAllAddr();
 			});
 	  });
@@ -1414,7 +1446,7 @@ input[type="datetime-local"]:before{
 					 html.push('<div class="weui-media-box weui-media-box_text mailAddress" id="mailadd-'+data[i].id+'">');
 					 html.push('<input style="float:left;height:27px;width:20px"  type="radio" name="radio1" class="" id="radio-'+data[i].id+'" '+chkattr+'>');
 			         html.push('<h4 style="width:80%;margin-left:35px;" class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）</h4>');
-			         html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
+			         //html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
 			         html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('</div>');
 				}
@@ -1510,7 +1542,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">预定日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			       <input id="bookDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
+			       <input id="bookDate" class="weui-input mydate" type="text" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
@@ -1520,7 +1552,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">入住日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="startDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
+			    	<input id="startDate" class="weui-input mydate" type="text" placeholder="请选择"> 
 			      
 			    </div>
 			    <div class="weui-cell__bd"></div>
@@ -1531,7 +1563,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">离店日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="endDate" class="weui-input mydate" type="datetime-local" placeholder="请选择"> 
+			    	<input id="endDate" class="weui-input mydate" type="text" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
@@ -1619,13 +1651,13 @@ input[type="datetime-local"]:before{
 				style="padding-bottom:50px;">
 				<div class="weui-popup__overlay"></div>
 				<div class="weui-popup__modal">
-				    <div id="roomList">
+				    <div class="modDiv" id="roomList">
 				    
 				    
 				    </div>
 				
 				
-					<div id="addressFitst">
+					<div class="modDiv" id="addressFitst">
 
 						<div class="weui-cells__title" style="color:red;font-weight:bold">点击地址选择或添加新联系人</div>
 						<a id="addAddress"
@@ -1645,7 +1677,7 @@ input[type="datetime-local"]:before{
 					</div>
 
 
-					<div id="addressSecond" style="display:none;">
+					<div class="modDiv" id="addressSecond" style="display:none;">
 
 						<div class="weui-cells weui-cells_form">
 							<div class="weui-cells__title">添加收货地址</div>
@@ -1657,7 +1689,7 @@ input[type="datetime-local"]:before{
 									<input id="name" class="weui-input" type="text" placeholder="">
 								</div>
 							</div>
-							<div class="weui-cell">
+							<div class="weui-cell" style="display:none;">
 							    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
 							    <div class="weui-cell__bd">
 							      <input id="idNum" class="weui-input" type="text" placeholder="">
@@ -1701,7 +1733,18 @@ input[type="datetime-local"]:before{
 							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
 
 					</div>
-
+                    <div class="modDiv" id="cameraDiv" style="display:none;">
+                          <div class="weui-cells__title">身份证</div>
+                          <div class="weui-cell">
+								<input style="border:1px solid black;" id="orderIdNum" class="weui-input" type="text"
+										placeholder="">
+						  </div>
+						  <div class="weui-cells__title">上传照片</div>
+                          <image id="uploadImage" src="<%=basePath%>/lib/fishimages/example.jpg" style="padding:15px;width:100%;height:250px;"></image>
+                          <a id="confirmPhoto"
+							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
+							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
+                    </div>
 				</div>
 
 
