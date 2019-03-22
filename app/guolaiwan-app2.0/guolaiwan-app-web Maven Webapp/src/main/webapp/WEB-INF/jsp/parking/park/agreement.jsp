@@ -118,7 +118,6 @@
 		 $.post(uri, $.toJSON(para), function(data) {
 			data = parseAjaxResult(data);
 			for(var i = 0; i<data.length; i++){
-				alert(data[i]);
 			 if("已支付"==data[i] ){
 		     window.location.href="vice/merchant/order?uid="+${param.useid};
 		    }

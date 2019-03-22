@@ -685,7 +685,7 @@ public class MerchantController extends BaseController {
 		List<MerchantPO> listpo = new ArrayList<MerchantPO>();
 		if (getLoginInfo() != null) {
 			Long comId = getLoginInfo().getComId();
-			String mName = encodeStr(request.getParameter("mName"));
+			String mName = request.getParameter("mName");
 			strMap.put("comId", comId);
 			strMap.put("shopName", mName);
 			listpo = conn_merchant.findAllByMapParams(strMap);

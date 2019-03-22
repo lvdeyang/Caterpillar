@@ -94,7 +94,7 @@ public class ParkManagementController extends BaseController {
 			fileUserId = getMerchantInfo().getComId();
 		}
 		String folderName = "/id_" + fileUserId; // 文件名
-		String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/lib/images/park" + folderName;
+		String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/parkingPic" + folderName;
 		// 文件名
 		String fileName = file.getOriginalFilename();
 		String newName = d.getTime() + fileName.substring(fileName.lastIndexOf(".")); // 时间戳+后缀名
@@ -110,7 +110,7 @@ public class ParkManagementController extends BaseController {
 		// 上传
 		File newFile = new File(path + "/" + newName);
 		file.transferTo(newFile);
-		po.setParkingImg("/lib/images/park" + folderName + "/" + newName);
+		po.setParkingImg("/parkingPic" + folderName + "/" + newName);
 		po.setAttractionsId(fileUserId);
 		attractionsDao.save(po);
 		map.put("code", "0");
@@ -164,7 +164,7 @@ public class ParkManagementController extends BaseController {
 		if (file.getSize() > 0) { // 修改图片
 			Date d = new Date();
 			String folderName = "/id_" + fileUserId; // 文件名
-			String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/lib/images/park" + folderName;
+			String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/parkimgPic" + folderName;
 			// 文件名
 			String fileName = file.getOriginalFilename();
 			String newName = d.getTime() + fileName.substring(fileName.lastIndexOf(".")); // 时间戳+后缀名
@@ -180,7 +180,7 @@ public class ParkManagementController extends BaseController {
 			// 上传
 			File newFile = new File(path + "/" + newName);
 			file.transferTo(newFile);
-			po.setParkingImg("/lib/images/park" + folderName + "/" + newName);
+			po.setParkingImg("/parkimgPic" + folderName + "/" + newName);
 			// 删除旧照片
 			if (imgTemp != null && !"".equals(imgTemp)) {
 				File[] filesInFolder = folder.listFiles();
