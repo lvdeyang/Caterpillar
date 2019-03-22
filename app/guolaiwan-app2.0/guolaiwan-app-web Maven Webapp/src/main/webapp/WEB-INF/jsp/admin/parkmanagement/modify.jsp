@@ -65,7 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 已用车位 </label>
 				<div class="layui-input-block">
-					<input type="text" name="usedParking" onkeyup="numChk($(this))" value="${po.usedParking}"  autocomplete="off" lay-verify="title" class="layui-input">
+					<input type="text" name="usedParking" onkeyup="numChkZero($(this))" value="${po.usedParking}"  autocomplete="off" lay-verify="title" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -185,11 +185,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    }
         	});
 		});
-		
+		function numChkZero($this){
+			var nubmer = $this.val();
+			var reg = /^[0-9]+[0-9]*]*$/; //判断正整数
+			if(!reg.test(nubmer)){
+				layer.msg("请输入整数数字！", { icon: 5, time: 1000 });
+				$this.val("");
+			}
+		}
 		function numChk($this,flag){
 			var nubmer = $this.val();
 			var re = /^[0-9]+.?[0-9]*$/; //判断字符串是否为数字  
-			var reg = /^[1-9]+[0-9]*]*$/; //判断正整数
+			var reg = /^[0-9]+[0-9]*]*$/; //判断正整数
 			if(!flag){
 				if(!reg.test(nubmer)){
 					layer.msg("请输入大于0的数字！", { icon: 5, time: 1000 });
