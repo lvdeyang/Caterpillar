@@ -105,11 +105,12 @@ $(function() {
 			data = parseAjaxResult(data);
 			var htm = [];
 			for (var i = 0; i < data.length; i++) {
+			alert(data[i].id);
 		   htm.push('<div class="main" style="width:100%;height:40%;background:#D5D5D5;position:relative">');
 		   htm.push('<div class="main_in" style="width:95%;height:80%;background:#ffffff;position:absolute;margin:auto;left:0;right:0;top:0;bottom:0;border-radius:5px;">')
            htm.push('<p style="font-size:14px;font-weight:bold;margin:5% 0 2% 5%;">' + data[i].parkingName + '</p>')
            htm.push('<p style="font-size:20px;font-weight:bold;margin:0 0 2% 5%;display: inline-block;"><span>'+data[i].parkingDistrict+'</span> <span>'+data[i].parkingNumber+'</span></p>')
-           htm.push('<p class="xiangqing" style="font-size:14px;font-weight:bold;padding-left:43%;display: inline-block;">订单详情 ></p>')
+           htm.push('<p class="xiangqing" style="font-size:14px;font-weight:bold;padding-left:43%;display: inline-block;"><a href="vice/merchant/order?uid='+data[i].attractionsId+'">订单详情 ></a></p>')
            htm.push('<div style="border-bottom: solid 1px #D5D5D5;width:90%;margin:0 auto;"></div>')
            htm.push('<p style="font-size:12px;margin:2% 0 2% 5%;color:#A3A3A3;">进场时间：' + data[i].bookingTime + '</p>')
            htm.push('<p style="font-size:12px;margin:2% 0 2% 5%;color:#A3A3A3;">离场时间：' + data[i].dueTime + '</p>')

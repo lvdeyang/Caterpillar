@@ -133,14 +133,16 @@ html, body {
     
 	
 	
-		 var _url = window.BASEPATH + 'vice/long';
-		 $.post(_url, null, function(data) {
+		  var _url = window.BASEPATH + 'vice/long';
+		 var  param= {};
+		 param.attid =  ${param.uid};
+		 $.post(_url, $.toJSON(param), function(data) {
 		 data = parseAjaxResult(data);
-		 var ht = [];
-		ht.push(' <img alt="" src="lib/images/145.png" style="width:60%;height:100%;">');
-		$('.img').append(ht.join(''));  
+		 alert(data.img);
+		 var ht = '<img alt="" src="'+data.img+'" style="width:60%;height:100%;">';
+		 $('.img').html(ht);  
 		});
-    
+     
     
     
     

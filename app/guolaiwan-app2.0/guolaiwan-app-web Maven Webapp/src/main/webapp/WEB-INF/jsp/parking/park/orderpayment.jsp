@@ -437,7 +437,31 @@ html, body {
 			//总额
 			var num4 = document.getElementById("zong");
 			num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
-
+			var _uti = window.BASEPATH + 'vice/number';
+			var para = {};
+			para.number = number;
+			para.qu = qu;
+			para.cheng = cheng;
+			para.uid = ${param.uid};
+			$.post(_uti, $.toJSON(para), function(data) {
+			    if(data.data.condition != 1 ){
+			      money = num4.innerText;
+			      var uid =${param.uid};
+			      var _util = window.BASEPATH + 'vice/message';
+						var param = {};
+						param.sDate =  $("#startDate").val();
+						param.eDate =  $("#endDate").val();
+						param.inner = demoP.innerHTML;
+						param.Text =  money; 
+						param.mark =  sign;
+						param.uid =  uid;
+						$.post(_util, $.toJSON(param), function(data) {    
+					});	
+			       payPublic(orderId,money,uid);
+                  }else{
+                   alert("您好你预订的车位已被购买,请您从新选择车位");
+                  }
+              });	
 		});
 
 
@@ -505,99 +529,81 @@ html, body {
 		});	
 	});
 	
+	function testStart(){
+		var startdiv = document.getElementById("startdiv").style.display;
+		var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
+		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
+		if (sDate >= eDate) {
+			$.toast("离场时间不能小于进场时间", "forbidden");
+			$("#endDate").val("")
+			return false;
+		}
+		if (sDate < new Date) {
+			$.toast("请输入正确的入场时间", "forbidden");
+			$("#startDate").val("")
+			return false;
+		}
+		if (startdiv != "none") {
+			if ($("#startDate").val() == '') {
+				$.toast("请选择入场日期", "forbidden");
+				return false;
+			} 
+		}
+	}
 	
 		   function test() {
-						
-							var startdiv = document.getElementById("startdiv").style.display;
-							var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
-							var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
-							if (sDate >= eDate) {
-								$.toast("离场时间不能小于进场时间", "forbidden");
-								return false;
-							}
-							if (sDate < new Date) {
-								$.toast("请输入正确的入场时间", "forbidden");
-								return false;
-							}
+					var startdiv = document.getElementById("startdiv").style.display;
+					var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
+					var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
+					if (sDate >= eDate) {
+						$.toast("离场时间不能小于进场时间", "forbidden");
+						return false;
+					}
+					if (sDate < new Date) {
+						$.toast("请输入正确的入场时间", "forbidden");
+						return false;
+					}
+			
+					if (startdiv != "none") {
+						if ($("#startDate").val() == '') {
+							$.toast("请选择入场日期", "forbidden");
+							return false;
+						} else if ($("#endDate").val() == '') {
+							$.toast("请选择离场日期", "forbidden");
+							return false;
+						}
+					}
+			
+					var demoP = document.getElementById("spa");
+					demoP.innerHTML = (parseInt(eDate - sDate) / 1000 / 60 / 60).toFixed(2);
 					
-							if (startdiv != "none") {
-								if ($("#startDate").val() == '') {
-									$.toast("请选择入场日期", "forbidden");
-									return false;
-								} else if ($("#endDate").val() == '') {
-									$.toast("请选择离场日期", "forbidden");
-									return false;
-								}
-								$("#btn").click(function() {
-									var _uti = window.BASEPATH + 'vice/number';
-									var para = {};
-									para.number = number;
-									para.qu = qu;
-									para.cheng = cheng;
-									para.uid = ${param.uid};
-									$.post(_uti, $.toJSON(para), function(data) {
-									    if(data.data.condition != 1 ){
-									    
-									    
-									    payPublic(orderId);
-									    
-									    
-									    // 支付 判断 成功 
-									    
-									    
-									  
-									    /*var _util = window.BASEPATH + 'vice/message';
-										var param = {};
-										var uid =${param.uid};
-										param.sDate =  $("#startDate").val();
-										param.eDate =  $("#endDate").val();
-										param.inner = demoP.innerHTML;
-										param.Text =  num4.innerText;
-										param.mark =  sign;
-										param.uid =  uid;
-										$.post(_util, $.toJSON(param), function(data) {    
-										});	*/
-									   
-									    
-									   //    失败
-									       // 提示支付失败
-									      // window.location.href = "vice/merchant/parking";
-									    
-									   }else{
-									   alert("您好你预订的车位已被购买,请您从新选择车位");
-									   }
-									});	
-					       
-								});
-					
-							}
-					
-							var demoP = document.getElementById("spa");
-							demoP.innerHTML = (parseInt(eDate - sDate) / 1000 / 60 / 60).toFixed(2);
-							
-							var num1 = document.getElementById('spa').innerText;
-							var num2 = document.getElementById('qian').innerText;
-							//应付金额
-							var num3 = document.getElementById("jin");
-							num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
-							//总额
-							var num4 = document.getElementById("zong");
-							num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+					var num1 = document.getElementById('spa').innerText;
+					var num2 = document.getElementById('qian').innerText;
+					//应付金额
+					var num3 = document.getElementById("jin");
+					num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+					//总额
+					var num4 = document.getElementById("zong");
+					num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
 				}
 				
-		var orderId=0;
+		var orderId=0; 
+		var text; 
 		var prepay_id;
-		var paySign;
-		var appId;
-		var timeStamp;
-		var nonceStr;
-		var packageStr;
-		var signType;
+		var paySign; 
+		var appId;   
+		var timeStamp;   
+		var nonceStr;  
+		var packageStr;  
+		var signType; 
 		var orderNo;	
 		
-			
-		function payPublic(orderId){
-			$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId, null, function(data){
+		function payPublic(orderId,text,uid){
+	        console.log(uid);
+			text =  text*100;	
+			var site = "payreportpark";
+			console.log(text)
+		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+text+"/"+uid+"/"+site, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;
@@ -623,16 +629,17 @@ html, body {
 		        },
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		                
-
+		             alert("交易成功");  
+	                 window.location.href = "vice/merchant/parking";
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
-		                alert("交易取消");  
-	
+		             alert("交易取消");  
+	                 window.location.href = "vice/merchant/parking";
 		            }  
 		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
 		                alert(res.err_desc); 
-
+                     window.location.href = "vice/merchant/parking";
+                       
 		            }  
 		        }
 		    );
@@ -716,7 +723,7 @@ style="float:right;overflow:auto;line-height:40px;margin-right:15px;">
 					<label class="weui-label">进场日期 :</label>
 				</div>
 				<div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-					<input id="startDate" class="weui-input" type="datetime-local"
+					<input id="startDate" class="weui-input" type="datetime-local"  onchange = "testStart()"
 						placeholder="">
 
 				</div>

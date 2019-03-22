@@ -37,7 +37,7 @@ public class OrderPO extends AbstractBasePO {
 	private String bookingTime;
 	//到期时间
 	private String dueTime;
-	//订单状态         // 未支付  已支付   已过期  申请退款 正在退款 退款完成
+	//订单状态         //  NOTPAY 未支付        PAYSUCCESS 已支付           PARKING 正在停车         PAST已过期     REFUNDING 申请退款             REFUNDED 退款完成
 	private String orderStatus;
 	//退款理由         
 	private String refund;
@@ -45,10 +45,25 @@ public class OrderPO extends AbstractBasePO {
 	private String platenumber;
 	//超时金额
 	private double overTimeMoney;
+	//超时时间
+	private double overTime;
 
-	//是否超时
-	private int overTime;
+	// 二维码路径
+	private String path;
 
+	
+	
+	
+	
+	
+
+	public double getOverTime() {
+		return overTime;
+	}
+
+	public void setOverTime(double overTime) {
+		this.overTime = overTime;
+	}
 
 	/**
 	 * 超时金额
@@ -273,20 +288,19 @@ public class OrderPO extends AbstractBasePO {
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-
 	/**
-	 * 是否超过预订时间
+	 * 二维码路径
 	 */
-	public int getOverTime() {
-		return overTime;
+	public String getPath() {
+		return path;
+	}
+	/**
+	 * 二维码路径
+	 */
+	public void setPath(String path) {
+		this.path = path;
 	}
 
-	/**
-	 * 是否超过预订时间  0未超出  1已超出
-	 */
-	public void setOverTime(int overTime) {
-		this.overTime = overTime;
-	}
 
 
 

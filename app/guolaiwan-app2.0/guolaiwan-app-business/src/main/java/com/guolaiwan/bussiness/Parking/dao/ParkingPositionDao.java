@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
+import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
@@ -42,11 +43,13 @@ public class ParkingPositionDao extends AbstractBaseDao<ParkingPositionPO>{
      * @return
      * @throws ParseException
      */
-    public List<ParkingPositionPO>  getNumber(Long uid,int number) throws ParseException{
+    public ParkingPositionPO  getNumber(Long uid,int number) throws ParseException{
     	QueryHql hql = this.newQueryHql();
     	hql.andBy("positionId",Condition.eq, uid);
     	hql.andBy("positionNumber",Condition.eq, number);
-    	return findByHql(hql);
+        List<ParkingPositionPO> findByHql = findByHql(hql);
+        if(findByHql == null || findByHql.size() ==0) return null;
+        return findByHql.get(0);
     }
     
 

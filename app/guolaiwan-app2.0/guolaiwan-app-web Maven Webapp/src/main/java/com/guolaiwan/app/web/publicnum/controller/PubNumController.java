@@ -467,21 +467,23 @@ public class PubNumController extends WebBaseControll {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/prev/paypark/{id}")
-	public Object prevPaypark(@PathVariable String id, String cip, HttpServletRequest request) throws Exception {
-		String orderNo = "park-"+id;
-		int payMoney=0;
-		
+	@RequestMapping(value = "/prev/paypark/{id}/{text}/{attactionsId}/{site}")
+	//TODO
+	public Object prevPaypark(@PathVariable String id, @PathVariable Integer text, @PathVariable Integer attactionsId,@PathVariable String site, HttpServletRequest request) throws Exception {
+
+        String orderNo = "park-"+id+"-"+attactionsId/*+"-"ID+"-"景ID*/;
+		int payMoney = text;
 		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
 		//payMoney+=orderInfoPO.getPayMoney();
-		
-
+		// String aLong = request.getParameter("text");
+		System.out.println(text);
+		System.out.println(attactionsId);
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user = conn_user.get(userId);
-		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/payreportpark", WxConfig.appId,
+		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/"+site, WxConfig.appId,
 				WxConfig.appsrcret);
 		// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
-		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo,1,
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo,payMoney,
 				"192.165.56.64", user.getUserOpenID());
 		// 生成包含prepay_id的map，map传入前端
 		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);

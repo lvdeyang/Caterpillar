@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
+import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
@@ -57,7 +58,7 @@ public class AttractionsDao extends AbstractBaseDao<AttractionsParkingPO> {
 	}
 
 	/**
-	 * 根据Id查询景区条例 所有 和车牌
+	 * 根据Id查询景区 信息
 	 * 
 	 * @param userId
 	 *            用户id
@@ -66,10 +67,12 @@ public class AttractionsDao extends AbstractBaseDao<AttractionsParkingPO> {
 	 * @return
 	 * @throws ParseException
 	 */
-	public List<AttractionsParkingPO> getUid(Long uid) throws ParseException {
+	public AttractionsParkingPO getUid(Long uid) throws ParseException {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("id", Condition.eq, uid);
-		return findByHql(hql);
+	    List<AttractionsParkingPO> findByHql = findByHql(hql);
+	    if(findByHql == null || findByHql.size() ==0) return null;
+	    return findByHql.get(0);
 	}
 
 	
