@@ -261,8 +261,8 @@ html, body {
 		 $.post(_ur,$.toJSON(par), function(data) {
 			data = parseAjaxResult(data);
 		   	var htm = []; 
-	       	htm.push('<p  style="text-align:center;font-size: 0.3rem;">停车场时间：<span id ="time" style="font-size: 0.3rem;">'+data.stoppingTime+'</span></p>');
-	       	htm.push('<p style="text-align:center;font-size: 0.3rem;">热线服务：<span style="font-size: 0.3rem;">'+data.phone+'</span></p>');
+	       	htm.push('<p  style="text-align:center;font-size: 0.3rem;">停车场时间：<span id ="time" style="font-size: 0.3rem;">8:00-20:00</span></p>');
+	       	htm.push('<p style="text-align:center;font-size: 0.3rem;">热线服务：<span style="font-size: 0.3rem;">0315-665748</span></p>');
 		   $('.footer_in').append(htm.join(''));  
 		});
 
