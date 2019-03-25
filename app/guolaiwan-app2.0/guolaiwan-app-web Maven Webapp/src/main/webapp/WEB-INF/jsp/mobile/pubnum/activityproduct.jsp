@@ -502,6 +502,12 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	  $("#bookDate").datetimePicker({
+	    onClose:function(){
+	       refreshActivity();
+	    }
+	  
+	  });
 	  var date;
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
@@ -554,6 +560,7 @@ html, body {
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
 				$('#addressphone1').html('<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopTel);
 			    $('#addressphone1').data('phone',data.merchant.shopTel);
+			    $('#bookDate').val(data.today);
 			    generateComment(data.comments , data.userimgs , data.useridlist)
 			    iscollect=data.product.ifcollection;
 			    qq=data.product.ifcollection;
@@ -567,6 +574,9 @@ html, body {
 			getProDate(data.product , data.miao , data.isXianGou);
 			initShare();
 		});
+		
+		
+		
 		
 		$(document).on('click','#addressphone1',function(){
 	       var phones=$('#addressphone1').data('phone').split('/');
@@ -585,6 +595,20 @@ html, body {
 	       var phones=phone.split('/');
 	       location.href ='tel://' + phones[0];
 	    });
+		
+		
+		function refreshActivity(){
+		   
+			var _urirefresh = window.BASEPATH + 'phoneApp/refreshActivity?productId=${id}&userId=${userId}&bDate='+$('#bookDate').val();
+		
+			$.get(_urirefresh, null, function(data){
+				$('#proDate').children().remove();
+				getProDate(data.data.product,data.data.miao,data.data.isXianGou);
+	
+			});
+		}
+		
+		
 		
 		function getProDate(data , miao , isXianGou){
 			var html=[];
@@ -871,7 +895,7 @@ html, body {
 		param.logisticsId=$('#logisticsList').val();
 		param.paytype='WEICHAT';
 		param.source="PUBLICADDRESS";
-		
+		param.bookDate=$('#bookDate').val();
 		var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val();
 			$.get(chkStockUrl, null, function(data){
 					data = parseAjaxResult(data);
@@ -885,7 +909,7 @@ html, body {
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					$.toast("已加入购物车");
-	
+	                refreshActivity();
 					
 				});
 	
@@ -920,7 +944,7 @@ html, body {
 			param.activityId=${actId};
 			param.logisticsId=$('#logisticsList').val();
 			param.source="PUBLICADDRESS";
-			
+			param.bookDate=$('#bookDate').val();
 			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val();
 			$.get(chkStockUrl, null, function(data){
 					data = parseAjaxResult(data);
@@ -934,7 +958,7 @@ html, body {
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					
-					
+					refreshActivity();
 					$.confirm("确定支付？", function() {
 					    payPublic(data.orderId);
 					  }, function() {
@@ -1173,6 +1197,21 @@ html, body {
             <div style="font-size:12px;padding:12px;overflow-x:hidden;width:155px;padding-left:70px;margin-top:-5px;">
 			    <a href="javascript:;" style="background:#18b4ed;width:80px;font-size:12px" class="weui-btn weui-btn_mini weui-btn_primary" id="gotoshop">进入店铺</a>
 			</div></div>
+			
+			<div id="choosediv"
+				style="display:none;width:95%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">购买设置</div>
+			<div id="bookdiv" style="font-size:12px;float:left;width:100%;overflow-x:scroll">
+			  <div class="weui-cell" >
+			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">预定日期</label></div>
+			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
+			       <input id="bookDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			    </div>
+			    <div class="weui-cell__bd"></div>
+			  </div>
+			</div>
+			
+			
+			
 			<div style="font-size:12px;float:left;width:100%;overflow-x:scroll">
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">物流选择</label></div>
