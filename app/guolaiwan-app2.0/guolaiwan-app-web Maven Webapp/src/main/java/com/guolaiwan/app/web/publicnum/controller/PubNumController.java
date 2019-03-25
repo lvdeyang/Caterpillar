@@ -1781,6 +1781,14 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 	
+	
+	@RequestMapping(value = "/progateway")
+	public ModelAndView progatewayIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/progateway");
+		return mv;
+	}
+	
 	@RequestMapping(value = "/camera")
 	public ModelAndView camera(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
