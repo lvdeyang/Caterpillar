@@ -1352,7 +1352,7 @@ public class PhoneController extends WebBaseControll {
 			if (collection != null) {
 				_product.setIfcollection(1);
 			}
-			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findTodayBuy(userId, activityPro.getId());
+			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),new Date());
 			if (activityPro.getOnePerDay() == 1 && userOneDayBuyPOs != null && !userOneDayBuyPOs.isEmpty()) {
 				dataMap.put("isXianGou", 1);
 			}
@@ -1438,9 +1438,97 @@ public class PhoneController extends WebBaseControll {
 		dataMap.put("userimgs", userHeadImgs);
 		dataMap.put("useridlist", useridList);
 		dataMap.put("shopTel", merchantJson.getString("shopTel"));
+		dataMap.put("today", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm"));
 		return success(dataMap);
 	}
 
+	
+	@ResponseBody
+	@RequestMapping(value = "/refreshActivity", method = RequestMethod.GET)
+	public Map<String, Object> refreshActivity(HttpServletRequest request, HttpServletResponse response, long productId,String bDate)
+			throws Exception {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		ProductPO product = conn_product.get(productId);
+		if (product == null) {
+			return ERROR("未获取到产品！");
+		}
+		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		// 商品
+		ProductVO _product = new ProductVO().set(product);
+		
+
+		_product.setProductShowPic(sysConfig.getWebUrl() + _product.getProductShowPic()); // 显示图片
+		_product.setProductMorePic(split(_product.getProductMorePic(), sysConfig.getWebUrl()));// 多图
+		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(_product.getId());
+		
+		// 收藏
+		Long userId = Long.parseLong(request.getParameter("userId"));
+		if (userId != null) {
+			UserInfoPO user = conn_user.get(userId);
+			CollectionPO collection = conn_collection.getByUserProId(user, productId);
+			if (collection != null) {
+				_product.setIfcollection(1);
+			}
+			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),DateUtil.parse(bDate, "yyyy-MM-dd HH:mm"));
+			if (activityPro.getOnePerDay() == 1 && userOneDayBuyPOs != null && !userOneDayBuyPOs.isEmpty()) {
+				dataMap.put("isXianGou", 1);
+			}
+
+		}
+		// 测试
+		DecimalFormat df = new DecimalFormat("0.00");
+		ActivityPO activityPO = conn_activity.get(activityPro.getActivityId());
+		if (activityPO.getType().equals(ActivityType.FIXEDPRICE)) {
+			if (activityPro.getPrice() > 0) {
+				_product.setProductPrice(df.format(Double.parseDouble(activityPro.getPrice() + "") / 100));
+			} else {
+				_product.setProductPrice(df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
+			}
+
+		}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+			if (activityPro.getPrice() > 0) {
+				_product.setProductPrice(df.format(Double.parseDouble(activityPro.getPrice() + "") / 100));
+			} else {
+				_product.setProductPrice(
+							df.format(Double.parseDouble(Long.parseLong(_product.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+			}
+		}
+
+		Date date = DateUtil.parse(bDate, "yyyy-MM-dd HH:mm");
+		Date beginDate = activityPro.getBeginDate();
+		Date endDate = activityPro.getEndDate();
+		Date beginTime = activityPro.getBeginTime();
+		Date endTime = activityPro.getEndTime();
+
+		String beginTimeStr = DateUtil.format(date, "yyyy-MM-dd") + " " + DateUtil.format(beginTime, "HH:mm:ss");
+		Date beginTimeAll = DateUtil.parse(beginTimeStr, "yyyy-MM-dd HH:mm:ss");
+		String endTimeStr = DateUtil.format(date, "yyyy-MM-dd") + " " + DateUtil.format(endTime, "HH:mm:ss");
+		Date endTimeAll = DateUtil.parse(endTimeStr, "yyyy-MM-dd HH:mm:ss");
+
+		if (date.before(beginDate) || date.before(beginTimeAll)) {
+			_product.setIsEffective(0);
+			long a = date.getTime();
+			long b = beginDate.getTime();
+			long b1 = beginTimeAll.getTime();
+			long c = (b - a) / 1000;
+			if (b < b1) {
+				c = (b1 - a) / 1000;
+			}
+			dataMap.put("miao", c);
+		} else if (date.after(beginDate) && date.after(beginTimeAll) && date.before(endTimeAll)
+				&& date.before(endDate)) {
+			_product.setIsEffective(1);
+		} else if (date.after(endDate) || date.after(endTimeAll)) {
+			_product.setIsEffective(2);
+		}
+
+		
+	
+		dataMap.put("product", _product);
+		return success(dataMap);
+	}
+	
+	
 	/**
 	 * 商品详情页 产品经销商
 	 * 
@@ -2209,7 +2297,7 @@ public class PhoneController extends WebBaseControll {
 		// 商品数量
 		order.setProductNum(Long.parseLong(num));
 		//
-		if (!comboId.equals("0")) {
+		if (comboId!=null&&!comboId.equals("0")) {
 			ProductComboPO comboPO = conn_combo.get(Long.parseLong(comboId));
 			payMoney = Integer.parseInt(num) * (comboPO.getComboprice());
 			orderAllMoney = payMoney;
@@ -2223,6 +2311,10 @@ public class PhoneController extends WebBaseControll {
 			buyPO.setUpdateTime(new Date());
 			buyPO.setUserId(userId);
 			buyPO.setProId(Long.parseLong(activityId));
+			if (orderBookDate != null && orderBookDate != "" && orderBookDate.length() != 0) {
+				orderBookDate = orderBookDate.replace("T", " ");
+				buyPO.setBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
+			}
 			conn_userone.save(buyPO);
 			order.setActivityId(Long.parseLong(activityId));
 
@@ -2459,6 +2551,10 @@ public class PhoneController extends WebBaseControll {
 			buyPO.setUpdateTime(new Date());
 			buyPO.setUserId(userId);
 			buyPO.setProId(Long.parseLong(activityId));
+			if (orderBookDate != null && orderBookDate != "" && orderBookDate.length() != 0) {
+				orderBookDate = orderBookDate.replace("T", " ");
+				buyPO.setBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
+			}
 			conn_userone.save(buyPO);
 			order.setActivityId(Long.parseLong(activityId));
 			conn_surpportbuy.delSurpport(userId, Long.parseLong(activityId));
@@ -3200,7 +3296,20 @@ public class PhoneController extends WebBaseControll {
 					return FORBIDDEN(message);
 				}
 			}
-
+            if(orderInfoPO.getOrderBookDate()!=null){
+            	
+            	String today=DateUtil.format(new Date(),"yyyy-MM-dd");
+    			Date sDate=DateUtil.parse(today+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+    			Date eDate=DateUtil.parse(today+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+    			if(sDate.after(orderInfoPO.getOrderBookDate())||eDate.before(orderInfoPO.getOrderBookDate())){
+    				String message = "这条订单日期不是今天！";
+					return FORBIDDEN(message);
+    			}
+            	
+            }
+			
+			
+			
 			// 判断订单状态？？？
 			if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYFINISH)
 					&& !orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {

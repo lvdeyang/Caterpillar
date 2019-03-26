@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.admin.po;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,6 +25,7 @@ public class UserOneDayBuyPO extends AbstractBasePO {
 	private static final long serialVersionUID = 1L;
 	private long userId;
 	private long proId;//活动关联商品表ID
+	private Date bookDate;
 	public long getUserId() {
 		return userId;
 	}
@@ -35,6 +37,12 @@ public class UserOneDayBuyPO extends AbstractBasePO {
 	}
 	public void setProId(long proId) {
 		this.proId = proId;
+	}
+	public Date getBookDate() {
+		return bookDate;
+	}
+	public void setBookDate(Date bookDate) {
+		this.bookDate = bookDate;
 	}
 	
 	

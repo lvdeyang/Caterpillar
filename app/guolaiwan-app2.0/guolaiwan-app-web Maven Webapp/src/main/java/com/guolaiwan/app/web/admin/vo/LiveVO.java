@@ -27,6 +27,19 @@ public class LiveVO extends AbstractBaseVO<LiveVO, LivePO> {
 	
 	//用户(显示)
 	private UserInfoVO user;
+	
+	private String leshiyunId;
+
+	
+	
+	public String getLeshiyunId() {
+		return leshiyunId;
+	}
+
+	public LiveVO setLeshiyunId(String leshiyunId) {
+		this.leshiyunId = leshiyunId;
+		return this;
+	}
 
 	public String getLiveName() {
 		return liveName;
@@ -111,6 +124,7 @@ public class LiveVO extends AbstractBaseVO<LiveVO, LivePO> {
 		.setLiveType(entity.getLiveType().getFiled())
 		.setPubName(entity.getPubName())
 		.setMerchantId(entity.getMerchantId())
+		.setLeshiyunId(entity.getLeshiyunId())
 		.setUserId(entity.getUserId());
 		return this;
 

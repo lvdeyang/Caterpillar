@@ -502,6 +502,12 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	  $("#bookDate").datetimePicker({
+	    onClose:function(){
+	       refreshActivity();
+	    }
+	  
+	  });
 	  var date;
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
@@ -519,6 +525,8 @@ html, body {
 	  var phone='';
       var iscollect=0;
       var qq="";
+      var buyOrbasketFlg=0;
+      var ifFace=0;
 		//获取所有一级推荐
       var _uriRecomment = window.BASEPATH + 'phoneApp/activityInfo?productId=${id}&userId=${userId}';
 		
@@ -554,9 +562,11 @@ html, body {
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
 				$('#addressphone1').html('<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopTel);
 			    $('#addressphone1').data('phone',data.merchant.shopTel);
+			    $('#bookDate').val(data.today);
 			    generateComment(data.comments , data.userimgs , data.useridlist)
 			    iscollect=data.product.ifcollection;
 			    qq=data.product.ifcollection;
+			    ifFace=data.product.ifFace;
 			    if(iscollect==1){
 			    
 			       $('#fav').html('取消收藏');
@@ -567,6 +577,9 @@ html, body {
 			getProDate(data.product , data.miao , data.isXianGou);
 			initShare();
 		});
+		
+		
+		
 		
 		$(document).on('click','#addressphone1',function(){
 	       var phones=$('#addressphone1').data('phone').split('/');
@@ -585,6 +598,20 @@ html, body {
 	       var phones=phone.split('/');
 	       location.href ='tel://' + phones[0];
 	    });
+		
+		
+		function refreshActivity(){
+		   
+			var _urirefresh = window.BASEPATH + 'phoneApp/refreshActivity?productId=${id}&userId=${userId}&bDate='+$('#bookDate').val();
+		
+			$.get(_urirefresh, null, function(data){
+				$('#proDate').children().remove();
+				getProDate(data.data.product,data.data.miao,data.data.isXianGou);
+	
+			});
+		}
+		
+		
 		
 		function getProDate(data , miao , isXianGou){
 			var html=[];
@@ -862,35 +889,45 @@ html, body {
 		
 		
 		$(document).on('click','#addOrder',function(){
-		
-		var param={};
-		param.productId=${id};
-		param.productNum=$('#proCount').val();
-		param.userId=${userId};
-		param.activityId=${actId};
-		param.logisticsId=$('#logisticsList').val();
-		param.paytype='WEICHAT';
-		param.source="PUBLICADDRESS";
-		
-		var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val();
-			$.get(chkStockUrl, null, function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-				if(data.stock==0){
-				   $.toast("抱歉，库存不足", "forbidden");
-				   return;
-				}	
-		       var _uriPay = window.BASEPATH + 'phoneApp/joinBasket';
-				$.post(_uriPay, $.toJSON(param), function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					$.toast("已加入购物车");
-	
-					
-				});
-	
-			});
+		    if(ifFace==0){
+		         joinBasket();
+		    
+		    }else{
+		         $('#selAddress').popup(); 
+		         $('.modDiv').hide();
+		         $('#cameraDiv').show();
+		         buyOrbasketFlg=1;
+		    }
 		});
+		function joinbasket(){
+			var param={};
+			param.productId=${id};
+			param.productNum=$('#proCount').val();
+			param.userId=${userId};
+			param.activityId=${actId};
+			param.logisticsId=$('#logisticsList').val();
+			param.paytype='WEICHAT';
+			param.source="PUBLICADDRESS";
+			param.bookDate=$('#bookDate').val();
+			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val();
+				$.get(chkStockUrl, null, function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+					if(data.stock==0){
+					   $.toast("抱歉，库存不足", "forbidden");
+					   return;
+					}	
+			       var _uriPay = window.BASEPATH + 'phoneApp/joinBasket';
+					$.post(_uriPay, $.toJSON(param), function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+						$.toast("已加入购物车");
+		                refreshActivity();
+						
+					});
+		
+				});
+		}
 		
 		$(document).on('click','#gotoshop',function(){
 	    	location.href=window.BASEPATH + 'pubnum/gotoshop?productId=${id}';
@@ -907,9 +944,31 @@ html, body {
 	    });
 		
 		
-		$(document).on('click','.mailAddress',function(){
+		$(document).on('click','#buynow',function(){
+		    if(ifFace==0){
+		    	dobuy();
+		    	return;
+		    }else{
+		       $('.modDiv').hide();
+		       $('#cameraDiv').show();
+		       buyOrbasketFlg=0;
+		    }
+		});
+		
+		
+		$(document).on('click','#confirmPhoto',function(){
 		    $.closePopup();
-		    var ids=this.id.split('-');
+		    if(buyOrbasketFlg==1){
+		       joinBasket();
+		    }else{
+		       dobuy();
+		    }
+		    
+		});
+		
+		function dobuy()
+		    $.closePopup();
+		    var ids=$('input[type^=radio]:checked').attr('id').split('-');
 		    var param={};
 			param.productId=${id};
 			param.productNum=$('#proCount').val();
@@ -920,7 +979,7 @@ html, body {
 			param.activityId=${actId};
 			param.logisticsId=$('#logisticsList').val();
 			param.source="PUBLICADDRESS";
-			
+			param.bookDate=$('#bookDate').val();
 			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val();
 			$.get(chkStockUrl, null, function(data){
 					data = parseAjaxResult(data);
@@ -934,7 +993,7 @@ html, body {
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					
-					
+					refreshActivity();
 					$.confirm("确定支付？", function() {
 					    payPublic(data.orderId);
 					  }, function() {
@@ -945,7 +1004,7 @@ html, body {
 				
 			});
 			
-		});
+		}
 		
 		
 		var prepay_id;
@@ -1026,7 +1085,7 @@ html, body {
 		
 		//编辑地址
 		$(document).on('click','#addAddress',function(){
-		    $('#addressFitst').hide();
+		    $('.modDiv').hide();
 		    $('#addressSecond').show();
 		
 		});
@@ -1057,8 +1116,8 @@ html, body {
 			$.post(_uriAdd, $.toJSON(params), function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
+				$('.modDiv').hide();
 				$('#addressFitst').show();
-		        $('#addressSecond').hide();
                 getAllAddr();
 			});
 	  });
@@ -1083,9 +1142,13 @@ html, body {
 			if(data && data.length>0){
 			    var html=[];
 				for(var i=0; i<data.length; i++){
-				   
+				   var chkattr='';
+				     if(i==0){
+				         chkattr='checked="checked"';
+				     }
 					 html.push('<div class="weui-media-box weui-media-box_text mailAddress" id="mailadd-'+data[i].id+'">');
-			         html.push('<h4 class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）<span style="font-size:12px;color:red" class=" icon-share-alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击支付</span></h4>');
+					 html.push('<input style="float:left;height:27px;width:20px"  type="radio" name="radio1" class="" id="radio-'+data[i].id+'" '+chkattr+'>');
+			         html.push('<h4 style="width:80%;margin-left:35px;" class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）</h4>');
 			         //html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
 			         html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('</div>');
@@ -1173,6 +1236,21 @@ html, body {
             <div style="font-size:12px;padding:12px;overflow-x:hidden;width:155px;padding-left:70px;margin-top:-5px;">
 			    <a href="javascript:;" style="background:#18b4ed;width:80px;font-size:12px" class="weui-btn weui-btn_mini weui-btn_primary" id="gotoshop">进入店铺</a>
 			</div></div>
+			
+			<div id="choosediv"
+				style="display:none;width:95%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">购买设置</div>
+			<div id="bookdiv" style="font-size:12px;float:left;width:100%;overflow-x:scroll">
+			  <div class="weui-cell" >
+			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">预定日期</label></div>
+			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
+			       <input id="bookDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			    </div>
+			    <div class="weui-cell__bd"></div>
+			  </div>
+			</div>
+			
+			
+			
 			<div style="font-size:12px;float:left;width:100%;overflow-x:scroll">
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">物流选择</label></div>
@@ -1224,24 +1302,29 @@ html, body {
 				style="padding-bottom:50px;">
 				<div class="weui-popup__overlay"></div>
 				<div class="weui-popup__modal">
-					<div id="addressFitst">
+					<div class="modDiv"  id="addressFitst">
 
 						<div class="weui-cells__title" style="color:red;font-weight:bold">点击地址选择或添加新联系人</div>
+						
+						<a id="addAddress"
+								style="width:96%;font-size:14px;margin-left:2%;background-color:#18b4ed;height:30px;line-height:30px;margin-top:0"
+								href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a>
+						
 						<div class="weui-panel__bd" id="addressList"
 							style="padding-bottom:40px;"></div>
 
 						<div style="width:100%;height:40px;">
 							<a id="cancelAddress"
-								style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
-								href="javascript:;" class="weui-btn weui-btn_primary">取消购买</a> <a
-								id="addAddress"
-								style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
-								href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a>
+								style="width:47%;font-size:14px;margin-left:2%;float:left;height:40px;line-height:40px;"
+								href="javascript:;" class="weui-btn weui-btn_warn">取消购买</a> <a
+								id="buynow"
+								style="width:47%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
+								href="javascript:;" class="weui-btn weui-btn_primary">立即购买</a>
 						</div>
 					</div>
 
 
-					<div id="addressSecond" style="display:none;">
+					<div class="modDiv"  id="addressSecond" style="display:none;">
 
 						<div class="weui-cells weui-cells_form">
 							<div class="weui-cells__title">添加收货地址</div>
@@ -1295,6 +1378,19 @@ html, body {
 							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
 
 					</div>
+					
+					<div class="modDiv" id="cameraDiv" style="display:none;">
+                          <div class="weui-cells__title">身份证</div>
+                          <div class="weui-cell">
+								<input style="border:1px solid black;" id="orderIdNum" class="weui-input" type="text"
+										placeholder="">
+						  </div>
+						  <div class="weui-cells__title">上传照片</div>
+                          <image id="uploadImage" src="<%=basePath%>/lib/fishimages/example.jpg" style="padding:15px;width:100%;height:250px;"></image>
+                          <a id="confirmPhoto"
+							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
+							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
+                    </div>
 
 				</div>
 

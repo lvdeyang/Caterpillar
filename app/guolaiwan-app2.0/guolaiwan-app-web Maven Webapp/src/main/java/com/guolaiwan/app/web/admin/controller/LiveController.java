@@ -96,6 +96,8 @@ public class LiveController extends BaseController {
 		LivePO live = conn_live.get(id);
 		if(field.equals("liveName")){
 			live.setLiveName(value);
+		}else if(field.equals("leshiyunId")){
+			live.setLeshiyunId(value);
 		}else{
 			live.setLiveStatusType(LiveStatusType.fromString(value));
 		}
