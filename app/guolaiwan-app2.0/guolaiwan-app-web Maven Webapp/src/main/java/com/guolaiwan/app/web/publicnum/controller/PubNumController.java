@@ -1412,16 +1412,21 @@ public class PubNumController extends WebBaseControll {
         if(actproductPO.getProductStock()>=count){
         	if (actproductPO.getDayStock() > 0) {
 				int daycount = conn_order.countDateByActpro(actProId,DateUtil.parse(bDate,"yyyy-MM-dd HH:mm"));
-				if (daycount < actproductPO.getDayStock()) {
+				if (count < actproductPO.getDayStock()-daycount) {
 					ret.put("stock", actproductPO.getProductStock() > (actproductPO.getDayStock() - daycount)
 							? (actproductPO.getDayStock() - daycount) : actproductPO.getProductStock());
+					ret.put("stock", actproductPO.getProductStock());
+					actproductPO.setProductStock(actproductPO.getProductStock()-count);
 				} else {
 					ret.put("stock", 0);
 				}
+			}else{
+				ret.put("stock", actproductPO.getProductStock());
+				actproductPO.setProductStock(actproductPO.getProductStock()-count);
+	        	conn_activityRel.save(actproductPO);
 			}
-        	ret.put("stock", actproductPO.getProductStock());
-        	actproductPO.setProductStock(actproductPO.getProductStock()-count);
-        	conn_activityRel.save(actproductPO);
+        	
+        	
         }else{
         	ret.put("stock", 0);
         }

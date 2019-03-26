@@ -502,12 +502,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-	  $("#bookDate").datetimePicker({
-	    onClose:function(){
-	       refreshActivity();
-	    }
 	  
-	  });
 	  var date;
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
@@ -571,6 +566,18 @@ html, body {
 			    ifFace=data.product.ifFace;
 			    bookStart=data.activityPro.bookBeginTime;
 			    bookEnd=data.activityPro.bookEndTime;
+
+			    $("#bookDate").datetimePicker({
+			        min:bookStart,
+				    max:bookEnd,
+				    onClose:function(){
+				       refreshActivity();
+				    }
+				    
+				  
+				 });
+			    
+			    
 			    if(iscollect==1){
 			    
 			       $('#fav').html('取消收藏');
@@ -921,7 +928,7 @@ html, body {
 		         buyOrbasketFlg=1;
 		    }
 		});
-		function joinbasket(){
+		function joinBasket(){
 			var param={};
 			param.productId=${id};
 			param.productNum=$('#proCount').val();
