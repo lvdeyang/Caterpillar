@@ -535,9 +535,9 @@ html, body {
 			</div>
 		</div>
 		<div class="content">
-			<image style="width:100%" src="lib/images/line1.jpg" id="line1"/>
-			<image style="width:100%" src="lib/images/2.jpg" id="line2"/>
-			<image style="width:100%" src="lib/images/3.jpg" id="line3"/>
+			<image style="width:100%" src="lib/images/shopping01.jpg" id="line1"/>
+			 <image style="width:100%" src="lib/images/shopping02.jpg" id="line2"/> 
+			<image style="width:100%;margin-top:-1.5%;" src="lib/images/shopping03.jpg" id="line3"/>
 		</div>
 	</div>
 </body>
