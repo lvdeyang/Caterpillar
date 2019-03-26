@@ -326,6 +326,11 @@ public class ProductController extends BaseController {
 		BigDecimal productPrice = bd.multiply(bd1);
 		long productStock = Long.parseLong(request.getParameter("productStock"));
 
+		
+		int ifFace = 1;
+		if (request.getParameter("ifFace") == null)
+			ifFace = 0;
+		
 		// 显示、推荐
 		int productIsShow = 1;
 		if (request.getParameter("productIsShow") == null)
@@ -397,6 +402,7 @@ public class ProductController extends BaseController {
 		product.setProductOldPrice(productOldPrice.longValue());
 		product.setProductPrice(productPrice.longValue());
 		product.setUpdateTime(d);
+		product.setIfFace(ifFace);
 
 		// 审核
 		product.setProductAuditstatus(ShopAuditStateType.fromName(productAuditstates));
@@ -460,6 +466,10 @@ public class ProductController extends BaseController {
 		int productCommissionCode = Integer.parseInt(request.getParameter("productCommissionCode"));
 		long productCommissionPrice = (long) (Double.parseDouble(request.getParameter("productCommissionPrice"))*100);
 
+		int ifFace = 1;
+		if (request.getParameter("ifFace") == null)
+			ifFace = 0;
+		
 		// 显示、推荐
 		int productIsShow = 1;
 		if (request.getParameter("productIsShow") == null)
@@ -591,7 +601,7 @@ public class ProductController extends BaseController {
 		product.setCostMessage(costMessage);
 		product.setNotes(notes);
 		product.setRemarks(remarks);
-		
+		product.setIfFace(ifFace);
 		
 		conn_product.saveOrUpdate(product);
 		return "success";

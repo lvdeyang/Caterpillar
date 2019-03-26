@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.guolaiwan.app.web.admin.vo.MerModularVO;
+import com.guolaiwan.app.web.admin.Utils.ExportExcelSeedBack;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
@@ -43,6 +44,7 @@ import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
 import pub.caterpillar.commons.util.binary.Sha1Util;
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 
 /**
@@ -186,13 +188,12 @@ public class MerchantController extends BaseController {
 		} else {
 			merchant.setBusiness(MerchantSpecialBusiness.fromString(business));
 		}
-		
-		UserInfoPO chkuser=conn_userinfo.getUserByPhone(shopLoginName);
-		if(chkuser!=null){
+
+		UserInfoPO chkuser = conn_userinfo.getUserByPhone(shopLoginName);
+		if (chkuser != null) {
 			return "has";
 		}
-		
-		
+
 		UserInfoPO user = new UserInfoPO();
 		user.setUserPhone(shopLoginName);
 		user.setUserPassword(Sha1Util.getSha1(shopLoginPwd));
@@ -302,7 +303,7 @@ public class MerchantController extends BaseController {
 		String modularClass = request.getParameter("modularClass");
 		String modularClassId = request.getParameter("modularClassId");
 		String shopLoginPwdj = Sha1Util.getSha1(shopLoginPwd);
-		if(shopLoginPwd.length()>20){
+		if (shopLoginPwd.length() > 20) {
 			shopLoginPwdj = shopLoginPwd;
 		}
 
@@ -636,45 +637,92 @@ public class MerchantController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/userlist.do" , method = RequestMethod.POST)
-	public Map<String, Object> getUsers(HttpServletRequest request , int page , int limit) throws Exception{
+	@RequestMapping(value = "/userlist.do", method = RequestMethod.POST)
+	public Map<String, Object> getUsers(HttpServletRequest request, int page, int limit) throws Exception {
 		String userPhone = request.getParameter("userPhone");
 		String nickname = request.getParameter("nickname");
 		String openId = request.getParameter("openId");
-		List<UserInfoPO> userinfo=conn_userinfo.GetListbyPage(page, limit,userPhone,nickname,openId);
+		List<UserInfoPO> userinfo = conn_userinfo.GetListbyPage(page, limit, userPhone, nickname, openId);
 		List<UserInfoVO> _userinfo = UserInfoVO.getConverter(UserInfoVO.class).convert(userinfo, UserInfoVO.class);
 		int count = conn_userinfo.countByPhone(userPhone);
-		Map<String, Object> map= new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("data", _userinfo);
 		map.put("code", "0");
 		map.put("msg", "");
 		map.put("count", count);
 		return map;
 	}
-	
+
 	@Autowired
 	private MerchantBusinessDAO conn_merchantBusiness;
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/chooseUser.do" , method = RequestMethod.POST)
-	public String chooseUser(HttpServletRequest request){
+	@RequestMapping(value = "/chooseUser.do", method = RequestMethod.POST)
+	public String chooseUser(HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		String merchantId = request.getParameter("merchantId");
-		MerchantBusinessPO merchantBusiness = conn_merchantBusiness.getMerchantBusinessBymerchantId(Long.parseLong(merchantId));
+		MerchantBusinessPO merchantBusiness = conn_merchantBusiness
+				.getMerchantBusinessBymerchantId(Long.parseLong(merchantId));
 		List<UserInfoPO> user = conn_userinfo.getUserByUid(Long.parseLong(userId));
 		List<MerchantPO> merchant = conn_merchant.getMerchantById(Long.parseLong(merchantId));
 		merchant.get(0).setUserName(user.get(0).getUserPhone());
 		conn_merchant.saveOrUpdate(merchant.get(0));
-		if (merchantBusiness==null) {
+		if (merchantBusiness == null) {
 			merchantBusiness = new MerchantBusinessPO();
 			merchantBusiness.setMerchantId(Long.parseLong(merchantId));
 			merchantBusiness.setUserId(Long.parseLong(userId));
 			conn_merchantBusiness.save(merchantBusiness);
 			return "success";
-		}else {
+		} else {
 			merchantBusiness.setUserId(Long.parseLong(userId));
 			return "success";
 		}
 	}
-	
+
+	@RequestMapping(value = "/exportallmerchant")
+	public String derive(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		List<MerchantPO> listpo = new ArrayList<MerchantPO>();
+		if (getLoginInfo() != null) {
+			Long comId = getLoginInfo().getComId();
+			String mName = request.getParameter("mName");
+			strMap.put("comId", comId);
+			strMap.put("shopName", mName);
+			listpo = conn_merchant.findAllByMapParams(strMap);
+		} else {
+			listpo.add(conn_merchant.get(getMerchantInfo().getMerchantId()));
+		}
+		List<MerchantVO> listvo = MerchantVO.getConverter(MerchantVO.class).convert(listpo, MerchantVO.class);
+		String title = "商户" + DateUtil.format(new Date(), "yyyyMMddhhmmss") + ".xls";
+		String[] headers = new String[] { "序号", "商家名称", "商户地址", "联系人", "联系电话", "板块" };
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		if (listvo != null) {
+			for (int i = 0; i < listvo.size(); i++) {
+				Object[] obj = new Object[headers.length];
+				obj[1] = listvo.get(i).getShopName();
+				obj[2] = listvo.get(i).getShopAddress();
+				obj[3] = listvo.get(i).getShopLinkperson();
+				obj[4] = listvo.get(i).getShopTel();
+				obj[5] = listvo.get(i).getModularName();
+
+				dataList.add(obj);
+			}
+		}
+		outputList(title, headers, dataList, response);
+		return "success";
+	}
+
+	// 导出表
+	public void outputList(String title, String headers[], List<Object[]> dataList, HttpServletResponse response)
+			throws Exception {
+		String headStr = "attachment; filename=\"" + new String(title.getBytes("gb2312"), "utf-8") + "\"";
+		response.setContentType("octets/stream");
+		response.setContentType("APPLICATION/OCTET-STREAM");
+		response.setHeader("Content-Disposition", headStr);
+		ServletOutputStream out = response.getOutputStream();
+		// ExportExcel ex = new ExportExcel(title, headers, dataList);//有标题
+		ExportExcelSeedBack ex = new ExportExcelSeedBack(title, headers, dataList);// 没有标题
+		ex.export(out);
+	}
+
 }

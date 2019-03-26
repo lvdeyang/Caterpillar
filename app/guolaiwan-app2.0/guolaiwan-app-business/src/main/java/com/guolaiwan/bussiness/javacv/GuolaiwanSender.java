@@ -15,10 +15,8 @@ import org.bytedeco.javacv.OpenCVFrameConverter;
 
 public class GuolaiwanSender{
 	private FFmpegFrameRecorder recorder;
-    private boolean istart=false;
+    private boolean isStart=false;
 	public GuolaiwanSender(String pubName,int width,int height) {
-		// TODO Auto-generated constructor stub
-		
 		recorder = new FFmpegFrameRecorder("rtmp://"+WXContants.Website+"/live/" + pubName, width,
 				height, 1);
 		recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264); // 28
@@ -36,21 +34,19 @@ public class GuolaiwanSender{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void send(Frame frame,String name){
-		
 		try {
-			if(!istart){
+			if(!isStart){
 				recorder.start();
-				istart=true;
+				isStart=true;
 			}
 			recorder.setTimestamp(frame.timestamp);
 			recorder.record(frame);
-		    
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-    
+	
 }

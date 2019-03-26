@@ -530,12 +530,12 @@ html, body {
 				<div style="width:100%;height:100px;">
 					
 					
-					<video src="${order.contractVideoUrl }" autoplay controls="controls" id="showContract" style="margin-left:15px;width:100px;height:100px;"/>
+					<video src="${order.contractVideoUrl}" autoplay controls="controls" id="showContract" style="margin-left:15px;width:100px;height:100px;"/>
 				</div>
 				
 				
-			    <a id="agree" style="width:43%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;float:left;margin-top:15px;" href="javascript:;" class="weui-btn weui-btn_primary">通过</a>   
-			    <a id="reject" style="width:43%;background-color:#18b4ed;height:40px;line-height:40px;float:right;margin-right:2%" href="javascript:;" class="weui-btn weui-btn_primary">驳回</a>   
+			    <a id="agree" style="display:none;width:43%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;float:left;margin-top:15px;" href="javascript:;" class="weui-btn weui-btn_primary">通过</a>   
+			    <a id="reject" style="display:none;width:43%;background-color:#18b4ed;height:40px;line-height:40px;float:right;margin-right:2%" href="javascript:;" class="weui-btn weui-btn_primary">驳回</a>   
 	            
 			</div>
 		</div>
@@ -549,6 +549,13 @@ html, body {
 
 <script type="text/javascript">
 	$(function() {
+	    var orderState='${order.status}';
+	    if(orderState!='PAYED'){
+	       $('#agree').show();
+	       $('#reject').show();
+	    }
+	
+	
 	    $(document).on('click','#agree',function(){
 	       checkOrder("PASSED");
 	    });

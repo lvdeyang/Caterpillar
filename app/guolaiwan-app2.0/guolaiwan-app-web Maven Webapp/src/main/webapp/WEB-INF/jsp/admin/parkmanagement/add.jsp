@@ -59,13 +59,13 @@
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 总停放位 </label>
 				<div class="layui-input-block">
-					<input type="text" onkeyup="numChk($(this))" placeholder="请输入总停放位（正整数）" name="commonParking" id="commonParking" autocomplete="off" class="layui-input">
+					<input type="text" onkeyup="numChk($(this))" placeholder="请输入总停放位" name="commonParking" id="commonParking" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 已用车位 </label>
 				<div class="layui-input-block">
-					<input type="text" onkeyup="numChk($(this))" placeholder="请输入已用车位（正整数）" name="usedParking" id="usedParking" autocomplete="off" class="layui-input">
+					<input type="text" onkeyup="numChkZero($(this))" placeholder="请输入已用车位" name="usedParking" id="usedParking" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -193,14 +193,21 @@
 			    }
         	});
 		});
-		
+		function numChkZero($this){
+			var nubmer = $this.val();
+			var reg = /^[0-9]+[0-9]*]*$/; //判断正整数
+			if(!reg.test(nubmer)){
+				layer.msg("请输入整数数字！", { icon: 5, time: 1000 });
+				$this.val("");
+			}
+		}
 		function numChk($this,flag){
 			var nubmer = $this.val();
 			var re = /^[0-9]+.?[0-9]*$/; //判断字符串是否为数字  
 			var reg = /^[1-9]+[0-9]*]*$/; //判断正整数
 			if(!flag){
 				if(!reg.test(nubmer)){
-					layer.msg("请输入大于0的数字！", { icon: 5, time: 1000 });
+					layer.msg("请输入大于0的整数！", { icon: 5, time: 1000 });
 					$this.val("");
 				}
 			}
@@ -242,6 +249,11 @@
 				var chargingColumn =data.field.chargingColumn
 				data.field.chargingColumn = parseInt(chargingColumn);
 			}	
+			var ffff = data.field.file;
+			if(!ffff){
+				layer.msg("请上传停车场图片！",{icon:5});
+				return false;
+			}
         	var formData = new FormData($("#myForm")[0]);  
 			$.ajax({
 				type:"post",

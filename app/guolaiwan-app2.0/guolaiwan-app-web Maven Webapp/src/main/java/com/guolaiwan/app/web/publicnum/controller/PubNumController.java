@@ -471,7 +471,7 @@ public class PubNumController extends WebBaseControll {
 	//TODO
 	public Object prevPaypark(@PathVariable String id, @PathVariable Integer text, @PathVariable Integer attactionsId,@PathVariable String site, HttpServletRequest request) throws Exception {
 
-        String orderNo = "park-"+id+"-"+attactionsId/*+"-"ID+"-"景ID*/;
+        String orderNo = "park-"+id+"-"+attactionsId+"-"+75/*+"-"ID+"-"景ID*/;
 		int payMoney = text;
 		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
 		//payMoney+=orderInfoPO.getPayMoney();
@@ -1354,6 +1354,19 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/product/index/merchant/payment")
+	public ModelAndView productIndexS( HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("parking/park/orderpayment");
+		return mv;
+	}
+	@RequestMapping(value = "/product/index/merchant/renewall") ///////////////////////////////////////////
+	public ModelAndView productRenewal( HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("parking/park/renewal");
+		return mv;
+	}
+	
 	@RequestMapping(value = "/merproduct/index/{id}")
 	public ModelAndView productdetailsIndexN(@PathVariable long id , HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
@@ -1780,6 +1793,13 @@ public class PubNumController extends WebBaseControll {
 	public ModelAndView gatewayIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubnum/gateway");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/camera")
+	public ModelAndView camera(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/camera");
 		return mv;
 	}
 

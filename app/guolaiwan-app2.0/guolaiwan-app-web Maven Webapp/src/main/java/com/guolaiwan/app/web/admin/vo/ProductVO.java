@@ -145,6 +145,8 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	
 	private int isEffective;//是否在有效时间内(0:还没开始,1:在,2:已经结束)
 	
+	private int ifFace;
+	
 	private int isSurpport;
 	
 	private int isactivityproduct;
@@ -1150,6 +1152,7 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setShopLatitude(entity.getProductMerchantJson())
 		.setShopLongitude(entity.getProductMerchantJson())
 		.setTraffic(entity.getTraffic())
+		.setIfFace(entity.getIfFace())
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)));
 		
 		return this;
@@ -1178,6 +1181,17 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 
 	public ProductVO setTraffic(String traffic) {
 		this.traffic = traffic;
+		return this;
+	}
+
+
+	public int getIfFace() {
+		return ifFace;
+	}
+
+
+	public ProductVO setIfFace(int ifFace) {
+		this.ifFace = ifFace;
 		return this;
 	}
 	

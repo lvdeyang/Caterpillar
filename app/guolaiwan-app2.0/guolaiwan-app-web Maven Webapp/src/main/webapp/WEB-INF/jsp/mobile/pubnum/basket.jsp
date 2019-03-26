@@ -871,8 +871,8 @@ html, body {
 	    
 	    });
 	    
-	    $(document).on('click','.mailAddress',function(){
-		    var addressIds=this.id.split('-');
+	    $(document).on('click','#buynow',function(){
+		    var addressIds=$('input[type^=radio]:checked').attr('id').split('-');
 		    $.closePopup();
 		   
 	        var ids=[];
@@ -1041,9 +1041,14 @@ html, body {
 			if(data && data.length>0){
 			    var html=[];
 				for(var i=0; i<data.length; i++){
-				   
+				     var chkattr='';
+				     if(i==0){
+				         chkattr='checked="checked"';
+				     }
 					 html.push('<div class="weui-media-box weui-media-box_text mailAddress" id="mailadd-'+data[i].id+'">');
-			         html.push('<h4 class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）<span style="color:red;font-size:12px" class=" icon-share-alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击支付</span></h4>');
+					 html.push('<input style="float:left;height:27px;width:20px"  type="radio" name="radio1" class="" id="radio-'+data[i].id+'" '+chkattr+'>');
+			         html.push('<h4 style="width:80%;margin-left:35px;" class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）</h4>');
+			         //html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
 			         html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('</div>');
 				}
@@ -1099,21 +1104,20 @@ html, body {
 				<div class="weui-popup__modal">
 					<div id="addressFitst">
 
-						<div class="weui-cells__title">选择收货地址</div>
+						<div class="weui-cells__title" style="color:red;font-weight:bold">点击地址选择或添加新联系人</div>
+						<a id="addAddress"
+								style="width:96%;font-size:14px;margin-left:2%;background-color:#18b4ed;height:30px;line-height:30px;margin-top:0"
+								href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a>
 						<div class="weui-panel__bd" id="addressList"
 							style="padding-bottom:40px;"></div>
 
-						<!-- 			     <a id="addAddress" style="width:96%;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">
-				      添加地址</a>
-				  <a id="cancelAddress" style="width:96%;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">
-				      取消购买</a> -->
-						<div style="width:100%;height:40px;position:fixed;bottom:2px">
+						<div style="width:100%;height:40px;">
 							<a id="cancelAddress"
-								style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
-								href="javascript:;" class="weui-btn weui-btn_primary">取消购买</a> <a
-								id="addAddress"
-								style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
-								href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a>
+								style="width:47%;font-size:14px;margin-left:2%;float:left;height:40px;line-height:40px;"
+								href="javascript:;" class="weui-btn weui-btn_warn">取消购买</a> <a
+								id="buynow"
+								style="width:47%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
+								href="javascript:;" class="weui-btn weui-btn_primary">立即购买</a>
 						</div>
 
 					</div>

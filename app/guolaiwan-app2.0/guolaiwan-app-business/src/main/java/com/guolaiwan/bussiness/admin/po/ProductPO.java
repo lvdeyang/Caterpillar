@@ -128,6 +128,9 @@ public class ProductPO extends AbstractBasePO {
 	// 是否限购（0，1）
 	private int productLimitType;
 
+	// 是否人脸（0，1）
+	private int ifFace;
+	
 	// 限购数量
 	private long productLimitNum;
 
@@ -596,6 +599,14 @@ public class ProductPO extends AbstractBasePO {
 
 	public void setRegionId(long regionId) {
 		this.regionId = regionId;
+	}
+
+	public int getIfFace() {
+		return ifFace;
+	}
+
+	public void setIfFace(int ifFace) {
+		this.ifFace = ifFace;
 	}
 	
 	

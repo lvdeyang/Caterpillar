@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.javacv;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import org.bytedeco.javacpp.avcodec;
@@ -14,11 +15,9 @@ public class GuolaiwanGetter extends Thread {
     private boolean isRun=true;
     private boolean isUsed=false;
     private GuolaiwanSender sender;
-    private FFmpegFrameRecorder recorder;
     //垫播pubName使用liveId,机位直播pubName使用subLivePubName
     private String pubName;
 	public GuolaiwanGetter(String pubName,int width,int height, GuolaiwanSender sender) {
-		// TODO Auto-generated constructor stub
 	    this.sender=sender;
 	    this.pubName=pubName;
 		try {
@@ -33,7 +32,6 @@ public class GuolaiwanGetter extends Thread {
 	
 	//垫播用
 	public GuolaiwanGetter(String liveId,String matPlayVideoPath,int width,int height, GuolaiwanSender sender) {
-		// TODO Auto-generated constructor stub
 	    this.sender=sender;
 	    this.pubName=liveId;
 		try {
@@ -49,25 +47,23 @@ public class GuolaiwanGetter extends Thread {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		while (isRun) {
-			Frame frame;
-			try {
-				frame = grabber.grab();
-				if (frame == null) {
+		try {
+			while (isRun) {
+				Frame currentframe = grabber.grab();
+				if (currentframe == null) {
 					continue;
 				}
 				if(isUsed){
-					sender.send(frame,this.pubName);
+					sender.send(currentframe,this.pubName);
 				}
-		
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-		}
+			grabber.stop();
+			grabber.release();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
-	
 	
 	public void setUsed(boolean isUsed){
 		this.isUsed=isUsed;
@@ -75,14 +71,7 @@ public class GuolaiwanGetter extends Thread {
 	
 	public void destory(){
 		isRun=false;
-		try {
-			System.out.println(pubName + " grabber stop");
-			grabber.stop();
-			grabber.release();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//grabber stop在run方法中
 	}
     
 }

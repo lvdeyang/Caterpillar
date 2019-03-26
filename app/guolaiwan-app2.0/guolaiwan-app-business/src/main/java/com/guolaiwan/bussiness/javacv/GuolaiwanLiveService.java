@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 
 import com.sun.tools.classfile.Dependencies.Recorder;
@@ -18,17 +19,7 @@ public class GuolaiwanLiveService {
 	private int height;
 
 	
-	/*private static GuolaiwanLiveService instance;
-    private GuolaiwanLiveService() {}
-    public static GuolaiwanLiveService getInstance() {
-        if (instance == null) {
-            instance = new GuolaiwanLiveService();
-        }
-        return instance;
-    }*/
-	
     public void init(String pubName,int width,int height) {
-		// TODO Auto-generated constructor stub
     	this.width=width;
     	this.height=height;
     	sender=new GuolaiwanSender(pubName, width, height);
@@ -53,22 +44,26 @@ public class GuolaiwanLiveService {
     	if(getter!=null){
     		getter.destory();
     	}
-    	
+    	getters.remove(pubName);
     }
     
     public void destory(){
         sender.destory();
-        for (String getterName : getters.keySet()) {
-			getters.get(getterName).destory();
-		}
+        if(getters.size() > 0){
+        	for (String getterName : getters.keySet()) {
+    			getters.get(getterName).destory();
+    		}
+        }
     }
     
     public void switchLive(String oldSubLivePubName, String newSubLivePubName){
     	//这里可能有先后问题，但是看测试效果，不把精力浪费在几乎不存在的事情上
     	if(getters.get(oldSubLivePubName) != null){
-    		getters.get(oldSubLivePubName).setUsed(false);
+    		GuolaiwanGetter oldGetter = getters.get(oldSubLivePubName);
+    		oldGetter.setUsed(false);
     	}
-    	getters.get(newSubLivePubName).setUsed(true);
+    	GuolaiwanGetter newGetter = getters.get(newSubLivePubName);
+    	newGetter.setUsed(true);
     }
 	
 }

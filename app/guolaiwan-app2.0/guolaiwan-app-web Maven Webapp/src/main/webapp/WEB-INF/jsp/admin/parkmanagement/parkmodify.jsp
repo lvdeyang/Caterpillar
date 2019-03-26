@@ -45,6 +45,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 车位区域 </label>
+				<div class="layui-input-block">
+					<input type="text" name="district" id="district" value="${po.district}" placeholder="请输入车位所在区域" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 车位层数 </label>
+				<div class="layui-input-block">
+					<input type="text" name="number" id="number" value="${po.number}" placeholder="请输入车位所在层数" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 使用情况 </label>
 				<div class="layui-input-block">
 					<select name="useCondition" id="useCondition" required>

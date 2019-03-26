@@ -613,20 +613,20 @@ html, body {
 		</div>
 		<div class="content">
 			
-			<div class="weui-search-bar" id="searchBar">
+			<div style="height:60px;" class="weui-search-bar" id="searchBar">
 			  <form class="weui-search-bar__form" action="pubnum/search/post" method="post">
 			    <input type="hidden" name="type" id="selType" value="${type}"/>
 			    <div class="weui-search-bar__box">
-			      <i id="search" class="weui-icon-search"></i>
-			      <input type="search" name="searchContent" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="" value="${content }">
+			      <i  id="search" class="weui-icon-search" style="line-height:50px;"></i>
+			      <input style="height:40px" type="search" name="searchContent" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="" value="${content }">
 			      <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
 			    </div>
 			    <label class="weui-search-bar__label" id="searchText">
 			      <i class="weui-icon-search"></i>
-			      <span>搜索</span>
+			      <span style="line-height: 45px;">搜索</span>
 			    </label>
 			  </form>
-			  <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+			  <a style="line-height:40px;" href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
 			</div>
 			
 			

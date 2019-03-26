@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -2287,6 +2288,16 @@ public class PhoneController extends WebBaseControll {
 		// 预订日期
 		// order.setOrderBookDate(date);
 
+		String photo=pageObject.getString("photo");
+		String idNum=pageObject.getString("idNum");
+		if(photo!=null){
+			order.setPhoto(URLDecoder.decode(photo));
+		}
+		if(idNum!=null){
+			order.setIdNum(idNum);
+		}
+		
+		
 		// 订单来源
 		order.setOrderType(OrderType.MERCHANT);
 		if (pageObject.getString("source") != null) {
@@ -2515,6 +2526,17 @@ public class PhoneController extends WebBaseControll {
 		// // 预订日期
 		// order.setOrderBookDate(date);
 
+		
+		String photo=pageObject.getString("photo");
+		String idNum=pageObject.getString("idNum");
+		if(photo!=null){
+			order.setPhoto(URLDecoder.decode(photo));
+		}
+		if(idNum!=null){
+			order.setIdNum(idNum);
+		}
+		
+		
 		if (pageObject.getString("source") != null) {
 			order.setSource(OrderSource.fromString(pageObject.getString("source")));
 		} else {
@@ -6100,7 +6122,7 @@ public class PhoneController extends WebBaseControll {
 		resultMap.put("status", subLivePO.getStatus() + "");
 		return success(resultMap);
 	}
-
+	
 	/**
 	 * 专业直播修：机位关闭直播
 	 * 
@@ -6118,11 +6140,20 @@ public class PhoneController extends WebBaseControll {
 		long subLiveId = params.getLongValue("subLiveId");
 		LivePO livePO = conn_live.get(liveId);
 		SubLivePO subLivePO = conn_subLive.get(subLiveId);
-		// 修改机位状态为未被使用
-		subLivePO.setInuse(0);
-		subLivePO.setStatus(LiveStatusType.STOP);
-		conn_subLive.saveOrUpdate(subLivePO);
-		return success();
+		ProfessionalLiveDirectorPO professionalLiveDirectorPO = conn_professionalLiveDirectorDao.findByLiveId(liveId);
+		String cameraCanClose = professionalLiveDirectorPO.getCameraCanClose();
+		if(cameraCanClose.equals("YES")){
+			//可关闭状态
+			// 修改机位状态为未被使用
+			subLivePO.setInuse(0);
+			subLivePO.setStatus(LiveStatusType.STOP);
+			conn_subLive.saveOrUpdate(subLivePO);
+			return success("YES");
+		}else {
+			return success("NO");
+		}
+		
+		
 	}
 
 	/**
@@ -6533,17 +6564,20 @@ public class PhoneController extends WebBaseControll {
 
 		ProfessionalLivePO findResultProfessionalLivePO = conn_professionalLiveDao
 				.findProfessionalLivePOByLiveId(liveId);
+		ProfessionalLiveDirectorPO professionalLiveDirectorPO = conn_professionalLiveDirectorDao.findByLiveId(liveId);
 		Map<String, String> resultMap = new HashMap<>();
 		if (findResultProfessionalLivePO == null) {
 			// 为空说明导播位未使用过第一次进入界面
 			resultMap.put("liveName", "");
 			resultMap.put("broadCastCamera", "");
 			resultMap.put("liveStatus", "");
+			resultMap.put("cameraCanClose", professionalLiveDirectorPO.getCameraCanClose());
 			return success(resultMap);
 		} else {
 			resultMap.put("liveName", findResultProfessionalLivePO.getLiveName());
 			resultMap.put("broadCastCamera", findResultProfessionalLivePO.getBroadcastCamera() + "");
 			resultMap.put("liveStatus", findResultProfessionalLivePO.getLiveStatusType());
+			resultMap.put("cameraCanClose", professionalLiveDirectorPO.getCameraCanClose());
 			return success(resultMap);
 		}
 	}
@@ -6623,7 +6657,6 @@ public class PhoneController extends WebBaseControll {
 		 }
 		return success();
 	}
-	
 	
 	/**
 	 * 专业直播导播机位开始录制
@@ -6759,10 +6792,24 @@ public class PhoneController extends WebBaseControll {
 		return success();
 	}
 	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 专业直播:导播界面修改机位是否可关闭直播
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/professionalLiveDirectorUpdateCameraCanClose", method = RequestMethod.POST)
+	public Map<String, Object> professionalLiveDirectorUpdateCameraCanClose(HttpServletRequest request) throws Exception {
+		String param = getRequestJson(request);
+		JSONObject jsonObject = JSON.parseObject(param);
+		long liveId = jsonObject.getLongValue("liveId");
+		//YES 或者 NO
+		String cameraCanClose = jsonObject.getString("cameraCanClose");
+		ProfessionalLiveDirectorPO professionalLiveDirectorPO = conn_professionalLiveDirectorDao.findByLiveId(liveId);
+		professionalLiveDirectorPO.setCameraCanClose(cameraCanClose);
+		conn_professionalLiveDirectorDao.saveOrUpdate(professionalLiveDirectorPO);
+		return success();
+	}
 }

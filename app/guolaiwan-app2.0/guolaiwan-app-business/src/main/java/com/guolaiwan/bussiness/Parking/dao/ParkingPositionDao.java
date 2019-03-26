@@ -12,6 +12,7 @@ import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
 import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
 
+import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
 import pub.caterpillar.orm.hql.QueryHql;
@@ -101,7 +102,19 @@ public class ParkingPositionDao extends AbstractBaseDao<ParkingPositionPO>{
 		List<ParkingPositionPO> poList = findByHqlPage(hql, pageNum, pageSize);
 		return poList;
 	}
-
+	// 获取停车场信息
+		public List<Object> getParkInfo(long id) {
+			StringBufferWrapper sqlBuffer = new StringBufferWrapper()
+					.append(" SELECT a.positionInformation, a.useCondition, count(1) ")
+					.append(" FROM t_parkingposition_table a LEFT JOIN t_attractionsparking_table b ON a.positionId = b.id ")
+					.append(" WHERE b.attractionsId = ").append(id)
+					.append(" GROUP BY a.positionInformation, a.useCondition  ");
+			List<Object> result = this.findBySql(sqlBuffer.toString());
+			if (result == null || result.size() <= 0) {
+				return null;
+			}
+			return result;
+		}
 	public List<ParkingPositionPO> getByPositionId(Long positionId) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("positionId", Condition.eq, positionId);

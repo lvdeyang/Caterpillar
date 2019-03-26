@@ -9,10 +9,7 @@ import org.bytedeco.javacv.FrameRecorder.Exception;
 import pub.caterpillar.weixin.constants.WXContants;
 
 public class GuolaiwanRecordService extends Thread {
-//	private String subivePubName;
-//	private String path;
-//	private int width;
-//	private int height;
+
 	private boolean isStop = false;
 	private FFmpegFrameGrabber grabber;
 	private FFmpegFrameRecorder recorder;
@@ -20,6 +17,9 @@ public class GuolaiwanRecordService extends Thread {
 		grabber = new FFmpegFrameGrabber("rtmp://"+WXContants.Website+"/live/" + subivePubName);
 		recorder = new FFmpegFrameRecorder(path, width, height, 1);
 		recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+		recorder.setFormat("flv"); // rtmp的类型
+		recorder.setFrameRate(25);
+		recorder.setGopSize(25);
 		System.out.println(subivePubName + "录制  grabber start");
 	}
 
@@ -31,34 +31,26 @@ public class GuolaiwanRecordService extends Thread {
 		} catch (Exception | org.bytedeco.javacv.FrameGrabber.Exception e) {
 			e.printStackTrace();
 		}
-		
-		while (!isStop) {
-			try {
+		try {
+			while (!isStop) {
 				Frame frame = null;
 				if((frame = grabber.grabFrame()) != null) {
 					recorder.setTimestamp(frame.timestamp);
 					recorder.record(frame);
 				}
-			} catch (org.bytedeco.javacv.FrameGrabber.Exception | Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-
+			recorder.stop();
+			recorder.release();
+			grabber.stop();
+			grabber.release();
+		} catch (org.bytedeco.javacv.FrameGrabber.Exception | Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
 	public void destory() {
 		isStop = true;	
-		try {
-			recorder.stop();
-			recorder.release();
-			grabber.stop();
-			grabber.release();
-		} catch (Exception | org.bytedeco.javacv.FrameGrabber.Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 
 }
