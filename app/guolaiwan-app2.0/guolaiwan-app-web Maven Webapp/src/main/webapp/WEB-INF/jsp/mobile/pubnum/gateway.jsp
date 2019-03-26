@@ -511,11 +511,11 @@ html, body {
 
 		
        $(document).on('click','#line1',function(){
-          location.href='http://<%=weburl%>/guolaiwan/pubnum/column/index?modularCode=2021';
+          location.href='http://<%=weburl%>/guolaiwan/pubnum/column/index?modularCode=0001';
        })
        
        $(document).on('click','#line2',function(){
-          location.href='http://<%=weburl%>/guolaiwan/pubnum/column/index?modularCode=0001';
+          location.href='http://<%=weburl%>/guolaiwan/pubnum/column/index?modularCode=2021';
        })
 	
 	
