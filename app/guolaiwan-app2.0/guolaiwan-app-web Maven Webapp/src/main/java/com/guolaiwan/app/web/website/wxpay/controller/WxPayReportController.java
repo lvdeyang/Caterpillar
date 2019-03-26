@@ -250,7 +250,6 @@ public class WxPayReportController extends WebBaseControll {
 				String ydNO = ydNoCode(userByid.getId()+"");
 				userByid.setOrderStatus("PAYFINISH");
 				userByid.setPath(ydNO);
-				System.out.println(ydNO);
 				Order.saveOrUpdate(userByid);
 				// 修改 车位 已使用
 				int	parkingNumber = userByid.getParkingNumber();

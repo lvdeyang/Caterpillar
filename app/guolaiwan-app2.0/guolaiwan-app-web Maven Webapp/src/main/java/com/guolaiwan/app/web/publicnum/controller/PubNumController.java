@@ -476,8 +476,6 @@ public class PubNumController extends WebBaseControll {
 		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
 		//payMoney+=orderInfoPO.getPayMoney();
 		// String aLong = request.getParameter("text");
-		System.out.println(text);
-		System.out.println(attactionsId);
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user = conn_user.get(userId);
 		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/"+site, WxConfig.appId,
