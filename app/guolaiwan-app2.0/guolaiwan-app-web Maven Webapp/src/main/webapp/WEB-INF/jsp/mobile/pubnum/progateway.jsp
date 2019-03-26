@@ -66,7 +66,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>直播播放主页</title>
+<title>选择服务</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -442,141 +442,83 @@ html, body {
 	text-align: center;
 }
 
+
+      .swiper-container {
+        width: 100%;
+        padding:0;
+        margin:0;
+        height:200px;
+      } 
+
+      .swiper-container img {
+        display: block;
+        width: 100%;
+      }
+    
+    #distributeList{
+       margin-top:10px;
+       padding-left:10px;
+       border-bottom:solid 2px #18b4ed;
+       width:100%;height:35px;
+       
+    }
+    
+    #distributeList a{
+       text-decoration:none;
+       color:#CCC;
+       font-size:12px;
+    }
+    #distributeList a.current{
+       text-decoration:none;
+       color:#18b4ed;
+       font-size:20px;
+    }
+    #columnTable{
+    
+        width:100%;
+        margin-top:10px;
+        
+    }
+    #columnTable td{
+	    width:20%;
+	    text-align:center;
+	    font-size:12px;
+    }
+    
+    
+
 </style>
-<link href="lib/video.css" rel="stylesheet">
+
 </head>
 
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
-<script type="text/javascript" src="lib/video.js"></script>
-<script type="text/javascript" src="lib/video-hls.js"></script>
-<script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
+
 <script type="text/javascript">
-   var  valve = 1;
+
 	$(function() {
-	  var usrid=${live.userId};
-	  if(usrid==100000){
-	     $('#player').show();
-	  }else{
-	     $('#my-video').show();
-	  }
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
-			if(data.status != 200){
-			  $.toast("评论失败!");
-				$.toptip(data.message, 'error');
-				valve = 0;
+			if(data.status !== 200){
+				$.toptip('data.message', 'error');
 				return -1;
 			}else{
-			   valve = 1;
-			return data.data;		
+				return data.data;		
 			}
 	  };
-	  var myPlayer = videojs('my-video');
-	  videojs("my-video").ready(function(){
-		var myPlayer = this;
-		myPlayer.play();
-	  });
-	  
-	  $('.my-video-dimensions').width('100%').height(200);
-	  
-	  
-	  $(document).on('click','#save',function(){
-	      var _uriaddMsg = window.BASEPATH + 'phoneApp/addMessage';
-		  var params={};
-		  params.liveId=${live.id};
-		  params.userId=${userId};
-		  params.message=$('#message').val();
-			$.post(_uriaddMsg, $.toJSON(params), function(data){
-				data = parseAjaxResult(data);
-			
-				 if(valve == 1 ){
-				   $.toast("评论成功!");
-				} 
-				 $('#message').val('');
-				  refreshMsg();	
-			});
-	  });
-	  
-	  var share={};
-	  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	    window.onload=function(){
-	    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
-			    $.get(_uri, null, function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					if(data){
-					    
-						share=data;
-						wx.config({
-	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            appId : share.appId, // 必填，公众号的唯一标识
-	            timestamp : share.timestamp, // 必填，生成签名的时间戳
-	            nonceStr : share.nonceStr, // 必填，生成签名的随机串
-	            signature : share.signature,// 必填，签名，见附录1
-	            jsApiList : ['checkJsApi', 'onMenuShareTimeline' ,'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        	});
-	  
-			  wx.ready(function() {
-			
-			               
-			            wx.onMenuShareTimeline({
-		                            title: '${live.liveName}', // 分享标题
-		                            link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-		                            imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
-		                            success: function () {
-		                                
-		                            }
-		                        });
-			            wx.onMenuShareAppMessage({
-							title : '${live.liveName}', // 分享标题
-							desc: '畅游华夏，尽在过来玩-联系电话:0315-6681288/6686299', // 分享描述
-							link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-		                    imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
-							success : function() {
-								
-							}
-						});
-			            
-			       });
-					}
-					
-				});
-	    }
-	   
-	  
-	  
-	  
-	  refreshMsg();
-	  
-	  function refreshMsg(){
-	  		var _uriMsg = window.BASEPATH + 'pubnum/getLiveMessage?liveId=${live.id}';
-		  
-			$.get(_uriMsg, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data){
-				  var html=[];
-				  for(var i=0;i<data.length;i++){
-				      html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg product" id="pro-828">');
-				      html.push('<div class="weui-media-box__hd">');
-				      html.push('	<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].headImg+'">');
-				      html.push('</div>');
-				      html.push('<div class="weui-media-box__bd">');
-				      html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].userName+'</h4>');
-				      html.push('<p class="weui-media-box__desc">'+data[i].content+'</p>');
-				      html.push('</div>');
-			          html.push('</a>');
-				  }
-				  $('#messageContent').children().remove();
-				  $('#messageContent').append(html.join(''));
-				  
-				}
-			});
-	  
-	  }
-	  
+		
+
+
+		
+       $(document).on('click','#line1',function(){
+          location.href='http://<%=weburl%>/guolaiwan/pubnum/column/index?modularCode=0003';
+       })
+       
+       $(document).on('click','#line2',function(){
+          location.href='http://<%=weburl%>/guolaiwan/pubnum/column/index?modularCode=01';
+       })
+	
+	
 	});
 </script>
 
@@ -589,46 +531,12 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">直播播放</div>
+				<div class="header-content">选择服务</div>
 			</div>
 		</div>
-		<div class="content" style="">
-			
-			<video style="display:none" id="my-video" class="video-js" controls preload="auto" width="100%" height="100%" poster="" x-webkit-airplay="allow" data-setup="{}">
-				<source src="http://<%=weburl%>/video/live/${live.userId}A${live.id}.m3u8" type="application/x-mpegURL">
-			</video>
-			
-			<div id="player" style="width:100%;height:250px;display:none;">
-			    <script type="text/javascript" charset="utf-8" src="http://yuntv.letv.com/player/live/blive.js"></script>
-			    <script>
-			        var leshiyunId='${live.leshiyunId}';
-			        var player = new CloudLivePlayer();
-			        player.init({activityId:leshiyunId});
-			    </script>
-			</div>
-			
-			
-		    <div style="margin-top:10px;margin-left:10px">${live.liveName}</div>
-		    <div class="weui-cells__title">请输入评论</div>
-			<div class="weui-cells weui-cells_form">
-			  <div class="weui-cell">
-			    <div class="weui-cell__bd">
-			      <textarea id="message" class="weui-textarea" rows="3"></textarea>
-                  
-			    </div>
-			  </div>
-			</div>
-			
-			<a id="save" href="javascript:void(0);" class="weui-btn_mini weui-btn_default" style="margin-top:5px;margin-left:10px;background:#18b4ed">发表评论</a>
-			
-			
-			<div class="weui-cells__title">评论列表</div>
-			<div id="messageContent" style="padding-bottom:50px;">
-			   
-			</div>
-			
-			
-			
+		<div class="content">
+			<a href="javascript:;" id="line1" class="weui-btn weui-btn_primary">地方美食</a>
+			<a href="javascript:;" id="line2" class="weui-btn weui-btn_primary">土特产品</a>
 		</div>
 	</div>
 </body>

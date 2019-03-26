@@ -48,6 +48,8 @@ public class LivePO extends AbstractBasePO {
 	private int isrecord;
 	private int recordSize;
 	
+	private String leshiyunId="";
+	
 	public int getIsback() {
 		return isback;
 	}
@@ -121,6 +123,12 @@ public class LivePO extends AbstractBasePO {
 	}
 	public void setFlag(boolean flag) {
 		this.flag = flag;
+	}
+	public String getLeshiyunId() {
+		return leshiyunId;
+	}
+	public void setLeshiyunId(String leshiyunId) {
+		this.leshiyunId = leshiyunId;
 	}
 	
 

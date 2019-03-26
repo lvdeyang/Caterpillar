@@ -32,8 +32,18 @@ public class UserOnedayBuyDAO extends AbstractBaseDao<UserOneDayBuyPO> {
 		QueryHql hql=this.newQueryHql();
 		hql.andBy("userId",Condition.eq,userId);
 		hql.andBy("proId",Condition.eq,proId);
-		hql.andBy("updateTime",Condition.gt,DateUtil.parse(DateUtil.format(new Date(),"yyyy-MM-dd")+" 00:00:00"));
-		hql.andBy("updateTime",Condition.lt,DateUtil.parse(DateUtil.format(new Date(),"yyyy-MM-dd")+" 23:59:59"));
+		hql.andBy("bookDate",Condition.gt,DateUtil.parse(DateUtil.format(new Date(),"yyyy-MM-dd")+" 00:00:00"));
+		hql.andBy("bookDate",Condition.lt,DateUtil.parse(DateUtil.format(new Date(),"yyyy-MM-dd")+" 23:59:59"));
+	    return findByHql(hql);
+	}
+	
+	
+	public List<UserOneDayBuyPO> findDateBuy(long userId,long proId,Date date) throws ParseException{
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("userId",Condition.eq,userId);
+		hql.andBy("proId",Condition.eq,proId);
+		hql.andBy("bookDate",Condition.gt,DateUtil.parse(DateUtil.format(date,"yyyy-MM-dd")+" 00:00:00"));
+		hql.andBy("bookDate",Condition.lt,DateUtil.parse(DateUtil.format(date,"yyyy-MM-dd")+" 23:59:59"));
 	    return findByHql(hql);
 	}
 }
