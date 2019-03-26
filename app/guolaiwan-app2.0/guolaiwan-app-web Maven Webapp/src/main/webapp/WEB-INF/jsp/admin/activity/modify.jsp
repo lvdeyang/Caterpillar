@@ -26,7 +26,7 @@
     
     <body>
         <div class="x-body" style="height:1500px">
-         <form action="/guolaiwan/admin/activity/modify.do" method="post" class="layui-form layui-form-pane">
+         <form action="<%=request.getContextPath() %>/admin/activity/modify.do" method="post" class="layui-form layui-form-pane">
             	<input type="hidden" value="${proid}" name="proid" />
                <div class="layui-inline">
                     <label for="productStock" class="layui-form-label">
@@ -55,6 +55,24 @@
                     	</div>
                     </div>
                 </div>
+                
+                <div class="layui-form-item">
+                	<div class="layui-inline">
+                    	<label class="layui-form-label">预定开始时间：</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="bStart" name="bookBegin" placeholder="yyyy-MM-dd HH:mm:ss" required lay-verify="required"
+                        	class="layui-input" value="${bStart}">
+                    	</div>
+                    </div>
+                    <div class="layui-inline">
+                    	<label class="layui-form-label">预定结束时间：</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="bEnd" name="bookEnd" placeholder="yyyy-MM-dd HH:mm:ss" required lay-verify="required"
+                        	class="layui-input"  value="${bEnd}">
+                    	</div>
+                    </div>
+                </div>
+                
                 
                 <div class="layui-form-item">
                 	<div class="layui-inline">
@@ -148,6 +166,16 @@
               var form = layui.form
               ,layer = layui.layer
               ,laydate = layui.laydate;
+              
+              laydate.render({
+              	elem: '#bStart'
+              	,type: 'datetime'
+              });
+              laydate.render({
+              	elem: '#bEnd'
+              	,type: 'datetime'
+              });
+              
               laydate.render({
               	elem: '#productBeginDate'
               	,type: 'datetime'

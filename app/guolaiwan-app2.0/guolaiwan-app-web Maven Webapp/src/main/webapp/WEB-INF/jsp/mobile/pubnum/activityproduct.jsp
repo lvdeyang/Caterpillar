@@ -527,6 +527,8 @@ html, body {
       var qq="";
       var buyOrbasketFlg=0;
       var ifFace=0;
+      var bookStart='';
+      var bookEnd='';
 		//获取所有一级推荐
       var _uriRecomment = window.BASEPATH + 'phoneApp/activityInfo?productId=${id}&userId=${userId}';
 		
@@ -567,6 +569,8 @@ html, body {
 			    iscollect=data.product.ifcollection;
 			    qq=data.product.ifcollection;
 			    ifFace=data.product.ifFace;
+			    bookStart=data.activityPro.bookBeginTime;
+			    bookEnd=data.activityPro.bookEndTime;
 			    if(iscollect==1){
 			    
 			       $('#fav').html('取消收藏');
@@ -886,9 +890,27 @@ html, body {
 		  }
 		});
 		
+		function checkBookDate(){
+		    if($('#bookDate').val()==''){
+		       $.toast("预定时间不能为空", "forbidden");
+		       return false;
+		    }
+		    var b=new Date($('#bookDate').val());
+		    var s=new Date(bookStart);
+		    var e=new Date(bookEnd);
+		    if(b<s||b>e){
+		       $.toast("不在预定期", "forbidden");
+		       return false;
+		    }
+		    return true;
 		
+		}
 		
 		$(document).on('click','#addOrder',function(){
+            if(!checkBookDate()){
+            
+               return;
+            }
 		    if(ifFace==0){
 		         joinBasket();
 		    
@@ -909,7 +931,8 @@ html, body {
 			param.paytype='WEICHAT';
 			param.source="PUBLICADDRESS";
 			param.bookDate=$('#bookDate').val();
-			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val();
+			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='
+			+$('#proCount').val()+"&bDate="+$('#bookDate').val();
 				$.get(chkStockUrl, null, function(data){
 						data = parseAjaxResult(data);
 						if(data === -1) return;
@@ -934,8 +957,11 @@ html, body {
 	    });	    
 		
 		$(document).on('click','#buy',function(){
-        
-        $('#selAddress').popup();
+           if(!checkBookDate()){
+            
+               return;
+           }
+           $('#selAddress').popup();
         
         });
 		$(document).on('click','#cancelAddress',function(){
@@ -945,6 +971,7 @@ html, body {
 		
 		
 		$(document).on('click','#buynow',function(){
+		
 		    if(ifFace==0){
 		    	dobuy();
 		    	return;
@@ -966,7 +993,7 @@ html, body {
 		    
 		});
 		
-		function dobuy()
+		function dobuy(){
 		    $.closePopup();
 		    var ids=$('input[type^=radio]:checked').attr('id').split('-');
 		    var param={};
@@ -980,7 +1007,7 @@ html, body {
 			param.logisticsId=$('#logisticsList').val();
 			param.source="PUBLICADDRESS";
 			param.bookDate=$('#bookDate').val();
-			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val();
+			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val()+"&bDate="+$('#bookDate').val();
 			$.get(chkStockUrl, null, function(data){
 					data = parseAjaxResult(data);
 					if(data === -1) return;
