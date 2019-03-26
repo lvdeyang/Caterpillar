@@ -23,6 +23,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.domain.RefundDetail;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.web.weixin.SendMsgUtil;
+import com.guolaiwan.bussiness.Parking.dao.AttractionsDao;
+import com.guolaiwan.bussiness.Parking.dao.CarPositionDao;
+import com.guolaiwan.bussiness.Parking.dao.OrderDao;
+import com.guolaiwan.bussiness.Parking.dao.ParkingPositionDao;
+import com.guolaiwan.bussiness.Parking.dao.VehicleDao;
+import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
+import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
+import com.guolaiwan.bussiness.Parking.po.OrderPO;
+import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
+import com.guolaiwan.bussiness.Parking.po.VehiclePO;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
@@ -55,6 +65,21 @@ public class WxPayReportController extends WebBaseControll {
 	
 	@Autowired
 	private BundleOrderDAO conn_bundleorder;
+	
+	@Autowired
+	private  VehicleDao par_king;
+	
+	@Autowired
+	private  AttractionsDao Attra_ctions;	
+	
+	@Autowired
+	private OrderDao  Order;
+	
+	@Autowired
+	private CarPositionDao  Car_Position;
+	
+	@Autowired
+	private ParkingPositionDao  Parking_Position;
 	
 	@ResponseBody
 	@RequestMapping(value = "/payreport", method = RequestMethod.POST)
@@ -173,6 +198,7 @@ public class WxPayReportController extends WebBaseControll {
 	
 	@ResponseBody
 	@RequestMapping(value = "/payreportpark", method = RequestMethod.POST)
+	// TODO
 	public String paypark(HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		Map<String, Object> ret=new HashMap<String, Object>();
@@ -189,7 +215,6 @@ public class WxPayReportController extends WebBaseControll {
 		GuolaiwanWxPay wxPay=GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
 		Map<String, String> respData = wxPay.processResponseXml(xml);
 		
-		
 		System.out.println("返回的参数："+respData.toString());
 		
 		String returncode = respData.get("return_code");
@@ -198,20 +223,45 @@ public class WxPayReportController extends WebBaseControll {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(returncode.equals("SUCCESS")){
 			if(resultcode.equals("SUCCESS")){
-				
 				//获取订单号
-				String tradeNum=respData.get("out_trade_no");
+				String vehicle = null;
+				String tradeNum = respData.get("out_trade_no");
+				Long orderId= Long.parseLong(tradeNum.split("-")[1]);
+				Long attactionsId = Long.parseLong(tradeNum.split("-")[2]);
+				List<VehiclePO> userBy = par_king.getNumber(attactionsId);
+				for (VehiclePO vehiclePO : userBy) {
+					vehicle =  vehiclePO.getNumber();
+				}
 				
-				String orderId=tradeNum.split("-")[1];
 				//orderNo="bundle-"+order.getId();
 			
 				//OrderInfoPO order = conn_orderInfo.get(Long.parseLong(orderId));
 				//if(order.getOrderState().toString().equals("NOTPAY")){
-					
-					
-				//}	
-				//修改订单状态,修改车位状态,增加用户预订时间和出场时间,增加用户小时数,生成二维码,
 				
+				//	}	
+				//    修改 总 车位 剩余车位
+			    AttractionsParkingPO att = Attra_ctions.getUid(attactionsId);
+			    int remain =  att.getUsedParking();
+			    att.setUsedParking(remain-1);
+			    Attra_ctions.saveOrUpdate(att);
+			    
+			    // 生成 二维码 修改订单状态
+				OrderPO userByid = Order.getform(orderId,attactionsId,vehicle);
+				String ydNO = ydNoCode(userByid.getId()+"");
+				userByid.setOrderStatus("PAYFINISH");
+				userByid.setPath(ydNO);
+				Order.saveOrUpdate(userByid);
+				// 修改 车位 已使用
+				int	parkingNumber = userByid.getParkingNumber();
+				String	parkingLayer = 	userByid.getParkingLayer();
+				String	district = 	userByid.getParkingDistrict();
+				
+				CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
+				long id = userName.getId();
+				
+			    ParkingPositionPO getTruck  =  Parking_Position.getNumber(id,parkingNumber);
+			    getTruck.setUseCondition(1);
+				Parking_Position.saveOrUpdate(getTruck);
 				
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("SUCCESS");
@@ -241,6 +291,71 @@ public class WxPayReportController extends WebBaseControll {
 		
 		System.out.println("微信返回字符串:"+stringBuffer);
 
+		return stringBuffer.toString();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/payreportrenew", method = RequestMethod.POST)
+	// TODO
+	public String  portrenew(HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		Map<String, Object> ret=new HashMap<String, Object>();
+		System.out.println("*****************wxreport****************");
+		//Mr.huang 2017/09/12 飞的好低的小蜜蜂
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String xml="";
+		String tempStr="";
+		while((tempStr=reader.readLine())!=null){
+			xml+=tempStr;
+			System.out.println(tempStr);
+		}
+		
+		GuolaiwanWxPay wxPay=GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+		Map<String, String> respData = wxPay.processResponseXml(xml);
+		
+		System.out.println("返回的参数："+respData.toString());
+		
+		String returncode = respData.get("return_code");
+		String resultcode = respData.get("result_code");
+		System.out.println("returncode是："+returncode+";resultcode是"+resultcode);
+		StringBuffer stringBuffer = new StringBuffer();
+		if(returncode.equals("SUCCESS")){
+			if(resultcode.equals("SUCCESS")){
+				//获取订单号
+				String tradeNum = respData.get("out_trade_no");
+				Long orderIdm = Long.parseLong(tradeNum.split("-")[1]);
+				Long attactionsId = Long.parseLong(tradeNum.split("-")[2]);
+				
+				
+				
+				stringBuffer.append("<xml><return_code><![CDATA[");
+				stringBuffer.append("SUCCESS");
+				stringBuffer.append("]]></return_code>");
+				stringBuffer.append("<return_msg><![CDATA[");
+				stringBuffer.append("OK");
+				stringBuffer.append("]]></return_msg>");
+				System.out.println("微信支付付款成功!订单号："+tradeNum);
+			}else{
+				stringBuffer.append("<xml><return_code><![CDATA[");
+				stringBuffer.append("FAIL");
+				stringBuffer.append("]]></return_code>");
+				stringBuffer.append("<return_msg><![CDATA[");
+				stringBuffer.append("交易失败");
+				stringBuffer.append("]]></return_msg>");
+				System.out.println("微信支付交易失败");
+			}
+		}else{
+			stringBuffer.append("<xml><return_code><![CDATA[");
+			stringBuffer.append("FAIL");
+			stringBuffer.append("]]></return_code>");
+			stringBuffer.append("<return_msg><![CDATA[");
+			stringBuffer.append("签名失败");
+			stringBuffer.append("]]></return_msg>");
+			System.out.println("微信支付签名失败");
+		}
+		
+		System.out.println("微信返回字符串:"+stringBuffer);
+		
 		return stringBuffer.toString();
 	}
 	

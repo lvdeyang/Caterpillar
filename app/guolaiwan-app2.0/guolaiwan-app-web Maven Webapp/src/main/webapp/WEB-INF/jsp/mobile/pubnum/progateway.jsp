@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+a<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -535,8 +535,10 @@ html, body {
 			</div>
 		</div>
 		<div class="content">
-			<a href="javascript:;" id="line1" class="weui-btn weui-btn_primary">地方美食</a>
-			<a href="javascript:;" id="line2" class="weui-btn weui-btn_primary">土特产品</a>
+			<!-- <a href="javascript:;" id="line1" class="weui-btn weui-btn_primary">地方美食</a>
+			<a href="javascript:;" id="line2" class="weui-btn weui-btn_primary">土特产品</a> -->
+			<image style="width:100%" src="lib/images/di.jpg" id="line1"/>
+			 <image style="width:100%" src="lib/images/te.jpg" id="line2"/> 
 		</div>
 	</div>
 </body>

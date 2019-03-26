@@ -100,6 +100,7 @@ html, body {
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
       leng = null;
+      var time= null;
     $(function(){ 
 			
         var _uti = window.BASEPATH + 'vice/theorder';
@@ -119,19 +120,18 @@ html, body {
 	       $.post(_util, $.toJSON(patam), function(data) {  
 			  	data = parseAjaxResult(data);
 			  	window.id = data.id; // 表单id
-			    window.trime = data.time; // 表单id
+			    time = data.time; // 表单id
 			    window.attid = data.uid; // 景区id
 			  	
 			  	$("#cost").empty();
 			    var objt = document.getElementById("chao");
 		        objt.innerText= 0; 
 		        
+		        var txt = document.getElementById("time"); //time
+	            txt.innerText= time;
+		        
 				var obj = document.getElementById("vehicle");
 	            obj.innerText= data.vehicle; 
-	            
-	            var txt = document.getElementById("time"); //time
-	            txt.innerText= data.time;
-	        
 	            var html = [];
 				html.push('<span style="font-size:22px;">'+data.cost+'</span> 元');
 				$('#cost').append(html.join('')); 
@@ -181,7 +181,11 @@ html, body {
        
         
       $(document).on('click', '#btn', function() {
-         var text  = window.money;
+           if(document.getElementById("weixin").checked==false){
+           $.toast("请选择支付方式", "forbidden");
+           return false;
+            }
+         var meony  = window.money;
          var orderId  = window.id;
          var uid =  window.attid;
 	     var parking = window.BASEPATH + 'vice/ seleparkingMoney';
@@ -189,27 +193,9 @@ html, body {
 		 objt.id = id;
 	     $.post(parking,$.toJSON(objt), function(data) {  
 	    	 data = parseAjaxResult(data);
-	    	 alert(orderId);
-	    	 alert(window.money);
-	    	 alert(uid);
-		     payPublic(orderId,text,uid);
-		     
-		    var _ut = window.BASEPATH + 'vice/addmoney'
-		    var para = {};
-		     if(data.leng>0){
-		    	 para.length = data.leng;
-		     }else{
-		      	para.length = 0;
-		     }
-		     para.sele = $("#sele").val();
-		     para.money =  window.money;
-		     para.id =  window.id;
-		     $.post(_ut,$.toJSON(para), function(data) {  
-		      	data = parseAjaxResult(data);
-		      	alert("续费成功");
-		      	window.location.href="vice/merchant/renewal";
-			  });	 
-		     
+	    	 time = data.leng;
+		     payPublic(orderId,meony,uid);
+	
 		});	  
 	});                       
 
@@ -236,13 +222,20 @@ html, body {
    
   
       function startTime() {
-                var shi = new Date(window.trime);
+
+                var shi = new Date(time);
 				var today = new Date() 
-				if(today >= shi){
+				if(today >= shi &&shi != null ){
+				var year=today.getFullYear() - shi.getFullYear()  
+                var mon=today.getMonth()+1 - shi.getFullYear()
+                var da=today.getDate() - shi.getFullYear()
 				var h = today.getHours() - shi.getHours()
 				var m = today.getMinutes() - shi.getMinutes() 
 				var s = today.getSeconds() - shi.getSeconds() 
 				// add a zero in front of numbers<10
+				year = checkTime(year)
+				mon = checkTime(mon)
+				da = checkTime(da)
 				h = checkTime(h)
 				m = checkTime(m)
 				s = checkTime(s)
@@ -250,6 +243,7 @@ html, body {
 				tt = setTimeout('startTime()', 1000)
 			}
           function checkTime(i) {
+                
 				if(h < 0){
 				   h = h + 23
 				}
@@ -283,7 +277,7 @@ html, body {
 		    window.id = data.id; // 表单id
 		    window.trime = data.time; // 表单id
 	        var txt = document.getElementById("time"); //time
-	        txt.innerText= data.time;
+	        txt.innerText= window.trime;
 	        
 			var obj = document.getElementById("vehicle");
             obj.innerText= data.vehicle; 
@@ -335,9 +329,9 @@ html, body {
 		});	
      }); 
   		
-  	/* 	
   		var orderId=0;  //订单 用户id
-		var text;  // 钱
+  		var time;
+		var meony;  // 
 		var prepay_id;
 		var paySign; 
 		var appId;   
@@ -347,10 +341,10 @@ html, body {
 		var signType; 
 		var orderNo;	
 		
-		function payPublic(orderId,text,uid){
-		    text =  text*100;	
+		function payPublic(orderId,meony,uid){
+		    meony =  meony*100;	
 	        var site = "payreportrenew";		
-		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+text+"/"+uid+"/"+site, null, function(data){
+		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+meony+"/"+uid+"/"+site, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;
@@ -376,17 +370,29 @@ html, body {
 		        },
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		             alert("交易成功");  
-	                 window.location.href = "vice/merchant/parking";
+						var _ut = window.BASEPATH + 'vice/addmoney'
+						var para = {};
+						if (time > 0) {
+							para.length = time
+						} else {
+							para.length = 0;
+						}
+						para.sele = $("#sele").val();
+						para.money = window.money;
+						para.id = window.id;
+						$.post(_ut, $.toJSON(para), function(data) {
+							data = parseAjaxResult(data);
+							alert("续费成功");
+							window.location.href = "pubnum/product/index/merchant/renewall";
+						});
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
 		             alert("交易取消");  
-	                 window.location.href = "vice/merchant/parking";
+	                 window.location.href = "pubnum/product/index/merchant/renewall";
 		            }  
 		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
 		                alert(res.err_desc); 
-                     window.location.href = "vice/merchant/parking";
-                       
+                     window.location.href = "pubnum/product/index/merchant/renewall";
 		            }  
 		        }
 		    );
@@ -402,15 +408,17 @@ html, body {
 		    }else{
 		        onBridgeReady();
 		    }
-		} */
-				
-			
-		  
+		}
 </script>
 
 
 
 <body onload="startTime()" >
+	<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">续费页面</span>
+	</div> 
 	<div class="header" style="width:100%;height:50%;">
 
 		<div class="header_in" style="margin: 0 auto;overflow: auto;" />
@@ -420,7 +428,7 @@ html, body {
 
 
 		<p id="cost"
-			style='display: inline-block;position: absolute;top:10%;left:46%;margin-left:-25px'>
+			style='display: inline-block;position: absolute;top:17%;left:46%;margin-left:-25px'>
 
 		</p>
 
@@ -471,20 +479,33 @@ html, body {
 				<option>3</option>
 				<option>4</option>
 			</select><span>小时</span>
-			<p style="font-weight: bold;font-size:18px;color:red;margin:5% auto;">
+			<p style="font-weight: bold;font-size:18px;color:red;margin:2% auto;">
 				超时停车费用：<span id="chao">0</span>元
 			</p>
 		</div>
 
 	</div>
 	<div class="footer" style="width:100%;">
-		<div class="footer_in" style="margin:5% 10% ;height:100%;">
-			<img alt="" src="lib/images/zhifu.png"
+		<div class="footer_in" style="margin:0 10% ;height:100%;">
+		<div>
+			<img alt="" src="lib/images/weixin.png"
 				style="width:30px;height:30px; vertical-align:middle;" /> <span
 				style="display:inline-block;font-size:12px;line-height:35px;">微信支付</span>
-			<input type="checkbox" name="" id="" value=""
+			<input type="checkbox" name="" id="weixin" value=""
 				style="float:right;margin-top:10px;background-color:red;" />
 		</div>
+		<div>
+			<img alt="" src="lib/images/zhifu.png"
+				style="width:30px;height:30px; vertical-align:middle;" /> <span
+				style="display:inline-block;font-size:12px;line-height:35px;">支付宝支付</span>
+			<input type="checkbox" name="" id="weixin" disabled="value"
+				style="float:right;margin-top:10px;background-color:red;" />
+		</div>	
+			 
+		</div>
+		<div style="width:100%;height:60px;">
+			
+		</div>	
 		<div class="footer_on" style="width:100%;">
 			<button
 				style="width:60%;height:50px;background:#ffffff;border:none;outline:none;border:1px solid #A0A0A0;border-left:none;color:#CE8805;">

@@ -97,14 +97,14 @@
 .conformity {
 	height: 50px;
 	margin: 0 auto;
-	width: 144px;
+	width: 40%;
 }
 
 .pid {
 	float: left;
 	text-align: center;
 	line-height: 50px;
-	margin-left: 20px;
+	margin-left: 20%;
 }
 
 .pid p, .phone p {
@@ -128,14 +128,19 @@
 }
 
 .banner {
+	height:50%;
 	width: 100%;
 	position: absolute;
-	top: 300px;
+	bottom:-10%;
+	margin:0;
+	padding:0;
 }
 
 .banner img {
-	width: 100%;
-	height: 50%;
+    width: 100%;
+	height:100%;
+	margin:0;
+	padding:0;
 }
 
 .btn {
@@ -188,8 +193,8 @@
 	right: 40%;
 }
 
-html {
-	height: 100%;
+html,body{
+	height:100%;
 }
 </style>
 
@@ -233,119 +238,316 @@ html {
 		})	;
 
 
+        var _ur = window.BASEPATH + 'vice/vehicleorder'; //
+		$.post(_ur,null, function(data) {
+			data = parseAjaxResult(data);
+			console.log(data.length);
+			var html = [];
+			for (var i = 0; i < data.length; i++) { 
+				html.push('<span id="alert_a" style="margin:0 0 0 2%;">' + data[i].vehicle + ' </span>' + '的')
+				html.push('<span id="alert_b">' + data[i].type+ '</span>' + '，在')
+				html.push('<span id="alert_c">' + data[i].parking + '</span>' + '，')
+				html.push('<span id="alert_d">' + data[i].district + '</span>')
+				html.push('<span id="alert_e">' + data[i].number + '</span>  </br>') 
+				var shi = new Date(data[i].dueTime);   /* '2019-03-22 14:00' */
+				var today = new Date();
+				var tan = ((shi - today) / 1000 / 60).toFixed(2);
+			} 
+				if (tan < 0) {
+					myAlert('系统提示:', '您已超时，当前系统正在按停车场三倍停车费用为您计时，请您及时续费。');
+				} else if (tan < 30  ) {
+					myAlert('系统提示:', '<p id="alertss" style="font-weight:bold;color:red;margin:5px auto;height:auto;line-height:30px;"><span id="alert_a"></span><span id="alert_b"></span><span id="alert_c"></span><span id="alert_d"></span><span id="alert_e"></span></p> <p style="margin:0 2%;">的停车时间将于30分钟后结束。如果您需要续费，请在预订时间结束前30分钟内续费。如果您预订的车位超出预订时间，未能驶离停车场，系统将按照三倍每小时费用自动计算。</p>');
+				} 
+			$('#alertss').append(html.join(''));
+		})	;
+ 
+
+
 
 		var _uri = window.BASEPATH + 'quit/order';
 		$.post(_uri, null, function(data) {
 			data = parseAjaxResult(data);
-			for(var i=0; i<data.length;i++){
-			if (data[i] == "未支付") {
-				var order = document.getElementById('img_order');
-				order.onclick = function() {
-					var Order = document.getElementById('test1');
-					Order.src = 'lib/images/dingdan.png';
-					window.location.href = "vice/merchant/information";
-				/* 	alert("我是订单页面") */
-				};
-			}
-        if (data[i] == "正在停车" ) {
-        var navigation = document.getElementById('img_navigation');
-				navigation.onclick = function() {
-					var Navigation = document.getElementById('test1');
-					Navigation.src = 'lib/images/daohang.png';
-					window.location.href = "vice/merchant/navigation";
-					 alert("我是导航页面") 
-				};
-				//进入停车界面
-				var parking = document.getElementById('img_parking');
-				parking.onclick = function() {
-					var Parking = document.getElementById('test1');
-					Parking.src = 'lib/images/tingche.png';
-					window.location.href = "vice/merchant/parkings";
-					 alert("我是停车页面") 
-				};
-				//进入续费界面
-				var renew = document.getElementById('img_Renewal');
-				renew.onclick = function() {
-					var Renew = document.getElementById('test1');
-					Renew.src = 'lib/images/xufei.png';
-					window.location.href = "vice/merchant/renewal";
-				/* 	alert("我是续费页面") */
-				};
-				var order = document.getElementById('img_order');
-				order.onclick = function() {
-					var Order = document.getElementById('test1');
-					Order.src = 'lib/images/dingdan.png';
-					window.location.href = "vice/merchant/information";
-					/* alert("我是订单页面") */
-				};
-        
-        }
-
-			//进入导航界面
-			if (data[i]  == "已支付"  ) {
-				var navigation = document.getElementById('img_navigation');
-				navigation.onclick = function() {
-					var Navigation = document.getElementById('test1');
-					Navigation.src = 'lib/images/daohang.png';
-					window.location.href = "vice/merchant/navigation";
-					
-					/* alert("我是导航页面") */
-				};
-				//进入续费界面
-				var renew = document.getElementById('img_Renewal');
-				renew.onclick = function() {
-					var Renew = document.getElementById('test1');
-					Renew.src = 'lib/images/xufei.png';
-					window.location.href = "vice/merchant/renewal";
-					/* alert("我是续费页面") */
-				};
-				var order = document.getElementById('img_order');
-				order.onclick = function() {
-					var Order = document.getElementById('test1');
-					Order.src = 'lib/images/dingdan.png';
-					window.location.href = "vice/merchant/information";
-					/* alert("我是订单页面") */
-				};
-				var parking = document.getElementById('img_parking');
-				parking.onclick = function() {
-					var Parking = document.getElementById('test1');
-					Parking.src = 'lib/images/tingche.png';
-					window.location.href = "vice/merchant/parkings";
-					 alert("我是停车页面") 
-				};
-			};
-
-
-
-			//进入订单界面
-			if (data[i]  == "已过期") {
-				var order = document.getElementById('img_order');
-				order.onclick = function() {
-					var Order = document.getElementById('test1');
-					Order.src = 'lib/images/dingdan.png';
-					window.location.href = "vice/merchant/information";
-					/* alert("我是订单页面") */
+			for (var i = 0; i < data.length; i++) {
+				if ( data[i] == "NOTPAY" ) { //未支付
+					var order = document.getElementById('img_order');
+					order.onclick = function() {
+						var Order = document.getElementById('test1');
+						Order.src = 'lib/images/dingdan.png';
+						
+						setTimeout(function(){
+						window.location.href = "vice/merchant/information";
+						 },300);
+					};
 				}
-			};
-      }
+				if ( data[i]=="PARKING" ) {//停车
+					var navigation = document.getElementById('img_navigation');
+					navigation.onclick = function() {
+						var Navigation = document.getElementById('test1');
+						Navigation.src = 'lib/images/daohang.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/navigation";
+						 },300);
+					};
+					//进入停车界面
+					var parking = document.getElementById('img_parking');
+					parking.onclick = function() {
+						var Parking = document.getElementById('test1');
+						Parking.src = 'lib/images/tingche.png';
+							setTimeout(function(){
+						window.location.href = "vice/merchant/parkings";
+						 },300);
+					};
+					//进入续费界面
+					var renew = document.getElementById('img_Renewal');
+					renew.onclick = function() {
+						var Renew = document.getElementById('test1');
+						Renew.src = 'lib/images/xufei.png';
+						setTimeout(function(){
+						window.location.href = "pubnum/product/index/merchant/renewall";
+							 },300);
+					};
+					var order = document.getElementById('img_order');
+					order.onclick = function() {
+						var Order = document.getElementById('test1');
+						Order.src = 'lib/images/dingdan.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/information";
+							 },300);
+					};
+
+				}
+
+				//进入导航界面
+				if ( data[i] == "PAYSUCCESS" ) { //已支付
+					var navigation = document.getElementById('img_navigation');
+					navigation.onclick = function() {
+						var Navigation = document.getElementById('test1');
+						Navigation.src = 'lib/images/daohang.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/navigation";
+						 },300);
+
+					};
+					//进入续费界面
+					var renew = document.getElementById('img_Renewal');
+					renew.onclick = function() {
+						var Renew = document.getElementById('test1');
+						Renew.src = 'lib/images/xufei.png';
+						setTimeout(function(){
+						window.location.href = "pubnum/product/index/merchant/renewall";
+						 },300);
+					};
+					var order = document.getElementById('img_order');
+					order.onclick = function() {
+						var Order = document.getElementById('test1');
+						Order.src = 'lib/images/dingdan.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/information";
+						},300);
+					};
+				}
+				;
+
+
+
+				//进入订单界面
+				if ( data[i] == "PAST") { //过期
+					var order = document.getElementById('img_order');
+					order.onclick = function() {
+						var Order = document.getElementById('test1');
+						Order.src = 'lib/images/dingdan.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/information";
+						},300);
+					}
+				}
+				;
+			}
 
 			//进入找车位界面
 			var parkingspace = document.getElementById('img_car');
 			parkingspace.onclick = function() {
 				var Parkingspace = document.getElementById('test1');
 				Parkingspace.src = 'lib/images/chewei.png';
-				/* alert("我是找车位页面") */
+				setTimeout(function(){
 				window.location.href = "vice/merchant/scenic";
+				},300);
 			};
 
 		});
 
 	});
 </script>
+<script type="text/javascript">
+(function($) {
+				$.alerts = {
+					alert : function(title, message, callback) {
+						if (title == null)
+							title = 'Alert';
+						$.alerts._show(title, message, null, 'alert', function(result) {
+							if (callback) callback(result);
+						});
+					},
 
+					confirm : function(title, message, callback) {
+						if (title == null)
+							title = 'Confirm';
+						$.alerts._show(title, message, null, 'confirm', function(result) {
+							if (callback) callback(result);
+						});
+					},
+
+
+					_show : function(title, msg, value, type, callback) {
+
+						var _html = "";
+
+						_html += '<div id="mb_box"></div><div id="mb_con"><span id="mb_tit">' + title + '</span>';
+						_html += '<div id="mb_msg">' + msg + '</div><div id="mb_btnbox">';
+						if (type == "alert") {
+							_html += '<input id="mb_btn_ok" type="button" value="确定" />';
+						}
+
+						_html += '</div></div>';
+
+						//必须先将_html添加到body，再设置Css样式  
+						$("body").append(_html); GenerateCss();
+
+						switch (type) {
+						case 'alert':
+
+							$("#mb_btn_ok").click(function() {
+								$.alerts._hide();
+								callback(true);
+							});
+							$("#mb_btn_ok").focus().keypress(function(e) {
+								if (e.keyCode == 13 || e.keyCode == 27) $("#mb_btn_ok").trigger('click');
+							});
+							break;
+						case 'confirm':
+
+							$("#mb_btn_ok").click(function() {
+								$.alerts._hide();
+								if (callback) callback(true);
+							});
+							$("#mb_btn_no").click(function() {
+								$.alerts._hide();
+								if (callback) callback(false);
+							});
+							$("#mb_btn_no").focus();
+							$("#mb_btn_ok, #mb_btn_no").keypress(function(e) {
+								if (e.keyCode == 13) $("#mb_btn_ok").trigger('click');
+								if (e.keyCode == 27) $("#mb_btn_no").trigger('click');
+							});
+							break;
+						}
+					},
+					_hide : function() {
+						$("#mb_box,#mb_con").remove();
+					}
+				}
+				// Shortuct functions  
+				myAlert = function(title, message, callback) {
+					$.alerts.alert(title, message, callback);
+				}
+
+				myConfirm = function(title, message, callback) {
+					$.alerts.confirm(title, message, callback);
+				};
+
+
+
+				//生成Css  
+				var GenerateCss = function() {
+
+					$("#mb_box").css({
+						width : '100%',
+						height : '100%',
+						zIndex : '99999',
+						position : 'fixed',
+						filter : 'Alpha(opacity=60)',
+						backgroundColor : 'black',
+						top : '0',
+						left : '0',
+						opacity : '0.6'
+					});
+
+					$("#mb_con").css({
+						zIndex : '999999',
+						width : '90%',
+						height : '40%',
+						position : 'fixed',
+						backgroundColor : 'White',
+					});
+
+					$("#mb_tit").css({
+						display : 'block',
+						fontSize : '14px',
+						color : 'red',
+						padding : '10px 15px 0',
+						backgroundColor : '#fff',
+						borderRadius : '15px 15px 0 0',
+						fontWeight : 'bold'
+					});
+
+					$("#mb_msg").css({
+						padding : '4px',
+						lineHeight : '20px',
+						textAlignleft : 'center',
+						fontSize : '12px',
+						color : '#000000'
+					});
+
+					$("#mb_ico").css({
+						display : 'block',
+						position : 'absolute',
+						right : '10px',
+						top : '9px',
+						border : '1px solid Gray',
+						width : '18px',
+						height : '18px',
+						textAlign : 'center',
+						lineHeight : '16px',
+						cursor : 'pointer',
+						borderRadius : '12px',
+						fontFamily : '微软雅黑'
+					});
+
+					$("#mb_btnbox").css({
+						margin : '5px 0px 10px 0',
+						textAlign : 'center'
+					});
+					$("#mb_btn_ok").css({
+						width : '80px',
+						height : '40px',
+						color : 'white',
+						border : 'none',
+						borderRadius : '4px'
+					});
+					$("#mb_btn_ok").css({
+						backgroundColor : '#FF8500'
+					});
+					var _widht = document.documentElement.clientWidth; //屏幕宽  
+					var _height = document.documentElement.clientHeight; //屏幕高  
+
+					var boxWidth = $("#mb_con").width();
+					var boxHeight = $("#mb_con").height();
+
+					//让提示框居中  
+					$("#mb_con").css({
+						top : (_height - boxHeight) / 1.2 + "px",
+						left : (_widht - boxWidth) / 2 + "px"
+					});
+				}
+			})(jQuery);
+</script>
 
 <body>
+   <div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
 
+     <!-- <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="smart/merchant/parking" title="返回"> <返回首页 </a> -->
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;">我的车位</span>
+	</div> 
 	<div class='header-pic'>
 		<div id="img"></div>
 		<div class="conformity">
@@ -378,7 +580,7 @@ html {
 		</div>
 	</div>
 
-	<div class="banner ">
+	<div class="banner">
 		<img src="lib/images/zhuanpan.png " class="img-responsive1 "
 			id="test1" alt=" ">
 		<div id="img_car" style="width:20%;height: 20%;border-radius:50%"

@@ -49,6 +49,7 @@ import com.guolaiwan.app.web.smartParking.vo.AttractionsVo;
 import com.guolaiwan.app.web.smartParking.vo.CarPositionVo;
 import com.guolaiwan.app.web.smartParking.vo.OrderVo;
 import com.guolaiwan.app.web.smartParking.vo.ParkingPositionVo;
+import com.guolaiwan.app.web.smartParking.vo.VehiceVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
@@ -85,17 +86,22 @@ public class SceneryListController  extends WebBaseControll{
 
 	@Autowired
 	private  VehicleDao par_king;
+	
 	@Autowired
 	private  AttractionsDao Attra_ctions;
 
 	@Autowired
 	private CarPositionDao  Car_Position;
+	
 	@Autowired
 	private OrderDao  Order;
+	
 	@Autowired
 	private ParkingPositionDao  Parking_Position;
+	
 	@Autowired
 	private SysConfigDAO conn_sysConfig;
+	
 	@Autowired
 	private MoneyDao Money;
 
@@ -121,13 +127,51 @@ public class SceneryListController  extends WebBaseControll{
 			param = param.substring(1, param.length() - 1);
 		}
 		JSONObject pageObject = JSON.parseObject(param);
-		List<AttractionsParkingPO> attractions =	Attra_ctions.getInformation(0, 20);
+		List<AttractionsParkingPO> attractions =	Attra_ctions.getInformation(0, 25);
+		for (int i = 0; i < attractions.size(); i++) {
+			List<CarPositionPO>  Position =	Car_Position.getInformation(attractions.get(i).getId());
+			
+		}
+		
 		List<AttractionsVo> _merchants = AttractionsVo.getConverter(AttractionsVo.class).convert(attractions,
 				AttractionsVo.class);
 		return success(_merchants);
 	}
 
 
+	/*****************************************************************************************************/
+	
+	
+	
+	
+	/**
+	 * 查询    停车结束时间
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/finish", method = RequestMethod.POST)
+	public Map<String, Object> SeleFinish(HttpServletRequest request) throws Exception {
+		String vehicle = null; // 车牌
+        Long userId = 	(Long) request.getSession().getAttribute("userId");
+		List<String> listHasCup=new ArrayList<String>();
+		List<VehiclePO> userBy = par_king.getNumber(userId);
+		for (VehiclePO vehiclePO : userBy) {
+			vehicle =  vehiclePO.getNumber();
+		}
+		List<String> list  = new ArrayList<String>();
+		list.add("PAYSUCCESS");
+		list.add("PARKING");
+		List<OrderPO> userByid = Order.getOrderform(userId,list,vehicle);
+	    for (OrderPO orderPO : userByid) {
+	    	listHasCup.add(orderPO.getDueTime());
+		}
+		return success(listHasCup);
+	}
+	
+	
 
 
 
@@ -159,7 +203,6 @@ public class SceneryListController  extends WebBaseControll{
 		AttractionsParkingPO attractions = Attra_ctions.getUid(uid);
 			dataMap.put("regulations", attractions.getRegulations());
 			dataMap.put("parkingName", attractions.getParkingName());
-
 		return success(dataMap);
 	}
 
@@ -192,6 +235,46 @@ public class SceneryListController  extends WebBaseControll{
 		List<AttractionsVo>   _merchants = AttractionsVo.getConverter(AttractionsVo.class).convert(userName,
 				AttractionsVo.class);
 		return success(_merchants);
+	}
+	
+	
+	/*****************************************************************************************************/
+
+	
+	
+	
+	/**
+	 * 获取 用户车型      查询订单 景区名称 区 车位 
+	 * @return
+	 **/
+	@ResponseBody
+	@RequestMapping(value = "/vehicleorder", method = RequestMethod.POST)
+	public Map<String, Object> seleOrder(HttpServletRequest request) throws Exception {
+		String vehicle = null; // 车牌
+		String type = null; // 车牌
+        Long userId = 	(Long) request.getSession().getAttribute("userId");
+		List<String> listHasCup=new ArrayList<String>();
+		List<VehiclePO> userBy = par_king.getNumber(userId);
+		for (VehiclePO vehiclePO : userBy) {
+			vehicle =  vehiclePO.getNumber();
+			type =  vehiclePO.getType();
+		}
+		List<String> list  = new ArrayList<String>();
+		list.add("PAYSUCCESS");
+		list.add("PARKING");
+		List<OrderPO> userByid = Order.getOrderform(userId,list,vehicle);
+		List<VehiceVo>  arrList  = new ArrayList<VehiceVo>();
+	    for (OrderPO order : userByid) {
+	    	VehiceVo  vehice = new VehiceVo();
+	    	vehice.setVehicle(vehicle);
+	    	vehice.setType(type);
+	    	vehice.setParkingn(order.getParkingName());
+	    	vehice.setNumber(order.getParkingNumber());
+	    	vehice.setDistrict(order.getParkingDistrict());
+	    	vehice.setDueTime(order.getDueTime());
+	    	arrList.add(vehice);
+		}
+		return success(arrList);
 	}
 
 
@@ -351,14 +434,12 @@ public class SceneryListController  extends WebBaseControll{
 			param = param.substring(1, param.length() - 1);
 		}
 		JSONObject pageObject = JSON.parseObject(param);
-		Long uid = pageObject.getLong("id");   
-		System.out.println(uid);
+		Long uid = pageObject.getLong("uid");   
 		List<AttractionsParkingPO> userName =  Attra_ctions.getBusinessHours(uid);
 		for (AttractionsParkingPO attractionsParkingPO : userName) {
 			dataMap.put("stoppingTime", attractionsParkingPO.getStoppingTime());
 			dataMap.put("phone", attractionsParkingPO.getPhone());
 		}
-		System.out.println(dataMap);
 		return success(dataMap);
 	}
 
@@ -390,9 +471,7 @@ public class SceneryListController  extends WebBaseControll{
 		List<VehiclePO> userBy = par_king.getNumber(userId);
 		for (VehiclePO vehiclePO : userBy) {
 			vehicle =  vehiclePO.getNumber();
-			
 		}
-	
 		Long uid = pageObject.getLong("uid");   
 		List<OrderPO> userByid = Order.getOrderform(userId,uid,vehicle);
 		for (OrderPO orderPO : userByid) {
@@ -441,7 +520,7 @@ public class SceneryListController  extends WebBaseControll{
 			vehicle =  vehiclePO.getNumber();
 		}
 			name   =  	attractions.getParkingName();
-			time  =attractions.getStoppingTime();
+			time  =   attractions.getStoppingTime();
 		List<OrderPO> userByid = Order.getOrderform(userId,uid,vehicle);
 		if (userByid.size() == 0) {
 			OrderPO odp = new OrderPO();
@@ -452,7 +531,7 @@ public class SceneryListController  extends WebBaseControll{
 			odp.setParkingDistrict(qu);
 			odp.setParkingNumber(stall);
 			odp.setAttractionsId(uid);
-			odp.setParkingCost(0); 
+			odp.setParkingCost(0);
 			odp.setPlatenumber(vehicle);
 			Order.save(odp);
 			dataMap.put("uid", odp.getId());
@@ -529,7 +608,6 @@ public class SceneryListController  extends WebBaseControll{
 		}
 		ParkingPositionPO userNam =  Parking_Position.getNumber(id,number);// 车位   用户id
 	    	dataMap.put("condition",userNam.getUseCondition());
-	    System.out.println(dataMap);
 		return success(dataMap);
 	}
 
@@ -616,6 +694,7 @@ public class SceneryListController  extends WebBaseControll{
 	 *   增加订单信息
 	 * @return
 	 **/
+	//TODO
 	@ResponseBody
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
 	public Object prevPay(HttpServletRequest request) throws Exception {
@@ -647,20 +726,22 @@ public class SceneryListController  extends WebBaseControll{
 			order.setParkingCost(money);
 			order.setStoppingTime(duration);
 			order.setPlatenumber(vehicle);
-			order.setOrderStatus("已支付");
 			Order.saveOrUpdate(order);
-			parkingNumber = order.getParkingNumber();
+		/*	parkingNumber = order.getParkingNumber();
 			parkingLayer = 	order.getParkingLayer();
-			district = 	order.getParkingDistrict();
+			district = 	order.getParkingDistrict();*/
 			
 		}
-		CarPositionPO userName =  Car_Position.getAmend(uid,parkingLayer,district);
-		id = userName.getId();
+	/*	List<CarPositionPO> userName =  Car_Position.getAmend(uid,parkingLayer,district);
+		for (CarPositionPO carPositionPO : userName) {
+		id = carPositionPO.getId();
+		}
 		
-		ParkingPositionPO getTruck  =  Parking_Position.getNumber(id,parkingNumber);
-			getTruck.setUseCondition(1);
-		 	Parking_Position.saveOrUpdate(getTruck);
-		
+		List<ParkingPositionPO> getTruck  =  Parking_Position.getNumber(id,parkingNumber);
+		for (ParkingPositionPO parkingPositionPO : getTruck) {
+		 	parkingPositionPO.setUseCondition(1);
+		 	Parking_Position.saveOrUpdate(parkingPositionPO);
+		}*/
 		return "";
 	}
 
@@ -686,8 +767,10 @@ public class SceneryListController  extends WebBaseControll{
 		JSONObject pageObject = JSON.parseObject(param);
 		Long uid = pageObject.getLong("uid"); 
 		String vehicle = pageObject.getString("vehicle"); 
-		String sal = "已支付";
-		List<OrderPO> userByid = Order.getOrderform(userId,uid,sal,vehicle);
+		List<String> relaIds = new ArrayList<String>();
+		relaIds.add("PAYSUCCESS");
+		relaIds.add("PARKING");
+		List<OrderPO> userByid = Order.getOrderform(userId,uid,relaIds,vehicle);
 		for (OrderPO order : userByid) {
 			dataMap.put("parkingName",order.getParkingName());
 			dataMap.put("parkingLayer",order.getParkingLayer());
@@ -698,7 +781,6 @@ public class SceneryListController  extends WebBaseControll{
 			dataMap.put("bookingTime",order.getBookingTime());
 			dataMap.put("dueTime",order.getDueTime());
 		}
-
 		return success(dataMap);
 	}
 	
@@ -727,10 +809,14 @@ public class SceneryListController  extends WebBaseControll{
 		for (VehiclePO vehiclePO : userBy) {
 			vehicle =  vehiclePO.getNumber();
 		}
-		List<OrderPO> userByid = Order.getOrderform(userId,uid,"已支付",vehicle);
+		List<String> relaIds = new ArrayList<String>();
+		relaIds.add("PAYSUCCESS");
+		relaIds.add("PARKING");
+		relaIds.add(" ");
+		List<OrderPO> userByid = Order.getOrderform(userId,uid,relaIds,vehicle);
 		for (OrderPO order : userByid) {
 			order.setRefund(refund);
-			order.setOrderStatus("申请退款");
+			order.setOrderStatus("REFUNDING");
 			Order.saveOrUpdate(order);
 		}
 		return success();
@@ -742,33 +828,29 @@ public class SceneryListController  extends WebBaseControll{
 	/*****************************************************************************************************/
 
 	/**
-	 * 生成 二维码
+	 *  获取 二维码
 	 * @return
 	 **/
 	@ResponseBody
 	@RequestMapping(value = "/long", method = RequestMethod.POST)
 	public Map<String, Object> SelePre(HttpServletRequest request) throws Exception {
+		String vehicle = null;
 		Long userId = 	(Long) request.getSession().getAttribute("userId");
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		final int width = 300;
-		final int height = 300;
-		final String format = "png";
-		final String content = userId+"";
-		//定义二维码的参数
-		HashMap hints = new HashMap();
-		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-		hints.put(EncodeHintType.MARGIN, 2);
-		//生成二维码
-		try{
-			BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);
-			String path = conn_sysConfig.getSysConfig().getFolderUrl()+"code"; 
-			Path file = new File(path).toPath();
-			MatrixToImageWriter.writeToPath(bitMatrix, format, file);
-			String web = conn_sysConfig.getSysConfig().getWebUrl();
-			dataMap.put("img", web);
-		}catch(Exception e){
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
 		}
+		JSONObject pageObject = JSON.parseObject(param);
+		Long attid = pageObject.getLong("attid");  
+		List<VehiclePO> userBy = par_king.getNumber(userId);
+		for (VehiclePO vehiclePO : userBy) {
+			vehicle =  vehiclePO.getNumber();
+		}
+		OrderPO userByid = Order.getform(userId,attid,vehicle);
+		dataMap.put("img", userByid.getPath());
+		dataMap.put("number", userByid.getId());
 		return success(dataMap);
 	}
 
@@ -781,7 +863,6 @@ public class SceneryListController  extends WebBaseControll{
 
 	
 	
-
 
 	/** 根据用户id 查询 订单
 	 * @return
@@ -798,14 +879,13 @@ public class SceneryListController  extends WebBaseControll{
 		JSONObject pageObject = JSON.parseObject(param);
 		String Headimg = pageObject.getString("Headimg");   
 		List<String> listHasCup=new ArrayList<String>();
-		List<OrderPO> userByid = Order.getOrderform(userId,"已支付",Headimg);
+		List<OrderPO> userByid = Order.getOrderform(userId,"PAYSUCCESS",Headimg);
 		for (OrderPO orderPO : userByid) {
 			AttractionsParkingPO userName =  Attra_ctions.getUid(orderPO.getAttractionsId());
 				 listHasCup.add(userName.getParkingName());
 				 listHasCup.add(userName.getParkingDistrict());
 				 listHasCup.add(userName.getAddress());
 		}
-		System.out.println(listHasCup);
 		return success(listHasCup);
 	}
 
@@ -830,7 +910,7 @@ public class SceneryListController  extends WebBaseControll{
 			vehicle =  vehiclePO.getNumber();
 		}
 		dataMap.put("vehicle", vehicle);
-		List<OrderPO> userByid = Order.getOrderform(userId,"已支付",vehicle);
+		List<OrderPO> userByid = Order.getOrderform(userId,"PARKING",vehicle);
 		for (OrderPO orderPO : userByid) {
 			dataMap.put("name", orderPO.getPlatenumber());
 			dataMap.put("number", orderPO.getParkingNumber());
@@ -843,7 +923,6 @@ public class SceneryListController  extends WebBaseControll{
 			dataMap.put("parkingDistrict", orderPO.getParkingDistrict());
 			dataMap.put("id", orderPO.getId());
 		}
-		System.out.println(dataMap);
 		return success(dataMap);
 	}
 	
@@ -873,8 +952,8 @@ public class SceneryListController  extends WebBaseControll{
 		}
 		dataMap.put("vehicle", vehicle);
 		List<String> relaIds = new ArrayList<String>();
-		relaIds.add("已支付");
-		relaIds.add("正在停车");
+		relaIds.add("PAYSUCCESS");
+		relaIds.add("PARKING");
 		List<OrderPO> userByid = Order.getOrderName(userId,relaIds,vehicle,Name);
 		for (OrderPO orderPO : userByid) {
 			dataMap.put("name", orderPO.getPlatenumber());
@@ -912,8 +991,8 @@ public class SceneryListController  extends WebBaseControll{
 		}
 		dataMap.put("vehicle", vehicle);
 		List<String> relaIds = new ArrayList<String>();
-		relaIds.add("已支付");
-		relaIds.add("正在停车");
+		relaIds.add("PAYSUCCESS");
+		relaIds.add("PARKING");
 		List<OrderPO> userByid = Order.getOrderform(userId,relaIds,vehicle);
 		for (OrderPO orderPO : userByid) {
 			dataMap.put("name", orderPO.getPlatenumber());
@@ -957,7 +1036,7 @@ public class SceneryListController  extends WebBaseControll{
 			vehicle =  vehiclePO.getNumber();
 			type = vehiclePO.getType();
 		}
-		OrderPO userByid = Order.getOrder(userId,"已支付",vehicle);
+		OrderPO userByid = Order.getOrder(userId,"PARKING",vehicle);
 		if(userByid != null){
 			Time = userByid.getDueTime();
 			attactionid = userByid.getAttractionsId();
@@ -965,7 +1044,7 @@ public class SceneryListController  extends WebBaseControll{
 			parkingLayer = userByid.getParkingLayer();
 		}
 		AttractionsParkingPO attractions = Attra_ctions.getUid(attactionid);
-			fineMultiple = attractions.getFineMultiple();
+		fineMultiple = attractions.getFineMultiple();
 	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    try
 	    {
@@ -1044,7 +1123,7 @@ public class SceneryListController  extends WebBaseControll{
 			district = userByid.getParkingDistrict();
 			parkingLayer = userByid.getParkingLayer();
 		}
-	    AttractionsParkingPO attractions = Attra_ctions.getUid(attactionid);
+		AttractionsParkingPO attractions = Attra_ctions.getUid(attactionid);
 		fineMultiple = attractions.getFineMultiple();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try
@@ -1066,7 +1145,9 @@ public class SceneryListController  extends WebBaseControll{
 				}
 				double  money =   ((parkingmoney/2.0)*fineMultiple)*leng;
 				double  ismoney =  userByid.getOverTimeMoney();
-				userByid.setOverTimeMoney(ismoney+money);			
+				double  over =  userByid.getOverTime();
+				userByid.setOverTimeMoney(ismoney+money);	
+				userByid.setOverTime(over+(leng/2));
 				Order.saveOrUpdate(userByid);
 				dataMap.put("time", time);
 				dataMap.put("money", money);
@@ -1144,8 +1225,11 @@ public class SceneryListController  extends WebBaseControll{
 			vehicle =  vehiclePO.getNumber();
 		}
 		List<String> list  = new ArrayList<String>();
-		list.add("已支付");
-		list.add("正在停车");
+		list.add("PAYSUCCESS");
+		list.add("PARKING");
+		list.add("PAST");
+		list.add("REFUNDING");
+		list.add("REFUNDED");
 		List<OrderPO> order = Order.getOrderform(userId,list,vehicle);
 		List<OrderVo>   _merchants = OrderVo.getConverter(OrderVo.class).convert(order,
 				OrderVo.class);
@@ -1264,7 +1348,7 @@ public class SceneryListController  extends WebBaseControll{
 		return mv;
 	}
 	//转到jsp文件
-		@RequestMapping(value = "/merchant/renewal")
+		@RequestMapping(value = "/merchant/renewall")
 		public ModelAndView Renewal(HttpServletRequest request,HttpSession session) throws Exception {
 			ModelAndView mv = null;
 			mv = new ModelAndView("parking/park/renewal"); 
@@ -1277,7 +1361,13 @@ public class SceneryListController  extends WebBaseControll{
 			mv = new ModelAndView("parking/park/orderinformation"); 
 			return mv;
 		}
-  
+		//转到jsp文件
+		@RequestMapping(value = "/merchant/additional")
+		public ModelAndView Additionalpayments(HttpServletRequest request,HttpSession session) throws Exception {
+			ModelAndView mv = null;
+			mv = new ModelAndView("parking/park/additionalpayments"); 
+			return mv;
+		}
 
 
 

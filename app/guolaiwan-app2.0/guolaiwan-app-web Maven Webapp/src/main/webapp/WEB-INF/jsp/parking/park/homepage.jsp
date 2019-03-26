@@ -116,11 +116,12 @@
 	float: left;
 	line-height: 50px;
 	text-align: center;
+	
 }
 
 .main {
 	height: 100px;
-}
+	}
 
 .main select {
 	font-weight: bold;
@@ -132,19 +133,24 @@
 }
 
 .banner {
+    height:auto;
 	width: 100%;
-	position: absolute;
-	top: 300px;
+	bottom: 0;
+	
+	padding-top:60%;
 }
 
 .banner img {
-	width: 100%;
-	height: 50%;
+    width: 100%;
+	height:50%;
+	padding:0;
+	
 }
 
 .btn {
 	color: white;
 	border-radius: 5%;
+	
 }
 
 .main1 {
@@ -159,8 +165,9 @@
 	overflow: auto;
 }
 
-html {
+html,body{
 	height: 100%;
+	background-color:#E6E6E6 ;
 }
 </style>
 
@@ -244,7 +251,7 @@ html {
 				<img class="img4"
 					style="float: left;width: 30px;height: 30px;margin: 0 auto;"
 					src=" lib/images/4.png" /> <input class="input1"
-					style="width:200px;height:30px;line-height: 30px;border:none;outline:none;font-weight: bold;font-size:16px;"
+					style="width:200px;height:30px;line-height: 30px;border:none;outline:none;font-weight: bold;font-size:16px;background-color:#E6E6E6 ;"
 					type="text" name="test" id="" value="" placeholder="请输入车牌号"
 					maxlength="7" />
 			</div>
@@ -253,8 +260,7 @@ html {
 				<img class="img3"
 					style="float: left;width: 30px;height: 30px;margin: 0 auto;"
 					src="lib/images/che.png" /> <select class="s"
-					style="height:30px;line-height: 30px;width: 202px;border: 0;outline: none;font-weight: bold;font-size:16px;>
-					<option style="width:200px ">请选择</option>
+					style="height:30px;line-height: 30px;width: 202px;border: 0;outline: none;font-weight: bold;font-size:16px;background-color:#E6E6E6 ;">
 					<option style="width:200px ">小型车</option>
 					<option style="width:200px ">中型车</option>
 					<option style="width:200px ">大型车</option>

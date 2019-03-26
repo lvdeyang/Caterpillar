@@ -15,7 +15,7 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Table(name = "t_vehicle_table")
 public class VehiclePO extends AbstractBasePO{
 	//用户id
-	private Long vehicleId;
+	private long vehicleId;
 	//车牌号
 	private String number;
 	//车型
@@ -25,14 +25,14 @@ public class VehiclePO extends AbstractBasePO{
 	 * 
 	 * @return 用户id
 	 */
-	public Long getVehicleid() {
+	public long getVehicleid() {
 		return vehicleId;
 	}
 	/**
 	 * 
 	 * @param 用户id
 	 */
-	public void setVehicleid(Long userId) {
+	public void setVehicleid(long userId) {
 		this.vehicleId = userId;
 	}
 	/**

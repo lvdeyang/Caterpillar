@@ -264,7 +264,11 @@ $("#btn2").bind("click", function () {
    
 </script>
 <body>
+   	<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
 
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">取消订单</span>
+	</div> 
 	<div class="header"
 		style="width:95%;height:30%;margin:0 auto;padding-top:3%;">
 		<div class="header_in"

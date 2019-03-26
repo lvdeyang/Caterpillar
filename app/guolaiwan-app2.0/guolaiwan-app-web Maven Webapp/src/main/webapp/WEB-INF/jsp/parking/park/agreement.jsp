@@ -118,10 +118,10 @@
 		 $.post(uri, $.toJSON(para), function(data) {
 			data = parseAjaxResult(data);
 			for(var i = 0; i<data.length; i++){
-			 if("已支付"==data[i] ){
+			 if("PAYSUCCESS"==data[i] ){
 		     window.location.href="vice/merchant/order?uid="+${param.useid};
 		    }
-			 if("正在停车"==data[i] ){
+			 if("PARKING"==data[i] ){
 		     window.location.href="vice/merchant/parkings";
 		    }
 		    
@@ -141,7 +141,7 @@
 				htm.push('<li>'+data.regulations+'</li>');
 			$('#ol').append(htm.join('')); 
 			var html = [];
-				html.push('<p style="font-size: 16px;font-weight: bold; margin: 50px 0px 20px 15px;">'+data.parkingName+'管理条例</p>');
+				html.push('<p style="font-size: 16px;font-weight: bold; padding: 8% 0px 20px 15px;">'+data.parkingName+'管理条例</p>');
 			$('.header').append(html.join('')); 
 			  });
 			
@@ -157,8 +157,11 @@
   
 </script>
   <body>
-		<script type="text/javascript">
-		</script>
+		<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">管理条例</span>
+	</div> 
 		
 		<div class="header">
 		</div>

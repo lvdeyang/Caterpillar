@@ -10,7 +10,6 @@
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
 <head>
-
 <!-- 声明文档使用的字符编码 -->
 <meta charset='utf-8'>
 <!-- 优先使用 IE 最新版本和 Chrome -->
@@ -69,29 +68,14 @@
 <title></title>
 
 <!-- 公共样式引用 -->
-
-
-<base href="http://localhost:8080/guolaiwan-app-web/">
-<link rel="stylesheet" type="text/css"
-	href="http://localhost:8080/guolaiwan-app-web/mobile/lib/jQuery-weui-v1.2.0/lib/weui.css">
-<link rel="stylesheet" type="text/css"
-	href="http://localhost:8080/guolaiwan-app-web/mobile/lib/jQuery-weui-v1.2.0/css/jquery-weui.css">
-<link rel="stylesheet" type="text/css"
-	href="http://localhost:8080/guolaiwan-app-web/mobile/lib/jQuery.mmenu/css/jquery.mmenu.all.css">
-<link rel="stylesheet" type="text/css"
-	href="http://localhost:8080/guolaiwan-app-web/web/lib/ui/iCheck/all.css">
-<link rel="stylesheet"
-	href="http://localhost:8080/guolaiwan-app-web/mobile/lib/Font-Awesome-3.2.1/css/font-awesome.min.css" />
-<!--[if IE 7]>
-<link rel="stylesheet" href="http://localhost:8080/guolaiwan-app-web/mobile/lib/Font-Awesome-3.2.1/css/font-awesome-ie7.min.css">
-<![endif]-->
-
+<jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 
 <style type="text/css">
 .header_in {
 	font-size: 1rem;
 	font-weight: bold;
 	width: 80%;
+	
 }
 
 .header_a {
@@ -349,33 +333,28 @@ html, body {
 </head>
 
 <!-- 公共脚本引入 -->
-<script type="text/javascript"
-	src="http://localhost:8080/guolaiwan-app-web/mobile/lib/jQuery-weui-v1.2.0/lib/jquery-2.1.4.js"></script>
-<script type="text/javascript"
-	src="http://localhost:8080/guolaiwan-app-web/mobile/lib/jQuery-weui-v1.2.0/lib/fastclick.js"></script>
-<script type="text/javascript"
-	src="http://localhost:8080/guolaiwan-app-web/mobile/lib/jQuery-weui-v1.2.0/js/jquery-weui.js"></script>
-<script type="text/javascript"
-	src="http://localhost:8080/guolaiwan-app-web/mobile/lib/jQuery.mmenu/js/jquery.mmenu.min.all.js"></script>
-<script type="text/javascript"
-	src="http://localhost:8080/guolaiwan-app-web/web/lib/ui/iCheck/icheck.min.js"></script>
-<script type="text/javascript"
-	src="http://localhost:8080/guolaiwan-app-web/web/commons/date/date.ext.js"></script>
-<script type="text/javascript"
-	src="http://localhost:8080/guolaiwan-app-web/mobile/lib/swiper.js"></script>
-<script type="text/javascript"
-	src="http://localhost:8080/guolaiwan-app-web/mobile/lib/jquery_json.js"></script>
+<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<!-- <script src="../../../../layui/lib/alert/css/alertstyle.css"></script> -->
+<script src="../../../../layui/lib/alert/js/jquery-1.7.1.min.js"></script>
+<script src="../../../../layui/lib/alert/js/ui.js"></script>
+<link href="../../../../layui/lib/alert/css/alertstyle.css"
+	rel="stylesheet" />
+<!-- 公共脚本引入 -->
+
 <script type="text/javascript">
+ 
  var name = null;
  var cheng = null;
  var qu = null;
  var number = null;
  var sign = null; //车牌
 	$(function() {
-	  
-		window.BASEPATH = 'http://localhost:8080/guolaiwan-app-web/';
+	
+	 
+	
+		window.BASEPATH = '<%=basePath %>';
 		var parseAjaxResult = function(data) {
 			if (data.status !== 200) {
 				$.toptip('data.message', 'error');
@@ -384,8 +363,8 @@ html, body {
 				return data.data;
 			}
 		};
-
-
+        $("#startDate").datetimePicker();
+        $("#endDate").datetimePicker();
 	
 	
 		$(".swiper-container").swiper({
@@ -403,7 +382,10 @@ html, body {
 
 
 		$(document).on('click', '#btn', function() {
-
+             if(document.getElementById("weixin").checked==false){
+           $.toast("请选择支付方式", "forbidden");
+           return false;
+            }
 			var startdiv = document.getElementById("startdiv").style.display;
 			var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
 			var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
@@ -437,7 +419,31 @@ html, body {
 			//总额
 			var num4 = document.getElementById("zong");
 			num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
-
+			var _uti = window.BASEPATH + 'vice/number';
+			var para = {};
+			para.number = number;
+			para.qu = qu;
+			para.cheng = cheng;
+			para.uid = ${param.uid};
+			$.post(_uti, $.toJSON(para), function(data) {
+			    if(data.data.condition != 1 ){
+			      money = num4.innerText;
+			      var uid =${param.uid};
+			      var _util = window.BASEPATH + 'vice/message';
+						var param = {};
+						param.sDate =  $("#startDate").val();
+						param.eDate =  $("#endDate").val();
+						param.inner = demoP.innerHTML;
+						param.Text =  money; 
+						param.mark =  sign;
+						param.uid =  uid;
+						$.post(_util, $.toJSON(param), function(data) {    
+					});	
+			        payPublic(orderId,money,uid); 
+                  }else{
+                   alert("您好你预订的车位已被购买,请您从新选择车位");
+                  }
+              });	
 		});
 
 
@@ -447,8 +453,7 @@ html, body {
 
 
 		$("#wu").click(function() {
-			$.toast("抱歉，暂不支持其他支付方式", "forbidden");
-
+			window.location.href = "vice/merchant/additional";
 		});
 
     
@@ -505,87 +510,85 @@ html, body {
 		});	
 	});
 	
+	function testStart(){
+		var startdiv = document.getElementById("startdiv").style.display;
+		var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//")).format("yyyy-MM-dd HH:mm:ss");
+		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//")).format("yyyy-MM-dd HH:mm:ss");
+		if (sDate >= eDate) {
+			$.toast("离场时间不能小于进场时间", "forbidden");
+			$("#endDate").val("")
+			return false;
+		}
+		if (sDate < new Date) {
+		alert(sDate)
+			$.toast("请输入正确的入场时间", "forbidden");
+			$("#startDate").val("")
+			return false;
+		}
+		if (startdiv != "none") {
+			if ($("#startDate").val() == '') {
+				$.toast("请选择入场日期", "forbidden");
+				return false;
+			} 
+		}
+	}
 	
 		   function test() {
-						
-							var startdiv = document.getElementById("startdiv").style.display;
-							var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
-							var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
-							if (sDate >= eDate) {
-								$.toast("离场时间不能小于进场时间", "forbidden");
-								return false;
-							}
-							if (sDate < new Date) {
-								$.toast("请输入正确的入场时间", "forbidden");
-								return false;
-							}
+					var startdiv = document.getElementById("startdiv").style.display;
+					var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, ""));
+					var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, ""));
+				/* 	if (sDate >= eDate) {
+						$.toast("离场时间不能小于进场时间", "forbidden");
+						return false;
+					}
+					if (sDate < new Date) {
+						$.toast("请输入正确的入场时间", "forbidden");
+						return false;
+					}
+			
+					 if (startdiv != "none") {
+						if ($("#startDate").val() == '') {
+							$.toast("请选择入场日期", "forbidden");
+							return false;
+						} else if ($("#endDate").val() == '') {
+							$.toast("请选择离场日期", "forbidden"); 
+							return false;
+						}
+					 } */
+			
+					var demoP = document.getElementById("spa");
+					demoP.innerHTML = (parseInt(eDate - sDate) / 1000 / 60 / 60).toFixed(2);
 					
-							if (startdiv != "none") {
-								if ($("#startDate").val() == '') {
-									$.toast("请选择入场日期", "forbidden");
-									return false;
-								} else if ($("#endDate").val() == '') {
-									$.toast("请选择离场日期", "forbidden");
-									return false;
-								}
-								$("#btn").click(function() {
-									var _uti = window.BASEPATH + 'vice/number';
-									var para = {};
-									para.number = number;
-									para.qu = qu;
-									para.cheng = cheng;
-									para.uid = ${param.uid};
-									$.post(_uti, $.toJSON(para), function(data) {
-									    alert(data.data.condition);
-									    if(data.data.condition != 1 ){
-									  
-									    var _util = window.BASEPATH + 'vice/message';
-										var param = {};
-										var uid =${param.uid};
-										param.sDate =  $("#startDate").val();
-										param.eDate =  $("#endDate").val();
-										param.inner = demoP.innerHTML;
-										param.Text =  num4.innerText;
-										param.mark =  sign;
-										param.uid =  uid;
-										$.post(_util, $.toJSON(param), function(data) {    
-										   window.location.href = "vice/merchant/order?uid="+${param.uid};
-										});	
-									   }else{
-									   alert("您好你预订的车位已被购买,请您从新选择车位");
-									   }
-									});	
-					       
-								});
 					
-							}
 					
-							var demoP = document.getElementById("spa");
-							demoP.innerHTML = (parseInt(eDate - sDate) / 1000 / 60 / 60).toFixed(2);
-							
-							var num1 = document.getElementById('spa').innerText;
-							var num2 = document.getElementById('qian').innerText;
-							//应付金额
-							var num3 = document.getElementById("jin");
-							num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
-							//总额
-							var num4 = document.getElementById("zong");
-							num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+					var num1 = document.getElementById('spa').innerText;
+					var num2 = document.getElementById('qian').innerText;
+					//应付金额
+					var num3 = document.getElementById("jin");
+					num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+					//总额
+					var num4 = document.getElementById("zong");
+					num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
 				}
-		/* 		
-		var orderId=0;
+				
+				
+		var orderId=0; 
+		var text; 
 		var prepay_id;
-		var paySign;
-		var appId;
-		var timeStamp;
-		var nonceStr;
-		var packageStr;
-		var signType;
+		var paySign; 
+		var appId;   
+		var timeStamp;   
+		var nonceStr;  
+		var packageStr;  
+		var signType; 
 		var orderNo;	
 		
-			
-		function payPublic(orderId){
-			$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId, null, function(data){
+		function payPublic(orderId,text,uid){
+	        console.log(uid);
+			text =  (text*100).toFixed(0);	
+			var site = "payreportpark";
+			console.log(text)
+		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+text+"/"+uid+"/"+site, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;
@@ -611,19 +614,20 @@ html, body {
 		        },
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		                
-
-		            }
+		             alert("交易成功");  
+	                 window.location.href = "vice/merchant/order?uid="+${param.uid};
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
-		                alert("交易取消");  
-	
+		             alert("交易取消");  
+	                 window.location.href = "vice/merchant/parking";
 		            }  
 		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
 		                alert(res.err_desc); 
-
+                     window.location.href = "vice/merchant/parking";
+                       
 		            }  
 		        }
-		    );
+		      }
+		    )
 		}
 		function callpay(){
 		    if (typeof WeixinJSBridge == "undefined"){
@@ -637,7 +641,7 @@ html, body {
 		        onBridgeReady();
 		    }
 		}
-				 */
+				
 				
 	
 </script>
@@ -645,6 +649,10 @@ html, body {
 
 
 <body>
+     	<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">订单支付</span>
+	</div> 
 	<div>
 		<div class="header_in" style="margin:20px 30px;">
 			<p>
@@ -683,7 +691,7 @@ style="float:right;overflow:auto;line-height:40px;margin-right:15px;">
 		style="width:100%;height:200px;background-color:#ffffff;">
 		<div id="choosediv"
 			style="display:none;width:95%;font-size:14px;font-weight:bold;margin-left:15px;float:left;margin-top:15px;color:#787878;">请选择预订时间</div>
-		<div id="bookdiv"
+		<!-- <div id="bookdiv"
 			style="display:none;font-size:12px;float:left;width:100%;overflow-x:scroll">
 			<div class="weui-cell">
 				<div class="weui-cell__hd" style="width:20%;float:left;">
@@ -695,7 +703,7 @@ style="float:right;overflow:auto;line-height:40px;margin-right:15px;">
 				</div>
 
 			</div>
-		</div>
+		</div> -->
 
 		<div id="startdiv"
 			style="display:none;font-size:12px;float:left;width:100%;">
@@ -704,9 +712,8 @@ style="float:right;overflow:auto;line-height:40px;margin-right:15px;">
 					<label class="weui-label">进场日期 :</label>
 				</div>
 				<div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-					<input id="startDate" class="weui-input" type="datetime-local"
-						placeholder="">
-
+				
+					<input class="weui-input" id="startDate" type="text" value="" readonly="">
 				</div>
 				<div class="weui-cell__bd"></div>
 			</div>
@@ -719,7 +726,7 @@ style="float:right;overflow:auto;line-height:40px;margin-right:15px;">
 					<label class="weui-label">离场日期 :</label>
 				</div>
 				<div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-					<input id="endDate" class="weui-input" type="datetime-local" onchange="test()" />
+					<input class="weui-input" id="endDate" type="text" value="" readonly="" onchange="test()">
 				</div>
 				<div class="weui-cell__bd"></div>
 			</div>
@@ -735,27 +742,38 @@ style="float:right;overflow:auto;line-height:40px;margin-right:15px;">
 
 	</div>
 	<div class="footer" style="width:100%;">
-		<div class="footer_in" style="margin:20px 20px;height:100%;">
-			<img alt="" src="lib/images/zhifu.png"
-				style="width:40px;height:40px; vertical-align:middle;" /> <span
+		<div class="footer_in" style="margin:4%  4%;height:100%;">
+		  <div style="padding:2% 0">
+			<img alt="" src="lib/images/weixin.png"
+				style="width:35px;height:35px; vertical-align:middle;" /> <span
 				style="display:inline-block;font-size:12px;line-height:35px;">微信支付</span>
-			<input type="checkbox" name="" id="" value=""
+			<input type="checkbox" name="" id="weixin" value=""
 				style="float:right;margin-top:10px;background-color:red;" />
+		    </div>
+		    <div>
+			<img alt="" src="lib/images/zhifu.png"
+				style="width:35px;height:35px; vertical-align:middle;" /> <span
+				style="display:inline-block;font-size:12px;line-height:35px;">支付宝支付</span>
+			<input type="checkbox" name="" id="zhifubao" disabled="value"
+				style="float:right;margin-top:10px;background-color:red;" />
+				<div style="border-bottom: solid 1px #D5D5D5;width:100%;margin:2% auto 0px;"></div>
+	      </div>
 			<p id="wu" style="text-align:center;color:#747474;margin:10px auto;">其他支付方式
 				∨</p>
 		</div>
-
-		<div class="footer_on"
+                    <div style="width:100%;height:40px;"> </div>
+		
+	</div>
+	<div class="footer_on"
 			style="width:100%;height:10%;background-color:#FFFFFF;font-size:12px;">
 			<p
-				style="display:inline-block;color:#FE923A;line-height:50px;font-weight: bold;margin-left:30px;">
+				style="display:inline-block;color:#FE923A;line-height:50px;font-weight: bold;margin-left:5%;">
 				总额：￥<span id="zong"
 					style="font-weight: bold;color:#FF7D13;font-size:18px;">0</span>
 			</p>
 			<button id="btn"
 				style="height:50px;width:40%;color:#ffffff;background-color:#FF7D13;border:none;outline:none;float:right;font-size:18px;">去支付</button>
 		</div>
-	</div>
 </body>
 
 

@@ -133,14 +133,15 @@ html, body {
     
 	
 	
-		  var _url = window.BASEPATH + 'vice/long';
+		 var _url = window.BASEPATH + 'vice/long';
 		 var  param= {};
 		 param.attid =  ${param.uid};
 		 $.post(_url, $.toJSON(param), function(data) {
 		 data = parseAjaxResult(data);
-		 alert(data.img);
-		 var ht = '<img alt="" src="lib/images/erweima.png" style="width:60%;height:100%;">';
+		 var ht = '<img alt="" src="'+data.img+'" style="width:60%;height:100%;">';
 		 $('.img').html(ht);  
+		 
+		 document.getElementById("span").innerHTML = data.number;//编号
 		});
      
     
@@ -153,6 +154,12 @@ html, body {
    });  
   </script>
 <body>
+
+<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">订单详情</span>
+	</div> 
 	<div class="header" style="width:100%;">
 		<p class="pic" style="padding:20px 0 10px 15px;font-weight: bold;">
 		</p>
@@ -179,7 +186,7 @@ html, body {
 
 		</div>
 		<p style="text-align:center;font-size:14px;">
-			订单编号：<span>123456789632</span>
+			订单编号：<span id="span">123456789632</span>
 		</p>
 		<p style="color:#777777;text-align:center;font-size:10px;">扫描二维码即可进入停车场</p>
 		<button class="btn"

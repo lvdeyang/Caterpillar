@@ -62,7 +62,7 @@ public class SmartParkingController  extends WebBaseControll{
 	public Map<String, Object> AddInformation(HttpServletRequest request) throws Exception {
 		Long userId = 	(Long) request.getSession().getAttribute("userId");
 		Map<String, Object> dataMap = new HashMap<String, Object>(); 
-		List<VehiclePO> userByid = par_king.getNumber(userId);
+		List<VehiclePO>  userByid = par_king.getNumber(userId);
 		for (VehiclePO vehiclePO : userByid) {
 			dataMap.put("userHeadimg", vehiclePO.getNumber());
 			dataMap.put("userNickname", vehiclePO.getType());
@@ -87,10 +87,10 @@ public class SmartParkingController  extends WebBaseControll{
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
 	public Map<String, Object> setState(HttpServletRequest request) throws Exception {
 		Long userId = 	(Long) request.getSession().getAttribute("userId");
-		String vehicle = null;
-		List<VehiclePO> userBy = par_king.getNumber(userId);
+		String	vehicle = null;
+		List<VehiclePO>  userBy = par_king.getNumber(userId);
 		for (VehiclePO vehiclePO : userBy) {
-			vehicle =  vehiclePO.getNumber();
+			vehicle  =  vehiclePO.getNumber();
 		}
 		List<String> listHasCup=new ArrayList<String>();
 		 List<OrderPO> userByid = or_der.getOrder(userId,vehicle);

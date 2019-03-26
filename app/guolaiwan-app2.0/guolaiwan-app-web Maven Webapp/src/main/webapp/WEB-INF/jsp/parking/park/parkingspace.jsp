@@ -262,7 +262,7 @@ html {
 				ht.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><img class="main_pic" id="main_pic"style="width:40%;height:130px; margin:20px 10px 20px;" src="'+data[i].parkingImg+'" /></a>');
 				ht.push('<div class="main_pid style="width:100%;height:50%;float:right;overflow:hidden;">');
 				ht.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><p style="font-weight: bold;font-size:0.8rem;color:#333;">' + data[i].parkingName + '</p></a>');
-				ht.push('<p style="font-size:0.7rem;margin:0 0 5px;overflow:hidden;">总车位：' + data[i].commonParking + '<span></span>剩余车位：<span>' + data[i].usedParking + '</span></p>');
+				ht.push('<p style="font-size:0.7rem;margin:0 0 5px;overflow:hidden;">总车位：' + data[i].commonParking + '<span> </span>剩余车位：<span>' + data[i].usedParking + '</span></p>');
 				ht.push('<p style="font-size:0.7rem;lor:#BDBDBD; ">' + data[i].position + '  <span> 充电柱: ' + data[i].chargingColumn + '</span></p>');
 				ht.push('<p style="font-size:0.7rem;color:#BDBDBD; "> 地址 ：<span>' + data[i].address + '</span></p>');
 				ht.push('<p style="font-size:0.7rem;color:#BDBDBD; ">距离您 ：<span>2.6km</span><img class="daohang"style="width:18%;margin:3px;" src="lib/images/hang.png" /></p>');
@@ -282,6 +282,11 @@ html {
 	
 </script>
 <body>
+	<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">搜索停车场</span>
+	</div> 
 <div id="container"></div> 
 	<div id="div_header">
 

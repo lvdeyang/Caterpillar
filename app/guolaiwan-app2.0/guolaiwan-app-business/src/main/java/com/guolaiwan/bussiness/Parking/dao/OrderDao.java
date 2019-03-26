@@ -137,11 +137,11 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
         * @return
         * @throws ParseException
         */
-       public List<OrderPO>  getOrderform(Long userId,Long attractionsId,String sal,String vehicle) throws ParseException{
+       public List<OrderPO>  getOrderform(Long userId,Long attractionsId,Collection<String> sal,String vehicle) throws ParseException{
     	   QueryHql hql = newQueryHql();
     	   hql.andBy("orderId", Condition.eq,userId);
     	   hql.andBy("attractionsId", Condition.eq,attractionsId);
-    	   hql.andBy("orderStatus", Condition.eq,sal);
+    	   hql.andBy("orderStatus", Condition.in,sal);
     	   hql.andBy("platenumber", Condition.eq,vehicle);
     	   return findByHql(hql);
     	   

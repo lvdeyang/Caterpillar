@@ -105,8 +105,7 @@ $(function() {
 			data = parseAjaxResult(data);
 			var htm = [];
 			for (var i = 0; i < data.length; i++) {
-			alert(data[i].id);
-		   htm.push('<div class="main" style="width:100%;height:40%;background:#D5D5D5;position:relative">');
+		   htm.push('<div class="main" style="width:100%;height:50%;background:#D5D5D5;position:relative">');
 		   htm.push('<div class="main_in" style="width:95%;height:80%;background:#ffffff;position:absolute;margin:auto;left:0;right:0;top:0;bottom:0;border-radius:5px;">')
            htm.push('<p style="font-size:14px;font-weight:bold;margin:5% 0 2% 5%;">' + data[i].parkingName + '</p>')
            htm.push('<p style="font-size:20px;font-weight:bold;margin:0 0 2% 5%;display: inline-block;"><span>'+data[i].parkingDistrict+'</span> <span>'+data[i].parkingNumber+'</span></p>')
@@ -115,11 +114,10 @@ $(function() {
            htm.push('<p style="font-size:12px;margin:2% 0 2% 5%;color:#A3A3A3;">进场时间：' + data[i].bookingTime + '</p>')
            htm.push('<p style="font-size:12px;margin:2% 0 2% 5%;color:#A3A3A3;">离场时间：' + data[i].dueTime + '</p>')
            htm.push('<p style="font-size:12px;margin:2% 0 2% 5%;color:#A3A3A3;display: inline-block;">停车时间：<span>' + data[i].stoppingTime + '</span> 小时</p>')
-           htm.push('<p style="font-size:12px;margin:2% 0 2% 5%;color:#A3A3A3;display: inline-block;">超出时长：<span> 0</span> 小时</p>')
+           htm.push('<p style="font-size:12px;margin:2% 0 2% 5%;color:#A3A3A3;display: inline-block;">超出时长：<span> '+data[i].overTime+'</span> 小时</p>')
            htm.push('<p style="display: inline-block;margin-left:4%;">￥<span>' + data[i].parkingCost + '</span></p>')
            htm.push('</div>') 
 		   htm.push('</div>');
-				
 			}
 			$('body').append(htm.join('')); 
 		}); 
@@ -135,7 +133,11 @@ $(function() {
  </script>
 
   <body>
-  
+     	<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">订单信息</span>
+	</div> 
    <div class="header" style="width:100%;">
      <p class="pic" style="padding:20px 0 10px 7%;font-weight: bold;"></p>
      <p class="pid" style="margin:0px 0 10px 7%;font-weight: bold;">车牌号：</p>

@@ -1,4 +1,4 @@
-	<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -261,8 +261,8 @@ html, body {
 		 $.post(_ur,$.toJSON(par), function(data) {
 			data = parseAjaxResult(data);
 		   	var htm = []; 
-	       	htm.push('<p  style="text-align:center;font-size: 0.3rem;">停车场时间：<span id ="time" style="font-size: 0.3rem;">8:00-20:00</span></p>');
-	       	htm.push('<p style="text-align:center;font-size: 0.3rem;">热线服务：<span style="font-size: 0.3rem;">0315-665748</span></p>');
+	       	htm.push('<p  style="text-align:center;font-size: 0.3rem;">停车场时间：<span id ="time" style="font-size: 0.3rem;">'+data.stoppingTime+'</span></p>');
+	       	htm.push('<p style="text-align:center;font-size: 0.3rem;">热线服务：<span style="font-size: 0.3rem;">'+data.phone+'</span></p>');
 		   $('.footer_in').append(htm.join(''));  
 		});
 
@@ -386,7 +386,7 @@ html, body {
 		param.time = $("#time").val();
 		param.stall = stall;
 		 $.post(_ur, $.toJSON(param), function(data) {
-		      window.location.href="vice/merchant/payment?uid="+${param.useid};
+		      window.location.href=window.BASEPATH +"pubnum/product/index/merchant/payment?uid="+${param.useid};
 		 });
 	} else{
 	alert("请选择车位!");
@@ -402,6 +402,11 @@ html, body {
  
  </script>
 <body>
+	<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">选车位</span>
+	</div> 
 	<div class="header">
 		<div class="header_in"
 			style="width:100%; margin: 0 auto;text-align: center;">

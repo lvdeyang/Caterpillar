@@ -132,7 +132,7 @@ font-size:0.6rem;
 }
 .footer{
 position:fixed;
- top:76%;
+ top:82%;
 }
 
 
@@ -196,7 +196,6 @@ position:fixed;
 		    var obj = document.getElementById("money");
             obj.innerText= data.cost; 
 			if(data.over>0){
-			    alert(data.over);
 			 var obj = document.getElementById("cost");
               obj.innerText= data.over; 
 			}
@@ -210,12 +209,17 @@ position:fixed;
 }); */
     /*   timer(intDiff); */
 $(document).on('click','#btn', function() {
-     	window.location.href="vice/merchant/renewal";
+     	window.location.href="pubnum/product/index/merchant/renewal";
 	}); 
 });
 </script>
 
   <body>
+  	<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">正在停车</span>
+	</div> 
   <div class="head">
    <div class="header"><div class="header_in"></div></div>
    <p id="position" style="position: absolute;top:20%;left:50%;color:#6AADF7;margin-left: -38px;font-size:18px;"></p>
