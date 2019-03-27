@@ -22,6 +22,8 @@ public class ActivityRelPO extends AbstractBasePO {
 	private Date endDate;
 	private Date beginTime;
 	private Date endTime;
+	private Date bookBeginTime;
+	private Date bookEndTime;
 	//关联活动多对一
 	private long activityId;
 	//商品Id
@@ -120,5 +122,19 @@ public class ActivityRelPO extends AbstractBasePO {
 	public void setPrice(long price) {
 		this.price = price;
 	}
+	public Date getBookBeginTime() {
+		return bookBeginTime;
+	}
+	public void setBookBeginTime(Date bookBeginTime) {
+		this.bookBeginTime = bookBeginTime;
+	}
+	public Date getBookEndTime() {
+		return bookEndTime;
+	}
+	public void setBookEndTime(Date bookEndTime) {
+		this.bookEndTime = bookEndTime;
+	}
+	
+	
 	
 }

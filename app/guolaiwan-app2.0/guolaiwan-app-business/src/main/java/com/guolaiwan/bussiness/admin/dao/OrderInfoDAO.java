@@ -77,6 +77,18 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		return countByHql(hql);
 
 	}
+	
+	
+	public int countDateByActpro(long actproId,Date bDate) throws ParseException {
+		String sqlString="SELECT SUM(productNum) FROM t_sys_orderinfo where activityId="+
+		actproId+" And (updateTime between '"+ 
+				DateUtil.format(bDate, "yyyy-MM-dd") + " 00:00:00'"+
+				" and '"+  DateUtil.format(bDate, "yyyy-MM-dd") + " 23:59:59'"+")";
+	    List<Object> oList=this.findBySql(sqlString);
+	    if(oList.get(0)==null) return 0;
+		return (int) oList.get(0);
+
+	}
 
 	/**
 	 * app专用

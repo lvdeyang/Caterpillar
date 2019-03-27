@@ -1405,23 +1405,28 @@ public class PubNumController extends WebBaseControll {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/stockact/check", method = RequestMethod.GET)
-	public Object checkActStock(HttpServletRequest request, HttpServletResponse response,long actProId,int count)
+	public Object checkActStock(HttpServletRequest request, HttpServletResponse response,long actProId,int count,String bDate)
 			throws Exception {
         Map<String, Object> ret=new HashMap<String, Object>();
         ActivityRelPO actproductPO = conn_activityRel.get(actProId);
         if(actproductPO.getProductStock()>=count){
         	if (actproductPO.getDayStock() > 0) {
-				int daycount = conn_order.countTodayByActpro(actProId);
-				if (daycount < actproductPO.getDayStock()) {
+				int daycount = conn_order.countDateByActpro(actProId,DateUtil.parse(bDate,"yyyy-MM-dd HH:mm"));
+				if (count < actproductPO.getDayStock()-daycount) {
 					ret.put("stock", actproductPO.getProductStock() > (actproductPO.getDayStock() - daycount)
 							? (actproductPO.getDayStock() - daycount) : actproductPO.getProductStock());
+					ret.put("stock", actproductPO.getProductStock());
+					actproductPO.setProductStock(actproductPO.getProductStock()-count);
 				} else {
 					ret.put("stock", 0);
 				}
+			}else{
+				ret.put("stock", actproductPO.getProductStock());
+				actproductPO.setProductStock(actproductPO.getProductStock()-count);
+	        	conn_activityRel.save(actproductPO);
 			}
-        	ret.put("stock", actproductPO.getProductStock());
-        	actproductPO.setProductStock(actproductPO.getProductStock()-count);
-        	conn_activityRel.save(actproductPO);
+        	
+        	
         }else{
         	ret.put("stock", 0);
         }

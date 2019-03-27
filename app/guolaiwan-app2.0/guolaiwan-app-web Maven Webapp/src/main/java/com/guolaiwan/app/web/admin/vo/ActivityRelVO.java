@@ -15,6 +15,8 @@ public class ActivityRelVO extends AbstractBaseVO<ActivityRelVO, ActivityRelPO> 
 	private String endDate;
 	private String beginTime;
 	private String endTime;
+	private String bookBeginTime;
+	private String bookEndTime;
 	private long activityId;
 	private long productId;
 	private String productName;
@@ -94,6 +96,24 @@ public class ActivityRelVO extends AbstractBaseVO<ActivityRelVO, ActivityRelPO> 
 		return this;
 	}
 
+	public String getBookBeginTime() {
+		return bookBeginTime;
+	}
+
+	public ActivityRelVO setBookBeginTime(String bookBeginTime) {
+		this.bookBeginTime = bookBeginTime;
+		return this;
+	}
+
+	public String getBookEndTime() {
+		return bookEndTime;
+	}
+
+	public ActivityRelVO setBookEndTime(String bookEndTime) {
+		this.bookEndTime = bookEndTime;
+		return this;
+	}
+
 	@Override
 	public ActivityRelVO set(ActivityRelPO entity) throws Exception {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -102,6 +122,8 @@ public class ActivityRelVO extends AbstractBaseVO<ActivityRelVO, ActivityRelPO> 
 		String endDate = entity.getEndDate()==null?"":formatter.format(entity.getEndDate());
 		String beginTime = entity.getBeginTime()==null?"":formatter1.format(entity.getBeginTime());
 		String endTime = entity.getEndTime()==null?"":formatter1.format(entity.getEndTime());
+		String bookBeginDate = entity.getBookBeginTime()==null?"":formatter.format(entity.getBookBeginTime());
+		String bookEndDate = entity.getBookEndTime()==null?"":formatter.format(entity.getBookEndTime());
 		this.setId(entity.getId())
 		.setUuid(entity.getUuid())
 		.setUpdateTime(formatter.format(entity.getUpdateTime()))
@@ -109,6 +131,8 @@ public class ActivityRelVO extends AbstractBaseVO<ActivityRelVO, ActivityRelPO> 
 		.setEndDate(endDate)
 		.setBeginTime(beginTime)
 		.setEndTime(endTime)
+		.setBookBeginTime(bookBeginDate)
+		.setBookEndTime(bookEndDate)
 		.setProductId(entity.getProductId())
 		.setActivityId(entity.getActivityId())
 		.setProductStock(entity.getProductStock())

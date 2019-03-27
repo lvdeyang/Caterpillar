@@ -374,6 +374,8 @@ public class ActivityController extends BaseController {
 		map.put("end", DateUtil.format(activityRelPO.getEndDate(), "yyyy-MM-dd HH:mm:ss"));
 		map.put("startTime", DateUtil.format(activityRelPO.getBeginTime(), "HH:mm:ss"));
 		map.put("endTime", DateUtil.format(activityRelPO.getEndTime(), "HH:mm:ss"));
+		map.put("bStart", DateUtil.format(activityRelPO.getBookBeginTime(), "yyyy-MM-dd HH:mm:ss"));
+		map.put("bEnd", DateUtil.format(activityRelPO.getBookEndTime(), "yyyy-MM-dd HH:mm:ss"));
 		mav = new ModelAndView("admin/activity/modify" , map);
 		return mav;
 	}
@@ -399,6 +401,10 @@ public class ActivityController extends BaseController {
 		Date endDate = sdf.parse(productEnddate);
 		Date beginTime = sdf1.parse(productBeginTime);
 		Date endTime = sdf1.parse(productEndTime);
+	    Date bookBeginTime=sdf.parse(request.getParameter("bookBegin"));
+	    Date bookEndTime=sdf.parse(request.getParameter("bookEnd"));
+	    arpo.setBookBeginTime(bookBeginTime);
+	    arpo.setBookEndTime(bookEndTime);
 		arpo.setBeginDate(beginDate);
 		arpo.setEndDate(endDate);
 		arpo.setBeginTime(beginTime);
@@ -420,6 +426,8 @@ public class ActivityController extends BaseController {
 		map.put("end", DateUtil.format(arpo.getEndDate(), "yyyy-MM-dd HH:mm:ss"));
 		map.put("startTime", DateUtil.format(arpo.getBeginTime(), "HH:mm:ss"));
 		map.put("endTime", DateUtil.format(arpo.getEndTime(), "HH:mm:ss"));
+		map.put("bStart", DateUtil.format(arpo.getBookBeginTime(), "yyyy-MM-dd HH:mm:ss"));
+		map.put("bEnd", DateUtil.format(arpo.getBookEndTime(), "yyyy-MM-dd HH:mm:ss"));
 		ModelAndView mav = new ModelAndView("admin/activity/modify" , map);
 		return mav;
 	}
