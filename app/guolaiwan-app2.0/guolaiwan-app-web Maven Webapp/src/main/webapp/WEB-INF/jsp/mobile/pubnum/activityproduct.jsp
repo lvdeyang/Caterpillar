@@ -966,7 +966,7 @@ html, body {
                   return false;
                }
             }
-			
+			$.closePopup();
 			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='
 			+$('#proCount').val()+"&bDate="+$('#bookDate').val();
 				$.get(chkStockUrl, null, function(data){
@@ -999,6 +999,17 @@ html, body {
 		   var html=[];
 		   for(var i=0;i<count;i++){
 		        html.push('<h1 style="font-size:16px;height:50px;line-height:50px;text-align:center;width:100%;color:red" class="demos-title">使用人'+(i+1)+'</h1>');
+		        
+		        html.push('<div class="weui-cell">');
+			    html.push('	 	<div class="weui-cell__hd">');
+			    html.push('			<label class="weui-label">姓名</label>');
+				html.push('	</div>');
+				html.push('	<div class="weui-cell__bd">');
+				html.push('		<input style="border:1px solid black;width:160px;height:30px;line-height:30px;" class="names" id="name-'+i+'" class="weui-input" type="text"');
+				html.push('			placeholder="">');
+				html.push('	</div>');
+				html.push('</div>');
+		        
 		        html.push('<div class="weui-cell">');
 			    html.push('	 	<div class="weui-cell__hd">');
 			    html.push('			<label class="weui-label">身份证</label>');
@@ -1059,7 +1070,7 @@ html, body {
 		    $.closePopup();
 		});
 		$(document).on('click','#confirmPhoto',function(){
-		    $.closePopup();
+		    
 		    if(buyOrbasketFlg==1){
 		       joinBasket();
 		    }else{
@@ -1078,16 +1089,32 @@ html, body {
 		            $.toast("身份证号不能为空", "forbidden");
 		            return false;
 		       }
+		      var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+			  if(reg.test($(idnums[i]).val()) === false) 
+			  { 
+			    $.toast("身份证输入不合法", "forbidden");
+			    return false; 
+			  } 
+		       
+		       
 		       idnumobj.idNum=$(idnums[i]).val();
 		       var ids=$(idnums[i]).attr('id').split('-');
+		       
+		       if($('#name-'+ids[1]).val()==''){
+		            $.toast("姓名不能为空", "forbidden");
+		            return false;
+		       }
+		       
+		       
 		       idnumobj.photo=encodeURIComponent(photos['uploadImage-'+i]?photos['uploadImage-'+i]:'');
+		       idnumobj.name=$('#name-'+ids[1]).val();
 		       ret.push(idnumobj);
 		    }
 		   return ret;
 		}
 		
 		function dobuy(){
-		    $.closePopup();
+		    
 		    var ids=$('input[type^=radio]:checked').attr('id').split('-');
 		    var param={};
 			param.productId=${id};
@@ -1110,6 +1137,7 @@ html, body {
                   return false;
                }
             }
+            $.closePopup();
 			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val()+"&bDate="+$('#bookDate').val();
 			$.get(chkStockUrl, null, function(data){
 					data = parseAjaxResult(data);

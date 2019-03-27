@@ -2412,6 +2412,7 @@ public class PhoneController extends WebBaseControll {
 				orderPeoplePo.setIdNum(jobj.getString("idNum"));
 				orderPeoplePo.setPhoto(URLDecoder.decode(jobj.getString("photo")));
 				orderPeoplePo.setOrderId(order.getId());
+				orderPeoplePo.setName(jobj.getString("name"));
 				conn_orderPeople.save(orderPeoplePo);
 			}
 		}
@@ -2672,6 +2673,7 @@ public class PhoneController extends WebBaseControll {
 				orderPeoplePo.setIdNum(jobj.getString("idNum"));
 				orderPeoplePo.setPhoto(URLDecoder.decode(jobj.getString("photo")));
 				orderPeoplePo.setOrderId(order.getId());
+				orderPeoplePo.setName(jobj.getString("name"));
 				conn_orderPeople.save(orderPeoplePo);
 			}
 		}
