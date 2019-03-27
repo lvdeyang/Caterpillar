@@ -121,6 +121,9 @@
 			 if("PAYSUCCESS"==data[i] ){
 		     window.location.href="vice/merchant/order?uid="+${param.useid};
 		    }
+			 if("REFUNDING"==data[i] ){
+		     window.location.href="vice/merchant/order?uid="+${param.useid};
+		    }
 			 if("PARKING"==data[i] ){
 		     window.location.href="vice/merchant/parkings";
 		    }

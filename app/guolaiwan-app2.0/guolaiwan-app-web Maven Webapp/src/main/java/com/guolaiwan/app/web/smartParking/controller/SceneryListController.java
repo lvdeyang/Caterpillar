@@ -495,6 +495,7 @@ public class SceneryListController  extends WebBaseControll{
 	/** 根据用户信息保存信息 订单界面显示用
 	 * @return
 	 **/
+	//TODO
 	@ResponseBody
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public  Map<String, Object> Business(HttpServletRequest request) throws Exception {
@@ -532,11 +533,12 @@ public class SceneryListController  extends WebBaseControll{
 			odp.setParkingNumber(stall);
 			odp.setAttractionsId(uid);
 			odp.setParkingCost(0);
+			odp.setOrderStatus("NOTPAY");
 			odp.setPlatenumber(vehicle);
 			Order.save(odp);
 			dataMap.put("uid", odp.getId());
 		}else {
-			for (OrderPO order : userByid) {
+			for (OrderPO order : userByid){
 				order.setParkingLayer(ceng);
 				order.setParkingName(name);
 				order.setTime(time);

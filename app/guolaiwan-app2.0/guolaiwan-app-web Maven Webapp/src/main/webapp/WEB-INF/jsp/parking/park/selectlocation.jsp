@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+`		-`-	------``-`--`-`------`--																												-+++++<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -81,11 +81,11 @@
 .header {
 	width: 100%;
 	margin: 0 auto;
-	background-color: orange;
+	/* background-color: orange; */
 }
 
 .header_in {
-	background-color: orange;
+	/* background-color: orange; */
 }
 
 .main {
@@ -410,14 +410,14 @@ html, body {
 	<div class="header">
 		<div class="header_in"
 			style="width:100%; margin: 0 auto;text-align: center;">
-			<span style="text-align: center;color: white;">楼层：</span> <select
+			<span style="text-align: center;color: black;">楼层：</span> <select
 				class="lou" id="test"
-				style="color: white;touch-action: none;height:40px;text-align: center; line-height:30%;width:auto;border: 0;outline: none;background-color: orange;text-align-last: center;">
+				style="touch-action: none;height:40px;text-align: center; line-height:30%;width:auto;border: 0;outline: none;text-align-last: center;">
 
 			</select> <span style="margin: 0 10%;color: white; overflow:hidden;">|</span>
-			<span style="text-align: center;color: white;overflow:hidden; ">区域：</span>
+			<span style="text-align: center;color: black;overflow:hidden; ">区域：</span>
 			<select class="qu" id="qu1"
-				style="color: white;touch-action: none;height:40px;text-align: center; line-height: 30px;width:auto;border: 0;outline: none;background-color: orange;text-align-last: center;">
+				style="touch-action: none;height:40px;text-align: center; line-height: 30px;width:auto;border: 0;outline: none;text-align-last: center;">
 
 			</select>
 		</div>
