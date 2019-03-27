@@ -117,6 +117,7 @@ import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.OrderPeopleDao;
 import com.guolaiwan.bussiness.admin.dao.PhoneCodeDAO;
 import com.guolaiwan.bussiness.admin.dao.PicproRelationDAO;
 import com.guolaiwan.bussiness.admin.dao.PictureDAO;
@@ -175,6 +176,7 @@ import com.guolaiwan.bussiness.admin.po.MerchantUser;
 import com.guolaiwan.bussiness.admin.po.ModularClassPO;
 import com.guolaiwan.bussiness.admin.po.ModularPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.OrderPeoplePo;
 import com.guolaiwan.bussiness.admin.po.PhoneCodePO;
 import com.guolaiwan.bussiness.admin.po.PicproRelationPO;
 import com.guolaiwan.bussiness.admin.po.PicturePO;
@@ -1428,6 +1430,10 @@ public class PhoneController extends WebBaseControll {
 
 		MerchantPO merchant = conn_merchant.get(product.getProductMerchantID());
 		MerchantVO _merchant = new MerchantVO().set(merchant);
+		
+		
+		List<ProductComboPO> comboList = conn_combo.findByField("productId", productId);
+		dataMap.put("combos", comboList);
 		dataMap.put("logistics", vos);
 		dataMap.put("merchant", _merchant);
 		dataMap.put("product", _product);
@@ -2398,6 +2404,17 @@ public class PhoneController extends WebBaseControll {
 			order.setSource(OrderSource.APP);
 		}
 		conn_order.saveOrUpdate(order);
+		JSONArray array=pageObject.getJSONArray("idnums");
+		if(array!=null){
+			for (Object obj : array) {
+				JSONObject jobj=(JSONObject)obj;
+				OrderPeoplePo orderPeoplePo=new OrderPeoplePo();
+				orderPeoplePo.setIdNum(jobj.getString("idNum"));
+				orderPeoplePo.setPhoto(URLDecoder.decode(jobj.getString("photo")));
+				orderPeoplePo.setOrderId(order.getId());
+				conn_orderPeople.save(orderPeoplePo);
+			}
+		}
 		return success();
 	}
 
@@ -2405,7 +2422,8 @@ public class PhoneController extends WebBaseControll {
 	SurpportBuyDao conn_surpportbuy;
 	@Autowired
 	RoomStatusDao conn_roomstatus;
-
+    @Autowired
+    OrderPeopleDao conn_orderPeople;
 	/**
 	 * 订单：立即支付
 	 * 
@@ -2644,6 +2662,23 @@ public class PhoneController extends WebBaseControll {
 		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
 		conn_product.update(productPO);
 		conn_order.saveOrUpdate(order);
+		
+		
+		JSONArray array=pageObject.getJSONArray("idnums");
+		if(array!=null){
+			for (Object obj : array) {
+				JSONObject jobj=(JSONObject)obj;
+				OrderPeoplePo orderPeoplePo=new OrderPeoplePo();
+				orderPeoplePo.setIdNum(jobj.getString("idNum"));
+				orderPeoplePo.setPhoto(URLDecoder.decode(jobj.getString("photo")));
+				orderPeoplePo.setOrderId(order.getId());
+				conn_orderPeople.save(orderPeoplePo);
+			}
+		}
+		
+		
+		
+		
 		long PayMoney = order.getPayMoney();
 		/* String tradeNum=order.getOrderNO(); */
 		String orderIdStr = String.valueOf(order.getId());

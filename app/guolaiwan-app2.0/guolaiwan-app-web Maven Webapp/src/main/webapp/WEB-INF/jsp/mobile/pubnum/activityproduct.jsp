@@ -524,6 +524,7 @@ html, body {
       var ifFace=0;
       var bookStart='';
       var bookEnd='';
+      var photos={};
 		//获取所有一级推荐
       var _uriRecomment = window.BASEPATH + 'phoneApp/activityInfo?productId=${id}&userId=${userId}';
 		
@@ -583,6 +584,7 @@ html, body {
 			       $('#fav').html('取消收藏');
 			    }
 			    initLogistics(data.logistics);
+			    initCombos(data.combos,data.product.productPrice);
 			}
 			
 			getProDate(data.product , data.miao , data.isXianGou);
@@ -590,7 +592,21 @@ html, body {
 		});
 		
 		
-		
+		function initCombos(data,price){
+		   var html=[];
+		   if(data.length==0){
+		   		//html.push('<option value="0">标准(￥'+price+')</option>');
+		   		html.push('<option value="0">标准</option>');
+		   }else{
+		        //$('#total').html((data[0].comboprice/100).toFixed(2));
+		   }
+		   
+		   for(var i=0;i<data.length;i++){
+		      //html.push('<option value="'+data[i].id+'-'+(data[i].comboprice/100).toFixed(2)+'">'+data[i].combo+'(￥'+(data[i].comboprice/100).toFixed(2)+')</option>');
+		      html.push('<option value="'+data[i].id+'-'+(data[i].comboprice/100).toFixed(2)+'">'+data[i].combo+'</option>');
+		   }
+		   $('#comboList').append(html.join(''));
+		}
 		
 		$(document).on('click','#addressphone1',function(){
 	       var phones=$('#addressphone1').data('phone').split('/');
@@ -883,6 +899,7 @@ html, body {
 		  	var pri = accMul($('#price').html(),number);
 		  	$('#total').html(pri);
 		  }
+		  initpeopleList();
 		});
 		$('.weui-count__increase').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
@@ -895,6 +912,7 @@ html, body {
 		  	var pri = accMul($('#price').html(),number);
 		  	$('#total').html(pri);
 		  }
+		  initpeopleList();
 		});
 		
 		function checkBookDate(){
@@ -938,6 +956,17 @@ html, body {
 			param.paytype='WEICHAT';
 			param.source="PUBLICADDRESS";
 			param.bookDate=$('#bookDate').val();
+			param.comboId=$('#comboList').val().split('-')[0];
+			
+			if(ifFace==1){
+               var retP;
+               if(retP=getIdNums()){
+                  param.idnums=retP;
+               }else{
+                  return false;
+               }
+            }
+			
 			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='
 			+$('#proCount').val()+"&bDate="+$('#bookDate').val();
 				$.get(chkStockUrl, null, function(data){
@@ -963,11 +992,47 @@ html, body {
 	    	location.href=window.BASEPATH + 'pubnum/gotoshop?productId=${id}';
 	    });	    
 		
+		
+		function initpeopleList(){
+		   $('#cameraContent').children().remove();
+		   var count=$('#proCount').val();
+		   var html=[];
+		   for(var i=0;i<count;i++){
+		        html.push('<h1 style="font-size:16px;height:50px;line-height:50px;text-align:center;width:100%;color:red" class="demos-title">使用人'+(i+1)+'</h1>');
+		        html.push('<div class="weui-cell">');
+			    html.push('	 	<div class="weui-cell__hd">');
+			    html.push('			<label class="weui-label">身份证</label>');
+				html.push('	</div>');
+				html.push('	<div class="weui-cell__bd">');
+				html.push('		<input style="border:1px solid black;width:160px;height:30px;line-height:30px;" class="idnums" id="orderIdNum-'+i+'" class="weui-input" type="text"');
+				html.push('			placeholder="">');
+				html.push('	</div>');
+				html.push('</div>');
+		        html.push('<div class="weui-cell">');
+				html.push('	<div class="weui-cell__hd">');
+				html.push('		<label class="weui-label">上传照片</label>');
+				html.push('	</div>');
+				html.push('	<div class="weui-cell__bd">');
+				html.push('		<image style="width:160px;height:120px;" class="uploadImages" id="uploadImage-'+i+'" src="<%=basePath%>/lib/fishimages/example.jpg"></image>');
+				html.push('	</div>');
+				html.push('</div>');
+			    html.push('</div>');
+		   
+		   }
+		   $('#cameraContent').append(html.join(''));
+		}
+		initpeopleList();
+		
 		$(document).on('click','#buy',function(){
            if(!checkBookDate()){
             
                return;
            }
+           
+           $('.modDiv').hide();
+		   $('#addressFitst').show();
+           
+           
            $('#selAddress').popup();
         
         });
@@ -990,6 +1055,9 @@ html, body {
 		});
 		
 		
+		$(document).on('click','#cancelPhoto',function(){
+		    $.closePopup();
+		});
 		$(document).on('click','#confirmPhoto',function(){
 		    $.closePopup();
 		    if(buyOrbasketFlg==1){
@@ -999,6 +1067,24 @@ html, body {
 		    }
 		    
 		});
+		
+		function getIdNums(){
+		    var idnums=$('.idnums');
+		    var ret=[];
+		    for(var i=0;i<idnums.length;i++){
+		       var idnumobj={};
+		      
+		       if($(idnums[i]).val()==''){
+		            $.toast("身份证号不能为空", "forbidden");
+		            return false;
+		       }
+		       idnumobj.idNum=$(idnums[i]).val();
+		       var ids=$(idnums[i]).attr('id').split('-');
+		       idnumobj.photo=encodeURIComponent(photos['uploadImage-'+i]?photos['uploadImage-'+i]:'');
+		       ret.push(idnumobj);
+		    }
+		   return ret;
+		}
 		
 		function dobuy(){
 		    $.closePopup();
@@ -1014,6 +1100,16 @@ html, body {
 			param.logisticsId=$('#logisticsList').val();
 			param.source="PUBLICADDRESS";
 			param.bookDate=$('#bookDate').val();
+			param.comboId=$('#comboList').val().split('-')[0];
+            if(ifFace==1){
+               var retP;
+               if(retP=getIdNums()){
+                  param.idnums=retP;
+                 
+               }else{
+                  return false;
+               }
+            }
 			var chkStockUrl=window.BASEPATH + 'pubnum/stockact/check?actProId='+${actId}+'&count='+$('#proCount').val()+"&bDate="+$('#bookDate').val();
 			$.get(chkStockUrl, null, function(data){
 					data = parseAjaxResult(data);
@@ -1115,6 +1211,92 @@ html, body {
 		        onBridgeReady();
 		    }
 		}
+		
+		
+		
+		
+		$(document).on('click','.uploadImages',function(){
+		    //人脸采集部分
+		    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+            var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			$.get(_uri, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				    
+					share=data;
+					wx.config({
+			            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            appId : share.appId, // 必填，公众号的唯一标识
+			            timestamp : share.timestamp, // 必填，生成签名的时间戳
+			            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+			            signature : share.signature,// 必填，签名，见附录1
+			            jsApiList : ['chooseImage',
+		                        'previewImage',
+		                        'uploadImage',
+		                        'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	       	        });
+                }
+            }); 
+            
+            
+             wx.ready(function () {
+                wx.checkJsApi({
+                    jsApiList: [
+                        'chooseImage',
+                        'previewImage',
+                        'uploadImage',
+                        'downloadImage'
+                    ],
+                    success: function (res) {
+                      
+                        if (res.checkResult.getLocation == false) {
+                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                            return;
+                        }else{
+                            choosePic(this.id);
+                        }
+                    }
+                });
+            });
+            wx.error(function(res){
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                alert("验证失败，请重试！");
+                wx.closeWindow();
+            });
+		
+		});
+		
+		function choosePic(id) {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    $.toast("照片处理中...", "loading");
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    getLocalData(localIds[0]);
+                }
+            });
+        }
+		
+        function getLocalData(localid) {
+			//获取本地图片资源
+            wx.getLocalImgData({
+                localId: localid, // 图片的localID
+                success: function (res) {
+                    var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+                    $('#'+id).attr('src','data:image/png;base64,'+localData);
+                    photos[id]=localData;
+                }
+            });
+ 
+        }
+		
+		
+		
+		
 		
 		
 		//编辑地址
@@ -1283,7 +1465,17 @@ html, body {
 			  </div>
 			</div>
 			
-			
+			<div style="font-size:12px;float:left;width:100%;overflow-x:scroll">
+			  <div class="weui-cell" >
+			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">套餐选择</label></div>
+			    <div class="weui-cell__bd" style="width:80%;">
+			      <select id="comboList" style="width:130px;height:25px;line-height:25px" name="select1">
+		         
+		          </select>
+			    </div>
+			   
+			  </div>
+			</div>
 			
 			<div style="font-size:12px;float:left;width:100%;overflow-x:scroll">
 			  <div class="weui-cell" >
@@ -1414,16 +1606,15 @@ html, body {
 					</div>
 					
 					<div class="modDiv" id="cameraDiv" style="display:none;">
-                          <div class="weui-cells__title">身份证</div>
-                          <div class="weui-cell">
-								<input style="border:1px solid black;" id="orderIdNum" class="weui-input" type="text"
-										placeholder="">
-						  </div>
-						  <div class="weui-cells__title">上传照片</div>
-                          <image id="uploadImage" src="<%=basePath%>/lib/fishimages/example.jpg" style="padding:15px;width:100%;height:250px;"></image>
+	                       <div id="cameraContent"></div>
+							 
+						  <div>
+                          <a id="cancelPhoto"
+							style="width:47%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
+							href="javascript:;" class="weui-btn weui-btn_primary"> 取消</a>
                           <a id="confirmPhoto"
-							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
+							style="width:47%;background-color:#18b4ed;height:40px;line-height:40px;"
+							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a></div>
                     </div>
 
 				</div>
