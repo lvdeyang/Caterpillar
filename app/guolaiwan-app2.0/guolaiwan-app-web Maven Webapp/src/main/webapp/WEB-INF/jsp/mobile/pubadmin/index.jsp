@@ -659,7 +659,7 @@ html, body {
 				       $.toast("验单通过");
 				       setTimeout(function(){
 				   
-					       location.href=window.BASEPATH + "pubnum/admin/order/TESTED";
+					       location.href=window.BASEPATH + "pubnum/admin/orderinfo?orderId="+orderNo;
 					   
 					   },1000);
 				    }else{
