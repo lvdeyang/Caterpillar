@@ -584,6 +584,7 @@ html, body {
 			       $('#fav').html('取消收藏');
 			    }
 			    initLogistics(data.logistics);
+			    initCombos(data.combos,data.product.productPrice);
 			}
 			
 			getProDate(data.product , data.miao , data.isXianGou);
@@ -591,7 +592,21 @@ html, body {
 		});
 		
 		
-		
+		function initCombos(data,price){
+		   var html=[];
+		   if(data.length==0){
+		   		//html.push('<option value="0">标准(￥'+price+')</option>');
+		   		html.push('<option value="0">标准</option>');
+		   }else{
+		        //$('#total').html((data[0].comboprice/100).toFixed(2));
+		   }
+		   
+		   for(var i=0;i<data.length;i++){
+		      //html.push('<option value="'+data[i].id+'-'+(data[i].comboprice/100).toFixed(2)+'">'+data[i].combo+'(￥'+(data[i].comboprice/100).toFixed(2)+')</option>');
+		      html.push('<option value="'+data[i].id+'-'+(data[i].comboprice/100).toFixed(2)+'">'+data[i].combo+'</option>');
+		   }
+		   $('#comboList').append(html.join(''));
+		}
 		
 		$(document).on('click','#addressphone1',function(){
 	       var phones=$('#addressphone1').data('phone').split('/');
@@ -941,6 +956,7 @@ html, body {
 			param.paytype='WEICHAT';
 			param.source="PUBLICADDRESS";
 			param.bookDate=$('#bookDate').val();
+			param.comboId=$('#comboList').val().split('-')[0];
 			
 			if(ifFace==1){
                var retP;
@@ -1084,6 +1100,7 @@ html, body {
 			param.logisticsId=$('#logisticsList').val();
 			param.source="PUBLICADDRESS";
 			param.bookDate=$('#bookDate').val();
+			param.comboId=$('#comboList').val().split('-')[0];
             if(ifFace==1){
                var retP;
                if(retP=getIdNums()){
@@ -1448,7 +1465,17 @@ html, body {
 			  </div>
 			</div>
 			
-			
+			<div style="font-size:12px;float:left;width:100%;overflow-x:scroll">
+			  <div class="weui-cell" >
+			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">套餐选择</label></div>
+			    <div class="weui-cell__bd" style="width:80%;">
+			      <select id="comboList" style="width:130px;height:25px;line-height:25px" name="select1">
+		         
+		          </select>
+			    </div>
+			   
+			  </div>
+			</div>
 			
 			<div style="font-size:12px;float:left;width:100%;overflow-x:scroll">
 			  <div class="weui-cell" >

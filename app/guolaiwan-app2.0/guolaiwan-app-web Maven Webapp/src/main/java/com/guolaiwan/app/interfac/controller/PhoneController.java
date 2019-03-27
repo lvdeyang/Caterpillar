@@ -1430,6 +1430,10 @@ public class PhoneController extends WebBaseControll {
 
 		MerchantPO merchant = conn_merchant.get(product.getProductMerchantID());
 		MerchantVO _merchant = new MerchantVO().set(merchant);
+		
+		
+		List<ProductComboPO> comboList = conn_combo.findByField("productId", productId);
+		dataMap.put("combos", comboList);
 		dataMap.put("logistics", vos);
 		dataMap.put("merchant", _merchant);
 		dataMap.put("product", _product);
