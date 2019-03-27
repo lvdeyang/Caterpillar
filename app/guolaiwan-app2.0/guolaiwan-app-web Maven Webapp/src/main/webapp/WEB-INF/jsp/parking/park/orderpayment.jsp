@@ -393,10 +393,10 @@ html, body {
 				$.toast("离场时间不能小于进场时间", "forbidden");
 				return false;
 			}
-			if (sDate < new Date) {
+			/* if (sDate < new Date) {
 				$.toast("请输入正确的入场时间", "forbidden");
 				return false;
-			}
+			} */
 
 			if (startdiv != "none") {
 				if ($("#startDate").val() == '') {
@@ -438,9 +438,11 @@ html, body {
 						param.Text =  money; 
 						param.mark =  sign;
 						param.uid =  uid;
+						param.orderid = ${param.orderid} ;
 						$.post(_util, $.toJSON(param), function(data) {    
+						   window.location.href = "vice/merchant/order?uid="+${param.uid};
 					});	
-			        payPublic(orderId,money,uid); 
+			     /*    payPublic(orderId,money,uid);  */
                   }else{
                    alert("您好你预订的车位已被购买,请您从新选择车位");
                   }
@@ -520,12 +522,12 @@ html, body {
 			$("#endDate").val("")
 			return false;
 		}
-		if (sDate < new Date) {
+		/* if (sDate < new Date) {
 		alert(sDate)
 			$.toast("请输入正确的入场时间", "forbidden");
 			$("#startDate").val("")
 			return false;
-		}
+		} */
 		if (startdiv != "none") {
 			if ($("#startDate").val() == '') {
 				$.toast("请选择入场日期", "forbidden");

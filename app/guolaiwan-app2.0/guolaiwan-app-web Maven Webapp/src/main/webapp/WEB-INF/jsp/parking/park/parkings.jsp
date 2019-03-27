@@ -209,7 +209,7 @@ position:fixed;
 }); */
     /*   timer(intDiff); */
 $(document).on('click','#btn', function() {
-     	window.location.href="pubnum/product/index/merchant/renewal";
+     	window.location.href="pubnum/product/index/merchant/renewall";
 	}); 
 });
 </script>

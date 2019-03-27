@@ -522,8 +522,6 @@ public class SceneryListController  extends WebBaseControll{
 		}
 			name   =  	attractions.getParkingName();
 			time  =   attractions.getStoppingTime();
-		List<OrderPO> userByid = Order.getOrderform(userId,uid,vehicle);
-		if (userByid.size() == 0) {
 			OrderPO odp = new OrderPO();
 			odp.setOrderId(userId);
 			odp.setParkingLayer(ceng);
@@ -533,22 +531,9 @@ public class SceneryListController  extends WebBaseControll{
 			odp.setParkingNumber(stall);
 			odp.setAttractionsId(uid);
 			odp.setParkingCost(0);
-			odp.setOrderStatus("NOTPAY");
 			odp.setPlatenumber(vehicle);
 			Order.save(odp);
 			dataMap.put("uid", odp.getId());
-		}else {
-			for (OrderPO order : userByid){
-				order.setParkingLayer(ceng);
-				order.setParkingName(name);
-				order.setTime(time);
-				order.setParkingDistrict(qu);
-				order.setParkingNumber(stall);
-				order.setParkingCost(0);
-				Order.saveOrUpdate(order);
-				dataMap.put("uid", order.getId());
-			}
-		}
 		return success(dataMap);
 	}
 
@@ -719,21 +704,20 @@ public class SceneryListController  extends WebBaseControll{
 		String  edate   =   eDate.replace('T',' ');  //离场时间
 		String inner =  pageObject.getString("inner");  //  停车时间
 		String parkingCost = pageObject.getString("Text"); // 费用
+		Long  orderid = pageObject.getLong("orderid"); // 订单id
 		double  money  =   Double.parseDouble(parkingCost);      
 		double  duration  =   Double.parseDouble(inner);
-		List<OrderPO> userByid = Order.getOrderform(userId,uid,vehicle);
-		for (OrderPO order : userByid) {
-			order.setBookingTime(date+":00");
-			order.setDueTime(edate+":00");
-			order.setParkingCost(money);
-			order.setStoppingTime(duration);
-			order.setPlatenumber(vehicle);
-			Order.saveOrUpdate(order);
+		OrderPO userByid = Order.getform(orderid,userId,uid,vehicle);
+		userByid.setBookingTime(date+":00");
+		userByid.setDueTime(edate+":00");
+		userByid.setParkingCost(money);
+		userByid.setStoppingTime(duration);
+		userByid.setPlatenumber(vehicle);
+		Order.saveOrUpdate(userByid);
 		/*	parkingNumber = order.getParkingNumber();
 			parkingLayer = 	order.getParkingLayer();
 			district = 	order.getParkingDistrict();*/
 			
-		}
 	/*	List<CarPositionPO> userName =  Car_Position.getAmend(uid,parkingLayer,district);
 		for (CarPositionPO carPositionPO : userName) {
 		id = carPositionPO.getId();

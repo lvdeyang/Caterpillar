@@ -197,6 +197,39 @@
 html,body{
 	height:100%;
 }
+body {
+			position: relative;
+			margin: 0 auto;
+			transition-duration:5s;
+		}
+	    body:before {
+			content: "";
+			position: absolute;
+			left: -500px;
+			top: -200%;
+			width: 300%;
+			height: 1%;
+			background-color:rgba(255, 255, 255, .5);
+			-webkit-transform: rotate(-45deg);
+			-moz-transform: rotate(-45deg);
+			-ms-transform: rotate(-45deg);
+			-o-transform: rotate(-45deg);
+			transform: rotate(-45deg);
+			animation: searchLights 4s ease-in 2s infinite;
+			z-index:999;
+		}
+		
+		@-webkit-keyframes searchLights {
+			
+			50% {
+				left:-300%;
+				top: -15%;
+			}
+		     100% {
+				left: 100%;
+				top:100%;
+			}
+		}
 </style>
 
 </head>
@@ -346,13 +379,10 @@ html,body{
 						window.location.href = "vice/merchant/information";
 						},300);
 					};
-				}
-				;
-
-
+				};
 
 				//进入订单界面
-				if ( data[i] == "PAST") { //过期
+				if ( data[i] == "PAST"||data[i] == "REFUNDED") { //过期
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');

@@ -1,4 +1,4 @@
-`		-`-	------``-`--`-`------`--																												-+++++<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -386,7 +386,8 @@ html, body {
 		param.time = $("#time").val();
 		param.stall = stall;
 		 $.post(_ur, $.toJSON(param), function(data) {
-		      window.location.href=window.BASEPATH +"pubnum/product/index/merchant/payment?uid="+${param.useid};
+		 data = parseAjaxResult(data);
+		      window.location.href=window.BASEPATH +"pubnum/product/index/merchant/payment?uid="+${param.useid}+"&orderid="+data.uid;
 		 });
 	} else{
 	alert("请选择车位!");

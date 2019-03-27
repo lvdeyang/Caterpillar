@@ -99,7 +99,24 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
            if(findByHql == null || findByHql.size() ==0) return null;
       	    return findByHql.get(0);
        }
-       
+       /**
+        * 通过用户id  景区id 查询信息
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public OrderPO  getform(Long orderid,Long userId,Long uid,String vehicle) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   hql.andBy("id", Condition.eq,orderid);
+    	   hql.andBy("orderId", Condition.eq,userId);
+    	   hql.andBy("attractionsId", Condition.eq,uid);
+    	   hql.andBy("platenumber", Condition.eq,vehicle);
+    	   List<OrderPO> findByHql = findByHql(hql);
+    	   if(findByHql == null || findByHql.size() ==0) return null;
+    	   return findByHql.get(0);
+       }
        
        
        
@@ -166,6 +183,7 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   return findByHql(hql);
     	   
        }
+  
        
        /**
         * 通过用户id   订单状态   车牌       停车场名  查询订单信息
