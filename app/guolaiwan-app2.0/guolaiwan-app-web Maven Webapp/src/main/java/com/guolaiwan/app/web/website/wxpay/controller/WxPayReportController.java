@@ -228,7 +228,7 @@ public class WxPayReportController extends WebBaseControll {
 				String tradeNum = respData.get("out_trade_no");
 				Long orderId= Long.parseLong(tradeNum.split("-")[1]);
 				Long attactionsId = Long.parseLong(tradeNum.split("-")[2]);
-				List<VehiclePO> userBy = par_king.getNumber(attactionsId);
+				List<VehiclePO> userBy = par_king.getNumber(orderId);
 				for (VehiclePO vehiclePO : userBy) {
 					vehicle =  vehiclePO.getNumber();
 				}
@@ -246,30 +246,41 @@ public class WxPayReportController extends WebBaseControll {
 			    Attra_ctions.saveOrUpdate(att);
 			    
 			    // 生成 二维码 修改订单状态
+			    
 				OrderPO userByid = Order.getform(orderId,attactionsId,vehicle);
-				String ydNO = ydNoCode(userByid.getId()+"");
-				userByid.setOrderStatus("PAYFINISH");
-				userByid.setPath(ydNO);
-				Order.saveOrUpdate(userByid);
-				// 修改 车位 已使用
-				int	parkingNumber = userByid.getParkingNumber();
-				String	parkingLayer = 	userByid.getParkingLayer();
-				String	district = 	userByid.getParkingDistrict();
-				
-				CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
-				long id = userName.getId();
-				
-			    ParkingPositionPO getTruck  =  Parking_Position.getNumber(id,parkingNumber);
-			    getTruck.setUseCondition(1);
-				Parking_Position.saveOrUpdate(getTruck);
-				
-				stringBuffer.append("<xml><return_code><![CDATA[");
-				stringBuffer.append("SUCCESS");
-				stringBuffer.append("]]></return_code>");
-				stringBuffer.append("<return_msg><![CDATA[");
-				stringBuffer.append("OK");
-				stringBuffer.append("]]></return_msg>");
-				System.out.println("微信支付付款成功!订单号："+tradeNum);
+				if(userByid != null){
+					System.out.println("---------------------------------OrderPO not null-------------------" + userByid);
+					String ydNO = ydNoCode(userByid.getId()+"");
+					if(ydNO != null){
+						System.out.println("---------------------------------ydNO not null-------------------" + ydNO);
+						userByid.setOrderStatus("PAYFINISH");
+						userByid.setPath(ydNO);
+						Order.saveOrUpdate(userByid);
+						// 修改 车位 已使用
+						int	parkingNumber = userByid.getParkingNumber();
+						String	parkingLayer = 	userByid.getParkingLayer();
+						String	district = 	userByid.getParkingDistrict();
+						
+						CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
+						long id = userName.getId();
+						
+					    ParkingPositionPO getTruck  =  Parking_Position.getNumber(id,parkingNumber);
+					    getTruck.setUseCondition(1);
+						Parking_Position.saveOrUpdate(getTruck);
+						
+						stringBuffer.append("<xml><return_code><![CDATA[");
+						stringBuffer.append("SUCCESS");
+						stringBuffer.append("]]></return_code>");
+						stringBuffer.append("<return_msg><![CDATA[");
+						stringBuffer.append("OK");
+						stringBuffer.append("]]></return_msg>");
+						System.out.println("微信支付付款成功!订单号："+tradeNum);
+					}else {
+						System.out.println("---------------------------------ydNO is null-------------------");
+					}
+				}else {
+					System.out.println("---------------------------------OrderPO is null-------------------");
+				}
 			}else{
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("FAIL");
