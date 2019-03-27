@@ -99,14 +99,9 @@
 	width: 144px;
 }
 
-.pid {
-	float: left;
-	text-align: center;
-	line-height: 50px;
-	margin-left: 20px;
-}
 
-.pid p, .phone p {
+
+.phone p {
 	font-size: 16px;
 	font-weight: bold;
 }
@@ -116,6 +111,7 @@
 	float: left;
 	line-height: 50px;
 	text-align: center;
+	margin-left:15%;
 	
 }
 
@@ -199,7 +195,7 @@ html,body{
 			$('#img').append(htm.join(''));
 
 			var html = [];
-			html.push('<p id="username">' + data.userNickname + '</p>');
+			html.push('<p id="username">用户名: ' + data.userNickname + '</p>');
 			$('.phone').append(html.join(''));
 		});
 
@@ -241,9 +237,7 @@ html,body{
 	<div class='header-pic'>
 		<div id="img"></div>
 		<div class="conformity">
-			<div class="pid">
-				<p>用户名：</p>
-			</div>
+			
 			<div class="phone"></div>
 		</div>
 		<div class="main">

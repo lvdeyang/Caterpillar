@@ -323,8 +323,6 @@ public class WxPayReportController extends WebBaseControll {
 			if(resultcode.equals("SUCCESS")){
 				//获取订单号
 				String tradeNum = respData.get("out_trade_no");
-				Long orderIdm = Long.parseLong(tradeNum.split("-")[1]);
-				Long attactionsId = Long.parseLong(tradeNum.split("-")[2]);
 				
 				
 				

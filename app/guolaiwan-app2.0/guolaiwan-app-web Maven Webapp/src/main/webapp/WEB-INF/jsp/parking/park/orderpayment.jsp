@@ -419,6 +419,7 @@ html, body {
 			//总额
 			var num4 = document.getElementById("zong");
 			num4.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+		
 			var _uti = window.BASEPATH + 'vice/number';
 			var para = {};
 			para.number = number;
@@ -537,25 +538,6 @@ html, body {
 					var startdiv = document.getElementById("startdiv").style.display;
 					var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, ""));
 					var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, ""));
-				/* 	if (sDate >= eDate) {
-						$.toast("离场时间不能小于进场时间", "forbidden");
-						return false;
-					}
-					if (sDate < new Date) {
-						$.toast("请输入正确的入场时间", "forbidden");
-						return false;
-					}
-			
-					 if (startdiv != "none") {
-						if ($("#startDate").val() == '') {
-							$.toast("请选择入场日期", "forbidden");
-							return false;
-						} else if ($("#endDate").val() == '') {
-							$.toast("请选择离场日期", "forbidden"); 
-							return false;
-						}
-					 } */
-			
 					var demoP = document.getElementById("spa");
 					demoP.innerHTML = (parseInt(eDate - sDate) / 1000 / 60 / 60).toFixed(2);
 					

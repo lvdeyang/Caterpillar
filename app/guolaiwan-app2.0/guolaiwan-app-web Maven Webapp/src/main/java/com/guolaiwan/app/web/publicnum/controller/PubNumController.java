@@ -471,7 +471,7 @@ public class PubNumController extends WebBaseControll {
 	//TODO
 	public Object prevPaypark(@PathVariable String id, @PathVariable Integer text, @PathVariable Integer attactionsId,@PathVariable String site, HttpServletRequest request) throws Exception {
 
-        String orderNo = "park-"+id+"-"+attactionsId+"-"+75/*+"-"ID+"-"景ID*/;
+        String orderNo = "park-"+id+"-"+attactionsId/*+"-"ID+"-"景ID*/;
 		int payMoney = text;
 		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
 		//payMoney+=orderInfoPO.getPayMoney();
