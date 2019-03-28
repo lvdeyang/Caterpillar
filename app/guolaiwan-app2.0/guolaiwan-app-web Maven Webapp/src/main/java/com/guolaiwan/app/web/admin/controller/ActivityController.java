@@ -376,6 +376,7 @@ public class ActivityController extends BaseController {
 		map.put("endTime", DateUtil.format(activityRelPO.getEndTime(), "HH:mm:ss"));
 		map.put("bStart", DateUtil.format(activityRelPO.getBookBeginTime(), "yyyy-MM-dd HH:mm:ss"));
 		map.put("bEnd", DateUtil.format(activityRelPO.getBookEndTime(), "yyyy-MM-dd HH:mm:ss"));
+		map.put("expireTime", activityRelPO.getExpireTime());
 		mav = new ModelAndView("admin/activity/modify" , map);
 		return mav;
 	}
@@ -396,6 +397,7 @@ public class ActivityController extends BaseController {
 		String surpportCount=request.getParameter("surpportCount");
 		String dayStock=request.getParameter("dayStock");
 		String price=request.getParameter("price");
+		String expireTime=request.getParameter("expireTime");
 		ActivityRelPO arpo = conn_activityRel.getById(Long.parseLong(proid));
 		Date beginDate = sdf.parse(productBeginDate);
 		Date endDate = sdf.parse(productEnddate);
@@ -415,6 +417,7 @@ public class ActivityController extends BaseController {
 		arpo.setSurpportCount(Integer.parseInt(surpportCount));
 		arpo.setDayStock(Integer.parseInt(dayStock));
 		arpo.setPrice(Long.valueOf(price));
+		arpo.setExpireTime(Integer.parseInt(expireTime));
 		conn_activityRel.saveOrUpdate(arpo);
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -428,6 +431,7 @@ public class ActivityController extends BaseController {
 		map.put("endTime", DateUtil.format(arpo.getEndTime(), "HH:mm:ss"));
 		map.put("bStart", DateUtil.format(arpo.getBookBeginTime(), "yyyy-MM-dd HH:mm:ss"));
 		map.put("bEnd", DateUtil.format(arpo.getBookEndTime(), "yyyy-MM-dd HH:mm:ss"));
+		map.put("expireTime", expireTime);
 		ModelAndView mav = new ModelAndView("admin/activity/modify" , map);
 		return mav;
 	}

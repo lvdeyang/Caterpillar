@@ -13,6 +13,7 @@ public class OrderPeoplePo extends AbstractBasePO{
 	private long orderId;
     private String idNum;
 	private String photo;
+	private String name;
 	public long getOrderId() {
 		return orderId;
 	}
@@ -32,6 +33,12 @@ public class OrderPeoplePo extends AbstractBasePO{
 	}
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 

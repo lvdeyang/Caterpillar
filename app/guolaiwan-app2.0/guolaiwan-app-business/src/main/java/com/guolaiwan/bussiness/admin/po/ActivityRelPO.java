@@ -41,6 +41,8 @@ public class ActivityRelPO extends AbstractBasePO {
 	//集赞个数
 	private int surpportCount;
 	
+	private int expireTime;//小时
+	
 	
 	private long price;
 	
@@ -133,6 +135,12 @@ public class ActivityRelPO extends AbstractBasePO {
 	}
 	public void setBookEndTime(Date bookEndTime) {
 		this.bookEndTime = bookEndTime;
+	}
+	public int getExpireTime() {
+		return expireTime;
+	}
+	public void setExpireTime(int expireTime) {
+		this.expireTime = expireTime;
 	}
 	
 	

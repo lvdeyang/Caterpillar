@@ -508,7 +508,7 @@ html, body {
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
-				$.toptip('data.message', 'error');
+				$.toptip(data.message, 'error');
 				return -1;
 			}else{
 				return data.data;		
@@ -659,7 +659,7 @@ html, body {
 				       $.toast("验单通过");
 				       setTimeout(function(){
 				   
-					       location.href=window.BASEPATH + "pubnum/admin/order/TESTED";
+					       location.href=window.BASEPATH + "pubnum/admin/orderinfo?orderId="+orderNo;
 					   
 					   },1000);
 				    }else{

@@ -544,6 +544,31 @@ html, body {
 			
 		});
 
+
+        var _uriviewPeople = window.BASEPATH + 'pubnum/getViewPeoples?orderId=${orderId}';
+        $.get(_uriviewPeople, null, function(data){
+			data = parseAjaxResult(data);
+			if(data === -1) return;
+			if(data){
+			    if(data.length>0){
+			      $('#viewPeopleDiv').show();
+			    
+			    }
+			    var html=[];
+			    for(var i=0;i<data.length;i++){
+			       html.push('<a class="weui-cell weui-cell_access" href="javascript:;">');
+		           html.push(' <div class="weui-cell__bd">');
+		           html.push('   <p>'+data[i].idNum+'</p>');
+		           html.push(' </div>');
+		           html.push(' <div class="weui-cell__ft">'+data[i].name+'</div>');
+		           html.push('</a>');
+			    
+			    }
+			    $('#viewPeoples').append(html.join(''));
+			
+			}
+			
+		});
 	
 	});
 </script>
@@ -654,8 +679,13 @@ html, body {
 					  </div>
 				    
 		     </div>
-		     
-			
+		     <div id="viewPeopleDiv" style="display:none;padding-bottom:50px;">
+		       <div class="weui-cells__title">游览人</div>
+		       <div class="weui-cells" id="viewPeoples">
+		          
+		         
+        	   </div>
+			</div>
 			
 		</div>
 	</div>

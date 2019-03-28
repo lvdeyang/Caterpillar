@@ -74,6 +74,7 @@ import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.OrderPeopleDao;
 import com.guolaiwan.bussiness.admin.dao.ProLatitudeLongitudeDAO;
 import com.guolaiwan.bussiness.admin.dao.ProTourismPictureDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
@@ -1821,5 +1822,16 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 
+	@Autowired
+	private OrderPeopleDao conn_orderpeople;
+	
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getViewPeoples", method = RequestMethod.GET)
+	public Object getViewPeoples(HttpServletRequest request, HttpServletResponse response, long orderId)
+			throws Exception {
+		
+		return conn_orderpeople.findByField("orderId", orderId);
+	}
 	
 }
