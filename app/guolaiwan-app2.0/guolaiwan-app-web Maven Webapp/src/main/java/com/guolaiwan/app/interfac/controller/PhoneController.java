@@ -2906,6 +2906,9 @@ public class PhoneController extends WebBaseControll {
 					    	continue;
 					    }
 					}
+					
+					
+					
 					orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
 					if (orderInfoVO.getComboId() != 0) {
 						ProductComboPO comboPO = conn_combo.get(orderInfoVO.getComboId());
@@ -2924,6 +2927,11 @@ public class PhoneController extends WebBaseControll {
 					if (orderInfoVO.getActivityId() != 0) {
 						ActivityRelPO activityRelPO = conn_activityRel.get(orderInfoVO.getActivityId());
 						if(activityRelPO!=null){
+							Date setDate=DateUtil.parse(orderInfoVO.getUpdateTime(),DateUtil.dateTimePattern);
+						    long between=DateUtil.daysBetween(setDate,new Date());
+						    if((between*24)>activityRelPO.getExpireTime()){
+						    	continue;
+						    }
 							orderInfoVO.setProductPrice(
 									new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
 						}
