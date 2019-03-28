@@ -1,6 +1,5 @@
 package pub.caterpillar.weixin.constants;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class WXContants {
@@ -23,6 +22,6 @@ public class WXContants {
   
     //public final static boolean istest=true;
 
-    public final static boolean istest=true;
+    public final static boolean istest=false;
     
 }
