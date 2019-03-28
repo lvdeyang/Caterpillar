@@ -1,6 +1,5 @@
 package pub.caterpillar.weixin.constants;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class WXContants {

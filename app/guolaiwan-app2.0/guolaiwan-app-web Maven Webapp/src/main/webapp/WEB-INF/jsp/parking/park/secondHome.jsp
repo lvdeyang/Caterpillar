@@ -97,7 +97,7 @@
 .conformity {
 	height: 50px;
 	margin: 0 auto;
-	width: 40%;
+	
 }
 
 /* .pid {
@@ -114,10 +114,10 @@
 
 .phone {
 	/* float: right; */
-	float: left;
+	
 	line-height: 50px;
 	text-align: center;
-	margin-left:15%;
+	
 }
 
 .main {
@@ -145,7 +145,7 @@
 }
 
 .btn {
-	border-radius: 5%;
+	border-radius: 5px;
 }
 
 .btn a {
@@ -197,39 +197,6 @@
 html,body{
 	height:100%;
 }
-body {
-			position: relative;
-			margin: 0 auto;
-			transition-duration:5s;
-		}
-	    body:before {
-			content: "";
-			position: absolute;
-			left: -500px;
-			top: -200%;
-			width: 300%;
-			height: 1%;
-			background-color:rgba(255, 255, 255, .5);
-			-webkit-transform: rotate(-45deg);
-			-moz-transform: rotate(-45deg);
-			-ms-transform: rotate(-45deg);
-			-o-transform: rotate(-45deg);
-			transform: rotate(-45deg);
-			animation: searchLights 4s ease-in 2s infinite;
-			z-index:999;
-		}
-		
-		@-webkit-keyframes searchLights {
-			
-			50% {
-				left:-300%;
-				top: -15%;
-			}
-		     100% {
-				left: 100%;
-				top:100%;
-			}
-		}
 </style>
 
 </head>
@@ -242,8 +209,11 @@ body {
 <script type="text/javascript">
 
 	$(function() {
-
-
+     $(".btn").click(function() {
+			window.location.href = "smart/merchant/parking?sal=1";
+			$(".btn").css("box-shadow","5px 5px 10px #8E8F8F");
+		});
+      
 		var _uriYd = window.BASEPATH + 'smart/usere';
 		$.post(_uriYd, null, function(data) {
 			data = parseAjaxResult(data);
@@ -379,10 +349,13 @@ body {
 						window.location.href = "vice/merchant/information";
 						},300);
 					};
-				};
+				}
+				;
+
+
 
 				//进入订单界面
-				if ( data[i] == "PAST"||data[i] == "REFUNDED") { //过期
+				if ( data[i] == "PAST") { //过期
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');
@@ -602,7 +575,7 @@ body {
 
 			</div>
 			<button class="btn"
-				style="width: 202px;height: 35px;margin: 15px auto;background-color: #02A1E9";>
+				style="width: 202px;height: 35px;margin: 15px auto;background-color: #02A1E9;border:none;outline:none;">
 				<a href="smart/merchant/parking?sal=1">退出</a>
 			</button>
 		</div>

@@ -103,7 +103,7 @@ html, body {
       var time= null;
     $(function(){ 
 			
-        var _uti = window.BASEPATH + 'vice/theorder';
+        var _uti = window.BASEPATH + 'vice/reneworder';
 	    $.post(_uti, null, function(data) {  
 	      	data = parseAjaxResult(data);
 		    for(var i=0; i<data.length ; i++){
@@ -149,7 +149,7 @@ html, body {
 			  
 			    var hours = window.BASEPATH + 'vice/ hours';
 	            var para = {};
-	            para.id = data.uid;
+	            para.id = 	window.attid;
 		     $.post(hours, $.toJSON(para), function(data) {  
 		      	data = parseAjaxResult(data);
 		        var objt = document.getElementById("stoppingTime");
@@ -194,7 +194,8 @@ html, body {
 	     $.post(parking,$.toJSON(objt), function(data) {  
 	    	 data = parseAjaxResult(data);
 	    	 time = data.leng;
-		     payPublic(orderId,meony,uid);
+	    	 var date = (new Date()).getTime(); 
+		     payPublic(orderId,meony,uid,date);
 	
 		});	  
 	});                       
@@ -301,7 +302,7 @@ html, body {
 		  
 		   var hours = window.BASEPATH + 'vice/ hours';
            var para = {};
-           para.id = data.uid;
+           para.id =  window.attid;
 	    $.post(hours, $.toJSON(para), function(data) {  
 	      	data = parseAjaxResult(data);
 	        var objt = document.getElementById("stoppingTime");
@@ -341,10 +342,10 @@ html, body {
 		var signType; 
 		var orderNo;	
 		
-		function payPublic(orderId,meony,uid){
+		function payPublic(orderId,meony,uid,date){
 		    meony =  meony*100;	
 	        var site = "payreportrenew";		
-		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+meony+"/"+uid+"/"+site, null, function(data){
+		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+meony+"/"+uid+"/"+site+"/"+date, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;

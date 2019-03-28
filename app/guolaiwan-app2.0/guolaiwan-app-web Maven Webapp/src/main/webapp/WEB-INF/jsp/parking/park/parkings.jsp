@@ -235,7 +235,7 @@ $(document).on('click','#btn', function() {
 
 
   </div>
-  <div class="main" style="text-align: center;margin:40% auto 0;width:100%;">
+  <div class="main" style="text-align: center;margin:30% auto 0;width:100%;">
   <div  id= "man" class="main_in" style="display: inline-block;width:30%;">
      <p >车位号</p>
     

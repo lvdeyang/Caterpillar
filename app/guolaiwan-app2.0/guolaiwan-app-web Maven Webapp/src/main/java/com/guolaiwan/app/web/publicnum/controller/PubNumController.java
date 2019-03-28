@@ -58,6 +58,8 @@ import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
+import com.guolaiwan.bussiness.Parking.dao.OrderDao;
+import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.admin.dao.ActivityBundleDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
@@ -467,12 +469,17 @@ public class PubNumController extends WebBaseControll {
 		return map;
 	}
 	
+	@Autowired
+	private OrderDao  Order;
 	@ResponseBody
-	@RequestMapping(value = "/prev/paypark/{id}/{text}/{attactionsId}/{site}")
+	@RequestMapping(value = "/prev/paypark/{id}/{text}/{attactionsId}/{site}/{date}")
 	//TODO
-	public Object prevPaypark(@PathVariable String id, @PathVariable Integer text, @PathVariable Integer attactionsId,@PathVariable String site, HttpServletRequest request) throws Exception {
+	public Object prevPaypark(@PathVariable String id, @PathVariable Integer text, @PathVariable Integer attactionsId,@PathVariable String site,@PathVariable String date, HttpServletRequest request) throws Exception {
 
-        String orderNo = "park-"+id+"-"+attactionsId/*+"-"ID+"-"景ID*/;
+        String orderNo = "park-"+id+"-"+attactionsId+"-"+date/*+"-"ID+"-"景ID*/;
+        OrderPO orde  =  Order.getform(Long.parseLong(id));
+        orde.setOrderNo(orderNo);
+    	Order.saveOrUpdate(orde);
 		int payMoney = text;
 		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
 		//payMoney+=orderInfoPO.getPayMoney();
