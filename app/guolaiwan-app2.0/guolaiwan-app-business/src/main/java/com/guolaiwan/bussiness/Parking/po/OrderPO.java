@@ -47,6 +47,8 @@ public class OrderPO extends AbstractBasePO {
 	private double overTimeMoney;
 	//超时时间
 	private double overTime;
+	//微信  预订 
+	private String orderNo;
 
 	// 二维码路径
 	private String path;
@@ -56,6 +58,14 @@ public class OrderPO extends AbstractBasePO {
 	
 	
 	
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
 
 	public double getOverTime() {
 		return overTime;

@@ -41,10 +41,19 @@ public class OrderVo  extends AbstractBaseVO<OrderVo, OrderPO>{
     private double overTime;
 	//二维码路径
 	private String path;
+	//微信  预订 
+    private String orderNo;
+	
+	
+	
 
-	
-	
-	
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
 
 	public double getOverTime() {
 		return overTime;

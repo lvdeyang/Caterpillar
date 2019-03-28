@@ -440,9 +440,9 @@ html, body {
 						param.uid =  uid;
 						param.orderid = ${param.orderid} ;
 						$.post(_util, $.toJSON(param), function(data) {    
-						   window.location.href = "vice/merchant/order?uid="+${param.uid};
 					});	
-			     /*    payPublic(orderId,money,uid);  */
+					var date = (new Date()).getTime();
+			        payPublic(orderId,money,uid,date); 
                   }else{
                    alert("您好你预订的车位已被购买,请您从新选择车位");
                   }
@@ -567,12 +567,12 @@ html, body {
 		var signType; 
 		var orderNo;	
 		
-		function payPublic(orderId,text,uid){
+		function payPublic(orderId,text,uid,date){
 	        console.log(uid);
 			text =  (text*100).toFixed(0);	
 			var site = "payreportpark";
 			console.log(text)
-		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+text+"/"+uid+"/"+site, null, function(data){
+		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+text+"/"+uid+"/"+site+"/"+date, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;

@@ -434,12 +434,14 @@ public class SceneryListController  extends WebBaseControll{
 			param = param.substring(1, param.length() - 1);
 		}
 		JSONObject pageObject = JSON.parseObject(param);
-		Long uid = pageObject.getLong("uid");   
+		Long uid = pageObject.getLong("id");   
+		System.out.println(uid);
 		List<AttractionsParkingPO> userName =  Attra_ctions.getBusinessHours(uid);
 		for (AttractionsParkingPO attractionsParkingPO : userName) {
 			dataMap.put("stoppingTime", attractionsParkingPO.getStoppingTime());
 			dataMap.put("phone", attractionsParkingPO.getPhone());
 		}
+		System.out.println(dataMap);
 		return success(dataMap);
 	}
 
@@ -835,7 +837,7 @@ public class SceneryListController  extends WebBaseControll{
 			vehicle =  vehiclePO.getNumber();
 		}
 		OrderPO userByid = Order.getform(userId,attid,vehicle);
-		dataMap.put("img", userByid.getPath());
+		dataMap.put("img", conn_sysConfig.getSysConfig().getWebUrl()+userByid.getPath());
 		dataMap.put("number", userByid.getId());
 		return success(dataMap);
 	}
@@ -1219,6 +1221,35 @@ public class SceneryListController  extends WebBaseControll{
 		List<OrderPO> order = Order.getOrderform(userId,list,vehicle);
 		List<OrderVo>   _merchants = OrderVo.getConverter(OrderVo.class).convert(order,
 				OrderVo.class);
+		return success( _merchants);
+	}
+	
+	
+
+	/*****************************************************************************************************/
+
+	
+	/** 查询 续费 停车场信息
+	 * @return
+	 **/
+	@ResponseBody
+	@RequestMapping(value = "/reneworder", method = RequestMethod.POST)
+	public Map<String, Object> renewOrder(HttpServletRequest request) throws Exception {
+		String vehicle = null; //车牌
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		List<VehiclePO> userBy = par_king.getNumber(userId);
+		for (VehiclePO vehiclePO : userBy) {
+			vehicle =  vehiclePO.getNumber();
+		}
+		List<String> list  = new ArrayList<String>();
+		list.add("PAYSUCCESS");
+		list.add("PARKING");
+		List<OrderPO> order = Order.getOrderform(userId,list,vehicle);
+		List<OrderVo>   _merchants = OrderVo.getConverter(OrderVo.class).convert(order,
+				OrderVo.class);
+		for (OrderVo orderVo : _merchants) {
+			System.out.println("orderVo: " +orderVo.getParkingName());
+		}
 		return success( _merchants);
 	}
 	

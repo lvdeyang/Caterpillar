@@ -96,7 +96,7 @@
 .conformity {
 	height: 50px;
 	margin: 0 auto;
-	width: 144px;
+	
 }
 
 
@@ -108,10 +108,10 @@
 
 .phone {
 	/* float: right; */
-	float: left;
+	
 	line-height: 50px;
 	text-align: center;
-	margin-left:15%;
+	
 	
 }
 
@@ -145,8 +145,9 @@
 
 .btn {
 	color: white;
-	border-radius: 5%;
-	
+	border-radius: 5px;
+	border:none;
+	outline:none;
 }
 
 .main1 {
@@ -175,8 +176,12 @@ html,body{
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
 <script type="text/javascript">
-
+   
 	$(function() {
+	  $(".btn").click(function() {
+			window.location.href = "smart/merchant/parking?sal=1";
+			$(".btn").css("box-shadow","5px 5px 10px #8E8F8F");
+		});
 	var _uri = window.BASEPATH + 'quit/query';
 	var sal = ${param.sal}
 		$.post(_uri, null, function(data) {

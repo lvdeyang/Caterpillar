@@ -100,6 +100,21 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
       	    return findByHql.get(0);
        }
        /**
+        * 通过订单 id 查询订单
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public OrderPO  getform(Long Id) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   hql.andBy("id", Condition.eq,Id);
+    	   List<OrderPO> findByHql = findByHql(hql);
+    	   if(findByHql == null || findByHql.size() ==0) return null;
+    	   return findByHql.get(0);
+       }
+       /**
         * 通过用户id  景区id 查询信息
         * @param userId 用户id
         * @param  
