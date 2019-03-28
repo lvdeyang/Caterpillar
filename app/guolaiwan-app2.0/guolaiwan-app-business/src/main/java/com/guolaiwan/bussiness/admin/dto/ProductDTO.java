@@ -163,6 +163,24 @@ public class ProductDTO {
 	
 	private String nowDate;//服务器当前时间
 	
+	private String cutDownTimeStartDate;//倒计时开始时间
+	private String cutDownTimeEndDate;//倒计时结束时间
+	
+	
+	
+	
+	public String getCutDownTimeStartDate() {
+		return cutDownTimeStartDate;
+	}
+	public void setCutDownTimeStartDate(String cutDownTimeStartDate) {
+		this.cutDownTimeStartDate = cutDownTimeStartDate;
+	}
+	public String getCutDownTimeEndDate() {
+		return cutDownTimeEndDate;
+	}
+	public void setCutDownTimeEndDate(String cutDownTimeEndDate) {
+		this.cutDownTimeEndDate = cutDownTimeEndDate;
+	}
 	public String getNowDate() {
 		return nowDate;
 	}

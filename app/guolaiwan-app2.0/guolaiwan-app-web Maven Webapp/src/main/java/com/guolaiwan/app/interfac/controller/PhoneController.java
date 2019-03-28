@@ -627,8 +627,11 @@ public class PhoneController extends WebBaseControll {
 					productDTO.setActivityName(activityVO.getName());
 					productDTO.setActivityId(activityVO.getId());
 					Date date = new Date();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					productDTO.setNowDate(sdf.format(date));
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					productDTO.setCutDownTimeStartDate(sdf.format(date) + " 10:00:00");
+					productDTO.setCutDownTimeEndDate(sdf.format(date) + " 23:59:59");
+					SimpleDateFormat sdfWithHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					productDTO.setNowDate(sdfWithHMS.format(date));
 					// 多图
 					productDTO.setProductMorePic(split(productDTO.getProductMorePic(), sysConfig.getWebUrl()));
 				}
