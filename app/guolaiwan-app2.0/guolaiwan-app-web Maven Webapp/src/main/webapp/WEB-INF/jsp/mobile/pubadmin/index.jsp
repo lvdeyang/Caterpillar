@@ -508,7 +508,7 @@ html, body {
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
-				$.toptip('data.message', 'error');
+				$.toptip(data.message, 'error');
 				return -1;
 			}else{
 				return data.data;		
