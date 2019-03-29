@@ -42,6 +42,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         				<input type="text" id="productNum" class="layui-input" name="productNum" style="width:300px" placeholder="手动输入票号" autocapitalize="on">
         			</div>
         			<div class="layui-inline">
+        				<input type="text" id="idnum" class="layui-input" name="idnum" style="width:300px;display:none" placeholder="身份证" autocapitalize="on">
+        			</div>
+        			<div class="layui-inline">
         				<button class='layui-btn' lay-filter="sell" lay-submit>售票<button>
         			</div>
         		</div>
@@ -71,7 +74,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			 //光标到input中            
               $("#productNum").focus();
              	
-             	
+             $(document).on('change','#productNum',function(){
+                 if($(this).val()==''){
+                    $('#idnum').hide();
+                 }else{
+                    $('#idnum').show();
+                 }
+             });
           
              $(document).click(function(e) { 
   				var clickId = $(e.target).attr("id")    
