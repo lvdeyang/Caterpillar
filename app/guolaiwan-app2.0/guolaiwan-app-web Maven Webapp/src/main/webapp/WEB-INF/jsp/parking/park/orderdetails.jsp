@@ -87,7 +87,10 @@ html, body {
 		$.post(_uriYd, null, function(data) {
 			data = parseAjaxResult(data);
 			var html = [];
-			html.push('	<span>'+data.userNickname+'</span>  <span>'+data.userPhone+'</span>');
+			html.push('	<span>'+data.userNickname+'</span>');
+			if(data.userPhone != null){
+			html.push('<span>'+data.userPhone+'</span>');
+			}
 			$('.pic').append(html.join(''));
 		});
 		 var _url = window.BASEPATH + 'quit/query';

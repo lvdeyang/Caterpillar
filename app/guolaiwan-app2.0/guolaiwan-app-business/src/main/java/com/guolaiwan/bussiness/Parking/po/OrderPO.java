@@ -30,7 +30,7 @@ public class OrderPO extends AbstractBasePO {
 	//车位编号
 	private int parkingNumber;
 	//停车费用
-	private Double  parkingCost;
+	private double  parkingCost;
 	//停车总时间
 	private Double  stoppingTime;
 	//预订时间
