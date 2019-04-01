@@ -10,6 +10,7 @@ import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
 import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
+import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
@@ -133,14 +134,6 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   return findByHql.get(0);
        }
        
-       
-       
-       
-       
-       
-       
-       
-       
        /**
         * 通过用户id 已支付  正在停车  景区id 查询信息
         * @param userId 用户id
@@ -158,9 +151,6 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   
        }
      
-  
-       
-       
        /**
         * 通过用户id 景区id   订单状态  查询订单信息
         * @param userId 用户id
@@ -169,19 +159,17 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
         * @return
         * @throws ParseException
         */
-       public List<OrderPO>  getOrderform(Long userId,Long attractionsId,Collection<String> sal,String vehicle) throws ParseException{
+       public  OrderPO  getOrderform(Long userId,Long attractionsId,Collection<String> sal,String vehicle) throws ParseException{
     	   QueryHql hql = newQueryHql();
     	   hql.andBy("orderId", Condition.eq,userId);
     	   hql.andBy("attractionsId", Condition.eq,attractionsId);
     	   hql.andBy("orderStatus", Condition.in,sal);
     	   hql.andBy("platenumber", Condition.eq,vehicle);
-    	   return findByHql(hql);
-    	   
+    	   List<OrderPO> findByHql = findByHql(hql);
+    	   if(findByHql == null || findByHql.size() ==0) return null;
+    	   return findByHql.get(0);
        }
       
-       
-       
-   
        /**
         * 通过用户id   订单状态  查询订单信息
         * @param userId 用户id
@@ -199,7 +187,6 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   
        }
   
-       
        /**
         * 通过用户id   订单状态   车牌       停车场名  查询订单信息
         * @param userId 用户id
@@ -217,8 +204,6 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   return findByHql(hql);
     	   
        }
-       
-       
        
        /**
         * 通过用户id 状态    查询 正在停车信息
@@ -256,11 +241,6 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   
        }
        
-       
-       
-       
-       
-       
        /**
         * 通过用户id  车牌  查询订单信息
         * @param userId 用户id
@@ -277,7 +257,48 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   
        }
        
+       
+       
+       
+       
+       /**
+        * 订单分页查询
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public List<OrderPO>  getOrderfor(int pageNum,int pageSize) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   List<OrderPO> orders = findByHqlPage(hql, pageNum, pageSize);
+    	   return orders;
+       }
+       
+       /**
+        * 查询所有订单信息
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public List<OrderPO>  getOrderfor() throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   return findByHql(hql);
+       }
+       
     
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
 	
 	
 }

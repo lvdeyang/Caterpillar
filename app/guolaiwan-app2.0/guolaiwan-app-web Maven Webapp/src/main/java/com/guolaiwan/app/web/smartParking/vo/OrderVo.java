@@ -41,7 +41,7 @@ public class OrderVo  extends AbstractBaseVO<OrderVo, OrderPO>{
     private double overTime;
 	//二维码路径
 	private String path;
-	//微信  预订 
+	//订单编号 
     private String orderNo;
 	
 	

@@ -469,14 +469,14 @@ public class PubNumController extends WebBaseControll {
 		return map;
 	}
 	
+	// 停车预定支付 
 	@Autowired
 	private OrderDao  Order;
 	@ResponseBody
-	@RequestMapping(value = "/prev/paypark/{id}/{text}/{attactionsId}/{site}/{date}")
-	//TODO
-	public Object prevPaypark(@PathVariable String id, @PathVariable Integer text, @PathVariable Integer attactionsId,@PathVariable String site,@PathVariable String date, HttpServletRequest request) throws Exception {
+	@RequestMapping(value = "/prev/paypark/{id}/{text}/{attactionsId}")
+	public Object prevPaypark(@PathVariable String id, @PathVariable Integer text, @PathVariable Integer attactionsId, HttpServletRequest request) throws Exception {
 
-        String orderNo = "park-"+id+"-"+attactionsId+"-"+date/*+"-"ID+"-"景ID*/;
+        String orderNo = "park-"+id+"-"+attactionsId/*+"-"ID+"-"景ID*/;
         OrderPO orde  =  Order.getform(Long.parseLong(id));
         orde.setOrderNo(orderNo);
     	Order.saveOrUpdate(orde);
@@ -486,7 +486,7 @@ public class PubNumController extends WebBaseControll {
 		// String aLong = request.getParameter("text");
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user = conn_user.get(userId);
-		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/"+site, WxConfig.appId,
+		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/payreportpark", WxConfig.appId,
 				WxConfig.appsrcret);
 		// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
 		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo,payMoney,
@@ -498,7 +498,60 @@ public class PubNumController extends WebBaseControll {
 		return map;
 	}
 	
-
+	// 续费
+	@ResponseBody
+	@RequestMapping(value = "/prev/payrenewal/{id}/{money}/{attactionsId}/{date}")
+	public Object prevRtrenew(@PathVariable String id, @PathVariable Integer money, @PathVariable Integer attactionsId,@PathVariable String date, HttpServletRequest request) throws Exception {
+		String orderNo = "rene-"+id+"-"+attactionsId+"-"+date/*+"-"ID+"-"景ID*/;
+		int payMoney = money;
+		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
+		//payMoney+=orderInfoPO.getPayMoney();
+		// String aLong = request.getParameter("text");
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		UserInfoPO user = conn_user.get(userId);
+		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/payreportrenew", WxConfig.appId,
+				WxConfig.appsrcret);
+		// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo,payMoney,
+				"192.165.56.64", user.getUserOpenID());
+		// 生成包含prepay_id的map，map传入前端
+		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
+		// 将订单号放入map，用以支付后处理
+		map.put("orderNo", orderNo);
+		return map;
+	}
+	
+	
+	
+	
+	
+	//停车退款功能
+	@ResponseBody
+	@RequestMapping(value = "/prev/parkrefund/{id}")
+	//TODO
+	public Object prevPaket(@PathVariable String id, HttpServletRequest request)
+			throws Exception {
+		String orderNo = "refund-"+id;
+		String newOrderNo = "";
+		int payMoney = 0;
+		OrderPO  orderPO =	 Order.getOrderform(Long.parseLong(id));
+	    Double cost = orderPO.getParkingCost();		
+	    payMoney += (cost*100);
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		UserInfoPO user = conn_user.get(userId);
+		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/parkreport", WxConfig.appId,
+				WxConfig.appsrcret);
+		// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, payMoney,
+				"192.165.56.64", orderPO.getOrderNo());
+		// 生成包含prepay_id的map，map传入前端
+		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
+		// 将订单号放入map，用以支付后处理
+		map.put("orderNo", newOrderNo);
+		return map;
+	}
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/prev/paybasket/{id}/{nums}")
 	public Object prevPayBasket(@PathVariable String id, @PathVariable String nums, HttpServletRequest request)

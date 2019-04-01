@@ -195,6 +195,119 @@ public class WxPayReportController extends WebBaseControll {
 
 		return stringBuffer.toString();
 	}
+	@RequestMapping(value = "/parkreport", method = RequestMethod.POST)
+	public String parkreport(HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		Map<String, Object> ret=new HashMap<String, Object>();
+		System.out.println("*****************wxreport****************");
+		//Mr.huang 2017/09/12 飞的好低的小蜜蜂
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String xml="";
+		String tempStr="";
+		while((tempStr=reader.readLine())!=null){
+			xml+=tempStr;
+			System.out.println(tempStr);
+		}
+		
+		GuolaiwanWxPay wxPay=GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+		Map<String, String> respData = wxPay.processResponseXml(xml);
+		
+		
+		System.out.println("返回的参数："+respData.toString());
+		
+		String returncode = respData.get("return_code");
+		String resultcode = respData.get("result_code");
+		System.out.println("returncode是："+returncode+";resultcode是"+resultcode);
+		StringBuffer stringBuffer = new StringBuffer();
+		if(returncode.equals("SUCCESS")){
+			if(resultcode.equals("SUCCESS")){
+				int i=0;
+				//获取订单号
+				String tradeNum=respData.get("out_trade_no");
+				String refundNum=respData.get("out_refund_no");
+				/*if(refundNum!=null&&refundNum.indexOf("refund")!=-1){
+					String[] rIds =  tradeNum.split("A");
+					if(tradeNum.indexOf("bundle")!=-1){
+						Long bundleOrderId=Long.parseLong(tradeNum.split("-")[1]);
+						BundleOrder bundleOrder=conn_bundleorder.get(bundleOrderId);
+						rIds=bundleOrder.getOrderStr().split("A");
+						
+					}
+					for (String ridStr : rIds) { //退款
+						OrderInfoPO order = conn_orderInfo.get(Long.parseLong(ridStr));
+						order.setOrderState(OrderStateType.REFUNDED);
+						conn_orderInfo.save(order);
+						sendMessage(order);
+					}
+					
+					stringBuffer.append("<xml><return_code><![CDATA[");
+					stringBuffer.append("SUCCESS");
+					stringBuffer.append("]]></return_code>");
+					stringBuffer.append("<return_msg><![CDATA[");
+					stringBuffer.append("OK");
+					stringBuffer.append("]]></return_msg>");
+					System.out.println("微信支付退款成功!订单号："+tradeNum);
+					return stringBuffer.toString();
+				}
+				String[] orderIds =  tradeNum.split("A");
+				//orderNo="bundle-"+order.getId();
+				if(tradeNum.indexOf("bundle")!=-1){
+					Long bundleOrderId=Long.parseLong(tradeNum.split("-")[1]);
+					BundleOrder bundleOrder=conn_bundleorder.get(bundleOrderId);
+					orderIds=bundleOrder.getOrderStr().split("A");
+				}
+				for (String orderId : orderIds) {
+					i=i+1;
+					OrderInfoPO order = conn_orderInfo.get(Long.parseLong(orderId));
+					if(order.getOrderState().toString().equals("NOTPAY")){
+						//微信支付
+						order.setPayMode(PayType.WEICHAT);
+						order.setPayDate(new Date());
+						//生成验单码,和二维码图片
+						String ydNO = ydNoCode(orderId);
+						order.setYdNO(ydNO);
+						//支付状态、减库存
+						order.setOrderState(OrderStateType.PAYSUCCESS);  
+						ProductPO product = conn_product.get(order.getProductId());
+						if(product != null){
+							//long productNum = order.getProductNum();
+							//product.setProductStock(product.getProductStock()-productNum);
+							//conn_product.saveOrUpdate(product);
+						}
+						conn_orderInfo.saveOrUpdate(order);
+						sendMessage(order);
+					}	
+				}*/
+				stringBuffer.append("<xml><return_code><![CDATA[");
+				stringBuffer.append("SUCCESS");
+				stringBuffer.append("]]></return_code>");
+				stringBuffer.append("<return_msg><![CDATA[");
+				stringBuffer.append("OK");
+				stringBuffer.append("]]></return_msg>");
+				System.out.println("微信支付付款成功!"+i+"个订单。订单号："+tradeNum);
+			}else{
+				stringBuffer.append("<xml><return_code><![CDATA[");
+				stringBuffer.append("FAIL");
+				stringBuffer.append("]]></return_code>");
+				stringBuffer.append("<return_msg><![CDATA[");
+				stringBuffer.append("交易失败");
+				stringBuffer.append("]]></return_msg>");
+				System.out.println("微信支付交易失败");
+			}
+		}else{
+			stringBuffer.append("<xml><return_code><![CDATA[");
+			stringBuffer.append("FAIL");
+			stringBuffer.append("]]></return_code>");
+			stringBuffer.append("<return_msg><![CDATA[");
+			stringBuffer.append("签名失败");
+			stringBuffer.append("]]></return_msg>");
+			System.out.println("微信支付签名失败");
+		}
+		
+		System.out.println("微信返回字符串:"+stringBuffer);
+		
+		return stringBuffer.toString();
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/payreportpark", method = RequestMethod.POST)
@@ -300,7 +413,6 @@ public class WxPayReportController extends WebBaseControll {
 			HttpServletResponse response) throws Exception{
 		Map<String, Object> ret=new HashMap<String, Object>();
 		System.out.println("*****************wxreport****************");
-		//Mr.huang 2017/09/12 飞的好低的小蜜蜂
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String xml="";
 		String tempStr="";
@@ -322,7 +434,44 @@ public class WxPayReportController extends WebBaseControll {
 			if(resultcode.equals("SUCCESS")){
 				//获取订单号
 				String tradeNum = respData.get("out_trade_no");
+				Long orderId= Long.parseLong(tradeNum.split("-")[1]);
+				Long attactionsId = Long.parseLong(tradeNum.split("-")[2]);
+				//获取商品订单号
+				String transaction = respData.get("transaction_id");
+				// 查询 订单信息 
+				OrderPO orderinfor = Order.getform(orderId);
+				String booking  =  orderinfor.getBookingTime(); //入场时间
+				Long attid  =  orderinfor.getAttractionsId(); // 景区id
+				String duetime = orderinfor.getDueTime(); // 离场时间说
+				String status = orderinfor.getOrderStatus();//订单状态
+				String layer = orderinfor.getParkingLayer();//层
+				String district = orderinfor.getParkingDistrict();//区  
+				Integer number = orderinfor.getParkingNumber();//车位编号  
+				String  name  = orderinfor.getParkingName();//车场名称  
+				String  plate  = orderinfor.getPlatenumber();//车牌号  
+				Long userid  = orderinfor.getOrderId(); // 用户id
+				orderinfor.setOrderStatus("PAST");
+				Order.saveOrUpdate(orderinfor);
 				
+				//新创订单 
+				OrderPO odp = new OrderPO();
+				odp.setBookingTime(booking);
+				odp.setDueTime(duetime);
+				odp.setStoppingTime(0.0);
+				odp.setOrderStatus(status);
+				odp.setParkingLayer(layer);
+				odp.setParkingName(name);
+				odp.setParkingDistrict(district);
+				odp.setParkingNumber(number);
+				odp.setAttractionsId(attid);
+				odp.setParkingCost(0);
+				odp.setOrderId(userid);
+				odp.setPlatenumber(plate);
+				odp.setOrderNo(tradeNum);
+				odp.setCommodityNumber(transaction);
+				String ydNO = ydNoCode(odp.getId()+"");
+				odp.setPath(ydNO);
+				Order.save(odp);
 				
 				
 				stringBuffer.append("<xml><return_code><![CDATA[");
@@ -336,7 +485,7 @@ public class WxPayReportController extends WebBaseControll {
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("FAIL");
 				stringBuffer.append("]]></return_code>");
-				stringBuffer.append("<return_msg><![CDATA[");
+				stringBuffer.append("<return_msg><![CDATA[");                                                             
 				stringBuffer.append("交易失败");
 				stringBuffer.append("]]></return_msg>");
 				System.out.println("微信支付交易失败");

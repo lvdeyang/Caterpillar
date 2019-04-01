@@ -53,53 +53,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         			<div class="layui-inline">
     					<input class="layui-input" name="mName" id="mName" autocomplete="off">
   					</div>
-        			商品：
-        			<div class="layui-inline">
-    					<input class="layui-input" name="pName" id="pName" autocomplete="off">
-  					</div>
-  					
   					<button class="layui-btn"   data-type="reload"  onclick="selectPName(this)">模糊搜索</button>
   					<button type="button" class="layui-btn" id="deriveallorder"
 			onclick="deriveallorder()">导出所有订单</button>	
-			<div class="layui-inline">
-			<from class="layui-form">
-				<table>
-					<td>
-						<select class="lay-input-inline" name="pmenus" lay-verify="required" id="pmenus">
-	        				<option value="-1">全部</option>
-	        	<%-- 			<c:forEach items="${pmenus}" var="pmenu">   --%>
-	                		<option  value="App" >手机App</option>  
-	                		<option  value="WEBPAGE" >网页</option> 
-	                		<option  value="线下" >线下</option> 
-	                		<option  value="分销线下" >分销线下</option> 
-	                		<option  value="公众号" >公众号</option> 
-	                		<option  value="直播">直播</option>>
-	               			<!-- </c:forEach>  -->
-	      				</select>
-	      			</td>
-					<td>
-					 	<button class="layui-btn"   data-type="reload"  onclick="fenyefind(this)">查询</button>
-					</td>
-				</table>
-			</from>
-			</div>  
 	   	 </div>
         	<!-- tab -->
             <div class="layui-tab layui-tab-brief" lay-filter="demo">
   				<ul class="layui-tab-title">
-    				<li class="layui-this">未付款<span id="NOTPAYbadge" class="layui-badge"></span></li>
     				<li>已付款<span id="PAYSUCCESSbadge"  class="layui-badge"></span></li>
-    				<li>已发货（商城）<span id="DELIVERbadge" hidden="hidden"  class="layui-badge"></span></li>
-    				<li>已收货（商城）<span id="RECEIPTbadge" hidden="hidden" class="layui-badge"></span></li>
-    				<li>已确认（订餐）<span id="CONFIRMEDbadge" hidden="hidden"  class="layui-badge"></span></li>
-    				<li>已验单（景点）<span id="TESTEDbadge" hidden="hidden" class="layui-badge"></span></li>
-    				<li>已评价<span id="COMMENTEDbadge" hidden="hidden" class="layui-badge"></span></li>
-    				<li>申请退款<span id="REFUNDINGbadge" hidden="hidden" class="layui-badge"></span></li>
+    				<li>正在停车<span id="DELIVERbadge" hidden="hidden"  class="layui-badge"></span></li>
+    				<li>已过期<span id="RECEIPTbadge" hidden="hidden" class="layui-badge"></span></li>
+    				<li>申请退款<span id="CONFIRMEDbadge" hidden="hidden"  class="layui-badge"></span></li>
     				<li>退款成功<span id="REFUNDEDbadge" hidden="hidden" class="layui-badge"></span></li>
     				<li>退款失败<span id="REFUNDFAILbadge" hidden="hidden" class="layui-badge"></span></li>
   				</ul>
   				
-  				<table id="orderList" lay-filter="orderList"></table>
+  				<table id="orderList" lay-filter="orderListF"></table>
   				<!-- <div class="layui-tab-content">
    					<div class="layui-tab-item layui-show"></div>
     				<div class="layui-tab-item"><table id="orderList1" lay-filter="orderList1"></table></div>
@@ -124,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         var mName = ""; 
         var pmenus = ""; 
             layui.use(['element','laypage','layer','laytpl','table'], function(){
-                $ = layui.jquery;//jquery
+              $ = layui.jquery;//jquery
               element = layui.element;//面包导航
               layer = layui.layer;//弹出层
               laypage = layui.laypage;//分页
@@ -135,70 +104,80 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               
 			 //切换tab
               element.on('tab(demo)', function(data){
+              alert(data.index);
     				i = data.index;
     				active["reload"].call(this);
   			  });
+  			  
               //详情
-              table.on('tool(orderList)', function(obj){
+           /*    table.on('tool(orderList)', function(obj){
     				console.log(1);
     				var data = obj.data;
     				if(obj.event === 'getOrderInfo'){
       					open_order(data);
     				} 
-  				});
-  				
+  				}); */
   				
   			active = {
         		reload: function(){
-            	table.reload('mClassTable', {
+            	table.reload('orderList', {
                 	page: {
           				curr: 1 //重新从第 1 页开始
-        			}
-                	,where: {
+        			},
+        			where: {
                     	pName: pName,
                     	mName: mName,
                     	pmenus:pmenus,
                     	type:i
                 	}
             	});
-        		}
+        	  }
     		};
         }); 
              
              
              
              function getList(){
-             console.log(1);
-            	ele=0;
+               ele=0;
              	table.render({
                     elem:'#orderList'
                     ,method:'post'
-                    ,url:'list.do'
-                    ,page:true
+                    ,url:'order.do'
+                    ,page: true 
                     ,where:{"type":ele,"pName":pName,"mName":mName,"pmenus":pmenus}
-                    ,limits: [5,10,30,100]
+                    ,limits: [5,10,30,100] 
                     ,limit: 10
                     ,cols: [[
                         {type:'checkbox'}  
-                        ,{field: 'id',title: 'Id',align:'center',width:60}  
-                        ,{field: 'orderNO', title: '订单号',width:280} 
-                        ,{field: 'userName', title: '用户',width:120 } 
-      					,{field: 'userTel', title: '手机号',width:120}
-   						,{field: 'createDate', title: '下单时间' ,width:200}  
-   						,{field: 'shopName', title: '商家' } 
-      					,{field: 'productName', title: '商品' } 
-      					,{field: 'productNum', title: '数量',width:60 } 
-     					,{field: 'orderAllMoney', title: '总金额',width:120 } 
-     					,{field: 'source', title: '订单来源',width:100 }
-      					,{field: 'orderState', title: '状态',width:80 }
-      					,{fixed: 'right', title: '操作',width:80,toolbar:'#zsgc'}
-    					 
+                         ,{field: 'id',title: 'Id',align:'center',width:60}  
+                         ,{field: 'orderId',title: '用户Id',align:'center',width:60}  
+                        ,{field: 'attractionsId', title: '景区Id',width:70} 
+      					,{field: 'parkingLayer', title: '层',width:50}
+   						,{field: 'parkingName', title: '停车场名称' ,width:100}  
+   						,{field: 'Time', title: '营业时间',width:95 } 
+      					,{field: 'parkingDistrict', title: '区',width:50 } 
+      					,{field: 'parkingNumber', title: '车位编号',width:90 } 
+     					,{field: 'parkingCost', title: '停车费用',width:90 } 
+     					,{field: 'stoppingTime', title: '停车总时间',width:100 }
+      					,{field: 'bookingTime', title: '预订时间',width:100 }
+      					,{field: 'dueTime', title: '到期时间',width:100 }
+      					,{field: 'orderStatus', title: '订单状态',width:100 }
+      					,{field: 'refund', title: '退款理由  ',width:100 }
+      					,{field: 'platenumber', title: '车牌号',width:100 }
+      					,{field: 'overTimeMoney', title: '超时金额',width:100 }
+      					,{field: 'overTime', title: '超时时间',width:100 }
+      					,{field: 'orderNo', title: '购买编号',width:100 }
+      					,{field: 'path', title: '二维码路径',width:100 }
+      				/* 	,{fixed: 'dueTime', title: '操作',width:80,toolbar:'#zsgc'} */
                      ]]
-                	,id:"mClassTable"
+                	,id:"orderList"
+                	,done:function(res, curr, count){
+				 		layer.closeAll("loading");
+					}
                 })
              }
              
-             function getListg(){
+            /*  function getListg(){
              	var orderId = $('#orderId').val();
             	var orderNO = $('#orderNO').val();
             	
@@ -212,19 +191,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     ,limit: 10
                     ,cols: [[
                         {type:'checkbox'}  
-                        ,{field: 'id',title: 'Id',align:'center',width:60}  
-                        ,{field: 'orderNO', title: '订单号',width:280} 
-                        ,{field: 'userName', title: '用户',width:120 } 
-      					,{field: 'userTel', title: '手机号',width:120}
-   						,{field: 'createDate', title: '下单时间' ,width:200}  
-   						,{field: 'shopName', title: '商家' } 
-      					,{field: 'productName', title: '商品' } 
-      					,{field: 'productNum', title: '数量',width:60 } 
-     					,{field: 'orderAllMoney', title: '总金额',width:120 } 
-     					,{field: 'source', title: '订单来源',width:100 }
-      					,{field: 'orderState', title: '状态',width:80 }
-      					,{fixed: 'right', title: '操作',width:80,toolbar:'#zsgc'}
-    					 
+                        ,{field: 'orderId',title: 'Id',align:'center',width:60}  
+                        ,{field: 'attractionsId', title: '景区Id',width:280} 
+      					,{field: 'parkingLayer', title: '停车场层',width:120}
+   						,{field: 'parkingName', title: '停车场名称' ,width:200}  
+   						,{field: 'Time', title: '停车场营业时间' } 
+      					,{field: 'parkingDistrict', title: '停车场区' } 
+      					,{field: 'parkingNumber', title: '车位编号',width:60 } 
+     					,{field: 'parkingCost', title: '停车费用',width:120 } 
+     					,{field: 'stoppingTime', title: '停车总时间',width:100 }
+      					,{field: 'bookingTime', title: '预订时间',width:80 }
+      					,{field: 'dueTime', title: '到期时间',width:80 }
+      					,{field: 'orderStatus', title: '订单状态',width:80 }
+      					,{field: 'refund', title: '退款理由  ',width:80 }
+      					,{field: 'platenumber', title: '车牌号',width:80 }
+      					,{field: 'overTimeMoney', title: '超时金额',width:80 }
+      					,{field: 'overTime', title: '超时时间',width:80 }
+      					,{field: 'orderNo', title: '购买编号',width:80 }
+      					,{field: 'path', title: '二维码路径',width:80 }
+      					,{fixed: 'dueTime', title: '操作',width:80,toolbar:'#zsgc'}
                      ]]
                      ,done: function(res, curr, count){
                      
@@ -236,10 +221,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   					}
                 })
              }
-          
+           */
              
-             
-             function open_order(order){
+           /*   
+             function open_order(order){ // 详情
 				//使用引擎模板
 				var data= {
 					"order":order
@@ -265,9 +250,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 	 		},
 		  			content: $("#view")
 				});
-			}
+			} */
 			
-			function selectPName(obj){
+			/* function selectPName(obj){
+			alert("1111111111111111111111111111");
 				$.ajax({
 					type:"post"
 					,url:"countMP.do"
@@ -288,7 +274,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						})
 						i=0;
   						pName=$("#pName").val();
+  						alert(pName);
   						mName=$("#mName").val();
+  						alert(mName);
   						active["reload"].call(this);	
 						}
 						layer.msg("共有"+ocount+"条订单！");
@@ -296,8 +284,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				
 				})
 			}
+			 */
+		/* 	function fenyefind(obj){  // 查询
 			
-			function fenyefind(obj){
+			alert("#$%^&*()")
 	        	var pId = $("#pmenus").val();
 	        	if(pId ==-1){
 	        		window.location.reload();
@@ -309,12 +299,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						,data:{"pmenus":$("#pmenus").val()}
 						,success:function(msg){
 							$(".layui-badge").css("display","none");
-	  							
 							console.log(msg.csgroups);
 							var ocount=0;
 							if(msg.csgroups!=null){
 							msg.csgroups.forEach(function(val,index,arr){
-	  							
 	  							$("#"+val.name+"badge").text(val.count);
 	  							$("#"+val.name+"badge").css("display","inline-block");
 								$(".layui-tab-title").children("li").removeClass("layui-this");
@@ -327,12 +315,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 							layer.msg("共有"+ocount+"条订单！");
 						}
-					
 					})
 	        	}
 
 			}
-		
+		 */
 		  function order_add(title,url,w,h){
 		    x_admin_show(title,url,w,h);
 		  }

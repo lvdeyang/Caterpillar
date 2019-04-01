@@ -441,8 +441,7 @@ html, body {
 						param.orderid = ${param.orderid} ;
 						$.post(_util, $.toJSON(param), function(data) {    
 					});	
-					var date = (new Date()).getTime();
-			        payPublic(orderId,money,uid,date); 
+			        payPublic(orderId,money,uid); 
                   }else{
                    alert("您好你预订的车位已被购买,请您从新选择车位");
                   }
@@ -567,12 +566,11 @@ html, body {
 		var signType; 
 		var orderNo;	
 		
-		function payPublic(orderId,text,uid,date){
+		function payPublic(orderId,text,uid){
 	        console.log(uid);
 			text =  (text*100).toFixed(0);	
-			var site = "payreportpark";
 			console.log(text)
-		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+text+"/"+uid+"/"+site+"/"+date, null, function(data){
+		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+text+"/"+uid, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;

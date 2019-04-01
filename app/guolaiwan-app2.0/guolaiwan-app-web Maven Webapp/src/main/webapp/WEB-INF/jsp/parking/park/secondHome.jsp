@@ -131,15 +131,17 @@
 .banner {
 	height:50%;
 	width: 100%;
-	position: absolute;
-	bottom:-10%;
+	 position:fixed;
+	bottom:0;
 	margin:0;
 	padding:0;
 }
 
 .banner img {
     width: 100%;
-	height:100%;
+	/* height:100%;
+	padding-top:6px; */
+  
 	margin:0;
 	padding:0;
 }
@@ -194,8 +196,11 @@
 	right: 40%;
 }
 
-html,body{
+html{
 	height:100%;
+}
+body{
+height:auto;
 }
 </style>
 
@@ -364,8 +369,33 @@ html,body{
 						window.location.href = "vice/merchant/information";
 						},300);
 					}
-				}
-				;
+				};
+				
+				//进入订单界面
+				if ( data[i] == "REFUNDING") { //申请退款
+					var order = document.getElementById('img_order');
+					order.onclick = function() {
+						var Order = document.getElementById('test1');
+						Order.src = 'lib/images/dingdan.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/information";
+						},300);
+					}
+				};
+				//进入订单界面
+				if ( data[i] == "REFUNDED") { //退款完成
+					var order = document.getElementById('img_order');
+					order.onclick = function() {
+						var Order = document.getElementById('test1');
+						Order.src = 'lib/images/dingdan.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/information";
+						},300);
+					}
+				};
+				
+				
+				
 			}
 
 			//进入找车位界面
@@ -547,11 +577,11 @@ html,body{
 </script>
 
 <body>
-   <div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
+   <!-- <div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
 
-     <!-- <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="smart/merchant/parking" title="返回"> <返回首页 </a> -->
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="smart/merchant/parking" title="返回"> <返回首页 </a>
 	  <span style="color:#ffffff;line-height:40px;font-size:18px;">我的车位</span>
-	</div> 
+	</div>  -->
 	<div class='header-pic'>
 		<div id="img"></div>
 		<div class="conformity">
@@ -575,7 +605,7 @@ html,body{
 
 			</div>
 			<button class="btn"
-				style="width: 202px;height: 35px;margin: 15px auto;background-color: #02A1E9;border:none;outline:none;">
+				style="width: 202px;height: 35px;margin: 8% auto;background-color: #02A1E9;border:none;outline:none;">
 				<a href="smart/merchant/parking?sal=1">退出</a>
 			</button>
 		</div>
@@ -584,7 +614,7 @@ html,body{
 	<div class="banner">
 		<img src="lib/images/zhuanpan.png " class="img-responsive1 "
 			id="test1" alt=" ">
-		<div id="img_car" style="width:20%;height: 20%;border-radius:50%"
+		<div id="img_car" style="width:20%;height: 20%;border-radius:50%;"
 			onclick="data()"></div>
 		<!--我要找车位-->
 		<div id="img_navigation"

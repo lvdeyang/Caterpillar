@@ -178,10 +178,6 @@ html,body{
 <script type="text/javascript">
    
 	$(function() {
-	  $(".btn").click(function() {
-			window.location.href = "smart/merchant/parking?sal=1";
-			$(".btn").css("box-shadow","5px 5px 10px #8E8F8F");
-		});
 	var _uri = window.BASEPATH + 'quit/query';
 	var sal = ${param.sal}
 		$.post(_uri, null, function(data) {
@@ -221,16 +217,11 @@ html,body{
 					param.parking = $(".input1").val();
 			      $.post(_uriY, $.toJSON(param), function(data) {
 			      	data = parseAjaxResult(data);
-			    
- 			      window.location.href="quit/merchant/smartparking?car="+data.carid;
- 			});
+ 			      window.location.href="quit/merchant/smartparking";
+ 			      });
 				});
-				
 			}
-
 		});
-
-
 	});
 
 	

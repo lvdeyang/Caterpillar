@@ -17,13 +17,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.app.web.admin.vo.AdminVO;
+import com.guolaiwan.app.web.admin.vo.LogisticVO;
+import com.guolaiwan.app.web.smartParking.vo.OrderVo;
+import com.guolaiwan.bussiness.Parking.dao.OrderDao;
+import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.admin.dao.AdminDAO;
 import com.guolaiwan.bussiness.admin.dao.CityInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.RoleDAO;
+import com.guolaiwan.bussiness.admin.dto.CountGroupDTO;
 import com.guolaiwan.bussiness.admin.po.AdminPO;
 import com.guolaiwan.bussiness.admin.po.CityInfoPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
+import com.guolaiwan.bussiness.admin.po.LogisticsPo;
 import com.guolaiwan.bussiness.admin.po.RolePO;
 
 import pub.caterpillar.commons.util.binary.Sha1Util;
@@ -31,23 +37,45 @@ import pub.caterpillar.mvc.controller.BaseController;
 
 
 @Controller
-@RequestMapping("/parking")
+@RequestMapping("/parkingorder")
 public class ParkingOrderController extends BaseController {
 	
+	@Autowired
+	private OrderDao  Order;
 	
 	
 	
 	
 	
+	@ResponseBody
+	@RequestMapping(value = "/order.do", method = RequestMethod.POST)
+	public Map<String, Object> getList(HttpServletRequest request , int page, int limit, int type) throws Exception {
+		List<OrderPO> order=Order.getOrderfor(page,limit);
+		List<OrderPO>  length =Order.getOrderfor();
+		List<OrderVo> listvo = OrderVo.getConverter(OrderVo.class).convert(order, OrderVo.class);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("count",length.size());
+	    map.put("data", listvo);
+		map.put("code", "0");
+		map.put("msg", "");
+		return map;
+	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
+	/*
+	// 搜索商家和商品
+		@ResponseBody
+		@RequestMapping(value = "/countMP.do", method = RequestMethod.POST)
+		public Map<String, Object> countMP(String mName, String pName) throws Exception {
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<CountGroupDTO> _countGroups = conn_OrderInfo.countMP(mName, pName);
+			for (int i = 0; i < _countGroups.size(); i++) {
+				System.out.println(_countGroups.get(i).getName());
+			}
+			map.put("cgroups", _countGroups);
+			return map;
+		}
+	*/
 	
 	
 	
@@ -65,4 +93,7 @@ public class ParkingOrderController extends BaseController {
 		}
 	
 }
+
+
+
 

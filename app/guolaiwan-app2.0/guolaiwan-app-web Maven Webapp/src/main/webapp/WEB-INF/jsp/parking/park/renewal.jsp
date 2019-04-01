@@ -194,6 +194,7 @@ html, body {
 	     $.post(parking,$.toJSON(objt), function(data) {  
 	    	 data = parseAjaxResult(data);
 	    	 time = data.leng;
+	    	 attid = uid;
 	    	 var date = (new Date()).getTime(); 
 		     payPublic(orderId,meony,uid,date);
 	
@@ -260,10 +261,8 @@ html, body {
    
    
     $(document).on('change', '#sect', function() {
-         
          var x = document.getElementById("sele");
-              x.selectedIndex = 0;
-    
+         x.selectedIndex = 0;
          var _util = window.BASEPATH + 'vice/vehiclename';
          var objt = {};
 		 objt.tion =   $(this).val();
@@ -294,9 +293,9 @@ html, body {
 		    param.District = data.parkingDistrict;
 		    
 	    $.post(_uti, $.toJSON(param), function(data) {  
-		      	data = parseAjaxResult(data);
-		        var objt = document.getElementById("spa");
-	            objt.innerText= data.cost; 
+	      	data = parseAjaxResult(data);
+	        var objt = document.getElementById("spa");
+            objt.innerText= data.cost; 
 		  });	 
 		  
 		  
@@ -332,6 +331,7 @@ html, body {
   		
   		var orderId=0;  //订单 用户id
   		var time;
+  		var attid;
 		var meony;  // 
 		var prepay_id;
 		var paySign; 
@@ -344,8 +344,7 @@ html, body {
 		
 		function payPublic(orderId,meony,uid,date){
 		    meony =  meony*100;	
-	        var site = "payreportrenew";		
-		$.get(window.BASEPATH +"pubnum/prev/paypark/"+orderId+"/"+meony+"/"+uid+"/"+site+"/"+date, null, function(data){
+		$.get(window.BASEPATH +"pubnum/prev/payrenewal/"+orderId+"/"+meony+"/"+uid+"/"+date, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;
@@ -380,7 +379,7 @@ html, body {
 						}
 						para.sele = $("#sele").val();
 						para.money = window.money;
-						para.id = window.id;
+						para.attid = time;
 						$.post(_ut, $.toJSON(para), function(data) {
 							data = parseAjaxResult(data);
 							alert("续费成功");

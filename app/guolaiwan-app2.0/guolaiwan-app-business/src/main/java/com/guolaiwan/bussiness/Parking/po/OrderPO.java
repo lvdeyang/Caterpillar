@@ -23,9 +23,9 @@ public class OrderPO extends AbstractBasePO {
 	private String parkingLayer;
 	//停车场 名称
 	private String parkingName;
-	//订单 二维码编号
+	//停车场营业时间
 	private String Time;
-	// 停车 区
+	// 停车区
 	private String  parkingDistrict;
 	//车位编号
 	private int parkingNumber;
@@ -47,8 +47,10 @@ public class OrderPO extends AbstractBasePO {
 	private double overTimeMoney;
 	//超时时间
 	private double overTime;
-	//微信  预订 
+	//支付订单号
 	private String orderNo;
+	//商品订单号
+	private String commodityNumber;
 
 	// 二维码路径
 	private String path;
@@ -58,6 +60,14 @@ public class OrderPO extends AbstractBasePO {
 	
 	
 	
+
+	public String getCommodityNumber() {
+		return commodityNumber;
+	}
+
+	public void setCommodityNumber(String commodityNumber) {
+		this.commodityNumber = commodityNumber;
+	}
 
 	public String getOrderNo() {
 		return orderNo;
