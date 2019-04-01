@@ -1503,7 +1503,7 @@ public class PhoneController extends WebBaseControll {
 			}
 		}
 
-		Date date = DateUtil.parse(bDate, "yyyy-MM-dd HH:mm");
+		Date date = new Date();
 		Date beginDate = activityPro.getBeginDate();
 		Date endDate = activityPro.getEndDate();
 		Date beginTime = activityPro.getBeginTime();
