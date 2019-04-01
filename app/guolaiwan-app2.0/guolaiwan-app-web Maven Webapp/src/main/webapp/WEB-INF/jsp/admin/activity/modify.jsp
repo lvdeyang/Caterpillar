@@ -113,7 +113,7 @@
                 
                 <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
-                                                            单日一个
+                                                            单日限购
                     </label>
                     <div class="layui-input-block">
                     <input type="text" id="onePerDay" name="onePerDay" required lay-verify="required"

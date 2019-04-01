@@ -560,14 +560,14 @@ html, body {
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
 				$('#addressphone1').html('<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopTel);
 			    $('#addressphone1').data('phone',data.merchant.shopTel);
-			    $('#bookDate').val(data.today);
+			    
 			    generateComment(data.comments , data.userimgs , data.useridlist)
 			    iscollect=data.product.ifcollection;
 			    qq=data.product.ifcollection;
 			    ifFace=data.product.ifFace;
 			    bookStart=data.activityPro.bookBeginTime;
 			    bookEnd=data.activityPro.bookEndTime;
-
+                $('#bookDate').val(bookStart);
 			    $("#bookDate").datetimePicker({
 			        min:bookStart,
 				    max:bookEnd,
