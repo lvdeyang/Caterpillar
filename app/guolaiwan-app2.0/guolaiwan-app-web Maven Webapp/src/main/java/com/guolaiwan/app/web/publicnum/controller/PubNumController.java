@@ -1453,7 +1453,7 @@ public class PubNumController extends WebBaseControll {
         ActivityRelPO actproductPO = conn_activityRel.get(actProId);
         HttpSession session = request.getSession();
         List<UserOneDayBuyPO> userOneDayBuyPOs=conn_userone.findTodayBuy(Long.parseLong(session.getAttribute("userId").toString()), actProId);
-    	if(count>0&&actproductPO.getOnePerDay()==1&&userOneDayBuyPOs!=null&&!userOneDayBuyPOs.isEmpty()){
+    	if(count>0&&actproductPO.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&(actproductPO.getOnePerDay()-count)<userOneDayBuyPOs.size()){
     		ret.put("stock", 0);
     	}else{
     		ret.put("stock", 1);
@@ -1489,7 +1489,7 @@ public class PubNumController extends WebBaseControll {
         	ActivityRelPO actproductPO = conn_activityRel.get(orderInfoPO.getActivityId());
         	HttpSession session = request.getSession();
         	List<UserOneDayBuyPO> userOneDayBuyPOs=conn_userone.findTodayBuy(Long.parseLong(session.getAttribute("userId").toString()), actproductPO.getId());
-        	if(count>0&&actproductPO.getOnePerDay()==1&&userOneDayBuyPOs!=null&&!userOneDayBuyPOs.isEmpty()){
+        	if(count>0&&actproductPO.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&(actproductPO.getOnePerDay()-count)<userOneDayBuyPOs.size()){
         		ret.put("stock", -1);
         	}
         	else if(count>0){

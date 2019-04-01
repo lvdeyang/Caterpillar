@@ -1358,7 +1358,7 @@ public class PhoneController extends WebBaseControll {
 				_product.setIfcollection(1);
 			}
 			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),new Date());
-			if (activityPro.getOnePerDay() == 1 && userOneDayBuyPOs != null && !userOneDayBuyPOs.isEmpty()) {
+			if (activityPro.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&activityPro.getOnePerDay()<=userOneDayBuyPOs.size()) {
 				dataMap.put("isXianGou", 1);
 			}
 
@@ -1479,7 +1479,7 @@ public class PhoneController extends WebBaseControll {
 				_product.setIfcollection(1);
 			}
 			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),DateUtil.parse(bDate, "yyyy-MM-dd HH:mm"));
-			if (activityPro.getOnePerDay() == 1 && userOneDayBuyPOs != null && !userOneDayBuyPOs.isEmpty()) {
+			if (activityPro.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&activityPro.getOnePerDay()<=userOneDayBuyPOs.size()) {
 				dataMap.put("isXianGou", 1);
 			}
 
