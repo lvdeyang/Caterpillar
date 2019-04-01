@@ -275,7 +275,7 @@ public class PubNumController extends WebBaseControll {
 		switch (classify) {
 		case "ACTIVITY":
 			mv = new ModelAndView("mobile/pubnum/activity");
-			mv.addObject("refActivityId", code);
+			mv.addObject("refActivityId", 0);
 			break;
 		case "MERCHANT":
 			mv = new ModelAndView("mobile/pubnum/merchant");
