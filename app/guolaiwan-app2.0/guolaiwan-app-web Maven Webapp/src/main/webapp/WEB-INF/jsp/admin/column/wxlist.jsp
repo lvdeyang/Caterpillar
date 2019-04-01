@@ -67,8 +67,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               table = layui.table;
               //以上模块根据需要引入
               
+               setTimeout(function(){
                
-              getMerchantList();
+                  getMerchantList();
+               },100);
+              
 
 			  
 			  //检索table表重新加载
