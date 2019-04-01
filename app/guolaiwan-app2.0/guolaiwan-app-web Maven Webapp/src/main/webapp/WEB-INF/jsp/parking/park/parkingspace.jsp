@@ -297,7 +297,7 @@ html {
 				src="lib/images/sousuo.png " />
 			<!--要模糊匹配的文本框-->
 			<input type="text" id="txt1" placeholder="&nbsp输入停车场关键词">
-			<button class="btn" style="width:20%;height:34px;">搜索</button>
+			<button class="btn" style="width:20%;height:34px;border:none;outline:none;">搜索</button>
 			<!--模糊匹配窗口-->
 			<div id="div_items"></div>
 		</div>

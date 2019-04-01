@@ -800,7 +800,6 @@ public class SceneryListController  extends WebBaseControll{
 		List<String> relaIds = new ArrayList<String>();
 		relaIds.add("PAYSUCCESS");
 		relaIds.add("PARKING");
-		relaIds.add(" ");
 		List<OrderPO> userByid = Order.getOrderform(userId,uid,relaIds,vehicle);
 		for (OrderPO order : userByid) {
 			order.setRefund(refund);
@@ -836,9 +835,14 @@ public class SceneryListController  extends WebBaseControll{
 		for (VehiclePO vehiclePO : userBy) {
 			vehicle =  vehiclePO.getNumber();
 		}
-		OrderPO userByid = Order.getform(userId,attid,vehicle);
-		dataMap.put("img", conn_sysConfig.getSysConfig().getWebUrl()+userByid.getPath());
-		dataMap.put("number", userByid.getId());
+		List<String> relaIds = new ArrayList<String>();
+		relaIds.add("PAYSUCCESS");
+		relaIds.add("PARKING");
+		List<OrderPO> userByid = Order.getOrderform(userId,attid,relaIds,vehicle);
+		for (OrderPO orderPO : userByid) {
+			dataMap.put("img", conn_sysConfig.getSysConfig().getWebUrl()+orderPO.getPath());
+			dataMap.put("number", orderPO.getId());
+		}
 		return success(dataMap);
 	}
 
