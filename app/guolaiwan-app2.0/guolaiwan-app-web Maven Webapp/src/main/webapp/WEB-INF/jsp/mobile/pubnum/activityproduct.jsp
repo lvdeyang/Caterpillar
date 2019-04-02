@@ -1488,7 +1488,7 @@ html, body {
 				style="display:none;width:95%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">购买设置</div>
 			<div id="bookdiv" style="font-size:12px;float:left;width:100%;overflow-x:scroll">
 			  <div class="weui-cell" >
-			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">预定日期</label></div>
+			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">使用日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
 			       <input id="bookDate" class="weui-input mydate" type="text" placeholder="请选择"> 
 			    </div>
