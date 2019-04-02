@@ -629,7 +629,8 @@ html, body {
 		
 		function refreshActivity(){
 		   
-			var _urirefresh = window.BASEPATH + 'phoneApp/refreshActivity?productId=${id}&userId=${userId}&bDate='+$('#bookDate').val();
+			var _urirefresh = window.BASEPATH + 'phoneApp/refreshActivity?productId=${id}&userId=${userId}&bDate='
+			+$('#bookDate').val()+'&count='+$('#proCount').val();
 		
 			$.get(_urirefresh, null, function(data){
 				$('#proDate').children().remove();
@@ -900,6 +901,7 @@ html, body {
 		  	$('#total').html(pri);
 		  }
 		  initpeopleList();
+		  refreshActivity();
 		});
 		$('.weui-count__increase').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
@@ -913,6 +915,7 @@ html, body {
 		  	$('#total').html(pri);
 		  }
 		  initpeopleList();
+		  refreshActivity();
 		});
 		
 		function checkBookDate(){

@@ -1454,7 +1454,7 @@ public class PhoneController extends WebBaseControll {
 	
 	@ResponseBody
 	@RequestMapping(value = "/refreshActivity", method = RequestMethod.GET)
-	public Map<String, Object> refreshActivity(HttpServletRequest request, HttpServletResponse response, long productId,String bDate)
+	public Map<String, Object> refreshActivity(HttpServletRequest request, HttpServletResponse response, long productId,String bDate,int count)
 			throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		ProductPO product = conn_product.get(productId);
@@ -1479,7 +1479,7 @@ public class PhoneController extends WebBaseControll {
 				_product.setIfcollection(1);
 			}
 			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),DateUtil.parse(bDate, "yyyy-MM-dd HH:mm"));
-			if (activityPro.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&activityPro.getOnePerDay()<=userOneDayBuyPOs.size()) {
+			if (activityPro.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&activityPro.getOnePerDay()<(userOneDayBuyPOs.size()+count)) {
 				dataMap.put("isXianGou", 1);
 			}
 
