@@ -1,4 +1,4 @@
-package pub.caterpillar.weixin.wxpay;
+package com.guolaiwan.app.letv;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -28,7 +28,7 @@ public class TestLeTV {
 		reqData.put("format", "json");
 		reqData.put("ver", "2.0");
 		reqData.put("timestamp", Long.toString(new Date().getTime()));
-		reqData.put("video_id","49369038");
+		reqData.put("video_id","49389132");
 		Set<String> keySet = reqData.keySet();
 		String[] keyArray = keySet.toArray(new String[keySet.size()]);
 		Arrays.sort(keyArray);
@@ -83,7 +83,7 @@ public class TestLeTV {
         for (byte item : array) {
             sb.append(Integer.toHexString((item & 0xFF) | 0x100).substring(1, 3));
         }
-        return sb.toString().toUpperCase();
+        return sb.toString().toLowerCase();
     }
 	
 	
