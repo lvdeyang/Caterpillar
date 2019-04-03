@@ -325,7 +325,7 @@ html, body {
 
 .footer_on {
 	position: fixed;
-	top: 93%;
+	top: 90%;
 	/*  z-index: -1;*/
 }
 </style>
@@ -507,7 +507,7 @@ html, body {
 		 $.post(_util, $.toJSON(param), function(data) {
 			data = parseAjaxResult(data);
 		   var html = [];
-		   	html.push('<span  style="color:#E80003;"><span id="qian">'+data.cost+'</span>元/小时 ></span>'); 
+		   	html.push('<span  style="color:#E80003;"><span id="qian">'+data.cost+'</span>元/小时 </span>'); 
 			$('#nkname').append(html.join(''));
 		});	
 	});
@@ -605,7 +605,7 @@ html, body {
 		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
 		                alert(res.err_desc); 
                      window.location.href = "vice/merchant/parking";
-                       
+                      
 		            }  
 		        }
 		      }
@@ -638,8 +638,8 @@ html, body {
 	<div>
 		<div class="header_in" style="margin:20px 30px;">
 			<p>
-				<span style="float:right;font-size:0.5rem;margin-top:2%;">车场详情
-					></span>
+				<!-- <span style="float:right;font-size:0.5rem;margin-top:2%;">车场详情
+					></span> -->
 			</p>
 		</div>
 		<div class="header_a">

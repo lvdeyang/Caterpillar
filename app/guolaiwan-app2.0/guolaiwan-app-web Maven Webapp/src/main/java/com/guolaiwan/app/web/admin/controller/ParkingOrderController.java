@@ -46,7 +46,7 @@ public class ParkingOrderController extends BaseController {
 	
 	
 	
-	
+	// 查询全部 订单     
 	@ResponseBody
 	@RequestMapping(value = "/order.do", method = RequestMethod.POST)
 	public Map<String, Object> getList(HttpServletRequest request , int page, int limit, int type) throws Exception {
@@ -62,20 +62,24 @@ public class ParkingOrderController extends BaseController {
 	}
 	
 	
-	/*
+	
 	// 搜索商家和商品
 		@ResponseBody
-		@RequestMapping(value = "/countMP.do", method = RequestMethod.POST)
-		public Map<String, Object> countMP(String mName, String pName) throws Exception {
+		@RequestMapping(value = "/switchover.do", method = RequestMethod.POST)
+		public Map<String, Object> switchoverSele(int page, int limit,String type) throws Exception {
 			Map<String, Object> map = new HashMap<String, Object>();
-			List<CountGroupDTO> _countGroups = conn_OrderInfo.countMP(mName, pName);
-			for (int i = 0; i < _countGroups.size(); i++) {
-				System.out.println(_countGroups.get(i).getName());
-			}
-			map.put("cgroups", _countGroups);
+			System.out.println("type: "+type);
+			String  status = ( "0".equals(type))?"PAYSUCCESS":( "1".equals(type))?"PARKING":( "2".equals(type))?"PAST":( "3".equals(type))?"REFUNDING":( "4".equals(type))?"REFUNDED":"REFUNDFAIL";
+			List<OrderPO>  length =Order.getOrderfor(status);
+			List<OrderPO>  order =Order.getOrderfor(status,page,limit);
+			List<OrderVo> listvo = OrderVo.getConverter(OrderVo.class).convert(order, OrderVo.class);
+			map.put("count",length.size());
+		    map.put("data", listvo);
+			map.put("code", "0");
+			map.put("msg", "");
 			return map;
 		}
-	*/
+	
 	
 	
 	

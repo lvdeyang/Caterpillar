@@ -38,10 +38,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			<button class="layui-btn"  onclick="order_add('出票','addv','900','600')">出票</button>
 	    </div>	  -->  	 
         <div class="layui-inline">
-        	订单Id：
-  			<div class="layui-inline">
-    			<input class="layui-input" name="orderId" id="orderId" autocomplete="off">
-  			</div>
         	订单号：
   			<div class="layui-inline">
     			<input class="layui-input" name="orderNO" id="orderNO" autocomplete="off">
@@ -104,14 +100,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               
 			 //切换tab
               element.on('tab(demo)', function(data){
-              alert(data.index);
     				i = data.index;
     				active["reload"].call(this);
   			  });
   			  
               //详情
            /*    table.on('tool(orderList)', function(obj){
-    				console.log(1);
+    				console.log(1); 
     				var data = obj.data;
     				if(obj.event === 'getOrderInfo'){
       					open_order(data);
@@ -129,7 +124,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	mName: mName,
                     	pmenus:pmenus,
                     	type:i
-                	}
+                	},
+                	  url:'switchover.do'
             	});
         	  }
     		};
@@ -149,8 +145,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     ,limit: 10
                     ,cols: [[
                         {type:'checkbox'}  
-                         ,{field: 'id',title: 'Id',align:'center',width:60}  
-                         ,{field: 'orderId',title: '用户Id',align:'center',width:60}  
+                        ,{field: 'id',title: 'Id',align:'center',width:60}  
+                        ,{field: 'orderId',title: '用户Id',align:'center',width:60}  
                         ,{field: 'attractionsId', title: '景区Id',width:70} 
       					,{field: 'parkingLayer', title: '层',width:50}
    						,{field: 'parkingName', title: '停车场名称' ,width:100}  
@@ -252,20 +248,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			} */
 			
-			/* function selectPName(obj){
-			alert("1111111111111111111111111111");
-				$.ajax({
+			 function selectPName(obj){ // 模糊查询
+			$.ajax({
 					type:"post"
 					,url:"countMP.do"
 					,data:{"pName":$("#pName").val(),"mName":$("#mName").val()}
 					,success:function(msg){
 						$(".layui-badge").css("display","none");
-  							
 						console.log(msg.cgroups);
 						var ocount=0;
 						if(msg.cgroups!=null){
 						msg.cgroups.forEach(function(val,index,arr){
-  							
   							$("#"+val.name+"badge").text(val.count);
   							$("#"+val.name+"badge").css("display","inline-block");
 							$(".layui-tab-title").children("li").removeClass("layui-this");
@@ -281,10 +274,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}
 						layer.msg("共有"+ocount+"条订单！");
 					}
-				
 				})
 			}
-			 */
+			
 		/* 	function fenyefind(obj){  // 查询
 			
 			alert("#$%^&*()")

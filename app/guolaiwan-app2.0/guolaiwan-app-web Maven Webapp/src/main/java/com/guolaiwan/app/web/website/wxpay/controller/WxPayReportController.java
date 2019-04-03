@@ -469,9 +469,9 @@ public class WxPayReportController extends WebBaseControll {
 				odp.setPlatenumber(plate);
 				odp.setOrderNo(tradeNum);
 				odp.setCommodityNumber(transaction);
-				String ydNO = ydNoCode(odp.getId()+"");
+				String ydNO = ydNoCode(tradeNum);
 				odp.setPath(ydNO);
-				Order.save(odp);
+				Order.saveOrUpdate(odp);
 				
 				
 				stringBuffer.append("<xml><return_code><![CDATA[");

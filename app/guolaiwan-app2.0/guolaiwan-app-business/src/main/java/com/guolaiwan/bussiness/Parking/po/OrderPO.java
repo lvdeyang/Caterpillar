@@ -37,7 +37,7 @@ public class OrderPO extends AbstractBasePO {
 	private String bookingTime;
 	//到期时间
 	private String dueTime;
-	//订单状态         //  NOTPAY 未支付        PAYSUCCESS 已支付           PARKING 正在停车         PAST已过期     REFUNDING 申请退款             REFUNDED 退款完成
+	//订单状态         //  NOTPAY 未支付        PAYSUCCESS 已支付           PARKING 正在停车         PAST已过期     REFUNDING 申请退款             REFUNDED 退款完成     REFUNDFAIL 退款失败
 	private String orderStatus;
 	//退款理由         
 	private String refund;

@@ -475,12 +475,14 @@ public class PubNumController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/prev/paypark/{id}/{text}/{attactionsId}")
 	public Object prevPaypark(@PathVariable String id, @PathVariable Integer text, @PathVariable Integer attactionsId, HttpServletRequest request) throws Exception {
-
+        System.out.println("-------------------------------------------------------------------------------"+"支付");
         String orderNo = "park-"+id+"-"+attactionsId/*+"-"ID+"-"景ID*/;
         OrderPO orde  =  Order.getform(Long.parseLong(id));
         orde.setOrderNo(orderNo);
     	Order.saveOrUpdate(orde);
 		int payMoney = text;
+		System.out.println("-----------------------------------------------------------------------------"+payMoney);
+    	/*int payMoney = 1;*/
 		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
 		//payMoney+=orderInfoPO.getPayMoney();
 		// String aLong = request.getParameter("text");
@@ -503,7 +505,8 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/prev/payrenewal/{id}/{money}/{attactionsId}/{date}")
 	public Object prevRtrenew(@PathVariable String id, @PathVariable Integer money, @PathVariable Integer attactionsId,@PathVariable String date, HttpServletRequest request) throws Exception {
 		String orderNo = "rene-"+id+"-"+attactionsId+"-"+date/*+"-"ID+"-"景ID*/;
-		int payMoney = money;
+		/* int payMoney = money; */
+		int payMoney = 1;
 		//OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(id));
 		//payMoney+=orderInfoPO.getPayMoney();
 		// String aLong = request.getParameter("text");
@@ -1420,6 +1423,7 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 	@RequestMapping(value = "/product/index/merchant/renewall") ///////////////////////////////////////////
+	//TODO
 	public ModelAndView productRenewal( HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("parking/park/renewal");
