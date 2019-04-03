@@ -233,9 +233,9 @@ public class GateWayController extends WebBaseControll{
 		public String index(HttpServletRequest request,String path) throws Exception {
 			double d = Math.random();//生成一个0~1的随机数
 	        if(d<=0.5){
-	        	return "redirect:http://192.165.56.93:6690/";
+	        	return "redirect:http://192.165.56.93:6690/"+path;
 	        }else{
-	        	return "redirect:http://192.165.56.94:6690/";
+	        	return "redirect:http://192.165.56.94:6690/"+path;
 	        }
 		    
 		}
