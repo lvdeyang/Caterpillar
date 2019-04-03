@@ -498,7 +498,7 @@ html, body {
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-
+<script type="text/javascript" src="lib/laydate/laydate.js" charset="utf-8"></script>
 <script type="text/javascript">
 
 	$(function() {
@@ -568,7 +568,7 @@ html, body {
 			    bookStart=data.activityPro.bookBeginTime;
 			    bookEnd=data.activityPro.bookEndTime;
                 $('#bookDate').val(bookStart);
-			    $("#bookDate").datetimePicker({
+			    /*$("#bookDate").datetimePicker({
 			        min:bookStart,
 				    max:bookEnd,
 				    onClose:function(){
@@ -576,7 +576,23 @@ html, body {
 				    }
 				    
 				  
+				 });*/
+				 laydate.skin('molv');//切换皮肤，请查看skins下面皮肤库
+				 $('#bookDate').on('click',function(){
+				    laydate({
+					    elem: '#bookDate',
+					    istime: true, 
+					    min:bookStart,
+				        max:bookEnd,
+					    format: 'YYYY-MM-DD hh:mm',
+					    festival: true, //显示节日
+					    choose: function(datas){ //选择日期完毕的回调
+					        refreshActivity();
+					    }
+					});
+				 
 				 });
+				 
 			    
 			    
 			    if(iscollect==1){
@@ -629,7 +645,8 @@ html, body {
 		
 		function refreshActivity(){
 		   
-			var _urirefresh = window.BASEPATH + 'phoneApp/refreshActivity?productId=${id}&userId=${userId}&bDate='+$('#bookDate').val();
+			var _urirefresh = window.BASEPATH + 'phoneApp/refreshActivity?productId=${id}&userId=${userId}&bDate='
+			+$('#bookDate').val()+'&count='+$('#proCount').val();
 		
 			$.get(_urirefresh, null, function(data){
 				$('#proDate').children().remove();
@@ -900,6 +917,7 @@ html, body {
 		  	$('#total').html(pri);
 		  }
 		  initpeopleList();
+		  refreshActivity();
 		});
 		$('.weui-count__increase').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
@@ -913,6 +931,7 @@ html, body {
 		  	$('#total').html(pri);
 		  }
 		  initpeopleList();
+		  refreshActivity();
 		});
 		
 		function checkBookDate(){
@@ -1485,9 +1504,9 @@ html, body {
 				style="display:none;width:95%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">购买设置</div>
 			<div id="bookdiv" style="font-size:12px;float:left;width:100%;overflow-x:scroll">
 			  <div class="weui-cell" >
-			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">预定日期</label></div>
+			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">使用日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			       <input id="bookDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			       <input id="bookDate" class="weui-input mydate" readonly="readonly" type="text" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>

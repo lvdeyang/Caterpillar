@@ -1454,7 +1454,7 @@ public class PhoneController extends WebBaseControll {
 	
 	@ResponseBody
 	@RequestMapping(value = "/refreshActivity", method = RequestMethod.GET)
-	public Map<String, Object> refreshActivity(HttpServletRequest request, HttpServletResponse response, long productId,String bDate)
+	public Map<String, Object> refreshActivity(HttpServletRequest request, HttpServletResponse response, long productId,String bDate,int count)
 			throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		ProductPO product = conn_product.get(productId);
@@ -1479,7 +1479,7 @@ public class PhoneController extends WebBaseControll {
 				_product.setIfcollection(1);
 			}
 			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),DateUtil.parse(bDate, "yyyy-MM-dd HH:mm"));
-			if (activityPro.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&activityPro.getOnePerDay()<=userOneDayBuyPOs.size()) {
+			if (activityPro.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&activityPro.getOnePerDay()<(userOneDayBuyPOs.size()+count)) {
 				dataMap.put("isXianGou", 1);
 			}
 
@@ -1503,7 +1503,7 @@ public class PhoneController extends WebBaseControll {
 			}
 		}
 
-		Date date = DateUtil.parse(bDate, "yyyy-MM-dd HH:mm");
+		Date date = new Date();
 		Date beginDate = activityPro.getBeginDate();
 		Date endDate = activityPro.getEndDate();
 		Date beginTime = activityPro.getBeginTime();
@@ -3345,14 +3345,17 @@ public class PhoneController extends WebBaseControll {
 				}
 			}
             if(orderInfoPO.getOrderBookDate()!=null&&orderInfoPO.getProductId()!=0){
+            	MerchantPO merchantPO=conn_merchant.get(orderInfoPO.getShopId());
+            	if(merchantPO.getModularCode().equals("0001")){
+            		String today=DateUtil.format(new Date(),"yyyy-MM-dd");
+        			Date sDate=DateUtil.parse(today+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+        			Date eDate=DateUtil.parse(today+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+        			if(sDate.after(orderInfoPO.getOrderBookDate())||eDate.before(orderInfoPO.getOrderBookDate())){
+        				String message = "这条订单日期不是今天！";
+    					return FORBIDDEN(message);
+        			}
+            	}
             	
-            	String today=DateUtil.format(new Date(),"yyyy-MM-dd");
-    			Date sDate=DateUtil.parse(today+" 00:00:00","yyyy-MM-dd HH:mm:ss");
-    			Date eDate=DateUtil.parse(today+" 23:59:59","yyyy-MM-dd HH:mm:ss");
-    			if(sDate.after(orderInfoPO.getOrderBookDate())||eDate.before(orderInfoPO.getOrderBookDate())){
-    				String message = "这条订单日期不是今天！";
-					return FORBIDDEN(message);
-    			}
             	
             }
 			
