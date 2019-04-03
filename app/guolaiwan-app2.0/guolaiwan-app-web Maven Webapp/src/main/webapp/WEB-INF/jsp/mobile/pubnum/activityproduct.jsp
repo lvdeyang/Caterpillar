@@ -498,7 +498,7 @@ html, body {
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-
+<script type="text/javascript" src="lib/laydate/laydate.js" charset="utf-8"></script>
 <script type="text/javascript">
 
 	$(function() {
@@ -568,7 +568,7 @@ html, body {
 			    bookStart=data.activityPro.bookBeginTime;
 			    bookEnd=data.activityPro.bookEndTime;
                 $('#bookDate').val(bookStart);
-			    $("#bookDate").datetimePicker({
+			    /*$("#bookDate").datetimePicker({
 			        min:bookStart,
 				    max:bookEnd,
 				    onClose:function(){
@@ -576,7 +576,23 @@ html, body {
 				    }
 				    
 				  
+				 });*/
+				 laydate.skin('molv');//切换皮肤，请查看skins下面皮肤库
+				 $('#bookDate').on('click',function(){
+				    laydate({
+					    elem: '#bookDate',
+					    istime: true, 
+					    min:bookStart,
+				        max:bookEnd,
+					    format: 'YYYY-MM-DD hh:mm',
+					    festival: true, //显示节日
+					    choose: function(datas){ //选择日期完毕的回调
+					        refreshActivity();
+					    }
+					});
+				 
 				 });
+				 
 			    
 			    
 			    if(iscollect==1){
@@ -1490,7 +1506,7 @@ html, body {
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">使用日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			       <input id="bookDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			       <input id="bookDate" class="weui-input mydate" readonly="readonly" type="text" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
