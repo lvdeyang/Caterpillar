@@ -511,6 +511,10 @@ html, body {
 			if(data && data.length>0){
 			   
 				for(var i=0; i<data.length; i++){
+				    var countStyle='';
+				    if(data[i].activityId==0){
+				       countStyle='display:none';
+				    }
 				    html.push('<div class="orderAll" style="width:100%;height:200px;border-bottom:1px solid #CCC" id="or-'+data[i].id+'">');
 				    html.push('   <div style="width:50px;float:left" class="weui-cells weui-cells_checkbox">');
 				    html.push('     <label class="weui-cell weui-check__label" for="s12-'+data[i].id+'" style="background-color:#fbfbfb;">');
@@ -555,9 +559,9 @@ html, body {
 						html.push('</p>');
 					}
 					html.push(' <div class="weui-count" style="font-size:12px;margin-top:15px;float:right;margin-right:10px;">');
-		            html.push('     <a style="" class="weui-count__btn weui-count__decrease" id="de-'+data[i].id+'"></a>');
+		            html.push('     <a style="'+countStyle+'" class="weui-count__btn weui-count__decrease" id="de-'+data[i].id+'"></a>');
 		            html.push('     <input  data="'+data[i].productPrice+'" class="weui-count__number" disabled="disabled" id="s13-'+data[i].id+'" type="number" value="'+data[i].productNum+'">');
-		            html.push('     <a style="" class="weui-count__btn weui-count__increase" id="in-'+data[i].id+'"></a>');
+		            html.push('     <a style="'+countStyle+'" class="weui-count__btn weui-count__increase" id="in-'+data[i].id+'"></a>');
 		            html.push('   </div>');
 					html.push('<a href="javascript:;" class="icon-trash delOrder" id="del-'+data[i].id+'" style="margin-left:25px;float:left;font-size:12px;margin-top:17px;width:60px;line-height:20px;height:20px">&nbsp;&nbsp;删除</a>');
 			    	html.push('</div>');
