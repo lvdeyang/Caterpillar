@@ -633,7 +633,12 @@ public class WxPayReportController extends WebBaseControll {
     	
     	
     	JSONObject nameObj=new JSONObject();
-    	nameObj.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
+    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+    		nameObj.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
+    	}else{
+    		nameObj.put("value",conn_user.get(orderInfoPO.getId()).getUserNickname());
+    	}
+    	
     	nameObj.put("color", "");
     	dataObject.put("keyword1", nameObj);
 
@@ -687,7 +692,11 @@ public class WxPayReportController extends WebBaseControll {
     	
     	
     	JSONObject nameObj2=new JSONObject();
-    	nameObj2.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
+    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+    		nameObj2.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
+    	}else{
+    		nameObj2.put("value",conn_user.get(orderInfoPO.getId()).getUserNickname());
+    	}
     	nameObj2.put("color", "");
     	dataObject2.put("keyword1", nameObj2);
 
