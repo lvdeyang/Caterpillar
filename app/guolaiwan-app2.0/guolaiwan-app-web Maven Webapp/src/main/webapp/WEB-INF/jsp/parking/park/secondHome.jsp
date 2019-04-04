@@ -81,21 +81,21 @@
 }
 
 .header-pic {
-	height: 80px;
+	
 	width: 100%;
 	text-align: center;
-	line-height: 10px;
+
 }
 
 .header-pic img {
 	width: 75px;
 	height: 75px;
 	border-radius: 50%;
-	margin: 30px 0px 10px;
+	margin: 3% auto;
 }
 
 .conformity {
-	height: 50px;
+	height: 40px;
 	margin: 0 auto;
 	
 }
@@ -115,14 +115,11 @@
 .phone {
 	/* float: right; */
 	
-	line-height: 50px;
+	line-height: 40px;
 	text-align: center;
-	
+	s
 }
 
-.main {
-	height: 100px;
-}
 
 .main input {
 	border: 1px solid #CDCDCD;
@@ -138,6 +135,7 @@
 }
 
 .banner img {
+    height:100%;
     width: 100%;
 	/* height:100%;
 	padding-top:6px; */
@@ -604,11 +602,12 @@ height:auto;
 
 
 			</div>
-			<button class="btn"
+			
+		</div>
+		<button class="btn"
 				style="width: 202px;height: 35px;margin: 8% auto;background-color: #02A1E9;border:none;outline:none;">
 				<a href="smart/merchant/parking?sal=1">退出</a>
 			</button>
-		</div>
 	</div>
 
 	<div class="banner">

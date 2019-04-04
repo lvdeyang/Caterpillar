@@ -83,18 +83,18 @@
 	height: 80px;
 	width: 100%;
 	text-align: center;
-	line-height: 10px;
+	
 }
 
 .header-pic img {
 	width: 75px;
 	height: 75px;
 	border-radius: 50%;
-	margin: 30px 0px 10px;
+	margin: 3% auto;
 }
 
 .conformity {
-	height: 50px;
+	height: 40px;
 	margin: 0 auto;
 	
 }
@@ -109,15 +109,12 @@
 .phone {
 	/* float: right; */
 	
-	line-height: 50px;
+	line-height: 40px;
 	text-align: center;
 	
 	
 }
 
-.main {
-	height: 100px;
-	}
 
 .main select {
 	font-weight: bold;
@@ -218,6 +215,7 @@ html,body{
 			      $.post(_uriY, $.toJSON(param), function(data) {
 			      	data = parseAjaxResult(data);
  			      window.location.href="quit/merchant/smartparking";
+ 			      	$(".btn").css("box-shadow","5px 5px 10px #8E8F8F");
  			      });
 				});
 			}
@@ -257,7 +255,7 @@ html,body{
                   </select>
                    
 				</div>
-				 <button class="btn"style="width: 202px;height: 35px;margin: 15px auto;background-color: #02A1E9";>保存
+				 <button class="btn"style="width: 202px;height: 35px;margin: 8% auto;background-color: #02A1E9";>保存
 					</button>
 			</div>
 		</div>

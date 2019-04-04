@@ -153,6 +153,11 @@
 	width: 8%;
 	height: 15%;
 }
+#btn{
+position: fixed;
+top:90%;
+}
+
 
 html, body {
 	height: 100%;
@@ -375,7 +380,7 @@ html, body {
  	 
  	 
  	 
- 	 $(document).on('click', '.but', function() {
+ 	 $(document).on('click', '.btn', function() {
  	if(stall != null){
  	    var _ur = window.BASEPATH + 'vice/save';
  		var param = {};
@@ -388,6 +393,7 @@ html, body {
 		 $.post(_ur, $.toJSON(param), function(data) {
 		 data = parseAjaxResult(data);
 		      window.location.href=window.BASEPATH +"pubnum/product/index/merchant/payment?uid="+${param.useid}+"&orderid="+data.uid;
+		      	$(".btn").css("box-shadow","5px 5px 10px #8E8F8F");
 		 });
 	} else{
 	alert("请选择车位!");
@@ -452,8 +458,9 @@ html, body {
 		<div class="footer_in" style="margin: 20px auto;"></div>
 
 	</div>
-	<div class="btn" style="margin: 0 auto;text-align: center;">
-		<button class="but"
+	<div style="width:100%;height:50px;"></div>
+	<div id="btn" style="margin: 0 auto;text-align: center;width:100%;">
+		<button class="btn"
 			style="background-color: #F39801;color: white;width: 80%;height: 50px;border-radius: 5px;border: none;outline: none;font-size: 0.9rem;">立即预定</button>
 	</div>
 

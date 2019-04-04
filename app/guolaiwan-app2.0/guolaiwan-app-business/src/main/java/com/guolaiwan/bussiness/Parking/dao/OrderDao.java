@@ -288,12 +288,36 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
     	   return findByHql(hql);
        }
        
-    
        
        
        
-       
-       
+       /**
+        * 根据状态 查询所有订单 分页
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public List<OrderPO>  getOrderfor(String status,int pageNum, int pageSize) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   hql.andBy("orderStatus", Condition.eq,status);
+    	   List<OrderPO> orders = findByHqlPage(hql, pageNum, pageSize);
+    	   return orders;
+       }
+       /**
+        * 根据状态 查询 
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public List<OrderPO>  getOrderfor(String status) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   hql.andBy("orderStatus", Condition.eq,status);
+    	   return findByHql(hql);
+       }
        
        
        

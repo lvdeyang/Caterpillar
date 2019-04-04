@@ -100,7 +100,7 @@
 			
 		    .btn{
 		    	position:fixed;
-                 top:93%;
+                 top:90%;
                /*  z-index: -1;*/         
 		    }
 			
@@ -141,19 +141,21 @@
 		 $.post(_uri, $.toJSON(params), function(data) {
 			data = parseAjaxResult(data);
 			var htm = [];
-				htm.push('<li>'+data.regulations+'</li>');
+				htm.push('<li style="font-size:16px;">'+data.regulations+'</li>');
 			$('#ol').append(htm.join('')); 
 			var html = [];
-				html.push('<p style="font-size: 16px;font-weight: bold; padding: 8% 0px 20px 15px;">'+data.parkingName+'管理条例</p>');
+				html.push('<p style="font-size: 18px;font-weight: bold; padding: 8% 0px 20px 15px;">'+data.parkingName+'管理条例</p>');
 			$('.header').append(html.join('')); 
 			  });
 			
 			
 		   $(document).on('click','.btn1', function() {
      window.location.href="vice/merchant/scenic?car=";
+     	$(".btn1").css("box-shadow","5px 5px 10px #8E8F8F");
       });  	
 		   $(document).on('click','.btn2', function() {
      window.location.href="vice/merchant/parking?useid="+${param.useid};
+     	$(".btn2").css("box-shadow","5px 5px 10px #8E8F8F");
       });  	
 			
       });

@@ -89,7 +89,7 @@ html, body {
 
 .footer_on {
 	position: fixed;
-	top: 91%;
+	top: 90%;
 	/*  z-index: -1;*/
 }
 </style>
@@ -456,30 +456,30 @@ html, body {
 		<div class="main_on" style="width:100%;">
 			<button
 				style="width:50%;height:40px;background:#ffffff;border:none;outline:none;border:1px solid #F39801;border-left:none;font-weight: bold;">
-				<p>
+				<p style='font-size:14px;'>
 					收费标准 : <span id="spa">5</span>元/小时
 				</p>
 			</button>
 			<button
 				style="width:50%;height:40px;float:right;background:#ffffff;outline:none;border:1px solid #F39801;border-right:none;font-weight: bold;">
-				<p>
+				<p style='font-size:14px;'>
 					开放时间 : <span id="stoppingTime">8：00-18：00</span>
 				</p>
 			</button>
 		</div>
 
 		<div class="main_cn"
-			style="widht:100%;height:auto;overflow: hidden;margin:10px 10%;">
-			<p style="display: inline-block;font-weight: bold;font-size:18px;">续费时长：</p>
+			style="widht:100%;height:auto;overflow: hidden;margin:10px 9%;">
+			<p style="display: inline-block;font-weight: bold;font-size:14px;">续费时长：</p>
 			<select id="sele" onchange="t()"
-				style="text-align:center; height:30px;line-height: 30px;width:20%;border: 0;outline: none;font-weight: bold;font-size:14spx;background:#E5E5E5;border-radius:5px;z-index: 999;">
+				style="text-align:center; height:30px;line-height: 30px;width:20%;border: 0;outline: none;font-weight: bold;font-size:14px;background:#E5E5E5;border-radius:5px;z-index: 999;">
 				<option value="0";>0</option>
 				<option>1</option>
 				<option>2</option>
 				<option>3</option>
 				<option>4</option>
-			</select><span>小时</span>
-			<p style="font-weight: bold;font-size:18px;color:red;margin:2% auto;">
+			</select><span style='font-size:14px;'>小时</span>
+			<p style="font-weight: bold;font-size:14px;color:red;margin:2% auto;">
 				超时停车费用：<span id="chao">0</span>元
 			</p>
 		</div>
@@ -503,7 +503,7 @@ html, body {
 		</div>	
 			 
 		</div>
-		<div style="width:100%;height:60px;">
+		<div style="width:100%;height:80px;">
 			
 		</div>	
 		<div class="footer_on" style="width:100%;">
@@ -514,7 +514,7 @@ html, body {
 				</p>
 			</button>
 			<button id="btn"
-				style="width:40%;height:50px;float:right;background:#CE8805;outline:none;border:none;color:#ffffff;font-size:16px;">
+				style="width:40%;height:50px;float:right;background:#FF7D13;outline:none;border:none;color:#ffffff;font-size:16px;">
 				<p>立即续费</p>
 			</button>
 		</div>
