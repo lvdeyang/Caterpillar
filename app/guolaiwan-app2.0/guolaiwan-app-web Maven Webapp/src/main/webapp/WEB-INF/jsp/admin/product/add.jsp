@@ -295,7 +295,7 @@
  						是否人脸：
                     </label>
                     <div class="layui-input-block">
-                        <input type="checkbox" name="ifFace" checked="checked" lay-skin="switch" id="ifFace" lay-text="ON|OFF" lay-filter="switchTest" value="1">
+                        <input type="checkbox" name="ifFace" lay-skin="switch" id="ifFace" lay-text="ON|OFF" lay-filter="switchTest" value="1">
                         <div class="layui-unselect	layui-form-switch" lay-skin="_switch">
                         	<em>OFF</em>
                         	<i></i>

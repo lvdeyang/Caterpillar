@@ -1075,7 +1075,8 @@ public class PubNumController extends WebBaseControll {
      	dataObject.put("refund", accountTypeObj);
      	
      	JSONObject remarkObj=new JSONObject();
-     	remarkObj.put("value", (productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName())+"-用户:"+buyUser.getUserNickname()+"("+addressPO.getConsigneePhone()+")");
+     	remarkObj.put("value", (productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName())+"-用户:"+buyUser.getUserNickname()+"("
+     	+addressPO==null?"":addressPO.getConsigneePhone()+")");
      	remarkObj.put("color", "");
      	dataObject.put("remark", remarkObj);
      	obj.put("data", dataObject);
@@ -1109,7 +1110,9 @@ public class PubNumController extends WebBaseControll {
      	dataObject1.put("refund", accountTypeObj1);
      	
      	JSONObject remarkObj1=new JSONObject();
-     	remarkObj1.put("value", (productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName())+"-用户:"+buyUser.getUserNickname()+"("+addressPO.getConsigneePhone()+")");
+     	remarkObj1.put("value", (productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName())+"-用户:"+buyUser.getUserNickname()+"("
+     			+addressPO==null?"":addressPO.getConsigneePhone()+")");
+     	
      	remarkObj1.put("color", "");
      	dataObject1.put("remark", remarkObj1);
      	obj1.put("data", dataObject1);

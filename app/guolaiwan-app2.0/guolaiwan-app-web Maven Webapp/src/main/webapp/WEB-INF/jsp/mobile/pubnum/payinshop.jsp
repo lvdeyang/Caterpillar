@@ -524,20 +524,26 @@ html, body {
 			   return false;
 			}
 			
-			AddAddress();
+			//AddAddress();
+			dopay(0);
 
 	  });  
 
 		$(document).on('click','.mailAddress',function(){
+		   var ids=this.id.split('-');
+           //dopay(ids[1]);
+		});	 
+		
+		function dopay(mailId){
 		    $.closePopup();
-		    var ids=this.id.split('-');
+		    
  		    var _uriAdd = window.BASEPATH + 'phoneApp/goToPay';
 			var params={};
 			params.userId=${userId};
 			params.merchantId=${merchantId};
 			params.source="PUBLICADDRESS";
 			params.payMoney=$('#paytext').val();
-			params.addressId=ids[1];
+			params.addressId=mailId;
 			$.confirm("确定支付？", function() {
 				$.post(_uriAdd, $.toJSON(params), function(data){
 					data = parseAjaxResult(data);
@@ -546,8 +552,8 @@ html, body {
 					 payPublic(data.id); 
 				});			  
 			  });	 	
-
-		});	  
+		}
+		 
 	  
 	  function deleteorder(orderId)
 	  {
