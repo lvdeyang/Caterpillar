@@ -532,7 +532,7 @@ html, body {
 		
 		$(document).on('click','.comSel',function(){
 		   location.href=window.BASEPATH + 'pubnum/index?comCode='+$(this).attr('data');
-		
+
 		});
 		
 		
