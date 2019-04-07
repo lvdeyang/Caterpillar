@@ -83,16 +83,21 @@ html, body {
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
       $(function() {
+      
+        var parseAjaxResult = function(data){
+			if(data.status !== 200){
+				$.toptip('data.message', 'error');
+				return -1;
+			}else{
+				return data.data;		
+			}
+	  };
       	var htm = [];
-      	var _uri = window.BASEPATH + 'phoneApp/getVideoPics';
-      	var sName = {};
-			sName.page = 0;
-			sName.pageSize = 100;
-			sName.userId = <%= request.getSession().getAttribute("userId")%>;
-			sName.vType = "PICTURE";
-		 $.get(_uri, sName, function(data) { 
+      	var _uri = window.BASEPATH + 'phoneApp/getVideoPics?page=0&pageSize=100&userId=0&vType=PICTURE&sName=';
+      	
+		 $.get(_uri, null, function(data) { 
 			data = parseAjaxResult(data);
-          for(var i = 0;i < data.size;i++) {
+          for(var i = 0;i < data.length;i++) {
 				htm.push('<div class="main" style="width:47%;height:50%;background-color: #ffffff; margin:1% 1% 3% 1%;float:left;border:1px solid #F6F6F6;">');
 				htm.push('<div class="main_in" style="padding:10%;height:100%;width:80%;">');
 				htm.push('<div class="main_on" style="height:20%;width:100%;position: relative;">');

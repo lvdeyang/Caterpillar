@@ -1894,4 +1894,11 @@ public class PubNumController extends WebBaseControll {
 		return conn_orderpeople.findByField("orderId", orderId);
 	}
 	
+	@RequestMapping(value = "/ipost")
+	public ModelAndView ipost(HttpServletRequest request,String comCode) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/ipost");
+		return mv;
+	}
+	
 }
