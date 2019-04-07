@@ -138,7 +138,7 @@
 	position: relative;
 	width: 100%;
 	height: 30%;
-	border-bottom: solid 2px #959595;
+	border-bottom: solid 2px #BDBDBD;
 	overflow: hidden
 }
 

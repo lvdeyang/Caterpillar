@@ -120,7 +120,7 @@ html, body {
 	       $.post(_util, $.toJSON(patam), function(data) {  
 			  	data = parseAjaxResult(data);
 			  	window.id = data.id; // 表单id
-			    time = data.time; // 表单id
+			    time = data.time; // 预定时间
 			    window.attid = data.uid; // 景区id
 			  	
 			  	$("#cost").empty();
@@ -275,7 +275,7 @@ html, body {
 	        
 		  	data = parseAjaxResult(data);
 		    window.id = data.id; // 表单id
-		    window.trime = data.time; // 表单id
+		    window.trime = data.time; // 预订时间
 	        var txt = document.getElementById("time"); //time
 	        txt.innerText= window.trime;
 	        
@@ -379,7 +379,7 @@ html, body {
 						}
 						para.sele = $("#sele").val();
 						para.money = window.money;
-						para.attid = time;
+						para.attid = window.attid;
 						$.post(_ut, $.toJSON(para), function(data) {
 							data = parseAjaxResult(data);
 							alert("续费成功");

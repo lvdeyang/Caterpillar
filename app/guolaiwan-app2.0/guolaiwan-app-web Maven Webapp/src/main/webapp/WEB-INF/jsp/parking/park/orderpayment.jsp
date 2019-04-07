@@ -325,7 +325,7 @@ html, body {
 
 .footer_on {
 	position: fixed;
-	top: 90%;
+	top: 92%;
 	/*  z-index: -1;*/
 }
 </style>
@@ -728,14 +728,14 @@ style="float:right;overflow:auto;line-height:40px;margin-right:15px;">
 		  <div style="padding:2% 0">
 			<img alt="" src="lib/images/weixin.png"
 				style="width:35px;height:35px; vertical-align:middle;" /> <span
-				style="display:inline-block;font-size:12px;line-height:35px;">微信支付</span>
+				style="display:inline-block;font-size:14px;line-height:35px;">微信支付</span>
 			<input type="checkbox" name="" id="weixin" value=""
 				style="float:right;margin-top:10px;background-color:red;" />
 		    </div>
 		    <div>
 			<img alt="" src="lib/images/zhifu.png"
 				style="width:35px;height:35px; vertical-align:middle;" /> <span
-				style="display:inline-block;font-size:12px;line-height:35px;">支付宝支付</span>
+				style="display:inline-block;font-size:14px;line-height:35px;">支付宝支付</span>
 			<input type="checkbox" name="" id="zhifubao" disabled="value"
 				style="float:right;margin-top:10px;background-color:red;" />
 				<div style="border-bottom: solid 1px #D5D5D5;width:100%;margin:2% auto 0px;"></div>

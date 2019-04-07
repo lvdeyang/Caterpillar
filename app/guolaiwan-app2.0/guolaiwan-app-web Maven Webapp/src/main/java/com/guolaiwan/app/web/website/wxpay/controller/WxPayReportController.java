@@ -195,7 +195,7 @@ public class WxPayReportController extends WebBaseControll {
 
 		return stringBuffer.toString();
 	}
-	@RequestMapping(value = "/parkreport", method = RequestMethod.POST)
+	@RequestMapping(value = "/parkrefund", method = RequestMethod.POST)
 	public String parkreport(HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		Map<String, Object> ret=new HashMap<String, Object>();
@@ -316,7 +316,6 @@ public class WxPayReportController extends WebBaseControll {
 			HttpServletResponse response) throws Exception{
 		Map<String, Object> ret=new HashMap<String, Object>();
 		System.out.println("*****************wxreport****************");
-		//Mr.huang 2017/09/12 飞的好低的小蜜蜂
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String xml="";
 		String tempStr="";
@@ -469,8 +468,6 @@ public class WxPayReportController extends WebBaseControll {
 				odp.setPlatenumber(plate);
 				odp.setOrderNo(tradeNum);
 				odp.setCommodityNumber(transaction);
-				String ydNO = ydNoCode(tradeNum);
-				odp.setPath(ydNO);
 				Order.saveOrUpdate(odp);
 				
 				

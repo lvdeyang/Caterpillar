@@ -1196,15 +1196,16 @@ public class SceneryListController  extends WebBaseControll{
 		OrderPO userByid = Order.getOrderform(userId,attid,relaIds,vehicle); 
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" +userByid.getId());
 		String getDueTime =   userByid.getDueTime(); //到期时间
-		Double stoppingTime =   userByid.getStoppingTime(); //停车总时间     
 	    Date date  =  	DateUtil.parse(getDueTime);
 	    Date addMinute = DateUtil.addMinute(date,time);
 	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    String format    =  df.format(addMinute);  // 到期时间
 		double dou =   time/60.0;
 		userByid.setDueTime(format); // 到期时间
-		userByid.setStoppingTime(stoppingTime+dou); // 停车总时间     
+		userByid.setStoppingTime(dou); // 停车总时间     
 		userByid.setParkingCost(moeny);   
+		String ydNO = ydNoCode(userByid.getId()+""); // 生成二维码
+		userByid.setPath(ydNO);
 		Order.saveOrUpdate(userByid);
 		return success(dataMap);
 	}
@@ -1395,13 +1396,6 @@ public class SceneryListController  extends WebBaseControll{
 		public ModelAndView Additionalpayments(HttpServletRequest request,HttpSession session) throws Exception {
 			ModelAndView mv = null;
 			mv = new ModelAndView("parking/park/additionalpayments"); 
-			return mv;
-		}
-		//转到jsp文件
-		@RequestMapping(value = "/merchant/a")
-		public ModelAndView Additionalpaym(HttpServletRequest request,HttpSession session) throws Exception {
-			ModelAndView mv = null;
-			mv = new ModelAndView("parking/park/a"); 
 			return mv;
 		}
 

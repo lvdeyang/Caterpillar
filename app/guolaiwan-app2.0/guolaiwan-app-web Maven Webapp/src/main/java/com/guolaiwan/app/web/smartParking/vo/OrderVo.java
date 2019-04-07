@@ -337,13 +337,14 @@ public class OrderVo  extends AbstractBaseVO<OrderVo, OrderPO>{
 	
 	@Override
 	public OrderVo set(OrderPO entity) throws Exception {
-	this.setOverTime(entity.getOverTime())
+	this
 	.setId(entity.getId())
 	.setAttractionsId(entity.getAttractionsId())
 	.setOrderId(entity.getOrderId())
 	.setParkingLayer(entity.getParkingLayer())
 	.setParkingName(entity.getParkingName())
 	.setTime(entity.getTime())
+	.setOverTime(entity.getOverTime())
 	.setParkingDistrict(entity.getParkingDistrict())
 	.setParkingNumber(entity.getParkingNumber())
 	.setParkingCost(entity.getParkingCost())

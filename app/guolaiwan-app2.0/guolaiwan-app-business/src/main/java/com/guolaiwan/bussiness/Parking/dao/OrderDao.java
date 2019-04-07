@@ -299,11 +299,27 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
         * @return
         * @throws ParseException
         */
-       public List<OrderPO>  getOrderfor(String status,int pageNum, int pageSize) throws ParseException{
+       public List<OrderPO>  getOrderfor(int pageNum, int pageSize,String status,String name) throws ParseException{
     	   QueryHql hql = newQueryHql();
     	   hql.andBy("orderStatus", Condition.eq,status);
+    	   hql.andBy("parkingName", Condition.lk,name);
     	   List<OrderPO> orders = findByHqlPage(hql, pageNum, pageSize);
     	   return orders;
+       }
+       
+       /**
+        * 根据状态 查询全部订单 
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public List<OrderPO>  getOrderform(String status,String name) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   hql.andBy("orderStatus", Condition.eq,status);
+    	   hql.andBy("parkingName", Condition.lk,name);
+    	   return findByHql(hql);
        }
        /**
         * 根据状态 查询 
@@ -313,13 +329,41 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
         * @return
         * @throws ParseException
         */
-       public List<OrderPO>  getOrderfor(String status) throws ParseException{
+       public List<OrderPO>  getOrderfor(String status,String name) throws ParseException{
     	   QueryHql hql = newQueryHql();
     	   hql.andBy("orderStatus", Condition.eq,status);
+    	   hql.andBy("parkingName", Condition.lk,name);
     	   return findByHql(hql);
        }
        
-       
+       /**
+        * 通过用户id 信息
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public List<OrderPO>   getOrderfor(Long Id) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   hql.andBy("id", Condition.eq,Id);
+    	   return findByHql(hql);
+    	   
+       }
+       /**
+        * 模糊搜索
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public List<OrderPO>   getOrderform(String status) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   hql.andBy("parkingName", Condition.lk,status);
+    	   return findByHql(hql);
+    	   
+       }
        
        
        
