@@ -514,6 +514,17 @@ html, body {
 	  
 		
 	 
+	 if(comCode=='0000'){
+							    comCode='0001';
+							}
+							getCom();
+			                getRecomment();
+						    getModal();
+							getActivityBundle();
+							initSharewx();
+	 
+	 
+	 
 	
 	  var loca={};
 	  function getloca(){
