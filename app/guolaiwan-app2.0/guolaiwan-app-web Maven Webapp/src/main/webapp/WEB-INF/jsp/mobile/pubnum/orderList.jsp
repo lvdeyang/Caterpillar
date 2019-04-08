@@ -585,6 +585,10 @@ html, body {
       });
       
       $(document).on('click','#saveReject',function(){
+          if($('#reasonContent').val()==''){
+              $.toast("请填写退款原因", "forbidden");
+              return false;
+          }
           var _urichangeorder = window.BASEPATH + 'pubnum/applyReject';
           var params={};
           params.orderId=commOrderId;

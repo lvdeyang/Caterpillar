@@ -154,12 +154,12 @@ public class WxPayReportController extends WebBaseControll {
 						String ydNO = ydNoCode(orderId);
 						order.setYdNO(ydNO);
 						//支付状态、减库存
-						order.setOrderState(OrderStateType.PAYSUCCESS);  
+						//order.setOrderState(OrderStateType.PAYSUCCESS);  
 						ProductPO product = conn_product.get(order.getProductId());
-						if(product != null){
-							//long productNum = order.getProductNum();
-							//product.setProductStock(product.getProductStock()-productNum);
-							//conn_product.saveOrUpdate(product);
+						if(product == null){
+							order.setOrderState(OrderStateType.TESTED);
+						}else{
+							order.setOrderState(OrderStateType.PAYSUCCESS); 
 						}
 						conn_orderInfo.saveOrUpdate(order);
 						sendMessage(order);

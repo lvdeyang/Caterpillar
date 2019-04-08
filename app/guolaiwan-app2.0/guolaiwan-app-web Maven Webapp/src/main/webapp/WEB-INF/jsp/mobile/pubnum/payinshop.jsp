@@ -609,7 +609,7 @@ html, body {
 		                setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
 								    
-								    if(data.data=="PAYSUCCESS"){
+								    if(data.data=="TESTED"){
 								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
 								    }
 								});
@@ -671,6 +671,10 @@ html, body {
 			   $.toast("请输入手机号", "forbidden");
 			   return false;
 			}
+			if(!(/^1[34578]\d{9}$/.test($('#addressphone').val()))){ 
+		       $.toast("手机号码有误，请重填", "forbidden");  
+		       return false; 
+		    } 
 			if($('#name').val()==''){
 			   $.toast("请输入姓名", "forbidden");
 			   return false;

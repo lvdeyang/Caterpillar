@@ -939,9 +939,9 @@ html, body {
 		       $.toast("预定时间不能为空", "forbidden");
 		       return false;
 		    }
-		    var b=new Date($('#bookDate').val());
-		    var s=new Date(bookStart);
-		    var e=new Date(bookEnd);
+		    var b=new Date($('#bookDate').val().replace(/-/g,'/')).getTime();
+		    var s=new Date(bookStart.replace(/-/g,'/')).getTime();
+		    var e=new Date(bookEnd.replace(/-/g,'/')).getTime();
 		    if(b<s||b>e){
 		       $.toast("不在预定期", "forbidden");
 		       return false;
@@ -1361,6 +1361,10 @@ html, body {
 			   $.toast("请输入手机号", "forbidden");
 			   return false;
 			}
+			if(!(/^1[34578]\d{9}$/.test($('#addressphone').val()))){ 
+		       $.toast("手机号码有误，请重填", "forbidden");  
+		       return false; 
+		    } 
 			if($('#name').val()==''){
 			   $.toast("请输入姓名", "forbidden");
 			   return false;
