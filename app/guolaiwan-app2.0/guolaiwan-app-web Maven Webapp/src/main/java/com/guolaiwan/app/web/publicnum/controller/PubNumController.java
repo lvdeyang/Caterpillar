@@ -245,7 +245,7 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubnum/home");
 		if(comCode==null){
-			comCode="0001";
+			comCode="0000";
 		}
 		mv.addObject("comCode", comCode);
 		return mv;
