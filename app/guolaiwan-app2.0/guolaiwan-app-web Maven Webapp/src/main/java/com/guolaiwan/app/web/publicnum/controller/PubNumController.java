@@ -1900,5 +1900,12 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/ipost");
 		return mv;
 	}
+	//转到jsp文件
+	@RequestMapping(value = "/postdetails")
+	public ModelAndView postdetails(HttpServletRequest request,HttpSession session) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/postdetails"); 
+		return mv;
+	}
 	
 }

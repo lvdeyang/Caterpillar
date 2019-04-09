@@ -73,7 +73,10 @@
 <style type="text/css">
 html, body {
 	height: 100%;
-	background-color: #F3F3F3;
+}
+#div1 img{
+    width:100%;
+    height:100%;
 }
 </style>
 </head>
@@ -82,60 +85,52 @@ html, body {
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
-      $(function() {
-      
-        var parseAjaxResult = function(data){
-			if(data.status !== 200){
-				$.toptip('data.message', 'error');
-				return -1;
-			}else{
-				return data.data;		
-			}
-	  };
-      	var htm = [];
-      	var _uri = window.BASEPATH + 'phoneApp/getVideoPics?page=0&pageSize=100&userId=0&vType=PICTURE&sName=';
-      	
-		 $.get(_uri, null, function(data) { 
-		 data = parseAjaxResult(data);
-          for(var i = 0;i < data.length;i++) {
-                var json = JSON.parse(data[i].content); 
-                htm.push('<a href="pubnum/postdetails?id='+data[i].id+'">');
-				htm.push('<div class="main" style="width:47%;height:50%;background-color: #ffffff; margin:1% 1% 3% 1%;float:left;border:1px solid #F6F6F6;">');
-				htm.push('<div class="main_in" style="padding:10%;height:100%;width:80%;">');
-				htm.push('<div class="main_on" style="height:20%;width:100%;position: relative;">');
-				htm.push('<img class="pic" style="width:50px;height:50px;border-radius: 50%;position: absolute; top: 50%;left:20%;transform: translate(-50%, -50%);" src='+data[i].user.userHeadimg+' / >');
-				htm.push('<span class="pid" style="position: absolute; top: 50%;left: 64%;transform: translate(-50%, -50%);color:#586F83;font-size:16px;overflow:hidden;width:4em;text-overflow:ellipsis;white-space:nowrap;">'+data[i].user.userNickname+'</span>');
-				htm.push('</div>');
-				htm.push('<img class="pic_a" style="width:100%;height:40%;margin:5% auto" src='+data[i].headPic+' / >');
-				htm.push('<p class="pid_a" style="font-weight: bold;font-size:16px;overflow:hidden;width:9em;text-overflow:ellipsis;white-space:nowrap;">'+data[i].name +'</p>');
-				htm.push('<p class="pid_b" style="color:#949494;font-size:14px;padding:2% auto;overflow:hidden;width:10em;text-overflow:ellipsis;white-space:nowrap;">'+json.title +'</p>');
-				htm.push('<p style="color:#949494;font-size:12px;margin:10% auto;"><span>4周前</span><span style="float:right;">点赞('+data[i].praiseCount+')</span><span style="float:right;">评论('+data[i].commentCount+')</span></p>');
-				htm.push('</div>');
-				htm.push('</div>');
-				htm.push('</a>');
-				}
-         $('.nav').append(htm.join('')); 
-      });
-    });
- </script>
+	$(function() {
+		var htm = [];  
+		var _uri = window.BASEPATH + 'phoneApp/videoPicInfo?vpId='+ ${param.id}+'&UserId=0';
+		$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				var json = JSON.parse(data.videoPic.content); //转换json
+                var text= json.title; //获取标题
+				var reg = new RegExp("\n","g");//g,表示全部替换。
+				text=text.replace(reg,"	<br>");//替换
+	            var newdiv = document.getElementById("p1");//添加
+                newdiv.innerHTML = text ;
+                var html = [];//添加头像 用户名
+                html.push('<img class="pic"style="width:50px;height:50px;border-radius: 50%;position: absolute; top: 50%;left:8%;transform: translate(-50%, -50%);" src="'+data.videoPic.user.userHeadimg+'"/ >');
+				html.push('<span class="pid" style="position: absolute; top: 50%;left: 24%;transform: translate(-50%, -50%);color:#586F83;font-size:16px;"> '+data.videoPic.user.userNickname+'</span>')   
+                $('.main_on').append(html.join(''));    
+                  
+                var htm = [];
+                var newdiv =json.content;
+                for(var i =0;i<newdiv.length;i++){
+  				   for(var j in newdiv[i]){
+  				     var   cont =   newdiv[i][j]
+  				     var reg = new RegExp("\n","g");//g,表示全部替换。
+					 cont = cont.toString().replace(reg,"<br>");
+					 var fill =  "img" == j ? "<img  src="+cont+" />" : "type" != j ? cont :'<br/>'; //添加文本图片
+                     htm.push(fill);
+   				   }
+			    }
+                $('#div1').append(htm.join(''));    
+		}); 	
+	});
+</script>
 <body>
 	<div class="nav" style="width:100%;height:100%;">
 
-		<!--  <div class="main" style="width:47%;height:50%;background-color: #ffffff; margin:1% 2% 5% 2%;float:left;border:1px solid #F6F6F6;">
-            <div class="main_in" style="padding:10%;height:100%;width:80%;">
-                  <div class="main_on" style="height:20%;position: relative;">
-                  <img class="pic" style="width:50px;height:50px;border-radius: 50%;position: absolute; top: 50%;left:20%;transform: translate(-50%, -50%);" src="lib/images/2.jpg" / >
-                  <span class="pid" style="position: absolute; top: 50%;left: 54%;transform: translate(-50%, -50%);color:#586F83;font-size:16px;">兔子</span>
-                  </div>
-                  <img class="pic_a" style="width:100%;height:40%;margin:5% auto" src="lib/images/2.jpg" / >
-                  <p class="pid_a" style="font-weight: bold;font-size:16px;overflow:hidden;width:10em;text-overflow:ellipsis;white-space:nowrap;">模拟</p>
-                  <p class="pid_b" style="color:#949494;font-size:14px;padding:2% auto;overflow:hidden;width:10em;text-overflow:ellipsis;white-space:nowrap;">模拟数据,模拟数据</p>
-                  <p style="color:#949494;font-size:12px;margin:10% auto;"><span>4周前</span><span style="float:right;">评论(1)</span><span style="float:right;">点赞(1)</span></p>
-            </div>
-      </div>
- -->
-
+		<div class="main"
+			style="width:90%;height:100%;background-color: #ffffff;margin:3% auto;">
+			<p class="pid_a" id="p1" style="font-weight: bold;font-size:16px;"></p>
+			<div class="main_in" style="height:100%;width:100%;margin:0 auto">
+				<div class="main_on" style="height:10%;position: relative;">
+				</div>
+				<div id="div1" style=""></div>
+			
+			</div>
+			
+		</div>
+		
 	</div>
-
 </body>
 </html>
