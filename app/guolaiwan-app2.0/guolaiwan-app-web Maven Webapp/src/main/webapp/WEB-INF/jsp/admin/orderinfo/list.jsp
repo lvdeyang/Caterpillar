@@ -185,6 +185,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         ,{field: 'userName', title: '用户',width:120 } 
       					,{field: 'userTel', title: '手机号',width:120}
    						,{field: 'createDate', title: '下单时间' ,width:200}  
+   						,{field: 'orderBookDate', title: '使用时间' ,width:200}  
    						,{field: 'shopName', title: '商家' } 
       					,{field: 'productName', title: '商品' } 
       					,{field: 'productNum', title: '数量',width:60 } 

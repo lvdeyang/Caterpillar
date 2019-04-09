@@ -605,6 +605,7 @@ html, body {
 			
 			getProDate(data.product , data.miao , data.isXianGou);
 			initShare();
+			refreshActivity();
 		});
 		
 		

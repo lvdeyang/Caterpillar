@@ -500,6 +500,7 @@ html, body {
 
 	$(function() {
 	  window.BASEPATH = '<%=basePath%>';
+	  var comCode='${comCode}';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
 				$.toptip('data.message', 'error');
@@ -508,59 +509,173 @@ html, body {
 				return data.data;		
 			}
 	  };
+	
+	  getloca();
+	  
 		
-       var _uricoms = window.BASEPATH + 'pubnum/getComs';
-		
-		$.get(_uricoms, null, function(data){
-			data = parseAjaxResult(data);
-			if(data === -1) return;
-			if(data && data.length>0){
-			    var html=[];
-				for(var i=0; i<data.length; i++){
-				    if(data[i].comCode=='${comCode}'){
-				        $('#selCom').html(data[i].comName);
-				    }
-				    	
-				    html.push('<li><a data="'+data[i].comCode+'" href="javascript:void(0)" class="comSel">'+data[i].comName+'</a></li>');
-				    
+	 
+	
+	  var loca={};
+	  function getloca(){
+	      
+		  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+	
+		  var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+		    $.get(_uri, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+					loca=data;
+					getLoation();
 				}
-				$('#com').append(html.join(''));
 				
-			}
-			
-		});
+		  });
+	  
+	  }
+	  
+	  
+	  function getLoation(){
+	       wx.config({
+	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            appId : loca.appId, // 必填，公众号的唯一标识
+	            timestamp : loca.timestamp, // 必填，生成签名的时间戳
+	            nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+	            signature : loca.signature,// 必填，签名，见附录1
+	            jsApiList : ['checkJsApi','getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        	});
+	        wx.ready(function() {
+	            wx.getLocation({  
+	                success: function (res) {  
+	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+	                    var speed = res.speed; // 速度，以米/每秒计  
+	                    var accuracy = res.accuracy; // 位置精度  
+	                    getCity(latitude,longitude);
+	                    
+	                },  
+	                cancel: function (e) {  
+	                        //这个地方是用户拒绝获取地理位置  
+	                        if(comCode=='0000'){
+							    comCode='0001';
+							}
+							getCom();
+			                getRecomment();
+						    getModal();
+							getActivityBundle();
+							initSharewx();
+					}
+	                	
+	             });     
+		         wx.error(function (res) {  
+		                if(comCode=='0000'){
+						    comCode='0001';
+						}
+						getCom();
+		                getRecomment();
+					    getModal();
+						getActivityBundle();
+						initSharewx();
+				
+		         });     
+	            
+	         });
+	  
+	  
+	  }
+	  
+	  function getCity(la,lo){
+	  
+	     $.ajax({  
+            url: 'http://api.map.baidu.com/geocoder/v2/?ak=yPjZB3eElPXn7zXRjcfqGCze6LCPlkmn&callback=renderReverse&location=' + la + ',' + lo + '&output=json&pois=1',  
+            type: "get",  
+            dataType: "jsonp",  
+            jsonp: "callback",  
+            success: function (data) {  
+                console.log(data);  
+                var province = data.result.addressComponent.province;  
+                var cityname = (data.result.addressComponent.city);  
+                var district = data.result.addressComponent.district;  
+                var street = data.result.addressComponent.street;  
+                var street_number = data.result.addressComponent.street_number;  
+                var formatted_address = data.result.formatted_address;  
+                if(comCode=='0000'){
+				    if(district.indexOf('平谷')!=-1){
+					    comCode='1003';
+					    $('#headerName').html('畅游平谷');
+					    $('#phone').html('010-89991991');
+					}else{
+					    comCode='0001';
+					}
+				}
+				
+				
+				getCom();
+                getRecomment();
+			    getModal();
+				getActivityBundle();
+				initSharewx();
+            }  
+        });  
+	  
+	  }
+	  
+	  function getCom(){
+	     var _uricoms = window.BASEPATH + 'pubnum/getComs';
 		
-		$(document).on('click','.comSel',function(){
+		 $.get(_uricoms, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data && data.length>0){
+				    var html=[];
+				   
+					for(var i=0; i<data.length; i++){
+					    if(data[i].comCode==comCode){
+					        $('#selCom').html(data[i].comName);
+					    }
+					    	
+					    html.push('<li><a data="'+data[i].comCode+'" href="javascript:void(0)" class="comSel">'+data[i].comName+'</a></li>');
+					    
+					}
+					$('#com').append(html.join(''));
+				}
+				
+		  });
+	  
+	  }
+	  
+	  $(document).on('click','.comSel',function(){
 		   location.href=window.BASEPATH + 'pubnum/index?comCode='+$(this).attr('data');
 
-		});
+	  });
+	  
+      /**/
 		
+	  function getRecomment(){
+	     var _uriRecomment = window.BASEPATH + 'phoneApp/getRecommend?comCode='+comCode;
 		
-	
-		
-      var _uriRecomment = window.BASEPATH + 'phoneApp/getRecommend?comCode=${comCode}';
-		
-		$.get(_uriRecomment, null, function(data){
-			data = parseAjaxResult(data);
-			if(data === -1) return;
-			if(data && data.length>0){
-			    var html=[];
-				for(var i=0; i<data.length; i++){
-					html.push('<div style="height:200px;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].productId+'-'+data[i].classify+'" style="height:200px;" src="'+data[i].slidepic+'" alt="">');
-					html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].name+'</div></div>');
+		 $.get(_uriRecomment, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data && data.length>0){
+				    var html=[];
+					for(var i=0; i<data.length; i++){
+						html.push('<div style="height:200px;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].productId+'-'+data[i].classify+'" style="height:200px;" src="'+data[i].slidepic+'" alt="">');
+						html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].name+'</div></div>');
+					}
+					$('#headerWrapper').append(html.join(''));
+					$("#headerSwiper").swiper({
+				        loop: true,
+				        autoplay: 3000
+				      });
 				}
-				$('#headerWrapper').append(html.join(''));
-				$("#headerSwiper").swiper({
-			        loop: true,
-			        autoplay: 3000
-			      });
-			}
-			
-		});
+		 });
+	  }
 		
+      
 		
-		
-		var _uriModal = window.BASEPATH + 'phoneApp/getModulars?comCode=${comCode}';
+	  function getModal(){
+	    var _uriModal = window.BASEPATH + 'phoneApp/getModulars?comCode='+comCode;
 		
 		$.get(_uriModal, null, function(data){
 			data = parseAjaxResult(data);
@@ -621,6 +736,10 @@ html, body {
 			
 			
 		});
+	  
+	  }
+		
+		
 	    
 	    
 	    function getCommentUser(id){
@@ -780,8 +899,7 @@ html, body {
 			  });
 	    }
 	
-	   getActivityBundle();
-	
+	   
 	    var paras={};
 	    $(document).on('click','#ewmpic',function(){
 	          var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+location.href.split('#')[0];
@@ -799,8 +917,9 @@ html, body {
 	    });
 	    
 	    var share={};
-	    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	    window.onload=function(){
+	    function initSharewx(){
+	        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+	  
 	    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
 			    $.get(_uri, null, function(data){
 					data = parseAjaxResult(data);
@@ -811,8 +930,11 @@ html, body {
 						doScanShare();
 					}
 					
-				});
+			});
+	    
 	    }
+	    
+	    
 	    
 	    function doScanShare(){
             wx.config({

@@ -545,7 +545,7 @@ public class OrderInfoController extends BaseController {
 				}
 				vo.setReason(orderInfoPO.getRefundReason());
 				vo.setProductName(orderInfoPO.getProductName() + "*" + orderInfoPO.getProductNum());
-				vo.setOrderAllMoney(orderInfoPO.getPayMoney() / 100 + "");
+				vo.setOrderAllMoney(new DecimalFormat("0.00").format((double)orderInfoPO.getPayMoney() / 100));
 				bundleOrderVos.add(vo);
 			} else {
 				if (!bundleMap.containsKey(bOder.getId())) {
@@ -558,14 +558,14 @@ public class OrderInfoController extends BaseController {
 					}
 					vo.setReason(orderInfoPO.getRefundReason());
 					vo.setProductName(orderInfoPO.getProductName() + "*" + orderInfoPO.getProductNum());
-					vo.setOrderAllMoney(orderInfoPO.getPayMoney() / 100 + "");
+					vo.setOrderAllMoney(new DecimalFormat("0.00").format((double)orderInfoPO.getPayMoney() / 100));
 					bundleOrderVos.add(vo);
 				} else {
 					BundleOrderVo vo = bundleMap.get(bOder.getId());
 					vo.setProductName(vo.getProductName() + "<br>" + orderInfoPO.getProductName() + "*"
 							+ orderInfoPO.getProductNum());
 					vo.setOrderAllMoney(
-							(Double.parseDouble(vo.getOrderAllMoney()) + orderInfoPO.getPayMoney() / 100) + "");
+							(new DecimalFormat("0.00").format(Double.parseDouble(vo.getOrderAllMoney()) + (double)orderInfoPO.getPayMoney() / 100)));
 				}
 			}
 		}
