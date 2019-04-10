@@ -510,7 +510,20 @@ html, body {
 			}
 	  };
 	
-	  getloca();
+	  if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+		    getloca();
+	  } else {
+		    if(comCode=='0000'){
+			    comCode='0001';
+			}
+			getCom();
+            getRecomment();
+		    getModal();
+			getActivityBundle();
+			initSharewx();
+	  }
+	
+	  
 	  
 		
 	 
