@@ -696,8 +696,8 @@ input[type="datetime-local"]:before{
 		$(document).on('click','#selRoom',function(){
 		    
 				var startdiv =document.getElementById("startdiv").style.display;  
-				var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/").getTime());
-		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/").getTime());		
+				var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/")).getTime();
+		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/")).getTime();		
 		   		if(sDate >= eDate)
 			    {
 				     $.toast("离店时间不能小于开始时间", "forbidden");
@@ -1155,9 +1155,9 @@ input[type="datetime-local"]:before{
 			var bookdiv =document.getElementById("bookdiv").style.display;       
 			var startdiv =document.getElementById("startdiv").style.display;  
 			
-			var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "/").getTime());
-			var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/").getTime());
-    		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/").getTime());
+			var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "/")).getTime();
+			var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/")).getTime();
+    		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/")).getTime();
     		if(sDate >= eDate)
 		    {
 			     $.toast("离店时间不能小于开始时间", "forbidden");

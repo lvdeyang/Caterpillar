@@ -32,6 +32,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
+import pub.caterpillar.communication.tcp.component.TcpCallBack;
 import pub.caterpillar.communication.tcp.standard.CommunicationStandard;
 
 
@@ -43,12 +44,14 @@ public class TcpServer extends IoHandlerAdapter {
     
     SocketAddress localAddress;
     
+    private TcpCallBack callBack;
 
     
 
     
-    public TcpServer(String ip,int port) throws IOException {
-        
+    public TcpServer(String ip,int port,TcpCallBack callBack) throws IOException {
+        this.callBack=callBack;
+    	
         acceptor = new NioSocketAcceptor();
         
         //acceptor.getFilterChain().addLast("protocol", new ProtocolCodecFilter(new RequestCodecFactory(true)));
@@ -74,7 +77,10 @@ public class TcpServer extends IoHandlerAdapter {
 	public void messageReceived(IoSession session, Object message)
 			throws Exception {
 		if (message instanceof IoBuffer){
-			IoBuffer buffer = (IoBuffer) message;	
+			IoBuffer buffer = (IoBuffer) message;
+			callBack.dealMessage(buffer.array(),session);
+			
+			/*IoBuffer buffer = (IoBuffer) message;	
 			IoBuffer recvBuffer = (IoBuffer) session.getAttribute("recvBuffer");
 	    	if (recvBuffer==null){
 		    	byte[] byteheader = new byte[CommunicationStandard.HEADER_LENGTH];
@@ -100,7 +106,7 @@ public class TcpServer extends IoHandlerAdapter {
 				System.out.println("[server recv]->"+recv);
 				session.removeAttribute("recvBuffer");
 				session.write(recv);
-			}
+			}*/
 		}
 		
 		
