@@ -25,9 +25,9 @@ public class GateWayTcpManager implements TcpCallBack{
 	@Override
 	public void dealMessage(byte[] bytes, IoSession session) {
 		// TODO Auto-generated method stub
-		byte[] cmdByte=ByteTool.subBytes(bytes, 4, 4);
-		byte[] devIdByte=ByteTool.subBytes(bytes, 12, 4);
-		byte[] dataByte=ByteTool.subBytes(bytes, 32, bytes.length-32);
+		byte[] cmdByte=ByteTool.subBytes(bytes, 2, 2);
+		byte[] devIdByte=ByteTool.subBytes(bytes, 6, 2);
+		byte[] dataByte=ByteTool.subBytes(bytes, 16, bytes.length-16);
 		long cmd=ByteTool.byteArrayToLong(cmdByte);
 		System.out.println(cmd);
 		/*const WORD CMD_S1DATA		= 12400;			//串口1数据上传
@@ -41,8 +41,14 @@ public class GateWayTcpManager implements TcpCallBack{
 		const WORD CMD_S1SFZ		= 12500;			//身份证1数据上传
 		DATA为身份证数据，*/
 		if(cmd==12400){
-			byte[] cmdSend=new byte[56];
-			
+			byte[] cmdSend=new byte[28];
+			//const WORD CMD_OPENRLY = 11000;
+			byte[] sHeaderByte=ByteTool.getBytes(0xFEEF);
+			cmdSend[0]=sHeaderByte[0];
+			cmdSend[1]=sHeaderByte[1];
+			byte[] sCmdbyte=ByteTool.getBytes(11000);
+			cmdSend[2]=sCmdbyte[0];
+			cmdSend[3]=sCmdbyte[1];
 		}
 		
 	}
