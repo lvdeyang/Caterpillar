@@ -559,9 +559,7 @@ input[type="datetime-local"]:before{
 
 	$(function() {
 	
-	  $("#bookDate").datetimePicker();
-	  $("#startDate").datetimePicker();
-	  $("#endDate").datetimePicker();
+	  
 	
 	
 	  $(document).on('focus','.mydate',function(){
@@ -651,6 +649,19 @@ input[type="datetime-local"]:before{
 			    iscollect=data.product.ifcollection;
 			    qq=data.product.ifcollection;
 			    ifFace=data.product.ifFace;
+			    
+			    var t = new Date();
+				var t_s = t.getTime();
+				t.setTime(t_s + 20000 * 60);
+				var t1 = new Date();
+				var t1_s = t1.getTime();
+				t1.setTime(t1_s + 20000 * 60+60*60*1000*24);
+			    $("#bookDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
+	  			$("#startDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
+	  			$("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',t1));
+			    $("#bookDate").datetimePicker();
+	            $("#startDate").datetimePicker();
+	            $("#endDate").datetimePicker();
 			    if(iscollect==1){
 			    
 			       $('#fav').html('取消收藏');
@@ -662,6 +673,27 @@ input[type="datetime-local"]:before{
 			initShare();
 			
 		});
+		
+		
+		function dateFtt(fmt,date)   
+		{ //author: meizz   
+		  var o = {   
+		    "M+" : date.getMonth()+1,                 //月份   
+		    "d+" : date.getDate(),                    //日   
+		    "h+" : date.getHours(),                   //小时   
+		    "m+" : date.getMinutes(),                 //分   
+		    "s+" : date.getSeconds(),                 //秒   
+		    "q+" : Math.floor((date.getMonth()+3)/3), //季度   
+		    "S"  : date.getMilliseconds()             //毫秒   
+		  };   
+		  if(/(y+)/.test(fmt))   
+		    fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));   
+		  for(var k in o)   
+		    if(new RegExp("("+ k +")").test(fmt))   
+		  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+		  return fmt;   
+		} 
+		
 		
 		function initLogistics(data){
 		   var html=[];
