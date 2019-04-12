@@ -12,7 +12,7 @@ import pub.caterpillar.communication.tcp.component.TcpCallBack;
 public class GateWayTcpManager implements TcpCallBack{
 
 	private TcpServer tcpServer;
-	private static final String ip="172.17.144.244";
+	private static final String ip="localhost";
 	private static final int port=2537;
 	public GateWayTcpManager(){
 		try {
