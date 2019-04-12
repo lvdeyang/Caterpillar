@@ -47,26 +47,23 @@ import pub.caterpillar.weixin.constants.WXContants;
 
 public class ContextListener extends InitLoader {
 
-	private AdminDAO conn_admin;
-	private MenuDAO conn_menu;
-	private RoleMenuDAO conn_roleMenu;
-	private RoleDAO conn_role;
 	private MerchantDAO conn_Merchant;
 	private ProductDAO conn_Product;
 	private OrderInfoDAO conn_OrderInfo;
 	private BalanceDAO conn_Balance;
-	private UserInfoDAO conn_userInfo;
-
-	private CompanyDAO conn_company;
-
-	private SysConfigDAO conn_sysConfig;
 
 	@Override
 	public void customInitialize() {
 
+		
 		initOrderThread();
 
-		initGateSocket();
+		try {
+			//initGateSocket();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		
 		System.out.println("context 初始化!");
 
@@ -84,7 +81,6 @@ public class ContextListener extends InitLoader {
 		conn_Product = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.ProductDAO");
 		conn_OrderInfo = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.OrderInfoDAO");
 		conn_Balance = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.BalanceDAO");
-		conn_userInfo = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.UserInfoDAO");
 
 		// 定时商家结算
 		TimerTask task = new TimerTask() {

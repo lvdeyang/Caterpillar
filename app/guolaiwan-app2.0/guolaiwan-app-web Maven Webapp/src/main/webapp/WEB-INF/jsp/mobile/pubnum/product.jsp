@@ -656,9 +656,17 @@ input[type="datetime-local"]:before{
 				var t1 = new Date();
 				var t1_s = t1.getTime();
 				t1.setTime(t1_s + 20000 * 60+60*60*1000*24);
-			    $("#bookDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
-	  			$("#startDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
-	  			$("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',t1));
+				var bookdiv =document.getElementById("bookdiv").style.display;       
+				var startdiv =document.getElementById("startdiv").style.display;  
+				if(bookdiv!='none'){
+				    $("#bookDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
+	  			    
+				}else{
+				    $("#startDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
+	  			    $("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',t1));
+				}
+			   
+	  			
 			    $("#bookDate").datetimePicker();
 	            $("#startDate").datetimePicker();
 	            $("#endDate").datetimePicker();

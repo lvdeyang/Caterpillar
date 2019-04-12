@@ -12,7 +12,7 @@ import pub.caterpillar.communication.tcp.component.TcpCallBack;
 public class GateWayTcpManager implements TcpCallBack{
 
 	private TcpServer tcpServer;
-	private static final String ip="www.guolaiwan.net";
+	private static final String ip="172.17.144.244";
 	private static final int port=2537;
 	public GateWayTcpManager(){
 		try {
@@ -66,6 +66,7 @@ public class GateWayTcpManager implements TcpCallBack{
 				   int cnt;
 			};
 			Opt=1时rly=继电器，cnt=开继电器时间（单位：10毫秒）
+			继电器1开门方向1，2 亮红灯，3开门方向2，4其他
 			Opt=0时rly=继电器，cnt=开继电器次数，（继电器的开、关时间调用CMD_SETRLYTIME设置）*/
 			byte[] optbyte=ByteTool.getBytes(1);
 			byte[] cntbyte=ByteTool.getBytes(2000);
