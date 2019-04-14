@@ -2,6 +2,7 @@ package com.guolaiwan.bussiness.Parking.po;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
@@ -205,6 +206,8 @@ public class AttractionsParkingPO extends AbstractBasePO {
 	/**
 	 * 景区规定条例
 	 */
+	@Lob
+	@Column(columnDefinition="LONGTEXT")
 	public String getParkingDistrict() {
 		return parkingDistrict;
 	}

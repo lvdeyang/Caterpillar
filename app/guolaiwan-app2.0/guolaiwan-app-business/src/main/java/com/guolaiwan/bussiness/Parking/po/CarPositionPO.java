@@ -1,6 +1,8 @@
 package com.guolaiwan.bussiness.Parking.po;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.bytedeco.javacpp.RealSense.intrinsics;
@@ -68,14 +70,16 @@ public class CarPositionPO  extends AbstractBasePO{
 		this.longitude = longitude;
 	}
 	/**
-	 * 景区车位纬度
+	 * 景区车位图
 	 * @return
 	 */
+	@Lob
+	@Column(columnDefinition="LONGTEXT")
 	public String getLatitude() {
 		return latitude;
 	}
 	/**
-	 * 景区车位纬度
+	 * 景区车位纬图
 	 * @return
 	 */
 	public void setLatitude(String latitude) {

@@ -120,7 +120,7 @@ html, body {
 	<div class="nav" style="width:100%;height:100%;">
 
 		<div class="main"
-			style="width:90%;height:100%;background-color: #ffffff;margin:3% auto;">
+			style="width:90%;height:100%;/* background-color: #ffffff; */margin:3% auto;">
 			<p class="pid_a" id="p1" style="font-weight: bold;font-size:16px;"></p>
 			<div class="main_in" style="height:100%;width:100%;margin:0 auto">
 				<div class="main_on" style="height:10%;position: relative;">
