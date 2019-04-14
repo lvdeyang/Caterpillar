@@ -645,12 +645,12 @@ html, body {
 		
 		
 		function refreshActivity(){
-		   
+		    $('#proDate').children().remove();
 			var _urirefresh = window.BASEPATH + 'phoneApp/refreshActivity?productId=${id}&userId=${userId}&bDate='
 			+$('#bookDate').val()+'&count='+$('#proCount').val();
 		
 			$.get(_urirefresh, null, function(data){
-				$('#proDate').children().remove();
+				
 				getProDate(data.data.product,data.data.miao,data.data.isXianGou);
 	
 			});
@@ -864,11 +864,11 @@ html, body {
 	    });
 		
 		$(document).on('click','#notbuy',function(){
-	      $.toast("每件商品限购一个哦", "cancel");
+	      $.toast("超过商品限购", "cancel");
 	    });
 		
 		$(document).on('click','#notaddOrder',function(){
-	      $.toast("每件商品限购一个哦", "cancel");
+	      $.toast("超过商品限购", "cancel");
 	    });
 		
 	    $(document).on('click','#fav',function(){

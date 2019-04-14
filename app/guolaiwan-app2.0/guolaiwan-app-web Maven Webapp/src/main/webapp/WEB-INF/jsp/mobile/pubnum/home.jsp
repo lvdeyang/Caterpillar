@@ -510,7 +510,20 @@ html, body {
 			}
 	  };
 	
-	  getloca();
+	  if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+		    getloca();
+	  } else {
+		    if(comCode=='0000'){
+			    comCode='0001';
+			}
+			getCom();
+            getRecomment();
+		    getModal();
+			getActivityBundle();
+			initSharewx();
+	  }
+	
+	  
 	  
 		
 	 
@@ -781,8 +794,9 @@ html, body {
 	          location.href=window.BASEPATH + 'pubnum/live/index';
 	       }else if(codes[1]=='01112'){
 	          location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=5';
+	       }else if(codes[1]=='12022'){
+	          location.href=window.BASEPATH + 'pubnum/ipost';
 	       }else{
-	       
 	         location.href=window.BASEPATH + 'pubnum/column/index?modularCode='+codes[1];
 	    
 	       }

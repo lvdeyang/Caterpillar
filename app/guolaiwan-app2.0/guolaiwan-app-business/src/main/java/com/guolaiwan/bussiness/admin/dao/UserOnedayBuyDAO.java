@@ -22,6 +22,7 @@ import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
 import pub.caterpillar.orm.hql.CountHql;
+import pub.caterpillar.orm.hql.DeleteHql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 
@@ -46,4 +47,14 @@ public class UserOnedayBuyDAO extends AbstractBaseDao<UserOneDayBuyPO> {
 		hql.andBy("bookDate",Condition.le,DateUtil.parse(DateUtil.format(date,"yyyy-MM-dd")+" 23:59:59"));
 	    return findByHql(hql);
 	}
+	
+	public void deleteByUserAndDate(long userId,long activityId,Date bookDate){
+		DeleteHql delHql=this.newDeleteHql();
+		delHql.andBy("userId",Condition.eq,userId);
+		delHql.andBy("proId",Condition.eq,activityId);
+		delHql.andBy("bookDate",Condition.eq,bookDate);
+		this.deleteByHql(delHql);
+	}
+	
+	
 }

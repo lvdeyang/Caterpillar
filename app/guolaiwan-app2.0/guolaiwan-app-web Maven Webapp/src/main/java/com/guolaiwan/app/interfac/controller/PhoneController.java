@@ -2054,7 +2054,8 @@ public class PhoneController extends WebBaseControll {
 
 		return success();
 	}
-
+    
+	
 	/***
 	 * 订单：订单删除
 	 * 
@@ -2084,7 +2085,16 @@ public class PhoneController extends WebBaseControll {
 
 		OrderInfoPO orderPO = conn_order.getByFields(fields, values);
 		if (orderPO != null) {
-
+            if(orderPO.getActivityId()!=0){
+            	conn_userone.deleteByUserAndDate(orderPO.getUserId(), orderPO.getActivityId(), orderPO.getOrderBookDate());
+            	ActivityRelPO actPro=conn_activityRel.get(orderPO.getActivityId());
+            	actPro.setDayStock(actPro.getDayStock()+(int)orderPO.getProductNum());
+            	conn_activityRel.save(actPro);
+            }else{
+            	ProductPO productPO=conn_product.get(orderPO.getProductId());
+            	productPO.setProductStock(productPO.getProductStock()+orderPO.getProductNum());
+            	conn_product.save(productPO);
+            }
 			conn_order.delete(orderID);
 			return success();
 		}
@@ -2933,6 +2943,12 @@ public class PhoneController extends WebBaseControll {
 							Date setDate=DateUtil.parse(orderInfoVO.getUpdateTime(),DateUtil.dateTimePattern);
 						    long between=DateUtil.daysBetween(setDate,new Date());
 						    if((between*24)>activityRelPO.getExpireTime()){
+						        OrderInfoPO innerOrderInfoPO=conn_order.get(orderInfoVO.getId());
+					            conn_userone.deleteByUserAndDate(innerOrderInfoPO.getUserId(), innerOrderInfoPO.getActivityId(), innerOrderInfoPO.getOrderBookDate());
+					            ActivityRelPO actPro=conn_activityRel.get(innerOrderInfoPO.getActivityId());
+					            actPro.setDayStock(actPro.getDayStock()+(int)innerOrderInfoPO.getProductNum());
+					            conn_activityRel.save(actPro);
+					           
 						    	continue;
 						    }
 							orderInfoVO.setProductPrice(
