@@ -592,6 +592,7 @@ input[type="datetime-local"]:before{
       var productModular=0;
       var photos={};
       var ifFace=0;
+      var product;
 		//获取所有一级推荐
       var _uriRecomment = window.BASEPATH + 'phoneApp/productInfo?productId=${id}&userId=${userId}';
 		
@@ -600,6 +601,7 @@ input[type="datetime-local"]:before{
 			productName = data.product.productName + '-过来玩';
 			productPic = data.product.productShowPic;
 			productUrl = window.location.href;
+			product =  data.product.productModularCode;
 			if(data === -1) return;
 			if(data){
 			    var html=[];
@@ -652,10 +654,10 @@ input[type="datetime-local"]:before{
 			    
 			    var t = new Date();
 				var t_s = t.getTime();
-				t.setTime(t_s + 20000 * 60);
+				t.setTime(t_s + 2000 * 60);
 				var t1 = new Date();
 				var t1_s = t1.getTime();
-				t1.setTime(t1_s + 20000 * 60+60*60*1000*24);
+				t1.setTime(t1_s + 2000 * 60+60*60*1000*24);
 				var bookdiv =document.getElementById("bookdiv").style.display;       
 				var startdiv =document.getElementById("startdiv").style.display;  
 				if(bookdiv!='none'){
@@ -759,8 +761,7 @@ input[type="datetime-local"]:before{
 			  		return false;
 			  	}     
 			  }
-		
-		
+		 /* ************************************************************************************************************************ */
 		    $('#selAddress').popup(); 
 	    	var _uri = window.BASEPATH + 'pubnum/stock/userRooms?productId=${id}&start='+
 	    	$("#startDate").val()+'&end='+$("#endDate").val();
@@ -1523,12 +1524,14 @@ input[type="datetime-local"]:before{
 		}
 		//编辑地址
 		$(document).on('click','#addAddress',function(){
+		   if(product=="0001"||product=="0002"){
+		     $('#weui,#weui-cell').hide();
+		   };
 		    $('.modDiv').hide();
 		    $('#addressSecond').show();
-		
 		});
 		$(document).on('click','#save',function(){
-		    if($('#address').val()==''){
+		    if($('#address').val()==''&&product!="0001"&&product!="0002"){
 			   $.toast("请选择地址", "forbidden");
 			   return false;
 			}
@@ -1564,11 +1567,6 @@ input[type="datetime-local"]:before{
                 getAllAddr();
 			});
 	  });
-
-    
-	
-
-	  
 	
       $("#address").cityPicker({
         title: "选择地址",
@@ -1595,19 +1593,13 @@ input[type="datetime-local"]:before{
 					 html.push('<input style="float:left;height:27px;width:20px"  type="radio" name="radio1" class="" id="radio-'+data[i].id+'" '+chkattr+'>');
 			         html.push('<h4 style="width:80%;margin-left:35px;" class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）</h4>');
 			         //html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
-			         html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
+			         if(data[i].province!=null&&data[i].city!=null&&data[i].district!=null)html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('</div>');
 				}
-				
-				
-				
 				$('#addressList').children().remove();
 			    $('#addressList').append(html.join(''));
 			}
-			
 		});
-     
-     
      }
 		
 	 
@@ -1781,10 +1773,10 @@ input[type="datetime-local"]:before{
 
 			<div style="width:100%;height:40px;position:fixed;z-index:10;bottom:2px">
 				<a id="addOrder"
-					style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
+					style="width:47.5%;font-size:13px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 					href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a> <a
 					id="buy"
-					style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
+					style="width:47.5%;font-size:13px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
 					href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span
 					id="total">0</span>）
 				</a>
@@ -1853,8 +1845,7 @@ input[type="datetime-local"]:before{
 										placeholder="">
 								</div>
 							</div>
-
-							<div class="weui-cell">
+							<div class="weui-cell" id="weui">
 								<div class="weui-cell__hd">
 									<label for="name" class="weui-label">地址选择</label>
 								</div>
@@ -1864,9 +1855,7 @@ input[type="datetime-local"]:before{
 										data-codes="420000,420100,420106">
 								</div>
 							</div>
-
-
-							<div class="weui-cell">
+							<div class="weui-cell" id="weui-cell">
 								<div class="weui-cell__hd">
 									<label class="weui-label">详细地址</label>
 								</div>
