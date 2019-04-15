@@ -4877,12 +4877,12 @@ public class PhoneController extends WebBaseControll {
 			VideoPicVO _videoPic = new VideoPicVO().set(videoPic);
 			// 路径
 			_videoPic.setfUrl(split(_videoPic.getfUrl(), webUrl));
-
+   
 			// 点赞数
 			int countPraise = conn_vPRel.countPraise(videoPic);
 			_videoPic.setPraiseCount(countPraise);
 
-			// 评论数
+ 			// 评论数
 			int countComment = 0;
 			List<VPCommentPO> vpComments = videoPic.getVPComments();
 			if (vpComments != null) {
@@ -4910,7 +4910,6 @@ public class PhoneController extends WebBaseControll {
 			}
 			_videoPics.add(_videoPic);
 		}
-
 		return success(_videoPics);
 	}
 
@@ -5252,6 +5251,7 @@ public class PhoneController extends WebBaseControll {
 	 * @return
 	 * @throws Exception
 	 */
+	// TODO
 	@ResponseBody
 	@RequestMapping(value = "/videoPicInfo", method = RequestMethod.GET)
 	public Map<String, Object> videoPicInfo(HttpServletRequest request, HttpServletResponse response, Long vpId,
@@ -5287,7 +5287,7 @@ public class PhoneController extends WebBaseControll {
 				_videoPic.setIsPraise(1);
 			}
 		}
-
+    
 		// 评论数
 		int countComment = 0;
 		int pages = 0;

@@ -796,6 +796,8 @@ html, body {
 	          location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=5';
 	       }else if(codes[1]=='12022'){
 	          location.href=window.BASEPATH + 'pubnum/ipost';
+	       }else if(codes[1]=='101112'){
+	          location.href=window.BASEPATH + 'back/merchant/comment';
 	       }else{
 	         location.href=window.BASEPATH + 'pubnum/column/index?modularCode='+codes[1];
 	    

@@ -107,7 +107,7 @@ html, body {
 				htm.push('<span class="pid" style="position: absolute; top: 50%;left: 64%;transform: translate(-50%, -50%);color:#586F83;font-size:16px;overflow:hidden;width:4em;text-overflow:ellipsis;white-space:nowrap;">'+data[i].user.userNickname+'</span>');
 				htm.push('</div>');
 				htm.push('<img class="pic_a" style="width:100%;height:40%;margin:5% auto" src='+data[i].headPic+' / >');
-				htm.push('<p class="pid_a" style="font-weight: bold;font-size:16px;overflow:hidden;width:9em;text-overflow:ellipsis;white-space:nowrap;">'+data[i].name +'</p>');
+				htm.push('<p class="pid_a" style="font-weight: bold;color:black;font-size:16px;overflow:hidden;width:9em;text-overflow:ellipsis;white-space:nowrap;">'+data[i].name +'</p>');
 				htm.push('<p class="pid_b" style="color:#949494;font-size:14px;padding:2% auto;overflow:hidden;width:10em;text-overflow:ellipsis;white-space:nowrap;">'+json.title +'</p>');
 				htm.push('<p style="color:#949494;font-size:12px;margin:10% auto;"><span>4周前</span><span style="float:right;">点赞('+data[i].praiseCount+')</span><span style="float:right;">评论('+data[i].commentCount+')</span></p>');
 				htm.push('</div>');
