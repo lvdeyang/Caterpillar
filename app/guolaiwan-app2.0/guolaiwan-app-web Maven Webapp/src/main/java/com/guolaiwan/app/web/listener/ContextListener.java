@@ -59,7 +59,7 @@ public class ContextListener extends InitLoader {
 		initOrderThread();
 
 		try {
-			//initGateSocket();
+			initGateSocket();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

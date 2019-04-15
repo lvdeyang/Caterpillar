@@ -12,7 +12,8 @@ import pub.caterpillar.communication.tcp.component.TcpCallBack;
 public class GateWayTcpManager implements TcpCallBack{
 
 	private TcpServer tcpServer;
-	private static final String ip="localhost";
+	//private static final String ip="172.17.48.24";
+	private static final String ip="192.165.56.64";
 	private static final int port=2537;
 	public GateWayTcpManager(){
 		try {
@@ -25,6 +26,7 @@ public class GateWayTcpManager implements TcpCallBack{
 	@Override
 	public void dealMessage(byte[] bytes, IoSession session) {
 		// TODO Auto-generated method stub
+		System.out.println("rev length:" +bytes.length);
 		byte[] cmdByte=ByteTool.subBytes(bytes, 2, 2);
 		byte[] devIdByte=ByteTool.subBytes(bytes, 6, 2);
 		byte[] dataByte=ByteTool.subBytes(bytes, 16, bytes.length-16);

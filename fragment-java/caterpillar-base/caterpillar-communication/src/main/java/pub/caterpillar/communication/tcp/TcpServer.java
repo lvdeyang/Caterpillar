@@ -169,12 +169,12 @@ public class TcpServer extends IoHandlerAdapter {
 	@Override
 	public void sessionOpened(IoSession session) throws Exception {
 		System.out.println("receive a session");
-		while(true){
+		//while(true){
 			//SendMessage(session, "<message id='9223372036854775807");	
-			WriteFuture writeFuture = session.write("sldkfjlsdslfaj;f");
-			writeFuture.awaitUninterruptibly();
-			Thread.sleep(1000);
-		}
+		//	WriteFuture writeFuture = session.write("sldkfjlsdslfaj;f");
+		//	writeFuture.awaitUninterruptibly();
+		//	Thread.sleep(1000);
+		//}
 	}
 
 

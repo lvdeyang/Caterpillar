@@ -84,6 +84,7 @@ public class TcpClient extends IoHandlerAdapter{
         connector = new NioSocketConnector();
         //connector.getFilterChain().addLast("codec", new XStreamFilter());
         //connector.getFilterChain().addLast("log", new LogFilter());
+        
         connector.setHandler(this);
         connector.setConnectTimeoutMillis(CommunicationStandard.CONNECTION_TIME_OUT);
         SocketSessionConfig dcfg = (SocketSessionConfig) connector.getSessionConfig();
