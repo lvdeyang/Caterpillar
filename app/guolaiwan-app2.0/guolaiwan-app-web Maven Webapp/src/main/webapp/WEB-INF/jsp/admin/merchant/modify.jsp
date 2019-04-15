@@ -254,6 +254,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</select>
 				</div>
 				</div>
+				
+			<div class="layui-form-item">
+				<label class="layui-form-label">到店支付：</label>
+				<div class="layui-input-inline">
+					<select name="shopyd" id="shopyd" required>
+						<option value=""></option>
+						<option value="1">验单</option>
+						<option value="0">不验单</option>
+					</select>
+				</div>
+			</div>
 			<div class="layui-form-item">
 				<div class="layui-form-item">
                     <button class="layui-btn" lay-filter="add1" lay-submit >
@@ -277,6 +288,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             layui.use(['form','layer'], function(){
                 $ = layui.jquery;
                 $("#business").val("${list.business}");
+                $('#shopyd').val(${list.shopyd});
                 layui.form.render('select');
               var form = layui.form
               ,layer = layui.layer;

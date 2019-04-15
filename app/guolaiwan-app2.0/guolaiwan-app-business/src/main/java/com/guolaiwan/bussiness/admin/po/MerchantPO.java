@@ -115,6 +115,8 @@ public class MerchantPO extends AbstractBasePO {
 	
 	private String userName;//业务人员名字
 	
+	private int shopyd=1;
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -436,6 +438,14 @@ public class MerchantPO extends AbstractBasePO {
 
 	public void setSignPic(String signPic) {
 		this.signPic = signPic;
+	}
+
+	public int getShopyd() {
+		return shopyd;
+	}
+
+	public void setShopyd(int shopyd) {
+		this.shopyd = shopyd;
 	}
 	
 

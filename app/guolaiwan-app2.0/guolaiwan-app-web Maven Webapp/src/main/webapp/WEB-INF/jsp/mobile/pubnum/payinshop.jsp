@@ -609,7 +609,7 @@ html, body {
 		                setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
 								    
-								    if(data.data=="TESTED"){
+								    if(data.data=="TESTED"||data.data=='PAYSUCCESS'){
 								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
 								    }
 								});
