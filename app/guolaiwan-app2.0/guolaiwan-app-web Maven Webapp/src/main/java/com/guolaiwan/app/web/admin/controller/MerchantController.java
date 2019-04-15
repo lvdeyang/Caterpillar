@@ -175,7 +175,7 @@ public class MerchantController extends BaseController {
 		String modularClassId = request.getParameter("modularClassId");
 		String shopAuditstates = request.getParameter("shopAuditstates");
 		String signPic = request.getParameter("signPic");
-
+		String shopyd = request.getParameter("shopyd");
 		MerchantPO merchant = new MerchantPO();
 		MerchantPO check = conn_merchant.getByField("shopLoginName", shopLoginName);
 		if (check != null) {
@@ -222,6 +222,7 @@ public class MerchantController extends BaseController {
 		merchant.setModularClass(modularClass);
 		merchant.setModularClassId(modularClassId);
 		merchant.setSignPic(signPic);
+		merchant.setShopyd(Integer.parseInt(shopyd));
 
 		merchant.setUpdateTime(new Date());
 		// session
@@ -302,6 +303,7 @@ public class MerchantController extends BaseController {
 		String modularCode = request.getParameter("modularCode");
 		String modularClass = request.getParameter("modularClass");
 		String modularClassId = request.getParameter("modularClassId");
+		String shopyd = request.getParameter("shopyd");
 		String shopLoginPwdj = Sha1Util.getSha1(shopLoginPwd);
 		if (shopLoginPwd.length() > 20) {
 			shopLoginPwdj = shopLoginPwd;
@@ -336,6 +338,7 @@ public class MerchantController extends BaseController {
 		merchant.setModularClass(modularClass);
 		merchant.setModularClassId(modularClassId);
 		merchant.setShopAuditState(ShopAuditStateType.fromString(shopAuditstates));
+		merchant.setShopyd(Integer.parseInt(shopyd));
 		user.setUserPhone(shopLoginName);
 		user.setUserPassword(shopLoginPwdj);
 

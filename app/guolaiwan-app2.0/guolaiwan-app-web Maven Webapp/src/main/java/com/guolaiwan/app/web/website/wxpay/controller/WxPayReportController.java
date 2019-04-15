@@ -157,7 +157,13 @@ public class WxPayReportController extends WebBaseControll {
 						//order.setOrderState(OrderStateType.PAYSUCCESS);  
 						ProductPO product = conn_product.get(order.getProductId());
 						if(product == null){
-							order.setOrderState(OrderStateType.TESTED);
+							MerchantPO merchantPO=conn_merchant.get(order.getShopId());
+							if(merchantPO.getShopyd()==1){
+								order.setOrderState(OrderStateType.PAYSUCCESS); 
+							}else{
+								order.setOrderState(OrderStateType.TESTED);
+								order.setYdDate(new Date());
+							}
 						}else{
 							order.setOrderState(OrderStateType.PAYSUCCESS); 
 						}

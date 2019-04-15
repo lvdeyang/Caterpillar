@@ -228,7 +228,16 @@
 					</select>
 				</div>
 				</div>
-			
+			<div class="layui-form-item">
+				<label class="layui-form-label">到店支付：</label>
+				<div class="layui-input-inline">
+					<select name="shopyd" id="shopyd" required>
+						<option value=""></option>
+						<option value="1">验单</option>
+						<option value="0">不验单</option>
+					</select>
+				</div>
+			</div>
 			<!-- <div class="layui-form-item">
 				<button class="layui-btn" lay-filter="add" lay-submit>保存</button>
 			</div> -->
