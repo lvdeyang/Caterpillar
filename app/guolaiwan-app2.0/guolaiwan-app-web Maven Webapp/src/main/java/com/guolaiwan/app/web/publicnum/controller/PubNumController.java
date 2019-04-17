@@ -300,7 +300,17 @@ public class PubNumController extends WebBaseControll {
 		mv.addObject("modularCode", modularCode);
 		return mv;
 	}
-
+	@RequestMapping(value = "/rejectOrder")
+	public ModelAndView rejectOrder(HttpServletRequest request, String modularCode) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/column");
+		mv.addObject("modularCode", modularCode);
+		return mv;
+	}
+	
+	
+	
+	
 	@RequestMapping(value = "/product/index")
 	public ModelAndView productIndex(HttpServletRequest request, long id,String activityproId) throws Exception {
 		ModelAndView mv = null;

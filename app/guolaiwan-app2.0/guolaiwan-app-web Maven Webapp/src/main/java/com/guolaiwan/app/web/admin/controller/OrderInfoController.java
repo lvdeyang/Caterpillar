@@ -522,9 +522,17 @@ public class OrderInfoController extends BaseController {
 	@JsonBody
 	@RequestMapping(value = "/changeOrderStatus", method = RequestMethod.GET)
 	public Object changeOrderStatus(HttpServletRequest request, Long orderId, String status) throws Exception {
-
 		OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
 		orderInfoPO.setOrderState(OrderStateType.REFUNDED);
+		conn_OrderInfo.update(orderInfoPO);
+		return success();
+	}
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/rejectOrderStatus", method = RequestMethod.GET)
+	public Object rejectOrderStatus(HttpServletRequest request, Long orderId, String status) throws Exception {
+		OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
+		orderInfoPO.setOrderState(OrderStateType.PAYSUCCESS);
 		conn_OrderInfo.update(orderInfoPO);
 		return success();
 	}
