@@ -151,10 +151,18 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 			}
 		} else {
 			if (start != null && !start.equals("")) {
-				hql.andBy("createDate", Condition.gt, DateUtil.parse(start + " 00:00:00"));
+				if(state.equals(OrderStateType.NOTPAY)){
+					hql.andBy("createDate", Condition.gt, DateUtil.parse(start + " 00:00:00"));
+				}else{
+					hql.andBy("payDate", Condition.gt, DateUtil.parse(start + " 00:00:00"));
+				}
 			}
 			if (end != null && !end.equals("")) {
-				hql.andBy("createDate", Condition.lt, DateUtil.parse(end + " 23:59:59"));
+				if(state.equals(OrderStateType.NOTPAY)){
+					hql.andBy("createDate", Condition.lt, DateUtil.parse(end + " 23:59:59"));	
+				}else{
+					hql.andBy("payDate", Condition.lt, DateUtil.parse(end + " 23:59:59"));
+				}
 			}
 		}
 		if (proId != 0l) {

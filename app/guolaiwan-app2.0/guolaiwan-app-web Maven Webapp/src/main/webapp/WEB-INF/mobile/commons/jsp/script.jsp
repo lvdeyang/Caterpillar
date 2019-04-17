@@ -36,7 +36,8 @@
     	
     	
 		var href=location.href;
-		if(href.indexOf('distributor/product/index')==-1&&
+		if(href.indexOf('pubnum/admin')==-1&&
+		   href.indexOf('distributor/product/index')==-1&&
 		   href.indexOf('distributor/off/sell')==-1&&
 		   href.indexOf("distributor/offorder/edit")==-1&&
 		   href.indexOf("distributor/order/check")==-1&&
