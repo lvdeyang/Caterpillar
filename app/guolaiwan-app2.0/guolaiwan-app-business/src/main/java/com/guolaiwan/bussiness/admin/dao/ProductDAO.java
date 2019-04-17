@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.admin.dao;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.guolaiwan.bussiness.admin.enumeration.ProductSaleType;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.admin.po.ChildProductPO;
+import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.sun.jna.platform.win32.WinDef.LONG;
 
@@ -520,5 +522,23 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		long maxId = (long)query.uniqueResult();
 		return maxId;
 	}
+	
+	
+	
+	// 查询到店支付 id
+		public ProductPO searchOrder(long merchantId,String name)
+				throws ParseException {
+			QueryHql hql = this.newQueryHql();
+			hql.andBy("productMerchantID", Condition.eq, merchantId);
+			hql.andBy("productName", Condition.eq, name);
+			List<ProductPO> orders = findByHql(hql);
+			if (orders == null || orders.size() == 0)
+				return null;
+			return orders.get(0);
+		}
+	
+	
+	
+	
 	
 }

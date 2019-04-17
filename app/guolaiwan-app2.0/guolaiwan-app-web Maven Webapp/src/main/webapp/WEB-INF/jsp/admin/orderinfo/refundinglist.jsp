@@ -69,7 +69,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     				} 
   				}); */
             	agreeOrder(obj,data.id);
-  				
+  				rejectOrder(obj,data.id);
   			active = {
         		reload: function(){
             	table.reload('mClassTable', {
@@ -94,14 +94,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					
 				 });
              }
+             function rejectOrder(obj,orderId){
+					rejectOrderStatus(obj,orderId,'PAYSUCCESS');
+             }
 	        function changeOrderStatus(obj,orderId,status){
 			   var _urichangeorder = 'changeOrderStatus?orderId='+orderId+'&status='+status;
 		          $.get(_urichangeorder, null, function(data){
 						layer.msg("已退款");
 						$(obj).parents("tr").remove();
 			      });
-			
-			}             
+			}       
+		   function rejectOrderStatus(obj,orderId,status){
+			   var _urichangeorder = 'rejectOrderStatus?orderId='+orderId+'&status='+status;
+		          $.get(_urichangeorder, null, function(data){
+						layer.msg("拒绝退款");
+						$(obj).parents("tr").remove();
+			      });
+			}      
              function getList(){
              console.log(1);
             	ele=0;
@@ -114,10 +123,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          {field: 'id',title: 'Id',align:'center',width:60}
       					,{field: 'userTel', title: '用户手机号',width:120}
    						,{field: 'createDate', title: '下单时间' ,width:200}  
-      					,{field: 'productName', title: '商品' } 
+      					,{field: 'productName', title: '商品' ,width:700} 
      					,{field: 'orderAllMoney', title: '总金额',width:120 } 
      					,{field: 'reason', title: '退款原因',width:120 } 
-      					,{fixed: 'right', title: '操作',width:120,toolbar:'#zsgc'}
+      					,{fixed: 'right', title: '操作',width:200,toolbar:'#zsgc,#tui1'}
     					 
                      ]]
                 	,id:"mClassTable"
@@ -128,8 +137,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script type="text/html" id="zsgc">
 			<div class="layui-btn-group">
 				<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="agree" onclick="agreeOrder(this,'{{ d.id }}')">同意退款>></a>
+                
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="agree" onclick="rejectOrder(this,'{{ d.id }}')"><<拒绝退款 </a>
 			</div>
 		</script>
-		
     </body>
 </html>

@@ -134,7 +134,8 @@ opacity:1;
 	         html.push('<span class="pid" style="font-size:16px;font-weight: bold;">'+data[i].username+'</span><br>');
 	         html.push(' <p class="pid_a" style="font-size:14px;">'+data[i].content+'</p>');
 	         if(data[i].replycontent != null)html.push(' <p class="pid_b" style="font-size:14px;"><span style="color:#19B4ED">回复：</span>'+data[i].replycontent+'</p>');
-	         html.push(' </div>');
+	     /*     html.push('<img class="trash" style="width:25px;height:25px;float:right;" src="lib/images/trashs.png" />') */
+	         html.push(' </div>');	        
 	         html.push(' </div>');
 	         html.push(' <div style="width:100%;border-bottom:1px dashed #C8CCCF;margin:0 auto;text-align: center;"></div>');
           }

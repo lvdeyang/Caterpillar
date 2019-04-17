@@ -1101,6 +1101,12 @@ public class PhoneController extends WebBaseControll {
 		String orderNO = getCityCodeByDomain() + "v" + merchant.getId() + "v" + merchant.getModularCode() + "v"
 				+ df.format(date) + "v" + user.getId();
 		order.setOrderNO(orderNO);
+
+		//增加 到店支付
+	   ProductPO orderList = conn_product.searchOrder(merchant.getId(),"到店支付订单");
+	   if(orderList !=  null){
+		   order.setProductId( orderList.getId());
+	   }
 		// 验单码
 
 		// 下单时间

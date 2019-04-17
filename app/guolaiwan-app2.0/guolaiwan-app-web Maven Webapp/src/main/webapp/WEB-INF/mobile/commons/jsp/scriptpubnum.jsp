@@ -110,7 +110,7 @@
 		var phone='0315-6681288';
 		var ccode='${comCode}';
 		if(ccode=='1003'){
-		   nameHeader='畅游平谷';
+		   nameHeader='全域休闲';
 		   phone='010-89991991';
 		}
 		$('.header-content').html('<image src="lib/images/logo.jpg" style="position:absolute;margin-top:5px;width:25px;height:25px;display:inline-block;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="headerName">'+nameHeader+'</span><div id="phone" style="font-size:10px;position:absolute;margin-top:-38px;z-index:1000;right:40px">'+phone+'</div>'

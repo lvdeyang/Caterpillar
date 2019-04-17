@@ -838,9 +838,10 @@ html, body {
 	           html.push('<p style="height:1px;"></p>');
 	           html.push('<div style="width:100%;height:30px;text-align:center;font-weight:bold;background-color: #f4f4f4;font-size:20px;">'+modals[i].modularName+'<div class="hrefModal" id="hmodal-'+modals[i].modularCode+'" style="font-size:10px;position:absolute;margin-top:-20px;z-index:499;color:#a6a6a6;right:10px">查看全部></div></div>');
 	           html.push('<br />');
-	           html.push('<div style="width:100%;margin-top:10px;" class="merchant1" id="merchant1-'+merchants[0].id+'">');
+	           html.push('<div style="width:100%;margin-top:10px;float:left;" class="merchant1" id="merchant1-'+merchants[0].id+'">');
 		       html.push('<image style="width:60px;height:60px;float:left;margin-left:12px;" src="'+merchants[0].shopHeading+'"/>');
-		       html.push('<div style="width:80%;float:left;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;font-weight:bold;padding-left:12px;height:40px;">'+merchants[0].shopName+'</div>');
+		       html.push('<div style="width:50%;float:left;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;font-weight:bold;padding-left:12px;height:40px;">'+merchants[0].shopName+'</div>');
+		       html.push('<button class="collect" style="float:right;width:17%;height:35px;font-size:16px;border-radius: 25px;color:#F6A2A2;background:#ffffff;border:1px solid #F6A2A2 ;outline:none;margin-right:5%;z-index:10;">+ 收藏</button>');
 		       html.push('</br>');
 		       html.push('<div style="width:80%;float:left;font-size:12px;padding-left:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+merchants[0].shopAddress+'</div>');
                html.push('<div style="width;100%;margin-top:15px;height:70px;float:left;margin-left:12px">');
