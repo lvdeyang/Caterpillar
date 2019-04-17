@@ -171,7 +171,7 @@ public class CarouselController extends BaseController{
 			if(comId==1l){
 				//获取总公司显示轮播的个数
 				int count = conn_Carousel.countByComEn(comId);
-				if(count >= 5){
+				if(count >= 10){
 					return "more";
 				}
 			}else{

@@ -84,7 +84,10 @@ public class ColumnController extends BaseController {
 		List<MerchantPO> listpo = new ArrayList<MerchantPO>();
 		List<ColumnPO> columnByCode = conn_column.getColumnByCode(modular.getModularCode());
 		for(ColumnPO cpo : columnByCode){
-			listpo.add(conn_merchant.getMerchantById(cpo.getMerchantId()).get(0));
+			List<MerchantPO> tempMerchantPOs=conn_merchant.getMerchantById(cpo.getMerchantId());
+			if(tempMerchantPOs!=null && !tempMerchantPOs.isEmpty()){
+				listpo.add(tempMerchantPOs.get(0));
+			}
 		}
 		int allcount = columnByCode.size();
 		List<MerchantVO> listvo = MerchantVO.getConverter(MerchantVO.class).convert(listpo, MerchantVO.class);

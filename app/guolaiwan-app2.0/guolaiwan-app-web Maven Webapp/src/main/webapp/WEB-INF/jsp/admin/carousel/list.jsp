@@ -103,7 +103,7 @@ String imgPath = request.getScheme()+"://"+request.getServerName()+":"+request.g
                         	
                            layer.msg("操作成功",{icon:1,time:500})
                         }else if(msg=='more'){
-                           layer.msg("轮播图最多支持五个！",{icon:2,time:3000});
+                           layer.msg("轮播图最多支持10个！",{icon:2,time:3000});
                            $(obj.elem).removeAttr("checked");
                            form.render("checkbox")
                         }
