@@ -215,6 +215,55 @@
 				 
 				</div>
 			</div>
+			
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">板块名称1</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularName1" required
+						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="text" name="modularCode1" 
+						lay-verify="required" autocomplete="off" class="layui-input" style="display: none">
+						
+				</div>
+				<label class="layui-form-label">分类名称1</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularClass1" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="text" name="modularClassId1" 
+						autocomplete="off" class="layui-input" style="display: none">
+				</div>
+				
+				 <div class="layui-input-inline" style="width: 100px;">
+				  <a href="javascript:openMap('选择分类','<%=request.getContextPath() %>/admin/modular/comSel?index=1','600','400')" class="layui-btn" >选择分类</a>
+				 
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">板块名称2</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularName2" required
+						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="text" name="modularCode2" 
+						lay-verify="required" autocomplete="off" class="layui-input" style="display: none">
+						
+				</div>
+				<label class="layui-form-label">分类名称2</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularClass2" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="text" name="modularClassId2" 
+						autocomplete="off" class="layui-input" style="display: none">
+				</div>
+				
+				 <div class="layui-input-inline" style="width: 100px;">
+				  <a href="javascript:openMap('选择分类','<%=request.getContextPath() %>/admin/modular/comSel?index=2','600','400')" class="layui-btn" >选择分类</a>
+				 
+				</div>
+			</div>
+			
+			
+			
 			<div class="layui-form-item">
 			<label class="layui-form-label">商户业务：</label>
 				<div class="layui-input-inline">

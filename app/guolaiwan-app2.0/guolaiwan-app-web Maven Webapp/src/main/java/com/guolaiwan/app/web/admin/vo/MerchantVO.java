@@ -466,6 +466,14 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 		.setModularCode(entity.getModularCode())
 		.setModularClass(entity.getModularClass())
 		.setModularClassId(entity.getModularClassId())
+		.setModularName1(entity.getModularName1())
+		.setModularCode1(entity.getModularCode1())
+		.setModularClass1(entity.getModularClass1())
+		.setModularClassId1(entity.getModularClassId1())
+		.setModularName2(entity.getModularName2())
+		.setModularCode2(entity.getModularCode2())
+		.setModularClass2(entity.getModularClass2())
+		.setModularClassId2(entity.getModularClassId2())
 		.setCityCode(entity.getCityCode())
 		.setCityName(entity.getCityName())
 		.setComId(entity.getComId())
@@ -477,5 +485,97 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 		.setSignPic(entity.getSignPic());
 		return this;
 	}
+	
+	
+	// 板块名称
+	private String modularName1;
+	// 板块Code
+	private String modularCode1;
+	// 板块分类
+	private String modularClass1;
+	// 板块分类Id
+	private String modularClassId1;
+	// 板块名称
+	private String modularName2;
+	// 板块Code
+	private String modularCode2;
+	// 板块分类
+	private String modularClass2;
+	// 板块分类Id
+	private String modularClassId2;
+
+	public String getModularName1() {
+		return modularName1;
+	}
+
+	public MerchantVO setModularName1(String modularName1) {
+		this.modularName1 = modularName1;
+		return this;
+	}
+
+	public String getModularCode1() {
+		return modularCode1;
+	}
+
+	public MerchantVO setModularCode1(String modularCode1) {
+		this.modularCode1 = modularCode1;
+		return this;
+	}
+
+	public String getModularClass1() {
+		return modularClass1;
+	}
+
+	public MerchantVO setModularClass1(String modularClass1) {
+		this.modularClass1 = modularClass1;
+		return this;
+	}
+
+	public String getModularClassId1() {
+		return modularClassId1;
+	}
+
+	public MerchantVO setModularClassId1(String modularClassId1) {
+		this.modularClassId1 = modularClassId1;
+		return this;
+	}
+
+	public String getModularName2() {
+		return modularName2;
+	}
+
+	public MerchantVO setModularName2(String modularName2) {
+		this.modularName2 = modularName2;
+		return this;
+	}
+
+	public String getModularCode2() {
+		return modularCode2;
+	}
+
+	public MerchantVO setModularCode2(String modularCode2) {
+		this.modularCode2 = modularCode2;
+		return this;
+	}
+
+	public String getModularClass2() {
+		return modularClass2;
+	}
+
+	public MerchantVO setModularClass2(String modularClass2) {
+		this.modularClass2 = modularClass2;
+		return this;
+	}
+
+	public String getModularClassId2() {
+		return modularClassId2;
+	}
+
+	public MerchantVO setModularClassId2(String modularClassId2) {
+		this.modularClassId2 = modularClassId2;
+		return this;
+	}
+	
+	
 
 }

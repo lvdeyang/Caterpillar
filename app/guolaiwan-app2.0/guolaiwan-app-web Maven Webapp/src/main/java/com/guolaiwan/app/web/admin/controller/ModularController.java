@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.bytedeco.javacpp.RealSense.intrinsics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -142,6 +143,10 @@ public class ModularController extends BaseController{
 	//显示列表
 	@RequestMapping(value="/comSel",method= RequestMethod.GET)
 	public ModelAndView getComSel(HttpServletRequest request){
+		int index=0;
+		if(request.getParameter("index")!=null){
+			index = Integer.parseInt(request.getParameter("index"));
+		}
 		Map<String, Object> strMap = new HashMap<String, Object>();
 
 		Object value=1;
@@ -175,6 +180,7 @@ public class ModularController extends BaseController{
 
 
 		strMap.put("list", sbHtml.toString());
+		strMap.put("index", index);
 		ModelAndView mv = new ModelAndView("admin/modular/comSel",strMap);
 		return mv;
 	}
