@@ -3233,7 +3233,9 @@ public class PhoneController extends WebBaseControll {
 
 		if (_order.getComboId() != 0) {
 			ProductComboPO comboPO = conn_combo.get(_order.getComboId());
-			_order.setProductPrice(new DecimalFormat("0.00").format((double) comboPO.getComboprice() / 100));
+			if(_order.getActivityId()==0){
+				_order.setProductPrice(new DecimalFormat("0.00").format((double) comboPO.getComboprice() / 100));
+			}
 			_order.setComboName(comboPO.getCombo());
 		} else {
 			_order.setComboName("标准");
