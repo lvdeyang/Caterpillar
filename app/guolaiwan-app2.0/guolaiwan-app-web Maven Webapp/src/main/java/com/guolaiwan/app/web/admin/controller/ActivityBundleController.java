@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.app.web.admin.vo.ActivityVO;
 import com.guolaiwan.bussiness.admin.dao.ActivityBundleDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.ActivityType;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
@@ -32,6 +33,8 @@ public class ActivityBundleController extends BaseController {
 	private SysConfigDAO conn_sysConfig;
 	@Autowired
 	private ActivityBundleDAO conn_bundle;
+	@Autowired
+	private MerchantDAO conn_merchant;
 	// 显示添加页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView bundleList(HttpServletRequest request) {
@@ -47,8 +50,11 @@ public class ActivityBundleController extends BaseController {
 	public Map<String, Object> AddView(int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		int count = conn_bundle.countAll();
-		
-		List<ActiveBundlePo> bundles = conn_bundle.queryByPage(page, limit);
+		Long comId = null;
+		if (getLoginInfo() != null) {
+			 comId = getLoginInfo().getComId();
+		}
+		List<ActiveBundlePo> bundles = conn_bundle.queryByPage(page, limit,comId.intValue());
 		
 		strMap.put("code", "0");
 		strMap.put("msg", "");
@@ -70,9 +76,13 @@ public class ActivityBundleController extends BaseController {
 	public String add(HttpServletRequest request) throws Exception {
 		String comName = getLoginInfo().getComName();
 		String title = request.getParameter("title");
-	
+		Long comId = null;
+		if (getLoginInfo() != null) {
+			 comId = getLoginInfo().getComId();
+		}
 		ActiveBundlePo bundlePo = new ActiveBundlePo();
 		bundlePo.setTitle(title);
+		bundlePo.setComId(comId.intValue());
 		conn_bundle.save(bundlePo);
 		return "success";
 	}

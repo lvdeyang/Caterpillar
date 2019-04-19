@@ -499,6 +499,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
 	  var parseAjaxResult = function(data){
@@ -835,13 +836,16 @@ html, body {
 	           if(merchants.length==0){
 	              continue;
 	           }
+	         
 	           html.push('<p style="height:1px;"></p>');
 	           html.push('<div style="width:100%;height:30px;text-align:center;font-weight:bold;background-color: #f4f4f4;font-size:20px;">'+modals[i].modularName+'<div class="hrefModal" id="hmodal-'+modals[i].modularCode+'" style="font-size:10px;position:absolute;margin-top:-20px;z-index:499;color:#a6a6a6;right:10px">查看全部></div></div>');
 	           html.push('<br />');
+	           html.push('<div class="zong" style="width:100%;position: relative;">');
+	              html.push('<button id="fav"class="collect" value="'+merchants[0].id+'" style="position: absolute;top:30%;left:80%;float:right;width:17%;height:35px;font-size:14px;border-radius: 25px;color:#F6A2A2;background:#ffffff;border:1px solid #F6A2A2 ;outline:none;margin-right:5%;z-index:10;">+ 收藏</button>');
 	           html.push('<div style="width:100%;margin-top:10px;float:left;" class="merchant1" id="merchant1-'+merchants[0].id+'">');
 		       html.push('<image style="width:60px;height:60px;float:left;margin-left:12px;" src="'+merchants[0].shopHeading+'"/>');
 		       html.push('<div style="width:50%;float:left;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;font-weight:bold;padding-left:12px;height:40px;">'+merchants[0].shopName+'</div>');
-		       html.push('<button class="collect" style="float:right;width:17%;height:35px;font-size:16px;border-radius: 25px;color:#F6A2A2;background:#ffffff;border:1px solid #F6A2A2 ;outline:none;margin-right:5%;z-index:10;">+ 收藏</button>');
+		    
 		       html.push('</br>');
 		       html.push('<div style="width:80%;float:left;font-size:12px;padding-left:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+merchants[0].shopAddress+'</div>');
                html.push('<div style="width;100%;margin-top:15px;height:70px;float:left;margin-left:12px">');
@@ -849,6 +853,7 @@ html, body {
                html.push('<image style="width:32%;height:90px;float:left;" src="'+morePics[0]+'"/>');
 		       html.push('<image style="width:32%;height:90px;float:left;margin-left:1%" src="'+morePics[1]+'"/>');
 		       html.push('<image style="width:32%;height:90px;float:left;margin-left:1%" src="'+morePics[2]+'"/>');
+		       html.push('</div>');
 		       html.push('</div>');
 		       html.push('<div id="commnetUser-'+merchants[0].id+'" style="height:25px;width:90%;margin-left:12px;margin-top:30px;float:left;">');
 		       html.push('<div style="float:left;width:60px;font-size:12px">评论用户</div>')
@@ -883,6 +888,37 @@ html, body {
 	   
 	     location.href="http://<%=weburl%>/download/download.html";
 	     return false;
+	   });
+	   
+	   
+	   //收藏
+	   $(document).on('click','#fav',function(){
+	   var merchantId =  $(this).attr("value");  
+	    if(iscollect==1){
+	            var param={};
+		        param.merId= merchantId;
+		        param.userId=${userId};
+	            var _urifav = window.BASEPATH + 'phoneApp/delmerCollectionPro';
+				$.post(_urifav, $.toJSON(param), function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					$.toast("取消收藏成功");
+	                $('#fav').html('收藏');
+					iscollect=0;
+				});
+	        }else{
+	           var param={};
+		        param.merId= merchantId;
+		        param.userId=${userId};
+	           var _urifav = window.BASEPATH + 'phoneApp/mercollectionPro';
+				$.post(_urifav, $.toJSON(param), function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					$.toast("收藏成功");
+	                $('#fav').html('取消收藏');
+					iscollect=1;
+				});
+	        }
 	   });
 	   
 	   

@@ -8,6 +8,7 @@ import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
+import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.admin.dto.MerchantDTO;
 import com.guolaiwan.bussiness.admin.dto.ProductDTO;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
@@ -26,8 +27,15 @@ import pub.caterpillar.orm.hql.QueryHql;
 @Repository("com.guolaiwan.bussiness.admin.dao.ActivityBundleDAO")
 public class ActivityBundleDAO extends AbstractBaseDao<ActiveBundlePo> {
 
-	public List<ActiveBundlePo> queryByPage(int page,int pagesize){
+	public List<ActiveBundlePo> queryByPage(int page,int pagesize,int comId){
 		QueryHql queryHql=this.newQueryHql();
-		return this.findByHqlPage(queryHql, page, pagesize);
+		queryHql.andBy("comId", Condition.eq, comId);
+		List<ActiveBundlePo> products = findByHqlPage(queryHql, page, pagesize);
+		if (products == null || products.size() <= 0)return null;
+		
+		return products;
 	}
+	
+	
+	
 }
