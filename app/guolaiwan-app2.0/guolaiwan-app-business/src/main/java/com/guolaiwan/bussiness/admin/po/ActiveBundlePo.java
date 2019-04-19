@@ -10,8 +10,18 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 public class ActiveBundlePo extends AbstractBasePO {
     private String title;
     private String pic;
-
+    //分公司id
+    private int  comId;
 	
+    
+    
+    
+	public int getComId() {
+		return comId;
+	}
+	public void setComId(int comId) {
+		this.comId = comId;
+	}
 	public String getTitle() {
 		return title;
 	}
