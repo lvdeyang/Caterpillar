@@ -39,7 +39,7 @@ layui.use(['element', 'layer','jquery'], function(){
  $ = layui.jquery;//jquery
   var element = layui.element;
   var layer = layui.layer;
-  
+  var indexparam=${index};
   //监听折叠
   element.on('collapse(test)', function(data){
     layer.msg('展开状态：'+ data.show);
@@ -50,11 +50,18 @@ layui.use(['element', 'layer','jquery'], function(){
    	var mname=$(this).attr("data-mname");
    	var ccode=$(this).attr("data-ccode");
    	var cname=$(this).attr("data-cname");
-   	
-   	  parent.$("input[name='modularName']").val(mname);
-      parent.$("input[name='modularCode']").val(mcode);
-      parent.$("input[name='modularClass']").val(cname);
-      parent.$("input[name='modularClassId']").val(ccode);
+   	  if(indexparam==0){
+   	      parent.$("input[name='modularName']").val(mname);
+	      parent.$("input[name='modularCode']").val(mcode);
+	      parent.$("input[name='modularClass']").val(cname);
+	      parent.$("input[name='modularClassId']").val(ccode);
+   	  }else{
+   	      parent.$("input[name='modularName"+indexparam+"']").val(mname);
+	      parent.$("input[name='modularCode"+indexparam+"']").val(mcode);
+	      parent.$("input[name='modularClass"+indexparam+"']").val(cname);
+	      parent.$("input[name='modularClassId"+indexparam+"']").val(ccode);
+   	  }
+   	  
       if(mcode=='2021'){
          parent.$(".proLine").show();
       }else{

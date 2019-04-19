@@ -616,7 +616,7 @@ html, body {
                 if(comCode=='0000'){
 				    if(district.indexOf('平谷')!=-1){
 					    comCode='1003';
-					    $('#headerName').html('畅游平谷');
+					    $('#headerName').html('全域休闲');
 					    $('#phone').html('010-89991991');
 					}else{
 					    comCode='0001';

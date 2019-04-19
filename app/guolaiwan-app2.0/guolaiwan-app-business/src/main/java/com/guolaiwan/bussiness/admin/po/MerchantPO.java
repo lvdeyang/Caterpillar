@@ -84,6 +84,27 @@ public class MerchantPO extends AbstractBasePO {
 	private String modularClass;
 	// 板块分类Id
 	private String modularClassId;
+	
+	
+	// 板块名称1
+	private String modularName1;
+	// 板块Code
+	private String modularCode1;
+	// 板块分类1
+	private String modularClass1;
+	// 板块分类Id
+	private String modularClassId1;
+	
+	
+	// 板块名称1
+	private String modularName2;
+	// 板块Code
+	private String modularCode2;
+	// 板块分类1
+	private String modularClass2;
+	// 板块分类Id
+	private String modularClassId2;
+	
 
 	// 城市标识
 	private String cityCode;
@@ -447,6 +468,72 @@ public class MerchantPO extends AbstractBasePO {
 	public void setShopyd(int shopyd) {
 		this.shopyd = shopyd;
 	}
+
+	public String getModularName1() {
+		return modularName1;
+	}
+
+	public void setModularName1(String modularName1) {
+		this.modularName1 = modularName1;
+	}
+
+	public String getModularCode1() {
+		return modularCode1;
+	}
+
+	public void setModularCode1(String modularCode1) {
+		this.modularCode1 = modularCode1;
+	}
+
+	public String getModularClass1() {
+		return modularClass1;
+	}
+
+	public void setModularClass1(String modularClass1) {
+		this.modularClass1 = modularClass1;
+	}
+
+	public String getModularClassId1() {
+		return modularClassId1;
+	}
+
+	public void setModularClassId1(String modularClassId1) {
+		this.modularClassId1 = modularClassId1;
+	}
+
+	public String getModularName2() {
+		return modularName2;
+	}
+
+	public void setModularName2(String modularName2) {
+		this.modularName2 = modularName2;
+	}
+
+	public String getModularCode2() {
+		return modularCode2;
+	}
+
+	public void setModularCode2(String modularCode2) {
+		this.modularCode2 = modularCode2;
+	}
+
+	public String getModularClass2() {
+		return modularClass2;
+	}
+
+	public void setModularClass2(String modularClass2) {
+		this.modularClass2 = modularClass2;
+	}
+
+	public String getModularClassId2() {
+		return modularClassId2;
+	}
+
+	public void setModularClassId2(String modularClassId2) {
+		this.modularClassId2 = modularClassId2;
+	}
+	
+	
 	
 
 }

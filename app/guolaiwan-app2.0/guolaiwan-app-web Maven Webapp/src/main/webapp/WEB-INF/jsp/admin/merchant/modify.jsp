@@ -241,6 +241,53 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				 
 				</div>
 			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">板块名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularName1" value="${list.modularName1}"
+						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="hidden"  name="modularCode1" value="${list.modularCode1}"
+						 autocomplete="off" class="layui-input" >
+						
+				</div>
+				<label class="layui-form-label">分类名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularClass1" value="${list.modularClass1}" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="hidden" name="modularClassId1" value="${list.modularClassId1}"
+						autocomplete="off" class="layui-input" >
+				</div>
+				
+				 <div class="layui-input-inline" style="width: 100px;">
+				  <a href="javascript:openMap('选择分类','<%=request.getContextPath() %>/admin/modular/comSel?index=1','600','400')" class="layui-btn" >选择分类</a>
+				 
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">板块名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularName1" value="${list.modularName2}"
+						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="hidden"  name="modularCode2" value="${list.modularCode2}"
+						 autocomplete="off" class="layui-input" >
+						
+				</div>
+				<label class="layui-form-label">分类名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularClass2" value="${list.modularClass2}" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="hidden" name="modularClassId2" value="${list.modularClassId2}"
+						autocomplete="off" class="layui-input" >
+				</div>
+				
+				 <div class="layui-input-inline" style="width: 100px;">
+				  <a href="javascript:openMap('选择分类','<%=request.getContextPath() %>/admin/modular/comSel?index=2','600','400')" class="layui-btn" >选择分类</a>
+				 
+				</div>
+			</div>
+			
+			
 			<div class="layui-form-item">
 			<label class="layui-form-label">商户业务：</label>
 				<div class="layui-input-inline">

@@ -216,6 +216,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				 
 			</div>
 			
+			<div class="layui-form-item">
+				<label class="layui-form-label">板块名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularName1" value="${list.modularName1}"
+						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="text" name="modularCode1" 
+						 autocomplete="off" class="layui-input" style="display: none">
+						
+				</div>
+				<label class="layui-form-label">分类名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularClass1" value="${list.modularClass1}" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="text" name="modularClassId1" 
+						autocomplete="off" class="layui-input" style="display: none">
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">板块名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularName2" value="${list.modularName2}"
+						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="text" name="modularCode2" 
+						 autocomplete="off" class="layui-input" style="display: none">
+						
+				</div>
+				<label class="layui-form-label">分类名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="modularClass2" value="${list.modularClass2}" autocomplete="off" class="layui-input" readonly="readonly">
+						<input type="text" name="modularClassId2" 
+						autocomplete="off" class="layui-input" style="display: none">
+				</div>
+			</div>
+			
+			
+			
+			
 			 <div class="layui-form-item">
     			<label class="layui-form-label">审核状态</label>
     			<div class="layui-input-block">

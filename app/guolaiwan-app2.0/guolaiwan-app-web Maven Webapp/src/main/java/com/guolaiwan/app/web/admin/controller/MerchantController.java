@@ -173,6 +173,19 @@ public class MerchantController extends BaseController {
 		String modularCode = request.getParameter("modularCode");
 		String modularClass = request.getParameter("modularClass");
 		String modularClassId = request.getParameter("modularClassId");
+		
+		
+		String modularName1 = request.getParameter("modularName1");
+		String modularCode1 = request.getParameter("modularCode1");
+		String modularClass1 = request.getParameter("modularClass1");
+		String modularClassId1 = request.getParameter("modularClassId1");
+		
+		String modularName2 = request.getParameter("modularName2");
+		String modularCode2 = request.getParameter("modularCode2");
+		String modularClass2 = request.getParameter("modularClass2");
+		String modularClassId2 = request.getParameter("modularClassId2");
+		
+		
 		String shopAuditstates = request.getParameter("shopAuditstates");
 		String signPic = request.getParameter("signPic");
 		String shopyd = request.getParameter("shopyd");
@@ -221,6 +234,19 @@ public class MerchantController extends BaseController {
 		merchant.setModularCode(modularCode);
 		merchant.setModularClass(modularClass);
 		merchant.setModularClassId(modularClassId);
+		
+		
+		merchant.setModularName1(modularName1);
+		merchant.setModularCode1(modularCode1);
+		merchant.setModularClass1(modularClass1);
+		merchant.setModularClassId1(modularClassId1);
+		
+		merchant.setModularName2(modularName2);
+		merchant.setModularCode2(modularCode2);
+		merchant.setModularClass2(modularClass2);
+		merchant.setModularClassId2(modularClassId2);
+		
+		
 		merchant.setSignPic(signPic);
 		merchant.setShopyd(Integer.parseInt(shopyd));
 
@@ -304,6 +330,18 @@ public class MerchantController extends BaseController {
 		String modularClass = request.getParameter("modularClass");
 		String modularClassId = request.getParameter("modularClassId");
 		String shopyd = request.getParameter("shopyd");
+		
+		String modularName1 = request.getParameter("modularName1");
+		String modularCode1 = request.getParameter("modularCode1");
+		String modularClass1 = request.getParameter("modularClass1");
+		String modularClassId1 = request.getParameter("modularClassId1");
+		
+		String modularName2 = request.getParameter("modularName2");
+		String modularCode2 = request.getParameter("modularCode2");
+		String modularClass2 = request.getParameter("modularClass2");
+		String modularClassId2 = request.getParameter("modularClassId2");
+		
+		
 		String shopLoginPwdj = Sha1Util.getSha1(shopLoginPwd);
 		if (shopLoginPwd.length() > 20) {
 			shopLoginPwdj = shopLoginPwd;
@@ -342,6 +380,17 @@ public class MerchantController extends BaseController {
 		user.setUserPhone(shopLoginName);
 		user.setUserPassword(shopLoginPwdj);
 
+		merchant.setModularName1(modularName1);
+		merchant.setModularCode1(modularCode1);
+		merchant.setModularClass1(modularClass1);
+		merchant.setModularClassId1(modularClassId1);
+		
+		merchant.setModularName2(modularName2);
+		merchant.setModularCode2(modularCode2);
+		merchant.setModularClass2(modularClass2);
+		merchant.setModularClassId2(modularClassId2);
+		
+		
 		user.setMerchant(merchant);
 		merchant.setUser(user);
 
