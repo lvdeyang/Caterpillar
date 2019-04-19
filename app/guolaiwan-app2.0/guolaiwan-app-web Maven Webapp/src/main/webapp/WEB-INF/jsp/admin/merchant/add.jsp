@@ -220,10 +220,10 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">板块名称1</label>
 				<div class="layui-input-inline">
-					<input type="text" name="modularName1" required
+					<input type="text" name="modularName1"
 						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
 						<input type="text" name="modularCode1" 
-						lay-verify="required" autocomplete="off" class="layui-input" style="display: none">
+						autocomplete="off" class="layui-input" style="display: none">
 						
 				</div>
 				<label class="layui-form-label">分类名称1</label>
@@ -243,10 +243,10 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">板块名称2</label>
 				<div class="layui-input-inline">
-					<input type="text" name="modularName2" required
+					<input type="text" name="modularName2"
 						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
 						<input type="text" name="modularCode2" 
-						lay-verify="required" autocomplete="off" class="layui-input" style="display: none">
+						autocomplete="off" class="layui-input" style="display: none">
 						
 				</div>
 				<label class="layui-form-label">分类名称2</label>
