@@ -1399,6 +1399,10 @@ public class PhoneController extends WebBaseControll {
 		Date endDate = activityPro.getEndDate();
 		Date beginTime = activityPro.getBeginTime();
 		Date endTime = activityPro.getEndTime();
+		Date bookBegin=activityPro.getBookBeginTime();
+		if(date.after(bookBegin)){
+			activityRelVO.setBookBeginTime(DateUtil.format(date,"yyyy-MM-dd HH:mm:ss"));
+		}
 
 		String beginTimeStr = DateUtil.format(date, "yyyy-MM-dd") + " " + DateUtil.format(beginTime, "HH:mm:ss");
 		Date beginTimeAll = DateUtil.parse(beginTimeStr, "yyyy-MM-dd HH:mm:ss");
