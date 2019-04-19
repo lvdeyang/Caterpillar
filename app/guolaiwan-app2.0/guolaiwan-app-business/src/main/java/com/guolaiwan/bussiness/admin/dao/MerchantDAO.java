@@ -246,6 +246,38 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		List<MerchantPO> merchants = findByHqlPage(hql, pageNum, pageSize);
 		return merchants;
 	}
+	
+	
+	public List<MerchantPO> getMerchantByModularCode1(String modularCode, Map<String, Object> Retrievals, int pageNum,
+			int pageSize) {
+
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
+		hql.andBy("modularCode1", Condition.eq, modularCode);
+
+		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
+			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
+		}
+
+		List<MerchantPO> merchants = findByHqlPage(hql, pageNum, pageSize);
+		return merchants;
+	}
+	
+	public List<MerchantPO> getMerchantByModularCode2(String modularCode, Map<String, Object> Retrievals, int pageNum,
+			int pageSize) {
+
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
+		hql.andBy("modularCode2", Condition.eq, modularCode);
+
+		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
+			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
+		}
+
+		List<MerchantPO> merchants = findByHqlPage(hql, pageNum, pageSize);
+		return merchants;
+	}
+	
 
 	/**
 	 * 获取指定模块下的商家个数（App接口调用）

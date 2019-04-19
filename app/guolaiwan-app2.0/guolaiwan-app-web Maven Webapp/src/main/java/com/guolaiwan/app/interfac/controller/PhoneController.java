@@ -714,6 +714,8 @@ public class PhoneController extends WebBaseControll {
 	public Map<String, Object> getMerchantsByMou(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		Map<String, Object> mapStr = new HashMap<String, Object>();
+		Map<String, Object> mapStr1 = new HashMap<String, Object>();
+		Map<String, Object> mapStr2 = new HashMap<String, Object>();
 
 		// 解析json
 		String param = getRequestJson(request);
@@ -734,6 +736,8 @@ public class PhoneController extends WebBaseControll {
 				switch (type) {
 				case "modularClass": // 判断为分类的检索条件
 					mapStr.put("modularClassId", value); // 查分类字段
+					mapStr1.put("modularClassId1", value); // 查分类字段
+					mapStr2.put("modularClassId2", value); // 查分类字段
 					break;
 				}
 			}
@@ -744,6 +748,8 @@ public class PhoneController extends WebBaseControll {
 
 		// 获取商家列表
 		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSize);
+		merchants.addAll(conn_merchant.getMerchantByModularCode1(modularCode, mapStr1, page, pageSize));
+		merchants.addAll(conn_merchant.getMerchantByModularCode2(modularCode, mapStr2, page, pageSize));
 		List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants, MerchantVO.class);
 		int count = conn_merchant.countMerchantByModularCode(modularCode, mapStr);
 
