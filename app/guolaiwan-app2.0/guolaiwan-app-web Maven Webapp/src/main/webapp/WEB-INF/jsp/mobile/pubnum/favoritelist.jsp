@@ -472,21 +472,23 @@ html, body {
 				   for(var i=0;i<pros.length;i++){
 				   	   var price = formatDigit(pros[i].productPrice);
 				       if(i%2==0){
-				          html.push('<tr>');
+				         	 html.push('<tr>');
 				       }
-	                     html.push('<td style="padding:10px;width:50%">');
-		                 
+	                     	html.push('<td style="padding:10px;width:50%">');
+		                 	html.push('<input class="inputt" type="checkbox" onclick="return false;" name="checkbox" id="inputt" value="'+pros[i].id+'" style="float:left;margin-top:50px;background-color:red;width:7%;" />');
 		                 if(pros[i].productAuditstatus=='审核通过'){
-		                 	html.push('<image style=" width:100%;height:100px;" src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'-'+pros[i].isactivityproduct+'-'+pros[i].activityReId+'"/>');
-			                html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+pros[i].productName+'</p>');
+		                   
+		                 	html.push('<image style=" width:92%;height:100px;" src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'-'+pros[i].isactivityproduct+'-'+pros[i].activityReId+'"/>');
+			                html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;margin-left:8%;">'+pros[i].productName+'</p>');
 			             }else{
-			             	html.push('<image style=" width:100%;height:100px;" src="'+pros[i].productShowPic+'"/>');
+			            
+			             	html.push('<image style=" width:92%;height:100px;" src="'+pros[i].productShowPic+'"/>');
 		                 	html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">已失效</p>');
 			             }
-			             html.push('<p style="font-size:12px;">￥'+price+'&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="icon-trash del" id="del-'+pros[i].id+'"></a></p>');
-			             html.push('</td>');
+			             	html.push('<p style="font-size:12px;margin-left:8%;">￥'+price+'&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="icon-trash del" id="del-'+pros[i].id+'"></a></p>');
+			            	html.push('</td>');
 	                     if(pros.length==1){
-	                       html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
+	                       html.push('<td style="padding:10px;"><div  style="width:100%;height:100px;"></div></td>');
 	                     }
 	                  if(i%2==1){
 				          html.push('</tr>');
@@ -523,7 +525,9 @@ html, body {
 	    
 	    });
 	    $(document).on('click','.del',function(){
+	    
 	       var codes=this.id.split('-');
+	       
 	       var param={};
 	       param.proId=codes[1];
 	       param.userId=${userId};
@@ -534,7 +538,7 @@ html, body {
 			$.post(_uriDelCollect, $.toJSON(param), function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
-				
+				 
 				   $.toast("已取消");
 				   setTimeout(function(){
 				   
@@ -547,7 +551,7 @@ html, body {
 	    });	  
 	    
 	    
-	    
+	     
 	    
 	    	function getMerchant(){
 		    var _uriproduct = window.BASEPATH + 'phoneApp/getmerCollection?userId=${userId}';
@@ -562,16 +566,17 @@ html, body {
 				       if(i%2==0){
 				          	html.push('<tr>');
 				       }
-	                   html.push('<td style="padding:10px;width:50%">');
+	                   		html.push('<td  style="padding:10px;width:50%">');
+	                     	html.push('<input class="inputt" type="checkbox" onclick="return false;" name="checkboxs" id="inputt" value="'+pros[i].id+'" style="float:left;margin-top:50px;background-color:red;width:7%;" />');
 				       if(pros[i].shopAuditState=='审核通过'){
-				       		html.push('<image style=" width:100%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" id="pro-'+pros[i].id+'"/>');
-		                 	html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+pros[i].shopName+'</p>');
+				       		html.push('<image style=" width:92%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" id="pro-'+pros[i].id+'"/>');
+		                 	html.push('<p style="font-size:12px;margin-left:8%;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+pros[i].shopName+'</p>');
 				       }else{
-				       		html.push('<image style=" width:100%;height:100px;" src="'+pros[i].shopPic+'"/>');
+				       		html.push('<image style=" width:92%;height:100px;" src="'+pros[i].shopPic+'"/>');
 		                 	html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">已失效</p>');
 				       }
 		               
-		               html.push('<p><a href="javascript:void(0)" class="icon-trash delmer" id="delmer-'+pros[i].id+'"></a></p>');  
+		               html.push('<p style="margin-left:8%;"><a href="javascript:void(0)" class="icon-trash delmer" id="delmer-'+pros[i].id+'"></a></p>');  
 		               html.push('</td>');
 	                   if(pros.length==1){
 	                       	html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
@@ -593,39 +598,94 @@ html, body {
 		$(document).on('click','.merchant',function(){
 	       var codes=this.id.split('-');
 	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
-	    
 	    });
 	    $(document).on('click','.delmer',function(){
 	       var codes=this.id.split('-');
 	       var param={};
 	       param.merId=codes[1];
-	       param.userId=${userId};
-	       
+	       param.userId=${userId};   
 	       var _uriDelCollect = window.BASEPATH + 'phoneApp/delmerCollectionPro';
-		
 			$.post(_uriDelCollect, $.toJSON(param), function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
-				
 				   $.toast("已取消");
 				   setTimeout(function(){
-				   
 				   location.href=location.href;
-				   
-				   },1000);
-				   
+				   },1000); 
 			});
-	    
 	    });
-	  
-
-
-	
-	});
+     
+		$(".btn1").click(function(){    //商品
+			$("input[name='checkbox']").each(function(){ 
+			if($(this).prop("checked") ) 
+			{ 
+			$(this).removeAttr("checked"); 
+			 document.getElementById('btn1').innerHTML="全选";
+			} 
+			else 
+			{ 
+			$(this).prop("checked","true"); 
+			document.getElementById('btn1').innerHTML="取消全选";
+			}  
+		}) 
+    	})  
+    	
+    	$(".btn11").click(function(){  //商家
+			$("input[name='checkboxs']").each(function(){ 
+			if($(this).prop("checked") ) 
+			{ 
+			$(this).removeAttr("checked"); 
+			 document.getElementById('btn11').innerHTML="全选";
+			} 
+			else 
+			{ 
+			$(this).prop("checked","true"); 
+			document.getElementById('btn11').innerHTML="取消全选";
+		}  
+		}) 
+    	})  
+       
+    	$(".btn2").click(function(){  //商品       
+  		 	var obj = document.getElementsByName("checkbox");
+			var str=null;
+    		for(k in obj){
+       			if(obj[k].checked){
+           		if(str == null){str = obj[k].value;}else{str += "-"+obj[k].value;}	
+        		}
+  				}
+	       	var param={};
+	       	param.productId=str;
+	       	param.userId=${userId};
+	      	var _uriDelCollect = window.BASEPATH + 'phoneApp/alldelete';
+			$.post(_uriDelCollect, $.toJSON(param), function(data){
+				    $.toast("删除成功");
+				    window.location.reload()
+		});
+       	}); 
+ 
+  		$(".btn22").click(function(){//商家   
+  			 var objj = document.getElementsByName("checkboxs");
+				var strr=null;
+    				for(k in objj){
+       			 	if(objj[k].checked){
+            		if(strr == null){strr = objj[k].value;}else{strr += "-"+objj[k].value;}	
+            	  	}
+  					}
+	       	var paramm={};
+	     	paramm.merId=strr;
+	      	paramm.userId=${userId};
+	       	var _uriDelCollect = window.BASEPATH + 'phoneApp/merdelete';
+			$.post(_uriDelCollect, $.toJSON(paramm), function(data){
+				    $.toast("删除成功");
+				    window.location.reload()
+		});
+       	});  
+    
+		});
 </script>
 
 
-
+	
 <body>
 	<div id="page">
 		<!-- 主页 -->
@@ -649,33 +709,28 @@ html, body {
 
 			  </div>
 
-             <div class="weui-tab__bd" style="padding-bottom:50px">
+             <div class="weui-tab__bd"  style="padding-bottom:50px">
 			    <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
 			       <table id="product_table" style="margin-top:15px;">
-                  
-                    </table>
-				   
+                   <div id="btns" style="width:100%;text-align: center;position:fixed;bottom:10%;">
+		           <button class="btn1"  id="btn1"  style="width:40%;height:30px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;">全选</button>
+		           <button class="btn2"  style="width:40%;height:30px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;">删除</button>
+		           </div> 
+                   </table> 
 			    </div>
 			    <div id="tab2" class="weui-tab__bd-item">
 			       <table id="merchant_table" style="margin-top:15px;">
-                  
+                   <div class="btnss" style="width:100%;text-align: center;position:fixed;bottom:10%;">
+		           <button class="btn11"  id="btn11"  style="width:40%;height:30px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;">全选</button>
+		           <button class="btn22"  style="width:40%;height:30px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;">删除</button>
+		            </div> 
                    </table>
 			    </div>
-			
-		
-			  </div>
-		   
-		    
-		    
-		   
-		    
-		    
-		    
-		   
-		    
+			 	</div>
+
+		    	<div style="width:100%;height:40px;"></div>
 		</div>
 	</div>
+	       
 </body>
-
-
 </html>

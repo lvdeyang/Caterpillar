@@ -3803,6 +3803,74 @@ public class PhoneController extends WebBaseControll {
 
 		return success();
 	}
+//  全选删除 商品
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/alldelete", method = RequestMethod.POST)
+	public Map<String, Object> allDelete(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		// 解析json
+		HttpServletRequestParser parser = new HttpServletRequestParser(request);
+		JSONObject pageObject = parser.parseJSON();
+		List<Long> list = new ArrayList<Long>();
+		long userId = pageObject.getLong("userId"); // 用户Id
+		String productId = pageObject.getString("productId");//商品
+		String[] strArr = productId.split("-");
+		for (String string : strArr) {
+			list.add(Long.parseLong(string));
+		}
+		UserInfoPO user = conn_user.get(userId);
+		if (user == null) {
+			return FORBIDDEN("没获取到用户！");
+		}
+		List<CollectionPO> collectionPO = conn_collection.getByUserIdProduct(userId, list);
+		System.out.println(collectionPO.size());
+		for (CollectionPO collectionPO2 : collectionPO) {
+			if (collectionPO2 == null) {
+				return FORBIDDEN("没获取收藏！");
+			}
+			if (collectionPO2.getUser().getId() != userId) {
+				return FORBIDDEN("非法操作!");
+			}
+			System.out.println(collectionPO2.getId());
+			conn_collection.delete(collectionPO2);
+		}
+		return success();
+	}
+	//  全选删除 商家
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/merdelete", method = RequestMethod.POST)
+	public Map<String, Object> merdelete(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		// 解析json
+		HttpServletRequestParser parser = new HttpServletRequestParser(request);
+		JSONObject pageObject = parser.parseJSON();
+		List<Long> list = new ArrayList<Long>();
+		long userId = pageObject.getLong("userId"); // 用户Id
+		String merId = pageObject.getString("merId");//商品
+		String[] strArr = merId.split("-");
+		for (String string : strArr) {
+			list.add(Long.parseLong(string));
+		}
+		UserInfoPO user = conn_user.get(userId);
+		if (user == null) {
+			return FORBIDDEN("没获取到用户！");
+		}
+		List<CollectionPO> collectionPO = conn_collection.getByUserIdMer(userId, list);
+		System.out.println(collectionPO.size());
+		for (CollectionPO collectionPO2 : collectionPO) {
+			if (collectionPO2 == null) {
+				return FORBIDDEN("没获取收藏！");
+			}
+			if (collectionPO2.getUser().getId() != userId) {
+				return FORBIDDEN("非法操作!");
+			}
+			System.out.println(collectionPO2.getId());
+			conn_collection.delete(collectionPO2);
+		}
+		return success();
+	}
 
 	/**
 	 * 订单：我的收藏

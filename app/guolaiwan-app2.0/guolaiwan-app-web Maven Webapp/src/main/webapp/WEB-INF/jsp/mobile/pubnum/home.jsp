@@ -891,34 +891,19 @@ html, body {
 	   });
 	   
 	   
-	   //收藏
+	  //收藏
 	   $(document).on('click','#fav',function(){
-	   var merchantId =  $(this).attr("value");  
-	    if(iscollect==1){
-	            var param={};
-		        param.merId= merchantId;
-		        param.userId=${userId};
-	            var _urifav = window.BASEPATH + 'phoneApp/delmerCollectionPro';
-				$.post(_urifav, $.toJSON(param), function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					$.toast("取消收藏成功");
-	                $('#fav').html('收藏');
-					iscollect=0;
-				});
-	        }else{
-	           var param={};
-		        param.merId= merchantId;
-		        param.userId=${userId};
-	           var _urifav = window.BASEPATH + 'phoneApp/mercollectionPro';
-				$.post(_urifav, $.toJSON(param), function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					$.toast("收藏成功");
-	                $('#fav').html('取消收藏');
-					iscollect=1;
-				});
-	        }
+	      var merchantId =  $(this).attr("value");  
+	      var param={};
+		  param.merId= merchantId;
+	      param.userId=${userId};
+	      var _urifav = window.BASEPATH + 'phoneApp/mercollectionPro';
+		  $.post(_urifav, $.toJSON(param), function(data){
+			data = parseAjaxResult(data);
+			if(data === -1) return;
+			$.toast("收藏成功");
+			iscollect=1;
+		  });
 	   });
 	   
 	   
