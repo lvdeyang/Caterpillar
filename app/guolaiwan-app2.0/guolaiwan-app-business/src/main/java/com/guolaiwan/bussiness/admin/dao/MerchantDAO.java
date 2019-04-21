@@ -410,6 +410,24 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		return merchants;
 	}
 
+	
+	/**
+	 * app专用搜索商家 新增方法 
+	 * 修改了平谷搜索的问题去掉了comId条件
+	 * @param comId
+	 * @return
+	 */
+	public List<MerchantPO> appfindByComNew(String name, int pageNum, int pageSize) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
+		hql.andBy("shopName", Condition.lk, name);
+		List<MerchantPO> merchants = findByHqlPage(hql, pageNum, pageSize);
+		if (merchants == null)
+			return new ArrayList<MerchantPO>();
+		return merchants;
+	}
+	
+	
 	/**
 	 * app专用搜索商家 liu
 	 * 
@@ -441,6 +459,22 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		return count;
 	}
 
+	
+	/**
+	 * app专用搜索商家（个数）
+	 * 修改了平谷搜索的功能 去掉了comId条件
+	 * @param comId
+	 * @return
+	 */
+	public int appCount(String name) {
+		CountHql cHql = newCountHql();
+		cHql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
+		cHql.andBy("shopName", Condition.lk, name);
+		int count = countByHql(cHql);
+		return count;
+	}
+	
+	
 	public List<MerchantPO> getMerchantBySc(String name) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("shopName", Condition.lk, name);
