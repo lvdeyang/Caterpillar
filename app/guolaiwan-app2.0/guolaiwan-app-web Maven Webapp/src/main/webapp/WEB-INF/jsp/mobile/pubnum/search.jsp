@@ -530,7 +530,6 @@ html, body {
 		
 		    var params={};
 		    params.page=page;
-		    params.comId="001";
 		    params.type="MERCHANT";
 		    params.name=$('#searchInput').val();
 			$.post(_uriproduct, $.toJSON(params), function(data){

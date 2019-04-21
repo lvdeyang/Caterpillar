@@ -562,6 +562,7 @@ html, body {
 				   for(var i=0;i<data.length;i++){
 				      html.push('<option value="'+data[i].id+'">'+data[i].productName+'</option>');
 				   }
+				   html.push('<option value="-1">到店支付</option>');
 				}
 				$('#proSel').append(html.join(""));
 			});
