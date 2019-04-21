@@ -529,7 +529,7 @@ html, body {
 				       addStr="bundle-";
 				    }
 				    if(type==2){
-					    //html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
+					    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
 					}
 					
 				    html.push('</div>');
