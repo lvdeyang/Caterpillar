@@ -20,7 +20,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet"
 	href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <style type="text/css">
-.layui-table img{     max-width: 1000px;}/* 照片的最大宽度  */
+.layui-table img {
+	max-width: 1000px;
+} /* 照片的最大宽度  */
 </style>
 </head>
 <body>
@@ -28,17 +30,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<span class="layui-breadcrumb"> <a><cite>首页</cite></a> <a><cite>直播管理</cite></a>
 	</div>
 	<div class="x-body">
-	<xblock>
-		<a class="layui-btn layui-btn-sm" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:getCompanyList();" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
-		
-		</xblock>
+		<xblock> <a class="layui-btn layui-btn-sm"
+			style="line-height:1.6em;margin-top:3px;float:right"
+			href="javascript:getCompanyList();" title="刷新"><i
+			class="layui-icon" style="line-height:30px">ဂ</i></a> </xblock>
 		<table id="liveList" lay-filter="liveList"></table>
 	</div>
-	
-	
 
-	<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js" charset="utf-8"></script>
-	<script src="<%=request.getContextPath() %>/layui/js/x-layui.js" charset="utf-8"></script>
+
+
+	<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"
+		charset="utf-8"></script>
+	<script src="<%=request.getContextPath() %>/layui/js/x-layui.js"
+		charset="utf-8"></script>
 	<script>
 	
 	layui.use(['element','layer','laytpl','upload','laydate','form','table'], function(){
@@ -74,6 +78,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	})
         })
         
+       
+        
+        
         //是否显示
               form.on('switch(enable)', function(obj){
                 layer.load();
@@ -100,15 +107,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            layer.msg("系统错误！",{icon:5,time:1000}); 
                         }
                     }
-
                 })
-
                 layer.tips(this.value+' : '+str,obj.othis);
               });
-		
-		
-      
-});
+		});
 
 
 	//获取列表
@@ -131,6 +133,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		,{field: 'liveType',title: '主播类型',align:  'center',sort: true,width:120}
         		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180,templet:'#switchTpl'}
         		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180}
+        		,{field: 'delectMessage',title: '评论管理',align:  'center',sort: true,width:180,templet:'#zsgc'}
    			]]
 		})
 	}
@@ -145,19 +148,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if(msg=='success'){
 					getLiveList();
 				}	
-			
 			}
-		
 		})
 		return false;
-		
-		
 	}
 	function open_win(title,url,w,h){
 		x_admin_show(title,url,w,h)
 	}
 
-		
+	//评论弹出层
+	 function stock_show(title,url,id,w,h) {
+	  
+		   var index = layer.open({
+		     type: 2,
+		     area: [w+'px', h +'px'],
+			  fix: false, //不固定
+			  maxmin: true,
+			  shadeClose: true,
+			  shade:0.4,
+			  title: title,
+			  content: url+"?liveId="+id
+			}); 
+		   layer.full(index);
+		 } 	
 
 	//删除
 	function del(uuid,cType){
@@ -182,7 +195,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			})
 		})
-		
 	}
 	
 	function show_pic(id){
@@ -193,7 +205,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			title: false,
   			closeBtn: 0,
   			area:'600',
-  			
   			skin: 'layui-layer-nobg', //没有背景色
   			shadeClose: true,
   			content: $(idn),
@@ -202,27 +213,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				$(idn).css("width","35px");
   			}
 		})
-		
     }
-
-  
-	         
-
+    
+     
 </script>
-<!-- <a class='layui-btn layui-btn-primary layui-btn-xs' href="javascript:open_win('选择城市','chooseC','500','500')">城市</a> -->
-<script type="text/html" id="zsgc">
-<div class="layui-btn-group">
-	<a class='layui-btn layui-btn-primary layui-btn-xs' href="javascript:open_win('选择图片','<%=path%>/admin/company/piclist?&img=comImg{{d.id}}&comId={{ d.id }}','600','500')">选择图片</a>
-	<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.uuid }}","{{ d.cType }}")'>删除</a>
-</div>
+
+
+	<script type="text/html" id="zsgc">
+
+	<a title="评论管理" href="javascript:;" onclick="stock_show('评论管理','<%=path%>/admin/live/liveDelect','{{d.id}}','','')" class="layui-btn layui-btn-xs">评论管理</a>
 </script>
-<script type="text/html" id="switchTpl">
+	<script type="text/html" id="switchTpl">
 	<input type="checkbox" name="liveStatusType" id='{{d.id}}' value='{{ d.liveStatusType }}'  lay-skin="switch" lay-text="正常|封号" lay-filter="enable" {{ d.liveStatusType == 'FORBID' ? '' : 'checked' }} >
 </script>
-<script type="text/html" id="picTpl">
+	<script type="text/html" id="picTpl">
 	<a href="javascript:show_pic('comImg{{d.id}}')"><img src='${sysConfigPO.webUrl}{{ d.pic }}' id='comImg{{d.id}}' style="width:35px;height:35px" alt='' ></a></div>
 </script>
-<script type="text/html" id="levelTpl">
+
+	<script type="text/html" id="levelTpl">
 	 {{#  if(d.cType === '总公司'){ }}
      	<span style="color: #F581B1;">{{ d.cType }}</span>
   	 {{#  } else { }}

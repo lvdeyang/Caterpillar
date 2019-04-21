@@ -9,6 +9,7 @@ import com.guolaiwan.bussiness.admin.po.LiveProductPO;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
+import pub.caterpillar.orm.hql.DeleteHql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 @Repository("com.guolaiwan.bussiness.admin.dao.LiveMessageDAO")
@@ -35,5 +36,12 @@ public class LiveMessageDAO extends AbstractBaseDao<LiveMessagePO> {
 		hql.andBy("liveId", Condition.eq, liveId);
 		hql.orderBy("updateTime", true);
 		return findByHqlPage(hql, 1, 200);
+	}
+	
+	//4/20新增删除评论
+	public void delectById(long Id){
+		DeleteHql hql =newDeleteHql();
+		hql.andBy("id",Condition.eq,Id);
+		this.deleteByHql(hql);
 	}
 }

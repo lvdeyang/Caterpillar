@@ -1353,9 +1353,10 @@ public class PubNumController extends WebBaseControll {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/getActivityBundle", method = RequestMethod.GET)
-	public Object getActivityBundle(HttpServletRequest request, HttpServletResponse response)
+	public Object getActivityBundle(HttpServletRequest request, HttpServletResponse response,String comCode)
 			throws Exception {
-		List<ActiveBundlePo> activeBundlePos=conn_bundle.findAll();
+		List<CompanyPO> companyPOs=  conn_com.findByField("", comCode);
+		List<ActiveBundlePo> activeBundlePos=conn_bundle.findByField("comId", companyPOs.get(0).getId());
         SysConfigPO sys=conn_sys.getSysConfig();
         Map<String, Object> ret=new HashMap<String, Object>();
         ret.put("bundles", activeBundlePos);

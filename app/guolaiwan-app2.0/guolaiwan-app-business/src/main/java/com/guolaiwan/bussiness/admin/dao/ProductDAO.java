@@ -417,6 +417,25 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		List<ProductPO> products = findByHqlPage(hql, pageNum, pageSize);
 		return products;
 	}
+	
+	/**
+	 * app搜索商品
+	 * 修改了平谷搜索功能 去掉了comId
+	 * @param comId
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	public List<ProductPO> appfindByComNew(String name,int pageNum,int pageSize) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("productAuditstatus", Condition.eq, ShopAuditStateType.T);  //审核通过
+		hql.andBy("productIsShow", Condition.eq, 1);                          //产品展示
+		hql.andBy("productName", Condition.lk, name);
+		List<ProductPO> products = findByHqlPage(hql, pageNum, pageSize);
+		return products;
+	}
+	
+	
 	/**
 	 * app搜提示
 	 * @param comId
@@ -445,6 +464,23 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		cHql.andBy("productAuditstatus", Condition.eq, ShopAuditStateType.T);  //审核通过
 		cHql.andBy("productIsShow", Condition.eq, 1);                          //产品展示
 		cHql.andBy("comId", Condition.eq, comId);
+		cHql.andBy("productName", Condition.lk, name);
+		int count = countByHql(cHql);
+		return count;
+	}
+	
+	/**
+	 * app搜索商品（个数）
+	 * 平谷搜索功能修改  去掉了 Long comId 
+	 * @param comId
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	public int appCountByComNew(String name) {
+		CountHql cHql = newCountHql();
+		cHql.andBy("productAuditstatus", Condition.eq, ShopAuditStateType.T);  //审核通过
+		cHql.andBy("productIsShow", Condition.eq, 1);                          //产品展示
 		cHql.andBy("productName", Condition.lk, name);
 		int count = countByHql(cHql);
 		return count;

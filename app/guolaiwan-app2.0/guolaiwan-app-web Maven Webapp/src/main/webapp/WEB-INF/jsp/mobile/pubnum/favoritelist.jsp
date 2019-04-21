@@ -474,18 +474,18 @@ html, body {
 				       if(i%2==0){
 				         	 html.push('<tr>');
 				       }
-	                     	html.push('<td style="padding:10px;width:50%">');
-		                 	html.push('<input class="inputt" type="checkbox" onclick="return false;" name="checkbox" id="inputt" value="'+pros[i].id+'" style="float:left;margin-top:50px;background-color:red;width:7%;" />');
+	                     	html.push('<td id="tdtd" style="padding:10px;width:50%">');
+		                 	html.push('<input class="inputt" type="checkbox" onclick="return false;" name="checkbox" id="inputt" value="'+pros[i].id+'" style="display:none;float:left;margin-top:50px;background-color:red;width:7%;" />');
 		                 if(pros[i].productAuditstatus=='审核通过'){
 		                   
 		                 	html.push('<image style=" width:92%;height:100px;" src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'-'+pros[i].isactivityproduct+'-'+pros[i].activityReId+'"/>');
-			                html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;margin-left:8%;">'+pros[i].productName+'</p>');
+			                html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+pros[i].productName+'</p>');
 			             }else{
 			            
 			             	html.push('<image style=" width:92%;height:100px;" src="'+pros[i].productShowPic+'"/>');
 		                 	html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">已失效</p>');
 			             }
-			             	html.push('<p style="font-size:12px;margin-left:8%;">￥'+price+'&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="icon-trash del" id="del-'+pros[i].id+'"></a></p>');
+			             	html.push('<p style="font-size:12px;">￥'+price+'&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="icon-trash del" id="del-'+pros[i].id+'"></a></p>');
 			            	html.push('</td>');
 	                     if(pros.length==1){
 	                       html.push('<td style="padding:10px;"><div  style="width:100%;height:100px;"></div></td>');
@@ -567,16 +567,16 @@ html, body {
 				          	html.push('<tr>');
 				       }
 	                   		html.push('<td  style="padding:10px;width:50%">');
-	                     	html.push('<input class="inputt" type="checkbox" onclick="return false;" name="checkboxs" id="inputt" value="'+pros[i].id+'" style="float:left;margin-top:50px;background-color:red;width:7%;" />');
+	                     	html.push('<input class="inputt" type="checkbox" onclick="return false;" name="checkboxs" id="inputt" value="'+pros[i].id+'" style="display:none;float:left;margin-top:50px;background-color:red;width:7%;" />');
 				       if(pros[i].shopAuditState=='审核通过'){
 				       		html.push('<image style=" width:92%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" id="pro-'+pros[i].id+'"/>');
-		                 	html.push('<p style="font-size:12px;margin-left:8%;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+pros[i].shopName+'</p>');
+		                 	html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+pros[i].shopName+'</p>');
 				       }else{
 				       		html.push('<image style=" width:92%;height:100px;" src="'+pros[i].shopPic+'"/>');
 		                 	html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">已失效</p>');
 				       }
 		               
-		               html.push('<p style="margin-left:8%;"><a href="javascript:void(0)" class="icon-trash delmer" id="delmer-'+pros[i].id+'"></a></p>');  
+		               html.push('<p style=""><a href="javascript:void(0)" class="icon-trash delmer" id="delmer-'+pros[i].id+'"></a></p>');  
 		               html.push('</td>');
 	                   if(pros.length==1){
 	                       	html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
@@ -615,37 +615,19 @@ html, body {
 			});
 	    });
      
-		$(".btn1").click(function(){    //商品
-			$("input[name='checkbox']").each(function(){ 
-			if($(this).prop("checked") ) 
-			{ 
-			$(this).removeAttr("checked"); 
-			 document.getElementById('btn1').innerHTML="全选";
-			} 
-			else 
-			{ 
-			$(this).prop("checked","true"); 
-			document.getElementById('btn1').innerHTML="取消全选";
-			}  
-		}) 
-    	})  
-    	
-    	$(".btn11").click(function(){  //商家
-			$("input[name='checkboxs']").each(function(){ 
-			if($(this).prop("checked") ) 
-			{ 
-			$(this).removeAttr("checked"); 
-			 document.getElementById('btn11').innerHTML="全选";
-			} 
-			else 
-			{ 
-			$(this).prop("checked","true"); 
-			document.getElementById('btn11').innerHTML="取消全选";
-		}  
-		}) 
-    	})  
+	
        
-    	$(".btn2").click(function(){  //商品       
+    	$(".btn2").click(function(){  //商品     
+           	$("input[name='checkbox']").each(function(){ 
+			if($(this).prop("checked") ) 
+			{ 
+			$(this).removeAttr("checked");  
+			} 
+			else 
+			{ 
+			$(this).prop("checked","true"); 
+			}  	
+		}) 
   		 	var obj = document.getElementsByName("checkbox");
 			var str=null;
     		for(k in obj){
@@ -658,13 +640,23 @@ html, body {
 	       	param.userId=${userId};
 	      	var _uriDelCollect = window.BASEPATH + 'phoneApp/alldelete';
 			$.post(_uriDelCollect, $.toJSON(param), function(data){
-				    $.toast("删除成功");
+				    $.toast("取消成功");
 				    window.location.reload()
 		});
        	}); 
  
   		$(".btn22").click(function(){//商家   
-  			 var objj = document.getElementsByName("checkboxs");
+  		     	$("input[name='checkboxs']").each(function(){ 
+			if($(this).prop("checked") ) 
+			{ 
+			$(this).removeAttr("checked");  
+			} 
+			else 
+			{ 
+			$(this).prop("checked","true"); 
+			}  	
+		})
+			 var objj = document.getElementsByName("checkboxs");
 				var strr=null;
     				for(k in objj){
        			 	if(objj[k].checked){
@@ -676,11 +668,11 @@ html, body {
 	      	paramm.userId=${userId};
 	       	var _uriDelCollect = window.BASEPATH + 'phoneApp/merdelete';
 			$.post(_uriDelCollect, $.toJSON(paramm), function(data){
-				    $.toast("删除成功");
+				    $.toast("取消成功");
 				    window.location.reload()
 		});
        	});  
-    
+         
 		});
 </script>
 
@@ -712,25 +704,25 @@ html, body {
              <div class="weui-tab__bd"  style="padding-bottom:50px">
 			    <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
 			       <table id="product_table" style="margin-top:15px;">
-                   <div id="btns" style="width:100%;text-align: center;position:fixed;bottom:10%;">
-		           <button class="btn1"  id="btn1"  style="width:40%;height:30px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;">全选</button>
-		           <button class="btn2"  style="width:40%;height:30px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;">删除</button>
-		           </div> 
+                 
                    </table> 
+                     <div id="btns" style="width:100%;text-align: center;">
+		           <button class="btn2"  style="width:80%;height:40px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;font-size:14px;">取消全部</button>
+		           </div> 
 			    </div>
 			    <div id="tab2" class="weui-tab__bd-item">
 			       <table id="merchant_table" style="margin-top:15px;">
-                   <div class="btnss" style="width:100%;text-align: center;position:fixed;bottom:10%;">
-		           <button class="btn11"  id="btn11"  style="width:40%;height:30px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;">全选</button>
-		           <button class="btn22"  style="width:40%;height:30px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;">删除</button>
-		            </div> 
+                  
                    </table>
+                    <div class="btnss" style="width:100%;text-align: center;">
+		           <button class="btn22"  style="width:80%;height:40px;background:#18B4ED;color:#ffffff;border:none;outline:none;border-radius:25px;font-size:14px;">取消全部</button>
+		            </div> 
 			    </div>
 			 	</div>
-
-		    	<div style="width:100%;height:40px;"></div>
 		</div>
 	</div>
 	       
 </body>
+
+
 </html>

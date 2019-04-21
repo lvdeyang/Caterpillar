@@ -337,7 +337,8 @@ public class PhoneController extends WebBaseControll {
 
 		switch (type) {
 		case "MERCHANT":
-			List<MerchantPO> merchants = conn_merchant.appfindByCom(comIdL, name, page, pageSize);
+			//修改平谷搜索功能 4/21
+			List<MerchantPO> merchants = conn_merchant.appfindByComNew(name, page, pageSize);
 
 			List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants,
 					MerchantVO.class);
@@ -366,12 +367,14 @@ public class PhoneController extends WebBaseControll {
 				 * merchantVO.getShopIntroduction()));
 				 */
 			}
-			int count = conn_merchant.appCountByCom(comIdL, name);
+			//修改平谷搜索功能 4/21
+			int count = conn_merchant.appCount(name);
 			dataMap.put("count", count);
 			dataMap.put("merchants", _merchants);
 			break;
 		case "PRODUCT":
-			List<ProductPO> products = conn_product.appfindByCom(comIdL, name, page, pageSize);
+			//修改平谷搜索功能 4/21
+			List<ProductPO> products = conn_product.appfindByComNew(name, page, pageSize);
 			List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
 			List<ProductVO> retProductVOs=new ArrayList<ProductVO>();
 			for (ProductVO productVO : _products) {
@@ -422,7 +425,8 @@ public class PhoneController extends WebBaseControll {
 				}
 				retProductVOs.add(productVO);
 			}
-			int count1 = conn_product.appCountByCom(comIdL, name);
+			//修改平谷搜索功能 4/21
+			int count1 = conn_product.appCountByComNew(name);
 			dataMap.put("count", count1);
 			dataMap.put("products", retProductVOs);
 			break;
@@ -1107,12 +1111,6 @@ public class PhoneController extends WebBaseControll {
 		String orderNO = getCityCodeByDomain() + "v" + merchant.getId() + "v" + merchant.getModularCode() + "v"
 				+ df.format(date) + "v" + user.getId();
 		order.setOrderNO(orderNO);
-
-		//增加 到店支付
-	   ProductPO orderList = conn_product.searchOrder(merchant.getId(),"到店支付订单");
-	   if(orderList !=  null){
-		   order.setProductId( orderList.getId());
-	   }
 		// 验单码
 
 		// 下单时间
