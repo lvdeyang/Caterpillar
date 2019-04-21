@@ -923,7 +923,7 @@ html, body {
 	   function getActivityBundle(){
 	    
 	        //
-	        var _uriBundle = window.BASEPATH + 'pubnum/getActivityBundle';
+	        var _uriBundle = window.BASEPATH + 'pubnum/getActivityBundle?comCode='+comCode;
 		
 		      $.get(_uriBundle, null, function(data){
 				data = parseAjaxResult(data);

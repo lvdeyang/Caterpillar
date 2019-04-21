@@ -168,7 +168,7 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		if (proId != 0l&&proId != -1) {
 			hql.andBy("productId", Condition.eq, proId);
 		}else if (proId==-1){
-			hql.andBy("productId", Condition.eq, 0);
+			hql.andBy("productId", Condition.eq, 0L);
 		}
 		hql.orderBy("createDate", true);
 		List<OrderInfoPO> orders = findByHql(hql);

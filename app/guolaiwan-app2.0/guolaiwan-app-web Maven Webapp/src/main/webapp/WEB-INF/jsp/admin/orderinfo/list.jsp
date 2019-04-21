@@ -372,7 +372,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				支付时间：{{   d.order.payDate}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;支付方式：{{   d.order.payMode}}<br>
 				发货时间：{{   d.order.sendDate}}<br>
 				验单时间：{{   d.order.ydDate}}<br>
-				成交时间：{{   d.order.dealDate}}<br>
+				退款时间：{{   d.order.dealDate}}<br>
 				<hr>
 				
 				当前状态：
