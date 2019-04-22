@@ -3465,6 +3465,9 @@ public class PhoneController extends WebBaseControll {
 		List<MerchantUser> merchantUsers = conn_merchantUser.findByField("merchantId", merchantPO.getId());
 		for (MerchantUser merchantUser : merchantUsers) {
 			UserInfoPO userInfoPO = conn_user.get(merchantUser.getUserId());
+			if(userInfoPO==null){
+				continue;
+			}
 			JSONObject obj = new JSONObject();
 			obj.put("touser", userInfoPO.getUserOpenID());
 			obj.put("template_id", "imgTupyObgSuKRYqZrc8VAXgzGePPEeuqwVG7IF_Rzw");
