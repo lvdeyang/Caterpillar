@@ -528,12 +528,21 @@ html, body {
 				    if(data[i].isBundle==1){
 				       addStr="bundle-";
 				    }
-				    if(type==2){
-					    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
-					}
-					
-				    html.push('</div>');
+				    
+				    
 				    for(var j=0;j<data[i].orderList.length;j++){
+				        if(j==0){
+				            var bookDate=data[i].orderList[j].orderBookDate.replace('年','/').replace('月','/').replace('日','');
+					        if('2019/04/15 00:00:00'<=bookDate&&bookDate<='2019/04/19 23:59:59'){
+					            //这里加各种各样的奇葩限制。
+					        }else{
+					           if(type==2){
+								    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
+							   }
+					        }
+				        }
+				        
+				        html.push('</div>');
 				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg product" id="pro-'+data[i].orderList[j].id+'">');
 					    html.push('<div class="weui-media-box__hd">');
 					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].orderList[j].productPic+'">');
