@@ -1774,10 +1774,10 @@ input[type="datetime-local"]:before{
 
 			<div style="width:100%;height:40px;position:fixed;z-index:10;bottom:2px">
 				<a id="addOrder"
-					style="width:47.5%;font-size:13px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
+					style="width:35%;font-size:13px;margin-left:2%;float:left;background-color:#1E90FF;height:40px;line-height:40px;"
 					href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a> <a
 					id="buy"
-					style="width:47.5%;font-size:13px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
+					style="width:60%;font-size:13px;margin-right:2%;float:right;background-color:#1E90FF;height:40px;line-height:40px;margin-top:0"
 					href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span
 					id="total">0</span>）
 				</a>
