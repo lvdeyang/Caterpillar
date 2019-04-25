@@ -607,6 +607,7 @@ html, body {
 			if(data === -1) return;
 			if(data){
 			   $.toast("申请退款中，等待商家确认");
+			   $('#reasonContent').val('');
 			   $('.weui-tab').show();
                $.closePopup();
 			   getOrder(2);

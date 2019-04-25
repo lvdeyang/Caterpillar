@@ -663,7 +663,7 @@ input[type="datetime-local"]:before{
 				if(bookdiv!='none'){
 				    $("#bookDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
 	  			    
-				}else{
+				}else if(startdiv!='none'){
 				    $("#startDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
 	  			    $("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',t1));
 				}
@@ -762,7 +762,7 @@ input[type="datetime-local"]:before{
 			  	}     
 			  }
 		 /* ************************************************************************************************************************ */
-		    $('#selAddress').popup(); 
+		    
 	    	var _uri = window.BASEPATH + 'pubnum/stock/userRooms?productId=${id}&start='+
 	    	$("#startDate").val()+'&end='+$("#endDate").val();
 		    $.get(_uri, null, function(data){
@@ -785,7 +785,7 @@ input[type="datetime-local"]:before{
 					   $('#roomList').append(html.join(''));
 					   $('.modDiv').hide();
 					   $('#roomList').show();
-					   
+					   $('#selAddress').popup(); 
 					
 				}
 			});
@@ -1088,9 +1088,10 @@ input[type="datetime-local"]:before{
 		      if(ifFace==0||productModular!='0001'){
 		         joinBasket();
 		      }else{
-		         $('#selAddress').popup(); 
+		         
 		         $('.modDiv').hide();
 		         $('#cameraDiv').show();
+		         $('#selAddress').popup(); 
 		         buyOrbasketFlg=1;
 		      }
 		
@@ -1220,10 +1221,10 @@ input[type="datetime-local"]:before{
 				  	$.toast("请选择预定日期", "forbidden");
 				  	return false;
 				  }else{
-         			$('#selAddress').popup(); 
+         			
          			$('.modDiv').hide();
          			$('#addressFitst').show();
-					
+					$('#selAddress').popup(); 
 				  }
 			  }else if(startdiv!="none")
 			  {
@@ -1234,16 +1235,16 @@ input[type="datetime-local"]:before{
 			  		$.toast("请选择离店日期", "forbidden");
 			  		return false;
 			  	}else{
-         			$('#selAddress').popup(); 
+         			
          			$('.modDiv').hide();
          			$('#addressFitst').show();
-					
+					$('#selAddress').popup(); 
 			  	}      
 			  }else{
-			  	$('#selAddress').popup(); 
+			  	
 			  	$('.modDiv').hide();
 			  	$('#addressFitst').show();
-				
+				$('#selAddress').popup(); 
 			  }
               
         });
