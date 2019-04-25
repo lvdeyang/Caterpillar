@@ -340,9 +340,9 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 			if(entry.getKey().equals("productName")||entry.getKey().equals("productMerchantName")){
 				hql.andBy(entry.getKey(),  Condition.lk, entry.getValue());
 			}else if(entry.getKey().equals("comId")){
-				if((long)entry.getValue()!=1l){
+				//if((long)entry.getValue()!=1l){
 					hql.andBy("comId",  Condition.eq, entry.getValue());
-				}
+				//}
 			}else{
 				hql.andBy(entry.getKey(),  Condition.eq, entry.getValue());
 			}
@@ -360,9 +360,9 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 			if(entry.getKey().equals("productName")||entry.getKey().equals("productMerchantName")){
 				cHql.andBy(entry.getKey(),  Condition.lk, entry.getValue());
 			}else if(entry.getKey().equals("comId")){
-				if((long)entry.getValue()!=1l){
+				//if((long)entry.getValue()!=1l){
 					cHql.andBy("comId",  Condition.eq, entry.getValue());
-				}
+				//}
 			}else{
 				cHql.andBy(entry.getKey(),  Condition.eq, entry.getValue());
 			}
