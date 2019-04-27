@@ -322,6 +322,8 @@ public class PubNumController extends WebBaseControll {
 			mv = new ModelAndView("mobile/pubnum/product");
 			mv.addObject("id", id);
 		}
+		//查询商品的comId发送到页面 4/26
+		mv.addObject("comId", conn_product.get(id).getComId());
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
 		return mv;
 	}
@@ -1355,8 +1357,8 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/getActivityBundle", method = RequestMethod.GET)
 	public Object getActivityBundle(HttpServletRequest request, HttpServletResponse response,String comCode)
 			throws Exception {
-		List<CompanyPO> companyPOs=  conn_com.findByField("", comCode);
-		List<ActiveBundlePo> activeBundlePos=conn_bundle.findByField("comId", companyPOs.get(0).getId());
+		List<CompanyPO> companyPOs=  conn_com.findByField("comCode", comCode);
+		List<ActiveBundlePo> activeBundlePos=conn_bundle.findByField("comId", companyPOs.get(0).getId().intValue());
         SysConfigPO sys=conn_sys.getSysConfig();
         Map<String, Object> ret=new HashMap<String, Object>();
         ret.put("bundles", activeBundlePos);
@@ -1676,6 +1678,21 @@ public class PubNumController extends WebBaseControll {
 				orders = testOrders;
 				orders.addAll(commentedOrders1);
 				break;
+			case 9:// 拒绝退款 4/24新增
+				List<OrderInfoPO> rOrderpos = conn_order.getOrdersByState(userId, OrderStateType.PAYSUCCESS);
+				List<OrderInfoPO> rOrderpos2=new ArrayList<OrderInfoPO>();
+				for (OrderInfoPO orderInfoPO : rOrderpos) {
+					if(orderInfoPO.getJustification()!=""&&orderInfoPO.getJustification()!=null){
+						
+						rOrderpos2.add(orderInfoPO);
+					}
+				}
+				List<OrderInfoVO> rOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(rOrderpos2,OrderInfoVO.class);
+				for (int i = 0; i < rOrderpos2.size(); i++) {
+					rOrders.get(i).setJustification(rOrderpos2.get(i).getJustification());
+				}
+				orders = rOrders;
+				break;
 
 			default:
 				break;
@@ -1751,6 +1768,21 @@ public class PubNumController extends WebBaseControll {
 
 				
 				orders = commentedOrders;
+				break;
+			case 9:// 拒绝退款 4/24新增
+				List<OrderInfoPO> rOrderpos = conn_order.getOrdersByState(userId, OrderStateType.PAYSUCCESS);
+				List<OrderInfoPO> rOrderpos2=new ArrayList<OrderInfoPO>();
+				for (OrderInfoPO orderInfoPO : rOrderpos) {
+					if(orderInfoPO.getJustification()!=""&&orderInfoPO.getJustification()!=null){
+						
+						rOrderpos2.add(orderInfoPO);
+					}
+				}
+				List<OrderInfoVO> rOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(rOrderpos2,OrderInfoVO.class);
+				for (int i = 0; i < rOrderpos2.size(); i++) {
+					rOrders.get(i).setJustification(rOrderpos2.get(i).getJustification());
+				}
+				orders = rOrders;
 				break;
 
 			default:

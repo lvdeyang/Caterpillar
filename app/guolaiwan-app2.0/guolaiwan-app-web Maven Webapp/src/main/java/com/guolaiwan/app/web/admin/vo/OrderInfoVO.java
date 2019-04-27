@@ -135,10 +135,19 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 	private String photo;
 	private String idNum;
 	
+	//4/23 新增拒绝理由
+	private String justification;
+	
+	
+	
+	public String getJustification() {
+		return justification;
+	}
 
-	
-	
-	
+	public void setJustification(String justification) {
+		this.justification = justification;
+	}
+
 	public String getPhoto() {
 		return photo;
 	}

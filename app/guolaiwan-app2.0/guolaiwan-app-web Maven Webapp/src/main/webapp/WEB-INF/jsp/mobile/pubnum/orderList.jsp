@@ -558,6 +558,10 @@ html, body {
 					    if(type==5){
 					       html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)">七个工作日内到帐，注意查收</a>')
 					    }
+					    //4.24 新增退款原因订单中展示
+					    if(type==9){
+					       html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)">未退款原因：'+data[i].orderList[j].justification+'</a>')
+					    }
 					    if(type==6||type==8){
 					    	if(data[i].orderList[j].productId!=0){
 					    		html.push('<a style="font-size:12px;margin-left:15px" id="edit-'+data[i].orderList[j].id+'" class="icon-edit" href="javascript:void(0)">&nbsp;&nbsp;添加评论</a>')
@@ -711,6 +715,9 @@ html, body {
 			    <a id="tab-8" onclick="return false" class="weui-navbar__item" href="#tab8">
 			      已验单
 			    </a>
+			    <a id="tab-9" onclick="return false" class="weui-navbar__item" href="#tab9">
+			      未退款 
+			    </a> 
 			   
 			  </div>
 			  <div class="weui-tab__bd" style="padding-bottom:50px">
@@ -734,6 +741,9 @@ html, body {
 			      
 			    </div>
 			    <div id="tab8" class="weui-tab__bd-item">
+			      
+			    </div>
+			    <div id="tab9" class="weui-tab__bd-item">
 			      
 			    </div>
 		

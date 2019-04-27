@@ -652,20 +652,26 @@ input[type="datetime-local"]:before{
 			    qq=data.product.ifcollection;
 			    ifFace=data.product.ifFace;
 			    
+			   
+				
 			    var t = new Date();
 				var t_s = t.getTime();
 				t.setTime(t_s + 2000 * 60);
-				var t1 = new Date();
+				
+				 //获取第二天十二点的时间  4/25修改 为了让离店时间变成第二天12点
+			    const start = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
+				
+				/* var t1 = new Date();
 				var t1_s = t1.getTime();
-				t1.setTime(t1_s + 2000 * 60+60*60*1000*24);
+				t1.setTime(t1_s + 2000 * 60+60*60*1000*24); */
 				var bookdiv =document.getElementById("bookdiv").style.display;       
 				var startdiv =document.getElementById("startdiv").style.display;  
 				if(bookdiv!='none'){
 				    $("#bookDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
 	  			    
-				}else if(startdiv!='none'){
+				}else{
 				    $("#startDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
-	  			    $("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',t1));
+	  			    $("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',start));
 				}
 			   
 	  			
@@ -762,7 +768,7 @@ input[type="datetime-local"]:before{
 			  	}     
 			  }
 		 /* ************************************************************************************************************************ */
-		    
+		    $('#selAddress').popup(); 
 	    	var _uri = window.BASEPATH + 'pubnum/stock/userRooms?productId=${id}&start='+
 	    	$("#startDate").val()+'&end='+$("#endDate").val();
 		    $.get(_uri, null, function(data){
@@ -785,7 +791,7 @@ input[type="datetime-local"]:before{
 					   $('#roomList').append(html.join(''));
 					   $('.modDiv').hide();
 					   $('#roomList').show();
-					   $('#selAddress').popup(); 
+					   
 					
 				}
 			});
@@ -884,16 +890,19 @@ input[type="datetime-local"]:before{
         }
 		function initDatePrice(){
 		      var number = parseInt($('#proCount').val());
-			  var startDate=$('#startDate').val();
+			  /* var startDate=$('#startDate').val(); */
+			  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 			  var endDate=$('#endDate').val();
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
 			        endDate = Date.parse(endDate);
+			        if(endDate!=startDate){
 			        var dateSpan = endDate - startDate;
-			        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
+			        var iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
+			        }
 			        if(iDays>0){
-			          daycount=iDays;
+			          daycount+=iDays;
 			        }
 			  }
 			  if($('#comboList').val()==0){
@@ -998,16 +1007,18 @@ input[type="datetime-local"]:before{
 		  if (number > MAX) number = MAX;
 		  $input.val(number);
 		  
-		  var startDate=$('#startDate').val();
+		  /* var startDate=$('#startDate').val(); */
+		   //获取第二天十二点的时间 
+		  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 		  var endDate=$('#endDate').val();
 		  var daycount=1;
 		  if(startDate&&endDate){
 		        startDate = Date.parse(startDate);
 		        endDate = Date.parse(endDate);
 		        var dateSpan = endDate - startDate;
-		        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
+		        var iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
 		        if(iDays>0){
-		          daycount=iDays;
+		          daycount+=iDays;
 		        }
 		  }
 		  
@@ -1023,16 +1034,20 @@ input[type="datetime-local"]:before{
 		
 		$(document).on('change','#comboList',function(){
 		    var number = parseInt($('#proCount').val());
-		      var startDate=$('#startDate').val();
+		      /* var startDate=$('#startDate').val(); */
 			  var endDate=$('#endDate').val();
+			  //获取第二天十二点的时间 
+			  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
 			        endDate = Date.parse(endDate);
-			        var dateSpan = endDate - startDate;
-			        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
+			        if(endDate!=startDate){
+			        	var dateSpan = endDate - startDate;
+			        	var iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
+			        }
 			        if(iDays>0){
-			          daycount=iDays;
+			          daycount+=iDays;
 			        }
 			  }
 			if($('#comboList').val()==0){
@@ -1088,10 +1103,9 @@ input[type="datetime-local"]:before{
 		      if(ifFace==0||productModular!='0001'){
 		         joinBasket();
 		      }else{
-		         
+		         $('#selAddress').popup(); 
 		         $('.modDiv').hide();
 		         $('#cameraDiv').show();
-		         $('#selAddress').popup(); 
 		         buyOrbasketFlg=1;
 		      }
 		
@@ -1101,6 +1115,8 @@ input[type="datetime-local"]:before{
 		function joinBasket(){
 		    var param={};
 			param.productId=${id};
+			//4/26 获取comId
+			param.comId=${comId};
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
 			param.paytype='WEICHAT';
@@ -1221,10 +1237,10 @@ input[type="datetime-local"]:before{
 				  	$.toast("请选择预定日期", "forbidden");
 				  	return false;
 				  }else{
-         			
+         			$('#selAddress').popup(); 
          			$('.modDiv').hide();
          			$('#addressFitst').show();
-					$('#selAddress').popup(); 
+					
 				  }
 			  }else if(startdiv!="none")
 			  {
@@ -1235,16 +1251,16 @@ input[type="datetime-local"]:before{
 			  		$.toast("请选择离店日期", "forbidden");
 			  		return false;
 			  	}else{
-         			
+         			$('#selAddress').popup(); 
          			$('.modDiv').hide();
          			$('#addressFitst').show();
-					$('#selAddress').popup(); 
+					
 			  	}      
 			  }else{
-			  	
+			  	$('#selAddress').popup(); 
 			  	$('.modDiv').hide();
 			  	$('#addressFitst').show();
-				$('#selAddress').popup(); 
+				
 			  }
               
         });
@@ -1395,6 +1411,8 @@ input[type="datetime-local"]:before{
 		    var ids=$('input[type^=radio]:checked').attr('id').split('-');
 		    var param={};
 			param.productId=${id};
+			//4/26 获取comId
+			param.comId=${comId};
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
 			param.paytype='WEICHAT';
@@ -1774,10 +1792,10 @@ input[type="datetime-local"]:before{
 
 			<div style="width:100%;height:40px;position:fixed;z-index:10;bottom:2px">
 				<a id="addOrder"
-					style="width:35%;font-size:13px;margin-left:2%;float:left;background-color:#1E90FF;height:40px;line-height:40px;"
+					style="width:47.5%;font-size:13px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 					href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a> <a
 					id="buy"
-					style="width:60%;font-size:13px;margin-right:2%;float:right;background-color:#1E90FF;height:40px;line-height:40px;margin-top:0"
+					style="width:47.5%;font-size:13px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
 					href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span
 					id="total">0</span>）
 				</a>

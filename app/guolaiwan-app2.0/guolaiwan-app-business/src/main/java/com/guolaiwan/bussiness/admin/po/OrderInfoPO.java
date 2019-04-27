@@ -145,7 +145,29 @@ public class OrderInfoPO extends AbstractBasePO {
 	
 	private String photo;
 	
+	//4/23新增拒绝理由
+	private String justification;
 	
+	//4/26新增comId
+	private long comId;
+	
+	
+	public String getJustification() {
+		return justification;
+	}
+
+	public void setJustification(String justification) {
+		this.justification = justification;
+	}
+
+	public long getComId() {
+		return comId;
+	}
+
+	public void setComId(long comId) {
+		this.comId = comId;
+	}
+
 	public long getLogisticsId() {
 		return logisticsId;
 	}

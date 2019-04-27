@@ -544,7 +544,7 @@ public class MerchantController extends BaseController {
 		return mv;
 	}
 
-	// 审核结论
+	/*// 审核结论
 	@ResponseBody
 	@RequestMapping(value = "/checkResult.do", method = RequestMethod.POST)
 	public String checkResult(HttpServletRequest request) throws Exception {
@@ -560,7 +560,38 @@ public class MerchantController extends BaseController {
 		conn_merchant.update(merchant);
 
 		return "success";
-	}
+	}*/
+	
+		// 审核结论   新改动的方法4/25 添加了在更改商户状态为下架的时候同时更改相关的所有商品状态为下架
+		@ResponseBody
+		@RequestMapping(value = "/checkResult.do", method = RequestMethod.POST)
+		public String checkResult(HttpServletRequest request) throws Exception {
+			String uuid = request.getParameter("uuid");
+			MerchantPO merchant = conn_merchant.get(uuid);
+
+			String shopAuditState = request.getParameter("shopAuditState");
+			String shopAuditopinion = request.getParameter("shopAuditopinion");
+
+			merchant.setShopAuditState(ShopAuditStateType.fromString(shopAuditState));
+			merchant.setShopAuditopinion(shopAuditopinion);
+			if(shopAuditState.equals("T")){
+				List<ProductPO> byMerchantId = conn_product.findByMerchantId(merchant.getId());
+				for (ProductPO productPO : byMerchantId) {
+					productPO.setProductAuditstatus(ShopAuditStateType.T);
+					conn_product.update(productPO);
+				}
+			}else{
+				List<ProductPO> byMerchantId = conn_product.findByMerchantId(merchant.getId());
+				for (ProductPO productPO : byMerchantId) {
+					productPO.setProductAuditstatus(ShopAuditStateType.N);
+					conn_product.update(productPO);
+				}
+			}
+			
+			conn_merchant.update(merchant);
+			
+			return "success";
+		}
 
 	@RequestMapping(value = "/sellist", method = RequestMethod.GET)
 	public ModelAndView selhome(HttpServletRequest request) {
