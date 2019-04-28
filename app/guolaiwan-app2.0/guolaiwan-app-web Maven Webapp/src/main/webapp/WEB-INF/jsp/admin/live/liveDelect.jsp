@@ -66,7 +66,7 @@
 				elem : '#liveList',
 				method : 'post',
 				url : 'message.do?liveId=' + a,
-				page : true,
+				page : false,
 				limits : [ 10, 30, 50, 100 ],
 				limit : 10,
 				cols : [ [
