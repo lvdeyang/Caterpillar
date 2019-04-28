@@ -180,6 +180,18 @@ public class ProductPO extends AbstractBasePO {
 	private List<DistributorProductPO> distributorProduct;
 	
 	private long regionId;
+	
+	//张羽 新增退款限制 4/28
+	private int productIsRefund;
+	
+
+	public int getProductIsRefund() {
+		return productIsRefund;
+	}
+
+	public void setProductIsRefund(int productIsRefund) {
+		this.productIsRefund = productIsRefund;
+	}
 
 	public boolean isFlag() {
 		return flag;

@@ -290,6 +290,21 @@
                         </div>
                     </div>
                 </div>
+                
+                 <!-- 4/28 张羽新增退款限制 -->
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">
+ 						退款限制：
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="productIsRefund" lay-skin="switch" id="productIsRefund" lay-text="ON|OFF" lay-filter="switchTest" value="1">
+                        <div class="layui-unselect	layui-form-switch" lay-skin="_switch">
+                        	<em>OFF</em>
+                        	<i></i>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="layui-form-item">
                     <label class="layui-form-label">
  						是否人脸：

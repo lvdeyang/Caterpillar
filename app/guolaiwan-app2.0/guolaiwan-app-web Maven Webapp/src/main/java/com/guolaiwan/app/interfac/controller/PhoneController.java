@@ -2247,9 +2247,11 @@ public class PhoneController extends WebBaseControll {
 		}
 
 		OrderInfoPO order = new OrderInfoPO();
-		//4/26新增的comId值 获取
+		//4/26新增的comId值 获取 张羽 4/28 添加退款限制
 		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
 		order.setComId(productPO2.getComId());
+		order.setProductIsRefund(productPO2.getProductIsRefund());
+		
 		
 		if (logisticsId != null) {
 			order.setLogisticsId(Long.parseLong(logisticsId));
@@ -2506,9 +2508,12 @@ public class PhoneController extends WebBaseControll {
 		}
 
 		OrderInfoPO order = new OrderInfoPO();
-		// 4/26添加comId
+		// 4/26添加comId 张羽 4/28 添加退款限制
 		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
 		order.setComId(productPO2.getComId());
+		order.setProductIsRefund(productPO2.getProductIsRefund());
+		
+		
 		if (logisticsId != null) {
 			order.setLogisticsId(Long.parseLong(logisticsId));
 		}

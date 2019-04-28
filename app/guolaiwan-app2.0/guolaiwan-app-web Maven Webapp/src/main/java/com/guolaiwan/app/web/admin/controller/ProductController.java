@@ -246,7 +246,7 @@ public class ProductController extends BaseController {
 		String regionFirst=request.getParameter("regionFirst");
 		String regionSecond=request.getParameter("regionSecond");
 		String regionThird=request.getParameter("regionThird");
-		
+			
 		product.setRegionId(Long.parseLong(regionFirst));
 		
 		
@@ -330,7 +330,10 @@ public class ProductController extends BaseController {
 		int ifFace = 1;
 		if (request.getParameter("ifFace") == null)
 			ifFace = 0;
-		
+		//张羽 4/28 添加退款限制
+		int productIsRefund=1;
+		if(request.getParameter("productIsRefund")==null)
+			productIsRefund=0;
 		// 显示、推荐
 		int productIsShow = 1;
 		if (request.getParameter("productIsShow") == null)
@@ -388,6 +391,9 @@ public class ProductController extends BaseController {
 		product.setProductName(productName);
 		// 板块
 		product.setProductModularCode(modularCode);
+		
+		//张羽 4/28 新增退款限制
+		product.setProductIsRefund(productIsRefund);
 		product.setProductModularCodeName(modularName);
 		product.setProductClassCode(modularClassId);
 		product.setProductClassName(modularClass);

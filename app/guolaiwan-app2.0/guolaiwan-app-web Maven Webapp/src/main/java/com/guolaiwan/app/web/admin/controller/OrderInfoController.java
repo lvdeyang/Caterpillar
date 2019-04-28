@@ -776,6 +776,16 @@ public class OrderInfoController extends BaseController {
 			strMap.put("msg", "");
 			return strMap;
 		}
+		
+		//4/23 新增的方法 将拒绝退款理由存入数据库
+		@ResponseBody
+		@RequestMapping(value = "/updateJustification.do", method = RequestMethod.POST)
+		public String updateJustification(Long orderId,String justification) throws Exception {
+			OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
+			orderInfoPO.setJustification(justification);
+			conn_OrderInfo.save(orderInfoPO);
+			return "success";
+		}
 	
 
 }

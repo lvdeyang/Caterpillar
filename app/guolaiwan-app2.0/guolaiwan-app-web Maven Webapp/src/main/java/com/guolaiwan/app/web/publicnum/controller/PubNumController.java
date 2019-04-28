@@ -1622,6 +1622,10 @@ public class PubNumController extends WebBaseControll {
 
 				List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
 						OrderInfoVO.class);
+				// 张羽 添加退款限制 4/28
+				for (int i=0;i<orderedOrderpos.size();i++) {
+					orderedOrders.get(i).setProductIsRefund(orderedOrderpos.get(i).getProductIsRefund());
+				}
 				orders = orderedOrders;
 				break;
 			case 3:// 已发货
@@ -1681,7 +1685,6 @@ public class PubNumController extends WebBaseControll {
 				List<OrderInfoPO> rOrderpos2=new ArrayList<OrderInfoPO>();
 				for (OrderInfoPO orderInfoPO : rOrderpos) {
 					if(orderInfoPO.getJustification()!=""&&orderInfoPO.getJustification()!=null){
-						
 						rOrderpos2.add(orderInfoPO);
 					}
 				}
@@ -1720,7 +1723,10 @@ public class PubNumController extends WebBaseControll {
 				orderedOrderpos.addAll(orderedOrderpo2);
 				List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
 						OrderInfoVO.class);
-
+				// 张羽 添加退款限制 4/28
+				for (int i=0;i<orderedOrderpos.size();i++) {
+					orderedOrders.get(i).setProductIsRefund(orderedOrderpos.get(i).getProductIsRefund());
+				}
 			
 				orders = orderedOrders;
 				break;

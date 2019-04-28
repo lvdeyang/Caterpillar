@@ -138,8 +138,18 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 	//4/23 新增拒绝理由
 	private String justification;
 	
+	//4/28 新增退款限制 ----张羽
+	private int productIsRefund;
 	
 	
+	public int getProductIsRefund() {
+		return productIsRefund;
+	}
+
+	public void setProductIsRefund(int productIsRefund) {
+		this.productIsRefund = productIsRefund;
+	}
+
 	public String getJustification() {
 		return justification;
 	}

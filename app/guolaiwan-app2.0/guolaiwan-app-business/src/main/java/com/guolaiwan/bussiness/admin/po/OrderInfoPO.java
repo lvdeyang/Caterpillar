@@ -151,7 +151,19 @@ public class OrderInfoPO extends AbstractBasePO {
 	//4/26新增comId
 	private long comId;
 	
+	//4/28 新增退款限制 ----张羽
+	private int productIsRefund;
 	
+	
+	
+	public int getProductIsRefund() {
+		return productIsRefund;
+	}
+
+	public void setProductIsRefund(int productIsRefund) {
+		this.productIsRefund = productIsRefund;
+	}
+
 	public String getJustification() {
 		return justification;
 	}

@@ -537,7 +537,13 @@ html, body {
 					            //这里加各种各样的奇葩限制。
 					        }else{
 					           if(type==2){
-								    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
+								    
+							    //添加退款限制理由 张羽 4/28
+							    if(data[i].orderList[j].productIsRefund!="1"){
+							    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
+							    }else{
+							    	html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')
+							    }
 							   }
 					        }
 				        }
@@ -552,6 +558,10 @@ html, body {
 					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+data[i].orderList[j].createDate+'</p>');
 					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">验单时间'+data[i].orderList[j].ydDate+'</p>');
 					    html.push('</div>');
+					    //退款限制 张羽 4/28
+					    if(data[i].orderList[j].productIsRefund=="1"){
+					    	html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)">活动商品不支持退款，谢谢您的支持</a>')
+					    }
 					    if(type==3){
 						    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="ok-'+data[i].orderList[j].id+'" class="icon-ok" href="javascript:void(0)">&nbsp;&nbsp;确认收货</a>')
 						}
