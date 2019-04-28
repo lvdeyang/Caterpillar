@@ -335,7 +335,7 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		return orders;
 	}
 
-	/*// 订单状态
+	// 订单状态
 	public List<OrderInfoPO> findOrdersByState(OrderStateType type, Map<String, Object> map, int pageNum, int pageSize)
 			throws Exception {
 		QueryHql hql = newQueryHql();
@@ -353,9 +353,9 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 
 		List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
 		return orders;
-	}*/
+	}
 	
-	// 订单状态 4/26 添加comId条件
+	/*// 订单状态 4/26 添加comId条件
 		public List<OrderInfoPO> findOrdersByState(OrderStateType type, Map<String, Object> map, int pageNum, int pageSize)
 				throws Exception {
 			QueryHql hql = newQueryHql();
@@ -375,11 +375,11 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 
 			List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
 			return orders;
-		}
+		}*/
 	
 	
 
-	/*	// 订单状态（数量）
+	// 订单状态（数量）
 	public int countOrdersByState(OrderStateType type, Map<String, Object> map) throws Exception {
 		CountHql cHql = newCountHql();
 		cHql.andBy("orderState", Condition.eq, type);
@@ -394,9 +394,9 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		}
 		int count = countByHql(cHql);
 		return count;
-	}*/
+	}
 		
-		// 订单状态（数量）4/26 添加comId条件
+		/*// 订单状态（数量）4/26 添加comId条件
 		public int countOrdersByState(OrderStateType type, Map<String, Object> map) throws Exception {
 			CountHql cHql = newCountHql();
 			cHql.andBy("orderState", Condition.eq, type);
@@ -413,7 +413,7 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 			}
 			int count = countByHql(cHql);
 			return count;
-		}
+		}*/
 		
 	
 

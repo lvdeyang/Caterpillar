@@ -97,9 +97,10 @@ public class OrderInfoController extends BaseController {
 	public Map<String, Object> GetList(HttpServletRequest request, int page, int limit, int type) throws Exception {
 		// 检索条件
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		//添加获取comId   4/26
-		Long comId = getLoginInfo().getComId();
-		dataMap.put("comId", comId);
+		/*//添加获取comId   4/26
+		String comId = getLoginInfo().getComId();
+		
+		dataMap.put("comId", comId);*/
 		
 		String mName = request.getParameter("mName");
 		if (mName != null && mName.length() != 0) {
