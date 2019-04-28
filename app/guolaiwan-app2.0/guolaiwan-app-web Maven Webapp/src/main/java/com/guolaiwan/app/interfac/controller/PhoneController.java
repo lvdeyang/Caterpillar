@@ -2225,11 +2225,11 @@ public class PhoneController extends WebBaseControll {
 		String num = pageObject.getString("productNum");
 		String addressId = pageObject.getString("addressId");
 		String activityId = pageObject.getString("activityId");
-		//4/26 新增的comId值 获取
+		/*//4/26 新增的comId值 获取
 		Long comId=null;
 		if(pageObject.getString("comId")!=null&&pageObject.getString("comId")!=""){
 		  comId=Long.parseLong(pageObject.getString("comId"));
-		}
+		}*/
 		String comboId = pageObject.getString("comboId");
 		String logisticsId = pageObject.getString("logisticsId");
 		/*
@@ -2248,9 +2248,9 @@ public class PhoneController extends WebBaseControll {
 
 		OrderInfoPO order = new OrderInfoPO();
 		//4/26新增的comId值 获取
-		if (comId != null) {
-			order.setComId(comId);
-		}
+		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
+		order.setComId(productPO2.getComId());
+		
 		if (logisticsId != null) {
 			order.setLogisticsId(Long.parseLong(logisticsId));
 		}
@@ -2485,11 +2485,11 @@ public class PhoneController extends WebBaseControll {
 		Long userId = Long.parseLong(pageObject.getString("userId"));
 		String paytype = pageObject.getString("paytype");
 		String activityId = pageObject.getString("activityId");
-		//4/26 新增的comId值 获取
+		/*//4/26 新增的comId值 获取
 		Long comId=null;
 		if(pageObject.getString("comId")!=null&&pageObject.getString("comId")!=""){
 		  comId=Long.parseLong(pageObject.getString("comId"));
-		}
+		}*/
 		String comboId = pageObject.getString("comboId");
 		String logisticsId = pageObject.getString("logisticsId");
 		/*
@@ -2506,12 +2506,9 @@ public class PhoneController extends WebBaseControll {
 		}
 
 		OrderInfoPO order = new OrderInfoPO();
-		//4/26新增获取comId
-		if (comId != null) {
-			order.setComId(comId);
-		}else{
-			order.setComId(1);
-		}
+		// 4/26添加comId
+		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
+		order.setComId(productPO2.getComId());
 		if (logisticsId != null) {
 			order.setLogisticsId(Long.parseLong(logisticsId));
 		}

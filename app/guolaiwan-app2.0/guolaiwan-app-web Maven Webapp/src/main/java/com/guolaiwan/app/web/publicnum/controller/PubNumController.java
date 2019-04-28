@@ -322,8 +322,6 @@ public class PubNumController extends WebBaseControll {
 			mv = new ModelAndView("mobile/pubnum/product");
 			mv.addObject("id", id);
 		}
-		//查询商品的comId发送到页面 4/26
-		mv.addObject("comId", conn_product.get(id).getComId());
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
 		return mv;
 	}

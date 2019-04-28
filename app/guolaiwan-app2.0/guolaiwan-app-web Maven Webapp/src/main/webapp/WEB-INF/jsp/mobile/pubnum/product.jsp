@@ -1115,8 +1115,6 @@ input[type="datetime-local"]:before{
 		function joinBasket(){
 		    var param={};
 			param.productId=${id};
-			//4/26 获取comId
-			param.comId=${comId};
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
 			param.paytype='WEICHAT';
@@ -1411,8 +1409,6 @@ input[type="datetime-local"]:before{
 		    var ids=$('input[type^=radio]:checked').attr('id').split('-');
 		    var param={};
 			param.productId=${id};
-			//4/26 获取comId
-			param.comId=${comId};
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
 			param.paytype='WEICHAT';
