@@ -1365,10 +1365,11 @@ public class PubNumController extends WebBaseControll {
 	}
 	
 	@RequestMapping(value = "/activity/index")
-	public ModelAndView activityIndex(HttpServletRequest request, long refActivityId) throws Exception {
+	public ModelAndView activityIndex(HttpServletRequest request, long refActivityId,String comCode) throws Exception {
 		ModelAndView mav = null;
 		mav = new ModelAndView("mobile/pubnum/activity");
 		mav.addObject("refActivityId", refActivityId);
+		mav.addObject("comCode", comCode);
 		return mav;
 	}
 	@Autowired
@@ -1378,14 +1379,17 @@ public class PubNumController extends WebBaseControll {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/activity/getProducts", method = RequestMethod.GET)
-	public Object getActivityProducts(HttpServletRequest request, HttpServletResponse response)
+	public Object getActivityProducts(HttpServletRequest request, HttpServletResponse response,String comCode)
 			throws Exception {
-		List<ActiveBundlePo> activeBundlePos=conn_bundle.findAll();
+		
+		List<CompanyPO> companyPOs=  conn_com.findByField("comCode", comCode);
+		List<ActiveBundlePo> activeBundlePos=conn_bundle.findByField("comId", companyPOs.get(0).getId().intValue());
+		
         SysConfigPO sys=conn_sys.getSysConfig();
         Map<String, Object> ret=new HashMap<String, Object>();
         ret.put("bundles", activeBundlePos);
         ret.put("url", sys.getWebUrl());
-        List<ActivityPO> activityPOs=conn_activity.findByField("recommend", 1);
+        List<ActivityPO> activityPOs=conn_activity.findRecomByCom(companyPOs.get(0).getId());
         ret.put("activity", activityPOs);
         DecimalFormat df=new DecimalFormat("0.00");
         for (ActivityPO activityPO : activityPOs) {

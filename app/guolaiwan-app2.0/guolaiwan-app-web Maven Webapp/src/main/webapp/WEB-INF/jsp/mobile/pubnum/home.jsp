@@ -794,7 +794,7 @@ html, body {
 	       if(codes[1]=='0000'){
 	          location.href=window.BASEPATH + 'pubnum/live/index';
 	       }else if(codes[1]=='01112'){
-	          location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=5';
+	          location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=5&comCode='+comCode;
 	       }else if(codes[1]=='12022'){
 	          location.href=window.BASEPATH + 'pubnum/ipost';
 	       }else if(codes[1]=='101112'){
@@ -915,7 +915,7 @@ html, body {
 	   });
 	   $(document).on('click','#bundle',function(){
 	   
-	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0';
+	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0&comCode='+comCode;
 	   
 	   });
 	
