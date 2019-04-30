@@ -2368,11 +2368,15 @@ public class PhoneController extends WebBaseControll {
 			productprice = activityRelPO.getPrice();
 		}
 
-		if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
+		/*if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
 			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
 			payMoney = payMoney * (bet+1);
 			orderAllMoney = payMoney;
-		}
+		}*/
+		//张羽 修改支付时的价钱按照页面的计算来 4/30
+		long bet=Long.parseLong(pageObject.getString("payMoney"));
+		payMoney = payMoney * bet;
+		orderAllMoney = payMoney;
 
 		order.setProductPrice(productprice);
 		// 所属板块DI
@@ -2631,12 +2635,16 @@ public class PhoneController extends WebBaseControll {
 			productprice = activityRelPO.getPrice();
 		}
 
-		if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
+		/*if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
 			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
 			payMoney = payMoney * (bet+1);
 			orderAllMoney = payMoney;
-		}
-
+		}*/
+		//张羽 修改支付时的价钱按照页面的计算来 4/30
+		long bet=Long.parseLong(pageObject.getString("payMoney"));
+		payMoney = payMoney * bet;
+		orderAllMoney = payMoney;
+		System.out.println(orderAllMoney+"-------------------------");
 		// 商品单价
 		order.setProductPrice(productprice);
 		// 所属板块DI

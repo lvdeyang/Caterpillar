@@ -557,11 +557,8 @@ input[type="datetime-local"]:before{
 <script type="text/javascript">
 
 
+
 	$(function() {
-	
-	  
-	
-	
 	  $(document).on('focus','.mydate',function(){
 	      $(this).removeAttr('placeholder');
 	  });
@@ -660,7 +657,6 @@ input[type="datetime-local"]:before{
 				
 				 //获取第二天十二点的时间  4/25修改 为了让离店时间变成第二天12点
 			    const start = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-				
 				/* var t1 = new Date();
 				var t1_s = t1.getTime();
 				t1.setTime(t1_s + 2000 * 60+60*60*1000*24); */
@@ -904,6 +900,7 @@ input[type="datetime-local"]:before{
 			        if(iDays>0){
 			          daycount+=iDays;
 			        }
+			         $("#payMoney").val(daycount);
 			  }
 			  if($('#comboList').val()==0){
 			  	 $('#total').html(($('#price').html()*number*daycount).toFixed(2));
@@ -981,7 +978,8 @@ input[type="datetime-local"]:before{
 		  var number = parseInt($input.val() || "0") - 1
 		  if (number < MIN) number = MIN;
 		  $input.val(number);
-		      var startDate=$('#startDate').val();
+		      /* var startDate=$('#startDate').val(); */
+		      var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 			  var endDate=$('#endDate').val();
 			  var daycount=1;
 			  if(startDate&&endDate){
@@ -990,8 +988,9 @@ input[type="datetime-local"]:before{
 			        var dateSpan = endDate - startDate;
 			        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
 			        if(iDays>0){
-			          daycount=iDays;
+			          daycount=iDays+1;
 			        }
+			         $("#payMoney").val(daycount);
 			  }
 		  if($('#comboList').val()==0){
 		  	 $('#total').html(($('#price').html()*number*daycount).toFixed(2));
@@ -1020,6 +1019,7 @@ input[type="datetime-local"]:before{
 		        if(iDays>0){
 		          daycount+=iDays;
 		        }
+		         $("#payMoney").val(daycount);
 		  }
 		  
 		  if($('#comboList').val()==0){
@@ -1049,6 +1049,7 @@ input[type="datetime-local"]:before{
 			        if(iDays>0){
 			          daycount+=iDays;
 			        }
+			        $("#payMoney").val(daycount);
 			  }
 			if($('#comboList').val()==0){
 			  	 $('#total').html(($('#price').html()*number*daycount).toFixed(2));
@@ -1117,6 +1118,7 @@ input[type="datetime-local"]:before{
 			param.productId=${id};
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
+			param.payMoney=$('#payMoney').val();
 			param.paytype='WEICHAT';
 			param.source="PUBLICADDRESS";
 			param.bookDate=$('#bookDate').val();
@@ -1410,6 +1412,7 @@ input[type="datetime-local"]:before{
 		    var param={};
 			param.productId=${id};
 			param.productNum=$('#proCount').val();
+			param.payMoney=$('#payMoney').val();
 			param.userId=${userId};
 			param.paytype='WEICHAT';
 			param.source="PUBLICADDRESS";
@@ -1719,6 +1722,7 @@ input[type="datetime-local"]:before{
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">离店日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
 			    	<input id="endDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			    	<input id="payMoney" class="weui-input mydate" type="text" value="1" hidden="hidden">
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
