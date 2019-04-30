@@ -538,7 +538,7 @@ html, body {
 	   
 		getProduct();
 		function getProduct(){
-		    var _uriproduct = window.BASEPATH + 'pubnum/activity/getProducts';
+		    var _uriproduct = window.BASEPATH + 'pubnum/activity/getProducts?comCode=${comCode}';
 		
 			$.get(_uriproduct, null, function(data){
 				data = parseAjaxResult(data);
