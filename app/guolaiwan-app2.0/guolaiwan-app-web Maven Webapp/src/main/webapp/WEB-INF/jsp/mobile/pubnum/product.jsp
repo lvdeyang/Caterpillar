@@ -638,7 +638,7 @@ input[type="datetime-local"]:before{
 			    $('.header-content').html(data.product.productName);
 			    $('#proName').html(data.product.productName+'￥<span id="price">'+data.product.productPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
 			    $('#proContent').html(data.product.productIntroduce);
-			    $('#total').html(data.product.productPrice);
+			    $('#total').html((data.product.productPrice*${productRestrictNumber}).toFixed(2));
 			    $('#proShowNum').html('销量'+data.product.productShowNum);
 			    $('#proStock').html('库存'+data.product.productStock);
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
@@ -972,7 +972,7 @@ input[type="datetime-local"]:before{
 	    });
 	
 	
-	    var MAX = 99, MIN = 1;
+	    var MAX = 99, MIN = ${productRestrictNumber};
 		$('.weui-count__decrease').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
 		  var number = parseInt($input.val() || "0") - 1
@@ -1118,6 +1118,7 @@ input[type="datetime-local"]:before{
 			param.productId=${id};
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
+			param.productRestrictNumber=${productRestrictNumber};
 			param.payMoney=$('#payMoney').val();
 			param.paytype='WEICHAT';
 			param.source="PUBLICADDRESS";
@@ -1682,7 +1683,7 @@ input[type="datetime-local"]:before{
 						<div class="weui-count">
 							<a class="weui-count__btn weui-count__decrease"></a> <input
 								disabled="disabled" class="weui-count__number" id="proCount"
-								type="number" value="1"> <a
+								type="number" value="${productRestrictNumber}"> <a
 								class="weui-count__btn weui-count__increase"></a>
 						</div>
 					</div>

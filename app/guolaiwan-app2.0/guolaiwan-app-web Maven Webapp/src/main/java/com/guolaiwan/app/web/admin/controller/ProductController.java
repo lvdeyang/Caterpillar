@@ -164,6 +164,8 @@ public class ProductController extends BaseController {
 		String uuid = request.getParameter("uuid");
 		ProductPO productp = conn_product.get(uuid);
 		ProductVO productV = new ProductVO().set(productp);
+		//张羽  将购买商品的最低购买数量带到页面
+		productV.setProductRestrictNumber(productp.getProductRestrictNumber());
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		String beginDate = sdf.format(productp.getProductBeginDate());
 		String ectiveDate = sdf.format(productp.getProductEctivedate());
@@ -234,19 +236,19 @@ public class ProductController extends BaseController {
 		String productEctivedate = request.getParameter("productEctivedate");
 		String psType = request.getParameter("psType");
 		String goldNum = request.getParameter("goldNum");
-
 		String productDayCount=request.getParameter("productDayCount");
 		String datesOn=request.getParameter("datesOn");
 		String costMessage=request.getParameter("costMessage");
 		String remarks=request.getParameter("remarks");
 		String notes=request.getParameter("notes");
 		String traffic=request.getParameter("traffic");
-		
-		
 		String regionFirst=request.getParameter("regionFirst");
 		String regionSecond=request.getParameter("regionSecond");
 		String regionThird=request.getParameter("regionThird");
-			
+		//张羽 新增 5/1 商品购买最低数量限制
+		String productRestrictNumber=request.getParameter("productRestrictNumber");
+		product.setProductRestrictNumber(Integer.parseInt(productRestrictNumber));
+		
 		product.setRegionId(Long.parseLong(regionFirst));
 		
 		
@@ -459,7 +461,10 @@ public class ProductController extends BaseController {
 		long productOldPrice = (long) (Double.parseDouble(request.getParameter("productOldPrice")) * 100);
 		long productPrice = (long) (Double.parseDouble(request.getParameter("productPrice")) * 100);
 		long productStock = Long.parseLong(request.getParameter("productStock"));
-
+		
+		//最低购买数量 张羽 5/1
+		int productRestrictNumber=Integer.parseInt(request.getParameter("productRestrictNumber"));
+		product.setProductRestrictNumber(productRestrictNumber);
 		// 时间
 		String productBeginDate = request.getParameter("productBeginDate");
 		String productEnddate = request.getParameter("productEnddate");
@@ -706,6 +711,7 @@ public class ProductController extends BaseController {
 		String uuid = request.getParameter("uuid");
 		ProductPO product = conn_product.get(uuid);
 		ProductVO productV = new ProductVO().set(product);
+		productV.setProductRestrictNumber(product.getProductRestrictNumber());
 		String beginDate = sdf.format(product.getProductBeginDate());
 		String ectiveDate = sdf.format(product.getProductEctivedate());
 		String endDate = sdf.format(product.getProductEnddate());
@@ -760,6 +766,7 @@ public class ProductController extends BaseController {
 		String beginDate = sdf.format(product.getProductBeginDate());
 		String ectiveDate = sdf.format(product.getProductEctivedate());
 		String endDate = sdf.format(product.getProductEnddate());
+		productV.setProductRestrictNumber(product.getProductRestrictNumber());
 		strMap.put("product", productV);
 		strMap.put("beginDate", beginDate);
 		strMap.put("ectiveDate", ectiveDate);// sysConfig
@@ -778,6 +785,7 @@ public class ProductController extends BaseController {
 		long id = Long.parseLong(request.getParameter("id"));
 		ProductPO product = conn_product.get(id);
 		ProductVO productV = new ProductVO().set(product);
+		productV.setProductRestrictNumber(product.getProductRestrictNumber());
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		String beginDate = sdf.format(product.getProductBeginDate());
 		String ectiveDate = sdf.format(product.getProductEctivedate());

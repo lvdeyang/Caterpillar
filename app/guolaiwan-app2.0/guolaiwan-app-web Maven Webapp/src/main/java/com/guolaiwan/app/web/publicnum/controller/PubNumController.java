@@ -320,6 +320,7 @@ public class PubNumController extends WebBaseControll {
 			mv.addObject("id",id);
 		}else {
 			mv = new ModelAndView("mobile/pubnum/product");
+			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("id", id);
 		}
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
@@ -1428,6 +1429,7 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubnum/activityproduct");
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(id);
+		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 		mv.addObject("actId",activityPro.getId());
 		mv.addObject("id", id);
 		mv.addObject("userId", request.getSession().getAttribute("userId"));

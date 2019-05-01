@@ -140,6 +140,18 @@
                         autocomplete="off" class="layui-input" value="${product.productStock}">
                  	</div>
                  </div>
+                 
+                  <!--  5/1 张羽 新增 最低购买数量限制 -->
+                   <div class="layui-inline">
+                    <label for="productRestrictNumber" class="layui-form-label">
+						最低购买量：
+                    </label>
+                    <div class="layui-input-inline">
+                    <input type="text" id="productRestrictNumber" name="productRestrictNumber" required lay-verify="required" placeholder="最低购买数量限制"
+                        autocomplete="off" class="layui-input" value="${product.productRestrictNumber}">
+                 	</div>
+                 </div>
+                 
                 </div>
                 
                 
@@ -657,6 +669,13 @@
 				var Stock =$("#productStock").val();
 				if(!(/^([1-9]\d*|[0]{1,1})$/).test(Stock)){
 						layer.msg("库存为整数字！",{time: 5000, icon:5});
+						return false;
+				}
+				
+				//最低购买数量限制 5/1 张羽 新增
+				var restrict =$("#productRestrictNumber").val();
+				if(!(/^([1-9]\d*|[0]{1,1})$/).test(restrict)){
+						layer.msg("购买限制为整数字！",{time: 5000, icon:5});
 						return false;
 				}
 				

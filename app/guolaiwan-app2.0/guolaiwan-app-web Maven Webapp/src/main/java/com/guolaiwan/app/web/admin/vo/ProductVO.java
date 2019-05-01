@@ -151,6 +151,20 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	
 	private int isactivityproduct;
 	
+	//张羽 新增 5/1 商品购买最低数量限制
+	private int productRestrictNumber;
+	
+	
+	public int getProductRestrictNumber() {
+		return productRestrictNumber;
+	}
+
+
+	public void setProductRestrictNumber(int productRestrictNumber) {
+		this.productRestrictNumber = productRestrictNumber;
+	}
+
+
 	@Override
     public Object clone() throws CloneNotSupportedException {
         ProductVO productVO = (ProductVO)super.clone();
