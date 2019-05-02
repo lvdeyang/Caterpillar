@@ -2961,6 +2961,7 @@ public class PhoneController extends WebBaseControll {
 					    }
 					}
 					
+					orderInfoVO.setProductRestrictNumber(conn_product.get(orderInfoVO.getProductId()).getProductRestrictNumber());
 					
 					
 					orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());

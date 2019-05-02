@@ -284,6 +284,8 @@ public class PubNumController extends WebBaseControll {
 			
 		case "PRODUCT":
 			mv = new ModelAndView("mobile/pubnum/product");
+			//轮播图商品购买跳转 张羽 新增参数到页面 商品购买数量限制 5/2
+			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
 			mv.addObject("id", code);
 			break;
 		default:
