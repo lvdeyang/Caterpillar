@@ -65,8 +65,7 @@ public class ChildProductPO extends AbstractBasePO {
 	private int isTaught; // 是否讲解(Taught)
 	
 	private String linkedPoint;
-	
-	
+
 	public String getEnglishContent() {
 		return englishContent;
 	}
