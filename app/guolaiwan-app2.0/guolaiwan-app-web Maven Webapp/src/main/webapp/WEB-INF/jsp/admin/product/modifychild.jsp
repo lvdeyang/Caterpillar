@@ -47,6 +47,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				</div>
  				
  				<div class="layui-form-item">
+                	<div class="layui-inline">
+                    	<label for="linkedPoint" class="layui-form-label">
+                    		关联点(逗号分隔ID)：
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="linkedPoint" name="linkedPoint" required lay-verify="required"
+                        	autocomplete="off" class="layui-input" value="${child.linkedPoint}">
+                    	</div>
+                    </div>
+ 				</div>
+ 				
+ 				
+ 				<div class="layui-form-item">
 				
 				<input type="hidden" value="${child.childPic}" name="childPic" />
 				

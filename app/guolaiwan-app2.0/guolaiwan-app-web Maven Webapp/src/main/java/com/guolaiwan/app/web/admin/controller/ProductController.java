@@ -927,7 +927,7 @@ public class ProductController extends BaseController {
 		String chineseboy = request.getParameter("chineseboy");
 		String englishgirl = request.getParameter("englishgirl");
 		String englishboy = request.getParameter("englishboy");
-
+        String linkedPoint=request.getParameter("linkedPoint");
 		long productID = Long.parseLong(request.getParameter("productID"));
 
 		ChildProductPO child = new ChildProductPO();
@@ -953,6 +953,7 @@ public class ProductController extends BaseController {
 		child.setChildScale(scale);
 		String imgids = request.getParameter("imgids");
 		child.setChildPic(imgids);
+		child.setLinkedPoint(linkedPoint);
 		conn_childProduct.saveOrUpdate(child);
 		ChildPicAndContentPO cpac = new ChildPicAndContentPO();
 		cpac.setChildPic(imgids);
@@ -1002,7 +1003,7 @@ public class ProductController extends BaseController {
 		String schildid = request.getParameter("schildid");
 		String scope = request.getParameter("scope");
 		String isTaught = request.getParameter("isTaught");
-
+		String linkedPoint=request.getParameter("linkedPoint");
 		ChildProductPO child = conn_childProduct.get(uuid);
 		child.setUpdateTime(new Date());
 		child.setChildName(childName);
@@ -1013,6 +1014,7 @@ public class ProductController extends BaseController {
 		child.setContent(content);
 		child.setLanId(Long.parseLong(lanId));
 		child.setChildScale(scale);
+		child.setLinkedPoint(linkedPoint);
 		child.setScope(scope);
 		child.setIsTaught(Integer.parseInt(isTaught));
 		String imgids = request.getParameter("imgids");

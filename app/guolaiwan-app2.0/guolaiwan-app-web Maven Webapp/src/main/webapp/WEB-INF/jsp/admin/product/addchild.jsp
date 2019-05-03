@@ -39,6 +39,18 @@
                     </div>
  				</div>
  				
+ 				<div class="layui-form-item">
+                	<div class="layui-inline">
+                    	<label for="linkedPoint" class="layui-form-label">
+                    		关联点(逗号分隔ID)：
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="linkedPoint" name="linkedPoint" required lay-verify="required"
+                        	autocomplete="off" class="layui-input">
+                    	</div>
+                    </div>
+ 				</div>
+ 				
  				  <div class="layui-form-item">
 				    <label class="layui-form-label">语言</label>
 				    <div class="layui-input-block" style="width:190px;">
