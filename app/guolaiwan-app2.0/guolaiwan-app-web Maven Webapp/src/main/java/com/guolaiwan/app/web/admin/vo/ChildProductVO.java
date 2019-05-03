@@ -64,6 +64,7 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 	
 	private int isTaught; // 是否讲解(Taught)
 	
+	private String linkedPoint;
 	
 	public String getChineseContent() {
 		return chineseContent;
@@ -257,10 +258,20 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 				.setChildLatitude(entity.getChildLatitude()).setLanId(entity.getLanId())
 				.setChineseContent(entity.getChineseContent())
 				.setEnglishContent(entity.getEnglishContent())
+				.setLinkedPoint(entity.getLinkedPoint())
 				.setChildPic(entity.getChildPic()).setContent(entity.getContent()).setChildScale(entity.getChildScale())
 				.setChildRoad(entity.getChildRoad()).setIsCen(entity.getIsCen()).setProductID(entity.getProductID());
 		this.setScope(entity.getScope());
 		this.setIsTaught(entity.getIsTaught());
+		return this;
+	}
+
+	public String getLinkedPoint() {
+		return linkedPoint;
+	}
+
+	public ChildProductVO setLinkedPoint(String linkedPoint) {
+		this.linkedPoint = linkedPoint;
 		return this;
 	}
 
