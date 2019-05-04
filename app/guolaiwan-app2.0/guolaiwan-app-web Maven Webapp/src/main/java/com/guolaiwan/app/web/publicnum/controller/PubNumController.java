@@ -772,6 +772,12 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubadmin/apply");
 		HttpSession session = request.getSession();
+		if(session.getAttribute("userId")!=null&&session.getAttribute("merchantId")!=null){
+		  String userId=session.getAttribute("userId").toString();
+		  String merchantId=session.getAttribute("merchantId").toString();
+		  conn_merchantuser.delMerUserByIds(Long.parseLong(userId),Long.parseLong(merchantId));
+		}
+		
 		session.setAttribute("merchantId", null);
 		return mv;
 	}
