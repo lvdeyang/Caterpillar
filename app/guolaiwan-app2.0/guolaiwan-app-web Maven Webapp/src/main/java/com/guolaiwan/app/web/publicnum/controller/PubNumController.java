@@ -1324,16 +1324,19 @@ public class PubNumController extends WebBaseControll {
 		Set<String> headers = new HashSet<String>();
 
 		ProductPO productPO = conn_product.getByMerchantId(merchantId);
-		List<CommentPO> commentPOs = conn_comment.findByPro(productPO.getId(), 1, 50);
-		for (CommentPO commentPO : commentPOs) {
-			UserInfoPO user = commentPO.getUser();
-			if (user.getUserHeadimg() != null) {
-				if (isImagesTrue(user.getUserHeadimg())) {
-					headers.add(user.getUserHeadimg());
-				}
+		if(productPO!=null){
+			List<CommentPO> commentPOs = conn_comment.findByPro(productPO.getId(), 1, 50);
+			for (CommentPO commentPO : commentPOs) {
+				UserInfoPO user = commentPO.getUser();
+				if (user.getUserHeadimg() != null) {
+					if (isImagesTrue(user.getUserHeadimg())) {
+						headers.add(user.getUserHeadimg());
+					}
 
+				}
 			}
 		}
+		
 		return headers;
 	}
 
