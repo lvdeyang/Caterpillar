@@ -76,7 +76,7 @@ public class ActivityController extends BaseController {
 		strMap.put("code", "0");
 		strMap.put("msg", "");
 		strMap.put("count", count);
-		strMap.put("data", activityVOs);
+		strMap.put("data", activitys);
 		return strMap;
 	}
 
