@@ -56,12 +56,10 @@ public class CarouselController extends BaseController{
 		SysConfigPO sysConfigPO = conn_sysConfig.getSysConfig();
 		strMap.put("sysConfigPO", sysConfigPO);
 		ModelAndView mv =null;
-		if(comId==1l){
-			mv = new ModelAndView("admin/carousel/list",strMap);
-			return mv;	
-		}
-		mv = new ModelAndView("admin/carousel/sonList",strMap);
-		return mv;
+
+		mv = new ModelAndView("admin/carousel/list",strMap);
+		return mv;	
+
 	}
 
 
