@@ -221,9 +221,11 @@ public class CarouselController extends BaseController{
 	@RequestMapping(value = "/checkProduct.do/proList.do" , method = RequestMethod.POST)
 	public Map<String, Object> getPros(int page , int limit) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<ProductPO> polist = conn_product.findByCom(1l, page, limit);
+		
+		List<ProductPO> polist = conn_product.findByCom(getLoginInfo().getComId(), page, limit);
 		List<ProductVO> volist = ProductVO.getConverter(ProductVO.class).convert(polist, ProductVO.class);
 		map.put("data", volist);
+		map.put("count", conn_product.countByCom(getLoginInfo().getComId()));
 		map.put("code", "0");
 		map.put("msg", "");
 		return map;
