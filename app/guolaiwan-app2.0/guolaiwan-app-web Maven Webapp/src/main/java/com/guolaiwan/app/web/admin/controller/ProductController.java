@@ -480,7 +480,10 @@ public class ProductController extends BaseController {
 		int ifFace = 1;
 		if (request.getParameter("ifFace") == null)
 			ifFace = 0;
-		
+		int productIsRefund=1;
+		if(request.getParameter("productIsRefund")==null)
+			productIsRefund=0;
+		product.setProductIsRefund(productIsRefund);
 		// 显示、推荐
 		int productIsShow = 1;
 		if (request.getParameter("productIsShow") == null)
