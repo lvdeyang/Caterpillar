@@ -905,7 +905,7 @@ html, body {
 	    });
 	
 	
-	    var MAX = 99, MIN = 1;
+	    var MAX = 99, MIN = ${productRestrictNumber};
 		$('.weui-count__decrease').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
 		  var number = parseInt($input.val() || "0") - 1
@@ -969,6 +969,7 @@ html, body {
 		function joinBasket(){
 			var param={};
 			param.productId=${id};
+			param.payMoney=$('#payMoney').val();
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
 			param.activityId=${actId};
@@ -1138,6 +1139,7 @@ html, body {
 		    var ids=$('input[type^=radio]:checked').attr('id').split('-');
 		    var param={};
 			param.productId=${id};
+			param.payMoney=$('#payMoney').val();
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
 			param.paytype='WEICHAT';
@@ -1490,7 +1492,7 @@ html, body {
 						<div class="weui-count">
 							<a class="weui-count__btn weui-count__decrease"></a> <input
 								disabled="disabled" class="weui-count__number" id="proCount"
-								type="number" value="1"> <a
+								type="number" value="${productRestrictNumber}"> <a
 								class="weui-count__btn weui-count__increase"></a>
 						</div>
 					</div>
@@ -1512,6 +1514,7 @@ html, body {
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">使用日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
 			       <input id="bookDate" class="weui-input mydate" readonly="readonly" type="text" placeholder="请选择"> 
+			       <input id="payMoney" class="weui-input mydate" type="text" value="1" hidden="hidden">
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>

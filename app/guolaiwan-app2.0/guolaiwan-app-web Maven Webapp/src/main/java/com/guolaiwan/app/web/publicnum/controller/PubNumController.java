@@ -284,6 +284,8 @@ public class PubNumController extends WebBaseControll {
 			
 		case "PRODUCT":
 			mv = new ModelAndView("mobile/pubnum/product");
+			//轮播图商品购买跳转 张羽 新增参数到页面 商品购买数量限制 5/2
+			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
 			mv.addObject("id", code);
 			break;
 		default:
@@ -320,6 +322,7 @@ public class PubNumController extends WebBaseControll {
 			mv.addObject("id",id);
 		}else {
 			mv = new ModelAndView("mobile/pubnum/product");
+			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("id", id);
 		}
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
@@ -769,6 +772,12 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubadmin/apply");
 		HttpSession session = request.getSession();
+		if(session.getAttribute("userId")!=null&&session.getAttribute("merchantId")!=null){
+		  String userId=session.getAttribute("userId").toString();
+		  String merchantId=session.getAttribute("merchantId").toString();
+		  conn_merchantuser.delMerUserByIds(Long.parseLong(userId),Long.parseLong(merchantId));
+		}
+		
 		session.setAttribute("merchantId", null);
 		return mv;
 	}
@@ -1315,16 +1324,19 @@ public class PubNumController extends WebBaseControll {
 		Set<String> headers = new HashSet<String>();
 
 		ProductPO productPO = conn_product.getByMerchantId(merchantId);
-		List<CommentPO> commentPOs = conn_comment.findByPro(productPO.getId(), 1, 50);
-		for (CommentPO commentPO : commentPOs) {
-			UserInfoPO user = commentPO.getUser();
-			if (user.getUserHeadimg() != null) {
-				if (isImagesTrue(user.getUserHeadimg())) {
-					headers.add(user.getUserHeadimg());
-				}
+		if(productPO!=null){
+			List<CommentPO> commentPOs = conn_comment.findByPro(productPO.getId(), 1, 50);
+			for (CommentPO commentPO : commentPOs) {
+				UserInfoPO user = commentPO.getUser();
+				if (user.getUserHeadimg() != null) {
+					if (isImagesTrue(user.getUserHeadimg())) {
+						headers.add(user.getUserHeadimg());
+					}
 
+				}
 			}
 		}
+		
 		return headers;
 	}
 
@@ -1355,8 +1367,8 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/getActivityBundle", method = RequestMethod.GET)
 	public Object getActivityBundle(HttpServletRequest request, HttpServletResponse response,String comCode)
 			throws Exception {
-		List<CompanyPO> companyPOs=  conn_com.findByField("", comCode);
-		List<ActiveBundlePo> activeBundlePos=conn_bundle.findByField("comId", companyPOs.get(0).getId());
+		List<CompanyPO> companyPOs=  conn_com.findByField("comCode", comCode);
+		List<ActiveBundlePo> activeBundlePos=conn_bundle.findByField("comId", companyPOs.get(0).getId().intValue());
         SysConfigPO sys=conn_sys.getSysConfig();
         Map<String, Object> ret=new HashMap<String, Object>();
         ret.put("bundles", activeBundlePos);
@@ -1365,10 +1377,11 @@ public class PubNumController extends WebBaseControll {
 	}
 	
 	@RequestMapping(value = "/activity/index")
-	public ModelAndView activityIndex(HttpServletRequest request, long refActivityId) throws Exception {
+	public ModelAndView activityIndex(HttpServletRequest request, long refActivityId,String comCode) throws Exception {
 		ModelAndView mav = null;
 		mav = new ModelAndView("mobile/pubnum/activity");
 		mav.addObject("refActivityId", refActivityId);
+		mav.addObject("comCode", comCode);
 		return mav;
 	}
 	@Autowired
@@ -1378,14 +1391,17 @@ public class PubNumController extends WebBaseControll {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/activity/getProducts", method = RequestMethod.GET)
-	public Object getActivityProducts(HttpServletRequest request, HttpServletResponse response)
+	public Object getActivityProducts(HttpServletRequest request, HttpServletResponse response,String comCode)
 			throws Exception {
-		List<ActiveBundlePo> activeBundlePos=conn_bundle.findAll();
+		
+		List<CompanyPO> companyPOs=  conn_com.findByField("comCode", comCode);
+		List<ActiveBundlePo> activeBundlePos=conn_bundle.findByField("comId", companyPOs.get(0).getId().intValue());
+		
         SysConfigPO sys=conn_sys.getSysConfig();
         Map<String, Object> ret=new HashMap<String, Object>();
         ret.put("bundles", activeBundlePos);
         ret.put("url", sys.getWebUrl());
-        List<ActivityPO> activityPOs=conn_activity.findByField("recommend", 1);
+        List<ActivityPO> activityPOs=conn_activity.findRecomByCom(companyPOs.get(0).getId());
         ret.put("activity", activityPOs);
         DecimalFormat df=new DecimalFormat("0.00");
         for (ActivityPO activityPO : activityPOs) {
@@ -1424,6 +1440,7 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubnum/activityproduct");
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(id);
+		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 		mv.addObject("actId",activityPro.getId());
 		mv.addObject("id", id);
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
@@ -1622,6 +1639,10 @@ public class PubNumController extends WebBaseControll {
 
 				List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
 						OrderInfoVO.class);
+				// 张羽 添加退款限制 4/28
+				for (int i=0;i<orderedOrderpos.size();i++) {
+					orderedOrders.get(i).setProductIsRefund(orderedOrderpos.get(i).getProductIsRefund());
+				}
 				orders = orderedOrders;
 				break;
 			case 3:// 已发货
@@ -1676,6 +1697,20 @@ public class PubNumController extends WebBaseControll {
 				orders = testOrders;
 				orders.addAll(commentedOrders1);
 				break;
+			case 9:// 拒绝退款 4/24新增
+				List<OrderInfoPO> rOrderpos = conn_order.getOrdersByState(userId, OrderStateType.PAYSUCCESS);
+				List<OrderInfoPO> rOrderpos2=new ArrayList<OrderInfoPO>();
+				for (OrderInfoPO orderInfoPO : rOrderpos) {
+					if(orderInfoPO.getJustification()!=""&&orderInfoPO.getJustification()!=null){
+						rOrderpos2.add(orderInfoPO);
+					}
+				}
+				List<OrderInfoVO> rOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(rOrderpos2,OrderInfoVO.class);
+				for (int i = 0; i < rOrderpos2.size(); i++) {
+					rOrders.get(i).setJustification(rOrderpos2.get(i).getJustification());
+				}
+				orders = rOrders;
+				break;
 
 			default:
 				break;
@@ -1705,7 +1740,10 @@ public class PubNumController extends WebBaseControll {
 				orderedOrderpos.addAll(orderedOrderpo2);
 				List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
 						OrderInfoVO.class);
-
+				// 张羽 添加退款限制 4/28
+				for (int i=0;i<orderedOrderpos.size();i++) {
+					orderedOrders.get(i).setProductIsRefund(orderedOrderpos.get(i).getProductIsRefund());
+				}
 			
 				orders = orderedOrders;
 				break;
@@ -1751,6 +1789,21 @@ public class PubNumController extends WebBaseControll {
 
 				
 				orders = commentedOrders;
+				break;
+			case 9:// 拒绝退款 4/24新增
+				List<OrderInfoPO> rOrderpos = conn_order.getOrdersByState(userId, OrderStateType.PAYSUCCESS);
+				List<OrderInfoPO> rOrderpos2=new ArrayList<OrderInfoPO>();
+				for (OrderInfoPO orderInfoPO : rOrderpos) {
+					if(orderInfoPO.getJustification()!=""&&orderInfoPO.getJustification()!=null){
+						
+						rOrderpos2.add(orderInfoPO);
+					}
+				}
+				List<OrderInfoVO> rOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(rOrderpos2,OrderInfoVO.class);
+				for (int i = 0; i < rOrderpos2.size(); i++) {
+					rOrders.get(i).setJustification(rOrderpos2.get(i).getJustification());
+				}
+				orders = rOrders;
 				break;
 
 			default:

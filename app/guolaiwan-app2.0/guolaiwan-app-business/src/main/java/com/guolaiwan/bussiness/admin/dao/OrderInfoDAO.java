@@ -335,7 +335,7 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		return orders;
 	}
 
-	// 订单状态
+	/*// 订单状态
 	public List<OrderInfoPO> findOrdersByState(OrderStateType type, Map<String, Object> map, int pageNum, int pageSize)
 			throws Exception {
 		QueryHql hql = newQueryHql();
@@ -353,9 +353,33 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 
 		List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
 		return orders;
-	}
+	}*/
+	
+	// 订单状态 4/26 添加comId条件
+		public List<OrderInfoPO> findOrdersByState(OrderStateType type, Map<String, Object> map, int pageNum, int pageSize)
+				throws Exception {
+			QueryHql hql = newQueryHql();
+			hql.andBy("orderState", Condition.eq, type);
+			for (Map.Entry<String, Object> entry : map.entrySet()) {
+				if (entry.getKey().equals("shopId")) {
+					hql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
+				} else if (entry.getKey().equals("source")) {
+					hql.andBy(entry.getKey(), Condition.eq, OrderSource.fromName(entry.getValue().toString()));
+				}else if (entry.getKey().equals("comId")) {
+					hql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
+				} else {
+					hql.andBy(entry.getKey(), Condition.lk, entry.getValue());
+				}
+			}
+			hql.orderBy("createDate", true);
 
-	// 订单状态（数量）
+			List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
+			return orders;
+		}
+	
+	
+
+	/*// 订单状态（数量）
 	public int countOrdersByState(OrderStateType type, Map<String, Object> map) throws Exception {
 		CountHql cHql = newCountHql();
 		cHql.andBy("orderState", Condition.eq, type);
@@ -370,7 +394,28 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		}
 		int count = countByHql(cHql);
 		return count;
-	}
+	}*/
+		
+		// 订单状态（数量）4/26 添加comId条件
+		public int countOrdersByState(OrderStateType type, Map<String, Object> map) throws Exception {
+			CountHql cHql = newCountHql();
+			cHql.andBy("orderState", Condition.eq, type);
+			for (Map.Entry<String, Object> entry : map.entrySet()) {
+				if (entry.getKey().equals("shopId")) {
+					cHql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
+				} else if (entry.getKey().equals("source")) {
+					cHql.andBy(entry.getKey(), Condition.eq, OrderSource.fromName(entry.getValue().toString()));
+				}else if (entry.getKey().equals("comId")) {
+					cHql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
+				} else {
+					cHql.andBy(entry.getKey(), Condition.lk, entry.getValue());
+				}
+			}
+			int count = countByHql(cHql);
+			return count;
+		}
+		
+	
 
 	// 订单NO,Id
 	public OrderInfoPO getByIdNO(Long orderId, String orderNO) {

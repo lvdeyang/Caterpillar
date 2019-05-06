@@ -509,6 +509,8 @@ html, body {
 		if(auto=='auto'){
 		
 		  $('#password').val('******');
+		}else{
+		  $('#password').val('');
 		}
 	  
       

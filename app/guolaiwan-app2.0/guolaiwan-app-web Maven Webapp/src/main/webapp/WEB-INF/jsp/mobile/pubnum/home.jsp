@@ -663,6 +663,19 @@ html, body {
 
 	  });
 	  
+	  
+	  //test
+	    /*if(comCode=='0000'){
+		    comCode='0001';
+		}
+		getCom();
+	    getRecomment();
+	    getModal();
+		getActivityBundle();
+		initSharewx();*/
+	  
+	  
+	  
       /**/
 		
 	  function getRecomment(){
@@ -794,7 +807,7 @@ html, body {
 	       if(codes[1]=='0000'){
 	          location.href=window.BASEPATH + 'pubnum/live/index';
 	       }else if(codes[1]=='01112'){
-	          location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=5';
+	          location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=5&comCode='+comCode;
 	       }else if(codes[1]=='12022'){
 	          location.href=window.BASEPATH + 'pubnum/ipost';
 	       }else if(codes[1]=='101112'){
@@ -833,7 +846,7 @@ html, body {
 	               addStyle="padding-bottom:70px;";
 	           }
 	           var merchants=modals[i].merchants;
-	           if(merchants.length==0){
+	           if(merchants==null||merchants.length==0){
 	              continue;
 	           }
 	         
@@ -848,7 +861,7 @@ html, body {
 		    
 		       html.push('</br>');
 		       html.push('<div style="width:80%;float:left;font-size:12px;padding-left:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+merchants[0].shopAddress+'</div>');
-               html.push('<div style="width;100%;margin-top:15px;height:70px;float:left;margin-left:12px">');
+               html.push('<div style="width;100%;margin-top:15px;height:90px;float:left;margin-left:12px">');
                var morePics=merchants[0].shopMpic.split(',');
                html.push('<image style="width:32%;height:90px;float:left;" src="'+morePics[0]+'"/>');
 		       html.push('<image style="width:32%;height:90px;float:left;margin-left:1%" src="'+morePics[1]+'"/>');
@@ -860,7 +873,7 @@ html, body {
 		       html.push('</div>');
 		       html.push('</div>');
 		       //后面的
-		       html.push('<div style="margin-top:38%;'+addStyle+'" class="weui-panel__bd" class="columnRecomments">');
+		       html.push('<div style="margin-top:50px;'+addStyle+'" class="weui-panel__bd" class="columnRecomments">');
 			   html.push('<div class="weui-panel__bd">'); 
 			   for(var j=1;j<merchants.length;j++){
 				   html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'">');
@@ -915,7 +928,7 @@ html, body {
 	   });
 	   $(document).on('click','#bundle',function(){
 	   
-	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0';
+	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0&comCode='+comCode;
 	   
 	   });
 	

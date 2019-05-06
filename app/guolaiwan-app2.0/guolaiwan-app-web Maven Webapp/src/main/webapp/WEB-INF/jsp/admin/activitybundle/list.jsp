@@ -51,6 +51,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               //以上模块根据需要引入
               
               getbudleList();
+            //编辑
+       	 table.on('edit(budleList)',function(obj){
+        	layer.load();
+        	var data = obj.data
+        	,field = obj.field
+        	,value = obj.value;
+			console.log(value);
+        	$.ajax({
+        		type:'post',
+        		url:'edit.do',
+        		data:{'id':data.id,'field':field,'value':value},
+        		success:function(msg){
+        		console.log(msg);
+        			layer.closeAll("loading");
+        			if(msg=="success"){
+        				layer.msg("修改成功！");
+        			}
+        		}
+        	})
+        })
               
               });
             

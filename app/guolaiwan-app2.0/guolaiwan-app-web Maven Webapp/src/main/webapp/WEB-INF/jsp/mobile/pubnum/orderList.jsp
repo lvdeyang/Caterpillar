@@ -528,12 +528,27 @@ html, body {
 				    if(data[i].isBundle==1){
 				       addStr="bundle-";
 				    }
-				    if(type==2){
-					    //html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
-					}
-					
-				    html.push('</div>');
+				    
+				    
 				    for(var j=0;j<data[i].orderList.length;j++){
+				        if(j==0){
+				            var bookDate=data[i].orderList[j].orderBookDate.replace('年','/').replace('月','/').replace('日','');
+					        if('2019/04/15 00:00:00'<=bookDate&&bookDate<='2019/04/19 23:59:59'){
+					            //这里加各种各样的奇葩限制。
+					        }else{
+					           if(type==2){
+								    
+							    //添加退款限制理由 张羽 4/28
+							    if(data[i].orderList[j].productIsRefund!="1"){
+							    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
+							    }else{
+							    	html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')
+							    }
+							   }
+					        }
+				        }
+				        
+				        html.push('</div>');
 				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg product" id="pro-'+data[i].orderList[j].id+'">');
 					    html.push('<div class="weui-media-box__hd">');
 					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].orderList[j].productPic+'">');
@@ -543,11 +558,19 @@ html, body {
 					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+data[i].orderList[j].createDate+'</p>');
 					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">验单时间'+data[i].orderList[j].ydDate+'</p>');
 					    html.push('</div>');
+					    //退款限制 张羽 4/28
+					    if(data[i].orderList[j].productIsRefund=="1"){
+					    	html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)">活动商品不支持退款，谢谢您的支持</a>')
+					    }
 					    if(type==3){
 						    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="ok-'+data[i].orderList[j].id+'" class="icon-ok" href="javascript:void(0)">&nbsp;&nbsp;确认收货</a>')
 						}
 					    if(type==5){
 					       html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)">七个工作日内到帐，注意查收</a>')
+					    }
+					    //4.24 新增退款原因订单中展示
+					    if(type==9){
+					       html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)">未退款原因：'+data[i].orderList[j].justification+'</a>')
 					    }
 					    if(type==6||type==8){
 					    	if(data[i].orderList[j].productId!=0){
@@ -598,6 +621,7 @@ html, body {
 			if(data === -1) return;
 			if(data){
 			   $.toast("申请退款中，等待商家确认");
+			   $('#reasonContent').val('');
 			   $('.weui-tab').show();
                $.closePopup();
 			   getOrder(2);
@@ -701,6 +725,9 @@ html, body {
 			    <a id="tab-8" onclick="return false" class="weui-navbar__item" href="#tab8">
 			      已验单
 			    </a>
+			    <a id="tab-9" onclick="return false" class="weui-navbar__item" href="#tab9">
+			      未退款 
+			    </a> 
 			   
 			  </div>
 			  <div class="weui-tab__bd" style="padding-bottom:50px">
@@ -724,6 +751,9 @@ html, body {
 			      
 			    </div>
 			    <div id="tab8" class="weui-tab__bd-item">
+			      
+			    </div>
+			    <div id="tab9" class="weui-tab__bd-item">
 			      
 			    </div>
 		

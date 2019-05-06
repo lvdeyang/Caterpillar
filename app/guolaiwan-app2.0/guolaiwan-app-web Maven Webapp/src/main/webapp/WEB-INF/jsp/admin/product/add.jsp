@@ -178,6 +178,14 @@
                         autocomplete="off" class="layui-input">
                  	</div>
                  </div>
+                <!--  5/1 张羽 新增 最低购买数量限制 -->
+	                 <div class = "layui-inline">
+	    				<label class="layui-form-label" id ="restrictNumber">最低购买量：</label>
+	    				<div class="layui-input-block">
+	      					<input type="text" name="productRestrictNumber" id="productRestrictNumber" class="layui-input" placeholder="最低购买数量限制"
+	      					required lay-verify="required">
+	    				</div>
+	    			 </div>
                 </div>
                 
                 
@@ -277,7 +285,7 @@
     				</div>
     			</div>
   			</div>
-                
+  			
                 <div class="layui-form-item">
                     <label class="layui-form-label">
  						显示：
@@ -290,6 +298,21 @@
                         </div>
                     </div>
                 </div>
+                
+                 <!-- 4/28 张羽新增退款限制 -->
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">
+ 						退款限制：
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="productIsRefund" lay-skin="switch" id="productIsRefund" lay-text="ON|OFF" lay-filter="switchTest" value="1">
+                        <div class="layui-unselect	layui-form-switch" lay-skin="_switch">
+                        	<em>OFF</em>
+                        	<i></i>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="layui-form-item">
                     <label class="layui-form-label">
  						是否人脸：
@@ -726,8 +749,15 @@
 				
 				//库存
 				var Stock =$("#productStock").val();
-				if(!(/^([1-9]\d*|[0]{1,1})$/).test(Stock)){
+				if(!(/^[1-9]\d*$/).test(Stock)){
 						layer.msg("库存为整数字！",{time: 5000, icon:5});
+						return false;
+				}
+				
+				//最低购买数量限制 5/1 张羽 新增
+				var restrict =$("#productRestrictNumber").val();
+				if(!(/^([1-9]\d*|[0]{1,1})$/).test(restrict)){
+						layer.msg("购买限制为整数字！",{time: 5000, icon:5});
 						return false;
 				}
 				

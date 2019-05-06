@@ -238,7 +238,7 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
 		hql.andBy("modularCode", Condition.eq, modularCode);
-
+        hql.orderBy("updateTime", true);
 		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
 			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 		}
@@ -254,7 +254,7 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
 		hql.andBy("modularCode1", Condition.eq, modularCode);
-
+		hql.orderBy("updateTime", true);
 		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
 			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 		}
@@ -269,7 +269,7 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
 		hql.andBy("modularCode2", Condition.eq, modularCode);
-
+		hql.orderBy("updateTime", true);
 		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
 			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 		}

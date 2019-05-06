@@ -64,7 +64,8 @@ public class ChildProductPO extends AbstractBasePO {
 	
 	private int isTaught; // 是否讲解(Taught)
 	
-	
+	private String linkedPoint;
+
 	public String getEnglishContent() {
 		return englishContent;
 	}
@@ -207,6 +208,14 @@ public class ChildProductPO extends AbstractBasePO {
 
 	public void setLanId(long lanId) {
 		this.lanId = lanId;
+	}
+
+	public String getLinkedPoint() {
+		return linkedPoint;
+	}
+
+	public void setLinkedPoint(String linkedPoint) {
+		this.linkedPoint = linkedPoint;
 	}
 
 

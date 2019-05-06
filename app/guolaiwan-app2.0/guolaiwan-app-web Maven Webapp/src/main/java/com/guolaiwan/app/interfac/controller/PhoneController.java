@@ -1363,7 +1363,7 @@ public class PhoneController extends WebBaseControll {
 		Long userId = Long.parseLong(request.getParameter("userId"));
 		if (userId != null) {
 			UserInfoPO user = conn_user.get(userId);
-			CollectionPO collection = conn_collection.getByUserProId(user, productId);
+			CollectionPO collection = conn_collection.getByUserIdProId(user.getId(), productId,activityPro.getId());
 			if (collection != null) {
 				_product.setIfcollection(1);
 			}
@@ -2225,7 +2225,11 @@ public class PhoneController extends WebBaseControll {
 		String num = pageObject.getString("productNum");
 		String addressId = pageObject.getString("addressId");
 		String activityId = pageObject.getString("activityId");
-
+		/*//4/26 新增的comId值 获取
+		Long comId=null;
+		if(pageObject.getString("comId")!=null&&pageObject.getString("comId")!=""){
+		  comId=Long.parseLong(pageObject.getString("comId"));
+		}*/
 		String comboId = pageObject.getString("comboId");
 		String logisticsId = pageObject.getString("logisticsId");
 		/*
@@ -2243,6 +2247,12 @@ public class PhoneController extends WebBaseControll {
 		}
 
 		OrderInfoPO order = new OrderInfoPO();
+		//4/26新增的comId值 获取 张羽 4/28 添加退款限制
+		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
+		order.setComId(productPO2.getComId());
+		order.setProductIsRefund(productPO2.getProductIsRefund());
+		
+		
 		if (logisticsId != null) {
 			order.setLogisticsId(Long.parseLong(logisticsId));
 		}
@@ -2358,11 +2368,15 @@ public class PhoneController extends WebBaseControll {
 			productprice = activityRelPO.getPrice();
 		}
 
-		if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
+		/*if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
 			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
 			payMoney = payMoney * (bet+1);
 			orderAllMoney = payMoney;
-		}
+		}*/
+		//张羽 修改支付时的价钱按照页面的计算来 4/30
+		long bet=Long.parseLong(pageObject.getString("payMoney"));
+		payMoney = payMoney * bet;
+		orderAllMoney = payMoney;
 
 		order.setProductPrice(productprice);
 		// 所属板块DI
@@ -2477,7 +2491,11 @@ public class PhoneController extends WebBaseControll {
 		Long userId = Long.parseLong(pageObject.getString("userId"));
 		String paytype = pageObject.getString("paytype");
 		String activityId = pageObject.getString("activityId");
-
+		/*//4/26 新增的comId值 获取
+		Long comId=null;
+		if(pageObject.getString("comId")!=null&&pageObject.getString("comId")!=""){
+		  comId=Long.parseLong(pageObject.getString("comId"));
+		}*/
 		String comboId = pageObject.getString("comboId");
 		String logisticsId = pageObject.getString("logisticsId");
 		/*
@@ -2494,7 +2512,12 @@ public class PhoneController extends WebBaseControll {
 		}
 
 		OrderInfoPO order = new OrderInfoPO();
-
+		// 4/26添加comId 张羽 4/28 添加退款限制
+		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
+		order.setComId(productPO2.getComId());
+		order.setProductIsRefund(productPO2.getProductIsRefund());
+		
+		
 		if (logisticsId != null) {
 			order.setLogisticsId(Long.parseLong(logisticsId));
 		}
@@ -2612,12 +2635,16 @@ public class PhoneController extends WebBaseControll {
 			productprice = activityRelPO.getPrice();
 		}
 
-		if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
+		/*if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
 			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
 			payMoney = payMoney * (bet+1);
 			orderAllMoney = payMoney;
-		}
-
+		}*/
+		//张羽 修改支付时的价钱按照页面的计算来 4/30
+		long bet=Long.parseLong(pageObject.getString("payMoney"));
+		payMoney = payMoney * bet;
+		orderAllMoney = payMoney;
+		System.out.println(orderAllMoney+"-------------------------");
 		// 商品单价
 		order.setProductPrice(productprice);
 		// 所属板块DI
@@ -2934,6 +2961,7 @@ public class PhoneController extends WebBaseControll {
 					    }
 					}
 					
+					orderInfoVO.setProductRestrictNumber(conn_product.get(orderInfoVO.getProductId()).getProductRestrictNumber());
 					
 					
 					orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
@@ -3465,6 +3493,9 @@ public class PhoneController extends WebBaseControll {
 		List<MerchantUser> merchantUsers = conn_merchantUser.findByField("merchantId", merchantPO.getId());
 		for (MerchantUser merchantUser : merchantUsers) {
 			UserInfoPO userInfoPO = conn_user.get(merchantUser.getUserId());
+			if(userInfoPO==null){
+				continue;
+			}
 			JSONObject obj = new JSONObject();
 			obj.put("touser", userInfoPO.getUserOpenID());
 			obj.put("template_id", "imgTupyObgSuKRYqZrc8VAXgzGePPEeuqwVG7IF_Rzw");

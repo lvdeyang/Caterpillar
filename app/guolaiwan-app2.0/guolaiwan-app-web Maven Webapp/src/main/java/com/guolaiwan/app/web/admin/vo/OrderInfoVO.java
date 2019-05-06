@@ -135,10 +135,40 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 	private String photo;
 	private String idNum;
 	
+	//4/23 新增拒绝理由
+	private String justification;
+	
+	//4/28 新增退款限制 ----张羽
+	private int productIsRefund;
+	
+	//张羽 新增 5/1 商品购买最低数量限制
+	private int productRestrictNumber;
+	
+	
+	public int getProductRestrictNumber() {
+		return productRestrictNumber;
+	}
 
-	
-	
-	
+	public void setProductRestrictNumber(int productRestrictNumber) {
+		this.productRestrictNumber = productRestrictNumber;
+	}
+
+	public int getProductIsRefund() {
+		return productIsRefund;
+	}
+
+	public void setProductIsRefund(int productIsRefund) {
+		this.productIsRefund = productIsRefund;
+	}
+
+	public String getJustification() {
+		return justification;
+	}
+
+	public void setJustification(String justification) {
+		this.justification = justification;
+	}
+
 	public String getPhoto() {
 		return photo;
 	}

@@ -145,12 +145,28 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	
 	private int isEffective;//是否在有效时间内(0:还没开始,1:在,2:已经结束)
 	
+	private int productIsRefund;
+	
 	private int ifFace;
 	
 	private int isSurpport;
 	
 	private int isactivityproduct;
 	
+	//张羽 新增 5/1 商品购买最低数量限制
+	private int productRestrictNumber;
+	
+	
+	public int getProductRestrictNumber() {
+		return productRestrictNumber;
+	}
+
+
+	public void setProductRestrictNumber(int productRestrictNumber) {
+		this.productRestrictNumber = productRestrictNumber;
+	}
+
+
 	@Override
     public Object clone() throws CloneNotSupportedException {
         ProductVO productVO = (ProductVO)super.clone();
@@ -1153,6 +1169,7 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setShopLongitude(entity.getProductMerchantJson())
 		.setTraffic(entity.getTraffic())
 		.setIfFace(entity.getIfFace())
+		.setProductIsRefund(entity.getProductIsRefund())
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)));
 		
 		return this;
@@ -1192,6 +1209,17 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 
 	public ProductVO setIfFace(int ifFace) {
 		this.ifFace = ifFace;
+		return this;
+	}
+
+
+	public int getProductIsRefund() {
+		return productIsRefund;
+	}
+
+
+	public ProductVO setProductIsRefund(int productIsRefund) {
+		this.productIsRefund = productIsRefund;
 		return this;
 	}
 	

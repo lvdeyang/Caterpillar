@@ -557,11 +557,8 @@ input[type="datetime-local"]:before{
 <script type="text/javascript">
 
 
+
 	$(function() {
-	
-	  
-	
-	
 	  $(document).on('focus','.mydate',function(){
 	      $(this).removeAttr('placeholder');
 	  });
@@ -641,7 +638,7 @@ input[type="datetime-local"]:before{
 			    $('.header-content').html(data.product.productName);
 			    $('#proName').html(data.product.productName+'￥<span id="price">'+data.product.productPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
 			    $('#proContent').html(data.product.productIntroduce);
-			    $('#total').html(data.product.productPrice);
+			    $('#total').html((data.product.productPrice*${productRestrictNumber}).toFixed(2));
 			    $('#proShowNum').html('销量'+data.product.productShowNum);
 			    $('#proStock').html('库存'+data.product.productStock);
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
@@ -652,12 +649,17 @@ input[type="datetime-local"]:before{
 			    qq=data.product.ifcollection;
 			    ifFace=data.product.ifFace;
 			    
+			   
+				
 			    var t = new Date();
 				var t_s = t.getTime();
 				t.setTime(t_s + 2000 * 60);
-				var t1 = new Date();
+				
+				 //获取第二天十二点的时间  4/25修改 为了让离店时间变成第二天12点
+			    const start = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
+				/* var t1 = new Date();
 				var t1_s = t1.getTime();
-				t1.setTime(t1_s + 2000 * 60+60*60*1000*24);
+				t1.setTime(t1_s + 2000 * 60+60*60*1000*24); */
 				var bookdiv =document.getElementById("bookdiv").style.display;       
 				var startdiv =document.getElementById("startdiv").style.display;  
 				if(bookdiv!='none'){
@@ -665,7 +667,7 @@ input[type="datetime-local"]:before{
 	  			    
 				}else{
 				    $("#startDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
-	  			    $("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',t1));
+	  			    $("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',start));
 				}
 			   
 	  			
@@ -884,17 +886,21 @@ input[type="datetime-local"]:before{
         }
 		function initDatePrice(){
 		      var number = parseInt($('#proCount').val());
-			  var startDate=$('#startDate').val();
+			  /* var startDate=$('#startDate').val(); */
+			  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 			  var endDate=$('#endDate').val();
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
 			        endDate = Date.parse(endDate);
+			        if(endDate!=startDate){
 			        var dateSpan = endDate - startDate;
-			        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
-			        if(iDays>0){
-			          daycount=iDays;
+			        var iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
 			        }
+			        if(iDays>0){
+			          daycount+=iDays;
+			        }
+			         $("#payMoney").val(daycount);
 			  }
 			  if($('#comboList').val()==0){
 			  	 $('#total').html(($('#price').html()*number*daycount).toFixed(2));
@@ -966,13 +972,14 @@ input[type="datetime-local"]:before{
 	    });
 	
 	
-	    var MAX = 99, MIN = 1;
+	    var MAX = 99, MIN = ${productRestrictNumber};
 		$('.weui-count__decrease').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
 		  var number = parseInt($input.val() || "0") - 1
 		  if (number < MIN) number = MIN;
 		  $input.val(number);
-		      var startDate=$('#startDate').val();
+		      /* var startDate=$('#startDate').val(); */
+		      var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 			  var endDate=$('#endDate').val();
 			  var daycount=1;
 			  if(startDate&&endDate){
@@ -981,8 +988,9 @@ input[type="datetime-local"]:before{
 			        var dateSpan = endDate - startDate;
 			        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
 			        if(iDays>0){
-			          daycount=iDays;
+			          daycount=iDays+1;
 			        }
+			         $("#payMoney").val(daycount);
 			  }
 		  if($('#comboList').val()==0){
 		  	 $('#total').html(($('#price').html()*number*daycount).toFixed(2));
@@ -998,17 +1006,20 @@ input[type="datetime-local"]:before{
 		  if (number > MAX) number = MAX;
 		  $input.val(number);
 		  
-		  var startDate=$('#startDate').val();
+		  /* var startDate=$('#startDate').val(); */
+		   //获取第二天十二点的时间 
+		  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 		  var endDate=$('#endDate').val();
 		  var daycount=1;
 		  if(startDate&&endDate){
 		        startDate = Date.parse(startDate);
 		        endDate = Date.parse(endDate);
 		        var dateSpan = endDate - startDate;
-		        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
+		        var iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
 		        if(iDays>0){
-		          daycount=iDays;
+		          daycount+=iDays;
 		        }
+		         $("#payMoney").val(daycount);
 		  }
 		  
 		  if($('#comboList').val()==0){
@@ -1023,17 +1034,22 @@ input[type="datetime-local"]:before{
 		
 		$(document).on('change','#comboList',function(){
 		    var number = parseInt($('#proCount').val());
-		      var startDate=$('#startDate').val();
+		      /* var startDate=$('#startDate').val(); */
 			  var endDate=$('#endDate').val();
+			  //获取第二天十二点的时间 
+			  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
 			        endDate = Date.parse(endDate);
-			        var dateSpan = endDate - startDate;
-			        iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
-			        if(iDays>0){
-			          daycount=iDays;
+			        if(endDate!=startDate){
+			        	var dateSpan = endDate - startDate;
+			        	var iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
 			        }
+			        if(iDays>0){
+			          daycount+=iDays;
+			        }
+			        $("#payMoney").val(daycount);
 			  }
 			if($('#comboList').val()==0){
 			  	 $('#total').html(($('#price').html()*number*daycount).toFixed(2));
@@ -1102,6 +1118,8 @@ input[type="datetime-local"]:before{
 			param.productId=${id};
 			param.productNum=$('#proCount').val();
 			param.userId=${userId};
+			param.productRestrictNumber=${productRestrictNumber};
+			param.payMoney=$('#payMoney').val();
 			param.paytype='WEICHAT';
 			param.source="PUBLICADDRESS";
 			param.bookDate=$('#bookDate').val();
@@ -1395,6 +1413,7 @@ input[type="datetime-local"]:before{
 		    var param={};
 			param.productId=${id};
 			param.productNum=$('#proCount').val();
+			param.payMoney=$('#payMoney').val();
 			param.userId=${userId};
 			param.paytype='WEICHAT';
 			param.source="PUBLICADDRESS";
@@ -1664,7 +1683,7 @@ input[type="datetime-local"]:before{
 						<div class="weui-count">
 							<a class="weui-count__btn weui-count__decrease"></a> <input
 								disabled="disabled" class="weui-count__number" id="proCount"
-								type="number" value="1"> <a
+								type="number" value="${productRestrictNumber}"> <a
 								class="weui-count__btn weui-count__increase"></a>
 						</div>
 					</div>
@@ -1704,6 +1723,7 @@ input[type="datetime-local"]:before{
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">离店日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
 			    	<input id="endDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			    	<input id="payMoney" class="weui-input mydate" type="text" value="1" hidden="hidden">
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>

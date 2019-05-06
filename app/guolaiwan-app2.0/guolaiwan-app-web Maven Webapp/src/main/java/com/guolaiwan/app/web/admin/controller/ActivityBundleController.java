@@ -109,4 +109,19 @@ public class ActivityBundleController extends BaseController {
 		conn_bundle.delete(id);
 		return "success";
 	}
+	
+	//新增方法4/23 修改活动集的标题方法
+			@ResponseBody
+			@RequestMapping(value = "/edit.do", method = RequestMethod.POST)
+			public String edit1(HttpServletRequest request) throws Exception {
+				long id = Long.parseLong(request.getParameter("id"));
+				String value = request.getParameter("value");
+				String field = request.getParameter("field");
+				ActiveBundlePo Active = conn_bundle.get(id);
+				if (field.equals("title")) {
+					Active.setTitle(value);
+				}
+				conn_bundle.save(Active);
+				return "success";
+			}
 }

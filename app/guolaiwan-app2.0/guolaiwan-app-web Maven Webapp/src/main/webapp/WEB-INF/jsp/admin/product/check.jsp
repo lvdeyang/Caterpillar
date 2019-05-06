@@ -120,6 +120,16 @@
                         autocomplete="off" class="layui-input" value="${product.productStock}">
                  	</div>
                  </div>
+                 <!-- 张羽 新增 5/1 商品最低购买数量 -->
+                  <div class="layui-inline">
+                    <label for="productRestrictNumber" class="layui-form-label">
+						最低购买量：
+                    </label>
+                    <div class="layui-input-inline">
+                    <input type="text" id="productRestrictNumber" name="productRestrictNumber" required lay-verify="required" placeholder="最低购买数量限制"
+                        autocomplete="off" class="layui-input" value="${product.productRestrictNumber}">
+                 	</div>
+                 </div>
                 </div>
                 
                 

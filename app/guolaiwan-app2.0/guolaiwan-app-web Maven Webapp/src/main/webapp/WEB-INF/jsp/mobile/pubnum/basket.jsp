@@ -561,6 +561,7 @@ html, body {
 					html.push(' <div class="weui-count" style="font-size:12px;margin-top:15px;float:right;margin-right:10px;">');
 		            html.push('     <a style="'+countStyle+'" class="weui-count__btn weui-count__decrease" id="de-'+data[i].id+'"></a>');
 		            html.push('     <input  data="'+data[i].productPrice+'" class="weui-count__number" disabled="disabled" id="s13-'+data[i].id+'" type="number" value="'+data[i].productNum+'">');
+		            html.push('     <input id="productRestrictNumber" class="productRestrictNumber" name="productRestrictNumber" type="text" hidden="hidden" value="'+data[i].productRestrictNumber+'">');
 		            html.push('     <a style="'+countStyle+'" class="weui-count__btn weui-count__increase" id="in-'+data[i].id+'"></a>');
 		            html.push('   </div>');
 					html.push('<a href="javascript:;" class="icon-trash delOrder" id="del-'+data[i].id+'" style="margin-left:25px;float:left;font-size:12px;margin-top:17px;width:60px;line-height:20px;height:20px">&nbsp;&nbsp;删除</a>');
@@ -758,7 +759,7 @@ html, body {
 	   var MAX = 99, MIN = 0;
 		$(document).on('click','.weui-count__decrease',function (e) {
 		 
-		
+		  var $productRestrictNumber=$(e.currentTarget).parent().find('.productRestrictNumber');
 		  var orderIds=this.id.split('-');
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
 		  var number = parseInt($input.val() || "0") - 1;
@@ -775,7 +776,7 @@ html, body {
 				   return;
 				}
 				
-				if(number==0){
+				if(number==parseInt($productRestrictNumber.val())-1){
 				     deleteOrder(orderIds[1]);
 				  }else{
 				  

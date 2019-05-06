@@ -95,7 +95,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				 });
              }
              function rejectOrder(obj,orderId){
-					rejectOrderStatus(obj,orderId,'PAYSUCCESS');
+             		//添加弹窗输入理由的方法
+             		inputJustification(orderId);
+             		if(confirm("确定要拒绝吗?")){
+             		rejectOrderStatus(obj,orderId,'PAYSUCCESS');
+             		}
+					
              }
 	        function changeOrderStatus(obj,orderId,status){
 			   var _urichangeorder = 'changeOrderStatus?orderId='+orderId+'&status='+status;
@@ -111,6 +116,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						$(obj).parents("tr").remove();
 			      });
 			}      
+			
+			
+			//输入理由的方法
+			function inputJustification(orderId){
+        		var val = prompt("请输入您拒绝退款的理由","您的退款理由不充分~");
+        		var Justification="";
+      	  		if(val!=null&&val!=""){
+      	  			Justification=val;
+      	  		}else{
+      	  			Justification="您的退款理由不充分~"
+      	  			 }
+      	  		$.ajax({ 
+			        type: "POST", 
+			        data :{"orderId":orderId,"justification":Justification},
+			        url: "updateJustification.do",
+			        success: function(data) {
+			         }
+			    });
+			}
              function getList(){
              console.log(1);
             	ele=0;

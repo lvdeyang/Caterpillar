@@ -31,7 +31,17 @@ public class ActivityDAO extends AbstractBaseDao<ActivityPO> {
 		List<ActivityPO> activitys = findByHql(hql);
 		return activitys;
 	}
+	
+	public List<ActivityPO> findRecomByCom(long comId){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("comId", Condition.eq, comId);
+		hql.andBy("recommend",Condition.eq, 1);
+		List<ActivityPO> activitys = findByHql(hql);
+		return activitys;
+	}
 
+	
+	
 	//后台显示分公司 活动
 	public List<ActivityPO> findByCom(long comId,int pageNum,int pageSize){
 		QueryHql hql = this.newQueryHql();

@@ -97,6 +97,10 @@ public class OrderInfoController extends BaseController {
 	public Map<String, Object> GetList(HttpServletRequest request, int page, int limit, int type) throws Exception {
 		// 检索条件
 		Map<String, Object> dataMap = new HashMap<String, Object>();
+		//添加获取comId   4/26
+		String comId = Long.toString(getLoginInfo().getComId());
+		dataMap.put("comId", comId);
+		
 		String mName = request.getParameter("mName");
 		if (mName != null && mName.length() != 0) {
 			dataMap.put("shopName", mName);
@@ -771,6 +775,16 @@ public class OrderInfoController extends BaseController {
 			strMap.put("count", count);
 			strMap.put("msg", "");
 			return strMap;
+		}
+		
+		//4/23 新增的方法 将拒绝退款理由存入数据库
+		@ResponseBody
+		@RequestMapping(value = "/updateJustification.do", method = RequestMethod.POST)
+		public String updateJustification(Long orderId,String justification) throws Exception {
+			OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
+			orderInfoPO.setJustification(justification);
+			conn_OrderInfo.save(orderInfoPO);
+			return "success";
 		}
 	
 

@@ -236,9 +236,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						autocomplete="off" class="layui-input" >
 				</div>
 				
-				 <div class="layui-input-inline" style="width: 100px;">
+				 <div class="layui-input-inline" style="width: 200px;">
 				  <a href="javascript:openMap('选择分类','<%=request.getContextPath() %>/admin/modular/comSel','600','400')" class="layui-btn" >选择分类</a>
-				 
+				  <a href="javascript:resetMo(0)" class="layui-btn" >清除分类</a>
 				</div>
 			</div>
 			
@@ -258,9 +258,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						autocomplete="off" class="layui-input" >
 				</div>
 				
-				 <div class="layui-input-inline" style="width: 100px;">
+				 <div class="layui-input-inline" style="width: 200px;">
 				  <a href="javascript:openMap('选择分类','<%=request.getContextPath() %>/admin/modular/comSel?index=1','600','400')" class="layui-btn" >选择分类</a>
-				 
+				  <a href="javascript:resetMo(1)" class="layui-btn" >清除分类</a>
 				</div>
 			</div>
 			
@@ -281,9 +281,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						autocomplete="off" class="layui-input" >
 				</div>
 				
-				 <div class="layui-input-inline" style="width: 100px;">
+				 <div class="layui-input-inline" style="width: 200px;">
 				  <a href="javascript:openMap('选择分类','<%=request.getContextPath() %>/admin/modular/comSel?index=2','600','400')" class="layui-btn" >选择分类</a>
-				 
+				   <a href="javascript:resetMo(2)" class="layui-btn" >清除分类</a>
 				</div>
 			</div>
 			
@@ -417,7 +417,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				 
              
                 
-             
+             function resetMo(index){
+               if(index==0){
+                   $("input[name='modularName']").val('');
+	               $("input[name='modularCode']").val('');
+	               $("input[name='modularClassId']").val('');
+	               $("input[name='modularClass']").val('');
+               }else{
+                   $("input[name='modularName"+index+"']").val('');
+	               $("input[name='modularCode"+index+"']").val('');
+	               $("input[name='modularClassId"+index+"']").val('');
+	               $("input[name='modularClass"+index+"']").val('');
+               }
+               
+            }
              
              
            //打开地图
