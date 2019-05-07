@@ -316,7 +316,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<a href="javascript:show_pic('actImg{{d.id}}')"><img src='${sysConfig.webUrl}{{ d.pic }}' id='actImg{{d.id}}' style="width:35px;height:35px" alt='' ></a></div>
  		  </script>
  		  <script type="text/html" id="actruleImg">
-			<a href="javascript:show_pic('actruleImg{{d.id}}')"><img src='${sysConfig.webUrl}{{ d.rulepic }}' id='actruleImg{{d.id}}' style="width:35px;height:35px" alt='' ></a></div>
+			<a href="javascript:show_pic('actruleImg{{d.id}}')"><img src='${sysConfig.webUrl}{{d.rulepic}}' id='actruleImg{{d.id}}' style="width:35px;height:35px" alt='' ></a></div>
  		  </script>
     </body>
 </html>

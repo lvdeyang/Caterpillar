@@ -772,6 +772,12 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubadmin/apply");
 		HttpSession session = request.getSession();
+		if(session.getAttribute("userId")!=null&&session.getAttribute("merchantId")!=null){
+		  String userId=session.getAttribute("userId").toString();
+		  String merchantId=session.getAttribute("merchantId").toString();
+		  conn_merchantuser.delMerUserByIds(Long.parseLong(userId),Long.parseLong(merchantId));
+		}
+		
 		session.setAttribute("merchantId", null);
 		return mv;
 	}
@@ -1318,16 +1324,19 @@ public class PubNumController extends WebBaseControll {
 		Set<String> headers = new HashSet<String>();
 
 		ProductPO productPO = conn_product.getByMerchantId(merchantId);
-		List<CommentPO> commentPOs = conn_comment.findByPro(productPO.getId(), 1, 50);
-		for (CommentPO commentPO : commentPOs) {
-			UserInfoPO user = commentPO.getUser();
-			if (user.getUserHeadimg() != null) {
-				if (isImagesTrue(user.getUserHeadimg())) {
-					headers.add(user.getUserHeadimg());
-				}
+		if(productPO!=null){
+			List<CommentPO> commentPOs = conn_comment.findByPro(productPO.getId(), 1, 50);
+			for (CommentPO commentPO : commentPOs) {
+				UserInfoPO user = commentPO.getUser();
+				if (user.getUserHeadimg() != null) {
+					if (isImagesTrue(user.getUserHeadimg())) {
+						headers.add(user.getUserHeadimg());
+					}
 
+				}
 			}
 		}
+		
 		return headers;
 	}
 

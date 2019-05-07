@@ -63,6 +63,7 @@
 		   
 		   
 		   if(href.indexOf('pubnum/index')!=-1||
+		      href.indexOf('pubnum/gotoshop')!=-1||
 		      href.indexOf('pubnum/column/index')!=-1||
 		      href.indexOf('pubnum/merchant/index')!=-1||
 		      href.indexOf('live')!=-1||

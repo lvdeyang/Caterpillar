@@ -132,12 +132,96 @@ public class MerchantPO extends AbstractBasePO {
 	//人均消费
 	private String averagePrice;
 	
+	
+	// 导览贴图X经度
+	private String Xlongitude;
+	// 导览贴图X纬度
+	private String Xlatitude;
+	
+	// 导览贴图Y经度
+	private String Ylongitude;
+	// 导览贴图y纬度
+	private String Ylatitude;
+	//导览图片
+	private String chartletPictures;
+	//导览  初始显示位置经度
+	private String  locationLongitude;
+	//导览  初始显示位置经度
+	private String  locationLatitude;
+	
 	private long isGuide;//是否支持导览
 	
 	private String userName;//业务人员名字
 	
 	private int shopyd=1;
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	public String getXlongitude() {
+		return Xlongitude;
+	}
+
+	public void setXlongitude(String xlongitude) {
+		Xlongitude = xlongitude;
+	}
+
+	public String getXlatitude() {
+		return Xlatitude;
+	}
+
+	public void setXlatitude(String xlatitude) {
+		Xlatitude = xlatitude;
+	}
+
+	public String getYlongitude() {
+		return Ylongitude;
+	}
+
+	public void setYlongitude(String ylongitude) {
+		Ylongitude = ylongitude;
+	}
+
+	public String getYlatitude() {
+		return Ylatitude;
+	}
+
+	public void setYlatitude(String ylatitude) {
+		Ylatitude = ylatitude;
+	}
+
+	public String getLocationLongitude() {
+		return locationLongitude;
+	}
+
+	public void setLocationLongitude(String locationLongitude) {
+		this.locationLongitude = locationLongitude;
+	}
+
+	public String getLocationLatitude() {
+		return locationLatitude;
+	}
+
+	public void setLocationLatitude(String locationLatitude) {
+		this.locationLatitude = locationLatitude;
+	}
+
+	public String getChartletPictures() {
+		return chartletPictures;
+	}
+
+	public void setChartletPictures(String chartletPictures) {
+		this.chartletPictures = chartletPictures;
+	}
+
 	public String getUserName() {
 		return userName;
 	}

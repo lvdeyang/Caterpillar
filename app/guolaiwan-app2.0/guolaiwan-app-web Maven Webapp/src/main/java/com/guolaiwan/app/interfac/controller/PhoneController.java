@@ -1363,7 +1363,7 @@ public class PhoneController extends WebBaseControll {
 		Long userId = Long.parseLong(request.getParameter("userId"));
 		if (userId != null) {
 			UserInfoPO user = conn_user.get(userId);
-			CollectionPO collection = conn_collection.getByUserProId(user, productId);
+			CollectionPO collection = conn_collection.getByUserIdProId(user.getId(), productId,activityPro.getId());
 			if (collection != null) {
 				_product.setIfcollection(1);
 			}

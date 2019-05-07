@@ -49,6 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<thead>
 				<tr>
 					<th><input type="checkbox" id="chooseAll" onclick="chooseAll()" ></th>
+					<th>id</th>
 					<th>子商品名称</th>
 					<th>图片</th>
 					<th>声音</th>
@@ -82,6 +83,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<tr>
                         <td>
                             <input type="checkbox" value="{{ item.uuid }}" name="selected" >
+                        </td>
+                        <td>
+                            {{ item.id }}
                         </td>
 						<td>
                             {{ item.childName }}

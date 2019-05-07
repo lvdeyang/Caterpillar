@@ -1073,7 +1073,7 @@ div.warp_con:not(.active)>span{
 					  	}
 					  	htm +='</div>'
 					}
-					htm = '<div class="warp_con"><h4>遵化公司</h4><span class="warp_sp">APP：439张</span><span class="warp_sp">分销：123张</span><span class="warp_sp">线下：233张</span><span class="warp_sp">网页：454张</span><span class="warp_sp">直播：147张</span><span class="warp_sp">公众号：534张</span></div><div class="warp_con"><h4>迁西公司</h4><span class="warp_sp">APP：9张</span><span class="warp_sp">分销：3张</span><span class="warp_sp">线下：3张</span><span class="warp_sp">网页：1张</span><span class="warp_sp">直播：1张</span><span class="warp_sp">公众号：1张</span></div>'
+					htm = '<div class="warp_con"><h4>遵化公司</h4><span class="warp_sp">APP：439张</span><span class="warp_sp">分销：123张</span><span class="warp_sp">线下：233张</span><span class="warp_sp">网页：454张</span><span class="warp_sp">直播：147张</span><span class="warp_sp">公众号：534张</span></div><div class="warp_con"><h4>平谷公司</h4><span class="warp_sp">APP：9张</span><span class="warp_sp">分销：3张</span><span class="warp_sp">线下：3张</span><span class="warp_sp">网页：1张</span><span class="warp_sp">直播：1张</span><span class="warp_sp">公众号：1张</span></div><div class="warp_con"><h4>迁西公司</h4><span class="warp_sp">APP：9张</span><span class="warp_sp">分销：3张</span><span class="warp_sp">线下：3张</span><span class="warp_sp">网页：1张</span><span class="warp_sp">直播：1张</span><span class="warp_sp">公众号：1张</span></div>'
 				  	$("#warpContainer").html(htm);
 				}
 			}
@@ -1101,9 +1101,9 @@ div.warp_con:not(.active)>span{
 					nameOrderArr = result.name;
 					monthArr = result.month;
 					dataArr= result.order;
-					nameOrderArr = ["遵化公司", "迁西公司"]
+					nameOrderArr = ["遵化公司", "迁西公司","平谷公司"]
 					monthArr = ["2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03"]
-					dataArr = [{data:[34540,46900,23243,34890,12380,42340,41420,24380,23410,23440,31320,14208],name: "遵化公司",type: "bar"},{data:[20223,42131,35620,22140,11328,13524,12524,2318,5644,25264,32124,9128],name: "迁西公司",type: "bar"},]
+					dataArr = [{data:[64540,86900,93243,44890,22380,52340,51420,34380,33410,33440,41320,24208],name: "遵化公司",type: "bar"},{data:[34540,46900,23243,34890,12380,42340,41420,24380,23410,23440,31320,14208],name: "遵化公司",type: "bar"},{data:[20223,42131,35620,22140,11328,13524,12524,2318,5644,25264,32124,9128],name: "迁西公司",type: "bar"}]
 				}
 			}
 		});
