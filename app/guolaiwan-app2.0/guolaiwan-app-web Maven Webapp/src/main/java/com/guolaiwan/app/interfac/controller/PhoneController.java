@@ -7104,4 +7104,22 @@ public class PhoneController extends WebBaseControll {
 		conn_professionalLiveDirectorDao.saveOrUpdate(professionalLiveDirectorPO);
 		return success();
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/giveLike", method = RequestMethod.POST)
+	public Map<String, Object>  giveLike(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String param = getRequestJson(request);
+		param = param.replace("\\n", "");
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		Long liveId = Long.parseLong(pageObject.getString("liveId"));
+		LivePO live=conn_live.get(liveId);
+		live.setGiveLike(live.getGiveLike()+1);
+		conn_live.saveOrUpdate(live);
+		return success();
+	}
 }

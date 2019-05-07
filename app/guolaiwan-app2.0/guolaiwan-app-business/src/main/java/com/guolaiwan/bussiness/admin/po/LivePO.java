@@ -50,6 +50,17 @@ public class LivePO extends AbstractBasePO {
 	
 	private String leshiyunId="";
 	
+	//点赞数 张羽 5/3
+	private long giveLike;
+	
+	
+	
+	public long getGiveLike() {
+		return giveLike;
+	}
+	public void setGiveLike(long giveLike) {
+		this.giveLike = giveLike;
+	}
 	public int getIsback() {
 		return isback;
 	}

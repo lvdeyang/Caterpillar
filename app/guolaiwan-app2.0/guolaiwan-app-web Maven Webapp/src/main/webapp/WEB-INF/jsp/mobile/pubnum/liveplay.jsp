@@ -72,6 +72,7 @@
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 
 <style type="text/css">
+
 a {
 	cursor: pointer !important;
 }
@@ -441,7 +442,43 @@ html, body {
 	top: 0;
 	text-align: center;
 }
-
+       .demo img {
+				width: 30px;
+				height: 30px;
+				position: absolute;
+				top: 485px;
+				right: 20px;
+				margin-left: -15px;
+				z-index:100000;
+			}
+			
+			.btn {
+				background: url(lib/images/xin6.gif)no-repeat center center;
+				background-size: 80% 80%;
+				width: 50px;
+				height: 50px;
+				border: 0;
+				color: #fff;
+				position: absolute;
+				top: 485px;
+				right:10px;
+				margin-left: -25px;
+				z-index:100000;
+			}
+			
+			.jishu {
+				border-radius: 5px;
+				position: absolute;
+				top:545px;
+				right: 10px;
+				width: 50px;
+				height: 20px;
+				background: black;
+				color: #FFFFFF;
+			/* 	margin-left: -25px; */
+				text-align: center;
+				line-height: 20px;
+			}
 </style>
 <link href="lib/video.css" rel="stylesheet">
 </head>
@@ -497,6 +534,7 @@ html, body {
 				  refreshMsg();	
 			});
 	  });
+	  
 	  
 	  var share={};
 	  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
@@ -578,11 +616,53 @@ html, body {
 	  }
 	  
 	});
+	
+	
+	
+
+	
+	
 </script>
 
 
+<script type="text/javascript">
+			$(function() {
+			window.BASEPATH = '<%=basePath%>';
+				 $("#btn1").click(function() {
+					var x = 100;
+					var y = 900;
+					var num = Math.floor(Math.random() * 3 + 1);
+					var index = $('.demo').children('img').length;
+					var rand = parseInt(Math.random() * (x - y + 1) + y);
 
-<body>
+					$(".demo").append("<img src=''>");
+					$('.demo img:eq(' + index + ')').attr('src', 'lib/images/' + num + '.png')
+					$(".demo img").animate({
+						top: "-480px",
+						opacity: "0",
+					}, 3000)
+					
+				  var giveLikeUrl = window.BASEPATH + 'phoneApp/giveLike';
+				  var params={};
+				  params.liveId=${live.id};
+				　　$.post(giveLikeUrl, $.toJSON(params), function(data){
+						data = parseAjaxResult(data);
+					});
+					//计数
+					var num = $(this).next().text()
+					num++;
+					$(this).next().text(num);
+				})
+			})
+		</script>
+
+<body>  
+     <div id="zong">
+     	<div class="demo"></div>
+		<div id="btn1" class="btn"></div>
+		<div class="jishu">${live.giveLike}</div>
+     </div>
+		
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
