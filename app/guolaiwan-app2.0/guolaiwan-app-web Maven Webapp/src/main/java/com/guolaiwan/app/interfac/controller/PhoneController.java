@@ -69,6 +69,7 @@ import com.guolaiwan.app.web.admin.vo.CommentVO;
 import com.guolaiwan.app.web.admin.vo.CompanyVO;
 import com.guolaiwan.app.web.admin.vo.DistributorVO;
 import com.guolaiwan.app.web.admin.vo.LanVO;
+import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
 import com.guolaiwan.app.web.admin.vo.LiveProductVO;
 import com.guolaiwan.app.web.admin.vo.LiveRecordVO;
 import com.guolaiwan.app.web.admin.vo.LiveVO;
@@ -108,6 +109,7 @@ import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.DistributorDAO;
 import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
 import com.guolaiwan.bussiness.admin.dao.LanDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveProductDAO;
@@ -167,6 +169,7 @@ import com.guolaiwan.bussiness.admin.po.CompanyPO;
 import com.guolaiwan.bussiness.admin.po.DistributorPO;
 import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
 import com.guolaiwan.bussiness.admin.po.LanPO;
+import com.guolaiwan.bussiness.admin.po.LiveAdvertisementPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.LiveProductPO;
@@ -300,6 +303,8 @@ public class PhoneController extends WebBaseControll {
 	private ProfessionalLiveDAO conn_professionalLiveDao;
 	@Autowired
 	private LiveRecordDao conn_recordDao;
+	@Autowired
+	private LiveAdvertisementDAO conn_liveAdvertisementDao;
 
 	/**
 	 * 首页搜索
@@ -7106,6 +7111,13 @@ public class PhoneController extends WebBaseControll {
 	}
 	
 	
+	/**
+	 * 点赞方法 张羽
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/giveLike", method = RequestMethod.POST)
 	public Map<String, Object>  giveLike(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -7121,5 +7133,24 @@ public class PhoneController extends WebBaseControll {
 		live.setGiveLike(live.getGiveLike()+1);
 		conn_live.saveOrUpdate(live);
 		return success();
+	}
+	
+	/**
+	 * 直播 获取广告轮播图  张羽 5/8
+	 * 
+	 * @param comCode
+	 * @return products
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getAdvertisement", method = RequestMethod.GET)
+	public Map<String, Object> getAdvertisement(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<LiveAdvertisementPO> rdvertisement = conn_liveAdvertisementDao.getList();
+		List<LiveAdvertisementVO> rdvertisementvo = LiveAdvertisementVO.getConverter(LiveAdvertisementVO.class).convert(rdvertisement, LiveAdvertisementVO.class);
+		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		for (LiveAdvertisementVO rpo : rdvertisementvo) {
+			rpo.setSlidepic(sysConfig.getWebUrl() + rpo.getSlidepic());
+		}
+		return success(rdvertisementvo);
 	}
 }

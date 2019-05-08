@@ -453,15 +453,15 @@ html, body {
 			}
 			
 			.btn {
-				background: url(lib/images/xin6.gif)no-repeat center center;
-				background-size: 80% 80%;
-				width: 50px;
-				height: 50px;
+				background: url(lib/images/xin7.png)no-repeat center center;
+				background-size: 100% 100%;
+				width: 60px;
+				height: 60px;
 				border: 0;
 				color: #fff;
 				position: absolute;
-				top: 485px;
-				right:10px;
+				top: 550px;
+				right:5px;
 				margin-left: -25px;
 				z-index:100000;
 			}
@@ -469,12 +469,11 @@ html, body {
 			.jishu {
 				border-radius: 5px;
 				position: absolute;
-				top:545px;
+				top:600px;
 				right: 10px;
 				width: 50px;
 				height: 20px;
-				background: black;
-				color: #FFFFFF;
+				color: #FD6770;
 			/* 	margin-left: -25px; */
 				text-align: center;
 				line-height: 20px;
@@ -628,32 +627,58 @@ html, body {
 <script type="text/javascript">
 			$(function() {
 			window.BASEPATH = '<%=basePath%>';
-				 $("#btn1").click(function() {
-					var x = 100;
-					var y = 900;
-					var num = Math.floor(Math.random() * 3 + 1);
-					var index = $('.demo').children('img').length;
-					var rand = parseInt(Math.random() * (x - y + 1) + y);
+			
+			getAdvertisement();
+			
+			 $("#btn1").click(function() {
+				var x = 100;
+				var y = 900;
+				var num = Math.floor(Math.random() * 3 + 1);
+				var index = $('.demo').children('img').length;
+				var rand = parseInt(Math.random() * (x - y + 1) + y);
 
-					$(".demo").append("<img src=''>");
-					$('.demo img:eq(' + index + ')').attr('src', 'lib/images/' + num + '.png')
-					$(".demo img").animate({
-						top: "-480px",
-						opacity: "0",
-					}, 3000)
-					
-				  var giveLikeUrl = window.BASEPATH + 'phoneApp/giveLike';
-				  var params={};
-				  params.liveId=${live.id};
-				　　$.post(giveLikeUrl, $.toJSON(params), function(data){
-						data = parseAjaxResult(data);
-					});
-					//计数
-					var num = $(this).next().text()
-					num++;
-					$(this).next().text(num);
-				})
+				$(".demo").append("<img src=''>");
+				$('.demo img:eq(' + index + ')').attr('src', 'lib/images/' + num + '.png')
+				$(".demo img").animate({
+					top: "-480px",
+					opacity: "0",
+				}, 3000)
+				
+			  var giveLikeUrl = window.BASEPATH + 'phoneApp/giveLike';
+			  var params={};
+			  params.liveId=${live.id};
+			　　$.post(giveLikeUrl, $.toJSON(params), function(data){
+					data = parseAjaxResult(data);
+				});
+				//计数
+				var num = $(this).next().text()
+				num++;
+				$(this).next().text(num);
 			})
+			
+			
+		})
+		
+		function getAdvertisement(){
+			     var _uriRecomment = window.BASEPATH + 'phoneApp/getAdvertisement';
+				
+				 $.get(_uriRecomment, null, function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+						if(data && data.length>0){
+						    var html=[];
+							for(var i=0; i<data.length; i++){
+								html.push('<div style="height:70px;width:100%;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].Id+'" style="height:100%;width:100%;" src="'+data[i].slidepic+'" alt="">');
+								html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].name+'</div></div>');
+							}
+							$('#headerWrapper').append(html.join(''));
+							$("#headerSwiper").swiper({
+						        loop: true,
+						        autoplay: 5000
+						      });
+						}
+				 });
+			  }
 		</script>
 
 <body>  
@@ -687,6 +712,10 @@ html, body {
 			    </script>
 			</div>
 			
+			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+			  <div class="swiper-wrapper" id="headerWrapper" style="height:70px;">
+			  </div>
+			</div>
 			
 		    <div style="margin-top:10px;margin-left:10px">${live.liveName}</div>
 		    <div class="weui-cells__title">请输入评论</div>

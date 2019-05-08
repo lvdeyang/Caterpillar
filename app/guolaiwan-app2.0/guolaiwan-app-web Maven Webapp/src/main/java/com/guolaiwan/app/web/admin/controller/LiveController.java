@@ -1,5 +1,8 @@
 package com.guolaiwan.app.web.admin.controller;
 
+import java.io.File;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,17 +14,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
+import com.guolaiwan.app.web.admin.vo.LiveRebroadcastVO;
+import com.guolaiwan.app.web.admin.vo.PictureVO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveRebroadcastDAO;
+import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
 import com.guolaiwan.bussiness.admin.po.LiveAdvertisementPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
+import com.guolaiwan.bussiness.admin.po.LiveRebroadcastPO;
+import com.guolaiwan.bussiness.admin.po.PicturePO;
+import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 
 import pub.caterpillar.mvc.controller.BaseController;
 
@@ -35,6 +47,10 @@ public class LiveController extends BaseController {
 	private LiveDAO conn_live;
 	@Autowired
 	private LiveMessageDAO conn_liveMessage;
+	@Autowired
+	private LiveRebroadcastDAO conn_liveRebroadcast;
+	@Autowired
+	private SysConfigDAO conn_sysConfig;
 
 	// 列表页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -154,10 +170,10 @@ public class LiveController extends BaseController {
 			return mv;
 		}
 		
-		//异步读取列表分页
+		//异步读取列表分页  张羽 5/6 新增
 		@ResponseBody
 		@RequestMapping(value="advertisementList.do",method = RequestMethod.POST)
-		public Map<String,Object> GetList(int page,int limit) throws Exception{
+		public Map<String,Object> GetadvertisementList(int page,int limit) throws Exception{
 			List<LiveAdvertisementPO> advertisementpo = conn_liveAdvertisement.GetListbyPage(page, limit);
 			int count = conn_liveAdvertisement.countAll();
 			List<LiveAdvertisementVO> LiveAdvertisementvo = LiveAdvertisementVO.getConverter(LiveAdvertisementVO.class).convert(advertisementpo, LiveAdvertisementVO.class);
@@ -169,7 +185,7 @@ public class LiveController extends BaseController {
 			return map;			
 		}
 		
-		//添加数据
+		//添加数据   张羽 5/6 新增
 		@ResponseBody
 		@RequestMapping(value="/addAdvertisement.do", method= RequestMethod.POST)
 		public String addAdvertisement(HttpServletRequest request) throws Exception {
@@ -179,7 +195,7 @@ public class LiveController extends BaseController {
 			return "success";
 		}
 		
-		//修改数据
+		//修改数据    张羽 5/6 新增
 		@ResponseBody
 		@RequestMapping(value="/updateAdvertisement.do", method= RequestMethod.POST)
 		public String update(HttpServletRequest request) throws Exception {
@@ -209,7 +225,7 @@ public class LiveController extends BaseController {
 		}
 		
 		
-		//删除数据
+		//删除数据   张羽 5/6 新增
 		@ResponseBody
 		@RequestMapping(value="/delAdvertisement.do", method= RequestMethod.POST)
 		public String del(HttpServletRequest request) throws Exception {
@@ -218,7 +234,7 @@ public class LiveController extends BaseController {
 			return "success";
 		}
 		
-		//选择图片
+		//选择图片   张羽 5/6 新增
 		@ResponseBody
 		@RequestMapping(value="/pic.do",method= RequestMethod.POST)
 		public String pic(HttpServletRequest request) {
@@ -234,7 +250,7 @@ public class LiveController extends BaseController {
 		
 		
 		
-		//是否显示
+		//是否显示    张羽 5/6 新增
 		@ResponseBody
 		@RequestMapping(value="/changeIsv.do",method= RequestMethod.POST)
 		public String changeIsv(HttpServletRequest request) throws Exception {
@@ -246,6 +262,100 @@ public class LiveController extends BaseController {
 			conn_liveAdvertisement.saveOrUpdate(advertisement);
 			return "success";
 		}
+		
+		
+
+		
+		//同时添加  直播回放5/7 张羽 新增
+		@RequestMapping(value="/rebroadcastlist",method= RequestMethod.GET)
+		public ModelAndView home(HttpServletRequest request){
+			Map<String, Object> strMap=new HashMap<String, Object>();
+			int count = conn_liveRebroadcast.getCountByPage();
+			strMap.put("count",count);
+			ModelAndView mv = new ModelAndView("admin/live/rebroadcastList",strMap);
+			return mv;
+		}
+
+		// 直播回放上传 5/7 张羽 新增
+		@ResponseBody
+		@RequestMapping(value="/upload.do",method= RequestMethod.POST)
+		public Map<String,Object> upload(@RequestParam(value = "images") CommonsMultipartFile file) throws Exception{
+			Map<String, Object> map= new HashMap<String, Object>();
+			//创建日期文件夹
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			Date d = new Date();
+			String folderName = sdf.format(d);  //文件名
+			String path=conn_sysConfig.getSysConfig().getFolderUrl()+folderName;
+
+			//文件名
+			String fileName = file.getOriginalFilename();  
+			String newName = d.getTime()+fileName.substring(fileName.lastIndexOf(".") ); //时间戳+后缀名
+
+			File folder =new File(path);
+			if(folder.exists() ==false){     //如果路径不存在
+				if(folder.getParentFile().exists()==false){
+					map.put("code", "1");
+					map.put("error", "文件路径错误！");
+					return map;
+				}
+				folder.mkdir();
+			}
+			//上传
+			File newFile=new File(path+"/"+newName);
+			String config = conn_sysConfig.getSysConfig().getWebUrl()+folderName+"/"+newName;
+			file.transferTo(newFile);           //写
+
+			//写数据库
+			LiveRebroadcastPO rebroadcast = new LiveRebroadcastPO();
+
+
+			if(file.getSize()/1024>1024l){
+				rebroadcast.setFileSize(new DecimalFormat("###.##").format((double)file.getSize()/1024/1024)+"M"); 
+			}else if(file.getSize()/1024/1024>1024l){
+				rebroadcast.setFileSize(new DecimalFormat("###.##").format((double)file.getSize()/1024/1024/1024)+"G");
+			}else{
+				rebroadcast.setFileSize(file.getSize()/1024+"kb") ;
+			}
+			rebroadcast.setFolde(folderName);
+			rebroadcast.setUpdateTime(d);
+			rebroadcast.setOldName(fileName);
+			rebroadcast.setNewName(newName);
+			conn_liveRebroadcast.save(rebroadcast);
+			rebroadcast.setWebUrl(config);
+			rebroadcast.setIntroduce("上传成功！");
+			rebroadcast.setIf_valid(1);
+			LiveRebroadcastVO pic = new LiveRebroadcastVO().set(rebroadcast);
+			map.put("pic", pic);
+			map.put("path", config);
+			map.put("code", "0");
+			return map;
+		}
+
+		// 异步读取。。。
+		@ResponseBody
+		@RequestMapping(value="/rebroadcastList.do", method= RequestMethod.POST,produces = "application/json; charset=utf-8")
+		public Map<String, Object> getRebroadcastList(int pagecurr,int ilimit) throws Exception {
+			List<LiveRebroadcastPO> listpo = conn_liveRebroadcast.getRebroadcastByPage(pagecurr,ilimit);
+			List<LiveRebroadcastVO> listvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class).convert(listpo, LiveRebroadcastVO.class);
+			Map<String, Object> map= new HashMap<String, Object>();
+			map.put("list", listvo);
+			return map;
+		}
+
+
+		// 异步删除。。。
+		@ResponseBody
+		@RequestMapping(value="rebroadcastdel.do", method= RequestMethod.POST)
+		public String picDel(HttpServletRequest request) throws Exception {
+			String uuid = request.getParameter("uuid");
+			conn_liveRebroadcast.deleteByUuid(uuid);
+			return "success";
+		}
+
+		
+
+		
+		
 }
 			
 	
