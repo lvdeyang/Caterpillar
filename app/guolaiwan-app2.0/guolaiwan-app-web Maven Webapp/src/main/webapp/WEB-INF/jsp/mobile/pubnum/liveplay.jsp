@@ -446,10 +446,10 @@ html, body {
 				width: 30px;
 				height: 30px;
 				position: absolute;
-				top: 485px;
+				top: 1%;
 				right: 20px;
 				margin-left: -15px;
-				z-index:100000;
+				z-index:9;
 			}
 			
 			.btn {
@@ -460,23 +460,62 @@ html, body {
 				border: 0;
 				color: #fff;
 				position: absolute;
-				top: 550px;
+				top: 0%;
 				right:5px;
 				margin-left: -25px;
-				z-index:100000;
+				z-index:10;
+				touch-action: none;
+				
 			}
-			
+			.btn2 {
+				background: url(lib/images/liwu.png)no-repeat center center;
+				background-size: 100% 100%;
+				width: 60px;
+				height: 60px;
+				border: 0;
+				color: #fff;
+				position: absolute;
+				top: -8%;
+				right:65px;
+				margin-left: -25px;
+				z-index:10;
+				touch-action: none;
+			}
+			.btn3 {
+				background: url(lib/images/huifang.png)no-repeat center center;
+				background-size: 70% 70%;
+				width: 60px;
+				height: 60px;
+				border: 0;
+				color: #fff;
+				position: absolute;
+				top: -2%;
+				right:120px;
+				margin-left: -25px;
+				z-index:10;
+				touch-action: none;
+			}
 			.jishu {
 				border-radius: 5px;
 				position: absolute;
-				top:600px;
+				top:70%;
 				right: 10px;
 				width: 50px;
-				height: 20px;
 				color: #FD6770;
-			/* 	margin-left: -25px; */
 				text-align: center;
-				line-height: 20px;
+			}
+			.pushGift{
+				width:100%;
+				height:95px;
+				display:none;
+				border:1px solid #EEEEEE;
+				background:#f3faff;
+				position: absolute;
+				z-index: 10000;
+				top:0%;
+				overflow: hidden;
+				justify-content:center;
+			     
 			}
 </style>
 <link href="lib/video.css" rel="stylesheet">
@@ -629,6 +668,7 @@ html, body {
 			window.BASEPATH = '<%=basePath%>';
 			
 			getAdvertisement();
+			pushGift();
 			
 			 $("#btn1").click(function() {
 				var x = 100;
@@ -640,7 +680,7 @@ html, body {
 				$(".demo").append("<img src=''>");
 				$('.demo img:eq(' + index + ')').attr('src', 'lib/images/' + num + '.png')
 				$(".demo img").animate({
-					top: "-480px",
+					top: "-500px",
 					opacity: "0",
 				}, 3000)
 				
@@ -656,7 +696,18 @@ html, body {
 				$(this).next().text(num);
 			})
 			
-			
+			$('#btn2').click(function(){
+				if( $(".pushGift").hasClass("show") ){
+		            // 执行隐藏
+		            $(".pushGift").fadeOut().removeClass("show");
+		            // 其他
+		        }else{
+		            // 显示
+		            $(".pushGift").fadeIn().addClass("show");
+		        }
+						 
+			})
+				
 		})
 		
 		function getAdvertisement(){
@@ -679,14 +730,32 @@ html, body {
 						}
 				 });
 			  }
+			  
+		
+		function pushGift(){
+			     var _uripushGift = window.BASEPATH + 'phoneApp/pushGift';
+				
+					$.post(_uripushGift, null, function(data){
+						data = parseAjaxResult(data); 
+						    var html=[]; 
+							for(var i=0; i<data.length; i++){
+								html.push('<div style="width:20%;height: 100%;background:#f3faff;display: inline-block;margin:0 auto;padding:0px;text-align: center;border: 1px solid #EEEEEE;">');
+								html.push('<img src="http://www.guolaiwan.net/file/'+data[i].slidepic+'" style="width:40px;height:40px;margin-top:10px;" />');
+								html.push('<p style="font-size:12px; ">'+data[i].name+'</P>');
+								html.push('<p style="font-size:12px;">'+(data[i].price/100).toFixed(2)+'元</P>'); 
+								html.push('</div>');
+							}
+							$('.pushGift').append(html.join(''));
+				   }); 
+			  }
+		
+		
+		
+		
 		</script>
 
 <body>  
-     <div id="zong">
-     	<div class="demo"></div>
-		<div id="btn1" class="btn"></div>
-		<div class="jishu">${live.giveLike}</div>
-     </div>
+    <p style="line-height: ">
 		
 	<div id="page">
 		<!-- 主页 -->
@@ -720,6 +789,7 @@ html, body {
 		    <div style="margin-top:10px;margin-left:10px">${live.liveName}</div>
 		    <div class="weui-cells__title">请输入评论</div>
 			<div class="weui-cells weui-cells_form">
+			<div class="pushGift"></div>
 			  <div class="weui-cell">
 			    <div class="weui-cell__bd">
 			      <textarea id="message" class="weui-textarea" rows="3"></textarea>
@@ -727,10 +797,18 @@ html, body {
 			    </div>
 			  </div>
 			</div>
-			
+			<div style="width:100%;height:70px;position:relative;">
 			<a id="save" href="javascript:void(0);" class="weui-btn_mini weui-btn_default" style="margin-top:5px;margin-left:10px;background:#18b4ed">发表评论</a>
-			
-			
+			 <div id="zong">
+	     		<div class="demo"></div>
+						<a href="javascipe:void(0)"><div id="btn1" class="btn"></div></a>
+						<div class="jishu">${live.giveLike}</div>
+						<!-- 礼物 -->
+						<a href="javascipe:void(0)"><div id="btn2" class="btn2"></div></a>
+						<!-- 回放 -->
+						<a href="<%=basePath %>admin/live/rebroadcastslist" ><div id="btn3" class="btn3"></div></a>
+	    		 </div>
+			</div>
 			<div class="weui-cells__title">评论列表</div>
 			<div id="messageContent" style="padding-bottom:50px;">
 			   

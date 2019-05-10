@@ -70,7 +70,9 @@ import com.guolaiwan.app.web.admin.vo.CompanyVO;
 import com.guolaiwan.app.web.admin.vo.DistributorVO;
 import com.guolaiwan.app.web.admin.vo.LanVO;
 import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
+import com.guolaiwan.app.web.admin.vo.LiveGiftVO;
 import com.guolaiwan.app.web.admin.vo.LiveProductVO;
+import com.guolaiwan.app.web.admin.vo.LiveRebroadcastVO;
 import com.guolaiwan.app.web.admin.vo.LiveRecordVO;
 import com.guolaiwan.app.web.admin.vo.LiveVO;
 import com.guolaiwan.app.web.admin.vo.LogisticVO;
@@ -111,8 +113,10 @@ import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
 import com.guolaiwan.bussiness.admin.dao.LanDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveProductDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveRebroadcastDAO;
 import com.guolaiwan.bussiness.admin.dao.LogisticsDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
@@ -170,9 +174,11 @@ import com.guolaiwan.bussiness.admin.po.DistributorPO;
 import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
 import com.guolaiwan.bussiness.admin.po.LanPO;
 import com.guolaiwan.bussiness.admin.po.LiveAdvertisementPO;
+import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.LiveProductPO;
+import com.guolaiwan.bussiness.admin.po.LiveRebroadcastPO;
 import com.guolaiwan.bussiness.admin.po.LogisticsPo;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
@@ -306,6 +312,8 @@ public class PhoneController extends WebBaseControll {
 	@Autowired
 	private LiveAdvertisementDAO conn_liveAdvertisementDao;
 
+	
+	
 	/**
 	 * 首页搜索
 	 * 
@@ -7145,12 +7153,36 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getAdvertisement", method = RequestMethod.GET)
 	public Map<String, Object> getAdvertisement(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<LiveAdvertisementPO> rdvertisement = conn_liveAdvertisementDao.getList();
-		List<LiveAdvertisementVO> rdvertisementvo = LiveAdvertisementVO.getConverter(LiveAdvertisementVO.class).convert(rdvertisement, LiveAdvertisementVO.class);
+		List<LiveAdvertisementPO> advertisement = conn_liveAdvertisementDao.getList();
+		List<LiveAdvertisementVO> advertisementvo = LiveAdvertisementVO.getConverter(LiveAdvertisementVO.class).convert(advertisement, LiveAdvertisementVO.class);
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
-		for (LiveAdvertisementVO rpo : rdvertisementvo) {
+		for (LiveAdvertisementVO rpo : advertisementvo) {
 			rpo.setSlidepic(sysConfig.getWebUrl() + rpo.getSlidepic());
 		}
+		return success(advertisementvo);
+	}
+	
+	@Autowired
+	private LiveRebroadcastDAO conn_rdvertisementDao;
+	
+	@ResponseBody
+	@RequestMapping(value = "/getAllRebroadcast", method = RequestMethod.POST)
+	public Map<String, Object> getAllRebroadcast(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<LiveRebroadcastPO> rdvertisement = conn_rdvertisementDao.findAll();
+		List<LiveRebroadcastVO> rdvertisementvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class).convert(rdvertisement, LiveRebroadcastVO.class);
 		return success(rdvertisementvo);
 	}
+	
+	@Autowired
+	private LiveGiftDAO conn_giftDao;
+	
+	@ResponseBody
+	@RequestMapping(value = "/pushGift", method = RequestMethod.POST)
+	public Map<String, Object> pushGift(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<LiveGiftPO> gifts = conn_giftDao.GetListbysort();
+		List<LiveGiftVO> giftsvo = LiveGiftVO.getConverter(LiveGiftVO.class).convert(gifts, LiveGiftVO.class);
+		return success(giftsvo);
+	}
+
+
 }

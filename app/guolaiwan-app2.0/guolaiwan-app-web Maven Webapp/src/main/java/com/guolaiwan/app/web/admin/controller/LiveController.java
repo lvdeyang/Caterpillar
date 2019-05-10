@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,11 +25,14 @@ import com.guolaiwan.app.web.admin.vo.LiveRebroadcastVO;
 import com.guolaiwan.app.web.admin.vo.PictureVO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveRebroadcastDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
+import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
 import com.guolaiwan.bussiness.admin.po.LiveAdvertisementPO;
+import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.LiveRebroadcastPO;
@@ -51,7 +55,8 @@ public class LiveController extends BaseController {
 	private LiveRebroadcastDAO conn_liveRebroadcast;
 	@Autowired
 	private SysConfigDAO conn_sysConfig;
-
+	@Autowired
+	private LiveGiftDAO conn_liveGift;
 	// 列表页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(HttpServletRequest request) throws Exception {
@@ -268,7 +273,7 @@ public class LiveController extends BaseController {
 		
 		//同时添加  直播回放5/7 张羽 新增
 		@RequestMapping(value="/rebroadcastlist",method= RequestMethod.GET)
-		public ModelAndView home(HttpServletRequest request){
+		public ModelAndView rebroadcastList(HttpServletRequest request){
 			Map<String, Object> strMap=new HashMap<String, Object>();
 			int count = conn_liveRebroadcast.getCountByPage();
 			strMap.put("count",count);
@@ -279,7 +284,7 @@ public class LiveController extends BaseController {
 		// 直播回放上传 5/7 张羽 新增
 		@ResponseBody
 		@RequestMapping(value="/upload.do",method= RequestMethod.POST)
-		public Map<String,Object> upload(@RequestParam(value = "images") CommonsMultipartFile file) throws Exception{
+		public Map<String,Object> uploadRebroadcast(@RequestParam(value = "images") CommonsMultipartFile file) throws Exception{
 			Map<String, Object> map= new HashMap<String, Object>();
 			//创建日期文件夹
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -331,8 +336,8 @@ public class LiveController extends BaseController {
 			return map;
 		}
 
-		// 异步读取。。。
-		@ResponseBody
+		// 后台回放获取  张羽 5/7 
+ 		@ResponseBody
 		@RequestMapping(value="/rebroadcastList.do", method= RequestMethod.POST,produces = "application/json; charset=utf-8")
 		public Map<String, Object> getRebroadcastList(int pagecurr,int ilimit) throws Exception {
 			List<LiveRebroadcastPO> listpo = conn_liveRebroadcast.getRebroadcastByPage(pagecurr,ilimit);
@@ -343,18 +348,118 @@ public class LiveController extends BaseController {
 		}
 
 
-		// 异步删除。。。
+		// 回放删除  张羽 5/7
 		@ResponseBody
 		@RequestMapping(value="rebroadcastdel.do", method= RequestMethod.POST)
-		public String picDel(HttpServletRequest request) throws Exception {
+		public String rebroadcastDel(HttpServletRequest request) throws Exception {
 			String uuid = request.getParameter("uuid");
 			conn_liveRebroadcast.deleteByUuid(uuid);
 			return "success";
 		}
 
 		
-
+		// 礼物页面  张羽  5/8 新增
+		@RequestMapping(value = "/giftlist", method = RequestMethod.GET)
+		public ModelAndView giftList(HttpServletRequest request) {
+			Map<String, Object> strMap = new HashMap<String, Object>();
+			SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+			strMap.put("sysConfig", sysConfig);
+			ModelAndView mv = new ModelAndView("admin/live/giftList", strMap);
+			return mv;
+		}
+		//礼物获取列表 张羽 5/8新增
+		@ResponseBody
+		@RequestMapping(value = "/giftList.do", method = RequestMethod.POST)
+		public Map<String, Object> AddView(int page, int limit) throws Exception {
+			Map<String, Object> strMap = new HashMap<String, Object>();
+			int count = conn_liveGift.countAll();
+			List<LiveGiftPO> gifts = conn_liveGift.findAll(page, limit);
+			strMap.put("code", "0");
+			strMap.put("msg", "");
+			strMap.put("count", count);
+			strMap.put("data", gifts);
+			return strMap;
+		}
 		
+		
+		//添加礼物数据   张羽 5/8 新增
+		@ResponseBody
+		@RequestMapping(value="/addgift.do", method= RequestMethod.POST)
+		public String addGift(HttpServletRequest request) throws Exception {
+			LiveGiftPO gift = new LiveGiftPO();
+			gift.setUpdateTime(new Date());
+			conn_liveGift.save(gift);
+			return "success";
+		}
+		
+		
+		//删除数据   张羽 5/8 新增
+		@ResponseBody
+		@RequestMapping(value="/delgift.do", method= RequestMethod.POST)
+		public String delGift(HttpServletRequest request) throws Exception {
+			long id =Long.parseLong(request.getParameter("id"));
+			conn_liveGift.delete(id);
+			return "success";
+		}
+		
+		//修改数据    张羽 5/8 新增
+		@ResponseBody
+		@RequestMapping(value="/updategift.do", method= RequestMethod.POST)
+		public String updateGift(HttpServletRequest request) throws Exception {
+			long id = Long.parseLong(request.getParameter("id"));
+			String field = request.getParameter("field");
+			String value = request.getParameter("value");
+			LiveGiftPO gift = conn_liveGift.get(id);
+			if(field.equals("sort")){
+				gift.setSort(Integer.parseInt(value));
+			}else if(field.equals("price")){
+				gift.setPrice(Long.parseLong(value));
+			}else{
+			
+				//字符串首字母转成大写
+				char[] cs = field.toCharArray();
+				cs[0]-=32;
+				String.valueOf(cs);
+				//反射
+				Class<LiveGiftPO> carClass = LiveGiftPO.class;
+				carClass.getDeclaredMethod("set"+String.valueOf(cs), String.class).invoke(gift, value);
+				//方法名，输入参数的类型，对象，输入参数的值
+			}
+			conn_liveGift.save(gift);
+			return "success";
+		}
+		
+		//选择图片   张羽 5/8 新增
+		@ResponseBody
+		@RequestMapping(value="/giftpic.do",method= RequestMethod.POST)
+		public String giftPic(HttpServletRequest request) {
+			String pic = request.getParameter("pic");
+			long picId = Long.parseLong(request.getParameter("picId"));
+			long id = Long.parseLong(request.getParameter("id"));
+			LiveGiftPO gift = conn_liveGift.get(id);
+			gift.setPicId(picId);
+			gift.setSlidepic(pic);
+			conn_liveGift.saveOrUpdate(gift);
+			return "success";
+		}
+		
+		/**
+		 * 前页面直播回放列表跳转 张羽
+		 * @param request
+		 * @return
+		 * @throws Exception 
+		 */
+		@RequestMapping(value = "/rebroadcastslist", method = RequestMethod.GET)
+		public ModelAndView rebroadcastsList(HttpServletRequest request,Model model) throws Exception {
+			ModelAndView mv = new ModelAndView("admin/live/rebroadcastsList");
+			return mv;
+		}
+		
+		@RequestMapping(value = "/pushGift", method = RequestMethod.GET)
+		public ModelAndView pushGift(HttpServletRequest request,Model model) throws Exception {
+			ModelAndView mv = new ModelAndView("admin/live/pushGift");
+			return mv;
+		}
 		
 }
 			
