@@ -1108,6 +1108,7 @@ public class PhoneController extends WebBaseControll {
 		}
 		// 会员ID
 		order.setUserId(userId);
+		order.setComId(merchant.getComId());
 		if (user.getUserNickname() != null) {
 			order.setUserName(user.getUserNickname());
 		}
@@ -3934,6 +3935,9 @@ public class PhoneController extends WebBaseControll {
 		for (CollectionPO collectionPO : collections) {
 			if (collectionPO.getProductId() != 0) {
 				ProductPO product = conn_product.get(collectionPO.getProductId());
+				if(product==null){
+					continue;
+				}
 				ProductVO _product = new ProductVO().set(product);
 				_product.setisactivityproduct(0);
 				if (collectionPO.getActivityproductId() != 0) {
