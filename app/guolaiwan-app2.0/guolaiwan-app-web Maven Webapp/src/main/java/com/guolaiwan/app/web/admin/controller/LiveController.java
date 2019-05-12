@@ -28,6 +28,7 @@ import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveRebroadcastDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
@@ -36,6 +37,7 @@ import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.LiveRebroadcastPO;
+import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
 import com.guolaiwan.bussiness.admin.po.PicturePO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 
@@ -57,6 +59,8 @@ public class LiveController extends BaseController {
 	private SysConfigDAO conn_sysConfig;
 	@Autowired
 	private LiveGiftDAO conn_liveGift;
+	@Autowired
+	private LiveTipGiftDAO conn_liveTipGift;
 	// 列表页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(HttpServletRequest request) throws Exception {
@@ -413,7 +417,7 @@ public class LiveController extends BaseController {
 			if(field.equals("sort")){
 				gift.setSort(Integer.parseInt(value));
 			}else if(field.equals("price")){
-				gift.setPrice(Long.parseLong(value));
+				gift.setPrice(Integer.parseInt(value));
 			}else{
 			
 				//字符串首字母转成大写
@@ -459,6 +463,49 @@ public class LiveController extends BaseController {
 		public ModelAndView pushGift(HttpServletRequest request,Model model) throws Exception {
 			ModelAndView mv = new ModelAndView("admin/live/pushGift");
 			return mv;
+		}
+		
+		/**
+		 * 直播打赏记录跳转 张羽
+		 * @param request
+		 * @param model
+		 * @return
+		 * @throws Exception
+		 */
+		@RequestMapping(value = "/tipgiftlist", method = RequestMethod.GET)
+		public ModelAndView tipGiftList(HttpServletRequest request,Model model) throws Exception {
+			ModelAndView mv = new ModelAndView("admin/live/tipGiftList");
+			return mv;
+		}
+		
+		
+		
+		/**
+		 * 获取打赏记录  张羽
+		 * @param page
+		 * @param limit
+		 * @return
+		 * @throws Exception
+		 */
+		@ResponseBody
+		@RequestMapping(value = "/tipgiftlist.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+		public Map<String, Object> getTipGiftList(int page, int limit) throws Exception {
+			Map<String, Object> strMap = new HashMap<String, Object>();
+			List<LiveTipGiftPO> lives = conn_liveTipGift.findAll(page, limit);
+			int count = conn_live.countAll();
+			strMap.put("data", lives);
+			strMap.put("msg", "");
+			strMap.put("count", count);
+			strMap.put("code", "0");
+			return strMap;
+		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/deltipgift.do")
+		public Map<String, Object> delTipGift(Long orderId) throws Exception {
+			conn_liveTipGift.delete(orderId);
+			return success();
 		}
 		
 }

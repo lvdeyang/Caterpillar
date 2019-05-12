@@ -13,7 +13,7 @@ public class LiveGiftPO extends AbstractBasePO{
 	
 	private String name;
 	
-	private long price;
+	private int price;
 	
 	private long picId;
 	
@@ -29,11 +29,13 @@ public class LiveGiftPO extends AbstractBasePO{
 		this.name = name;
 	}
 
-	public long getPrice() {
+	
+
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(long price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 

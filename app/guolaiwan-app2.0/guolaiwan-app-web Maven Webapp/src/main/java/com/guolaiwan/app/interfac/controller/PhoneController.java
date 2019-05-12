@@ -7140,7 +7140,7 @@ public class PhoneController extends WebBaseControll {
 		LivePO live=conn_live.get(liveId);
 		live.setGiveLike(live.getGiveLike()+1);
 		conn_live.saveOrUpdate(live);
-		return success();
+		return success(live);
 	}
 	
 	/**
