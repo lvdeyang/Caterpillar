@@ -3009,6 +3009,8 @@ public class PhoneController extends WebBaseControll {
 						    }
 							orderInfoVO.setProductPrice(
 									new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+						}else{
+							continue;
 						}
 						
 					}
