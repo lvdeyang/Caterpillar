@@ -1,0 +1,113 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+
+        /* 页面紧凑 */
+        #driver .box-header{position:relative; z-index:2;}
+
+        /* 面包屑 */
+        #driver .content-header{float:left; padding:0 10px;}
+        #driver .breadcrumb{position:static; top:0; padding:0;}
+        #driver .breadcrumb a{color:#333; cursor:pointer;}
+        #driver .breadcrumb a:hover{color:#00acd6;}
+
+        /* 隐藏展示切换 */
+        #driver .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #driver-table th, #driver-table td{vertical-align:middle;}
+        #driver-table th.center, #driver-table td.center{text-align:center;}
+        #driver-table th.left, #driver-table td.left{text-align:left;}
+        #driver-table th.right, #driver-table td.right{text-align:right;}
+        /* 文字颜色 */
+        #driver-table td a{color:#333; cursor:pointer;}
+        #driver-table td a:hover{color:#00acd6;}
+
+        #driver-table .operation a{font-size:18px; margin-right:10px;}
+        #driver-table .operation a.last{margin-right:0;}
+
+    </style>
+
+    <section id="driver" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <div>
+                            <button type="button" class="button-add btn btn-info margin"><i class="fa fa-folder-o" /> 添加司机</button>
+                            <button type="button" class="button-remove btn btn-warning margin" disabled><i class="fa fa-trash-o" /> 删除司机</button>
+                        </div>
+                        <!-- <div class="content-header">
+                            <ol class="breadcrumb">
+                                <li><a class="scenerys-show"><i class="fa fa-list-ul"></i> 景点列表</a></li>
+                                <li class="active">${scenery}</li>
+                            </ol>
+                        </div> -->
+                    </div>
+                    <div class="box-body">
+
+                        <table id="driver-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:20px;">
+                                        <input type="checkbox" name="driver" class="flat-red checkall" />
+                                    </th>
+                                    <th class="center">司机姓名</th>
+                                    <th class="center">手机号</th>
+                                    <th class="center">车辆</th>
+                                    <th class="center">车队</th>
+                                    <th class="center">出发路线</th>
+                                    <th class="center">返回路线</th>
+                                    <th class="center" style="width:200px;">修改日期</th>
+                                    <th style="width:80px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {@if drivers && drivers.length>0}
+                                {@each drivers as driver}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="driver" class="flat-red" value="${driver.id}"/>
+                                        </td>
+                                        <td>
+                                            ${driver.name}
+                                        </td>
+                                        <td>
+                                            ${driver.mobile}
+                                        </td>
+                                        <td>
+                                            ${driver.carType}<input class="driver-car" type="hidden" value="${driver.carId}" />
+                                        </td>
+                                        <td>
+                                            ${driver.fleetName}<input class="driver-fleet" type="hidden" value="${driver.fleetId}" />
+                                        </td>
+                                        <td>
+                                            ${driver.route}<input class="driver-route" type="hidden" value="${driver.routeId}" />
+                                        </td>
+                                        <td>
+                                            ${driver.revert}<input class="driver-revert" type="hidden" value="${driver.revertId}" />
+                                        </td>
+                                        <td class="center">
+                                            ${driver.updateTime}
+                                        </td>
+                                        <td class="operation center">
+                                            <a class="edit" data-toggle="tooltip" data-placement="bottom" title="编辑司机"><i class="fa fa-edit"></i></a>
+                                            <a class="key" data-toggle="tooltip" data-placement="bottom" title="重置密码"><i class="fa fa-key"></i></a>
+                                            <a class="last remove" data-toggle="tooltip" data-placement="bottom" title="删除司机"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                {@/each}
+                            {@/if}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

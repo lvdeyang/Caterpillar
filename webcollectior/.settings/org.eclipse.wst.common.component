@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="guolaiwan-app-web Maven Webapp">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/target/m2e-jee/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <dependent-module archiveName="guolaiwan-app-business-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/guolaiwan-app-business/guolaiwan-app-business">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="caterpillar-mvc-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/caterpillar-mvc/caterpillar-mvc">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="caterpillar-commons-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/caterpillar-commons/caterpillar-commons">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="caterpillar-orm-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/caterpillar-orm/caterpillar-orm">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="caterpillar-cache-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/caterpillar-cache/caterpillar-cache">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="caterpillar-weixin-api-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/caterpillar-weixin-api/caterpillar-weixin-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="caterpillar-communication-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/caterpillar-communication/caterpillar-communication">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/guolaiwan-app-web Maven Webapp/target/classes"/>
+        <property name="context-root" value="guolaiwan-app-web"/>
+    </wb-module>
+</project-modules>

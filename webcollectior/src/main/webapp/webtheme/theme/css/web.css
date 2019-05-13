@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+.feilei{width: 200px;background-color: #fff;border-radius: 2px;box-shadow: none;border: 1px solid #dddddd;}
+.feilei-title{padding: 0 80px 0 18px;height: 42px;line-height: 42px;border-bottom: 1px solid #dddddd;font-size: 14px;color: #333;white-space: nowrap;}
+.fenlei-context{padding: 5px 0;position: relative;overflow: auto;white-space: nowrap;}
+.fenlei-wrap{-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-padding-start: 20px;}
+.fenlei-wrap  li{line-height: 28px;display: list-item;}
+.fenlei-wrap li a{color: #666;text-decoration: none;font-size:10px;display: block;}
+.fenlei-wrap li a:hover{color:#ea4949;}
+.fenlei-wrap li a cite{font-style: normal;height: 24px;}
+.select:hover{color:#ea4949;}
+.selected{color:#ea4949;}
+.selectAll {margin-bottom: 5px;}
+.selectOther {margin-top: 5px;}

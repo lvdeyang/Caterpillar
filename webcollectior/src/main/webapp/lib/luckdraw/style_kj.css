@@ -1,0 +1,77 @@
+@import url("total.css"); 
+body {
+margin:0;
+border:0;
+padding:0;
+height:100%; 
+max-height:100%; 
+background:#fff; 
+font-family:arial, verdana, sans-serif; 
+font-size:12px;
+overflow: hidden; 
+}
+a{ text-decoration:none}
+*{ margin:0; padding:0;}
+* html body {
+padding:30px 0 -1px 0; 
+}
+
+#container {
+position:fixed; 
+top:30px;
+left:0;
+bottom:41px; 
+right:0; 
+overflow:auto; 
+background:#fff;
+
+text-align:center;
+}
+* html #container {
+height:100%; 
+width:100%; 
+}
+
+#header {
+position:absolute; 
+top:0; 
+left:0; 
+width:100%;
+overflow:auto; 
+}
+* html #header {height:120px;}
+#footer {
+position:absolute; 
+bottom:-1px; 
+left:0;
+width:100%; 
+height:41px; 
+overflow:auto; 
+text-align:right; 
+}
+* html #footer {height:40px;}
+#left { float:left;width:19.1%;background-color: #e0ced6; height:100%;}
+#right {float:right;width:80.9%;background-color: #ffcc00;height:100%}
+
+.kj_top{ background:url(images/kl_top.gif) repeat-x; height:30px; line-height:30px;}
+.kj_top div p.left{ float:left; height:30px; line-height:30px;}
+.kj_top div p.left a{ color:#666; margin-right:5px}
+.kj_top div p.left a:hover{ color:#000; text-decoration:none}
+.kj_top div p.right{ float:right; margin-top:5px;}
+.kj_top div p.right a{ color:#000; margin-right:10px;}
+
+.kj_bottom{ background:url(images/kj_bottom.gif) repeat-x; height:41px; }
+.kj_bottom div p.left{ float:left; height:41px; line-height:41px;}
+.kj_bottom div p.cut{ width:530px; overflow:hidden}
+.kj_bottom div p.left span,.kj_bottom div p.left a{ float:left; margin-right:10px}
+.kj_bottom div p.left a{ color:#666666}
+.kj_bottom div p.left span{ margin: 0 2px 0 8px; color:#02558e}
+.kj_bottom div p.left a.down{ display:block; background:url(images/gif-0160.gif) no-repeat right 14px;  padding-right:20px}
+.kj_bottom div p.left a.sn{ background:url(images/sina_w.gif) no-repeat left 11px; padding-left:20px; margin-right:10px}
+.kj_bottom div p.left a.tx{background:url(images/QQ_w.gif) no-repeat left 11px; padding-left:20px; margin-right:10px}
+.kj_bottom div p.left a.qq{background:url(images/qzone_w.gif) no-repeat left 11px; padding-left:20px; margin-right:10px}
+.kj_bottom div p.right{ float:right;height:41px;; line-height:41px;}
+.kj_bottom div p.right a{ color:#333; margin-left:5px;display:block; float:left; text-align:center; background:url(images/kj_btn.gif) no-repeat; width:63px; height:26px; line-height:26px; margin-top:8px}
+.kj_top div #chinaz_topbar .userbar{ margin-top:5px;+margin-top:6px;_margin-top:5px}
+.kj_top div #chinaz_topbar{ margin-right:10px}
+

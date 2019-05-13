@@ -1,0 +1,108 @@
+<section data-type="text/component">
+
+    <!-- 组件样式 -->
+    <style type="text/css">
+
+        /* 页面紧凑 */
+        #route .box-header{position:relative; z-index:2;}
+
+        /* 面包屑 */
+        #route .content-header{float:left; padding:0 10px;}
+        #route .breadcrumb{position:static; top:0; padding:0;}
+        #route .breadcrumb a{color:#333; cursor:pointer;}
+        #route .breadcrumb a:hover{color:#00acd6;}
+
+        /* 隐藏展示切换 */
+        #route .hidden{display:none;}
+
+        /* 搜索框样式覆盖 */
+        .dataTables_filter input.form-control{border-radius:20px;}
+        .dataTables_length select{border-radius:20px; position:relative; bottom:2px; line-height:1em; padding-bottom:5px;}
+        /* 单元格居中 */
+        #route-table th, #route-table td{vertical-align:middle;}
+        #route-table th.center, #route-table td.center{text-align:center;}
+        #route-table th.left, #route-table td.left{text-align:left;}
+        #route-table th.right, #route-table td.right{text-align:right;}
+        /* 文字颜色 */
+        #route-table td a{color:#333; cursor:pointer;}
+        #route-table td a:hover{color:#00acd6;}
+
+        #route-table .operation a{font-size:18px; margin-right:10px;}
+        #route-table .operation a.last{margin-right:0;}
+
+    </style>
+
+    <section id="route" class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <div>
+                            <button type="button" class="button-add btn btn-info margin"><i class="fa fa-folder-o" /> 添加路线</button>
+                            <button type="button" class="button-remove btn btn-warning margin" disabled><i class="fa fa-trash-o" /> 删除路线</button>
+                        </div>
+                        <!-- <div class="content-header">
+                            <ol class="breadcrumb">
+                                <li><a class="scenerys-show"><i class="fa fa-list-ul"></i> 景点列表</a></li>
+                                <li class="active">${scenery}</li>
+                            </ol>
+                        </div> -->
+                    </div>
+                    <div class="box-body">
+
+                        <table id="route-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:20px;">
+                                        <input type="checkbox" name="route" class="flat-red checkall" />
+                                    </th>
+                                    <th class="center">始发站</th>
+                                    <th class="center">终点站</th>
+                                    <th class="center">拼车价格（元）</th>
+                                    <th class="center">包车价格（元）</th>
+                                    <th class="center">车队</th>
+                                    <th class="center" style="width:200px;">修改日期</th>
+                                    <th style="width:80px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {@if routes && routes.length>0}
+                                {@each routes as route}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="route" class="flat-red" value="${route.id}"/>
+                                        </td>
+                                        <td>
+                                            ${route.departureName}<input class="route-departure" type="hidden" value="${route.departureId}" />
+                                        </td>
+                                        <td>
+                                            ${route.destinationName}<input class="route-destination" type="hidden" value="${route.destinationId}" />
+                                        </td>
+                                        <td>
+                                        	${route.carpoolPrice}
+                                        </td>
+                                        <td>
+                                        	${route.charterPrice}
+                                        </td>
+                                        <td>
+                                        	${route.fleetName}<input class="route-fleet" type="hidden" value="${route.fleetId}" />
+                                        </td>
+                                        <td class="center">
+                                            ${route.updateTime}
+                                        </td>
+                                        <td class="operation center">
+                                            <a class="edit" data-toggle="tooltip" data-placement="bottom" title="编辑路线"><i class="fa fa-edit"></i></a>
+                                            <a class="last remove" data-toggle="tooltip" data-placement="bottom" title="删除路线"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                {@/each}
+                            {@/if}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
