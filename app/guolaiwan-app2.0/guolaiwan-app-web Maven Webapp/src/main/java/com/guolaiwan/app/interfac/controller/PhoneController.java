@@ -6008,53 +6008,82 @@ public class PhoneController extends WebBaseControll {
 	 * @param 景区中所有景点和路线点集合childProductPOList
 	 * @return 路线规划结果集resultList
 	 */
-	public List<ChildProductPO> planRoad(String currentLon, String currentLat, ChildProductPO childProductPO,
+	public List<List<ChildProductPO>> planRoad(ChildProductPO childProductPO,
 			List<ChildProductPO> childProductPOList, List<ChildProductPO> resultList,
-			Map<Double, List<ChildProductPO>> map) {
+			List<List<ChildProductPO>> resultBundle) {
 		// 当第一次调用方法时,结果集还未创建
 		// 当递归调用方式时,结果集已存在,要保证结果集不变
+		if (resultBundle == null) {
+			resultBundle = new ArrayList<List<ChildProductPO>>();
+
+		}
 		if (resultList == null) {
 			resultList = new ArrayList<ChildProductPO>(10);
-		}
 
-		System.out.println("原始长度" + childProductPOList.size());
+		}
 		// 如果景点和路线点集合:childProductPOList第一个元素就是终点:childProductPO
-		if (childProductPOList.get(0).getId() == childProductPO.getId()) {
-			resultList.add(childProductPO);
-			return resultList;
-			// childProductPOList第一个元素不是终点
-		} else {
-			// 获取距离当前点距离最近点的下标leastDistanceIndex
-			double leastDistance = getDis(Double.parseDouble(currentLat), Double.parseDouble(currentLon),
-					Double.parseDouble(childProductPOList.get(0).getChildLatitude()),
-					Double.parseDouble(childProductPOList.get(0).getChildLongitude()));
-			int leastDistanceIndex = 0;
-			for (int i = 1; i < childProductPOList.size(); i++) {
-				double distance = getDis(Double.parseDouble(currentLat), Double.parseDouble(currentLon),
-						Double.parseDouble(childProductPOList.get(i).getChildLatitude()),
-						Double.parseDouble(childProductPOList.get(i).getChildLongitude()));
-				System.out.println("距离---" + childProductPOList.get(i).getChildName() + "---" + distance);
-				if (distance < leastDistance) {
-					leastDistance = distance;
-					leastDistanceIndex = i;
+
+		// Mr
+		String linkpoint = childProductPO.getLinkedPoint();
+		String[] linkPoints = linkpoint.split(",");
+		int count = 0;
+		for (String childId : linkPoints) {
+			ChildProductPO linkChild = conn_childProduct.get(Long.parseLong(childId));
+			boolean has = false;
+			for (ChildProductPO hasChild : resultList) {
+				if (linkChild.getId().equals(hasChild.getId())) {
+					has = true;
+					break;
 				}
 			}
-			// 将距离当前点最近的点加入到结果集中
-			ChildProductPO leastDistancePO = childProductPOList.get(leastDistanceIndex);
-			System.out.println("最近点" + leastDistancePO.getChildName());
-			resultList.add(leastDistancePO);
-			// 将距离当前点最近的点在childProductPO中删除,防止重复遍历造成死循环
-			childProductPOList.remove(leastDistanceIndex);
-			// 如果离当前点最近的点就是目标点则返回结果集
-			if (leastDistancePO.getId() == childProductPO.getId()) {
-				return resultList;
-			} else {
-				// 如果离当前点最近的点不是目标点则递归调用此方法直到最近点是目标点
-				planRoad(leastDistancePO.getChildLongitude(), leastDistancePO.getChildLatitude(), childProductPO,
-						childProductPOList, resultList, map);
+			if (!has) {
+				resultList.add(linkChild);
+				if(linkChild.getId().equals(childProductPO.getId())){
+					resultBundle.add(resultList);
+					continue;
+				}
+				if (count == 0) {
+					planRoad(childProductPO, childProductPOList, resultList, resultBundle);
+				} else {
+
+					List<ChildProductPO> newReusltList = new ArrayList<ChildProductPO>();
+					newReusltList.addAll(resultList);
+					System.out.println("generate new:" + newReusltList.size());
+					// resultBundle.add(newReusltList);
+					planRoad(childProductPO, childProductPOList, newReusltList, resultBundle);
+				}
+
+			}
+			count++;
+		}
+			
+		
+		// Mr
+	    return resultBundle;
+
+	}
+	
+	
+	List<ChildProductPO> getshortest(List<List<ChildProductPO>> result){
+		double tempDis=0;
+		List<ChildProductPO> resultChild=null;
+		for (List<ChildProductPO> list : result) {
+			double curdis=0;
+			for(int i=0;i<list.size()-1;i++){
+				curdis+=getDis(Double.parseDouble(list.get(i).getChildLatitude()),Double.parseDouble(list.get(i).getChildLongitude()),
+						Double.parseDouble(list.get(i+1).getChildLatitude()),Double.parseDouble(list.get(i+1).getChildLongitude()));
+			}
+			if(tempDis==0){
+				tempDis=curdis;
+				resultChild=list;
+			}else{
+				if(tempDis>curdis){
+					tempDis=curdis;
+					resultChild=list;
+				}
 			}
 		}
-		return resultList;
+		return resultChild;
 	}
 
 	/**
@@ -6066,6 +6095,7 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getRoad", method = RequestMethod.POST)
 	public Map<String, Object> getDijkstra(HttpServletRequest request) {
+		System.out.println("first mr huang emmmmmmmmmmmmmm get in");
 		// 接 参
 		String requestJson = getRequestJson(request);
 		// 转换为json数据
@@ -6087,10 +6117,14 @@ public class PhoneController extends WebBaseControll {
 		// 通过父id：productId查询所有子景点的信息childProductPOList
 		List<ChildProductPO> childProductPOList = conn_childProduct.getChildByProductId(productID);
 		// 路线规划
-		List<ChildProductPO> roadPlanResult = planRoad(nowLoString, nowLaString, childProduct, childProductPOList, null,
+		List<List<ChildProductPO>> roadPlanResult = planRoad(childProduct, childProductPOList, null,
 				null);
-		return success(roadPlanResult);
+		
+		
+		
+		return success(getshortest(roadPlanResult));
 	}
+
 
 	/**
 	 * Liw 评论删除
