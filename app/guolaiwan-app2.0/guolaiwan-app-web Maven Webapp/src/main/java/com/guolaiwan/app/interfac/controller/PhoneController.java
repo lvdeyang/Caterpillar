@@ -6008,7 +6008,7 @@ public class PhoneController extends WebBaseControll {
 	 * @param 景区中所有景点和路线点集合childProductPOList
 	 * @return 路线规划结果集resultList
 	 */
-	public List<List<ChildProductPO>> planRoad(ChildProductPO childProductPO,
+	public List<List<ChildProductPO>> planRoad(ChildProductPO start,ChildProductPO childProductPO,
 			List<ChildProductPO> childProductPOList, List<ChildProductPO> resultList,
 			List<List<ChildProductPO>> resultBundle) {
 		// 当第一次调用方法时,结果集还未创建
@@ -6019,12 +6019,15 @@ public class PhoneController extends WebBaseControll {
 		}
 		if (resultList == null) {
 			resultList = new ArrayList<ChildProductPO>(10);
-
+			resultList.add(start);
 		}
 		// 如果景点和路线点集合:childProductPOList第一个元素就是终点:childProductPO
-
+		if(start.getId().equals(childProductPO.getId())){
+			resultBundle.add(resultList);
+			return resultBundle;
+		}
 		// Mr
-		String linkpoint = childProductPO.getLinkedPoint();
+		String linkpoint = start.getLinkedPoint();
 		String[] linkPoints = linkpoint.split(",");
 		int count = 0;
 		for (String childId : linkPoints) {
@@ -6043,14 +6046,14 @@ public class PhoneController extends WebBaseControll {
 					continue;
 				}
 				if (count == 0) {
-					planRoad(childProductPO, childProductPOList, resultList, resultBundle);
+					planRoad(linkChild,childProductPO, childProductPOList, resultList, resultBundle);
 				} else {
 
 					List<ChildProductPO> newReusltList = new ArrayList<ChildProductPO>();
 					newReusltList.addAll(resultList);
 					System.out.println("generate new:" + newReusltList.size());
 					// resultBundle.add(newReusltList);
-					planRoad(childProductPO, childProductPOList, newReusltList, resultBundle);
+					planRoad(linkChild,childProductPO, childProductPOList, newReusltList, resultBundle);
 				}
 
 			}
@@ -6110,14 +6113,29 @@ public class PhoneController extends WebBaseControll {
 		String nowLoString = nowLoAndLaStrings[0];
 		// 客户当前位置的纬度
 		String nowLaString = nowLoAndLaStrings[1];
+		
+		
 		// 根据景区内景点id进行查询
 		ChildProductPO childProduct = conn_childProduct.getChildById(Long.parseLong(childIdString)).get(0);
 		// 获取父id
 		long productID = childProduct.getProductID();
 		// 通过父id：productId查询所有子景点的信息childProductPOList
 		List<ChildProductPO> childProductPOList = conn_childProduct.getChildByProductId(productID);
+		double tempDis=0;
+		ChildProductPO start=new ChildProductPO();
+		for (ChildProductPO childProductPO : childProductPOList) {
+			Double dis=getDis(Double.parseDouble(nowLaString), Double.parseDouble(nowLoString), 
+					Double.parseDouble(childProduct.getChildLatitude()), Double.parseDouble(childProduct.getChildLongitude()));
+			if(tempDis==0){
+				tempDis=dis;
+				start=childProductPO;
+			}else if(tempDis<dis){
+				tempDis=dis;
+				start=childProductPO;
+			}
+		}
 		// 路线规划
-		List<List<ChildProductPO>> roadPlanResult = planRoad(childProduct, childProductPOList, null,
+		List<List<ChildProductPO>> roadPlanResult = planRoad(start,childProduct, childProductPOList, null,
 				null);
 		
 		
