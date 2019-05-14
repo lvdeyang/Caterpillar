@@ -6104,15 +6104,16 @@ public class PhoneController extends WebBaseControll {
 		// 转换为json数据
 		JSONObject jsonData = JSON.parseObject(requestJson);
 		// 客户当前位置的经纬度字符串
-		String nowLoAndLa = jsonData.getString("nowLoAndLa");
+		//String nowLoAndLa = jsonData.getString("nowLoAndLa");
+		String startId = jsonData.getString("startId");
 		// 获取当前景点的id
 		String childIdString = jsonData.getString("childId");
 		// 客户当前位置的经纬度数组
-		String[] nowLoAndLaStrings = nowLoAndLa.split(",");
+		//String[] nowLoAndLaStrings = nowLoAndLa.split(",");
 		// 客户当前位置的经度
-		String nowLoString = nowLoAndLaStrings[0];
+		//String nowLoString = nowLoAndLaStrings[0];
 		// 客户当前位置的纬度
-		String nowLaString = nowLoAndLaStrings[1];
+		//String nowLaString = nowLoAndLaStrings[1];
 		
 		
 		// 根据景区内景点id进行查询
@@ -6121,9 +6122,9 @@ public class PhoneController extends WebBaseControll {
 		long productID = childProduct.getProductID();
 		// 通过父id：productId查询所有子景点的信息childProductPOList
 		List<ChildProductPO> childProductPOList = conn_childProduct.getChildByProductId(productID);
-		double tempDis=0;
-		ChildProductPO start=new ChildProductPO();
-		for (ChildProductPO childProductPO : childProductPOList) {
+		//double tempDis=0;
+		ChildProductPO start=conn_childProduct.getChildById(Long.parseLong(startId)).get(0);
+		/*for (ChildProductPO childProductPO : childProductPOList) {
 			Double dis=getDis(Double.parseDouble(nowLaString), Double.parseDouble(nowLoString), 
 					Double.parseDouble(childProduct.getChildLatitude()), Double.parseDouble(childProduct.getChildLongitude()));
 			if(tempDis==0){
@@ -6133,7 +6134,7 @@ public class PhoneController extends WebBaseControll {
 				tempDis=dis;
 				start=childProductPO;
 			}
-		}
+		}*/
 		// 路线规划
 		List<List<ChildProductPO>> roadPlanResult = planRoad(start,childProduct, childProductPOList, null,
 				null);
