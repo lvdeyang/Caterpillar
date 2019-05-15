@@ -24,8 +24,7 @@ public class Notice {
 	private static final Logger logger = LoggerFactory.getLogger(Notice.class);
 
 	
-	@Resource
-	private ApiConfig apiConfig;
+	private ApiConfig apiConfig=new ApiConfig();
 	
 	@ResponseBody
 	@RequestMapping("consume")
