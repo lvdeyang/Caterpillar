@@ -69,6 +69,7 @@ public class ZybPackUtil {
 	 */
 	public static PWBResponse  requestZyb(PWBRequest pwbRequest,String key,String url){
 		String xmlMsg = ObjectToXml(pwbRequest);
+		System.out.println(xmlMsg);
 		String sign = MD5.md5("xmlMsg="+xmlMsg+ key);
 		Map<String, String[]> map = new HashMap<String, String[]>();
 		map.put("xmlMsg", new String[]{xmlMsg});

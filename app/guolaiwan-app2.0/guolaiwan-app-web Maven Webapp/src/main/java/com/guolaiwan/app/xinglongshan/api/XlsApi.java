@@ -53,12 +53,12 @@ public class XlsApi{
 	    order.setPayMethod("vm");//备用金
 	    List<TicketOrder> ticketOrders =new ArrayList<TicketOrder>();
 	    TicketOrder ticketOrder = new TicketOrder();
-	    ticketOrder.setGoodsCode("PTS20190402040638"); 
+	    ticketOrder.setGoodsCode("PST20190402040638"); 
 	    ticketOrder.setGoodsName("单票");
 	    DateFormat dd=new SimpleDateFormat("yyyy-MM-dd");
 	    Date date;
 		try {
-			date = dd.parse("2017-12-14");
+			date = dd.parse("2019-05-24");
 			ticketOrder.setOccDate(date);
 		} catch (ParseException e) {
 			e.printStackTrace();
