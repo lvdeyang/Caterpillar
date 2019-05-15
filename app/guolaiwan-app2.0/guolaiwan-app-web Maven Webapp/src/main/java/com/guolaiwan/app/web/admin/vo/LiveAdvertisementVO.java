@@ -16,9 +16,49 @@ public class LiveAdvertisementVO extends AbstractBaseVO<LiveAdvertisementVO,Live
 	private int sort;
 	//是否启用
 	private int enable;
+	//商品名称
+	private String productName;
+	//商品id
+	private long productId;
+	private String classify;
+	
+	
+	public String getClassify() {
+		return classify;
+	}
 
-	
-	
+
+
+	public void setClassify(String classify) {
+		this.classify = classify;
+	}
+
+
+
+	public String getProductName() {
+		return productName;
+	}
+
+
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+
+
+	public long getProductId() {
+		return productId;
+	}
+
+
+
+	public void setProductId(long productId) {
+		this.productId = productId;
+	}
+
+
+
 	public String getName() {
 		return name;
 	}
@@ -89,6 +129,9 @@ public class LiveAdvertisementVO extends AbstractBaseVO<LiveAdvertisementVO,Live
 		this.setSort(entity.getSort());
 		this.setUpdateTime(entity.getUpdateTime());
 		this.setUuid(entity.getUuid());
+		this.setProductId(entity.getProductId());
+		this.setProductName(entity.getProductName());
+		this.setClassify(entity.getClassify());
 		return this;
 	}
 

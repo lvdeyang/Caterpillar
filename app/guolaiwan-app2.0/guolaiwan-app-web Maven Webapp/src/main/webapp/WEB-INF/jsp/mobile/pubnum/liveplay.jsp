@@ -736,7 +736,7 @@ html, body {
 					number=max;
 				}
 				$('.giftNumber').val(number);
-				$('.Allprice').text((chengjie*number).toFixed(2));
+				$('.Allprice').text('共计：'+(chengjie*number).toFixed(2)+'元');
 				
 			})
 			
@@ -749,7 +749,7 @@ html, body {
 					number=min;
 				}
 				$('.giftNumber').val(number);
-				$('.Allprice').text((chengjie*number).toFixed(2));
+				$('.Allprice').text('共计：'+(chengjie*number).toFixed(2)+'元');
 			})
 			
 			
@@ -771,7 +771,7 @@ html, body {
 						if(data && data.length>0){
 						    var html=[];
 							for(var i=0; i<data.length; i++){
-								html.push('<div style="height:70px;width:100%;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].Id+'" style="height:100%;width:100%;" src="'+data[i].slidepic+'" alt="">');
+								html.push('<div style="height:70px;width:100%;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].productId+'-'+data[i].classify+'" style="height:100%;width:100%;" src="'+data[i].slidepic+'" alt="">');
 								html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].name+'</div></div>');
 							}
 							$('#headerWrapper').append(html.join(''));
@@ -811,7 +811,7 @@ html, body {
 		            // 显示
 		            $('.readyBuy').fadeIn().addClass("show");
 		            $('.chengjie').val((giftPrice/100).toFixed(2));
-		            $('.Allprice').text((giftPrice/100).toFixed(2));
+		            $('.Allprice').text('共计：'+(giftPrice/100).toFixed(2)+'元');
 		            
 		        }
      		      $('.readyBuy').attr('id',giftId);
@@ -830,35 +830,17 @@ html, body {
 		var signType; 
 		var orderNo; 
 		
-		
-		function payPublic(orderId){
-			$.get(window.BASEPATH +"pubnum/prev/pay/"+orderId, null, function(data){
-				prepay_id = data.prepay_id;
-		        paySign = data.paySign;
-		        appId = data.appId;
-		        timeStamp = data.timeStamp;
-		        nonceStr = data.nonceStr;
-		        packageStr = data.packageStr;
-		        signType = data.signType;
-		        orderNo = data.orderNo;
-		        callpay();
-			});
-		}
-		
-		
-		
 		function toPay(){
 		
 			var liveId=${live.id}
 			var giftId=$('.readyBuy').attr('id')
 			var num=$('.giftNumber').val()
 			var userId=${userId};
-			
 			$.get(window.BASEPATH+'pubnum/gift/addOrder/'+liveId+"/"+giftId+"/"+num+"/"+userId, null, function(data){
-				data = parseAjaxResult(data); 
-		         var orderNo = data.id;
+		          orderNo = data.id
 				$('.dingdanhao').val(orderNo);
 		        $.get(window.BASEPATH+'pubnum/gift/pay/'+orderNo+"/"+userId, null, function(data){
+		        	data = parseAjaxResult(data)
 					prepay_id = data.prepay_id;
 			        paySign = data.paySign;
 			        appId = data.appId;
@@ -886,19 +868,18 @@ html, body {
 		           "paySign"   : paySign    //微信签名
 		        },
 		        function(res){
+		            	var orderId=$('.dingdanhao').val();
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		                //每五秒刷新订单状态
-		                
+		                alert("感谢老板的打赏~~");
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") { 
-		            	var orderId=$('.dangdanhao').val();
-		            	$.post(window.BASEPATH+'live/deltipgift.do',{'orderId':orderId},function(){
+		            	$.post(window.BASEPATH+'admin/live/deltipgift.do',{'orderId':orderId},function(){
 		            	}) 
 		                alert("交易取消");  
 		            }  
 		            if (res.err_msg == "get_brand_wcpay_request:fail") {
-		            	var orderId=$('.dangdanhao').val();
-		            	$.post(window.BASEPATH+'live/deltipgift.do',{'orderId':orderId},function(){
+		            	$.post(window.BASEPATH+'admin/live/deltipgift.do',{'orderId':orderId},function(){
 		            	})
 		                alert(res.err_desc); 
 		            }  
@@ -918,7 +899,12 @@ html, body {
 		    }
 		} 
 		
-
+		
+		$(document).on('click','.topmod',function(){
+	       var codes=this.id.split('-');
+	       if(codes[2]==''){return;}
+	       location.href=window.BASEPATH + 'pubnum/merchant/index1?code='+codes[1]+'&classify='+codes[2];
+	    });
 		</script>
 
 <body>

@@ -81,7 +81,7 @@
 			
 				    var html=[];
 				    for(var i=0; i<data.length; i++){
-						html.push('<div >'+data[i].newName+'</div>');
+						html.push('<div >'+data[i].oldName+'</div>');
 						html.push('<div ><video src="'+data[i].webUrl+'" controls="controls" width=100% height="200"></video></div>');
 						html.push('</br>');
 					} 

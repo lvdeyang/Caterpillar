@@ -1,6 +1,7 @@
 package com.guolaiwan.app.web.admin.controller;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,25 +22,35 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.guolaiwan.app.web.admin.vo.ActivityVO;
 import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
 import com.guolaiwan.app.web.admin.vo.LiveRebroadcastVO;
+import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.PictureVO;
+import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.bussiness.admin.dao.ActivityDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveRebroadcastDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
+import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
+import com.guolaiwan.bussiness.admin.po.ActivityPO;
+import com.guolaiwan.bussiness.admin.po.CarouselPO;
 import com.guolaiwan.bussiness.admin.po.LiveAdvertisementPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.LiveRebroadcastPO;
 import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.PicturePO;
+import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 
 import pub.caterpillar.mvc.controller.BaseController;
@@ -61,6 +73,13 @@ public class LiveController extends BaseController {
 	private LiveGiftDAO conn_liveGift;
 	@Autowired
 	private LiveTipGiftDAO conn_liveTipGift;
+	
+	@Autowired
+	private ProductDAO conn_product;
+	@Autowired
+	private MerchantDAO conn_merchant;
+	@Autowired
+	private ActivityDAO conn_activity;
 	// 列表页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(HttpServletRequest request) throws Exception {
@@ -506,6 +525,111 @@ public class LiveController extends BaseController {
 		public Map<String, Object> delTipGift(Long orderId) throws Exception {
 			conn_liveTipGift.delete(orderId);
 			return success();
+		}
+		@ResponseBody
+		@RequestMapping(value = "/checkProduct.do/{carid}/{classify}" , method = RequestMethod.GET)
+		public ModelAndView updateProductName(@PathVariable long carid,@PathVariable String classify , HttpServletRequest request) throws Exception{
+			ModelAndView mav = null;
+			mav = new ModelAndView("admin/live/prolist");
+			request.setAttribute("carid", carid);
+			request.setAttribute("classify", classify);
+			return mav;
+		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/proList.do" , method = RequestMethod.POST)
+		public Map<String, Object> getPros(int page , int limit) throws Exception{
+			Map<String, Object> map = new HashMap<String, Object>();
+			
+			List<ProductPO> polist = conn_product.findByCom(getLoginInfo().getComId(), page, limit);
+			List<ProductVO> volist = ProductVO.getConverter(ProductVO.class).convert(polist, ProductVO.class);
+			map.put("data", volist);
+			map.put("count", conn_product.countByCom(getLoginInfo().getComId()));
+			map.put("code", "0");
+			map.put("msg", "");
+			return map;
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/merList.do" , method = RequestMethod.POST)
+		public Map<String, Object> getMers(int page , int limit) throws Exception{
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<MerchantPO> polist = conn_merchant.findMerByCom(1l, page, limit);
+			List<MerchantVO> volist = MerchantVO.getConverter(MerchantVO.class).convert(polist, MerchantVO.class);
+			map.put("data", volist);
+			map.put("code", "0");
+			map.put("msg", "");
+			return map;
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/actList.do" , method = RequestMethod.POST)
+		public Map<String, Object> getActs(int page , int limit) throws Exception{
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<ActivityPO> polist = conn_activity.findByCom(1l, page, limit);
+			List<ActivityVO> volist = ActivityVO.getConverter(ActivityVO.class).convert(polist, ActivityVO.class);
+			map.put("data", volist);
+			map.put("code", "0");
+			map.put("msg", "");
+			return map;
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/selectPro.do/{id}/{carid}/{cla}" , method = RequestMethod.GET)
+		public String selectPro(@PathVariable long id , @PathVariable long carid, @PathVariable String cla){
+			String name = "";
+			switch (cla) {
+			case "PRODUCT":
+				ProductPO productPO = conn_product.get(id);
+				name = productPO.getProductName();
+				break;
+			case "MERCHANT":
+				MerchantPO merchantPO = conn_merchant.get(id);	
+				name = merchantPO.getShopName();
+				break;
+			case "ACTIVITY":
+				ActivityPO activityPO = conn_activity.get(id);
+				name = activityPO.getName();
+				break;
+			default:
+				break;
+			}
+			LiveAdvertisementPO liveAdvertisementPO = conn_liveAdvertisement.get(carid);
+			liveAdvertisementPO.setProductId(id);
+			liveAdvertisementPO.setProductName(name);
+			conn_liveAdvertisement.saveOrUpdate(liveAdvertisementPO);
+			return "success";
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/mohuSelect.do" , method = RequestMethod.POST , produces = "application/json; charset=utf-8")
+		public Map<String, Object> getMoHu(HttpServletRequest request) throws Exception{
+			Map<String, Object> map = new HashMap<String, Object>();
+			String mohus = request.getParameter("mohus");
+			String page = request.getParameter("page");
+			String limit = request.getParameter("limit");
+			List<ProductPO> polist = conn_product.getMoHu(mohus , Integer.parseInt(page) , Integer.parseInt(limit));
+			List<ProductVO> volist = ProductVO.getConverter(ProductVO.class).convert(polist, ProductVO.class);
+			map.put("data", volist);
+			map.put("code", "0");
+			map.put("msg", "");
+			return map;
+		}
+		
+		//修改广告图类别
+		@ResponseBody
+		@RequestMapping(value="/updateClassify.do",method= RequestMethod.POST)
+		public String updateClassify(HttpServletRequest request) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+			long id = Long.parseLong(request.getParameter("id"));
+			String classify = request.getParameter("classify");
+			System.out.println(classify+"----------------------------");
+			
+			LiveAdvertisementPO liveAdvertisementPO = conn_liveAdvertisement.get(id);
+			liveAdvertisementPO.setClassify(classify);
+			conn_liveAdvertisement.saveOrUpdate(liveAdvertisementPO);
+			
+			return "success";
 		}
 		
 }
