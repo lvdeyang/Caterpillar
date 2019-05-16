@@ -1,0 +1,534 @@
+
+/*!  author: Li Zhen Ya
+ *   login.css
+ *   http://azenui.com/
+/*!  http://y-show.com/   */
+
+.BHeader {background:#ffffff; height:30px;}
+.menu .subnav { top:30px;}
+.login-body   { background:#f2f2f2;}
+.login-header { width:990px; margin:0 auto; padding:20px 0;}
+.containers   { width:990px; margin:0 auto; padding:0;}
+.login-centre { width:990px; margin:0 auto;border-color: #eb4a4a #e0e0e0 #e0e0e0;  border-style: solid;  border-width: 3px 1px 1px;background:#f9f9f9}
+.login-back   { width:988px; height:510px; padding-top:80px;}
+.login-switch { width:985px; line-height:32px;}
+.login-switch ul{padding-left:150px; }
+.login-switch p a { color:#ea4949;}
+.login-switch ul li{ width:224px; height:32px; line-height:32px; float:left; text-align:center; font-size:15px; background:#f7f7f7; border:1px solid #e0e0e0; margin-left:15px;margin-bottom:-1px;}
+.login-switch ul li a{ width:224px; height:32px; line-height:32px;display:block;}
+.login-switch ul .cur{ width:224px; height:33px; line-height:32px; float:left; text-align:center; font-size:15px;  border-top:1px solid #e0e0e0; border-left:1px solid #e0e0e0; border-right:1px solid #e0e0e0; border-bottom:none; margin-left:15px; background:#fff; margin-bottom:-2px;}
+.login-input { margin:0 0 20px; overflow:hidden; }
+.login-input label { width:260px; height:40px; line-height:40px; text-align:right; padding-right:10px; float:left; font-size:15px;}
+.login-input input { width:512px; height:40px; line-height:40px; text-align:left;  padding-left:5px;   float:left; border:1px solid #e0e0e0; font-size:14px; background:#fff}
+.login-input .obtain { width:106px; height:40px; line-height:40px; text-align:center;  padding-left:0;   float:left; border:1px solid #e0e0e0; font-size:12px;  display:block; background:#f7f7f7; margin-left:15px;}
+.login-input input:focus { border:1px solid #ea4949;}
+.login-input .list-input {background:#fff}
+.login-input .list-iphone { background:#fff; width:388px;}
+.login-input .list-notes  { background:#fff; width:132px;}
+.item-ifo { padding-left:270px; padding-top:20px;}
+.login-button {padding-left:270px; padding-top:30px;}
+.login-button a { width:270px; height:45px; line-height:45px; text-align:center; background:#ea4949; border-radius:2px; display:block; color:#ffffff; font-size:16px;}
+.login-button a:hover { width:270px; height:45px; line-height:45px; text-align:center; background:#f25350; border-radius:2px; display:block; color:#ffffff; font-size:16px;}
+
+
+
+li{
+    display: list-item;
+}
+.w{
+    width:1000px;
+    margin:0 auto;
+}
+div{
+    display: block;
+}
+.links{
+    color:#999;
+}
+#logo{
+    position:relative;
+    width:300px;
+    margin:10px 0;
+    height:80px;
+    float:left;
+    border:1px;
+}
+#logo img{
+
+}
+#logo b{
+    display:block;
+    width:110px;
+    height:40px;
+    position:absolute;
+    right:0;
+    top:10px;
+    background:url("../login/l") no-repeat;
+}
+.q_link{
+    margin:53px 0px 1px 1px;
+    width:136px;
+    height:16px;
+
+    line-height: 11px;
+}
+.q_link b{
+    display:block;
+    width:18px;
+    height:14px;
+    background:url("../login/msg.png") no-repeat;
+    margin-right: 5px;
+}
+/*主题内容部分，清除浮动*/
+#content{
+    clear:both;
+}
+.login-wrap{
+    position:relative;
+    height:520px;
+    margin:10px 0 20px;
+    z-index:5;
+}
+.login-wrap .login-banner{
+    position:absolute;
+    left:0;top:0;
+    width:100%;
+    height:520px;
+    background:#e93854;
+}
+.login-wrap .i-inner{
+    position:relative;
+    z-index:3;
+    height:520px;
+}
+.login-wrap .login-form{
+    float:right;
+    top:60px;
+}
+.login-form{
+    position:relative;
+    z-index:4;
+    background-color:rgba(255, 255, 255, 0.9);
+    overflow:visible;
+    width:346px;
+}
+.login-form .login-tab{
+    height:54px;
+    font-size:16px;
+    text-align:center;
+    border-bottom:1px solid #fff8f8;
+    position:absolute;
+
+    display:block;
+}
+.login-form .login-tab a{
+    width:99%;
+    height:54px;
+    line-height:54px;
+    position:absolute;
+    left:0;
+    top:0;
+    border-right:1px solid #fff4f4;
+    text-decoration:none;
+}
+.login-form .login-tab a:focus{
+    outline:0!important;
+    -moz-outline:0!important;
+}
+.login-form .login-tab a.checked,.login-form .login-tab a:hover{
+
+    color:#ea4949;
+}
+.login-form .login-tab-l,.login-form .login-tab-r{
+    width:173px;
+}
+.login-form .login-tab-r{right:0;}
+.login-form .login-tab-link{display:inline-block;}
+/*login-box开始（账户登录）*/
+.login-form .login-box{
+    width:306px;
+    padding:20px;
+    display: block;
+    visibility: visible;
+}
+.login-form .login-box .mt{
+    display:inline-block;
+    display:block;width:306px;
+    overflow:visible;height:27px;
+}
+/*不清楚什么鬼*/
+.login-form .login-box .mt:after{
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+/*提示信息开始*/
+.login-form .msg-wrap{
+    min-height:23px;
+    margin-top:5px;
+    margin-bottom:5px;
+    height:auto!important;
+}
+.login-form .msg-warn{
+    position:relative;
+    background:#fef4e5;
+    color:#666;
+    border:1px solid #f6c090;
+    padding:3px 10px 3px 40px;
+    line-height:15px;
+    height:auto;
+}
+.login-form .msg-warn b{
+    position:absolute;
+    top:50%;
+    left:10px;
+    display:block;
+    margin-top:-8px;
+    width:16px;
+    height:17px;
+    overflow:hidden;
+    background:url("../login/login-icons.png") -104px -24px no-repeat;
+}
+* html .login-form .login-box .mt{height:1%}*+html .login-form .login-box .mt{min-height:1%}
+/*输入框开始*/
+.form .item-fore1,.form .item-fore2{
+    border:1px solid #bdbdbd;
+    height:38px;
+    width:304px;
+}
+.form .item{
+    position:relative;
+    margin-bottom:20px;
+    z-index:1;
+}
+.form .item .placeholder{
+    position:absolute;
+    left:50px;
+    top:10px;
+    line-height:18px;
+    color:#999;
+    font-size:14px;
+    -webkit-transition:all .2s ease-out;
+    -moz-transition:all .2s ease-out;
+    transition:all .2s ease-out;
+    opacity:1;
+}
+.form .item .login-label{
+    position:absolute;
+    z-index:3;
+    top:0;
+    left:0;
+    width:38px;
+    height:38px;
+    border-right:1px solid #bdbdbd;
+    background:url("../login/login-icons.png") no-repeat;
+}
+.form .item .name-label{background-position:0 0}
+.form .item .pwd-label{background-position:-48px 0}
+
+.form .itxt{
+    line-height:18px;
+    height:18px;
+    border:0;
+    padding:10px 0 10px 50px;
+    width:254px;
+    float:none;
+    overflow:hidden;
+    font-size:14px;
+    font-family:'\5b8b\4f53';
+    *margin:-1px 0 0;
+}
+/*图形验证码*/
+.form .itxt02{
+    padding:10px 5px;
+    width:150px;
+    text-align:center；
+}
+.form .verify-code{/*验证码*/
+    cursor:pointer;
+    width:90px;
+    height:33px;
+    vertical-align:middle；
+}
+.form .item-vcode .placeholder{left:25px}
+.form .item-vcode .itxt02,.form .item-vcode .verify-code{float:left}
+.form .item-vcode a{
+    display:inline-block;
+    width:38px;
+    float:right；
+}
+.form .item-vcode:after{
+    display:block;
+    content:"clear";
+    height:0;
+    clear:both;
+    overflow:hidden;
+    visibility:hidden;
+}
+.form #o-authcode.item{border:0}
+.form #o-authcode.item .itxt{
+    border:1px solid #bdbdbd;
+    font-size:14px;
+    padding:7px 5px;
+    vertical-align:middle;
+    margin-right:10px;
+}
+/*自动登录*/
+.form .item-fore4{
+    *float:left;
+    *margin-top:15px;
+}
+.login-form .login-box .safe{
+    position:relative
+;color:#666;
+    *float:left;
+    *width:305px;
+}
+.login-form .login-box .safe span{
+    margin-right:15px;
+    *float:left;
+}
+.login-form .login-box .safe .forget-pw-safe{
+    position:absolute;
+    *float:right;
+    *position:static;
+    right:0;
+    top:0;
+    margin:0;
+}
+/*登录按钮*/
+.form .item-fore5{margin-bottom:10px}
+.login-form .login-box .login-btn{
+
+    margin:0 auto;
+    height:32px;
+    width:99%;
+    position:relative;
+}
+.login-form .login-box .login-btn .btn-img{
+    display:block;
+    width:302px;
+    background:#ea4949;
+    border-radius:3px;
+    height:45px;
+    line-height:45px;
+    color:#fff;
+    font-size:16px;
+    font-weight:normal;
+}
+.login-form .login-box .login-btn .btn-img:hover{text-decoration:none;}
+.btn-img,.button{
+    display:inline-block;
+    margin:0;
+    padding:0;
+    border:0;
+    text-align:center;
+    cursor:pointer;
+}
+/*二维码登陆开始 （扫码登录）开始*/
+.login-form .qrcode-login{
+    display:none;
+    visibility:hidden;
+    width:306px;
+    padding:20px 18px 20px 20px;
+    text-align:center;
+}
+.login-form .qrcode-login .qrcode-error-2016{      /*这部分功能不清楚*/
+    display:none;
+    font-size:14px;
+    color:#fbfbfb;
+    margin-top:65px;
+    position:relative;
+    z-index:1;
+}
+.login-form .qrcode-login .qrcode-error-2016 .qrcode-error-mask{
+    display:block;
+    position:absolute;
+    width:170px;
+    background:#000;
+    filter:alpha(opacity=60);
+    -moz-opacity:.6;
+    opacity:.6;
+    height:163px;
+    left:66px;
+    z-index:9;
+    top:0;
+    text-align:center;
+    line-height:100px;
+}
+
+.login-form .qrcode-login .mc{overflow:visible}
+.login-form .qrcode-login .qrcode-main{
+    position:relative;
+    height:168px;
+    margin-top:55px;
+}
+.login-form .qrcode-login .qrcode-img{
+    border:1px solid #666;
+    padding:8px;
+    width:155px;
+    position:absolute;
+    left:64px;
+
+}
+.login-form .qrcode-login .qrcode-img img{
+    width:147px;
+    height:147px;
+}
+.login-form .qrcode-login .qrcode-help{
+    position:absolute;
+    right:-18px;
+    top:-2px;
+    width:141px;
+    height:168px;
+    background:url("../login/phone-orange.png") no-repeat;z-index:99;
+}
+/*扫码登录底部文字*/
+.login-form .qrcode-login .qrcode-panel{
+    width:257px;
+    margin:18px auto 14px;
+    text-align:center;
+}
+.login-form .qrcode-login .qrcode-panel ul{
+    display:inline-block;
+    display:block;
+}
+.login-form .qrcode-login .qrcode-panel ul:after{
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.login-form .qrcode-login .qrcode-panel li{
+    display:inline-block;
+    *display:inline;
+    padding:0 0 0 5px;
+    margin:0 5px 0 0;
+}
+.login-form .qrcode-login .qrcode-panel .red{color:#e4393c}
+
+.qr-coagent{
+    background-color:#fff;
+    font-family:"microsoft yahei";
+    color:#999;
+    border:none;
+    padding:0;
+    line-height:25px;
+    margin-left:40px;
+
+}
+.qr-coagent li{
+    text-align:left;
+    position:relative;
+    margin-right:18px;
+}
+.qr-coagent li b{
+    width:25px;
+    height:25px;
+    display:block;
+    background:url("../login/qr-coagent.png") no-repeat;
+    margin:0 auto;
+    position:absolute;
+    left:0;
+}
+.qr-coagent li .faster{background-position:-27px}
+.qr-coagent li .more-safe{background-position:-54px}
+.qr-coagent li em{
+    padding-left:32px;
+    *display:inline-block;
+    _display:inline;
+}
+.qrcode-login .coagent{
+    padding:0px;
+    line-height: 25px;
+
+}
+/*登录框底部开始qq微信*/
+.login-form .qlogin-main .coagent{
+    margin-top:20px;
+}
+
+.coagent{
+    padding-left:20px;
+    padding-right:20px;
+    line-height:50px;
+
+    height:auto;
+
+}
+.coagent ul{
+    display:inline-block;
+    display:block;
+}
+.coagent ul:after{
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.coagent li{float:left}
+.coagent li .line{
+    color:#ccc;
+    padding:0 10px;
+}
+.coagent li a.pdl{
+    display:inline-block;
+    position:relative;
+    padding-left:24px;
+}
+.coagent li a.pdl b{
+    width:19px;
+    height:18px;
+    display:block;
+    background:url("../login/QQ-weixin.png") no-repeat;
+    margin:0 auto;
+    position:absolute;
+    float:left;
+    left:0;
+    top:16px;
+}
+.coagent li a.pdl b.weixin-icon{background-position:-20px 0}
+.coagent li.extra-r{float:right}
+.coagent .regist-link{color:#ea4949;font-size:14px}
+.coagent .regist-link a{color:#ea4949}
+.coagent .regist-link b{
+    display:inline-block;
+    *display:inline;
+    *zoom:1;
+    width:22px;
+    height:22px;
+    overflow:hidden;
+    background:url("../login/login-icons.png") -97px -73px no-repeat;
+    vertical-align:middle;
+    margin-right:5px;
+}
+/*页面底部布局*/
+#footer-2013 .links a,#footer-2013 .links span{
+    margin:0 10px
+}
+#footer-2013 .links span a{margin:0}
+
+/* 清理浮动 */
+.fn-clear{
+    visibility:hidden;
+    display:block;
+    font-size:0;
+    content:" ";
+    clear:both;
+    height:0;
+    zoom:1; /* for IE6 IE7 */
+}
+
+
+/* 隐藏, 通常用来与 JS 配合 */
+body .hide {
+    display:none;
+}
+
+/* 设置内联, 减少浮动带来的bug */
+.fl{float:left;display:inline;}
+.fr{float:right;display:inline;}

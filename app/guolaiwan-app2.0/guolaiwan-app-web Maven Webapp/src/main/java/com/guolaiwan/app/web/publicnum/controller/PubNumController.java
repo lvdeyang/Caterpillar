@@ -323,6 +323,7 @@ public class PubNumController extends WebBaseControll {
 		if (activityproId!=null&&activityproId!=""&&activityproId.length()!=0&&!activityproId.equals("0")) {
 			mv = new ModelAndView("mobile/pubnum/activityproduct");
 			mv.addObject("actId",activityproId);
+			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("id",id);
 		}else {
 			mv = new ModelAndView("mobile/pubnum/product");

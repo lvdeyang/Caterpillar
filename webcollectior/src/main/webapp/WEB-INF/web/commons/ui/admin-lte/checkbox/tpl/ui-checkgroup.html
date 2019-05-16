@@ -1,0 +1,39 @@
+<div class="modal checkgroup sx" id="${now}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <style type="text/css">
+        .checkgroup .checkgroup-action{text-align:left;}
+        .checkgroup .modal-header h4{margin:0;}
+        .checkgroup .modal-body{padding:10px; overflow:auto;}
+        .checkgroup .checkgroup-column{float:left; margin-right:20px;}
+        .modal-backdrop.in{display:none;}
+        .checkgroup.modal.sx{background:rgba(0,0,0,.6);}
+    </style>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 style="margin:0;">${title}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="checkgroup-action">
+                    <button class="btn btn-link btn-xs checkgroup-action-checkall">全选</button>&nbsp;/&nbsp;
+                    <button class="btn btn-link btn-xs checkgroup-action-reverse">反选</button>&nbsp;/&nbsp;
+                    <button class="btn btn-link btn-xs checkgroup-action-revoke">撤销</button>
+                </div>
+                {@each rangeList as range}
+                <div class="checkgroup-column">
+                    {@each i in range(range[0], range[1])}
+                    <div class="checkbox checkgroup-checkbox" style="display:block;">
+                        <label>
+                            <input type="checkbox" data-index="${i}" > {@if data[i].name}${data[i].name}{@else}${data[i].value}{@/if}
+                        </label>
+                    </div>
+                    {@/each}
+                </div>
+                {@/each}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary checkgroup-set" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
