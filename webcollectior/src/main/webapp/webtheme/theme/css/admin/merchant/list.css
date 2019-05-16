@@ -1,9 +1,0 @@
-@CHARSET "UTF-8";
-.wrap {margin-bottom:10px;position:relative;}
-.noticeb {width:10px;height:10px;line-height:20px;font-size:10px;color:#666;text-align:center;background-color:#fff;;position:relative;top:-10px;padding:0px 2px;}
-.noticed {width:10px;height:10px;line-height:20px;font-size:5px;color:#fff;text-align:center;background-color:steelblue;position:relative;top:-10px;padding:0px 2px;}
-.noticer {width:10px;height:10px;line-height:20px;font-size:5px;color:#fff;text-align:center;background-color:#F581B1;position:relative;top:-10px;padding:0px 2px;}
-.maxw3 {max-width:300px;}
-.color1 {color: #F581B1;}
-.color2 {color: #01AAED;}
-.tdn {text-decoration:none;}
