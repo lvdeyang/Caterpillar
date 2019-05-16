@@ -1,8 +1,0 @@
-/* reset */
-html, body{width:100%; min-height:100%}
-a{cursor:pointer!important;}
-
-/* AdminLTE ÑùÊ½¸²¸Ç */
-.skin-yellow-light .sidebar-menu>li.treeview.active>a{background:#f9fafc;}
-.skin-yellow-light .sidebar-menu>li>.treeview-menu{background:#f9fafc;}
-.skin-yellow-light .sidebar-menu>li>.treeview-menu>li.active{background:#f4f4f5;}
