@@ -202,6 +202,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						{type:"checkbox"}
    						,{field:"name",title:"名称",edit:"text"}
    						,{field:"type",title:"类型",width:160}
+   						,{field:"fixedPrice",title:"固定价格（元）",width:160,edit:"text"}
    						,{field:"content",title:"活动内容",event:"setContent", style:'cursor: pointer;',width:160}
    						,{title:"活动图片",templet:"#actImg",width:100}
    						,{field:"activityRule",title:"活动规则",edit:"text"}
