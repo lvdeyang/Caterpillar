@@ -156,7 +156,9 @@ String imgPath = request.getScheme()+"://"+request.getServerName()+":"+request.g
                 ,{field: 'id',title: '广告图ID',sort: true,width:100}
                 ,{field: 'name' ,title: '广告图名称',sort: true,edit:'text'}  
                 ,{title: '广告图照片',templet:"#picTpl",width:100}   
-                ,{field: 'sort' ,title: '排序',sort: true,edit:'text',width:80}  
+                ,{field: 'sort' ,title: '排序',sort: true,edit:'text',width:80} 
+                ,{title: '关联商品' ,templet:"#productName"} 
+                ,{field: 'classify' ,title: '类型',sort: true,width:180,templet:'#classifyTpl'}
                 ,{title: '是否显示',templet:"#switchTpl",width:100}
                 ,{title: '操作',sort: true,templet:'#zsgcTpl'}
               ]]
@@ -167,6 +169,12 @@ String imgPath = request.getScheme()+"://"+request.getServerName()+":"+request.g
               })
             }
             
+             function prodcutName(title, url,id,classify, w, h) {
+            	if(classify=='null'&&classify==null){
+            		layer.msg("请选择类型",{icon:2,time:3000});
+            	}else{
+            		x_admin_show(title, url+'/'+id+'/'+classify, w, h);}
+			}
             
             
            function addadvertisement(){
@@ -209,8 +217,44 @@ String imgPath = request.getScheme()+"://"+request.getServerName()+":"+request.g
 		
     }
     
+    function editCity(id){
+    	var cnSpan = "#cnSpan"+id;
+    	var citySpan = "#citySpan"+id;
+    	console.log("1");
+    	$(cnSpan).hide();
+    	$(citySpan).show();    
     
+    } 
     
+     //改变轮播图类别
+    function  changeClassify(obj,id){
+    	var value = $(obj).find("option:selected").val();
+    	if(value=="-1"){
+    		return false;
+    	}
+    	layer.load(2); 
+    	var text = $(obj).find("option:selected").text();	
+    	$.ajax({
+    		type:'post',
+    		url:'updateClassify.do',
+    		data:{"id":id,"classify":text},
+    		success:function(msg){
+    			if(msg=="success"){
+    				layer.closeAll("loading");
+    				$("#cnSpan"+id).show();
+    				$("#citySpan"+id).hide();
+    				$("#cn"+id).text(text);
+    				layer.msg("修改成功！",{icon:1});
+    				
+    			}
+    		}
+    	})
+    	
+    }
+    
+</script>
+<script type="text/html" id="productName">
+ <a href="javascript:;" onclick="prodcutName('选择商品','checkProduct.do','{{d.id}}','{{d.classify}}','800','510')"><sapn>{{d.productName}}</sapn></a>
 </script>
 <script type="text/html" id="picTpl">
  <a href="javascript:show_pic('caImg{{d.id}}')"><img id="caImg{{d.id}}"  src= "http://www.guolaiwan.net/file/{{ d.slidepic}}" alt="" style="width:35px;height:35px"></a>
@@ -227,6 +271,17 @@ String imgPath = request.getScheme()+"://"+request.getServerName()+":"+request.g
 <!-- switch -->
 <script type="text/html" id="switchTpl">
 	<input type="checkbox" name="enable" class="car{{d.id}}" id="{{d.id}}" value={{d.comName}} lay-skin="switch" lay-text="on|off" lay-filter="enable" {{ d.enable == 1 ? 'checked' : '' }} >
+</script>
+<script type="text/html" id ="classifyTpl">
+	<span id="cnSpan{{d.id}}"><span id="cn{{d.id}}">{{d.classify}}</span>&nbsp;<a href="javascript:editCity({{d.id}})" style="text-decoration:underline">编辑</a></span>
+	<span id="citySpan{{d.id}}" hidden="hidden">
+	<select lay-ignore  style="border:1px solid #5c5c5c;" id='city{{d.id}}'  onchange="changeClassify(this,{{d.id}})">
+		<option value="-1">请选择</option>
+		<option value="0" >ACTIVITY</option>
+		<option value="1" >MERCHANT</option>
+		<option value="2" >PRODUCT</option>
+	</select>
+	</span>
 </script>
 
 </body>

@@ -49,7 +49,9 @@
 		<script id="alist" type="text/html">
 {{#  layui.each(d.list, function(index, item){ }}
                         <tr>
-                        
+                        <td>
+                            <input type="checkbox" value="1" name="">
+                        </td>
 						<td>
                             <video  src={{ item.webUrl }} width="90" height="90">	
                         </td>

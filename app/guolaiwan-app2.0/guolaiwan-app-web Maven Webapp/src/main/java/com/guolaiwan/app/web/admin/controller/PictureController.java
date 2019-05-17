@@ -171,7 +171,11 @@ public class PictureController extends BaseController{
 		if (source.equals("activityrule")) {
 			strMap.put("source", "activity");
 			strMap.put("picdo", "rulepic.do");
-		}else {
+		}else if(source.equals("live1")){
+			strMap.put("source", "live");
+			strMap.put("picdo", "giftpic.do");
+		}
+		else {
 			strMap.put("source", source);
 			strMap.put("picdo", "pic.do");
 		}

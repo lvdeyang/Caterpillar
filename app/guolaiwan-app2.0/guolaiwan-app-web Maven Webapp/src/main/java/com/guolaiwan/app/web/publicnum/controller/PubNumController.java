@@ -70,7 +70,9 @@ import com.guolaiwan.bussiness.admin.dao.CollectionDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
@@ -96,8 +98,10 @@ import com.guolaiwan.bussiness.admin.po.ChildProductPO;
 import com.guolaiwan.bussiness.admin.po.CollectionPO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
+import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
+import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
@@ -319,6 +323,7 @@ public class PubNumController extends WebBaseControll {
 		if (activityproId!=null&&activityproId!=""&&activityproId.length()!=0&&!activityproId.equals("0")) {
 			mv = new ModelAndView("mobile/pubnum/activityproduct");
 			mv.addObject("actId",activityproId);
+			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("id",id);
 		}else {
 			mv = new ModelAndView("mobile/pubnum/product");
@@ -1971,5 +1976,58 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/postdetails"); 
 		return mv;
 	}
+	
+	@Autowired
+	private LiveTipGiftDAO conn_liveTipGiftDao;
+	@Autowired
+	private LiveGiftDAO conn_liveGiftDao;
+	
+	
+	//打赏礼物支付 5/11
+	@ResponseBody
+	@RequestMapping(value = "/gift/pay/{orderId}/{userId}")
+	public Map<String, Object> giftPay(@PathVariable Long orderId,@PathVariable Long userId,HttpServletRequest request) throws Exception {
+	    String orderNo="gift-"+orderId;
+	    System.out.println("---------------------------------"+orderNo+"---------支付");
+	    LiveTipGiftPO order=conn_liveTipGiftDao.get(orderId);
+	    int price=(order.getPrice());
+		UserInfoPO user = conn_user.get(userId);
+		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/giftPayreport", WxConfig.appId,
+				WxConfig.appsrcret);
+		// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
+		
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo,price,
+				"192.165.56.64", user.getUserOpenID());
+		// 生成包含prepay_id的map，map传入前端
+		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
+
+		// 将订单号放入map，用以支付后处理
+		map.put("orderId", orderId);
+		return success(map);
+	}
+
+	
+	
+	//打赏礼物支付 5/11
+		@ResponseBody
+		@RequestMapping(value = "/gift/addOrder/{liveId}/{giftId}/{num}/{userId}")
+		public Object addOrder(@PathVariable Long liveId,@PathVariable Long giftId,@PathVariable Integer num,@PathVariable Long userId,HttpServletRequest request) throws Exception {
+			LiveGiftPO gift = conn_liveGiftDao.get(giftId);
+			LiveTipGiftPO order=new LiveTipGiftPO();
+			int price=gift.getPrice()*num;
+			order.setGiftId(giftId);
+			order.setGiftname(gift.getName());
+			order.setGiftnumber(num);
+			order.setLiveid(liveId);
+			order.setPrice(price);
+			order.setUsername(conn_user.get(userId).getUserNickname());
+			conn_liveTipGiftDao.save(order);
+			return order;
+		}
+	
+	
+	
+	
+	
 	
 }

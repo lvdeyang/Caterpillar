@@ -317,7 +317,6 @@ public class WxPayReportController extends WebBaseControll {
 	
 	@ResponseBody
 	@RequestMapping(value = "/payreportpark", method = RequestMethod.POST)
-	// TODO
 	public String paypark(HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		Map<String, Object> ret=new HashMap<String, Object>();
@@ -410,6 +409,66 @@ public class WxPayReportController extends WebBaseControll {
 
 		return stringBuffer.toString();
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/giftPayreport", method = RequestMethod.POST)
+	// TODO
+	public String payprot(HttpServletRequest request,HttpServletResponse response) throws Exception{
+		Map<String, Object> ret=new HashMap<String, Object>();
+		System.out.println("*****************wxreport****************");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String xml="";
+		String tempStr="";
+		while((tempStr=reader.readLine())!=null){
+			xml+=tempStr;
+			System.out.println(tempStr);
+		}
+
+		GuolaiwanWxPay wxPay=GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+		Map<String, String> respData = wxPay.processResponseXml(xml);
+		
+		System.out.println("返回的参数："+respData.toString());
+		
+		String returncode = respData.get("return_code");
+		String resultcode = respData.get("result_code");
+		System.out.println("returncode是："+returncode+";resultcode是"+resultcode);
+		StringBuffer stringBuffer = new StringBuffer();
+		if(returncode.equals("SUCCESS")){
+			if(resultcode.equals("SUCCESS")){
+				//获取订单号
+				String vehicle = null;
+				String tradeNum = respData.get("out_trade_no");
+						stringBuffer.append("<xml><return_code><![CDATA[");
+						stringBuffer.append("SUCCESS");
+						stringBuffer.append("]]></return_code>");
+						stringBuffer.append("<return_msg><![CDATA[");
+						stringBuffer.append("OK");
+						stringBuffer.append("]]></return_msg>");
+						System.out.println("微信支付付款成功!订单号："+tradeNum);
+			}else{
+				stringBuffer.append("<xml><return_code><![CDATA[");
+				stringBuffer.append("FAIL");
+				stringBuffer.append("]]></return_code>");
+				stringBuffer.append("<return_msg><![CDATA[");
+				stringBuffer.append("交易失败");
+				stringBuffer.append("]]></return_msg>");
+				System.out.println("微信支付交易失败");
+			}
+		}else{
+			stringBuffer.append("<xml><return_code><![CDATA[");
+			stringBuffer.append("FAIL");
+			stringBuffer.append("]]></return_code>");
+			stringBuffer.append("<return_msg><![CDATA[");
+			stringBuffer.append("签名失败");
+			stringBuffer.append("]]></return_msg>");
+			System.out.println("微信支付签名失败");
+		}
+		
+		System.out.println("微信返回字符串:"+stringBuffer);
+
+		return stringBuffer.toString();
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/payreportrenew", method = RequestMethod.POST)

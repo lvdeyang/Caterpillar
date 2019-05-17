@@ -70,7 +70,9 @@ import com.guolaiwan.app.web.admin.vo.CompanyVO;
 import com.guolaiwan.app.web.admin.vo.DistributorVO;
 import com.guolaiwan.app.web.admin.vo.LanVO;
 import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
+import com.guolaiwan.app.web.admin.vo.LiveGiftVO;
 import com.guolaiwan.app.web.admin.vo.LiveProductVO;
+import com.guolaiwan.app.web.admin.vo.LiveRebroadcastVO;
 import com.guolaiwan.app.web.admin.vo.LiveRecordVO;
 import com.guolaiwan.app.web.admin.vo.LiveVO;
 import com.guolaiwan.app.web.admin.vo.LogisticVO;
@@ -111,8 +113,10 @@ import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
 import com.guolaiwan.bussiness.admin.dao.LanDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveProductDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveRebroadcastDAO;
 import com.guolaiwan.bussiness.admin.dao.LogisticsDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
@@ -170,9 +174,11 @@ import com.guolaiwan.bussiness.admin.po.DistributorPO;
 import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
 import com.guolaiwan.bussiness.admin.po.LanPO;
 import com.guolaiwan.bussiness.admin.po.LiveAdvertisementPO;
+import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.LiveProductPO;
+import com.guolaiwan.bussiness.admin.po.LiveRebroadcastPO;
 import com.guolaiwan.bussiness.admin.po.LogisticsPo;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
@@ -306,6 +312,8 @@ public class PhoneController extends WebBaseControll {
 	@Autowired
 	private LiveAdvertisementDAO conn_liveAdvertisementDao;
 
+	
+	
 	/**
 	 * 首页搜索
 	 * 
@@ -1100,6 +1108,7 @@ public class PhoneController extends WebBaseControll {
 		}
 		// 会员ID
 		order.setUserId(userId);
+		order.setComId(merchant.getComId());
 		if (user.getUserNickname() != null) {
 			order.setUserName(user.getUserNickname());
 		}
@@ -3000,6 +3009,8 @@ public class PhoneController extends WebBaseControll {
 						    }
 							orderInfoVO.setProductPrice(
 									new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+						}else{
+							continue;
 						}
 						
 					}
@@ -3926,6 +3937,9 @@ public class PhoneController extends WebBaseControll {
 		for (CollectionPO collectionPO : collections) {
 			if (collectionPO.getProductId() != 0) {
 				ProductPO product = conn_product.get(collectionPO.getProductId());
+				if(product==null){
+					continue;
+				}
 				ProductVO _product = new ProductVO().set(product);
 				_product.setisactivityproduct(0);
 				if (collectionPO.getActivityproductId() != 0) {
@@ -5994,53 +6008,85 @@ public class PhoneController extends WebBaseControll {
 	 * @param 景区中所有景点和路线点集合childProductPOList
 	 * @return 路线规划结果集resultList
 	 */
-	public List<ChildProductPO> planRoad(String currentLon, String currentLat, ChildProductPO childProductPO,
+	public List<List<ChildProductPO>> planRoad(ChildProductPO start,ChildProductPO childProductPO,
 			List<ChildProductPO> childProductPOList, List<ChildProductPO> resultList,
-			Map<Double, List<ChildProductPO>> map) {
+			List<List<ChildProductPO>> resultBundle) {
 		// 当第一次调用方法时,结果集还未创建
 		// 当递归调用方式时,结果集已存在,要保证结果集不变
+		if (resultBundle == null) {
+			resultBundle = new ArrayList<List<ChildProductPO>>();
+
+		}
 		if (resultList == null) {
 			resultList = new ArrayList<ChildProductPO>(10);
+			resultList.add(start);
 		}
-
-		System.out.println("原始长度" + childProductPOList.size());
 		// 如果景点和路线点集合:childProductPOList第一个元素就是终点:childProductPO
-		if (childProductPOList.get(0).getId() == childProductPO.getId()) {
-			resultList.add(childProductPO);
-			return resultList;
-			// childProductPOList第一个元素不是终点
-		} else {
-			// 获取距离当前点距离最近点的下标leastDistanceIndex
-			double leastDistance = getDis(Double.parseDouble(currentLat), Double.parseDouble(currentLon),
-					Double.parseDouble(childProductPOList.get(0).getChildLatitude()),
-					Double.parseDouble(childProductPOList.get(0).getChildLongitude()));
-			int leastDistanceIndex = 0;
-			for (int i = 1; i < childProductPOList.size(); i++) {
-				double distance = getDis(Double.parseDouble(currentLat), Double.parseDouble(currentLon),
-						Double.parseDouble(childProductPOList.get(i).getChildLatitude()),
-						Double.parseDouble(childProductPOList.get(i).getChildLongitude()));
-				System.out.println("距离---" + childProductPOList.get(i).getChildName() + "---" + distance);
-				if (distance < leastDistance) {
-					leastDistance = distance;
-					leastDistanceIndex = i;
+		if(start.getId().equals(childProductPO.getId())){
+			resultBundle.add(resultList);
+			return resultBundle;
+		}
+		// Mr
+		String linkpoint = start.getLinkedPoint();
+		String[] linkPoints = linkpoint.split(",");
+		int count = 0;
+		for (String childId : linkPoints) {
+			ChildProductPO linkChild = conn_childProduct.get(Long.parseLong(childId));
+			boolean has = false;
+			for (ChildProductPO hasChild : resultList) {
+				if (linkChild.getId().equals(hasChild.getId())) {
+					has = true;
+					break;
 				}
 			}
-			// 将距离当前点最近的点加入到结果集中
-			ChildProductPO leastDistancePO = childProductPOList.get(leastDistanceIndex);
-			System.out.println("最近点" + leastDistancePO.getChildName());
-			resultList.add(leastDistancePO);
-			// 将距离当前点最近的点在childProductPO中删除,防止重复遍历造成死循环
-			childProductPOList.remove(leastDistanceIndex);
-			// 如果离当前点最近的点就是目标点则返回结果集
-			if (leastDistancePO.getId() == childProductPO.getId()) {
-				return resultList;
-			} else {
-				// 如果离当前点最近的点不是目标点则递归调用此方法直到最近点是目标点
-				planRoad(leastDistancePO.getChildLongitude(), leastDistancePO.getChildLatitude(), childProductPO,
-						childProductPOList, resultList, map);
+			if (!has) {
+				resultList.add(linkChild);
+				if(linkChild.getId().equals(childProductPO.getId())){
+					resultBundle.add(resultList);
+					continue;
+				}
+				if (count == 0) {
+					planRoad(linkChild,childProductPO, childProductPOList, resultList, resultBundle);
+				} else {
+
+					List<ChildProductPO> newReusltList = new ArrayList<ChildProductPO>();
+					newReusltList.addAll(resultList);
+					System.out.println("generate new:" + newReusltList.size());
+					// resultBundle.add(newReusltList);
+					planRoad(linkChild,childProductPO, childProductPOList, newReusltList, resultBundle);
+				}
+
+			}
+			count++;
+		}
+			
+		
+		// Mr
+	    return resultBundle;
+
+	}
+	
+	
+	List<ChildProductPO> getshortest(List<List<ChildProductPO>> result){
+		double tempDis=0;
+		List<ChildProductPO> resultChild=null;
+		for (List<ChildProductPO> list : result) {
+			double curdis=0;
+			for(int i=0;i<list.size()-1;i++){
+				curdis+=getDis(Double.parseDouble(list.get(i).getChildLatitude()),Double.parseDouble(list.get(i).getChildLongitude()),
+						Double.parseDouble(list.get(i+1).getChildLatitude()),Double.parseDouble(list.get(i+1).getChildLongitude()));
+			}
+			if(tempDis==0){
+				tempDis=curdis;
+				resultChild=list;
+			}else{
+				if(tempDis>curdis){
+					tempDis=curdis;
+					resultChild=list;
+				}
 			}
 		}
-		return resultList;
+		return resultChild;
 	}
 
 	/**
@@ -6052,31 +6098,52 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getRoad", method = RequestMethod.POST)
 	public Map<String, Object> getDijkstra(HttpServletRequest request) {
+		System.out.println("first mr huang emmmmmmmmmmmmmm get in");
 		// 接 参
 		String requestJson = getRequestJson(request);
 		// 转换为json数据
 		JSONObject jsonData = JSON.parseObject(requestJson);
 		// 客户当前位置的经纬度字符串
-		String nowLoAndLa = jsonData.getString("nowLoAndLa");
+		//String nowLoAndLa = jsonData.getString("nowLoAndLa");
+		String startId = jsonData.getString("startId");
 		// 获取当前景点的id
 		String childIdString = jsonData.getString("childId");
 		// 客户当前位置的经纬度数组
-		String[] nowLoAndLaStrings = nowLoAndLa.split(",");
+		//String[] nowLoAndLaStrings = nowLoAndLa.split(",");
 		// 客户当前位置的经度
-		String nowLoString = nowLoAndLaStrings[0];
+		//String nowLoString = nowLoAndLaStrings[0];
 		// 客户当前位置的纬度
-		String nowLaString = nowLoAndLaStrings[1];
+		//String nowLaString = nowLoAndLaStrings[1];
+		
+		
 		// 根据景区内景点id进行查询
 		ChildProductPO childProduct = conn_childProduct.getChildById(Long.parseLong(childIdString)).get(0);
 		// 获取父id
 		long productID = childProduct.getProductID();
 		// 通过父id：productId查询所有子景点的信息childProductPOList
 		List<ChildProductPO> childProductPOList = conn_childProduct.getChildByProductId(productID);
+		//double tempDis=0;
+		ChildProductPO start=conn_childProduct.getChildById(Long.parseLong(startId)).get(0);
+		/*for (ChildProductPO childProductPO : childProductPOList) {
+			Double dis=getDis(Double.parseDouble(nowLaString), Double.parseDouble(nowLoString), 
+					Double.parseDouble(childProduct.getChildLatitude()), Double.parseDouble(childProduct.getChildLongitude()));
+			if(tempDis==0){
+				tempDis=dis;
+				start=childProductPO;
+			}else if(tempDis<dis){
+				tempDis=dis;
+				start=childProductPO;
+			}
+		}*/
 		// 路线规划
-		List<ChildProductPO> roadPlanResult = planRoad(nowLoString, nowLaString, childProduct, childProductPOList, null,
+		List<List<ChildProductPO>> roadPlanResult = planRoad(start,childProduct, childProductPOList, null,
 				null);
-		return success(roadPlanResult);
+		
+		
+		
+		return success(getshortest(roadPlanResult));
 	}
+
 
 	/**
 	 * Liw 评论删除
@@ -7132,7 +7199,7 @@ public class PhoneController extends WebBaseControll {
 		LivePO live=conn_live.get(liveId);
 		live.setGiveLike(live.getGiveLike()+1);
 		conn_live.saveOrUpdate(live);
-		return success();
+		return success(live);
 	}
 	
 	/**
@@ -7145,12 +7212,36 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getAdvertisement", method = RequestMethod.GET)
 	public Map<String, Object> getAdvertisement(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<LiveAdvertisementPO> rdvertisement = conn_liveAdvertisementDao.getList();
-		List<LiveAdvertisementVO> rdvertisementvo = LiveAdvertisementVO.getConverter(LiveAdvertisementVO.class).convert(rdvertisement, LiveAdvertisementVO.class);
+		List<LiveAdvertisementPO> advertisement = conn_liveAdvertisementDao.getList();
+		List<LiveAdvertisementVO> advertisementvo = LiveAdvertisementVO.getConverter(LiveAdvertisementVO.class).convert(advertisement, LiveAdvertisementVO.class);
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
-		for (LiveAdvertisementVO rpo : rdvertisementvo) {
+		for (LiveAdvertisementVO rpo : advertisementvo) {
 			rpo.setSlidepic(sysConfig.getWebUrl() + rpo.getSlidepic());
 		}
+		return success(advertisementvo);
+	}
+	
+	@Autowired
+	private LiveRebroadcastDAO conn_rdvertisementDao;
+	
+	@ResponseBody
+	@RequestMapping(value = "/getAllRebroadcast", method = RequestMethod.POST)
+	public Map<String, Object> getAllRebroadcast(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<LiveRebroadcastPO> rdvertisement = conn_rdvertisementDao.findAll();
+		List<LiveRebroadcastVO> rdvertisementvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class).convert(rdvertisement, LiveRebroadcastVO.class);
 		return success(rdvertisementvo);
 	}
+	
+	@Autowired
+	private LiveGiftDAO conn_giftDao;
+	
+	@ResponseBody
+	@RequestMapping(value = "/pushGift", method = RequestMethod.POST)
+	public Map<String, Object> pushGift(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<LiveGiftPO> gifts = conn_giftDao.GetListbysort();
+		List<LiveGiftVO> giftsvo = LiveGiftVO.getConverter(LiveGiftVO.class).convert(gifts, LiveGiftVO.class);
+		return success(giftsvo);
+	}
+
+
 }

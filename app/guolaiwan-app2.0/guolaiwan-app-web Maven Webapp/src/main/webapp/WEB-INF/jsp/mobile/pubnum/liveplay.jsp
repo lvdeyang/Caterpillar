@@ -5,7 +5,7 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	String weburl=WXContants.Website;
+	String weburl = WXContants.Website;
 %>
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
@@ -72,7 +72,6 @@
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 
 <style type="text/css">
-
 a {
 	cursor: pointer !important;
 }
@@ -442,42 +441,95 @@ html, body {
 	top: 0;
 	text-align: center;
 }
-       .demo img {
-				width: 30px;
-				height: 30px;
-				position: absolute;
-				top: 485px;
-				right: 20px;
-				margin-left: -15px;
-				z-index:100000;
-			}
-			
-			.btn {
-				background: url(lib/images/xin7.png)no-repeat center center;
-				background-size: 100% 100%;
-				width: 60px;
-				height: 60px;
-				border: 0;
-				color: #fff;
-				position: absolute;
-				top: 550px;
-				right:5px;
-				margin-left: -25px;
-				z-index:100000;
-			}
-			
-			.jishu {
-				border-radius: 5px;
-				position: absolute;
-				top:600px;
-				right: 10px;
-				width: 50px;
-				height: 20px;
-				color: #FD6770;
-			/* 	margin-left: -25px; */
-				text-align: center;
-				line-height: 20px;
-			}
+
+.demo img {
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 1%;
+	right: 20px;
+	margin-left: -15px;
+	z-index: 9;
+}
+
+.btn {
+	background: url(lib/images/xin7.png) no-repeat center center;
+	background-size: 100% 100%;
+	width: 60px;
+	height: 60px;
+	border: 0;
+	color: #fff;
+	position: absolute;
+	top: 0%;
+	right: 5px;
+	margin-left: -25px;
+	z-index: 10;
+	touch-action: none;
+}
+
+.btn2 {
+	background: url(lib/images/liwu.png) no-repeat center center;
+	background-size: 100% 100%;
+	width: 60px;
+	height: 60px;
+	border: 0;
+	color: #fff;
+	position: absolute;
+	top: -8%;
+	right: 65px;
+	margin-left: -25px;
+	z-index: 10;
+	touch-action: none;
+}
+
+.btn3 {
+	background: url(lib/images/huifang.png) no-repeat center center;
+	background-size: 70% 70%;
+	width: 60px;
+	height: 60px;
+	border: 0;
+	color: #fff;
+	position: absolute;
+	top: -2%;
+	right: 120px;
+	margin-left: -25px;
+	z-index: 10;
+	touch-action: none;
+}
+
+.jishu {
+	border-radius: 5px;
+	position: absolute;
+	top: 70%;
+	right: 10px;
+	width: 50px;
+	color: #FD6770;
+	text-align: center;
+
+}
+
+.pushGift {
+	width: 100%;
+	height: 95px;
+	display: none;
+	border: 1px solid #EEEEEE;
+	background: #f3faff;
+	position: absolute;
+	z-index: 10000;
+	top: 0%;
+	 overflow: hidden; 
+	justify-content: center;
+}
+
+.readyBuy{
+    /* position: relative;
+     right:3%;
+     top:100%; */
+     z-index: 10000;
+    display: none; 
+    
+   
+}
 </style>
 <link href="lib/video.css" rel="stylesheet">
 </head>
@@ -628,7 +680,7 @@ html, body {
 			$(function() {
 			window.BASEPATH = '<%=basePath%>';
 			
-			getAdvertisement();
+			$('.url').val(window.BASEPATH)
 			
 			 $("#btn1").click(function() {
 				var x = 100;
@@ -640,7 +692,7 @@ html, body {
 				$(".demo").append("<img src=''>");
 				$('.demo img:eq(' + index + ')').attr('src', 'lib/images/' + num + '.png')
 				$(".demo img").animate({
-					top: "-480px",
+					top: "-500px",
 					opacity: "0",
 				}, 3000)
 				
@@ -649,14 +701,65 @@ html, body {
 			  params.liveId=${live.id};
 			　　$.post(giveLikeUrl, $.toJSON(params), function(data){
 					data = parseAjaxResult(data);
+					$('.jishu').html(data.giveLike); 
 				});
-				//计数
-				var num = $(this).next().text()
+				/*  //计数
+				var num = $('.jishu').text();
 				num++;
-				$(this).next().text(num);
+				$('.jishu').text(num); */ 
+			})
+			
+			$('#btn2').click(function(){
+				if( $(".pushGift").hasClass("show") ){
+		            // 执行隐藏
+		            $(".pushGift").fadeOut().removeClass("show");
+		            // 其他
+		        }else{
+		            // 显示
+		            $(".pushGift").fadeIn().addClass("show");
+		        }
+		        	 if( $('.readyBuy').hasClass("show") ){
+		            // 执行隐藏
+		            $('.readyBuy').fadeOut().removeClass("show");
+		            // 其他
+		        }  
+						 
+			})
+			
+			var max=99,min=1
+			$('.numAdd').click(function(){
+				var chengjie=$('.chengjie').val();
+				var number=$('.giftNumber').val();
+				if(number<max){
+					number++;
+				}else{
+					number=max;
+				}
+				$('.giftNumber').val(number);
+				$('.Allprice').text('共计：'+(chengjie*number).toFixed(2)+'元');
+				
+			})
+			
+			$('.numCut').click(function(){
+				var chengjie=$('.chengjie').val();
+				var number=$('.giftNumber').val();
+				if(number>min){
+					number--;
+				}else{
+					number=min;
+				}
+				$('.giftNumber').val(number);
+				$('.Allprice').text('共计：'+(chengjie*number).toFixed(2)+'元');
 			})
 			
 			
+			
+			
+			
+		getAdvertisement();
+		pushGift();
+			
+				
 		})
 		
 		function getAdvertisement(){
@@ -668,7 +771,7 @@ html, body {
 						if(data && data.length>0){
 						    var html=[];
 							for(var i=0; i<data.length; i++){
-								html.push('<div style="height:70px;width:100%;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].Id+'" style="height:100%;width:100%;" src="'+data[i].slidepic+'" alt="">');
+								html.push('<div style="height:70px;width:100%;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].productId+'-'+data[i].classify+'" style="height:100%;width:100%;" src="'+data[i].slidepic+'" alt="">');
 								html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].name+'</div></div>');
 							}
 							$('#headerWrapper').append(html.join(''));
@@ -679,15 +782,134 @@ html, body {
 						}
 				 });
 			  }
+			  
+		
+		function pushGift(){
+			     var _uripushGift = window.BASEPATH + 'phoneApp/pushGift';
+				
+					$.post(_uripushGift, null, function(data){
+						data = parseAjaxResult(data); 
+						    var html=[]; 
+						    /* */
+							for(var i=0; i<data.length; i++){
+								html.push('<div class="gift"  onclick="readyBuy('+data[i].id+','+data[i].price+')"  style="width:20%;height: 100%;background:#f3faff;display: inline-block;margin:0 auto;padding:0px;text-align: center;border: 1px solid #EEEEEE;">');
+								html.push('<img src="http://www.guolaiwan.net/file/'+data[i].slidepic+'" style="width:40px;height:40px;margin-top:10px;" />');
+								html.push('<p style="font-size:12px; ">'+data[i].name+'</P>');
+								html.push('<p style="font-size:12px;">'+(data[i].price/100).toFixed(2)+'元</P>'); 
+								html.push('</div>');
+							}
+							$('.pushGift').append(html.join(''));
+				   }); 
+			  }
+		   
+		   function readyBuy(giftId,giftPrice){
+		 	if( $('.readyBuy').hasClass("show") ){
+		            // 执行隐藏
+		            $('.readyBuy').fadeOut().removeClass("show");
+		            // 其他
+		        }else{
+		            // 显示
+		            $('.readyBuy').fadeIn().addClass("show");
+		            $('.chengjie').val((giftPrice/100).toFixed(2));
+		            $('.Allprice').text('共计：'+(giftPrice/100).toFixed(2)+'元');
+		            
+		        }
+     		      $('.readyBuy').attr('id',giftId);
+		      
+		 }  
+		 
+		 
+		 	
+		
+		var prepay_id;
+		var paySign; 
+		var appId;   
+		var timeStamp;   
+		var nonceStr;  
+		var packageStr;  
+		var signType; 
+		var orderNo; 
+		
+		function toPay(){
+		
+			var liveId=${live.id}
+			var giftId=$('.readyBuy').attr('id')
+			var num=$('.giftNumber').val()
+			var userId=${userId};
+			$.get(window.BASEPATH+'pubnum/gift/addOrder/'+liveId+"/"+giftId+"/"+num+"/"+userId, null, function(data){
+		          orderNo = data.id
+				$('.dingdanhao').val(orderNo);
+		        $.get(window.BASEPATH+'pubnum/gift/pay/'+orderNo+"/"+userId, null, function(data){
+		        	data = parseAjaxResult(data)
+					prepay_id = data.prepay_id;
+			        paySign = data.paySign;
+			        appId = data.appId;
+			        timeStamp = data.timeStamp;
+			        nonceStr = data.nonceStr;
+			        packageStr = data.packageStr;
+			        signType = data.signType;
+			        callpay();
+				}); 
+			});
+			
+			
+		    
+		}		
+		
+		
+		function onBridgeReady(){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            	var orderId=$('.dingdanhao').val();
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		                //每五秒刷新订单状态
+		                alert("感谢老板的打赏~~");
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") { 
+		            	$.post(window.BASEPATH+'admin/live/deltipgift.do',{'orderId':orderId},function(){
+		            	}) 
+		                alert("交易取消");  
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {
+		            	$.post(window.BASEPATH+'admin/live/deltipgift.do',{'orderId':orderId},function(){
+		            	})
+		                alert(res.err_desc); 
+		            }  
+		        }
+		    );
+		}
+		function callpay(){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady();
+		    }
+		} 
+		
+		
+		$(document).on('click','.topmod',function(){
+	       var codes=this.id.split('-');
+	       if(codes[2]==''){return;}
+	       location.href=window.BASEPATH + 'pubnum/merchant/index1?code='+codes[1]+'&classify='+codes[2];
+	    });
 		</script>
 
-<body>  
-     <div id="zong">
-     	<div class="demo"></div>
-		<div id="btn1" class="btn"></div>
-		<div class="jishu">${live.giveLike}</div>
-     </div>
-		
+<body>
+<input class="chengjie" hidden="hidden" type="number" value=""/>
+<input class="dingdanhao" value="" hidden="hidden">
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
@@ -698,46 +920,80 @@ html, body {
 			</div>
 		</div>
 		<div class="content" style="">
-			
-			<video style="display:none" id="my-video" class="video-js" controls preload="auto" width="100%" height="100%" poster="" x-webkit-airplay="allow" data-setup="{}">
-				<source src="http://<%=weburl%>/video/live/${live.userId}A${live.id}.m3u8" type="application/x-mpegURL">
+             <div style="position: absolute;top:40px;right:5%;color:#ffffff;z-index:111111;font-size:12px;"><img style="width:15px;height:15px;display: inline-block;" alt="" src="lib/images/renshu2.png"><p style="display: inline-block;">864</p></div>
+			<video style="display:none" id="my-video" class="video-js" controls
+				preload="auto" width="100%" height="100%" poster=""
+				x-webkit-airplay="allow" data-setup="{}">
+				<source
+					src="http://<%=weburl%>/video/live/${live.userId}A${live.id}.m3u8"
+					type="application/x-mpegURL">
 			</video>
-			
+
 			<div id="player" style="width:100%;height:250px;display:none;">
-			    <script type="text/javascript" charset="utf-8" src="http://yuntv.letv.com/player/live/blive.js"></script>
-			    <script>
-			        var leshiyunId='${live.leshiyunId}';
-			        var player = new CloudLivePlayer();
-			        player.init({activityId:leshiyunId});
-			    </script>
+				<script type="text/javascript" charset="utf-8"
+					src="http://yuntv.letv.com/player/live/blive.js"></script>
+				<script>
+					var leshiyunId = '${live.leshiyunId}';
+					var player = new CloudLivePlayer();
+					player.init({
+						activityId : leshiyunId
+					});
+				</script>
+			</div>
+
+			<div class="swiper-container" id="headerSwiper"
+				data-space-between='10' data-pagination='.swiper-pagination'
+				data-autoplay="1000">
+				<div class="swiper-wrapper" id="headerWrapper" style="height:70px;">
+				
+				</div>
+			
 			</div>
 			
-			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
-			  <div class="swiper-wrapper" id="headerWrapper" style="height:70px;">
-			  </div>
+			<div style="margin-top:10px;margin-left:10px">${live.liveName}
+			
 			</div>
 			
-		    <div style="margin-top:10px;margin-left:10px">${live.liveName}</div>
-		    <div class="weui-cells__title">请输入评论</div>
+			<div class="weui-cells__title" style="width:100%;height:10%;"><p >请输入评论</p>
+				<div class="readyBuy" style="line-height:20px;font-size:16px;" >
+				<button class="numCut" style="width:20px;height:20px;background:#ffffff;border-radius:50%;color:#18b4ed;border:1px solid #18b4ed;outline: none;">-</button>
+				<input disabled="disabled" class="giftNumber" id="giftNumber"
+					type="number" value="1" style="width:5%;border: none;outline: none;background:#FBFBFB;text-align: center; ">
+				<button class="numAdd" style="width:20px;height:20px;background:#18b4ed;border-radius:50%;color:#ffffff;border: none;outline: none;">+</button>
+				<span class="Allprice" style="position: absolute;right:20%;"></span>
+				<button class="toPay" onclick="toPay()" style="position: absolute;right:2%;width:12%;height:20px;background:#18b4ed;color:#ffffff;border: none;outline: none;border-radius:12px;">打赏</button>
+			</div>
+			</div>
+			
 			<div class="weui-cells weui-cells_form">
-			  <div class="weui-cell">
-			    <div class="weui-cell__bd">
-			      <textarea id="message" class="weui-textarea" rows="3"></textarea>
-                  
-			    </div>
-			  </div>
+				<div class="pushGift"></div>
+				<div class="weui-cell" >
+					<div class="weui-cell__bd">
+						<textarea id="message" class="weui-textarea" rows="3" ></textarea>
+
+					</div>
+				</div>
 			</div>
-			
-			<a id="save" href="javascript:void(0);" class="weui-btn_mini weui-btn_default" style="margin-top:5px;margin-left:10px;background:#18b4ed">发表评论</a>
-			
-			
+			<div style="width:100%;height:70px;position:relative;">
+				<a id="save" href="javascript:void(0);"
+					class="weui-btn_mini weui-btn_default"
+					style="margin-top:5px;margin-left:10px;background:#18b4ed">发表评论</a>
+				<div id="zong">
+					<div class="demo"></div>
+					<div id="btn1" class="btn"></div>
+					<div class="jishu">${live.giveLike}</div>
+					<!-- 礼物 -->
+					<div id="btn2" class="btn2"></div>
+					<!-- 回放 -->
+					<a href="<%=basePath%>admin/live/rebroadcastslist"><div
+							id="btn3" class="btn3"></div></a>
+				</div>
+			</div>
 			<div class="weui-cells__title">评论列表</div>
-			<div id="messageContent" style="padding-bottom:50px;">
-			   
-			</div>
-			
-			
-			
+			<div id="messageContent" style="padding-bottom:50px;"></div>
+
+
+
 		</div>
 	</div>
 </body>
