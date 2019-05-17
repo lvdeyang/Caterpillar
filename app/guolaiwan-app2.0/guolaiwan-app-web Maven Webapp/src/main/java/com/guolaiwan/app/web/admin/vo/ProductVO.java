@@ -57,7 +57,9 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 
 	//现价
 	private String productPrice;
-
+	// 积分商品  0是 1不是
+	private int IntegralGoods;
+	
 	//提成模式（0：佣金1：比例）
 	private int productCommissionCode;
 
@@ -157,6 +159,19 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	private int productRestrictNumber;
 	
 	
+	
+	
+	public int getIntegralGoods() {
+		return IntegralGoods;
+	}
+
+
+	public ProductVO setIntegralGoods(int integralGoods) {
+		this.IntegralGoods = integralGoods;
+		return this;
+	}
+
+
 	public int getProductRestrictNumber() {
 		return productRestrictNumber;
 	}
@@ -1169,7 +1184,9 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setShopLongitude(entity.getProductMerchantJson())
 		.setTraffic(entity.getTraffic())
 		.setIfFace(entity.getIfFace())
+		.setIntegralGoods(entity.getIntegralGoods())
 		.setProductIsRefund(entity.getProductIsRefund())
+		
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)));
 		
 		return this;

@@ -370,6 +370,16 @@
                         autocomplete="off" class="layui-input" value="${product.productntegral}">
                  	</div>
                  </div>
+                 
+                 <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
+						积分商品：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="Integra" value="0" name="Integra" 
+                        	autocomplete="off" class="layui-input">
+                 	</div>
+                 </div>
                 </div>
                 
                 
@@ -739,7 +749,12 @@
 						layer.msg("提成为数字！",{time: 5000, icon:5});
 						return false;
 				} 
-				
+				//积分商品
+				var IntegralGoods =$("#Integra").val();
+				if( IntegralGoods!=0 && IntegralGoods !=1){
+						layer.msg("是否是积分商品0不是1是",{time: 5000, icon:5});
+						return false;
+				} 
 				//原价小数
 				var oldPrice = parseFloat(data.field.productOldPrice);
 				var price = parseFloat(data.field.productPrice);
