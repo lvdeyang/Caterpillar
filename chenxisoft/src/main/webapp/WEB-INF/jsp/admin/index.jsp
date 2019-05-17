@@ -79,7 +79,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="layui-body">
 			<!-- 内容主体区域 -->
 			<div style="padding: 15px;">
-                 <iframe id="mainframe" style="width:100%;height:95%;border:0px;">
+                 <iframe id="mainframe" style="width:100%;height:95%;border:0px;" src="/chenxisoft/article/index">
                  
                  
                  </iframe>
@@ -96,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		layui.use('element', function(){
 		  var $ = layui.jquery;
 		  var element = layui.element;
-		  $('#mainframe').attr('src',"");
+		  
 		});
 	</script>
 </body>
