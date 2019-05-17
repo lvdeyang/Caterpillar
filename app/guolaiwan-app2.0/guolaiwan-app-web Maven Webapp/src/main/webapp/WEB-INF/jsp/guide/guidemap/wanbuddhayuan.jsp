@@ -281,7 +281,7 @@ ul li {
 	margin: auto;
 	background-color: rgba(255, 255, 255, 0.5);
 	opacity: 0.7;
-	box-shadow: 0px 2px 2px #FFF;
+	box-shadow: 0px 1px 1px #FFF;
 	position: fixed;
 	bottom: 4%;
 	left: 50%;
@@ -292,11 +292,10 @@ ul li {
 .audio-view {
 	position: relative;
 	height: 100%;
-	width: 98%;
+	width: 100%;
 }
 
 .audio-body {
-	padding: 0 10px;
 	width: 100%;
 }
 
@@ -316,7 +315,6 @@ ul li {
 	height: 1px;
 	border-radius: 3px;
 	background-color: dodgerblue;
-	margin-left: -4%;
 }
 
 .audio-setbacks {
@@ -350,7 +348,7 @@ ul li {
 	height: 14px;
 	margin-top: -7px;
 	top: 50%;
-	right: -5px;
+	right: -2px;
 	background-color: dodgerblue;
 	border-radius: 50%;
 	cursor: pointer;
@@ -361,12 +359,9 @@ ul li {
 	width: 20px;
 	position: absolute;
 	top: 70%;
-	right: 5%;
+	right: 8%;
 }
 
-.audio-select {
-	
-}
 
 .audio-select>div {
 	width: 20px;
@@ -376,11 +371,13 @@ ul li {
 	background-repeat: no-repeat;
 	float: left;
 	cursor: pointer;
+	/* margin-right:15%; */
 }
 
 .audio-select>div+div {
-	margin-left: 10px;
+	margin-left: 2px;
 }
+
 
 .audio-play {
 	background-image: url('lib/images/stop.png');
@@ -546,6 +543,7 @@ input[type="radio"] {
 <script type="text/javascript">
     var json ="";
     var map;
+    var str = []; //存入id 修改颜色已浏览
 	$(function() {
 		var _uril = window.BASEPATH + 'guide/getMessage'; //获取图片 xy 初始位置
 		var param = {};
@@ -574,95 +572,8 @@ input[type="radio"] {
 			});
 	      	 lockMapBounds(); 
 	      	 getMark();  //设置所有的坐标点
-        });
-        
-         //限制地图显示范围
-		function lockMapBounds() {
-		   var bounds = map.getBounds();
-		   map.setLimitBounds(bounds);
-	     };  
-        
-        
-        function getMark(){
-			var _uri = window.BASEPATH + 'guide/getChildByPro'; //获取所有坐标点
-			var params = {};
-			params.merchantId = ${chantId};
-			$.post(_uri, $.toJSON(params), function(data) {
-				data = parseAjaxResult(data);
-				var info = data.volist;
-				json = data.result;
-                data =  json; 
-				var html = [];
-				var str = []; //存入id 修改颜色已浏览
-				for (var j = 0; j < info.length; j++) {
-				// 遍历拆分 存入数组
-				 str  = info[j].childId.split(",");
-				}
-			   for (var i = 0; i < data.length; i++) {
-				    var cildId = 0;
-				    //根据数组长度 循环  j
-				    for(var v = 0; v < str.length; v++){
-					  // 判断 j ==  data[i].id
-					  if(data[i].id == str[v]){
-					   // 更换颜色
-				        var  marker = new AMap.Marker({
-				           size: new AMap.Size(20, 20), 
-						   icon : new AMap.Icon({            
-				           image: "lib/images/huang.png",
-				           imageSize: new AMap.Size(16,16)
-			               }),   
-					      position : [ data[i].childLongitude , data[i].childLatitude ]
-				        });
-						marker.proName= data[i].childName;
-						marker.on('click', function(e){
-						showInfoM(e.target.proName);
-		                }); //增加点击事件; 
-						map.add(marker);
-						cildId = data[i].id;
-					    break; 
-					 } 
-				    } 
-				    if(cildId　==　0){ // 默认为红色
-					     marker = new AMap.Marker({
-					     size: new AMap.Size(20, 20), 
-						 icon : new AMap.Icon({            
-			             image: "lib/images/hong.png",
-			             imageSize: new AMap.Size(16,16)
-		            	 }),   
-					    position : [ data[i].childLongitude , data[i].childLatitude ]
-				        });
-						marker.proName= data[i].childName;
-						marker.on('click', function(e){
-						showInfoM(e.target.proName);
-		                }); //增加点击事件; 
-						map.add(marker);
-				    }
-					/* 增加搜索景点搜索 景点名称 */
-					html.push('<div style="color: black;height: 44px;">');
-					html.push('<p  data="'+data[i].childName+'" class="searchResult" style="padding-left: 5%;line-height: 44px;font-size: 14px;">'+data[i].childName+'</p>');
-					html.push('</div>');
-					html.push('<div style="border-bottom: solid 1px #E0E0E0;width:100%;"></div>'); 
-				   } 
-				  $('.div_txt').append(html.join(''));
-				  $(document).on('click','.searchResult',function(){
-				     var data=$(this).attr('data');
-				     selectName(data);
-				  });
-				  /* getItude("孝经"); */  
-		  	 }); 
-	  	   }	
-	  
-	  
-	   
-		function showInfoM(e) { // 点击 坐标点
-			$.confirm(e, function() {
-				  
-			}, function() {
-				
-		    });
-		}
-
-	 	AMap.plugin('AMap.Weather', function() { // 查询天气
+	      	 
+	    AMap.plugin('AMap.Weather', function() { // 查询天气
         var weather = new AMap.Weather();
         //查询实时天气信息, 查询的城市到行政级别的城市，如朝阳区、杭州市
         weather.getLive('遵化', function(err, data) {
@@ -688,29 +599,70 @@ input[type="radio"] {
                 });
             }
           });
-    	});  
+    	 });  
+        });
+        
+         //限制地图显示范围
+		function lockMapBounds() {
+		   var bounds = map.getBounds();
+		   map.setLimitBounds(bounds);
+	     };  
 	
 	});
 	
 	
 	setTimeout(function() {
-		$('.info').hide(0);
+	 $('.info').hide(0);
+	 ref = setInterval(function(){// 循环
+		 consoleLog();
+	 },5000);
 	}, 24000); //延迟2000毫米
 	
+	 
     var Longitude;
     var Latitude;
+    var id;
+    var name;
     function selectName(e){ // 点击查询对应坐标更换颜色
-       if(Longitude != null && Latitude !=null){ //搜索时把上一个表 更换为红点
-	       var marker = new AMap.Marker({
+    var cha = 0; 
+      if(Longitude != null && Latitude !=null){ //搜索时把上一个表 更换为红点
+         for(var i=0; i<str.length; i++){
+		   if(id == str[i] ){   // 拆分  数组  遍历
+			  var marker = new AMap.Marker({
 			    size: new AMap.Size(20, 20), 
 				icon : new AMap.Icon({            
-	            image: "lib/images/hong.png",
-	            imageSize: new AMap.Size(15,15)
+	            image: "lib/images/huang.png",
+	            imageSize: new AMap.Size(16,16)
 	            }),   
 				position : [ Longitude , Latitude ]
+		      });
+		       marker.proName= name;
+		       marker.id= id;
+			   marker.on('click', function(e,id){
+					showInfoM(e.target.proName,e.target.id);
+		       }); //增加点击事件; 
+		       marker.setMap(map);
+		      cha = 1;
+           }
+         }
+         if(cha == 0){
+	         var marker = new AMap.Marker({
+			  size: new AMap.Size(20, 20), 
+			  icon : new AMap.Icon({            
+	          image: "lib/images/hong.png",
+	          imageSize: new AMap.Size(16,16)
+	          }),   
+			  position : [ Longitude , Latitude ]
 		   });
-		  marker.setMap(map);
-	   }  
+		    marker.proName= name;
+		    marker.id= id;
+			marker.on('click', function(e,id){
+					showInfoM(e.target.proName,e.target.id);
+		    }); //增加点击事件; 
+		    marker.setMap(map);
+         } 
+	   }
+	   
 	   var leng = -1 ;
 	   if(e != null){
 	     for (var i = 0; i < json.length; i++) { //搜索切换紫标
@@ -723,21 +675,25 @@ input[type="radio"] {
 	            }),   
 				position : [ json[i].childLongitude , json[i].childLatitude ]
 			  });
-			  marker.setMap(map);
+			   marker.proName= json[i].childName;
+			   marker.id= json[i].id;
+			   marker.on('click', function(e,id){
+					showInfoM(e.target.proName,e.target.id);
+		      }); //增加点击事件; 
+		      marker.setMap(map);
 			  leng= 0;
 			  Longitude =  json[i].childLongitude;
 			  Latitude  =  json[i].childLatitude ; 
+			  id  = json[i].id;
+			  name = json[i].childName;
 			  $("#container").show();
 			  $(".div_txt").hide();
-			 
 		  }
 	    } 
 	  }   
 	  if(leng == -1){
 	     $.toast("没有此景点", "forbidden");
 	  }
-	  
-	  
 	}
 	
 	$(document).on('click','#but',function(){
@@ -748,11 +704,110 @@ input[type="radio"] {
 	   $.toast("请输入景点名称", "forbidden");
 	  }
 	});
+	
+	 
+	 function getMark(){
+        map.clearMap();  
+		var _uri = window.BASEPATH + 'guide/getChildByPro'; //获取所有坐标点
+		var params = {};
+		params.merchantId = ${chantId};
+		$.post(_uri, $.toJSON(params), function(data) {
+			data = parseAjaxResult(data);
+			var info = data.volist;
+			json = data.result;
+               data =  json; 
+			var html = [];
+			if(info.childId != null){
+			// 遍历拆分 存入数组
+			 str  = info.childId.split(",");
+		    }
+		   for (var i = 0; i < data.length; i++) {
+			    var cildId = 0;
+			    if(str.length != 0){
+			     //根据数组长度 循环  j
+			     for(var v = 0; v < str.length; v++){
+				   // 判断 j ==  data[i].id
+				   if(data[i].id == str[v]){
+				     // 更换颜色
+			         var  marker = new AMap.Marker({
+			            size: new AMap.Size(20, 20), 
+					    icon : new AMap.Icon({            
+			            image: "lib/images/huang.png",
+			            imageSize: new AMap.Size(16,16)
+		                }),   
+				       position : [ data[i].childLongitude , data[i].childLatitude ]
+			         });
+					 marker.proName= data[i].childName;
+					 marker.id= data[i].id;
+					 marker.on('click', function(e,id){
+					 showInfoM(e.target.proName,e.target.id);
+	                 }); //增加点击事件; 
+	                 marker.setAnimation('AMAP_ANIMATION_DROP'); //弹跳点 
+					 map.add(marker);
+					 cildId = data[i].id;
+				     break; 
+				  } 
+			     }
+			    } 
+			   if(cildId　==　0){ // 默认为红色
+				     marker = new AMap.Marker({
+				     size: new AMap.Size(20, 20), 
+					 icon : new AMap.Icon({            
+		             image: "lib/images/hong.png",
+		             imageSize: new AMap.Size(16,16)
+	            	 }),   
+				    position : [ data[i].childLongitude , data[i].childLatitude ]
+			        });
+			        marker.setAnimation('AMAP_ANIMATION_DROP'); //弹跳点 
+					marker.proName= data[i].childName;
+					marker.id= data[i].id;
+					marker.on('click', function(e,id){
+					showInfoM(e.target.proName,e.target.id);
+	                }); //增加点击事件; 
+					map.add(marker);
+			    }
+				/* 增加搜索景点搜索 景点名称 */
+				html.push('<div style="color: black;height: 44px;">');
+				html.push('<p  data="'+data[i].childName+'" class="searchResult" style="padding-left: 5%;line-height: 44px;font-size: 14px;">'+data[i].childName+'</p>');
+				html.push('</div>');
+				html.push('<div style="border-bottom: solid 1px #E0E0E0;width:100%;"></div>'); 
+			   } 
+			  $('.div_txt').append(html.join(''));
+			  $(document).on('click','.searchResult',function(){
+			     var data=$(this).attr('data');
+			     selectName(data);
+			  });
+			  /* getItude("孝经"); */  
+	  	 }); 
+  	   }	
+	  	   
+	  	  function   setaddChild(d){
+    		var _uril = window.BASEPATH + 'guide/addChildByUidCid';                   //保存浏览点id
+			var param = {};
+			param.ChildId = d;
+			$.post(_uril, $.toJSON(param), function(data) {
+				getMark();
+		        ref = setInterval(function(){
+	 			   consoleLog();
+				},5000);
+	        });
+	  	  }
+	  	  
+	    function clickHandler(){
+	      map.clearMap(); 
+	      getMark();
+	      /* var _uril = window.BASEPATH + 'guide/delectchildId';                   //清楚路线
+		  $.post(_uril, null, function(data) {
+		  
+	      }); */
+	   }
 </script>
 
 <script>
+ var latitid;      //当前景点id
 	function consoleLog(){
 	    getloca();
+	    
 	    var loca = {};
 		function getloca() {
 			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
@@ -793,25 +848,148 @@ input[type="radio"] {
 	    function getCity(latitude, longitude) { //通过经纬度   获取高德位置
 	     //   计算两点的距离
 	     var name;
-	     var  length;
+	     var length;  //米
+	     var Longitude; //经度
+	     var Latitude; //纬度
+	     var mp3;  //音频
+	     var text; //音频文本
+	     var scope;
+	     var child;
 		 for (var i = 0; i < json.length; i++) {
 	        var p1 = [latitude,longitude];
 		    var p2 = [json[i].childLongitude,json[i].childLatitude];
 		   // 返回 p1 到 p2 间的地面距离，单位：米
 			var dis = AMap.GeometryUtil.distance(p1, p2);
             if(length == null || dis < length){
-               length = dis;
-               name = json[i].childName;
+                length = dis; // 保存距离
+                latitid =  json[i].id;
+                name = json[i].childName; // 景点名称
+                Longitude = json[i].childLongitude; // 经度
+                Latitude = json[i].childLatitude; // 纬度
+                mp3 = json[i].chineseGirl; //音频
+                text = json[i].chineseContent; // 文本
+                scope = json[i].scope; //距离
 	        }			
-		 } 
-		 /* alert(name); 
-		  marker.setAnimation('AMAP_ANIMATION_BOUNCE'); //弹跳点
-		 */
-		} 
+		 }  
+		 if(str != "" ){  // 判断是否有已浏览点
+		   for(var i = 0; i < str.length; i++){
+			 if( latitid != str[i]){   // 拆分  数组  遍历
+			  if( length <= scope ){  // 判断是否小于讲解范围
+				  $('#pid').html(text);
+				   var song = [{
+							'src': 'http://www.guolaiwan.net/file/'+mp3,
+							'title': ''+name+''
+						}
+				   ];
+			      MP3(song,latitid);
+			      red(name);
+			      clearInterval(ref);  //停止循环 
+			   }
+			 } 
+	       }
+		 }else{  // 没有已预览点 则直接判断播放距离
+		    if( length >= scope ){  // 判断是否小于讲解范围
+				  $('#pid').html(text);
+				   var song = [{
+							'src': 'http://www.guolaiwan.net/file/'+mp3,
+							'title': ''+name+''
+						}
+				   ];
+			      MP3(song,latitid); // 播放音乐
+			    clearInterval(ref);  //停止循环 定位
+			    red(latitid);
+			}
+		 }
+	  } 
 	}
-	ref = setInterval(function(){
-	    consoleLog();
-	},5000);
+	
+	
+	
+	
+	
+	$(function() {
+	  var song = [{
+					'src': 'lib/images/huanying.mp3',
+					'title': '孝经'
+				}
+			];
+	  MP3(song);
+	 
+	});
+   function red(n){
+      map.clearMap(); 
+      var cha = 0;
+    for (var i = 0; i < json.length; i++){
+		 for(var j=0; j<str.length; j++){
+		   if(json[i].id == str[j] ){   // 拆分  数组  遍历
+		      alert("111");
+			  var marker = new AMap.Marker({
+			    size: new AMap.Size(20, 20), 
+				icon : new AMap.Icon({            
+	            image: "lib/images/huang.png",
+	            imageSize: new AMap.Size(16,16)
+	            }),   
+				position : [ json[i].childLongitude , json[i].childLatitude ]
+		      });
+		       marker.proName= json[i].childName;
+		       marker.id= json[i].id;
+		       if(json[i].id == n) marker.setAnimation('AMAP_ANIMATION_BOUNCE'); //弹跳点 
+			   marker.on('click', function(e,id){
+					showInfoM(e.target.proName,e.target.id);
+		       }); //增加点击事件; 
+		       marker.setMap(map);
+		      cha = 1;
+           }
+         }
+          if(cha == 0){
+	       var marker = new AMap.Marker({
+			  size: new AMap.Size(20, 20), 
+			  icon : new AMap.Icon({            
+	          image: "lib/images/hong.png",
+	          imageSize: new AMap.Size(16,16)
+	          }),   
+			  position : [ json[i].childLongitude , json[i].childLatitude ]
+		   });
+		    marker.proName= json[i].childName;
+		    marker.id= json[i].id;
+		    if(json[i].id == n) marker.setAnimation('AMAP_ANIMATION_BOUNCE'); //弹跳点 
+			marker.on('click', function(e,id){
+				showInfoM(e.target.proName,e.target.id);
+		    }); //增加点击事件;  
+		    marker.setMap(map);
+         }  
+		} 
+   }
+   
+     function showInfoM(e,id) { // 点击 坐标点
+	  $.modal({
+	  text: e,
+	  buttons: [
+	    { text: "取消", onClick: function(){  } },
+	    { text: "导航", onClick: function(){  
+	          alert(latitid);
+		      var _uril = window.BASEPATH + 'phoneApp/getRoad'; //获取图片 xy 初始位置
+			  var param = {};
+			  param.startId = 44;  // 用户点位
+			  param.childId = id;  // 用户当id
+			  $.post(_uril, $.toJSON(param), function(data) {
+				  data = parseAjaxResult(data);
+				  var lines = [];
+				  alert(data.length +"leng");
+				  for(var i=0;i<data.length;i++){
+					 lines.push([data[i].childLongitude , data[i].childLatitude]);
+				  }
+				  alert(lines);
+				  var polyLine = new AMap.Polyline({
+				  //折线的节点坐标数组
+				  path:lines,
+				  map:map
+				  }); 
+		      }); 
+	    }},
+	  ]
+	}); 
+	}
 </script>
 
 <script type="text/javascript">
@@ -1229,7 +1407,7 @@ input[type="radio"] {
 					if(this.settings.auto)
 						this.play(this.settings.interval, 'next', true);
 
-					return this;
+					return this; 
 				},
 				onComplete: function() {
 					setTimeout(function() {
@@ -1423,7 +1601,7 @@ input[type="radio"] {
 			})
 		})(jQuery)
 	</script>
-<script language="javascript">
+<script language="javascript"> 
 		
 		var interval2 = window.setInterval("test()", 100);
 		var array = new Array();
@@ -1460,7 +1638,7 @@ input[type="radio"] {
 
 
 <body>
-	<!-- <div class="fugai"></div> -->
+	 <div class="fugai"></div> 
 	<audio style="display: none;" controls="" autoplay="" name="media">
 		<source src="horse.ogg" type="audio/ogg">
 		<source src="lib/images/huanying.mp3" type="audio/mpeg">
@@ -1493,10 +1671,8 @@ input[type="radio"] {
 			<span
 				style="color:black;font-weight: bold;float:left;line-height: 40px;font-size:20px;margin-left:3%;">
 				< </span> <img
-				style="width:5%;height:40%;position: absolute;left: 38%;top:32%;"
-				src="lib/images/sousuo.png" /> <input class="sousuo"
-				placeholder="&nbsp景点搜索"
-				style="width:25%;height:25px;margin-left:12.5%;text-indent: 25px;border-radius: 25px;border:solid 1px #BDBDBD;outline:none;padding: 0px 3px; "></input>
+				style="width:5%;height:40%;position: absolute;left: 40%;top:32%;"
+				src="lib/images/sousuo.png" /> 
 		</div>
 		<div id="zhanshi"
 			style="position:fixed;width:50%;z-index:10;display: inline-block;display: none;">
@@ -1572,7 +1748,7 @@ input[type="radio"] {
 		</div>
 		<div id="xiangqing"
 			style="width: 65%;height: 35%;display:none;z-index: 100;box-shadow: 0px 3px 5px #FFF; overflow-x: hidden;word-break:break-all;word-wrap:break-word;border-radius: 12px;color: #3C94F9;font-size:13.5px;position: fixed;top:50px;left:3%;border:1px solid #3C94F9;background-color:rgba(255,255,255,0.5);">
-			<p style="padding:2px;">进了山门,眼前呈现出一座长16米,高4.5米的汉白玉孝经影壁,上面刻着儒家十三经中最著名的《孝经》，宣扬了中华名族的孝道文明。经文的大意是：君王、臣子、百官、庶民，都要遵从百善孝为先的思想，为国尽忠，为父母尽孝是做人的根本，它的精神应为华夏子孙去继承和光大。为什么在迎门设置影壁呢？因为影壁在风水学上称为玄关，他避开了一箭穿心的弊端。通过弯曲的道路把人引入，一个别有洞天的境界，在两侧有两个耳碑，上面是左青龙右白虎，有阻挡煞气的作用。</p>
+			<p  id = "pid" style="padding:2px;">进了山门,眼前呈现出一座长16米,高4.5米的汉白玉孝经影壁,上面刻着儒家十三经中最著名的《孝经》，宣扬了中华名族的孝道文明。经文的大意是：君王、臣子、百官、庶民，都要遵从百善孝为先的思想，为国尽忠，为父母尽孝是做人的根本，它的精神应为华夏子孙去继承和光大。为什么在迎门设置影壁呢？因为影壁在风水学上称为玄关，他避开了一箭穿心的弊端。通过弯曲的道路把人引入，一个别有洞天的境界，在两侧有两个耳碑，上面是左青龙右白虎，有阻挡煞气的作用。</p>
 		</div>
 	</div>
 
@@ -1593,8 +1769,9 @@ input[type="radio"] {
 	</div>
 </body>
 <script type="text/javascript">
-		$(function() {
-
+var id;
+		function MP3(e,m){  
+		    id =  m;//  是景点id
 			$(".sousuo").click(function() {
 				$("#container").hide();
 				$(".div_txt").show();
@@ -1605,17 +1782,7 @@ input[type="radio"] {
 				$("#container").show();
 				$(".div_txt").hide();
 			});
-			$("#xianshi").click(function() {
-				if($("#xianshi").html()=='显示详情'){	
-				    $("#xiangqing").show();
-				   	$("#zhanshi").hide();
-				    $("#xianshi").html("隐藏详情");
-				}else if($("#xianshi").html()=='隐藏详情'){		
-					$("#xiangqing").hide();
-					$("#zhanshi").show();
-				    $("#xianshi").html("显示详情");
-				}
-			});
+			
 			$("#imgss").click(function() {
 				$(".yuyan").show();
 			});
@@ -1630,20 +1797,15 @@ input[type="radio"] {
         _this.audio.pause();
         };*/
 
-			var song = [{
+			/* window.song = [{
 
 					'src': 'lib/images/huanying.mp3',
 					'title': '孝经'
-				},
-				{
-
-					'src': 'lib/images/damen.mp3',
-					'title': '大门'
 				}
-			];
+			]; */
 
 			var audioFn = audioPlay({
-				song: song,
+				song: e,
 				autoPlay: false //是否立即播放第一首，autoPlay为true且song为空，会alert文本提示并退出
 			});
 
@@ -1669,9 +1831,18 @@ input[type="radio"] {
 			/* 当前播放曲目的对象 */
 			//console.log(audioFn.audio);
 
-		});
-
-		;
+		};
+             $("#xianshi").click(function() {
+				if($("#xianshi").html()=='显示详情'){	
+				    $("#xiangqing").show();
+				   	$("#zhanshi").hide();
+				    $("#xianshi").html("隐藏详情");
+				}else if($("#xianshi").html()=='隐藏详情'){		
+					$("#xiangqing").hide();
+					$("#zhanshi").show();
+				    $("#xianshi").html("显示详情");
+				}
+			});
 		(function($) {
 
 			var fnName = 'audioPlay';
@@ -1759,13 +1930,13 @@ input[type="radio"] {
 					volumeCircular = $(_this.setbacks.volumeCircular),
 					volumeSetbacks = $(_this.setbacks.volumeSetbacks),
 					volumeBox = $(_this.volume.volumeBox),
-					play = $(_this.button.play),
-					prev = $(_this.button.prev),
+					play = $(_this.button.play);
+					/* prev = $(_this.button.prev),
 					next = $(_this.button.next),
 					menuBtn = $(_this.button.menu),
 					volume = $(_this.button.volume),
 					menuClose = $(_this.button.menuClose),
-					backs = $(_this.button.backs);
+					backs = $(_this.button.backs); */
 
 				_this.createAudio = function() {
 
@@ -1775,11 +1946,10 @@ input[type="radio"] {
 					}
 
 					var song = config.song;
-					if(!song) {
-
+					/* if(!song) {
 						alert('当前没有音乐!!!');
 						return false;
-					}
+					} */
 
 					_this.stopAudio();
 					_this.audio.src = song[songEq].src;
@@ -1809,19 +1979,33 @@ input[type="radio"] {
 
 						setTimeout(function() {
 
-							++songEq;
-							songEq = (songEq < _this.song.length) ? songEq : 0;
-							_this.selectMenu(songEq, true);
-						}, 1000);
+						++songEq;
+						songEq = (songEq < _this.song.length) ? songEq : 0;
+						_this.selectMenu(songEq, false);
+						}, 500);
+						/* _this.audio.currentTime = 0;
+       					 _this.audio.pause();
+       					 _this.playAudio();
+       					 self.stop();
+       					$(".audio-stop").css("background-image","url(lib/images/stop.png)"); */
+       					_this.audio.currentTime = 0;
+			             _this.audio.pause();
+			             _this.stopAudio();
+       				     setaddChild(id); // 存已浏览点
+       					$(".audio-play").click(function() {
+       					if($buttonControl.hasClass("action-start")){
+       					  	$(".audio-play").css("background-image","url(lib/images/plays.png)"); 
+       					  	}else{
+       					  	$(".audio-stop").css("background-image","url(lib/images/stop.png)");
+       					  	}
+						}); 
 					}
 
 				}
 
 				var timeAudio;
 				_this.playAudio = function() {
-
 					if(_this.audio) {
-
 						if(!playDate || (Date.now() - playDate) > 100) {
 
 							playDate = Date.now();
@@ -1830,10 +2014,8 @@ input[type="radio"] {
 
 							_this.audio.play();
 							play.addClass('audio-stop').one('click', function() {
-
 								_this.stopAudio();
 								$(this).removeClass('audio-stop').one('click', function() {
-
 									_this.playAudio();
 								});
 							});
@@ -1894,15 +2076,14 @@ input[type="radio"] {
 					var song = _this.song,
 						inline = $(_this.menu.list).empty();
 
-					for(var i in song) {
+					/* for(var i in song) {
 
 						inline.append("<li><a href='javascript:;'>" + (song[i].title || '52player.cn提示：未知歌曲') + "</a></li>");
 					}
-
-					inline.find(">li").unbind('click').on('click', function() {
+					 inline.find(">li").unbind('click').on('click', function() {
 
 						_this.selectMenu($(this).index(), true);
-					});
+					}); */
 				}
 
 				_this.selectMenu = function(num, _bool) {
@@ -1920,7 +2101,7 @@ input[type="radio"] {
 					});
 				}
 
-				_this.newSong = function(_new, _bool) {
+				/* _this.newSong = function(_new, _bool) {
 
 					if(typeof(_new) == 'object') {
 
@@ -1944,7 +2125,7 @@ input[type="radio"] {
 
 						alert('提示：这不是一个对象');
 					}
-				}
+				} */
 
 				var volumeTime;
 				volumeBox.on('mousedown', function() {
@@ -2021,10 +2202,10 @@ input[type="radio"] {
 					_this.playAudio();
 				});
 
-				menuBtn.on('click', function() {
+			/* 	menuBtn.on('click', function() {
 
 					$(_this.menu.menuView).toggleClass('menu-show');
-				});
+				}); 
 
 				prev.on('click', function() {
 
@@ -2048,7 +2229,7 @@ input[type="radio"] {
 				volume.on('click', function() {
 
 					$(_this.volume.volumeView).toggleClass('audio-show-volume');
-				});
+				}); */
 
 				_this.upMenu();
 

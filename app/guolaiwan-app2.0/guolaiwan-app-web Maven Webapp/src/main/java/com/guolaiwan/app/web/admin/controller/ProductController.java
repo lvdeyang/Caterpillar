@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -225,6 +226,7 @@ public class ProductController extends BaseController {
 		ProductPO product = new ProductPO();
 		// 名称、副标题、板块、分类、时间
 		String modularCode = request.getParameter("modularCode");
+		String Integra = request.getParameter("Integra"); //积分商品
 		String modularName = request.getParameter("modularName");
 		String productName = request.getParameter("productName");
 		String modularClassId = request.getParameter("modularClassId");
@@ -259,6 +261,7 @@ public class ProductController extends BaseController {
 			product.setProductDayCount(Integer.parseInt(productDayCount));	
 		}
 		product.setDatesOn(datesOn);
+		product.setIntegralGoods(Integer.parseInt(Integra)); //添加积分商品
 		product.setCostMessage(costMessage);
 		product.setNotes(notes);
 		product.setRemarks(remarks);
@@ -444,6 +447,7 @@ public class ProductController extends BaseController {
 		String modularName = request.getParameter("modularName");
 		String modularClassId = request.getParameter("modularClassId");
 		String modularClass = request.getParameter("modularClass");
+		String Integra = request.getParameter("Integra"); //积分商品
 
 		// 商家
 		long productMerchantID = Long.parseLong(request.getParameter("productMerchantID"));
@@ -546,6 +550,8 @@ public class ProductController extends BaseController {
 		// 审核状态
 		String productAuditstates = request.getParameter("productAuditstates");
 
+		//积分商品
+		product.setIntegralGoods(Integer.parseInt(Integra));
 		// 商品、副标题
 		product.setProductName(productName);
 		product.setProductSubtitle(productSubtitle);
