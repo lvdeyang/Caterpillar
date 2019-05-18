@@ -1,4 +1,4 @@
-package com.chenxi.test;
+package com.chenxi.spider;
 
 import cn.edu.hfut.dmic.webcollector.example.DemoAutoNewsCrawler;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;

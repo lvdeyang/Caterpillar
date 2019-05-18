@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="guolaiwan-app-web Maven Webapp">
+    <wb-module deploy-name="chenxisoft Maven Webapp">
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-jee/web-resources"/>
@@ -22,7 +22,7 @@
         <dependent-module archiveName="caterpillar-communication-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/caterpillar-communication/caterpillar-communication">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="java-output-path" value="/guolaiwan-app-web Maven Webapp/target/classes"/>
-        <property name="context-root" value="guolaiwan-app-web"/>
+        <property name="java-output-path" value="/chenxisoft Maven Webapp/target/classes"/>
+        <property name="context-root" value="chenxisoft"/>
     </wb-module>
 </project-modules>

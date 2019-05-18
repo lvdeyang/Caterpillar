@@ -13,6 +13,7 @@ import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.admin.po.ChildProductPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
+import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.sun.jna.platform.win32.WinDef.LONG;
 
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -132,6 +133,18 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		cHql.andBy("productMerchantID", Condition.eq, merchantId);
 		return countByHql(cHql);
 	}
+	 //获取所有积分商品
+	public  List<ProductPO> getIntegralGoods() { 
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("integralGoods", Condition.eq, 1);
+		return findByHql(hql);
+	}
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * 获取商家的最小价钱

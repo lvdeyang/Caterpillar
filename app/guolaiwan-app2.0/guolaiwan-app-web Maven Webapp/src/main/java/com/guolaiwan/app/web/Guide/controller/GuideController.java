@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,7 +33,6 @@ import com.guolaiwan.bussiness.admin.po.ChildProductPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
-import com.mysql.fabric.xmlrpc.base.Array;
 
 @Controller
 @RequestMapping("/guide")
@@ -55,6 +53,12 @@ public class GuideController extends WebBaseControll  {
 		ModelAndView mv = null;
 		mv = new ModelAndView("guide/guidemap/wanbuddhayuan");
 		mv.addObject("chantId", chantId);
+		return mv;
+	}
+	@RequestMapping(value = "/visitors/home")
+	public ModelAndView home(HttpServletRequest request ) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("guide/guidemap/home");
 		return mv;
 	}
 	
@@ -106,7 +110,7 @@ public class GuideController extends WebBaseControll  {
 		List<UserInfoPO> polist = conn_userInfo.getUserByUid(userId);
 		List<UserInfoVO> volist = UserInfoVO.getConverter(UserInfoVO.class).convert(polist, UserInfoVO.class);
 		map.put("result", result);
-		map.put("volist", volist);
+		map.put("volist", volist.get(0));
 		return success(map);
 	}
 	
@@ -134,7 +138,6 @@ public class GuideController extends WebBaseControll  {
 		long merchantId = pageObject.getLong("chantId");
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<MerchantPO> product = mer_chant.getMerchantById(merchantId);
-		System.out.println(product.size()+"++++++");
 		if (product == null) {
 			return success(null);
 		}
@@ -147,50 +150,76 @@ public class GuideController extends WebBaseControll  {
 			dataMap.put("longitude", merchantPO.getLocationLongitude());
 			dataMap.put("pictures", merchantPO.getChartletPictures());
 		}
-		System.out.println("22222222");
 		return success(dataMap);
 	}
 	
 	
-	
-	
-	
-	
 	/**
-	 * Liw 用户每浏览一个导览点执行新增Controller
-	 **/
-	@RequestMapping(value = "/addChildByUidCid/{childIds}", method = RequestMethod.POST)
-	public void addChildByUidCid(HttpServletRequest request, @RequestParam String childIds) {
+	 * 
+	 * 查询       贴图  xy   导览图片      初始显示位置
+	 * @param productId
+	 * @param page
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delectchildId", method = RequestMethod.POST)
+	public Map<String, Object> DelectChildId(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		Long userId = (Long) request.getSession().getAttribute("userId");
-		UserInfoPO user = new UserInfoPO();
 		List<UserInfoPO> upolist = conn_userInfo.getUserByUid(userId);
-		String child = upolist.get(0).getChildId();
-		String str = null;
-		String[] s = childIds.split(",");
-		for (String st : s) {
-			str = child + "," + st;
-		}
-		user.setChildId(str);
-		conn_userInfo.save(user);
+		String childId =   upolist.get(0).getChildId();
+		String str = "";
+		upolist.get(0).setChildId(str);
+		conn_userInfo.saveOrUpdate(upolist.get(0));
+		return success("");
 	}
 	
 	
 	
 	
 	
+
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 *  用户每浏览一个导览点执行新增Controller
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/addChildByUidCid", method = RequestMethod.POST)
+	public  Map<String, Object> addChildByUidCid(HttpServletRequest request , HttpServletResponse response) {
+		Long userId = (Long) request.getSession().getAttribute("userId");
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		String merchantId = pageObject.getString("ChildId");
+		if(merchantId != null){
+			List<UserInfoPO> upolist = conn_userInfo.getUserByUid(userId);
+			String[] childId =   upolist.get(0).getChildId().split(",");
+			for (String string : childId) {
+				if (merchantId.equals(string)) {
+					return success("");
+				}
+			}
+			String child = upolist.get(0).getChildId();
+			String str = null;
+			if( !"".equals(child) && merchantId != null ){
+				str = child +","+merchantId;
+			}else {
+				str = merchantId;
+			}
+			upolist.get(0).setChildId(str);
+			conn_userInfo.saveOrUpdate(upolist.get(0));
+		}
+		
+		return success("");
+	}
+
 	
 	
 	
