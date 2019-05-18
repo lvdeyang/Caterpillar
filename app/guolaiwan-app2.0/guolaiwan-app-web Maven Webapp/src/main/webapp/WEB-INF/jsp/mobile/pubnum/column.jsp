@@ -507,6 +507,8 @@ html, body {
 			}
 	  };
 		
+		
+	  var pageNumber=2;
 	  var columnName;
 	  var columnPic;
 	  var columnUrl;
@@ -632,8 +634,11 @@ html, body {
 		});
 		
 		$(document).on('change','#classes',function(){
+			$('.weui-panel__bd').remove();
 		   getMerchants($(this).val());
-		   
+		   $('.chengjie').val($(this).val());
+		   $('.flag').val(0);
+		   pageNumber=2;
 		});
 		
 		
@@ -655,53 +660,76 @@ html, body {
 					if(data){
 					   generateProduct(data);
 					}
-					
 				});
-		
-		
-		
 		}
+		
+		$(window).scroll(function(){
+　　			//判断是否滑动到页面底部
+		     if($(window).scrollTop() === $(document).height() - $(window).height()){
+				var flag=$('.flag').val();
+				if(flag==2)return;
+		           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
+				var classId=$('.chengjie').val();
+				var page=pageNumber;
+				var params={};
+				if(classId!=0){
+					params.retrievals=[];
+					params.retrievals.push({"type":"modularClass","value":classId});
+				}
+				params.modularCode='${modularCode}';
+				params.page=page;
+				$.post('<%=basePath%>phoneApp/getMerchantsByModu', $.toJSON(params), function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					if(data){
+					  getLine(data);
+					 $('.weui-loadmore').fadeIn().addClass("show")
+					setTimeout(function(){$('.weui-loadmore').fadeOut().addClass("show")},3000);
+					pageNumber+=1;
+						}
+					});
+			     }
+			});
+
+
 		
 		
 		$(document).on('click','.merchant',function(){
 	       var codes=this.id.split('-');
 	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
-	    
 	    });
 	    
 	    $(document).on('click','.merchant1',function(){
 	       var codes=this.id.split('-');
 	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
-	    
 	    });
 		
 		function getLine(modal){
 	        var html=[];
-	  
            var merchants=modal.merchants;
-           
+           if(merchants.length==0){
+           		$('.flag').val(2);
+              return;
+           }
 	       //后面的
 	       html.push('<div style="margin-top:5px;padding-bottom:50px;" class="weui-panel__bd" class="columnRecomments">');
-		   html.push('<div class="weui-panel__bd">');
 		   for(var j=1;j<modal.merchants.length-1;j++){
-			   html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].merchantId+'">');
-			   html.push('<div class="weui-media-box__hd">');
-			   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].linePic+'">');
-			   html.push('</div>');
-			   html.push('<div class="weui-media-box__bd">');
-			   html.push('<h4 class="weui-media-box__title">'+merchants[j].lineName+'</h4>');
-			   html.push('<p class="weui-media-box__desc">'+merchants[j].lineSubtitle+'</p>');
-			   html.push('<div style="font-size:12px;height:20px"></div>');
-			   html.push('</div>');
-			   html.push('</a>');
-		   
+		   	   html.push('<div class="weui-panel__bd">');
+						   html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'">');
+						   html.push('<div class="weui-media-box__hd">');
+						   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].shopHeading+'">');
+						   html.push('</div>');
+						   html.push('<div class="weui-media-box__bd">');
+						   html.push('<h4 class="weui-media-box__title">'+merchants[j].shopName+'</h4>');
+						   html.push('<p class="weui-media-box__desc">'+merchants[j].shopAddress+'</p>');
+						   html.push('<div style="font-size:12px;height:20px"></div>');
+						   html.push('</div>');
+						   html.push('</a>');
+					       html.push('</div>');
 		   }
-		   html.push('</div></div>');
+		   html.push('</div>');
 
-	        
-	    
 	        $('#content').append(html.join(''));
-	    
 	    }
 		
 		function generateProduct(modal){
@@ -724,24 +752,22 @@ html, body {
 	       html.push('</div>');
 	       //后面的
 	       html.push('<div style="margin-top:5px;padding-bottom:50px;" class="weui-panel__bd allMer" class="columnRecomments">');
-		   html.push('<div class="weui-panel__bd">');
 		   for(var j=1;j<modal.merchants.length;j++){
-			   html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'">');
-			   html.push('<div class="weui-media-box__hd">');
-			   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].shopHeading+'">');
-			   html.push('</div>');
-			   html.push('<div class="weui-media-box__bd">');
-			   html.push('<h4 class="weui-media-box__title">'+merchants[j].shopName+'</h4>');
-			   html.push('<p class="weui-media-box__desc">'+merchants[j].shopAddress+'</p>');
-			   html.push('<div style="font-size:12px;height:20px"></div>');
-			   html.push('</div>');
-			   html.push('</a>');
-		   
+					       html.push('<div class="weui-panel__bd">');
+						   html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'">');
+						   html.push('<div class="weui-media-box__hd">');
+						   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].shopHeading+'">');
+						   html.push('</div>');
+						   html.push('<div class="weui-media-box__bd">');
+						   html.push('<h4 class="weui-media-box__title">'+merchants[j].shopName+'</h4>');
+						   html.push('<p class="weui-media-box__desc">'+merchants[j].shopAddress+'</p>');
+						   html.push('<div style="font-size:12px;height:20px"></div>');
+						   html.push('</div>');
+						   html.push('</a>');
+					       html.push('</div>');
 		   }
-		   html.push('</div></div>');
+		   html.push('</div>');
 
-	        
-	    
 	        $('#content').append(html.join(''));
 	    
 	    }
@@ -753,11 +779,15 @@ html, body {
 	   
 	   });
 	});
+	
+		
 </script>
 
 
 
 <body>
+<input type="text" class="chengjie" value="" hidden="hidden"> 
+<input type="text" class="flag" value="" hidden="hidden">
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
@@ -780,8 +810,13 @@ html, body {
 		          <select id="classes" style="width:100px;height:30px;line-height:30px"></select>
 		        </div>
 	       </div>
+	       
 		</div>
-		
 	</div>
+	
+	<div class="weui-loadmore" hidden="hidden" style="position:fixed;bottom: 5%;left:18%;z-index: 10000">
+			  <i class="weui-loading"></i>
+			  <span class="weui-loadmore__tips">正在加载</span>
+	</div>		
 </body>
 </html>
