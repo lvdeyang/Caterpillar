@@ -713,7 +713,7 @@ html, body {
            }
 	       //后面的
 	       html.push('<div style="margin-top:5px;padding-bottom:50px;" class="weui-panel__bd" class="columnRecomments">');
-		   for(var j=1;j<modal.merchants.length-1;j++){
+		   for(var j=0;j<modal.merchants.length;j++){
 		   	   html.push('<div class="weui-panel__bd">');
 						   html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'">');
 						   html.push('<div class="weui-media-box__hd">');
