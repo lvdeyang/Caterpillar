@@ -240,6 +240,7 @@ public class PhoneController extends WebBaseControll {
 	// 默认查询数量
 	private final int pageNum = 1;
 	private final int pageSizeL = 6;
+	private final int pageSizeI = 8;
 	private final int pageSize = 100;
 	private final int recommendSize = 6;
 
@@ -733,7 +734,6 @@ public class PhoneController extends WebBaseControll {
 		Map<String, Object> mapStr = new HashMap<String, Object>();
 		Map<String, Object> mapStr1 = new HashMap<String, Object>();
 		Map<String, Object> mapStr2 = new HashMap<String, Object>();
-
 		// 解析json
 		String param = getRequestJson(request);
 
@@ -744,7 +744,6 @@ public class PhoneController extends WebBaseControll {
 		JSONObject pageObject = JSON.parseObject(param);
 		int page = Integer.parseInt(pageObject.getString("page"));
 		String modularCode = pageObject.getString("modularCode");
-
 		JSONArray retrievals = pageObject.getJSONArray("retrievals");// 解析json数组
 		if (retrievals != null && retrievals.size() > 0) {
 			for (int i = 0; i < retrievals.size(); i++) {
@@ -764,9 +763,9 @@ public class PhoneController extends WebBaseControll {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 
 		// 获取商家列表
-		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSize);
-		merchants.addAll(conn_merchant.getMerchantByModularCode1(modularCode, mapStr1, page, pageSize));
-		merchants.addAll(conn_merchant.getMerchantByModularCode2(modularCode, mapStr2, page, pageSize));
+		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSizeI);
+		merchants.addAll(conn_merchant.getMerchantByModularCode1(modularCode, mapStr1, page, pageSizeI));
+		merchants.addAll(conn_merchant.getMerchantByModularCode2(modularCode, mapStr2, page, pageSizeI));
 		List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants, MerchantVO.class);
 		int count = conn_merchant.countMerchantByModularCode(modularCode, mapStr);
 

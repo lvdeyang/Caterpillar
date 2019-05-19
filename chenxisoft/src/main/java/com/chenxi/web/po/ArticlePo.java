@@ -13,6 +13,7 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Table(name = "article")
 public class ArticlePo extends AbstractBasePO {
 	private String pic;
+	private String title;
 	private String content;
 	private ContentSource source;
 	private Moudular moudular;
@@ -65,6 +66,14 @@ public class ArticlePo extends AbstractBasePO {
 
 	public void setAutor(String autor) {
 		this.autor = autor;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }
