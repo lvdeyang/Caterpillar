@@ -12,6 +12,7 @@ public class ClassesPo extends AbstractBasePO{
 
 	private String name;
 	private String code;
+	private int sindex;
 	public String getName() {
 		return name;
 	}
@@ -24,5 +25,13 @@ public class ClassesPo extends AbstractBasePO{
 	public void setCode(String code) {
 		this.code = code;
 	}
+	public int getSindex() {
+		return sindex;
+	}
+	public void setSindex(int sindex) {
+		this.sindex = sindex;
+	}
+	
+	
 	
 }
