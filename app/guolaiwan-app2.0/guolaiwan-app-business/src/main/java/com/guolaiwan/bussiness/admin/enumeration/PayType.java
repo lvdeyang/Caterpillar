@@ -6,8 +6,10 @@ public enum PayType {
 	ALIPAY("支付宝"),
 
 	//点击渲染
-	WEICHAT("微信"),
-
+	WEICHAT("微信"),  
+    
+	INTEGRAL("积分"),
+	
 	//
 	GOLDPAY("金币支付");
 
@@ -40,6 +42,8 @@ public enum PayType {
 			return WEICHAT;
 		}else if("GOLDPAY".equals(s)){
 			return GOLDPAY;
+		}else if("INTEGRAL".equals(s)){
+			return INTEGRAL;
 		}else {
 			throw new Exception("错误的支付方式："+s);
 		}
