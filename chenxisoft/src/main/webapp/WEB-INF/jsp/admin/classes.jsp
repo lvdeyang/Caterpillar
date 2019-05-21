@@ -25,8 +25,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       </div>
     </div>
     <div class="layui-col-xs10">
-      <div class="grid-demo">10/12</div>
-    </div>
+       <script type="text/html" id="bar">
+              <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	   </script>
+	    <div>
+		      搜索：
+		  <div class="layui-inline">
+		    <input class="layui-input" name="id" id="searchtxt" autocomplete="off">
+		  </div>
+		  <button class="layui-btn" id="search" data-type="reload">搜索</button>
+		  <label class="layui-form-label" id="selClassName">未选择分类</label>
+		  <input type="hidden" id="selClassId" value="0"/>
+		</div>
+		<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
+	    </div>
    
   </div>
     
@@ -44,6 +56,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                  layui.tree({
 				  elem: '#classes' //传入元素选择器
 				  ,nodes:data.list
+				  ,click: function(node){
+                    
+				    console.log(node) //node即为当前点击的节点数据
+				    $('#selClassName').html(node.name);
+				    $('#selClassId').val(node.id);
+				    
+				    table.reload('dataTable', {
+				        page: {
+				          curr: 1 //重新从第 1 页开始
+				        }
+				        ,where: {
+				          key: {
+				            classId:$('#selClassId').val()
+				          }
+				        }
+				    });
+				    
+				    
+				  }  
 				});
               },
               complete: function () {
@@ -62,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		         200,300
 		          
 		        ] 
-		        ,content: ''
+		        ,content: 'classes/add'
 		        //layer.closeAll();
 		        ,zIndex: layer.zIndex //
 		        ,success: function(layero){
@@ -72,6 +103,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
           });
 		   
+		   
+		   var table = layui.table;
+		    $('#search').on('click',function(){
+                  
+              
+              });
+              
+              
+			  table.render({
+			    elem: '#dataTable'
+			    ,url:'/chenxisoft/onlineclass/list?classId='+$('#selClassId').val()
+			    ,title: '上架列表'
+			    ,cols: [[
+			      {type: 'checkbox', fixed: 'left'}
+			      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
+			      ,{field:'contentName', title:'内容名称', width:500, edit: 'text'}
+			      ,{field:'contentMouduler', title:'所属板块', width:200, edit: 'text'}
+			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}
+			    ]]
+			    ,page: true
+			  });
+			  
+			  
+			  table.on('tool(dataTable)', function(obj){
+			    var data = obj.data;
+			    //console.log(obj)
+			    if(obj.event === 'del'){
+			      layer.confirm('真的删除行么', function(index){
+			        obj.del();
+			        layer.close(index);
+			      });
+			    } 
+			    
+			  });  
 
            
 			

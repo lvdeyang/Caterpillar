@@ -13,27 +13,62 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 
 <body class="layui-layout-body">
-
+<div class="x-body">
     <form class="layui-form" action="">
 	  <div class="layui-form-item">
-	    <label class="layui-form-label">单行输入框</label>
+	    <label class="layui-form-label">code</label>
 	    <div class="layui-input-block">
-	      <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+	      <input type="text" name="code" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
 	    </div>
 	  </div>
 	  <div class="layui-form-item">
-	    <label class="layui-form-label">验证必填项</label>
+	    <label class="layui-form-label">名称</label>
 	    <div class="layui-input-block">
-	      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+	      <input type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
 	    </div>
 	  </div>
-   
+      <div class="layui-form-item" style="margin-left:50px;">
+           <button class="layui-btn" lay-filter="add" lay-submit>
+                                                              保存
+           </button>
+      </div>
+</form>
+</div>
 	<script>
 		//JavaScript代码区域
-		layui.use(['table','tree','layer'],function(){
+		layui.use(['form','layer'],function(){
 		   var $ = layui.jquery;
-		   
+		   var form = layui.form
+              ,layer = layui.layer;
 
+              //监听提交
+              form.on('submit(add)', function(data){
+              console.log(data.field);
+          
+                $.ajax({
+                	  type:"post",
+           			  url:"classes/add.do",
+                      data:data.field,
+                      success:function(msg){
+                        if(msg=="success"){
+                          layer.alert("增加成功", {icon: 6},function () {
+                           // 获得frame索引
+                           var index = parent.layer.getFrameIndex(window.name);
+                           //关闭当前frame
+                           parent.window.location.reload();
+                           parent.layer.close(index);
+                           });
+                        }
+                        //提示
+                        else{
+                        
+                        }
+                       }
+                }) 
+              
+                return false;
+            });
+ 
            
 			
 		});
