@@ -59,6 +59,8 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	private String productPrice;
 	// 积分商品  0是 1不是
 	private int IntegralGoods;
+	// 积分商品自领取地址  0是 1不是
+	private String site;
 	
 	//提成模式（0：佣金1：比例）
 	private int productCommissionCode;
@@ -402,7 +404,18 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	}
 
 
+     
 
+
+	public String getSite() {
+		return site;
+	}
+
+
+	public ProductVO setSite(String site) {
+		this.site = site;
+		return this;
+	}
 
 
 	public String getProductMerchantJson() {
@@ -1186,7 +1199,7 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setIfFace(entity.getIfFace())
 		.setIntegralGoods(entity.getIntegralGoods())
 		.setProductIsRefund(entity.getProductIsRefund())
-		
+		.setSite(entity.getSite())
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)));
 		
 		return this;

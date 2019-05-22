@@ -31,9 +31,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.admin.vo.ChildProductVO;
+import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
+import com.guolaiwan.app.web.website.vo.AddressVO;
 import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.bussiness.admin.dao.ActivityDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
@@ -48,6 +50,7 @@ import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveProductDAO;
+import com.guolaiwan.bussiness.admin.dao.LogisticsDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
@@ -80,15 +83,19 @@ import com.guolaiwan.bussiness.admin.enumeration.OrderType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.ChildProductPO;
+import com.guolaiwan.bussiness.admin.po.LogisticsPo;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
+import com.guolaiwan.bussiness.admin.po.MerchantUser;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.OrderPeoplePo;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.RoomStatusPO;
+import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
+import com.guolaiwan.bussiness.website.po.AddressPO;
 
 import pub.caterpillar.commons.util.date.DateUtil;
 
@@ -117,14 +124,17 @@ public class integralControll extends WebBaseControll  {
 	private MerchantDAO conn_merchant;
 	@Autowired
 	UserOnedayBuyDAO conn_userone;
+	@Autowired
+	private LogisticsDao conn_logistics;
+
 	
 	
 	@RequestMapping(value = "visitors/home")
-	public ModelAndView home(HttpServletRequest request ,long userId, long id) throws Exception {
+	public ModelAndView home(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
 		mv = new ModelAndView("guide/guidemap/home");
 		mv.addObject("userId", userId);
-		mv.addObject("id", id);
 		return mv;
 	}
 	
@@ -225,6 +235,7 @@ public class integralControll extends WebBaseControll  {
 		String paytype = pageObject.getString("paytype");
 		String activityId = pageObject.getString("activityId");
 		long money = pageObject.getLong("payMoney");
+		long comboName = pageObject.getLong("comboName");
 		ProductPO productPO = conn_product.get(Long.parseLong(productId));
 		if (num == null) {
 			num = "1";
@@ -234,6 +245,7 @@ public class integralControll extends WebBaseControll  {
 		// 4/26添加comId 张羽 4/28 添加退款限制
 		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
 		order.setComId(productPO2.getComId());
+		order.setLogisticsId(comboName); // 添加快递领取 到店领取
 		order.setProductIsRefund(productPO2.getProductIsRefund());
 		
 
@@ -401,7 +413,7 @@ public class integralControll extends WebBaseControll  {
 		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
 		conn_product.update(productPO);
 		conn_order.saveOrUpdate(order);
-		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		JSONArray array=pageObject.getJSONArray("idnums");
 		if(array!=null){
@@ -420,7 +432,13 @@ public class integralControll extends WebBaseControll  {
 		return success(data);
 	}
 
-	
+	@RequestMapping(value = "/order/info")
+	public ModelAndView orderInfo(HttpServletRequest request, long orderId) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("guide/guidemap/orderInfo");
+		mv.addObject("orderId", orderId);
+		return mv;
+	}
 	
 	
 	@Autowired MerchantUserDao conn_merchantUser;
@@ -476,10 +494,112 @@ public class integralControll extends WebBaseControll  {
         	obj.put("data", dataObject);
         	SendMsgUtil.sendTemplate(obj.toJSONString());
     	}
+    	
+
+		JSONObject obj = new JSONObject();
+		obj.put("touser", "opVUYv9LtqKAbiaXInBqI01hlpYg");
+		obj.put("template_id", "imgTupyObgSuKRYqZrc8VAXgzGePPEeuqwVG7IF_Rzw");
+		obj.put("url", "");
+		JSONObject microProObj = new JSONObject();
+		microProObj.put("appid", "");
+		microProObj.put("pagepath", "");
+		obj.put("miniprogram", microProObj);
+		JSONObject dataObject = new JSONObject();
+		JSONObject firstObj = new JSONObject();
+		firstObj.put("value", "积分订单完成");
+		firstObj.put("color", "");
+		dataObject.put("first", firstObj);
+		String nowDate = DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+
+		JSONObject nameObj = new JSONObject();
+		nameObj.put("value", nowDate);
+		nameObj.put("color", "");
+		dataObject.put("keyword2", nameObj);
+
+		JSONObject accountTypeObj = new JSONObject();
+		accountTypeObj.put("value", orderInfoPO.getId());
+		accountTypeObj.put("color", "");
+		dataObject.put("keyword1", accountTypeObj);
+
+		JSONObject remarkObj = new JSONObject();
+		remarkObj.put("value", productPO == null ? "到店支付订单:" + merchantPO.getShopName()
+				: productPO.getProductName() + "(" + df.format(amount) + "积分)");
+		remarkObj.put("color", "");
+		dataObject.put("remark", remarkObj);
+		obj.put("data", dataObject);
+		SendMsgUtil.sendTemplate(obj.toJSONString());
+
+		// opVUYv9LtqKAbiaXInBqI01hlpYg
     };
 	
 	
-	
+    /**
+	 * 订单：订单详情
+	 * 
+	 * @param orderId
+	 * @return order 邮寄地址address
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/orderInfo", method = RequestMethod.GET)
+	public Map<String, Object> orderInfo(HttpServletRequest request, Long orderId) throws Exception {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		// 订单
+		OrderInfoPO order = conn_order.get(orderId);
+
+		// 邮寄地址
+		AddressPO address = conn_address.get(order.getMailAddress());
+		if (address != null) {
+			AddressVO _address = new AddressVO().set(address);
+			dataMap.put("address", _address);
+		} else {
+			dataMap.put("address", null);
+		}
+		// 商家
+		MerchantPO merchantPO = conn_merchant.get(order.getShopId());
+
+		OrderInfoVO _order = new OrderInfoVO().set(order);
+		if (_order.getProductName() == null) {
+			_order.setProductName("");
+		}
+		_order.setYdNO(sysConfig.getWebUrl() + _order.getYdNO());
+		_order.setProductPic(sysConfig.getWebUrl() + _order.getProductPic());
+		_order.setShopLongitude(merchantPO.getShopLongitude());
+		_order.setShopLatitude(merchantPO.getShopLatitude());  
+		
+		if (_order.getComboId() != 0) {
+			ProductComboPO comboPO = conn_combo.get(_order.getComboId());
+			if(comboPO!=null){
+				_order.setProductPrice(new DecimalFormat("0.00").format((double) comboPO.getComboprice() / 100));
+				_order.setComboName(comboPO.getCombo());
+			}
+			
+		} else {
+			_order.setComboName("标准");
+		}
+		LogisticsPo logisticsPo = conn_logistics.get(_order.getLogisticsId());
+		if (logisticsPo != null) {
+			_order.setLogisticsName(logisticsPo.getName());
+		} else { 
+			_order.setLogisticsName("-");
+		}
+
+		if (_order.getActivityId() != 0) {
+			ActivityRelPO activityRelPO = conn_activityRel.get(_order.getActivityId());
+			if(activityRelPO!=null){
+				_order.setProductPrice(
+						new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+			}
+		}
+		ProductPO Product =   conn_product.getProductByProId(order.getProductId()).get(0);
+	    if ( Product.getSite() != null) {
+	    	System.out.println("222222222222222222222222");
+	    	dataMap.put("site",  Product.getSite());
+		}	
+		dataMap.put("order", _order);
+		return success(dataMap);
+	}
 	
 	
 	
