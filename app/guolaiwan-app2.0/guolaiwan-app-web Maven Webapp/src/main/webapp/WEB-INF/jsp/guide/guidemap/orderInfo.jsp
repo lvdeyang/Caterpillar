@@ -64,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>个人主页</title>
+<title>订单详情</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -506,7 +506,119 @@ html, body {
 	  };
 		
 
+      var _uriRecomment = window.BASEPATH + 'integral/orderInfo?orderId=${orderId}';
+		
+		$.get(_uriRecomment, null, function(data){ 
+			data = parseAjaxResult(data);
+			if(data === -1) return;
+			
+			
+			if("积分"==data.order.payMode){ //判断是否是积分订单
+			    if(data.order.productPic.indexOf('null')==-1){
+			       $('#proPic').attr('src',data.order.productPic);
+			    }
+			    alert(data.site);
+			    if(data.order.logisticsId != 2){
+			      $('#cuserName').html(data.address.consigneeName);
+			      $('#cphone').html(data.address.consigneePhone);
+			      $('#caddress').html(data.address.province+data.address.city+data.address.district+'&nbsp;&nbsp;&nbsp;&nbsp;'+data.address.consigneeAddress);
+			    }else{
+			      $("#cuser,#cph,#cadd").hide();
+			      $("#site").show();
+			      $('#getsite').html(data.site);
+			    }
+			    $('#proName').html(data.order.productName);
+			    $('#proPrice').html(data.order.productPrice*100);
+			    $('#amount').val(data.order.orderAllMoney*100);
+			    $('#payAmount').val(data.order.payMoney*100);
+			    $('#ydImage').attr('src',data.order.ydNO);
+			    $('#largeYd').attr('src',data.order.ydNO);
+			    $('#orderNo').html(data.order.id);
+			    $('#orderDate').html(data.order.payDate);
+			    $('#combo').html(data.order.comboName);
+			    $('#logistics').html(data.order.logisticsName);
+			 
+			  
+			    $('#bookspan').html(data.order.orderBookDate);
+			    $('#startspan').html(data.order.orderBookDate);
+			    $('#endspan').html(data.order.endBookDate);
+			  
+			    
+ 			    if(data.order.bkCode=='0002'){
+			    	$('#startDate').show();
+			    	$('#endDate').show();
+			    }else if(data.order.bkCode=='0003'||data.order.bkCode=='0001'){
+			    	$('#bookDate').show();
+			    } 
+			     return;
+			}
+			
+			if(data){
+			    if(data.order.productPic.indexOf('null')==-1){
+			       $('#proPic').attr('src',data.order.productPic);
+			    }
+			    
+			    
+			    if(data.order.productName == "")
+			    {	
+			    	$('#proName').html('到店支付');
+			    }else{
+			    	$('#proName').html(data.order.productName);
+			    	$('#proPrice').html('￥'+data.order.productPrice);
+			    	$('#proCount').html('x'+data.order.productNum);
+			    }
+			    $('#amount').val('￥'+data.order.orderAllMoney);
+			    $('#payAmount').val('￥'+data.order.payMoney);
+			    $('#ydImage').attr('src',data.order.ydNO);
+			    $('#largeYd').attr('src',data.order.ydNO);
+			    $('#orderNo').html(data.order.id);
+			    $('#orderDate').html(data.order.payDate);
+			    $('#combo').html(data.order.comboName);
+			    $('#logistics').html(data.order.logisticsName);
+			    $('#cuserName').html(data.address.consigneeName);
+			    $('#cphone').html(data.address.consigneePhone);
+			    $('#bookspan').html(data.order.orderBookDate);
+			    $('#startspan').html(data.order.orderBookDate);
+			    $('#endspan').html(data.order.endBookDate);
+			    $('#caddress').html(data.address.province+data.address.city+data.address.district+'&nbsp;&nbsp;&nbsp;&nbsp;'+data.address.consigneeAddress);
+			    
+ 			    if(data.order.bkCode=='0002'){
+			    	$('#startDate').show();
+			    	$('#endDate').show();
+			    }else if(data.order.bkCode=='0003'||data.order.bkCode=='0001'){
+			    	$('#bookDate').show();
+			    } 
+			}
+			
+		});
+	
+	   $(document).on('click','#ydImage',function(){
+	      $("#large").popup();
+	   
+	   });
+	   
+       function changeStatus(){
+       
+         setTimeout(function(){ 
+	          $.get(window.BASEPATH +"pubnum/order/status?orderId=${orderId}", null, function(data){
+		
+			    if(data.data=="TESTED"){
+			       $.toast("已验单");
+			    }else{
+			      changeStatus();
+			    }
+		
+	         });
+          }, 1000);
+       }
    
+   
+	    changeStatus();
+          
+	      
+
+      
+	   
 	
 	
 	});
@@ -521,72 +633,131 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">个人</div>
+				<div class="header-content">订单详情</div>
 			</div>
 		</div>
 		<div class="content">
-			<div style="width:100%;height:100px;">
-			    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-			      <div class="weui-media-box__hd">
-			        <img id="userHead" style="border-radius:50%;width:60px;height:60px;" class="weui-media-box__thumb" src="${user.userHeadimg}">
-			      </div>
-			      <div class="weui-media-box__bd">
-			        <h4 class="weui-media-box__title" style="font-size:12px;" id="userName">${user.userNickname}</h4>
-			        <p class="weui-media-box__desc" style="font-size:12px;">积分: ${user.userIntegral}</p>
-			      </div>
-    		    </a>
-			</div>
-			<div class="weui-grids">
-			  <a href="pubnum/favoritelist/index" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/sc.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                    收藏
-			    </p>
-			  </a>
-			  <a href="pubnum/order/list" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/dd.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                我的订单
-			    </p>
-			  </a>
-			  <a href="pubnum/basket/index" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/gwc.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                   购物车
-			    </p>
-			  </a>
-			</div>
 			
-			
-			<div class="weui-cells" style="font-size:12px">
-			  <a class="weui-cell weui-cell_access" href="pubnum/address/index">
-			    <div class="weui-cell__bd">
-			      <p>收货地址</p>
-			    </div>
-			    <div class="weui-cell__ft">
-			    </div>
-			  </a>
-			</div>
-			
-			<div class="weui-cells" style="font-size:12px">
-			  <a class="weui-cell weui-cell_access" href="integral/visitors/home">
-			    <div class="weui-cell__bd">
-			      <p>积分商城</p>
-			    </div>
-			    <div class="weui-cell__ft">
-			    </div>
-			  </a>
-			</div>
+			<div class="weui-panel__bd" style="padding-bottom:50px;">
+				    <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+				      <div class="weui-media-box__hd">
+				        <img id="proPic" style="width:60px;height:60px;" class="weui-media-box__thumb" src="">
+				      </div>
+				      <div class="weui-media-box__bd">
+				        <h4 class="weui-media-box__title" id="proName"></h4>
+				        <p class="weui-media-box__desc"><span id="proPrice"></span><span id="proCount"></span></p>
+				      </div>
+				    </a>
+				    
+				    <div class="weui-cell">
+					    <div class="weui-cell__hd"><label class="weui-label">订单总额</label></div>
+					    <div class="weui-cell__bd">
+					      <input id="amount"  class="weui-input" value="" disabled type="text" placeholder="">
+					    </div>
+					  </div>
+					 <div class="weui-cell">
+					    <div class="weui-cell__hd"><label class="weui-label">实付总额</label></div>
+					    <div class="weui-cell__bd">
+					      <input id="payAmount" class="weui-input" value="" disabled type="text" placeholder="">
+					    </div>
+					  </div>
+					  
+					  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" style="height:100px">
+				      <div class="weui-media-box__hd" style="width:100px;height:100px;">
+				        <img style="width:100px;height:100px;" class="weui-media-box__thumb open-popup" id="ydImage" src="">
+				      </div>
+				      <div class="weui-media-box__bd">
+				        <!-- <h4 class="weui-media-box__title">订单号:<span id="orderNo"></span></h4> -->
+				        <p class="weui-media-box__desc">支付日期:<span id="orderDate"></span></p>
+				      </div>
+				    </a>
+				    
+				    
+				    <div class="weui-cell">
+					    <div class="weui-cell__hd"><label class="weui-label">订单号:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="orderNo"></span>
+					    </div>
+					  </div>
+					  
+					  <div class="weui-cell" style="display:none;" id="bookDate">
+					    <div class="weui-cell__hd"><label class="weui-label">使用日期:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="bookspan"></span>
+					    </div>
+					  </div>
+					  
+					  <div class="weui-cell" style="display:none;" id="startDate">
+					    <div class="weui-cell__hd"><label class="weui-label">入住日期:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="startspan"></span>
+					    </div>
+					  </div>
+					  
+					  <div class="weui-cell" style="display:none;" id="endDate">
+					    <div class="weui-cell__hd"><label class="weui-label">离店日期:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="endspan"></span>
+					    </div>
+					  </div>
+					  
+					  <div class="weui-cell">
+					    <div class="weui-cell__hd"><label class="weui-label">领取方式:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="combo"></span>
+					    </div>
+					  </div>
+					  
+					  <div class="weui-cell">
+					    <div class="weui-cell__hd"><label class="weui-label">快递:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="logistics"></span>
+					    </div>
+					  </div>
+					
+					  <div class="weui-cell" id = "cuser">
+					    <div class="weui-cell__hd"><label class="weui-label">联系人:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="cuserName"></span>
+					    </div>
+					  </div>
+					  <div class="weui-cell" id = "cph">
+					    <div class="weui-cell__hd"><label class="weui-label">手机号:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="cphone"></span>
+					    </div>
+					  </div>
+					  <div class="weui-cell" id = "cadd">
+					    <div class="weui-cell__hd"><label class="weui-label">详细地址:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px;" id="caddress"></span>
+					    </div>
+					  </div>
+					  
+					  <div class="weui-cell" id = "site" style="display: none;">
+					    <div class="weui-cell__hd"><label class="weui-label">领取地址:</label></div>
+					    <div class="weui-cell__bd">
+					         <span style="font-size:12px; " id="getsite"></span>
+					    </div>
+					  </div>
+					  
+				    
+		     </div>
+		     
 			
 			
 		</div>
 	</div>
+	
+	<div id="large" class="weui-popup__container" style="padding-bottom:50px;">
+	  <div class="weui-popup__overlay"></div>
+	  <div class="weui-popup__modal">
+	      <image id="largeYd" style="width:100%;height:350px;margin-top:10px;"/>
+	      <a style="width:96%;margin-top:50px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary close-popup">
+	      关闭</a>
+	</div>
+</div>
+	
 </body>
 
 

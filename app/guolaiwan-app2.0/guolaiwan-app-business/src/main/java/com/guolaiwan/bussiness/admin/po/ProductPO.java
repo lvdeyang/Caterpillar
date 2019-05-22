@@ -57,6 +57,9 @@ public class ProductPO extends AbstractBasePO {
 	
 	// 积分商品  0是 1不是
 	private int IntegralGoods;
+	
+	// 积分商品自领取地址  0是 1不是
+	private String site;
 
 	// 分类名称
 	private String productClassName;
@@ -189,6 +192,17 @@ public class ProductPO extends AbstractBasePO {
 	//张羽 新增 5/1 商品购买最低数量限制
 	private int productRestrictNumber;
 	
+
+	
+	
+	
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
 
 	public int getIntegralGoods() {
 		return IntegralGoods;

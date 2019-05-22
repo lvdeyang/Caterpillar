@@ -227,6 +227,7 @@ public class ProductController extends BaseController {
 		// 名称、副标题、板块、分类、时间
 		String modularCode = request.getParameter("modularCode");
 		String Integra = request.getParameter("Integra"); //积分商品
+		String site = request.getParameter("site"); //积分商品
 		String modularName = request.getParameter("modularName");
 		String productName = request.getParameter("productName");
 		String modularClassId = request.getParameter("modularClassId");
@@ -262,6 +263,7 @@ public class ProductController extends BaseController {
 		}
 		product.setDatesOn(datesOn);
 		product.setIntegralGoods(Integer.parseInt(Integra)); //添加积分商品
+		product.setSite(site);//添加到店领取地址
 		product.setCostMessage(costMessage);
 		product.setNotes(notes);
 		product.setRemarks(remarks);
@@ -448,7 +450,7 @@ public class ProductController extends BaseController {
 		String modularClassId = request.getParameter("modularClassId");
 		String modularClass = request.getParameter("modularClass");
 		String Integra = request.getParameter("Integra"); //积分商品
-
+		String site = request.getParameter("site"); //积分商品
 		// 商家
 		long productMerchantID = Long.parseLong(request.getParameter("productMerchantID"));
 		String productMerchantName = request.getParameter("productMerchantName");
@@ -552,6 +554,7 @@ public class ProductController extends BaseController {
 
 		//积分商品
 		product.setIntegralGoods(Integer.parseInt(Integra));
+		product.setSite(site);//添加到店领取地址
 		// 商品、副标题
 		product.setProductName(productName);
 		product.setProductSubtitle(productSubtitle);
@@ -561,7 +564,7 @@ public class ProductController extends BaseController {
 		product.setProductModularCodeName(modularName);
 		product.setProductClassCode(modularClassId);
 		product.setProductClassName(modularClass);
-
+ 
 		// 商家
 		product.setProductMerchantID(productMerchantID);
 		product.setProductMerchantName(productMerchantName);

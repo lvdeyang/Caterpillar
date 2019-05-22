@@ -87,17 +87,16 @@
 </style>
 </head>
 <!-- 公共脚本引入 -->
-<!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <!-- <script src="../../../../layui/lib/alert/css/alertstyle.css"></script> -->
 <script src="../../../../layui/lib/alert/js/jquery-1.7.1.min.js"></script>
 <script src="../../../../layui/lib/alert/js/ui.js"></script>
-<link href="../../../../layui/lib/alert/css/alertstyle.css"
-	rel="stylesheet" />
+<link href="../../../../layui/lib/alert/css/alertstyle.css"  rel="stylesheet" />
 <script type="text/javascript">
 var money;
+var commodityId; //商品id
      $(function() {
       var _uri = window.BASEPATH + 'integral/integ'; //获取所有坐标点
 		$.post(_uri, null, function(data) {
@@ -105,29 +104,39 @@ var money;
 	     	var produ = data.product;  
 	     	var html = [];
 		    for(var i=0; i<produ.length; i++){
-		       html.push('<div class="body1" onclick="clickHandler('+produ[i].productPrice+')">');
+		       html.push('<div class="body1" onclick="clickHandler('+produ[i].productPrice+','+produ[i].id+')">');
 			   html.push('<img style="width:100%;height:70%;" src="'+produ[i].productShowPic+'">');
 			   html.push(' <p style="margin-top: 1%; margin-left: 6%">'+produ[i].productName+'</p>');
-			   html.push('<p style="margin-top: 1%; margin-left: 8%">$ <span>'+produ[i].productPrice+'</span></p>'); 
+			   html.push('<p style="margin-top: 1%; margin-left: 8%"> <span>'+produ[i].productPrice+'</span> 积分</p>'); 
 			   html.push('</div>'); 
 		    }
 		       $('#body').append(html.join(''));
 		});
+		 $("#address").cityPicker({
+        title: "选择地址",
+        onChange: function (picker, values, displayValues) {
+          console.log(values, displayValues);
+        }
+      });
      });
      
-     function  clickHandler(e){
+     function  clickHandler(e,id){
+     commodityId = id;
+     money = e; 
 	     $.modal({
-		  text:  "花费"+e+"积分总换积分商品?",
-		  buttons: [
-		    { text: "到店领取", onClick: function(){  } },
-		    { text: "快递总换", onClick: function(){ 
-		         money = e; 
+			  text: "花费"+e+"积分总换积分商品?",
+			  buttons: [
+			   { text: "到店领取", onClick: function(){ 
+			       getcommodity(2);  //到店领取
+			   } },
+               { text: "快递总换", onClick: function(){  
 		         $('#selAddress').popup(); 
 		        /*  $('.modDiv').hide(); */
 		         $('#cameraDiv').show();
-		         getAllAddr();
-		    }},
-		  ]
+		         getAllAddr();  
+		         } },
+               { text: "取消", className: "default", onClick: function(){ } },
+			  ]
 		}); 
 		
     }
@@ -174,28 +183,25 @@ var money;
 			});
 	  });
 	  
-	  function getcommodity(){  //判断积分够 然后减库存
+	  function getcommodity(e){  //判断积分够 然后减库存
 	    var _uri = window.BASEPATH + 'integral/convertibility'; //获取所有坐标点
 		var param = {};
 		param.integral= money;
-		param.id = ${id};
+		param.id = commodityId;
 		$.post(_uri,  $.toJSON(param), function(data) {
 	     	data = parseAjaxResult(data);
 	     	if(1 == data){
-	     	   dobuy();
+	     	   dobuy(e);
 	     	}else if(0 == data){
 	     	  $.toast("您的积分不足", "forbidden");
 	        } else{
 	          $.toast("库存不足", "forbidden");
 	        }
-	   }); 
+	   });  
 	  }
 	  
-	  
-	  
-	  
      function getAllAddr(){
-        var _uriAddress = window.BASEPATH + 'phoneApp/address/list?userId='+145;  //${userId}
+        var _uriAddress = window.BASEPATH + 'phoneApp/address/list?userId='+${userId};  
 		$.get(_uriAddress, null, function(data){
 			data = parseAjaxResult(data);
 			if(data === -1) return;
@@ -221,12 +227,7 @@ var money;
 	  
 	  
 	
-       $("#address").cityPicker({
-        title: "选择地址",
-        onChange: function (picker, values, displayValues) {
-          console.log(values, displayValues);
-        }
-      });
+      
     
     
     	$(document).on('click','#cancelAddress',function(){
@@ -235,28 +236,35 @@ var money;
 	    });
 	    
 	    $(document).on('click','#buynow',function(){
-		    	 getcommodity();
+		    getcommodity();
 		});
 		
 		
 		
 		
-	  function dobuy(){
-		    var ids=$('input[type^=radio]:checked').attr('id').split('-');
-		    var param={};
-			param.productId = ${id};  //${id} 商品id
+	  function dobuy(e){
+	        var param={};
+	        var spli =$('input[type^=radio]:checked').attr('id');
+	        if(spli !=null){
+	        var ids = spli.split('-');
+		    param.addressId=ids[1];
+	        }
+			param.productId = commodityId;  //${id} 商品id
 			param.productNum=1;
 			param.payMoney= money;
 			param.userId= ${userId};  
 			param.paytype='INTEGRAL';
 			param.source="PUBLICADDRESS";
-			param.addressId=ids[1];
+			if(e == null){
+		        e = 1; //快递配送
+		    }
+		    param.comboName = e;
             $.closePopup();
 			var _uriPay = window.BASEPATH + 'integral/order/add';
 			 $.post(_uriPay, $.toJSON(param), function(data){
 				data = parseAjaxResult(data);
-				location.href=window.BASEPATH +"pubnum/order/info?orderId="+data.id; 
-			});
+				location.href=window.BASEPATH +"integral/order/info?orderId="+data.id; 
+			});  
 		}  
 	    
      
@@ -333,7 +341,7 @@ var money;
 									<label for="name" class="weui-label">地址选择</label>
 								</div>
 								<div class="weui-cell__bd">
-									<input class="weui-input" id="address" type="text" value=""
+									<input class="weui-input" id="address" type="text" value="" 
 										readonly="" data-code="420106"
 										data-codes="420000,420100,420106">
 								</div> 
@@ -343,7 +351,7 @@ var money;
 									<label class="weui-label">详细地址</label>
 								</div>
 								<div class="weui-cell__bd">
-									<input id="moreAddress" class="weui-input" type="text"
+									<input id="moreAddress" class="weui-input" type="text" 
 										placeholder="">
 								</div>
 							</div>
@@ -356,14 +364,9 @@ var money;
                     <div class="modDiv" id="cameraDiv" style="display:none;">
                           <div id="cameraContent"></div>
 							  
-						 <!--  <div>
-                          <a id="cancelPhoto"
-							style="width:47%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 取消</a>
-                          <a id="confirmPhoto"
-							style="width:47%;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a></div>
-                    </div> -->
+						   <div>
+                         
+                    </div> 
 				</div>
 			</div>
 	

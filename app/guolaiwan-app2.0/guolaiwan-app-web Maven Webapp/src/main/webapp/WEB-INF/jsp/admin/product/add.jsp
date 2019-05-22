@@ -405,12 +405,21 @@
                  	</div>
                  	
                  </div>
-                   <div class="layui-inline">
-                    <label for="sent" class="layui-form-label">
+                 <div class="layui-inline">
+                    <label for="Integra" class="layui-form-label">
 						积分商品：
                     </label>
                     <div class="layui-input-inline">
                    		 <input type="text" id="Integra" value="0" name="Integra" 
+                        	autocomplete="off" class="layui-input">
+                 	</div>
+                 </div>
+                 <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
+						领取地址：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="site" value="遵化市法院对面万乘晟象12楼" name="site" 
                         	autocomplete="off" class="layui-input">
                  	</div>
                  </div>
