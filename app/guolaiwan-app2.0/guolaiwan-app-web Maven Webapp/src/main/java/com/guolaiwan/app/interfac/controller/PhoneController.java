@@ -6042,7 +6042,7 @@ public class PhoneController extends WebBaseControll {
 				resultList.add(linkChild);
 				if(linkChild.getId().equals(childProductPO.getId())){
 					resultBundle.add(resultList);
-					continue;
+					break;
 				}
 				if (count == 0) {
 					planRoad(linkChild,childProductPO, childProductPOList, resultList, resultBundle);
@@ -6138,7 +6138,12 @@ public class PhoneController extends WebBaseControll {
 		List<List<ChildProductPO>> roadPlanResult = planRoad(start,childProduct, childProductPOList, null,
 				null);
 		
-		
+		for (List<ChildProductPO> list : roadPlanResult) {
+			System.out.println("new line:");
+			for (ChildProductPO childProductPO : list) {
+				System.out.println(childProductPO.getId()+childProductPO.getChildName());
+			}
+		}
 		
 		return success(getshortest(roadPlanResult));
 	}
