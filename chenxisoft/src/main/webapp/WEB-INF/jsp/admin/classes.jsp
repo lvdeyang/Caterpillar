@@ -34,8 +34,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    <input class="layui-input" name="id" id="searchtxt" autocomplete="off">
 		  </div>
 		  <button class="layui-btn" id="search" data-type="reload">搜索</button>
-		  <label class="layui-form-label" id="selClassName">未选择分类</label>
+		  <label class="layui-form-label" id="selClassName" style="color:red;font-weight:bold">未选择分类</label>
 		  <input type="hidden" id="selClassId" value="0"/>
+		  <button style="margin-left:10px;" class="layui-btn" id="addOnline">添加</button>
 		</div>
 		<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
 	    </div>
@@ -104,6 +105,43 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           });
 		   
 		   
+		   $('#addOnline').on('click',function(){
+		     if($('#selClassId').val()==0){
+		        var index=layer.alert("请在左侧选择分类。", {icon: 2},function () {
+		        
+		            
+                    layer.close(index);
+		        
+		        });
+		        return false;
+		     }
+		     
+		   
+             layer.open({
+		        type: 2 //此处以iframe举例
+		        ,title: '添加资源'
+		        ,area: ['1200px', '600px']
+		        ,shade: 0
+		        ,maxmin: true
+		        ,offset: [ //为了演示，随机坐标
+		         50,300
+		          
+		        ] 
+		        ,content: 'article/index'
+		        //layer.closeAll();
+		        ,zIndex: layer.zIndex //
+		        ,success: function(layero){
+		          layer.setTop(layero); //
+		        }
+		      });
+          
+          });
+		   
+		   
+		   
+		   
+		   
+		   
 		   var table = layui.table;
 		    $('#search').on('click',function(){
                   
@@ -131,14 +169,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    //console.log(obj)
 			    if(obj.event === 'del'){
 			      layer.confirm('真的删除行么', function(index){
-			        obj.del();
-			        layer.close(index);
+			         
+			         
+			         $.ajax({
+			              url:'article/del.do',
+			              type:'post',
+			              data:{id:data.id},
+			              success:function(data){
+			                 obj.del();
+			        		 layer.close(index);
+			              }
+			          });
 			      });
 			    } 
 			    
 			  });  
 
-           
+          
 			
 		});
 	</script>

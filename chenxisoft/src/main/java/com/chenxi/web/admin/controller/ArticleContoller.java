@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.chenxi.web.dao.ArticleDao;
-
+import com.chenxi.web.dao.OnlineClassesDao;
+import com.chenxi.web.po.ArticlePo;
+import com.chenxi.web.po.ClassesPo;
+import com.chenxi.web.po.OnlineClassesPo;
 
 import pub.caterpillar.mvc.controller.BaseController;
 
@@ -40,4 +44,47 @@ public class ArticleContoller extends BaseController {
 		strMap.put("msg", "");
 		return strMap;
 	}
+	
+	@Autowired
+	OnlineClassesDao conn_onlineclasses;
+	
+	@ResponseBody
+	@RequestMapping(value="/addonline.do", method= RequestMethod.POST)
+	public String add(HttpServletRequest request) throws Exception {
+		if(request.getParameter("ids")!=null){
+			String ids=request.getParameter("ids");
+			String classIdString=request.getParameter("classId");
+			String[] idlist=ids.split(",");
+			for (String idStr : idlist) {
+				long resId=Long.parseLong(idStr);
+				long classId=Long.parseLong(classIdString);
+				ArticlePo articlePo=conn_article.get(resId);
+				OnlineClassesPo onlineClassesPo=new OnlineClassesPo();
+				onlineClassesPo.setClassesId(classId);
+				onlineClassesPo.setContentId(articlePo.getId());
+				onlineClassesPo.setContentName(articlePo.getTitle());
+				onlineClassesPo.setContentMouduler(articlePo.getMoudular());
+				conn_onlineclasses.save(onlineClassesPo);
+			}
+		}
+		
+		
+	
+		return "success";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/del.do", method= RequestMethod.POST)
+	public String del(HttpServletRequest request) throws Exception {
+		if(request.getParameter("id")!=null){
+			conn_onlineclasses.delete(Long.parseLong(request.getParameter("id")));
+		}
+		
+		
+	
+		return "success";
+	}
+	
+	
 }
