@@ -449,7 +449,7 @@ public class integralControll extends WebBaseControll  {
     	MerchantPO merchantPO=conn_merchant.get(orderInfoPO.getShopId());
     	
     	//用户推送消息
-    	Double amount=Double.parseDouble(orderInfoPO.getPayMoney()+"")/100;
+    	Double amount=Double.parseDouble(orderInfoPO.getPayMoney()+"");
     	DecimalFormat df=new DecimalFormat("0.00");  
     	UserInfoPO buyUser=conn_user.get(orderInfoPO.getUserId());
     	if(buyUser!=null){
