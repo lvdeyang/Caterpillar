@@ -16,30 +16,32 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.chenxi.web.dao.ArticleDao;
 import com.chenxi.web.dao.OnlineClassesDao;
+import com.chenxi.web.dao.ProductDao;
 import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
+import com.chenxi.web.po.ProductPo;
 
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
-@RequestMapping("/article")
-public class ArticleContoller extends BaseController {
-	@Autowired ArticleDao conn_article;
+@RequestMapping("/product")
+public class ProductContoller extends BaseController {
+	@Autowired ProductDao conn_product;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		
-		ModelAndView mv = new ModelAndView("admin/article", strMap);
+		ModelAndView mv = new ModelAndView("admin/product", strMap);
 		return mv;
 	}
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Map<String, Object> list(int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		strMap.put("count", conn_article.countAll());
-		strMap.put("data", conn_article.findAll(page, limit));
+		strMap.put("count", conn_product.countAll());
+		strMap.put("data", conn_product.findAll(page, limit));
 		strMap.put("code", 0);
 		strMap.put("msg", "");
 		return strMap;
@@ -58,12 +60,12 @@ public class ArticleContoller extends BaseController {
 			for (String idStr : idlist) {
 				long resId=Long.parseLong(idStr);
 				long classId=Long.parseLong(classIdString);
-				ArticlePo articlePo=conn_article.get(resId);
+				ProductPo productPo=conn_product.get(resId);
 				OnlineClassesPo onlineClassesPo=new OnlineClassesPo();
 				onlineClassesPo.setClassesId(classId);
-				onlineClassesPo.setContentId(articlePo.getId());
-				onlineClassesPo.setContentName(articlePo.getTitle());
-				onlineClassesPo.setContentMouduler(articlePo.getMoudular());
+				onlineClassesPo.setContentId(productPo.getId());
+				onlineClassesPo.setContentName(productPo.getName());
+				onlineClassesPo.setContentMouduler(productPo.getMoudular());
 				conn_onlineclasses.save(onlineClassesPo);
 			}
 		}
@@ -75,13 +77,15 @@ public class ArticleContoller extends BaseController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value="/delarticle.do", method= RequestMethod.POST)
-	public String delArticle(HttpServletRequest request) throws Exception {
+	@RequestMapping(value="/delproduct.do", method= RequestMethod.POST)
+	public String delProduct(HttpServletRequest request) throws Exception {
 		if(request.getParameter("id")!=null){
-			conn_article.delete(Long.parseLong(request.getParameter("id")));
+			conn_product.delete(Long.parseLong(request.getParameter("id")));
 		}
 		return "success";
 	}
+	
+	
 	
 	@ResponseBody
 	@RequestMapping(value="/del.do", method= RequestMethod.POST)
@@ -89,9 +93,6 @@ public class ArticleContoller extends BaseController {
 		if(request.getParameter("id")!=null){
 			conn_onlineclasses.delete(Long.parseLong(request.getParameter("id")));
 		}
-		
-		
-	
 		return "success";
 	}
 	

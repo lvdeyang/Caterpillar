@@ -380,8 +380,18 @@
                         	autocomplete="off" class="layui-input">
                  	</div>
                  </div>
+                 
+                  <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
+						领取地址：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="site" value="遵化市法院对面万乘晟象12楼" name="site" 
+                        	autocomplete="off" class="layui-input">
+                 	</div>
+                 </div>
                 </div>
-                
+               
                 
                 <div class="layui-form-item proLine">
                 <div class="layui-inline">

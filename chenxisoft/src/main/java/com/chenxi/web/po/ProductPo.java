@@ -18,6 +18,7 @@ public class ProductPo extends AbstractBasePO{
 	private String shortContent;
 	private String content;
 	private ContentSource source;
+	private Moudular moudular;
 	public String getPic() {
 		return pic;
 	}
@@ -54,6 +55,13 @@ public class ProductPo extends AbstractBasePO{
 	}
 	public void setSource(ContentSource source) {
 		this.source = source;
+	}
+	@Enumerated(EnumType.STRING)
+	public Moudular getMoudular() {
+		return moudular;
+	}
+	public void setMoudular(Moudular moudular) {
+		this.moudular = moudular;
 	}
 	
 }
