@@ -57,7 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        datas.push(data[i].id);
                    }
                    if(datas.length==0){
-                        var index=layer.alert("请选择一个文章。", {icon: 2},function () {
+                        var index=layer.alert("请选择一个商品", {icon: 2},function () {
 		        
 		            
 		                    layer.close(index);
@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    var classId=$("#selClassId",window.parent.document).val();
                    $.ajax({
                 	  type:"post",
-           			  url:"article/addonline.do",
+           			  url:"product/addonline.do",
                       data:{ids:datas.join(','),classId:classId},
                       success:function(msg){
                         if(msg=="success"){
@@ -94,14 +94,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               
 			  table.render({
 			    elem: '#dataTable'
-			    ,url:'/chenxisoft/article/list'
-			    ,title: '文章列表'
+			    ,url:'/chenxisoft/product/list'
+			    ,title: '商品列表'
 			    ,cols: [[
 			      {type: 'checkbox', fixed: 'left'}
 			      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-			      ,{field:'title', title:'主题', width:300, edit: 'text'}
-			      ,{field:'autor', title:'作者', width:200, edit: 'text', templet: function(res){
-			        return '<em>'+ res.autor +'</em>'
+			      ,{field:'name', title:'名称', width:300, edit: 'text'}
+			      ,{field:'price', title:'价格', width:200, edit: 'text', templet: function(res){
+			        return '<em>￥'+ res.price +'</em>'
 			      }}
 			      ,{field:'updateTime', title:'生产时间', width:180, edit: 'text', sort: true}
 			      ,{field:'source', title:'来源', width:200}
@@ -118,9 +118,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    //console.log(obj)
 			    if(obj.event === 'del'){
 			      layer.confirm('真的删除行么', function(index){
-			         $.ajax({
+			        
+			      
+			        $.ajax({
 	                	  type:"post",
-	           			  url:"article/delarticle.do",
+	           			  url:"product//delproduct.do",
 	                      data:{id:data.id},
 	                      success:function(msg){
 	                        if(msg=="success"){
@@ -129,6 +131,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        }
 	                      }
 	                });
+			        
 			      });
 			    } 
 			    

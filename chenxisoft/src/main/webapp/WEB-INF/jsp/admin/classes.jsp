@@ -36,7 +36,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <button class="layui-btn" id="search" data-type="reload">搜索</button>
 		  <label class="layui-form-label" id="selClassName" style="color:red;font-weight:bold">未选择分类</label>
 		  <input type="hidden" id="selClassId" value="0"/>
-		  <button style="margin-left:10px;" class="layui-btn" id="addOnline">添加</button>
+		  <button style="margin-left:10px;" class="layui-btn" id="addOnline">添加文章</button>
+		  <button style="margin-left:10px;" class="layui-btn" id="addProOnline">添加商品</button>
 		</div>
 		<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
 	    </div>
@@ -104,40 +105,46 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
           });
 		   
-		   
-		   $('#addOnline').on('click',function(){
-		     if($('#selClassId').val()==0){
-		        var index=layer.alert("请在左侧选择分类。", {icon: 2},function () {
-		        
-		            
-                    layer.close(index);
-		        
-		        });
-		        return false;
-		     }
+		   $('#addProOnline').on('click',function(){
 		     
+               addOnline('product/index');
+           });
+		   $('#addOnline').on('click',function(){
+		     
+               addOnline('article/index');
+           });
 		   
-             layer.open({
-		        type: 2 //此处以iframe举例
-		        ,title: '添加资源'
-		        ,area: ['1200px', '600px']
-		        ,shade: 0
-		        ,maxmin: true
-		        ,offset: [ //为了演示，随机坐标
-		         50,300
-		          
-		        ] 
-		        ,content: 'article/index'
-		        //layer.closeAll();
-		        ,zIndex: layer.zIndex //
-		        ,success: function(layero){
-		          layer.setTop(layero); //
-		        }
-		      });
-          
-          });
+		   function addOnline(url){
+		       if($('#selClassId').val()==0){
+			        var index=layer.alert("请在左侧选择分类。", {icon: 2},function () {
+			        
+			            
+	                    layer.close(index);
+			        
+			        });
+			        return false;
+			     }
+			     
+			   
+	             layer.open({
+			        type: 2 //此处以iframe举例
+			        ,title: '添加资源'
+			        ,area: ['1200px', '600px']
+			        ,shade: 0
+			        ,maxmin: true
+			        ,offset: [ //为了演示，随机坐标
+			         50,300
+			          
+			        ] 
+			        ,content: url
+			        //layer.closeAll();
+			        ,zIndex: layer.zIndex //
+			        ,success: function(layero){
+			          layer.setTop(layero); //
+			        }
+			      });
 		   
-		   
+		   }
 		   
 		   
 		   
