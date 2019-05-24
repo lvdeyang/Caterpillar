@@ -144,7 +144,17 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 	//张羽 新增 5/1 商品购买最低数量限制
 	private int productRestrictNumber;
 	
-	
+	// 新增快递单号--------------Dongsuyan
+	private String trackingnumber;
+
+	public String getTrackingnumber() {
+		return trackingnumber;
+	}
+
+	public void setTrackingnumber(String trackingnumber) {
+		this.trackingnumber = trackingnumber;
+	}
+
 	public int getProductRestrictNumber() {
 		return productRestrictNumber;
 	}
@@ -735,7 +745,8 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 		.setComboId(entity.getComboId())
 		.setPhoto(entity.getPhoto())
 		.setIdNum(entity.getIdNum())
-		.setSettleDate(SettleDate);
+		.setSettleDate(SettleDate)
+		.setTrackingnumber(entity.getTrackingnumber());
 		return this;
 
 	}

@@ -495,6 +495,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -533,6 +534,8 @@ html, body {
 			    $('#startspan').html(data.order.orderBookDate);
 			    $('#endspan').html(data.order.endBookDate);
 			    $('#caddress').html(data.address.province+data.address.city+data.address.district+'&nbsp;&nbsp;&nbsp;&nbsp;'+data.address.consigneeAddress);
+			
+			    
 			    
  			    if(data.order.bkCode=='0002'){
 			    	$('#startDate').show();
@@ -570,8 +573,15 @@ html, body {
 			    $('#bookspan').html(data.order.orderBookDate);
 			    $('#startspan').html(data.order.orderBookDate);
 			    $('#endspan').html(data.order.endBookDate);
-			    $('#caddress').html(data.address.province+data.address.city+data.address.district+'&nbsp;&nbsp;&nbsp;&nbsp;'+data.address.consigneeAddress);
-			    
+			    $('#caddress').html(data.address.province+data.address.city+data.address.district+'&nbsp;&nbsp;&nbsp;&nbsp;'+data.address.consigneeAddress);				        
+			   if( data.order.orderState=="已发货"){
+			   var html="";
+	          
+			    html=html+"<div class='weui-cell__hd'><label class='weui-label'>快递单号:</label></div>"; 
+			    html=html+" <div class='weui-cell__bd'><span style='font-size:12px;' id='caddress'>"+data.order.trackingnumber+"</span></div>"
+			  	$("#weui-cell-1").html(html);
+         
+			}
  			    if(data.order.bkCode=='0002'){
 			    	$('#startDate').show();
 			    	$('#endDate').show();
@@ -723,7 +733,9 @@ html, body {
 					         <span style="font-size:12px;" id="caddress"></span>
 					    </div>
 					  </div>
-					  
+					  <div class="weui-cell" id="weui-cell-1">
+					 
+					  </div>
 				    
 		     </div>
 		     
