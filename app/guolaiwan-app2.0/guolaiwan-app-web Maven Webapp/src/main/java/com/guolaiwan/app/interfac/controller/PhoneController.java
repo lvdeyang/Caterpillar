@@ -7241,6 +7241,17 @@ public class PhoneController extends WebBaseControll {
 		List<LiveGiftVO> giftsvo = LiveGiftVO.getConverter(LiveGiftVO.class).convert(gifts, LiveGiftVO.class);
 		return success(giftsvo);
 	}
+	
+	//获取用户钱包里的钱 张羽 
+	@ResponseBody
+	@RequestMapping(value = "/wallet", method = RequestMethod.GET)
+	public Map<String, Object> getWalletMoney(HttpServletRequest request, long userId)throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		UserInfoPO user=conn_user.get(userId);
+		UserInfoVO _user = new UserInfoVO().set(user);
+		map.put("data", _user);
+		return success(map);
+	}
 
 
 }

@@ -37,22 +37,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.BalanceVO;
 import com.guolaiwan.app.web.admin.vo.ChildProductVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
-import com.guolaiwan.app.web.admin.vo.ProLatitudeLongitudeVO;
-import com.guolaiwan.app.web.admin.vo.ProTourismPictureVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
-import com.guolaiwan.app.web.admin.vo.ShareVO;
-import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.app.web.publicnum.util.EmojiFilter;
 import com.guolaiwan.app.web.publicnum.vo.BundleOrderVo;
 import com.guolaiwan.app.web.publicnum.vo.LiveMessageVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
-import com.guolaiwan.app.web.website.user.exception.PasswordErrorException;
-import com.guolaiwan.app.web.website.user.exception.UnkonwnUserException;
 import com.guolaiwan.app.web.weixin.JsTicketUtil;
 import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.app.web.weixin.WxConfig;
@@ -69,6 +62,7 @@ import com.guolaiwan.bussiness.admin.dao.ChildProductDAO;
 import com.guolaiwan.bussiness.admin.dao.CollectionDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
+import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
@@ -77,10 +71,7 @@ import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderPeopleDao;
-import com.guolaiwan.bussiness.admin.dao.ProLatitudeLongitudeDAO;
-import com.guolaiwan.bussiness.admin.dao.ProTourismPictureDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
-import com.guolaiwan.bussiness.admin.dao.ShareDAO;
 import com.guolaiwan.bussiness.admin.dao.SurpportBuyDao;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.SystemCacheDao;
@@ -98,6 +89,7 @@ import com.guolaiwan.bussiness.admin.po.ChildProductPO;
 import com.guolaiwan.bussiness.admin.po.CollectionPO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
+import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
@@ -105,10 +97,7 @@ import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
-import com.guolaiwan.bussiness.admin.po.ProLatitudeLongitudePO;
-import com.guolaiwan.bussiness.admin.po.ProTourismPicturePO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
-import com.guolaiwan.bussiness.admin.po.SharePO;
 import com.guolaiwan.bussiness.admin.po.SurpportBuyPo;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.SystenCachePo;
@@ -116,11 +105,9 @@ import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
-import com.sun.jna.platform.win32.WinDef.LONG;
 
 import pub.caterpillar.commons.exception.BaseException;
 import pub.caterpillar.commons.exception.code.enumeration.StatusCode;
-import pub.caterpillar.commons.util.binary.Md5Utils;
 import pub.caterpillar.commons.util.binary.Sha1Util;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -128,7 +115,6 @@ import pub.caterpillar.communication.http.client.HttpClient;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
 import pub.caterpillar.weixin.constants.WXContants;
-import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
 
 //portal
 @Controller
@@ -138,6 +124,8 @@ public class PubNumController extends WebBaseControll {
 	private boolean istest = WXContants.istest;
 	@Autowired
 	SystemCacheDao conn_systemcache;
+	@Autowired
+	InvestWalletDAO conn_investwallet;
 	@RequestMapping(value = "/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
 
@@ -1990,7 +1978,7 @@ public class PubNumController extends WebBaseControll {
 	    String orderNo="gift-"+orderId;
 	    System.out.println("---------------------------------"+orderNo+"---------支付");
 	    LiveTipGiftPO order=conn_liveTipGiftDao.get(orderId);
-	    int price=(order.getPrice());
+	    int price=order.getPrice();
 		UserInfoPO user = conn_user.get(userId);
 		YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/giftPayreport", WxConfig.appId,
 				WxConfig.appsrcret);
@@ -2006,28 +1994,518 @@ public class PubNumController extends WebBaseControll {
 		return success(map);
 	}
 
-	
-	
 	//打赏礼物支付 5/11
+	@ResponseBody
+	@RequestMapping(value = "/gift/addOrder/{liveId}/{giftId}/{num}/{userId}")
+	public Object addOrder(@PathVariable Long liveId,@PathVariable Long giftId,@PathVariable Integer num,@PathVariable Long userId,HttpServletRequest request) throws Exception {
+		LiveGiftPO gift = conn_liveGiftDao.get(giftId);
+		LiveTipGiftPO order=new LiveTipGiftPO();
+		int price=gift.getPrice()*num;
+		order.setGiftId(giftId);
+		order.setGiftname(gift.getName());
+		order.setGiftnumber(num);
+		order.setLiveid(liveId);
+		order.setPrice(price);
+		order.setUsername(conn_user.get(userId).getUserNickname());
+		conn_liveTipGiftDao.save(order);
+		return order;
+	}
+	
+	//我的钱包 张羽 5/19
+	@RequestMapping(value = "/wallet")
+	public ModelAndView myWallet(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/wallet");
+		HttpSession session = request.getSession();
+		mv.addObject("userId", session.getAttribute("userId"));
+		return mv;
+	}
+	
+	
+	//我的钱包支付 提现记录 方法 张羽
+	@ResponseBody
+	@RequestMapping(value = "/wallet/addOrder")
+	public Object addWalletOrder(HttpServletRequest request ) throws Exception {
+		long money=Long.parseLong(request.getParameter("money"));
+		long id=Long.parseLong(request.getParameter("userId"));
+		int type=Integer.parseInt(request.getParameter("type"));
+		InvestWalletPO order=new InvestWalletPO();
+		
+		if(type==1){
+			money=money*100;
+			System.out.println(money+"----------------------充值");
+			UserInfoPO user=conn_user.get(id);
+			order.setUsername(user.getUserNickname());
+			order.setUserid(id);
+			order.setMoney(money);
+			conn_investwallet.save(order);
+			return success(order);
+		}else{
+			money=-(money*100);
+			System.out.println(money+"----------------------提现");
+			UserInfoPO user=conn_user.get(id);
+			order.setUsername(user.getUserNickname());
+			order.setUserid(id);
+			order.setMoney(money);
+			conn_investwallet.save(order);
+			return success(order);
+		}
+		
+	}
+	
+	//充值失败删除记录 张羽
+	@ResponseBody
+	@RequestMapping(value = "/wallet/deleteOrder")
+	public Object deleteWalletOrder(HttpServletRequest request ) throws Exception {
+		long orderId=Long.parseLong(request.getParameter("orderId"));
+		conn_investwallet.delete(orderId);
+		return success();
+	}
+	
+	
+	//钱包充值方法 张羽
 		@ResponseBody
-		@RequestMapping(value = "/gift/addOrder/{liveId}/{giftId}/{num}/{userId}")
-		public Object addOrder(@PathVariable Long liveId,@PathVariable Long giftId,@PathVariable Integer num,@PathVariable Long userId,HttpServletRequest request) throws Exception {
-			LiveGiftPO gift = conn_liveGiftDao.get(giftId);
-			LiveTipGiftPO order=new LiveTipGiftPO();
-			int price=gift.getPrice()*num;
-			order.setGiftId(giftId);
-			order.setGiftname(gift.getName());
-			order.setGiftnumber(num);
-			order.setLiveid(liveId);
-			order.setPrice(price);
-			order.setUsername(conn_user.get(userId).getUserNickname());
-			conn_liveTipGiftDao.save(order);
-			return order;
+		@RequestMapping(value = "/wallet/pay/{orderId}/{userId}")
+		public Map<String, Object> walletPay(@PathVariable Long orderId,@PathVariable Long userId,HttpServletRequest request) throws Exception {
+		    String orderNo="wallet-"+orderId;
+		    System.out.println("---------------------------------"+orderNo+"---------支付");
+		    InvestWalletPO order=conn_investwallet.get(orderId);
+		    Long money=order.getMoney();
+		    int price=money.intValue();
+		    System.out.println(price+"-----------------");
+			UserInfoPO user = conn_user.get(userId);
+			YuebaWxPayConstants.set("http://"+WXContants.Website+"/website/wxreport/walletPayreport", WxConfig.appId,
+					WxConfig.appsrcret);
+			// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
+			
+			String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo,price,
+					"192.165.56.64", user.getUserOpenID());
+			// 生成包含prepay_id的map，map传入前端
+			java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
+
+			// 将订单号放入map，用以支付后处理
+			map.put("orderId", orderId);
+			
+			return success(map);
 		}
 	
+		//我的钱包充值成功修改用户余额 张羽 5/19
+		@RequestMapping(value = "/wallet/updata")
+		public Object updataUserMoney(HttpServletRequest request) throws Exception {
+			long id=Long.parseLong(request.getParameter("userId"));
+			long orderId=Long.parseLong(request.getParameter("orderId"));
+			InvestWalletPO order = conn_investwallet.get(orderId);
+			long money=order.getMoney();
+			UserInfoPO user=conn_user.get(id);
+			long userMoney=user.getWallet();
+			user.setWallet(userMoney+money);
+			conn_user.saveOrUpdate(user);
+			//调用方法推送充值消息给 李姐 刘姐 用户
+			sendWalletPayMessage(order);
+			return success();
+		}
+		
+		//余额购买成功修改用户余额并推送消息 张羽 5/21
+		@ResponseBody
+		@RequestMapping(value = "/wallet/walletbuy")
+		public Object walletbuy(HttpServletRequest request) throws Exception {
+			long orderId= Long.parseLong(request.getParameter("orderId"));
+			long id=Long.parseLong(request.getParameter("userId"));
+			UserInfoPO user=conn_user.get(id);
+			OrderInfoPO order=conn_order.get(orderId);
+			long productPrice=order.getPayMoney();
+			long userMoney=user.getWallet();
+			System.out.println(orderId+"--------"+id+"--------"+productPrice+"--------"+userMoney+"---------");
+			if(userMoney>=productPrice){
+				user.setWallet(userMoney-productPrice);
+				order.setOrderState(OrderStateType.PAYSUCCESS);
+				conn_order.saveOrUpdate(order);
+				conn_user.saveOrUpdate(user);
+				//推送购买商品成功信息给用户 商家 李姐 刘姐
+				sendPayMessage(order);
+			}else{
+				//余额不足 不允许购买
+				return success(2);
+			}
+			return success(1);
+		}
 	
-	
-	
-	
-	
+		
+		
+		
+		@Autowired 
+		MerchantUserDao conn_merchantUser;
+	    /**
+	     * 余额购买商品成功消息推送
+	     * @param orderInfoPO
+	     */
+	    private void sendPayMessage(OrderInfoPO orderInfoPO){
+	    	
+	    	ProductPO productPO=conn_product.get(orderInfoPO.getProductId());
+	    	MerchantPO merchantPO=conn_merchant.get(orderInfoPO.getShopId());
+	    	
+	    	//用户推送消息
+	    	Double amount=Double.parseDouble(orderInfoPO.getPayMoney()+"")/100;
+	    	DecimalFormat df=new DecimalFormat("0.00");  
+	    	UserInfoPO buyUser=conn_user.get(orderInfoPO.getUserId());
+	    	if(buyUser!=null){
+	    		JSONObject obj=new JSONObject();
+	    		obj.put("touser", buyUser.getUserOpenID());
+	        	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+	        	obj.put("url", "");
+	        	JSONObject microProObj=new JSONObject();
+	        	microProObj.put("appid", "");
+	        	microProObj.put("pagepath", "");
+	        	obj.put("miniprogram", microProObj);
+	        	JSONObject dataObject=new JSONObject();
+	        	JSONObject firstObj=new JSONObject();
+	        	firstObj.put("value", "您的订单支付成功");
+	        	firstObj.put("color", "");
+	        	dataObject.put("first", firstObj);
+	        	
+	        	
+	        	JSONObject nameObj=new JSONObject();
+	        	nameObj.put("value", buyUser.getUserNickname());
+	        	nameObj.put("color", "");
+	        	dataObject.put("keyword1", nameObj);
+	        	
+	        	JSONObject accountTypeObj=new JSONObject();
+	        	accountTypeObj.put("value", orderInfoPO.getId());
+	        	accountTypeObj.put("color", "");
+	        	dataObject.put("keyword2", accountTypeObj);
+	        	
+	        	
+	        	JSONObject accountObj=new JSONObject();
+	        	accountObj.put("value", df.format(amount));
+	        	accountObj.put("color", "");
+	        	dataObject.put("keyword3", accountObj);
+	        	JSONObject timeObj=new JSONObject();
+	        	timeObj.put("value",productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName());
+	        	timeObj.put("color", "");
+	        	dataObject.put("keyword4", timeObj);
+	        	JSONObject remarkObj=new JSONObject();
+	        	remarkObj.put("value", "感谢使用过来玩服务");
+	        	remarkObj.put("color", "");
+	        	dataObject.put("remark", remarkObj);
+	        	obj.put("data", dataObject);
+	        	SendMsgUtil.sendTemplate(obj.toJSONString());
+	    	}
+	    	
+	    	
+	    	
+	    	//商户推送消息
+	    	//UserInfoPO userInfoPO=merchantPO.getUser();
+	    	List<MerchantUser> merchantUsers=conn_merchantUser.findByField("merchantId", merchantPO.getId());
+	    	for (MerchantUser merchantUser : merchantUsers) {
+	    		UserInfoPO userInfoPO=conn_user.get(merchantUser.getUserId());
+	    		if(userInfoPO==null){
+	    			continue;
+	    		}
+	    		JSONObject obj=new JSONObject();
+	    		obj.put("touser",userInfoPO.getUserOpenID() );
+	        	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+	        	obj.put("url", "");
+	        	JSONObject microProObj=new JSONObject();
+	        	microProObj.put("appid", "");
+	        	microProObj.put("pagepath", "");
+	        	obj.put("miniprogram", microProObj);
+	        	JSONObject dataObject=new JSONObject();
+	        	JSONObject firstObj=new JSONObject();
+	        	firstObj.put("value", "新的过来玩订单");
+	        	firstObj.put("color", "");
+	        	dataObject.put("first", firstObj);
+	        	
+	        	
+	        	JSONObject nameObj=new JSONObject();
+	        	nameObj.put("value", buyUser.getUserNickname());
+	        	nameObj.put("color", "");
+	        	dataObject.put("keyword1", nameObj);
+	        	
+	        	JSONObject accountTypeObj=new JSONObject();
+	        	accountTypeObj.put("value", orderInfoPO.getOrderNO());
+	        	accountTypeObj.put("color", "");
+	        	dataObject.put("keyword2", accountTypeObj);
+	        	
+	        	
+	        	JSONObject accountObj=new JSONObject();
+	        	accountObj.put("value", df.format(amount));
+	        	accountObj.put("color", "");
+	        	dataObject.put("keyword3", accountObj);
+	        	JSONObject timeObj=new JSONObject();
+	        	timeObj.put("value", productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName());
+	        	timeObj.put("color", "");
+	        	dataObject.put("keyword4", timeObj);
+	        	JSONObject remarkObj=new JSONObject();
+	        	remarkObj.put("value", "请做好接待工作");
+	        	remarkObj.put("color", "");
+	        	dataObject.put("remark", remarkObj);
+	        	obj.put("data", dataObject);
+	        	SendMsgUtil.sendTemplate(obj.toJSONString());
+			}
+	    	
+	    	
+	    	JSONObject obj=new JSONObject();
+			obj.put("touser","opVUYv9LtqKAbiaXInBqI01hlpYg");
+	    	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+	    	obj.put("url", "");
+	    	JSONObject microProObj=new JSONObject();
+	    	microProObj.put("appid", "");
+	    	microProObj.put("pagepath", "");
+	    	obj.put("miniprogram", microProObj);
+	    	JSONObject dataObject=new JSONObject();
+	    	JSONObject firstObj=new JSONObject();
+	    	firstObj.put("value", "新的过来玩订单");
+	    	firstObj.put("color", "");
+	    	dataObject.put("first", firstObj);
+	    	
+	    	
+	    	JSONObject nameObj=new JSONObject();
+	    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+	    		nameObj.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
+	    	}else{
+	    		nameObj.put("value",conn_user.get(orderInfoPO.getId()).getUserNickname());
+	    	}
+	    	
+	    	nameObj.put("color", "");
+	    	dataObject.put("keyword1", nameObj);
+
+	    	
+	    	JSONObject accountTypeObj=new JSONObject();
+	    	accountTypeObj.put("value", orderInfoPO.getId());
+	    	accountTypeObj.put("color", "");
+	    	dataObject.put("keyword2", accountTypeObj);
+	    	
+	    	
+	    	JSONObject accountObj=new JSONObject();
+	    	accountObj.put("value", df.format(amount));
+	    	accountObj.put("color", "");
+	    	dataObject.put("keyword3", accountObj);
+	    	JSONObject timeObj=new JSONObject();
+	    	timeObj.put("value", productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName());
+	    	timeObj.put("color", "");
+	    	
+	    	String pNum="";
+	    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+	    		pNum=conn_address.get(orderInfoPO.getMailAddress()).getConsigneePhone();
+	    	}
+	    	if(pNum==null||pNum.isEmpty()){
+	    		pNum=buyUser.getUserPhone();
+	    	}
+	    	dataObject.put("keyword4", timeObj);
+	    	JSONObject remarkObj=new JSONObject();
+	    	remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+")");
+	    	remarkObj.put("color", "");
+	    	dataObject.put("remark", remarkObj);
+	    	obj.put("data", dataObject);
+	    	SendMsgUtil.sendTemplate(obj.toJSONString());
+	    	
+	    	//opVUYv9LtqKAbiaXInBqI01hlpYg
+	    	
+	    	
+	    	
+	    	JSONObject obj2=new JSONObject();
+			obj2.put("touser","opVUYv-havBnt8CaydM5zmmhkLlw");
+	    	obj2.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+	    	obj2.put("url", "");
+	    	JSONObject microProObj2=new JSONObject();
+	    	microProObj2.put("appid", "");
+	    	microProObj2.put("pagepath", "");
+	    	obj2.put("miniprogram", microProObj2);
+	    	JSONObject dataObject2=new JSONObject();
+	    	JSONObject firstObj2=new JSONObject();
+	    	firstObj2.put("value", "新的过来玩订单");
+	    	firstObj2.put("color", "");
+	    	dataObject2.put("first", firstObj2);
+	    	
+	    	
+	    	JSONObject nameObj2=new JSONObject();
+	    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+	    		nameObj2.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
+	    	}else{
+	    		nameObj2.put("value",conn_user.get(orderInfoPO.getId()).getUserNickname());
+	    	}
+	    	nameObj2.put("color", "");
+	    	dataObject2.put("keyword1", nameObj2);
+
+	    	
+	    	JSONObject accountTypeObj2=new JSONObject();
+	    	accountTypeObj2.put("value", orderInfoPO.getId());
+	    	accountTypeObj2.put("color", "");
+	    	dataObject2.put("keyword2", accountTypeObj2);
+	    	
+	    	
+	    	JSONObject accountObj2=new JSONObject();
+	    	accountObj2.put("value", df.format(amount));
+	    	accountObj2.put("color", "");
+	    	dataObject2.put("keyword3", accountObj2);
+	    	JSONObject timeObj2=new JSONObject();
+	    	timeObj2.put("value", productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName());
+	    	timeObj2.put("color", "");
+	    	
+	    	
+	    	dataObject2.put("keyword4", timeObj2);
+	    	JSONObject remarkObj2=new JSONObject();
+	    	remarkObj2.put("value", "请做好接待工作(用户电话:"+pNum+")");
+	    	remarkObj2.put("color", "");
+	    	dataObject2.put("remark", remarkObj2);
+	    	obj2.put("data", dataObject2);
+	    	SendMsgUtil.sendTemplate(obj2.toJSONString());
+	    	
+	    }
+		
+		
+	    /**
+	     * 用户钱包余额充值成功消息推送
+	     * @param InvestWalletPO
+	     */
+	    private void sendWalletPayMessage(InvestWalletPO orderInfoPO){
+	    	
+	    	
+	    	//用户推送消息
+	    	Double amount=Double.parseDouble(orderInfoPO.getMoney()+"")/100;
+	    	DecimalFormat df=new DecimalFormat("0.00");  
+	    	UserInfoPO buyUser=conn_user.get(orderInfoPO.getUserid());
+	    	if(buyUser!=null){
+	    		JSONObject obj=new JSONObject();
+	    		obj.put("touser", buyUser.getUserOpenID());
+	        	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+	        	obj.put("url", "");
+	        	JSONObject microProObj=new JSONObject();
+	        	microProObj.put("appid", "");
+	        	microProObj.put("pagepath", "");
+	        	obj.put("miniprogram", microProObj);
+	        	JSONObject dataObject=new JSONObject();
+	        	JSONObject firstObj=new JSONObject();
+	        	firstObj.put("value", "恭喜您充值成功");
+	        	firstObj.put("color", "");
+	        	dataObject.put("first", firstObj);
+	        	
+	        	
+	        	JSONObject nameObj=new JSONObject();
+	        	nameObj.put("value", buyUser.getUserNickname());
+	        	nameObj.put("color", "");
+	        	dataObject.put("keyword1", nameObj);
+	        	
+	        	JSONObject accountTypeObj=new JSONObject();
+	        	accountTypeObj.put("value", orderInfoPO.getId());
+	        	accountTypeObj.put("color", "");
+	        	dataObject.put("keyword2", accountTypeObj);
+	        	
+	        	
+	        	JSONObject accountObj=new JSONObject();
+	        	accountObj.put("value", df.format(amount));
+	        	accountObj.put("color", "");
+	        	dataObject.put("keyword3", accountObj);
+	        	JSONObject timeObj=new JSONObject();
+	        	timeObj.put("value","我的钱包充值成功，金额为："+df.format(amount));
+	        	timeObj.put("color", "");
+	        	dataObject.put("keyword4", timeObj);
+	        	JSONObject remarkObj=new JSONObject();
+	        	remarkObj.put("value", "感谢使用过来玩服务");
+	        	remarkObj.put("color", "");
+	        	dataObject.put("remark", remarkObj);
+	        	obj.put("data", dataObject);
+	        	SendMsgUtil.sendTemplate(obj.toJSONString());
+	    	}
+	    	
+	    	
+	    	JSONObject obj=new JSONObject();
+			obj.put("touser","opVUYv9LtqKAbiaXInBqI01hlpYg");
+	    	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+	    	obj.put("url", "");
+	    	JSONObject microProObj=new JSONObject();
+	    	microProObj.put("appid", "");
+	    	microProObj.put("pagepath", "");
+	    	obj.put("miniprogram", microProObj);
+	    	JSONObject dataObject=new JSONObject();
+	    	JSONObject firstObj=new JSONObject();
+	    	firstObj.put("value", "用户充值钱包通知");
+	    	firstObj.put("color", "");
+	    	dataObject.put("first", firstObj);
+	    	
+	    	
+	    	JSONObject nameObj=new JSONObject();
+    		nameObj.put("value",conn_user.get(orderInfoPO.getUserid()).getUserNickname());
+	    	nameObj.put("color", "");
+	    	dataObject.put("keyword1", nameObj);
+
+	    	
+	    	JSONObject accountTypeObj=new JSONObject();
+	    	accountTypeObj.put("value", orderInfoPO.getId());
+	    	accountTypeObj.put("color", "");
+	    	dataObject.put("keyword2", accountTypeObj);
+	    	
+	    	
+	    	JSONObject accountObj=new JSONObject();
+	    	accountObj.put("value", df.format(amount));
+	    	accountObj.put("color", "");
+	    	dataObject.put("keyword3", accountObj);
+	    	JSONObject timeObj=new JSONObject();
+	    	timeObj.put("value", "我的钱包充值成功，金额为："+df.format(amount));
+	    	timeObj.put("color", "");
+	    	
+	    	String pNum="";
+	    	if(pNum==null||pNum.isEmpty()){
+	    		pNum=buyUser.getUserPhone();
+	    	}
+	    	dataObject.put("keyword4", timeObj);
+	    	JSONObject remarkObj=new JSONObject();
+	    	remarkObj.put("value", "用户电话:"+pNum);
+	    	remarkObj.put("color", "");
+	    	dataObject.put("remark", remarkObj);
+	    	obj.put("data", dataObject);
+	    	SendMsgUtil.sendTemplate(obj.toJSONString());
+	    	
+	    	//opVUYv9LtqKAbiaXInBqI01hlpYg
+	    	
+	    	
+	    	
+	    	JSONObject obj2=new JSONObject();
+			obj2.put("touser","opVUYv-havBnt8CaydM5zmmhkLlw");
+	    	obj2.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+	    	obj2.put("url", "");
+	    	JSONObject microProObj2=new JSONObject();
+	    	microProObj2.put("appid", "");
+	    	microProObj2.put("pagepath", "");
+	    	obj2.put("miniprogram", microProObj2);
+	    	JSONObject dataObject2=new JSONObject();
+	    	JSONObject firstObj2=new JSONObject();
+	    	firstObj2.put("value", "用户充值钱包通知");
+	    	firstObj2.put("color", "");
+	    	dataObject2.put("first", firstObj2);
+	    	
+	    	
+	    	JSONObject nameObj2=new JSONObject();
+    		nameObj2.put("value",conn_user.get(orderInfoPO.getUserid()).getUserNickname());
+	    	nameObj2.put("color", "");
+	    	dataObject2.put("keyword1", nameObj2);
+
+	    	
+	    	JSONObject accountTypeObj2=new JSONObject();
+	    	accountTypeObj2.put("value", orderInfoPO.getId());
+	    	accountTypeObj2.put("color", "");
+	    	dataObject2.put("keyword2", accountTypeObj2);
+	    	
+	    	
+	    	JSONObject accountObj2=new JSONObject();
+	    	accountObj2.put("value", df.format(amount));
+	    	accountObj2.put("color", "");
+	    	dataObject2.put("keyword3", accountObj2);
+	    	JSONObject timeObj2=new JSONObject();
+	    	timeObj2.put("value", "我的钱包充值成功，金额为："+df.format(amount));
+	    	timeObj2.put("color", "");
+	    	
+	    	
+	    	dataObject2.put("keyword4", timeObj2);
+	    	JSONObject remarkObj2=new JSONObject();
+	    	remarkObj2.put("value", "用户电话:"+pNum);
+	    	remarkObj2.put("color", "");
+	    	dataObject2.put("remark", remarkObj2);
+	    	obj2.put("data", dataObject2);
+	    	SendMsgUtil.sendTemplate(obj2.toJSONString());
+	    	
+	    }
+		
+		
+		
 }
