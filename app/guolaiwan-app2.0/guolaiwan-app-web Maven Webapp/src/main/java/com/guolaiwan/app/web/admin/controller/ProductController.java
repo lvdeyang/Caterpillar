@@ -1008,6 +1008,8 @@ public class ProductController extends BaseController {
 		String childVoice = request.getParameter("childVoice");
 		String childLongitude = request.getParameter("childLongitude");
 		String childLatitude = request.getParameter("childLatitude");
+		String wxChildLongitude = request.getParameter("wxChildLongitude");
+		String wxChildLatitude = request.getParameter("wxChildLatitude");
 		String uuid = request.getParameter("uuid");
 		String content = request.getParameter("desc");
 		String lanId = request.getParameter("lan");
@@ -1023,6 +1025,8 @@ public class ProductController extends BaseController {
 		child.setChineseGirl(childVoice);
 		child.setChildLongitude(childLongitude);
 		child.setChildLatitude(childLatitude);
+		child.setWxChildLongitude(wxChildLongitude);
+		child.setWxChildLatitude(wxChildLatitude);
 		child.setContent(content);
 		child.setLanId(Long.parseLong(lanId));
 		child.setChildScale(scale);

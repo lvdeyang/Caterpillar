@@ -36,7 +36,13 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 
 	// 纬度
 	private String childLatitude;
-
+    
+	//微信经度
+    private String WxChildLongitude;
+		
+	//微信纬度
+	private String WxChildLatitude;
+	
 	// 产品ID
 	private long productID;
 
@@ -66,6 +72,27 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 	
 	private String linkedPoint;
 	
+	
+	
+	
+	public String getWxChildLongitude() {
+		return WxChildLongitude;
+	}
+
+	public ChildProductVO setWxChildLongitude(String wxChildLongitude) {
+		WxChildLongitude = wxChildLongitude;
+		return this;
+	}
+
+	public String getWxChildLatitude() {
+		return WxChildLatitude;
+	}
+
+	public ChildProductVO setWxChildLatitude(String wxChildLatitude) {
+		WxChildLatitude = wxChildLatitude;
+		return this;
+	}
+
 	public String getChineseContent() {
 		return chineseContent;
 	}
@@ -259,6 +286,8 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 				.setChineseContent(entity.getChineseContent())
 				.setEnglishContent(entity.getEnglishContent())
 				.setLinkedPoint(entity.getLinkedPoint())
+                .setWxChildLatitude(entity.getWxChildLatitude())
+                .setWxChildLongitude(entity.getWxChildLongitude())
 				.setChildPic(entity.getChildPic()).setContent(entity.getContent()).setChildScale(entity.getChildScale())
 				.setChildRoad(entity.getChildRoad()).setIsCen(entity.getIsCen()).setProductID(entity.getProductID());
 		this.setScope(entity.getScope());

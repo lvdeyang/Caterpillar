@@ -124,12 +124,12 @@ var commodityId; //商品id
      commodityId = id;
      money = e; 
 	     $.modal({
-			  text: "花费"+e+"积分总换积分商品?",
+			  text: "花费"+e+"积分兑换积分商品?",
 			  buttons: [
 			   { text: "到店领取", onClick: function(){ 
 			       getcommodity(2);  //到店领取
 			   } },
-               { text: "快递总换", onClick: function(){  
+               { text: "快递兑换", onClick: function(){  
 		         $('#selAddress').popup(); 
 		        /*  $('.modDiv').hide(); */
 		         $('#cameraDiv').show();

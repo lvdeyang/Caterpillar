@@ -55,6 +55,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<th>声音</th>
 					<th>经度</th>
 					<th>纬度</th>
+					<th>微信经度</th>
+					<th>微信纬度</th>
 					<th>语言</th>
 					<th>讲解范围</th>
 					<th>是否讲解</th>
@@ -102,6 +104,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </td>
 						<td>
                             {{ item.childLatitude }}
+                        </td>
+						<td>
+                            {{ item.wxChildLongitude }}
+                        </td>
+						<td>
+                            {{ item.wxChildLatitude }}
                         </td>
                         <td>
                             {{ item.lanId }}
