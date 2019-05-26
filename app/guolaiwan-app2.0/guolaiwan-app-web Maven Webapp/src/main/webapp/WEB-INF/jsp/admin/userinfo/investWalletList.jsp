@@ -30,23 +30,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="x-body">
             
             <xblock>
-                <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button>
-                <button class="layui-btn" onclick="userinfo_add('添加模块','addv','900','500')"><i class="layui-icon">&#xe608;</i>添加用户</button>
-                <span class="x-right" style="line-height:40px">共有${allCount} 个用户注册</span>
                 <div class="layui-inline">
-                	用户手机号：
+                   	 用户昵称：
                     <div class="layui-inline">
-                        <input class="layui-input" name="userPhone" id="userPhone" autocomplete="off">
+                        <input class="layui-input" name="username" id="username" autocomplete="off">
                     </div>
-                   	 昵称：
-                    <div class="layui-inline">
-                        <input class="layui-input" name="nickname" id="nickname" autocomplete="off">
-                    </div>
-                    openId：
-                    <div class="layui-inline">
-                        <input class="layui-input" name="openId" id="openId" autocomplete="off">
-                    </div>
+                    
                     <button class="layui-btn" data-type="reload" onclick="select(this)" >搜索</button>
+                    
                 </div>
             </xblock>
             
@@ -67,21 +58,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               table = layui.table;//table
               //以上模块根据需要引入
 
-              getUserList();
-
+              getWalletList();
               active = {
                 reload: function(){
-                    var userPhone = $('#userPhone');
-                    var nickname = $('#nickname');
-                    var openId = $('#openId');
+                    var userid = $('#userid');
+                    var username = $('#username');
                     table.reload('userListTable', {
                         page: {
                                curr: 1 //重新从第 1 页开始
                               }
                         ,where: {
-                            userPhone: userPhone.val(),
-                            nickname:nickname.val(),
-                            openId:openId.val()
+                            userid: userid.val(),
+                            username:username.val(),
                         }
                     });
                 }
@@ -90,24 +78,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              
             });
 
-            function getUserList(){
+            function getWalletList(){
               table.render({
                     elem:"#userList"
                     ,method:"post"
-                    ,url:"list.do"
+                    ,url:"walletlist.do"
                     ,page:true
                     ,limits: [10, 20, 30]
                     ,limit: 10
                     ,cols: [[
                         {type:"checkbox"}
                         ,{field:"id",title:"Id",sort:true}
-                        ,{field:"userPhone",title:"手机号"}
-                        ,{field:"userIntegral",title:"积分"}
-                        ,{field:"userHeadimg",title:"头像"}
-                        ,{field:"userNickname",title:"昵称"} 
-                        ,{field:"userOpenID",title:"openID"}
-                        ,{field:"wallet",title:"钱包余额（单位：分）",sort:true}
-                        ,{field:"updateTime",title:"创建时间"}
+                        ,{field:"userid",title:"用户Id"}
+                        ,{field:"username",title:"用户昵称"} 
+                        ,{field:"money",title:"充值金额（单位：分）",sort:true}
+                        ,{field:"updateTime",title:"充值时间"}
                     ]]
                     ,done:function(res, curr, count){
                     }
@@ -119,6 +104,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 var type = $(obj).data('type');
                 active[type] ? active[type].call(this) : '';
             }
+            
+            
+            
             </script>
             
     </body>

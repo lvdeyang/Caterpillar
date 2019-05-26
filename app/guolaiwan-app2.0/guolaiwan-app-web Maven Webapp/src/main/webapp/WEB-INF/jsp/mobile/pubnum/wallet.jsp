@@ -482,16 +482,13 @@ html, body {
 	    text-align:center;
 	    font-size:12px;
     }
+   .jinbi{
+   		
+   		width: 20%;
+   		height: 20%;
+   }
+   
     
-    .weui-grid{
-    
-    width:25% !important;
-    }
-    
-    .qianbao{
-    width:22px !important;
-    height:22px !important;
-    }
 
 </style>
 
@@ -513,95 +510,163 @@ html, body {
 			}
 	  };
 		
-
-   
+		getMoney()
 	
 	
 	});
+	
+	function getMoney(){
+		  var userId=${userId};
+          var _uriorder =window.BASEPATH+'phoneApp/wallet?userId='+userId;
+          $.get(_uriorder, null, function(data){
+			data = parseAjaxResult(data);
+			var money=((data.data.wallet)/100).toFixed(2);
+				$('.money').text(money);
+			});
+		}
+	
+	
+	
+	
+		var prepay_id;
+		var paySign; 
+		var appId;   
+		var timeStamp;   
+		var nonceStr;  
+		var packageStr;  
+		var signType; 
+		var orderNo;
+	
+	
+	function invest(){
+	 var orderurl =window.BASEPATH+'pubnum/wallet/addOrder';
+	 var userId=${userId};
+		$.prompt({
+		  title: '请您输入充值金额：',
+		  input: '单位：（元）',
+		  empty: false, // 是否允许为空
+		  onOK: function (input) {
+		    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
+		    	 $.post(orderurl,{'money':input,'userId':userId,'type':1},function(data){
+		    		data = parseAjaxResult(data)
+		    		orderNo=data.id;
+		    		$.get(window.BASEPATH+'pubnum/wallet/pay/'+orderNo+"/"+userId, null, function(data){
+		        	data = parseAjaxResult(data)
+					prepay_id = data.prepay_id;
+			        paySign = data.paySign;
+			        appId = data.appId;
+			        timeStamp = data.timeStamp;
+			        nonceStr = data.nonceStr;
+			        packageStr = data.packageStr;
+			        signType = data.signType;
+			        callpay();
+				});
+		    		
+		    	});
+		    }else{
+		    	$.alert('您的输入有误！')
+				return;		    	
+		    }
+		  },
+		  onCancel: function () {
+		    //点击取消
+		    $.alert('您已取消充值，感谢您的使用！')
+		    return;
+		  }
+		});
+	}
+	
+	
+	function Withdraw(){
+			 var orderurl =window.BASEPATH+'pubnum/wallet/addOrder';
+			 var userId=${userId};
+				$.prompt({
+				  title: '请您输入充值金额：',
+				  input: '单位：（元）',
+				  empty: false, // 是否允许为空
+				  onOK: function (input) {
+				    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
+				    	 $.post(orderurl,{'money':input,'userId':userId,'type':2},function(data){
+				    		data = parseAjaxResult(data)
+				    		orderNo=data.id;
+				    		$.alert('提现成功'+orderNo)
+						});
+				    		
+				    }else{
+				    	$.alert('您的输入有误！')
+						return;		    	
+				    }
+				  },
+				  onCancel: function () {
+				    //点击取消
+				    $.alert('您已取消提现，感谢您的使用！')
+				    return;
+				  }
+				});
+			}
+	
+	
+	
+	
+	
+	function onBridgeReady(){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		        		var userId=${userId};
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		                //每五秒刷新订单状态
+		               $.post(window.BASEPATH+'pubnum/wallet/updata',{'userId':userId,'orderId':orderNo},function(){
+		               		$.alert('您已充值成功，感谢您的使用！')
+		               		window.location.reload();
+		            	}) 
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") { 
+		            	 $.post(window.BASEPATH+'pubnum/wallet/deleteOrder',{'orderId':orderNo},function(){
+		               		$.alert('充值失败，请您重试！')
+		            	}) 
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {
+		            	
+		                alert(res.err_desc); 
+		            }  
+		        }
+		    );
+		}
+		function callpay(){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady();
+		    }
+		} 
+		
+		
 </script>
 
 
 
 <body>
-	<div id="page">
-		<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-				<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">个人</div>
-			</div>
-		</div>
-		<div class="content">
-			<div style="width:100%;height:100px;">
-			    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-			      <div class="weui-media-box__hd">
-			        <img id="userHead" style="border-radius:50%;width:60px;height:60px;" class="weui-media-box__thumb" src="${user.userHeadimg}">
-			      </div>
-			      <div class="weui-media-box__bd">
-			        <h4 class="weui-media-box__title" style="font-size:12px;" id="userName">${user.userNickname}</h4>
-			        <p class="weui-media-box__desc" style="font-size:12px;">积分: ${user.userIntegral}</p>
-			      </div>
-    		    </a>
-			</div>
-			<div class="weui-grids">
-			  <a href="pubnum/favoritelist/index" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/sc.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                    收藏
-			    </p>
-			  </a>
-			  <a href="pubnum/order/list" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/dd.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                我的订单
-			    </p>
-			  </a>
-			  <a href="pubnum/wallet" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/qianbao.png" class="qianbao" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                我的钱包
-			    </p>
-			  </a>
-			  <a href="pubnum/basket/index" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/gwc.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                   购物车
-			    </p>
-			  </a>
-			</div>
-			
-			
-			<div class="weui-cells" style="font-size:12px">
-			  <a class="weui-cell weui-cell_access" href="pubnum/address/index">
-			    <div class="weui-cell__bd">
-			      <p>收货地址</p>
-			    </div>
-			    <div class="weui-cell__ft">
-			    </div>
-			  </a>
-			</div>
-			
-			<div class="weui-cells" style="font-size:12px">
-			  <a class="weui-cell weui-cell_access" href="integral/visitors/home">
-			    <div class="weui-cell__bd">
-			      <p>积分商城</p>
-			    </div>
-			    <div class="weui-cell__ft">
-			    </div>
-			  </a>
-			</div>
-			
-			
-		</div>
+	<div id="page" style="text-align:center;margin-top:30%;">
+		<img class="jinbi" alt="" src="lib/images/jinbi.png">
+		<p class="lingqian">我的零钱</p>
+		<h1 class="money"></h1>
+		<a href="javascript:;" onclick="invest()" class="weui-btn weui-btn_primary" style="width: 60%">充值</a>
+		<a href="javascript:;" onclick="Withdraw()" class="weui-btn weui-btn_warn" style="width: 60%">提现</a>
+		
+		
 	</div>
 </body>
 

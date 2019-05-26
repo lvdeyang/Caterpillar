@@ -64,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>个人主页</title>
+<title>订单详情</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -483,18 +483,11 @@ html, body {
 	    font-size:12px;
     }
     
-    .weui-grid{
     
-    width:25% !important;
-    }
-    
-    .qianbao{
-    width:22px !important;
-    height:22px !important;
-    }
 
 </style>
-
+<script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 </head>
 
 <!-- 公共脚本引入 -->
@@ -514,10 +507,30 @@ html, body {
 	  };
 		
 
-   
-	
-	
-	});
+      var _uriRecomment = window.BASEPATH + 'phoneApp/logisticspage?orderId=${orderId}';
+		
+		$.get(_uriRecomment, null, function(data){ 
+		  var html=[];
+		for(var i=0;i<data.length;i++){		
+		       if(i%4==0){
+		           html.push('<li class="list-group-item list-group-item-success">'+data[i].AcceptTime+"&nbsp&nbsp"+data[i].AcceptStation+'</li>'); 
+		       }
+		        if(i%4==1){
+		            html.push('<li class="list-group-item list-group-item-info">'+data[i].AcceptTime+"&nbsp&nbsp"+data[i].AcceptStation+'</li>'); 
+		       }
+		        if(i%4==2){
+		           html.push('<li class="list-group-item list-group-item-warning">'+data[i].AcceptTime+"&nbsp&nbsp"+data[i].AcceptStation+'</li>'); 
+		       }
+		        if(i%4==3){
+		           html.push(' <li class="list-group-item list-group-item-danger">'+data[i].AcceptTime+"&nbsp&nbsp"+data[i].AcceptStation+'</li>'); 
+		       }
+		    
+		     
+		  
+          }
+			  $('.list-group').append(html.join(''));							
+		 });	
+});
 </script>
 
 
@@ -529,80 +542,29 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">个人</div>
+				<div class="header-content">订单详情</div>
 			</div>
 		</div>
 		<div class="content">
-			<div style="width:100%;height:100px;">
-			    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-			      <div class="weui-media-box__hd">
-			        <img id="userHead" style="border-radius:50%;width:60px;height:60px;" class="weui-media-box__thumb" src="${user.userHeadimg}">
-			      </div>
-			      <div class="weui-media-box__bd">
-			        <h4 class="weui-media-box__title" style="font-size:12px;" id="userName">${user.userNickname}</h4>
-			        <p class="weui-media-box__desc" style="font-size:12px;">积分: ${user.userIntegral}</p>
-			      </div>
-    		    </a>
-			</div>
-			<div class="weui-grids">
-			  <a href="pubnum/favoritelist/index" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/sc.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                    收藏
-			    </p>
-			  </a>
-			  <a href="pubnum/order/list" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/dd.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                我的订单
-			    </p>
-			  </a>
-			  <a href="pubnum/wallet" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/qianbao.png" class="qianbao" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                我的钱包
-			    </p>
-			  </a>
-			  <a href="pubnum/basket/index" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/gwc.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                   购物车
-			    </p>
-			  </a>
-			</div>
 			
-			
-			<div class="weui-cells" style="font-size:12px">
-			  <a class="weui-cell weui-cell_access" href="pubnum/address/index">
-			    <div class="weui-cell__bd">
-			      <p>收货地址</p>
-			    </div>
-			    <div class="weui-cell__ft">
-			    </div>
-			  </a>
-			</div>
-			
-			<div class="weui-cells" style="font-size:12px">
-			  <a class="weui-cell weui-cell_access" href="integral/visitors/home">
-			    <div class="weui-cell__bd">
-			      <p>积分商城</p>
-			    </div>
-			    <div class="weui-cell__ft">
-			    </div>
-			  </a>
-			</div>
+					<ul class="list-group">
+				
+					
+					</ul>		     
 			
 			
 		</div>
 	</div>
+	
+	<div id="large" class="weui-popup__container" style="padding-bottom:50px;">
+	  <div class="weui-popup__overlay"></div>
+	  <div class="weui-popup__modal">
+	      <image id="largeYd" style="width:100%;height:350px;margin-top:10px;"/>
+	      <a style="width:96%;margin-top:50px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary close-popup">
+	      关闭</a>
+	</div>
+</div>
+	
 </body>
 
 

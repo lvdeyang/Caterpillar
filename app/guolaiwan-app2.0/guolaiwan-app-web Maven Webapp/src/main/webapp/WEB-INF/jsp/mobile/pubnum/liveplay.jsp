@@ -447,7 +447,7 @@ html, body {
 	height: 30px;
 	position: absolute;
 	top: 1%;
-	right: 20px;
+	right: 15px;
 	margin-left: -15px;
 	z-index: 9;
 }
@@ -455,8 +455,8 @@ html, body {
 .btn {
 	background: url(lib/images/xin7.png) no-repeat center center;
 	background-size: 100% 100%;
-	width: 60px;
-	height: 60px;
+	width: 50px;
+	height: 50px;
 	border: 0;
 	color: #fff;
 	position: absolute;
@@ -470,12 +470,12 @@ html, body {
 .btn2 {
 	background: url(lib/images/liwu.png) no-repeat center center;
 	background-size: 100% 100%;
-	width: 60px;
-	height: 60px;
+	width: 50px;
+	height: 50px;
 	border: 0;
 	color: #fff;
 	position: absolute;
-	top: -8%;
+	top: 0%;
 	right: 65px;
 	margin-left: -25px;
 	z-index: 10;
@@ -484,9 +484,9 @@ html, body {
 
 .btn3 {
 	background: url(lib/images/huifang.png) no-repeat center center;
-	background-size: 70% 70%;
-	width: 60px;
-	height: 60px;
+	background-size: 100% 100%;
+	width: 50px;
+	height: 50px;
 	border: 0;
 	color: #fff;
 	position: absolute;
@@ -501,7 +501,7 @@ html, body {
 	border-radius: 5px;
 	position: absolute;
 	top: 70%;
-	right: 10px;
+	right: 2px;
 	width: 50px;
 	color: #FD6770;
 	text-align: center;
@@ -722,6 +722,7 @@ html, body {
 		            // 执行隐藏
 		            $('.readyBuy').fadeOut().removeClass("show");
 		            // 其他
+		            $('.giftNumber').val(1);
 		        }  
 						 
 			})
@@ -807,6 +808,8 @@ html, body {
 		            // 执行隐藏
 		            $('.readyBuy').fadeOut().removeClass("show");
 		            // 其他
+		            $('.giftNumber').val(1);
+		            $('.Allprice').text('共计：'+(giftPrice/100).toFixed(2)+'元');
 		        }else{
 		            // 显示
 		            $('.readyBuy').fadeIn().addClass("show");

@@ -509,6 +509,7 @@ html, body {
 
       var _uriMyOrder = window.BASEPATH + 'pubnum/getOrder?type=${status}';
 			$.get(_uriMyOrder, null, function(data){
+			
 				data = parseAjaxResult(data);
 				if(data === -1) return;
 				 var html=[];
@@ -587,11 +588,22 @@ html, body {
 		      
 		      $(document).on('click','.icon-check',function(){
 		          var ids=this.id.split('-');
-		       changeOrderStatus(ids[1],'DELIVER');
+		          $.prompt("请输入快递单号", function(text) {		             
+		        		             
+		             if(!isNaN(text)){
+		                 changeOrderStatus(ids[1],'DELIVER',text);
+		             }else{
+		                $.alert("请重新输入正确的快递单号")		   
+		                return;
+		             } 
+		                                         	        					  
+					}, function() {
+					  //点击取消后的回调函数
+					});
 		      });
 			
-        function changeOrderStatus(orderId,status){
-		   var _urichangeorder = window.BASEPATH + 'pubnum/changeOrderStatus?orderId='+orderId+'&status='+status;
+        function changeOrderStatus(orderId,status,trackingnumber){
+		   var _urichangeorder = window.BASEPATH + 'pubnum/changeOrderStatus?orderId='+orderId+'&status='+status+'&trackingnumber='+trackingnumber;
 	          $.get(_urichangeorder, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
@@ -605,6 +617,7 @@ html, body {
 		}
 	
 	function searchOrder(){
+	
 	
 	$('#orderContent').children().remove();
 		if('${status}'=='TESTED'){

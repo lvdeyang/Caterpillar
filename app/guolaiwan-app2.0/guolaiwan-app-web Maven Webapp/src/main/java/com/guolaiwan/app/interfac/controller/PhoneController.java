@@ -5,25 +5,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -31,10 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.core.pattern.MapPatternConverter;
-import org.bytedeco.javacpp.RealSense.float2;
-import org.bytedeco.javacpp.RealSense.intrinsics;
-import org.hibernate.metamodel.source.annotations.attribute.MappedAttribute;
 import org.mp4parser.Container;
 import org.mp4parser.muxer.Movie;
 import org.mp4parser.muxer.Track;
@@ -42,23 +29,20 @@ import org.mp4parser.muxer.builder.DefaultMp4Builder;
 import org.mp4parser.muxer.container.mp4.MovieCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
-import com.beust.jcommander.internal.Console;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.interfac.util.FilterSensitive;
-import com.guolaiwan.app.web.admin.controller.LiwDijkstraController;
+import com.guolaiwan.app.interfac.util.KdniaoTrackQueryAPI;
 import com.guolaiwan.app.web.admin.vo.ActiveBundleVO;
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.ActivityVO;
@@ -84,13 +68,11 @@ import com.guolaiwan.app.web.admin.vo.ProLatitudeLongitudeVO;
 import com.guolaiwan.app.web.admin.vo.ProTourismPictureVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.admin.vo.ProfessionalLiveVO;
-import com.guolaiwan.app.web.admin.vo.SubLiveVO;
 import com.guolaiwan.app.web.admin.vo.ShareVO;
-import com.guolaiwan.app.web.admin.vo.TodayHotSearchVO;
+import com.guolaiwan.app.web.admin.vo.SubLiveVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.app.web.admin.vo.VPCommentVO;
 import com.guolaiwan.app.web.admin.vo.VideoPicVO;
-import com.guolaiwan.app.web.webScoket.WSManager;
 import com.guolaiwan.app.web.website.alisms.controller.Alisms;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.web.website.user.exception.PasswordErrorException;
@@ -110,6 +92,7 @@ import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.DistributorDAO;
 import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
+import com.guolaiwan.bussiness.admin.dao.ExpressDao;
 import com.guolaiwan.bussiness.admin.dao.LanDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
@@ -172,6 +155,7 @@ import com.guolaiwan.bussiness.admin.po.CommentPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
 import com.guolaiwan.bussiness.admin.po.DistributorPO;
 import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
+import com.guolaiwan.bussiness.admin.po.ExpressPO;
 import com.guolaiwan.bussiness.admin.po.LanPO;
 import com.guolaiwan.bussiness.admin.po.LiveAdvertisementPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
@@ -213,11 +197,6 @@ import com.guolaiwan.bussiness.admin.po.live.SubLivePO;
 import com.guolaiwan.bussiness.javacv.GuoliawanLiveServiceWrapper;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
-import com.mysql.fabric.xmlrpc.base.Array;
-import com.sun.tools.classfile.StackMapTable_attribute.verification_type_info;
-import com.sun.tools.doclint.Checker.Flag;
-import com.sun.tools.internal.jxc.gen.config.Config;
-import com.sun.tools.javac.util.Convert;
 
 import pub.caterpillar.commons.img.VerifyCodeUtils;
 import pub.caterpillar.commons.util.binary.Sha1Util;
@@ -225,13 +204,10 @@ import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.commons.util.html2text.ReduceHtml2Text;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
-import pub.caterpillar.orm.hql.Condition;
-import pub.caterpillar.orm.hql.DeleteHql;
-import pub.caterpillar.orm.hql.QueryHql;
 import pub.caterpillar.weixin.constants.WXContants;
 import pub.caterpillar.weixin.wxpay.GuolaiwanWxPayApp;
-import pub.caterpillar.weixin.wxpay.WXPayUtil;
 import pub.caterpillar.weixin.wxpay.WXPayConstants.SignType;
+import pub.caterpillar.weixin.wxpay.WXPayUtil;
 
 @Controller
 @RequestMapping("/phoneApp")
@@ -312,9 +288,9 @@ public class PhoneController extends WebBaseControll {
 	private LiveRecordDao conn_recordDao;
 	@Autowired
 	private LiveAdvertisementDAO conn_liveAdvertisementDao;
+	@Autowired
+	private ExpressDao expressdao;
 
-	
-	
 	/**
 	 * 首页搜索
 	 * 
@@ -351,7 +327,7 @@ public class PhoneController extends WebBaseControll {
 
 		switch (type) {
 		case "MERCHANT":
-			//修改平谷搜索功能 4/21
+			// 修改平谷搜索功能 4/21
 			List<MerchantPO> merchants = conn_merchant.appfindByComNew(name, page, pageSize);
 
 			List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants,
@@ -381,21 +357,21 @@ public class PhoneController extends WebBaseControll {
 				 * merchantVO.getShopIntroduction()));
 				 */
 			}
-			//修改平谷搜索功能 4/21
+			// 修改平谷搜索功能 4/21
 			int count = conn_merchant.appCount(name);
 			dataMap.put("count", count);
 			dataMap.put("merchants", _merchants);
 			break;
 		case "PRODUCT":
-			//修改平谷搜索功能 4/21
+			// 修改平谷搜索功能 4/21
 			List<ProductPO> products = conn_product.appfindByComNew(name, page, pageSize);
 			List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
-			List<ProductVO> retProductVOs=new ArrayList<ProductVO>();
+			List<ProductVO> retProductVOs = new ArrayList<ProductVO>();
 			for (ProductVO productVO : _products) {
 				JSONObject shopJson = JSON.parseObject(productVO.getProductMerchantJson());
 				ActivityRelPO relPO = conn_activityRel.getActivityRelByProductId(productVO.getId());
 				if (relPO != null) {
-					ProductVO origProductVO=(ProductVO) productVO.clone();
+					ProductVO origProductVO = (ProductVO) productVO.clone();
 					origProductVO.setProductShowPic(sysConfig.getWebUrl() + origProductVO.getProductShowPic());
 					origProductVO.setProductMorePic(split(origProductVO.getProductMorePic(), sysConfig.getWebUrl()));
 					if (shopJson != null && !shopJson.equals("")) {
@@ -414,22 +390,22 @@ public class PhoneController extends WebBaseControll {
 										df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
 							}
 						}
-					}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+					} else if (activityPO.getType().equals(ActivityType.DAZHE)) {
 						if (relPO.getPrice() > 0) {
 							productVO.setProductPrice(df.format(Double.parseDouble(relPO.getPrice() + "") / 100));
 						} else {
-							productVO.setProductPrice(
-										df.format(Double.parseDouble(Long.parseLong(productVO.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+							productVO.setProductPrice(df.format(Double.parseDouble(
+									Long.parseLong(productVO.getProductPrice()) * activityPO.getDiscount() / 10 + "")
+									/ 100));
 						}
 					}
 					productVO.setActivityReId(relPO.getId());
 					productVO.setIsSurpport(relPO.getSurpportBuy());
-					
+
 				} else {
 					productVO.setActivityReId(0);
 					productVO.setIsSurpport(0);
 				}
-				
 
 				productVO.setProductShowPic(sysConfig.getWebUrl() + productVO.getProductShowPic());
 				productVO.setProductMorePic(split(productVO.getProductMorePic(), sysConfig.getWebUrl()));
@@ -439,7 +415,7 @@ public class PhoneController extends WebBaseControll {
 				}
 				retProductVOs.add(productVO);
 			}
-			//修改平谷搜索功能 4/21
+			// 修改平谷搜索功能 4/21
 			int count1 = conn_product.appCountByComNew(name);
 			dataMap.put("count", count1);
 			dataMap.put("products", retProductVOs);
@@ -593,26 +569,26 @@ public class PhoneController extends WebBaseControll {
 				for (ColumnPO cpo : columns) {
 					List<MerchantPO> mers = conn_merchant.getMerchantById(cpo.getMerchantId());
 					if (mers != null && !mers.isEmpty()) {
-						if(mers.get(0).getShopAuditState().equals(ShopAuditStateType.T)){
+						if (mers.get(0).getShopAuditState().equals(ShopAuditStateType.T)) {
 							merchants.add(mers.get(0));
 						}
 					}
 					List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants,
 							MerchantVO.class);
 					for (MerchantVO merchantVO : _merchants) {
-	
+
 						// 图片
 						merchantVO.setShopHeading(sysConfig.getWebUrl() + merchantVO.getShopHeading());
 						merchantVO.setShopQualifications(sysConfig.getWebUrl() + merchantVO.getShopQualifications());
 						merchantVO.setShopPic(sysConfig.getWebUrl() + merchantVO.getShopPic());
-	
+
 						// 多图
 						String morePicStr = split(merchantVO.getShopMpic(), sysConfig.getWebUrl());
 						merchantVO.setShopMpic(morePicStr);
-	
+
 						// 最小价格
 						long minPrice = conn_product.getMinPriceByMer(merchantVO.getId());
-	
+
 						if (minPrice == 0l) {
 							merchantVO.setAveragePrice("无数据");
 						} else {
@@ -1013,12 +989,12 @@ public class PhoneController extends WebBaseControll {
 		// 商品
 		List<ProductPO> products = conn_product.getProductsByMer(merchantID, page, pageSize);
 		List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
-		List<ProductVO> retProductVOs=new ArrayList<ProductVO>();
+		List<ProductVO> retProductVOs = new ArrayList<ProductVO>();
 		int count = conn_product.countProductsByMer(merchantID);
 		for (ProductVO productVO : _products) {
 			ActivityRelPO relPO = conn_activityRel.getActivityRelByProductId(productVO.getId());
 			if (relPO != null) {
-				ProductVO origProductVO=(ProductVO) productVO.clone();
+				ProductVO origProductVO = (ProductVO) productVO.clone();
 				origProductVO.setProductShowPic(sysConfig.getWebUrl() + origProductVO.getProductShowPic()); // 显示图片
 				retProductVOs.add(origProductVO);
 				ActivityPO activityPO = conn_activity.get(relPO.getActivityId());
@@ -1029,17 +1005,18 @@ public class PhoneController extends WebBaseControll {
 					} else {
 						productVO.setProductPrice(df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
 					}
-				}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+				} else if (activityPO.getType().equals(ActivityType.DAZHE)) {
 					if (relPO.getPrice() > 0) {
 						productVO.setProductPrice(df.format(Double.parseDouble(relPO.getPrice() + "") / 100));
 					} else {
-						productVO.setProductPrice(
-									df.format(Double.parseDouble(Long.parseLong(productVO.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+						productVO.setProductPrice(df.format(Double.parseDouble(
+								Long.parseLong(productVO.getProductPrice()) * activityPO.getDiscount() / 10 + "")
+								/ 100));
 					}
 				}
 				productVO.setActivityReId(relPO.getId());
 				productVO.setIsSurpport(relPO.getSurpportBuy());
-				
+
 			} else {
 				productVO.setActivityReId(0);
 				productVO.setIsSurpport(0);
@@ -1376,12 +1353,13 @@ public class PhoneController extends WebBaseControll {
 		Long userId = Long.parseLong(request.getParameter("userId"));
 		if (userId != null) {
 			UserInfoPO user = conn_user.get(userId);
-			CollectionPO collection = conn_collection.getByUserIdProId(user.getId(), productId,activityPro.getId());
+			CollectionPO collection = conn_collection.getByUserIdProId(user.getId(), productId, activityPro.getId());
 			if (collection != null) {
 				_product.setIfcollection(1);
 			}
-			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),new Date());
-			if (activityPro.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&activityPro.getOnePerDay()<=userOneDayBuyPOs.size()) {
+			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(), new Date());
+			if (activityPro.getOnePerDay() != 0 && userOneDayBuyPOs != null
+					&& activityPro.getOnePerDay() <= userOneDayBuyPOs.size()) {
 				dataMap.put("isXianGou", 1);
 			}
 
@@ -1396,12 +1374,12 @@ public class PhoneController extends WebBaseControll {
 				_product.setProductPrice(df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
 			}
 
-		}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+		} else if (activityPO.getType().equals(ActivityType.DAZHE)) {
 			if (activityPro.getPrice() > 0) {
 				_product.setProductPrice(df.format(Double.parseDouble(activityPro.getPrice() + "") / 100));
 			} else {
-				_product.setProductPrice(
-							df.format(Double.parseDouble(Long.parseLong(_product.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+				_product.setProductPrice(df.format(Double.parseDouble(
+						Long.parseLong(_product.getProductPrice()) * activityPO.getDiscount() / 10 + "") / 100));
 			}
 		}
 
@@ -1410,9 +1388,9 @@ public class PhoneController extends WebBaseControll {
 		Date endDate = activityPro.getEndDate();
 		Date beginTime = activityPro.getBeginTime();
 		Date endTime = activityPro.getEndTime();
-		Date bookBegin=activityPro.getBookBeginTime();
-		if(date.after(bookBegin)){
-			activityRelVO.setBookBeginTime(DateUtil.format(date,"yyyy-MM-dd HH:mm:ss"));
+		Date bookBegin = activityPro.getBookBeginTime();
+		if (date.after(bookBegin)) {
+			activityRelVO.setBookBeginTime(DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"));
 		}
 
 		String beginTimeStr = DateUtil.format(date, "yyyy-MM-dd") + " " + DateUtil.format(beginTime, "HH:mm:ss");
@@ -1460,8 +1438,7 @@ public class PhoneController extends WebBaseControll {
 
 		MerchantPO merchant = conn_merchant.get(product.getProductMerchantID());
 		MerchantVO _merchant = new MerchantVO().set(merchant);
-		
-		
+
 		List<ProductComboPO> comboList = conn_combo.findByField("productId", productId);
 		dataMap.put("combos", comboList);
 		dataMap.put("logistics", vos);
@@ -1478,11 +1455,10 @@ public class PhoneController extends WebBaseControll {
 		return success(dataMap);
 	}
 
-	
 	@ResponseBody
 	@RequestMapping(value = "/refreshActivity", method = RequestMethod.GET)
-	public Map<String, Object> refreshActivity(HttpServletRequest request, HttpServletResponse response, long productId,String bDate,int count)
-			throws Exception {
+	public Map<String, Object> refreshActivity(HttpServletRequest request, HttpServletResponse response, long productId,
+			String bDate, int count) throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		ProductPO product = conn_product.get(productId);
 		if (product == null) {
@@ -1491,12 +1467,11 @@ public class PhoneController extends WebBaseControll {
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		// 商品
 		ProductVO _product = new ProductVO().set(product);
-		
 
 		_product.setProductShowPic(sysConfig.getWebUrl() + _product.getProductShowPic()); // 显示图片
 		_product.setProductMorePic(split(_product.getProductMorePic(), sysConfig.getWebUrl()));// 多图
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(_product.getId());
-		
+
 		// 收藏
 		Long userId = Long.parseLong(request.getParameter("userId"));
 		if (userId != null) {
@@ -1505,8 +1480,10 @@ public class PhoneController extends WebBaseControll {
 			if (collection != null) {
 				_product.setIfcollection(1);
 			}
-			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),DateUtil.parse(bDate, "yyyy-MM-dd HH:mm"));
-			if (activityPro.getOnePerDay()!=0&&userOneDayBuyPOs!=null&&activityPro.getOnePerDay()<(userOneDayBuyPOs.size()+count)) {
+			List<UserOneDayBuyPO> userOneDayBuyPOs = conn_userone.findDateBuy(userId, activityPro.getId(),
+					DateUtil.parse(bDate, "yyyy-MM-dd HH:mm"));
+			if (activityPro.getOnePerDay() != 0 && userOneDayBuyPOs != null
+					&& activityPro.getOnePerDay() < (userOneDayBuyPOs.size() + count)) {
 				dataMap.put("isXianGou", 1);
 			}
 
@@ -1521,12 +1498,12 @@ public class PhoneController extends WebBaseControll {
 				_product.setProductPrice(df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
 			}
 
-		}else if(activityPO.getType().equals(ActivityType.DAZHE)){
+		} else if (activityPO.getType().equals(ActivityType.DAZHE)) {
 			if (activityPro.getPrice() > 0) {
 				_product.setProductPrice(df.format(Double.parseDouble(activityPro.getPrice() + "") / 100));
 			} else {
-				_product.setProductPrice(
-							df.format(Double.parseDouble(Long.parseLong(_product.getProductPrice())*activityPO.getDiscount()/10 + "") / 100));
+				_product.setProductPrice(df.format(Double.parseDouble(
+						Long.parseLong(_product.getProductPrice()) * activityPO.getDiscount() / 10 + "") / 100));
 			}
 		}
 
@@ -1558,13 +1535,10 @@ public class PhoneController extends WebBaseControll {
 			_product.setIsEffective(2);
 		}
 
-		
-	
 		dataMap.put("product", _product);
 		return success(dataMap);
 	}
-	
-	
+
 	/**
 	 * 商品详情页 产品经销商
 	 * 
@@ -2053,7 +2027,7 @@ public class PhoneController extends WebBaseControll {
 		String consigneeAddress = pageObject.getString("consigneeAddress");// 详细地址
 		String phone = pageObject.getString("addressphone");
 		String consigneeName = pageObject.getString("consigneeName");// 收货人
-        String idNum=pageObject.getString("idNum");
+		String idNum = pageObject.getString("idNum");
 		// 获取用户
 		UserInfoPO user = conn_user.get(userId);
 		if (user == null) {
@@ -2071,7 +2045,7 @@ public class PhoneController extends WebBaseControll {
 		address.setDistrict(district);// 区
 		address.setConsigneeAddress(consigneeAddress);// 详细地址
 		address.setUserId(userId);
-		if(idNum!=null){
+		if (idNum != null) {
 			address.setIdNum(idNum);
 		}
 		if (count == 0) {
@@ -2081,8 +2055,7 @@ public class PhoneController extends WebBaseControll {
 
 		return success();
 	}
-    
-	
+
 	/***
 	 * 订单：订单删除
 	 * 
@@ -2112,16 +2085,17 @@ public class PhoneController extends WebBaseControll {
 
 		OrderInfoPO orderPO = conn_order.getByFields(fields, values);
 		if (orderPO != null) {
-            if(orderPO.getActivityId()!=0){
-            	conn_userone.deleteByUserAndDate(orderPO.getUserId(), orderPO.getActivityId(), orderPO.getOrderBookDate());
-            	ActivityRelPO actPro=conn_activityRel.get(orderPO.getActivityId());
-            	actPro.setDayStock(actPro.getDayStock()+(int)orderPO.getProductNum());
-            	conn_activityRel.save(actPro);
-            }else{
-            	ProductPO productPO=conn_product.get(orderPO.getProductId());
-            	productPO.setProductStock(productPO.getProductStock()+orderPO.getProductNum());
-            	conn_product.save(productPO);
-            }
+			if (orderPO.getActivityId() != 0) {
+				conn_userone.deleteByUserAndDate(orderPO.getUserId(), orderPO.getActivityId(),
+						orderPO.getOrderBookDate());
+				ActivityRelPO actPro = conn_activityRel.get(orderPO.getActivityId());
+				actPro.setDayStock(actPro.getDayStock() + (int) orderPO.getProductNum());
+				conn_activityRel.save(actPro);
+			} else {
+				ProductPO productPO = conn_product.get(orderPO.getProductId());
+				productPO.setProductStock(productPO.getProductStock() + orderPO.getProductNum());
+				conn_product.save(productPO);
+			}
 			conn_order.delete(orderID);
 			return success();
 		}
@@ -2182,7 +2156,7 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/address/list", method = RequestMethod.GET)
 	public Map<String, Object> addressList(HttpServletRequest request, Long userId) throws Exception {
-		List<AddressPO> addresses = conn_address.getByUserIdAndDelFlg(userId,0);
+		List<AddressPO> addresses = conn_address.getByUserIdAndDelFlg(userId, 0);
 		List<AddressVO> _addresses = AddressVO.getConverter(AddressVO.class).convert(addresses, AddressVO.class);
 		return success(_addresses);
 	}
@@ -2208,7 +2182,7 @@ public class PhoneController extends WebBaseControll {
 		}
 		polist.get(0).setDelFlg(1);
 		conn_address.save(polist.get(0));
-		//conn_address.delete(polist.get(0));
+		// conn_address.delete(polist.get(0));
 		return success();
 	}
 
@@ -2238,11 +2212,11 @@ public class PhoneController extends WebBaseControll {
 		String num = pageObject.getString("productNum");
 		String addressId = pageObject.getString("addressId");
 		String activityId = pageObject.getString("activityId");
-		/*//4/26 新增的comId值 获取
-		Long comId=null;
-		if(pageObject.getString("comId")!=null&&pageObject.getString("comId")!=""){
-		  comId=Long.parseLong(pageObject.getString("comId"));
-		}*/
+		/*
+		 * //4/26 新增的comId值 获取 Long comId=null;
+		 * if(pageObject.getString("comId")!=null&&pageObject.getString("comId")
+		 * !=""){ comId=Long.parseLong(pageObject.getString("comId")); }
+		 */
 		String comboId = pageObject.getString("comboId");
 		String logisticsId = pageObject.getString("logisticsId");
 		/*
@@ -2260,12 +2234,11 @@ public class PhoneController extends WebBaseControll {
 		}
 
 		OrderInfoPO order = new OrderInfoPO();
-		//4/26新增的comId值 获取 张羽 4/28 添加退款限制
+		// 4/26新增的comId值 获取 张羽 4/28 添加退款限制
 		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
 		order.setComId(productPO2.getComId());
 		order.setProductIsRefund(productPO2.getProductIsRefund());
-		
-		
+
 		if (logisticsId != null) {
 			order.setLogisticsId(Long.parseLong(logisticsId));
 		}
@@ -2353,7 +2326,7 @@ public class PhoneController extends WebBaseControll {
 		// 商品数量
 		order.setProductNum(Long.parseLong(num));
 		//
-		if (comboId!=null&&!comboId.equals("0")) {
+		if (comboId != null && !comboId.equals("0")) {
 			ProductComboPO comboPO = conn_combo.get(Long.parseLong(comboId));
 			payMoney = Integer.parseInt(num) * (comboPO.getComboprice());
 			orderAllMoney = payMoney;
@@ -2381,13 +2354,14 @@ public class PhoneController extends WebBaseControll {
 			productprice = activityRelPO.getPrice();
 		}
 
-		/*if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
-			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
-			payMoney = payMoney * (bet+1);
-			orderAllMoney = payMoney;
-		}*/
-		//张羽 修改支付时的价钱按照页面的计算来 4/30
-		long bet=Long.parseLong(pageObject.getString("payMoney"));
+		/*
+		 * if (order.getOrderBookDate() != null && order.getEndBookDate() !=
+		 * null) { long bet = DateUtil.daysBetween(order.getOrderBookDate(),
+		 * order.getEndBookDate()); payMoney = payMoney * (bet+1); orderAllMoney
+		 * = payMoney; }
+		 */
+		// 张羽 修改支付时的价钱按照页面的计算来 4/30
+		long bet = Long.parseLong(pageObject.getString("payMoney"));
 		payMoney = payMoney * bet;
 		orderAllMoney = payMoney;
 
@@ -2440,16 +2414,15 @@ public class PhoneController extends WebBaseControll {
 		// 预订日期
 		// order.setOrderBookDate(date);
 
-		String photo=pageObject.getString("photo");
-		String idNum=pageObject.getString("idNum");
-		if(photo!=null){
+		String photo = pageObject.getString("photo");
+		String idNum = pageObject.getString("idNum");
+		if (photo != null) {
 			order.setPhoto(URLDecoder.decode(photo));
 		}
-		if(idNum!=null){
+		if (idNum != null) {
 			order.setIdNum(idNum);
 		}
-		
-		
+
 		// 订单来源
 		order.setOrderType(OrderType.MERCHANT);
 		if (pageObject.getString("source") != null) {
@@ -2458,11 +2431,11 @@ public class PhoneController extends WebBaseControll {
 			order.setSource(OrderSource.APP);
 		}
 		conn_order.saveOrUpdate(order);
-		JSONArray array=pageObject.getJSONArray("idnums");
-		if(array!=null){
+		JSONArray array = pageObject.getJSONArray("idnums");
+		if (array != null) {
 			for (Object obj : array) {
-				JSONObject jobj=(JSONObject)obj;
-				OrderPeoplePo orderPeoplePo=new OrderPeoplePo();
+				JSONObject jobj = (JSONObject) obj;
+				OrderPeoplePo orderPeoplePo = new OrderPeoplePo();
 				orderPeoplePo.setIdNum(jobj.getString("idNum"));
 				orderPeoplePo.setPhoto(URLDecoder.decode(jobj.getString("photo")));
 				orderPeoplePo.setOrderId(order.getId());
@@ -2477,8 +2450,9 @@ public class PhoneController extends WebBaseControll {
 	SurpportBuyDao conn_surpportbuy;
 	@Autowired
 	RoomStatusDao conn_roomstatus;
-    @Autowired
-    OrderPeopleDao conn_orderPeople;
+	@Autowired
+	OrderPeopleDao conn_orderPeople;
+
 	/**
 	 * 订单：立即支付
 	 * 
@@ -2504,11 +2478,11 @@ public class PhoneController extends WebBaseControll {
 		Long userId = Long.parseLong(pageObject.getString("userId"));
 		String paytype = pageObject.getString("paytype");
 		String activityId = pageObject.getString("activityId");
-		/*//4/26 新增的comId值 获取
-		Long comId=null;
-		if(pageObject.getString("comId")!=null&&pageObject.getString("comId")!=""){
-		  comId=Long.parseLong(pageObject.getString("comId"));
-		}*/
+		/*
+		 * //4/26 新增的comId值 获取 Long comId=null;
+		 * if(pageObject.getString("comId")!=null&&pageObject.getString("comId")
+		 * !=""){ comId=Long.parseLong(pageObject.getString("comId")); }
+		 */
 		String comboId = pageObject.getString("comboId");
 		String logisticsId = pageObject.getString("logisticsId");
 		/*
@@ -2529,8 +2503,7 @@ public class PhoneController extends WebBaseControll {
 		ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
 		order.setComId(productPO2.getComId());
 		order.setProductIsRefund(productPO2.getProductIsRefund());
-		
-		
+
 		if (logisticsId != null) {
 			order.setLogisticsId(Long.parseLong(logisticsId));
 		}
@@ -2648,16 +2621,17 @@ public class PhoneController extends WebBaseControll {
 			productprice = activityRelPO.getPrice();
 		}
 
-		/*if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
-			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
-			payMoney = payMoney * (bet+1);
-			orderAllMoney = payMoney;
-		}*/
-		//张羽 修改支付时的价钱按照页面的计算来 4/30
-		long bet=Long.parseLong(pageObject.getString("payMoney"));
+		/*
+		 * if (order.getOrderBookDate() != null && order.getEndBookDate() !=
+		 * null) { long bet = DateUtil.daysBetween(order.getOrderBookDate(),
+		 * order.getEndBookDate()); payMoney = payMoney * (bet+1); orderAllMoney
+		 * = payMoney; }
+		 */
+		// 张羽 修改支付时的价钱按照页面的计算来 4/30
+		long bet = Long.parseLong(pageObject.getString("payMoney"));
 		payMoney = payMoney * bet;
 		orderAllMoney = payMoney;
-		System.out.println(orderAllMoney+"-------------------------");
+		System.out.println(orderAllMoney + "-------------------------");
 		// 商品单价
 		order.setProductPrice(productprice);
 		// 所属板块DI
@@ -2708,17 +2682,15 @@ public class PhoneController extends WebBaseControll {
 		// // 预订日期
 		// order.setOrderBookDate(date);
 
-		
-		String photo=pageObject.getString("photo");
-		String idNum=pageObject.getString("idNum");
-		if(photo!=null){
+		String photo = pageObject.getString("photo");
+		String idNum = pageObject.getString("idNum");
+		if (photo != null) {
 			order.setPhoto(URLDecoder.decode(photo));
 		}
-		if(idNum!=null){
+		if (idNum != null) {
 			order.setIdNum(idNum);
 		}
-		
-		
+
 		if (pageObject.getString("source") != null) {
 			order.setSource(OrderSource.fromString(pageObject.getString("source")));
 		} else {
@@ -2730,13 +2702,12 @@ public class PhoneController extends WebBaseControll {
 		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
 		conn_product.update(productPO);
 		conn_order.saveOrUpdate(order);
-		
-		
-		JSONArray array=pageObject.getJSONArray("idnums");
-		if(array!=null){
+
+		JSONArray array = pageObject.getJSONArray("idnums");
+		if (array != null) {
 			for (Object obj : array) {
-				JSONObject jobj=(JSONObject)obj;
-				OrderPeoplePo orderPeoplePo=new OrderPeoplePo();
+				JSONObject jobj = (JSONObject) obj;
+				OrderPeoplePo orderPeoplePo = new OrderPeoplePo();
 				orderPeoplePo.setIdNum(jobj.getString("idNum"));
 				orderPeoplePo.setPhoto(URLDecoder.decode(jobj.getString("photo")));
 				orderPeoplePo.setOrderId(order.getId());
@@ -2744,10 +2715,7 @@ public class PhoneController extends WebBaseControll {
 				conn_orderPeople.save(orderPeoplePo);
 			}
 		}
-		
-		
-		
-		
+
 		long PayMoney = order.getPayMoney();
 		/* String tradeNum=order.getOrderNO(); */
 		String orderIdStr = String.valueOf(order.getId());
@@ -2964,19 +2932,19 @@ public class PhoneController extends WebBaseControll {
 				List<OrderInfoPO> orderingOrderpos = conn_order.getOrdersByState(userId, OrderStateType.NOTPAY);
 				List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
 						OrderInfoVO.class);
-			    List<OrderInfoVO> checkOrders=new ArrayList<OrderInfoVO>();
+				List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
 				for (OrderInfoVO orderInfoVO : orderingOrders) {
-					if(!orderInfoVO.getOrderBookDate().equals("")){
-						Date bookDate=DateUtil.parse(orderInfoVO.getOrderBookDate(),"yyyy年MM月dd日 HH:mm:ss");
-					    long between=DateUtil.daysBetween(new Date(),bookDate);
-					    if(bookDate.getTime()<new Date().getTime()){
-					    	continue;
-					    }
+					if (!orderInfoVO.getOrderBookDate().equals("")) {
+						Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");
+						long between = DateUtil.daysBetween(new Date(), bookDate);
+						if (bookDate.getTime() < new Date().getTime()) {
+							continue;
+						}
 					}
-					
-					orderInfoVO.setProductRestrictNumber(conn_product.get(orderInfoVO.getProductId()).getProductRestrictNumber());
-					
-					
+
+					orderInfoVO.setProductRestrictNumber(
+							conn_product.get(orderInfoVO.getProductId()).getProductRestrictNumber());
+
 					orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
 					if (orderInfoVO.getComboId() != 0) {
 						ProductComboPO comboPO = conn_combo.get(orderInfoVO.getComboId());
@@ -2994,24 +2962,25 @@ public class PhoneController extends WebBaseControll {
 					}
 					if (orderInfoVO.getActivityId() != 0) {
 						ActivityRelPO activityRelPO = conn_activityRel.get(orderInfoVO.getActivityId());
-						if(activityRelPO!=null){
-							Date setDate=DateUtil.parse(orderInfoVO.getUpdateTime(),DateUtil.dateTimePattern);
-						    long between=DateUtil.daysBetween(setDate,new Date());
-						    if((between*24)>activityRelPO.getExpireTime()){
-						        OrderInfoPO innerOrderInfoPO=conn_order.get(orderInfoVO.getId());
-					            conn_userone.deleteByUserAndDate(innerOrderInfoPO.getUserId(), innerOrderInfoPO.getActivityId(), innerOrderInfoPO.getOrderBookDate());
-					            ActivityRelPO actPro=conn_activityRel.get(innerOrderInfoPO.getActivityId());
-					            actPro.setDayStock(actPro.getDayStock()+(int)innerOrderInfoPO.getProductNum());
-					            conn_activityRel.save(actPro);
-					           
-						    	continue;
-						    }
+						if (activityRelPO != null) {
+							Date setDate = DateUtil.parse(orderInfoVO.getUpdateTime(), DateUtil.dateTimePattern);
+							long between = DateUtil.daysBetween(setDate, new Date());
+							if ((between * 24) > activityRelPO.getExpireTime()) {
+								OrderInfoPO innerOrderInfoPO = conn_order.get(orderInfoVO.getId());
+								conn_userone.deleteByUserAndDate(innerOrderInfoPO.getUserId(),
+										innerOrderInfoPO.getActivityId(), innerOrderInfoPO.getOrderBookDate());
+								ActivityRelPO actPro = conn_activityRel.get(innerOrderInfoPO.getActivityId());
+								actPro.setDayStock(actPro.getDayStock() + (int) innerOrderInfoPO.getProductNum());
+								conn_activityRel.save(actPro);
+
+								continue;
+							}
 							orderInfoVO.setProductPrice(
 									new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
-						}else{
+						} else {
 							continue;
 						}
-						
+
 					}
 					checkOrders.add(orderInfoVO);
 				}
@@ -3284,11 +3253,11 @@ public class PhoneController extends WebBaseControll {
 
 		if (_order.getComboId() != 0) {
 			ProductComboPO comboPO = conn_combo.get(_order.getComboId());
-			if(comboPO!=null){
+			if (comboPO != null) {
 				_order.setProductPrice(new DecimalFormat("0.00").format((double) comboPO.getComboprice() / 100));
 				_order.setComboName(comboPO.getCombo());
 			}
-			
+
 		} else {
 			_order.setComboName("标准");
 		}
@@ -3301,9 +3270,8 @@ public class PhoneController extends WebBaseControll {
 
 		if (_order.getActivityId() != 0) {
 			ActivityRelPO activityRelPO = conn_activityRel.get(_order.getActivityId());
-			if(activityRelPO!=null){
-				_order.setProductPrice(
-						new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+			if (activityRelPO != null) {
+				_order.setProductPrice(new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
 			}
 		}
 		dataMap.put("order", _order);
@@ -3420,23 +3388,20 @@ public class PhoneController extends WebBaseControll {
 					return FORBIDDEN(message);
 				}
 			}
-            if(orderInfoPO.getOrderBookDate()!=null&&orderInfoPO.getProductId()!=0){
-            	MerchantPO merchantPO=conn_merchant.get(orderInfoPO.getShopId());
-            	if(merchantPO.getModularCode().equals("0001")){
-            		String today=DateUtil.format(new Date(),"yyyy-MM-dd");
-        			Date sDate=DateUtil.parse(today+" 00:00:00","yyyy-MM-dd HH:mm:ss");
-        			Date eDate=DateUtil.parse(today+" 23:59:59","yyyy-MM-dd HH:mm:ss");
-        			if(sDate.after(orderInfoPO.getOrderBookDate())||eDate.before(orderInfoPO.getOrderBookDate())){
-        				String message = "这条订单日期不是今天！";
-    					return FORBIDDEN(message);
-        			}
-            	}
-            	
-            	
-            }
-			
-			
-			
+			if (orderInfoPO.getOrderBookDate() != null && orderInfoPO.getProductId() != 0) {
+				MerchantPO merchantPO = conn_merchant.get(orderInfoPO.getShopId());
+				if (merchantPO.getModularCode().equals("0001")) {
+					String today = DateUtil.format(new Date(), "yyyy-MM-dd");
+					Date sDate = DateUtil.parse(today + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
+					Date eDate = DateUtil.parse(today + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
+					if (sDate.after(orderInfoPO.getOrderBookDate()) || eDate.before(orderInfoPO.getOrderBookDate())) {
+						String message = "这条订单日期不是今天！";
+						return FORBIDDEN(message);
+					}
+				}
+
+			}
+
 			// 判断订单状态？？？
 			if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYFINISH)
 					&& !orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
@@ -3508,7 +3473,7 @@ public class PhoneController extends WebBaseControll {
 		List<MerchantUser> merchantUsers = conn_merchantUser.findByField("merchantId", merchantPO.getId());
 		for (MerchantUser merchantUser : merchantUsers) {
 			UserInfoPO userInfoPO = conn_user.get(merchantUser.getUserId());
-			if(userInfoPO==null){
+			if (userInfoPO == null) {
 				continue;
 			}
 			JSONObject obj = new JSONObject();
@@ -3847,18 +3812,18 @@ public class PhoneController extends WebBaseControll {
 
 		return success();
 	}
-//  全选删除 商品
+
+	// 全选删除 商品
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/alldelete", method = RequestMethod.POST)
-	public Map<String, Object> allDelete(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public Map<String, Object> allDelete(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 解析json
 		HttpServletRequestParser parser = new HttpServletRequestParser(request);
 		JSONObject pageObject = parser.parseJSON();
 		List<Long> list = new ArrayList<Long>();
 		long userId = pageObject.getLong("userId"); // 用户Id
-		String productId = pageObject.getString("productId");//商品
+		String productId = pageObject.getString("productId");// 商品
 		String[] strArr = productId.split("-");
 		for (String string : strArr) {
 			list.add(Long.parseLong(string));
@@ -3881,18 +3846,18 @@ public class PhoneController extends WebBaseControll {
 		}
 		return success();
 	}
-	//  全选删除 商家
+
+	// 全选删除 商家
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/merdelete", method = RequestMethod.POST)
-	public Map<String, Object> merdelete(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public Map<String, Object> merdelete(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 解析json
 		HttpServletRequestParser parser = new HttpServletRequestParser(request);
 		JSONObject pageObject = parser.parseJSON();
 		List<Long> list = new ArrayList<Long>();
 		long userId = pageObject.getLong("userId"); // 用户Id
-		String merId = pageObject.getString("merId");//商品
+		String merId = pageObject.getString("merId");// 商品
 		String[] strArr = merId.split("-");
 		for (String string : strArr) {
 			list.add(Long.parseLong(string));
@@ -3936,7 +3901,7 @@ public class PhoneController extends WebBaseControll {
 		for (CollectionPO collectionPO : collections) {
 			if (collectionPO.getProductId() != 0) {
 				ProductPO product = conn_product.get(collectionPO.getProductId());
-				if(product==null){
+				if (product == null) {
 					continue;
 				}
 				ProductVO _product = new ProductVO().set(product);
@@ -5011,12 +4976,12 @@ public class PhoneController extends WebBaseControll {
 			VideoPicVO _videoPic = new VideoPicVO().set(videoPic);
 			// 路径
 			_videoPic.setfUrl(split(_videoPic.getfUrl(), webUrl));
-   
+
 			// 点赞数
 			int countPraise = conn_vPRel.countPraise(videoPic);
 			_videoPic.setPraiseCount(countPraise);
 
- 			// 评论数
+			// 评论数
 			int countComment = 0;
 			List<VPCommentPO> vpComments = videoPic.getVPComments();
 			if (vpComments != null) {
@@ -5421,7 +5386,7 @@ public class PhoneController extends WebBaseControll {
 				_videoPic.setIsPraise(1);
 			}
 		}
-    
+
 		// 评论数
 		int countComment = 0;
 		int pages = 0;
@@ -6007,7 +5972,7 @@ public class PhoneController extends WebBaseControll {
 	 * @param 景区中所有景点和路线点集合childProductPOList
 	 * @return 路线规划结果集resultList
 	 */
-	public List<List<ChildProductPO>> planRoad(ChildProductPO start,ChildProductPO childProductPO,
+	public List<List<ChildProductPO>> planRoad(ChildProductPO start, ChildProductPO childProductPO,
 			List<ChildProductPO> childProductPOList, List<ChildProductPO> resultList,
 			List<List<ChildProductPO>> resultBundle) {
 		// 当第一次调用方法时,结果集还未创建
@@ -6021,7 +5986,7 @@ public class PhoneController extends WebBaseControll {
 			resultList.add(start);
 		}
 		// 如果景点和路线点集合:childProductPOList第一个元素就是终点:childProductPO
-		if(start.getId().equals(childProductPO.getId())){
+		if (start.getId().equals(childProductPO.getId())) {
 			resultBundle.add(resultList);
 			return resultBundle;
 		}
@@ -6040,48 +6005,48 @@ public class PhoneController extends WebBaseControll {
 			}
 			if (!has) {
 				resultList.add(linkChild);
-				if(linkChild.getId().equals(childProductPO.getId())){
+				if (linkChild.getId().equals(childProductPO.getId())) {
 					resultBundle.add(resultList);
 					break;
 				}
 				if (count == 0) {
-					planRoad(linkChild,childProductPO, childProductPOList, resultList, resultBundle);
+					planRoad(linkChild, childProductPO, childProductPOList, resultList, resultBundle);
 				} else {
 
 					List<ChildProductPO> newReusltList = new ArrayList<ChildProductPO>();
 					newReusltList.addAll(resultList);
 					System.out.println("generate new:" + newReusltList.size());
 					// resultBundle.add(newReusltList);
-					planRoad(linkChild,childProductPO, childProductPOList, newReusltList, resultBundle);
+					planRoad(linkChild, childProductPO, childProductPOList, newReusltList, resultBundle);
 				}
 
 			}
 			count++;
 		}
-			
-		
+
 		// Mr
-	    return resultBundle;
+		return resultBundle;
 
 	}
-	
-	
-	List<ChildProductPO> getshortest(List<List<ChildProductPO>> result){
-		double tempDis=0;
-		List<ChildProductPO> resultChild=null;
+
+	List<ChildProductPO> getshortest(List<List<ChildProductPO>> result) {
+		double tempDis = 0;
+		List<ChildProductPO> resultChild = null;
 		for (List<ChildProductPO> list : result) {
-			double curdis=0;
-			for(int i=0;i<list.size()-1;i++){
-				curdis+=getDis(Double.parseDouble(list.get(i).getChildLatitude()),Double.parseDouble(list.get(i).getChildLongitude()),
-						Double.parseDouble(list.get(i+1).getChildLatitude()),Double.parseDouble(list.get(i+1).getChildLongitude()));
+			double curdis = 0;
+			for (int i = 0; i < list.size() - 1; i++) {
+				curdis += getDis(Double.parseDouble(list.get(i).getChildLatitude()),
+						Double.parseDouble(list.get(i).getChildLongitude()),
+						Double.parseDouble(list.get(i + 1).getChildLatitude()),
+						Double.parseDouble(list.get(i + 1).getChildLongitude()));
 			}
-			if(tempDis==0){
-				tempDis=curdis;
-				resultChild=list;
-			}else{
-				if(tempDis>curdis){
-					tempDis=curdis;
-					resultChild=list;
+			if (tempDis == 0) {
+				tempDis = curdis;
+				resultChild = list;
+			} else {
+				if (tempDis > curdis) {
+					tempDis = curdis;
+					resultChild = list;
 				}
 			}
 		}
@@ -6103,51 +6068,46 @@ public class PhoneController extends WebBaseControll {
 		// 转换为json数据
 		JSONObject jsonData = JSON.parseObject(requestJson);
 		// 客户当前位置的经纬度字符串
-		//String nowLoAndLa = jsonData.getString("nowLoAndLa");
+		// String nowLoAndLa = jsonData.getString("nowLoAndLa");
 		String startId = jsonData.getString("startId");
 		// 获取当前景点的id
 		String childIdString = jsonData.getString("childId");
 		// 客户当前位置的经纬度数组
-		//String[] nowLoAndLaStrings = nowLoAndLa.split(",");
+		// String[] nowLoAndLaStrings = nowLoAndLa.split(",");
 		// 客户当前位置的经度
-		//String nowLoString = nowLoAndLaStrings[0];
+		// String nowLoString = nowLoAndLaStrings[0];
 		// 客户当前位置的纬度
-		//String nowLaString = nowLoAndLaStrings[1];
-		
-		
+		// String nowLaString = nowLoAndLaStrings[1];
+
 		// 根据景区内景点id进行查询
 		ChildProductPO childProduct = conn_childProduct.getChildById(Long.parseLong(childIdString)).get(0);
 		// 获取父id
 		long productID = childProduct.getProductID();
 		// 通过父id：productId查询所有子景点的信息childProductPOList
 		List<ChildProductPO> childProductPOList = conn_childProduct.getChildByProductId(productID);
-		//double tempDis=0;
-		ChildProductPO start=conn_childProduct.getChildById(Long.parseLong(startId)).get(0);
-		/*for (ChildProductPO childProductPO : childProductPOList) {
-			Double dis=getDis(Double.parseDouble(nowLaString), Double.parseDouble(nowLoString), 
-					Double.parseDouble(childProduct.getChildLatitude()), Double.parseDouble(childProduct.getChildLongitude()));
-			if(tempDis==0){
-				tempDis=dis;
-				start=childProductPO;
-			}else if(tempDis<dis){
-				tempDis=dis;
-				start=childProductPO;
-			}
-		}*/
+		// double tempDis=0;
+		ChildProductPO start = conn_childProduct.getChildById(Long.parseLong(startId)).get(0);
+		/*
+		 * for (ChildProductPO childProductPO : childProductPOList) { Double
+		 * dis=getDis(Double.parseDouble(nowLaString),
+		 * Double.parseDouble(nowLoString),
+		 * Double.parseDouble(childProduct.getChildLatitude()),
+		 * Double.parseDouble(childProduct.getChildLongitude()));
+		 * if(tempDis==0){ tempDis=dis; start=childProductPO; }else
+		 * if(tempDis<dis){ tempDis=dis; start=childProductPO; } }
+		 */
 		// 路线规划
-		List<List<ChildProductPO>> roadPlanResult = planRoad(start,childProduct, childProductPOList, null,
-				null);
-		
+		List<List<ChildProductPO>> roadPlanResult = planRoad(start, childProduct, childProductPOList, null, null);
+
 		for (List<ChildProductPO> list : roadPlanResult) {
 			System.out.println("new line:");
 			for (ChildProductPO childProductPO : list) {
-				System.out.println(childProductPO.getId()+childProductPO.getChildName());
+				System.out.println(childProductPO.getId() + childProductPO.getChildName());
 			}
 		}
-		
+
 		return success(getshortest(roadPlanResult));
 	}
-
 
 	/**
 	 * Liw 评论删除
@@ -6490,7 +6450,7 @@ public class PhoneController extends WebBaseControll {
 		resultMap.put("status", subLivePO.getStatus() + "");
 		return success(resultMap);
 	}
-	
+
 	/**
 	 * 专业直播修：机位关闭直播
 	 * 
@@ -6510,18 +6470,17 @@ public class PhoneController extends WebBaseControll {
 		SubLivePO subLivePO = conn_subLive.get(subLiveId);
 		ProfessionalLiveDirectorPO professionalLiveDirectorPO = conn_professionalLiveDirectorDao.findByLiveId(liveId);
 		String cameraCanClose = professionalLiveDirectorPO.getCameraCanClose();
-		if(cameraCanClose.equals("YES")){
-			//可关闭状态
+		if (cameraCanClose.equals("YES")) {
+			// 可关闭状态
 			// 修改机位状态为未被使用
 			subLivePO.setInuse(0);
 			subLivePO.setStatus(LiveStatusType.STOP);
 			conn_subLive.saveOrUpdate(subLivePO);
 			return success("YES");
-		}else {
+		} else {
 			return success("NO");
 		}
-		
-		
+
 	}
 
 	/**
@@ -6762,7 +6721,8 @@ public class PhoneController extends WebBaseControll {
 		storePath = storePath + vedioFileName + ".mp4";
 		File toUploadFile = new File(storePath);
 		vedioFile.transferTo(toUploadFile);
-		//videoPath 格式 G:\Develop\apache-tomcat-7.0.92-windows-x64\apache-tomcat-7.0.92\webapps\file\mat_play_vedio\46\46.mp4
+		// videoPath 格式
+		// G:\Develop\apache-tomcat-7.0.92-windows-x64\apache-tomcat-7.0.92\webapps\file\mat_play_vedio\46\46.mp4
 		String videoPath = storePath;
 		ProfessionalLiveMatPlayVedioPO professionalLiveMatPlayVedioPO = conn_professionalLiveMatPlayVedioDao
 				.findByLiveId(Long.parseLong(vedioFileName));
@@ -6777,7 +6737,7 @@ public class PhoneController extends WebBaseControll {
 		}
 		return success();
 	}
-	
+
 	/**
 	 * 专业直播修：导播开启垫播服务,关闭垫播服务不用做,APP关闭直播时判断哪个录制未关闭需要用户点击关闭
 	 * 
@@ -6795,8 +6755,10 @@ public class PhoneController extends WebBaseControll {
 		JSONObject params = httpServletRequestParser.parseJSON();
 		long liveId = params.getLongValue("liveId");
 		LivePO livePO = conn_live.get(liveId);
-		ProfessionalLiveMatPlayVedioPO professionalLiveMatPlayVedioPO = conn_professionalLiveMatPlayVedioDao.findByLiveId(liveId);
-		GuoliawanLiveServiceWrapper.getInstance().startMatPlay(livePO.getPubName(), liveId+"", professionalLiveMatPlayVedioPO.getVedioPath());
+		ProfessionalLiveMatPlayVedioPO professionalLiveMatPlayVedioPO = conn_professionalLiveMatPlayVedioDao
+				.findByLiveId(liveId);
+		GuoliawanLiveServiceWrapper.getInstance().startMatPlay(livePO.getPubName(), liveId + "",
+				professionalLiveMatPlayVedioPO.getVedioPath());
 		return null;
 	}
 
@@ -6989,43 +6951,45 @@ public class PhoneController extends WebBaseControll {
 			findResultProfessionalLivePO.setLiveType("PROFESSIONAL_LIVE");
 			conn_professionalLiveDao.saveOrUpdate(findResultProfessionalLivePO);
 		}
-		 // 进行切流
-		 if(oldBroadCastCamera == 0){
-			 //调用导播位开启直播方法
-			 if(newBroadCastCamera != 7){
-				 //7为垫播逻辑和机位不同
-				 SubLivePO subLivePO = conn_subLive.getSubLivePO(liveId,newBroadCastCamera);
-				 LivePO livePO = conn_live.get(liveId);
-				 GuoliawanLiveServiceWrapper.getInstance().startLive(livePO.getPubName(),subLivePO.getPubName());
-			 }else {
-				 LivePO livePO = conn_live.get(liveId);
-				 GuoliawanLiveServiceWrapper.getInstance().startLive(livePO.getPubName(),liveId+"");
-			 }
-		 }else {
-			 if(newBroadCastCamera != 7){
-				 //还需要区分oldBroadCastCamera是否为垫播
-				 if(oldBroadCastCamera != 7){
-					//调用切流方法
-					SubLivePO newCameraSubLivePO = conn_subLive.getSubLivePO(liveId,newBroadCastCamera);
-					SubLivePO oldCameraSubLivePO = conn_subLive.getSubLivePO(liveId,oldBroadCastCamera);
+		// 进行切流
+		if (oldBroadCastCamera == 0) {
+			// 调用导播位开启直播方法
+			if (newBroadCastCamera != 7) {
+				// 7为垫播逻辑和机位不同
+				SubLivePO subLivePO = conn_subLive.getSubLivePO(liveId, newBroadCastCamera);
+				LivePO livePO = conn_live.get(liveId);
+				GuoliawanLiveServiceWrapper.getInstance().startLive(livePO.getPubName(), subLivePO.getPubName());
+			} else {
+				LivePO livePO = conn_live.get(liveId);
+				GuoliawanLiveServiceWrapper.getInstance().startLive(livePO.getPubName(), liveId + "");
+			}
+		} else {
+			if (newBroadCastCamera != 7) {
+				// 还需要区分oldBroadCastCamera是否为垫播
+				if (oldBroadCastCamera != 7) {
+					// 调用切流方法
+					SubLivePO newCameraSubLivePO = conn_subLive.getSubLivePO(liveId, newBroadCastCamera);
+					SubLivePO oldCameraSubLivePO = conn_subLive.getSubLivePO(liveId, oldBroadCastCamera);
 					LivePO livePO = conn_live.get(liveId);
 					GuoliawanLiveServiceWrapper.getInstance().switchSubLive(livePO.getPubName(),
-					oldCameraSubLivePO.getPubName(), newCameraSubLivePO.getPubName());
-				 }else{
-					SubLivePO newCameraSubLivePO = conn_subLive.getSubLivePO(liveId,newBroadCastCamera);
+							oldCameraSubLivePO.getPubName(), newCameraSubLivePO.getPubName());
+				} else {
+					SubLivePO newCameraSubLivePO = conn_subLive.getSubLivePO(liveId, newBroadCastCamera);
 					LivePO livePO = conn_live.get(liveId);
-					GuoliawanLiveServiceWrapper.getInstance().switchSubLive(livePO.getPubName(),liveId+"", newCameraSubLivePO.getPubName());
-				 }
-			 }else {
-				 SubLivePO oldCameraSubLivePO = conn_subLive.getSubLivePO(liveId,oldBroadCastCamera);
-				 LivePO livePO = conn_live.get(liveId);
-				 GuoliawanLiveServiceWrapper.getInstance().switchSubLive(livePO.getPubName(),oldCameraSubLivePO.getPubName(), liveId+"");
-			 }
-			 
-		 }
+					GuoliawanLiveServiceWrapper.getInstance().switchSubLive(livePO.getPubName(), liveId + "",
+							newCameraSubLivePO.getPubName());
+				}
+			} else {
+				SubLivePO oldCameraSubLivePO = conn_subLive.getSubLivePO(liveId, oldBroadCastCamera);
+				LivePO livePO = conn_live.get(liveId);
+				GuoliawanLiveServiceWrapper.getInstance().switchSubLive(livePO.getPubName(),
+						oldCameraSubLivePO.getPubName(), liveId + "");
+			}
+
+		}
 		return success();
 	}
-	
+
 	/**
 	 * 专业直播导播机位开始录制
 	 * 
@@ -7037,25 +7001,26 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/professionalLiveStartRecord", method = RequestMethod.POST)
-	public Map<String, Object> professionalLiveStartRecord(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		
+	public Map<String, Object> professionalLiveStartRecord(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
 		String param = getRequestJson(request);
 		JSONObject jsonObject = JSON.parseObject(param);
 		long liveId = jsonObject.getLongValue("liveId");
 		long subLiveId = jsonObject.getLongValue("subLiveId");
 		SubLivePO subLivePO = conn_subLive.findSubLivePOById(subLiveId);
-		//保存路径
-		String storePath = conn_sysConfig.getSysConfig().getFolderUrl() + File.separator + "record_video" + File.separator + liveId + File.separator;
-		//发布url
-		//conn_sysConfig.getSysConfig().getWebUrl():http://localhost:8080/file/
+		// 保存路径
+		String storePath = conn_sysConfig.getSysConfig().getFolderUrl() + File.separator + "record_video"
+				+ File.separator + liveId + File.separator;
+		// 发布url
+		// conn_sysConfig.getSysConfig().getWebUrl():http://localhost:8080/file/
 		String pubUrl = conn_sysConfig.getSysConfig().getWebUrl() + "record_video";
 		File folder = new File(storePath);
 		if (folder.exists() == false) {
 			// 没有就新建
 			folder.mkdir();
 		}
-		//开始录制
+		// 开始录制
 		subLivePO.setRecordState("RECORDING");
 		conn_subLive.saveOrUpdate(subLivePO);
 		LiveRecordPO liveRecordPO = new LiveRecordPO();
@@ -7063,18 +7028,18 @@ public class PhoneController extends WebBaseControll {
 		liveRecordPO.setSubLiveId(subLiveId);
 		liveRecordPO.setSubLiveName(subLivePO.getLiveName());
 		liveRecordPO.setStartTime(new Date());
-		//需要替换路径中的"\"为"/"否则Recorder无法识别
-		storePath.replace("\\","/");
-		liveRecordPO.setRecordName(new Date().getTime()+"");
+		// 需要替换路径中的"\"为"/"否则Recorder无法识别
+		storePath.replace("\\", "/");
+		liveRecordPO.setRecordName(new Date().getTime() + "");
 		storePath = storePath + liveRecordPO.getRecordName() + ".mp4";
 		liveRecordPO.setLocalPath(storePath);
 		pubUrl = pubUrl + "/" + liveId + "/" + liveRecordPO.getRecordName() + ".mp4";
 		liveRecordPO.setPubUrl(pubUrl);
-		GuoliawanLiveServiceWrapper.getInstance().startRecord(subLivePO.getPubName(),storePath);
+		GuoliawanLiveServiceWrapper.getInstance().startRecord(subLivePO.getPubName(), storePath);
 		conn_recordDao.save(liveRecordPO);
 		return success();
 	}
-	
+
 	/**
 	 * 专业直播导播机位停止录制
 	 * 
@@ -7086,23 +7051,23 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/professionalLiveStopRecord", method = RequestMethod.POST)
-	public Map<String, Object> professionalLiveStopRecord(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public Map<String, Object> professionalLiveStopRecord(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		String param = getRequestJson(request);
 		JSONObject jsonObject = JSON.parseObject(param);
 		long liveId = jsonObject.getLongValue("liveId");
 		long subLiveId = jsonObject.getLongValue("subLiveId");
 		SubLivePO subLivePO = conn_subLive.findSubLivePOById(subLiveId);
-		//停止录制
+		// 停止录制
 		subLivePO.setRecordState("STOP");
 		conn_subLive.saveOrUpdate(subLivePO);
-		LiveRecordPO liveRecordPO = conn_recordDao.findByLiveIdAndSubLiveIdAndIng(liveId,subLiveId);
+		LiveRecordPO liveRecordPO = conn_recordDao.findByLiveIdAndSubLiveIdAndIng(liveId, subLiveId);
 		liveRecordPO.setEndTime(new Date());
 		GuoliawanLiveServiceWrapper.getInstance().stopRecord(subLivePO.getPubName());
 		conn_recordDao.saveOrUpdate(liveRecordPO);
 		return success();
 	}
-	
+
 	/**
 	 * 专业直播获取录制视频列表
 	 * 
@@ -7120,18 +7085,17 @@ public class PhoneController extends WebBaseControll {
 		JSONObject jsonObject = JSON.parseObject(param);
 		long userId = jsonObject.getLongValue("userId");
 		int currentPage = jsonObject.getIntValue("currentPage");
-		
+
 		LivePO livePO = conn_live.findByUserId(userId);
 		Long liveId = livePO.getId();
-		
+
 		List<LiveRecordPO> liveRecordPOList = conn_recordDao.getVideoList(liveId, currentPage, pageSize);
-		List<LiveRecordVO> liveRecordVOList = LiveRecordVO.getConverter(LiveRecordVO.class).convert(liveRecordPOList, LiveRecordVO.class);
-		
+		List<LiveRecordVO> liveRecordVOList = LiveRecordVO.getConverter(LiveRecordVO.class).convert(liveRecordPOList,
+				LiveRecordVO.class);
+
 		return success(liveRecordVOList);
 	}
-	
-	
-	
+
 	/**
 	 * 专业直播删除录制视频列表数据
 	 * 
@@ -7148,20 +7112,21 @@ public class PhoneController extends WebBaseControll {
 		String param = getRequestJson(request);
 		JSONObject jsonObject = JSON.parseObject(param);
 		long id = jsonObject.getLongValue("id");
-		
+
 		LiveRecordPO liveRecordPO = conn_recordDao.findById(id);
-		//删除文件
+		// 删除文件
 		File file = new File(liveRecordPO.getLocalPath());
-		if(file.exists()){
+		if (file.exists()) {
 			file.delete();
 		}
-		//删除数据
+		// 删除数据
 		conn_recordDao.delete(liveRecordPO);
 		return success();
 	}
-	
+
 	/**
 	 * 专业直播:导播界面修改机位是否可关闭直播
+	 * 
 	 * @param request
 	 * @return
 	 * @throws Exception
@@ -7169,21 +7134,22 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/professionalLiveDirectorUpdateCameraCanClose", method = RequestMethod.POST)
-	public Map<String, Object> professionalLiveDirectorUpdateCameraCanClose(HttpServletRequest request) throws Exception {
+	public Map<String, Object> professionalLiveDirectorUpdateCameraCanClose(HttpServletRequest request)
+			throws Exception {
 		String param = getRequestJson(request);
 		JSONObject jsonObject = JSON.parseObject(param);
 		long liveId = jsonObject.getLongValue("liveId");
-		//YES 或者 NO
+		// YES 或者 NO
 		String cameraCanClose = jsonObject.getString("cameraCanClose");
 		ProfessionalLiveDirectorPO professionalLiveDirectorPO = conn_professionalLiveDirectorDao.findByLiveId(liveId);
 		professionalLiveDirectorPO.setCameraCanClose(cameraCanClose);
 		conn_professionalLiveDirectorDao.saveOrUpdate(professionalLiveDirectorPO);
 		return success();
 	}
-	
-	
+
 	/**
 	 * 点赞方法 张羽
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
@@ -7191,7 +7157,7 @@ public class PhoneController extends WebBaseControll {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/giveLike", method = RequestMethod.POST)
-	public Map<String, Object>  giveLike(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public Map<String, Object> giveLike(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String param = getRequestJson(request);
 		param = param.replace("\\n", "");
 		if (param.indexOf("\\") >= 0) {
@@ -7200,14 +7166,14 @@ public class PhoneController extends WebBaseControll {
 		}
 		JSONObject pageObject = JSON.parseObject(param);
 		Long liveId = Long.parseLong(pageObject.getString("liveId"));
-		LivePO live=conn_live.get(liveId);
-		live.setGiveLike(live.getGiveLike()+1);
+		LivePO live = conn_live.get(liveId);
+		live.setGiveLike(live.getGiveLike() + 1);
 		conn_live.saveOrUpdate(live);
 		return success(live);
 	}
-	
+
 	/**
-	 * 直播 获取广告轮播图  张羽 5/8
+	 * 直播 获取广告轮播图 张羽 5/8
 	 * 
 	 * @param comCode
 	 * @return products
@@ -7215,30 +7181,34 @@ public class PhoneController extends WebBaseControll {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/getAdvertisement", method = RequestMethod.GET)
-	public Map<String, Object> getAdvertisement(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public Map<String, Object> getAdvertisement(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		List<LiveAdvertisementPO> advertisement = conn_liveAdvertisementDao.getList();
-		List<LiveAdvertisementVO> advertisementvo = LiveAdvertisementVO.getConverter(LiveAdvertisementVO.class).convert(advertisement, LiveAdvertisementVO.class);
+		List<LiveAdvertisementVO> advertisementvo = LiveAdvertisementVO.getConverter(LiveAdvertisementVO.class)
+				.convert(advertisement, LiveAdvertisementVO.class);
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		for (LiveAdvertisementVO rpo : advertisementvo) {
 			rpo.setSlidepic(sysConfig.getWebUrl() + rpo.getSlidepic());
 		}
 		return success(advertisementvo);
 	}
-	
+
 	@Autowired
 	private LiveRebroadcastDAO conn_rdvertisementDao;
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getAllRebroadcast", method = RequestMethod.POST)
-	public Map<String, Object> getAllRebroadcast(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public Map<String, Object> getAllRebroadcast(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		List<LiveRebroadcastPO> rdvertisement = conn_rdvertisementDao.findAll();
-		List<LiveRebroadcastVO> rdvertisementvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class).convert(rdvertisement, LiveRebroadcastVO.class);
+		List<LiveRebroadcastVO> rdvertisementvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class)
+				.convert(rdvertisement, LiveRebroadcastVO.class);
 		return success(rdvertisementvo);
 	}
-	
+
 	@Autowired
 	private LiveGiftDAO conn_giftDao;
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/pushGift", method = RequestMethod.POST)
 	public Map<String, Object> pushGift(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -7247,5 +7217,36 @@ public class PhoneController extends WebBaseControll {
 		return success(giftsvo);
 	}
 
+	// 获取用户钱包里的钱 张羽
+	@ResponseBody
+	@RequestMapping(value = "/wallet", method = RequestMethod.GET)
+	public Map<String, Object> getWalletMoney(HttpServletRequest request, long userId) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		UserInfoPO user = conn_user.get(userId);
+		UserInfoVO _user = new UserInfoVO().set(user);
+		map.put("data", _user);
+		return success(map);
+	}
+
+	// 封住物流信息的方法
+	@ResponseBody
+	@RequestMapping(value = "/logisticspage", method = RequestMethod.GET)
+	public List<Map> logisticspage(HttpServletRequest request, Long orderId) throws Exception {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		// 订单
+		OrderInfoPO order = conn_order.get(orderId);
+		OrderInfoVO _order = new OrderInfoVO().set(order);
+
+		LogisticsPo logisticsPo = conn_logistics.get(_order.getLogisticsId());
+
+		ExpressPO findByUserId = expressdao.findByUserId(logisticsPo.getName());
+		KdniaoTrackQueryAPI api = new KdniaoTrackQueryAPI();
+		String orderTracesByJson = api.getOrderTracesByJson(findByUserId.getF2(), _order.getTrackingnumber());
+		String aString = "[" + orderTracesByJson + "]";
+		List<Map> list = JSONObject.parseArray(aString, Map.class);
+		List<Map> list1 = (List<Map>) list.get(0).get("Traces");
+		return list1;
+	}
 
 }

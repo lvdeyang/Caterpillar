@@ -563,7 +563,9 @@ html, body {
 					    	html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)">活动商品不支持退款，谢谢您的支持</a>')
 					    }
 					    if(type==3){
-						    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="ok-'+data[i].orderList[j].id+'" class="icon-ok" href="javascript:void(0)">&nbsp;&nbsp;确认收货</a>')
+						    html.push('<a style="color:black;font-size:12px;margin-left:45px" id="ok-'+data[i].orderList[j].id+'" class="icon-ok" href="javascript:void(0)">&nbsp;&nbsp;确认收货</a>')
+						    html.push('<a style="color:black;font-size:12px;margin-left:95px" id="ok-'+data[i].orderList[j].id+'" class="icon-ok-logistics" href="javascript:void(0)">&nbsp;&nbsp;查看物流</a>')
+						 
 						}
 					    if(type==5){
 					       html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)">七个工作日内到帐，注意查收</a>')
@@ -629,10 +631,23 @@ html, body {
 		  });
       });
       
+      
+      
+      //查询物流的jqurey
+      $(document).on('click','.icon-ok-logistics',function(){
+	       var ids=this.id.split('-');
+	       location.href=window.BASEPATH + 'pubnum/logistics/particulars?orderId='+ids[1];
+	    
+	  });
+      
+      
+      
       $(document).on('click','.icon-ok',function(){
           var ids=this.id.split('-');
           changeOrderStatus(ids[1],'RECEIPT',3);
       });
+      
+      
       var commOrderId=0;
       $(document).on('click','.icon-edit',function(){
           var ids=this.id.split('-');
@@ -683,8 +698,7 @@ html, body {
 					   getOrder(type);
 					}
 				});
-			}
-	
+			}			
 	});
 </script>
 

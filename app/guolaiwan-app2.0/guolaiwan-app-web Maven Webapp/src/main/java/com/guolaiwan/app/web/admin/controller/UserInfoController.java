@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-
+import com.guolaiwan.app.web.admin.vo.InvestWalletVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
+import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
-
-
+import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.ModularPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
@@ -31,6 +31,8 @@ public class UserInfoController extends BaseController{
 
 	@Autowired
 	private UserInfoDAO conn_UserInfo;
+	@Autowired
+	private InvestWalletDAO conn_investWallet;
 	//显示列表
 	@RequestMapping(value="/list",method= RequestMethod.GET)
 	public ModelAndView getuserinfos(HttpServletRequest request){
@@ -73,6 +75,31 @@ public class UserInfoController extends BaseController{
 		UserInfoPO userinfo = conn_UserInfo.get(uuid);
 		conn_UserInfo.delete(userinfo);
 		return "success";
+	}
+	
+	
+	//充值记录页面跳转 张羽
+	@RequestMapping("/investwalletlist")
+	public ModelAndView InvestWalletList(){
+		ModelAndView mv = new ModelAndView("admin/userinfo/investWalletList");
+		return mv;
+	}
+	
+	//异步读取充值列表分页 张羽
+	@ResponseBody
+	@RequestMapping(value="/walletlist.do", method= RequestMethod.POST,produces = "application/json; charset=utf-8")
+	public Map<String, Object> GetWalletList(HttpServletRequest request,int page,int limit) throws Exception {
+		String userid = request.getParameter("userid");
+		String username = request.getParameter("username");
+		List<InvestWalletPO> wallet=conn_investWallet.GetListbyPage(page, limit,userid,username);
+		List<InvestWalletVO> walletvo = InvestWalletVO.getConverter(InvestWalletVO.class).convert(wallet, InvestWalletVO.class);
+		int count = conn_investWallet.countByUserId(userid);
+		Map<String, Object> map= new HashMap<String, Object>();
+		map.put("data", walletvo);
+		map.put("code", "0");
+		map.put("msg", "");
+		map.put("count", count);
+		return map;
 	}
 }
 
