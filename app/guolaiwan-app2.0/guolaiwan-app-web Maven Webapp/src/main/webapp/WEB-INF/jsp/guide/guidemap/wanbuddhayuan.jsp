@@ -623,7 +623,7 @@ input[type="radio"] {
     var Latitude;
     var id;
     var name;
-    function selectName(e){ // 点击查询对应坐标更换颜色
+    function selectName(e){ // 点击查询对应坐标 更换颜色
     var cha = 0; 
       if(Longitude != null && Latitude !=null){ //搜索时把上一个表 更换为红点
          for(var i=0; i<str.length; i++){
@@ -922,7 +922,6 @@ input[type="radio"] {
     for (var i = 0; i < json.length; i++){
 		 for(var j=0; j<str.length; j++){
 		   if(json[i].id == str[j] ){   // 拆分  数组  遍历
-		      alert("111");
 			  var marker = new AMap.Marker({
 			    size: new AMap.Size(20, 20), 
 				icon : new AMap.Icon({            
@@ -967,10 +966,9 @@ input[type="radio"] {
 	  buttons: [
 	    { text: "取消", onClick: function(){  } },
 	    { text: "导航", onClick: function(){  
-	          alert(latitid);
 		      var _uril = window.BASEPATH + 'phoneApp/getRoad'; //获取图片 xy 初始位置
 			  var param = {};
-			  param.startId = 44;  // 用户点位
+			  param.startId = latitid;  // 用户点位
 			  param.childId = id;  // 用户当id
 			  $.post(_uril, $.toJSON(param), function(data) {
 				  data = parseAjaxResult(data);
@@ -1670,9 +1668,13 @@ input[type="radio"] {
 			style="width:100%;height:40px;background:#ffffff;text-align: center;line-height: 40px;position:relative;z-index:10;">
 			<span
 				style="color:black;font-weight: bold;float:left;line-height: 40px;font-size:20px;margin-left:3%;">
-				< </span> <img
+				< </span> 
+				<img
 				style="width:5%;height:40%;position: absolute;left: 40%;top:32%;"
-				src="lib/images/sousuo.png" /> 
+				src="lib/images/sousuo.png" />
+				<input class="sousuo"
+				placeholder="&nbsp景点搜索"
+				style="width:25%;height:25px;text-indent: 25px;margin-left:-3%;border-radius: 25px;border:solid 1px #BDBDBD;outline:none;padding: 0px 3px; "></input> 
 		</div>
 		<div id="zhanshi"
 			style="position:fixed;width:50%;z-index:10;display: inline-block;display: none;">
