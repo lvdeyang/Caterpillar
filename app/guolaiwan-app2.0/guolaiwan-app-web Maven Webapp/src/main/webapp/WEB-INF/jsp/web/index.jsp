@@ -71,6 +71,11 @@ String weburl=WXContants.Website;
         body {
         height:2000px;
         }
+         .pic img{
+        	width:100%;
+			height:480px;
+        	
+        }
     </style>
   	
     <script type="text/javascript" src="<%=path %>/webtheme/theme/js/jquery.js"></script>
@@ -80,8 +85,6 @@ String weburl=WXContants.Website;
     <script type="text/javascript" src="<%=path %>/webtheme/theme/js/jcarousellite.js"></script>
     <script type="text/javascript" src="<%=path %>/webtheme/theme/js/top.js"></script>
     <script type="text/javascript">
-    
-    
         var intDiff = parseInt(80000);//倒计时总秒数量
         var webUrl = '${sysconfig.webUrl}';
         function timer(intDiff) {
@@ -165,10 +168,6 @@ String weburl=WXContants.Website;
                     $("#hotList").fadeIn(200);
                     }
                 })   
-                
-                
-                
-                 
         }
         
         
@@ -281,7 +280,49 @@ String weburl=WXContants.Website;
     </script>
   
    
-  
+     <script type="text/javascript">
+
+$(function(){
+    var num=1;
+    var timer;
+    var hasStarted = false;
+
+    function showpic(index){
+        $(".pic li").eq(index).show().siblings().hide();
+        $(".dot li").eq(index).css("background","red").siblings().css("background","#fff");
+    }
+    $(".dot li").hover(function () {
+        stop();
+        num = $(this).index();
+        $(".pic li").eq(num).show().siblings().hide();
+        $(this).css("background","red").siblings().css("background","#fff");
+    },start);
+    $(".pic li").each(function(index){
+        $(this).hover(function(){
+            stop();
+            /* show(index); */
+            num = index+1;
+        },start)
+    });
+    function start() {
+        if(!hasStarted) {
+            hasStarted = true;
+            timer = setInterval(function(){
+                showpic(num);
+                num++;
+                if(num== $(".pic li").size()){
+                    num =0;
+                }
+            },4000);
+        }
+    }
+    function stop() {
+        clearInterval(timer);
+        hasStarted = false;
+    }
+    start();
+});
+    </script>
   
 </head>
 <body>
@@ -312,16 +353,28 @@ String weburl=WXContants.Website;
     	<!-- style="position:absolute; left:260px; right:360px; top:0; bottom:0;" -->
         <div class="yBanner" style="width:1200px; margin:auto; position:relative;">
             <div class="banner" id="banner" style="position:absolute; left:190px; right:252px; top:0; bottom:0;">
-	            <c:if test="${carousels != null}">
+	         <%--    <c:if test="${carousels != null}">
 		            <c:forEach items="${carousels}" var="c">
 		             	<a href="${c.slideurl}" class="d1" style="background: url(${sysconfig.webUrl}${c.slidepic}) center no-repeat; background-color: white;"></a>
 		            </c:forEach>
 	            </c:if>
-                <%-- <a href="javascript:;" class="d1" style="background: url(<%=path %>/webtheme/theme/img/ad/banner2.jpg) center no-repeat; background-color: #a96ae3; padding-left: 180px;"></a>
+                <a href="javascript:;" class="d1" style="background: url(<%=path %>/webtheme/theme/img/ad/banner2.jpg) center no-repeat; background-color: #a96ae3; padding-left: 180px;"></a>
                 <a href="javascript:;" class="d1" style="background: url(<%=path %>/webtheme/theme/img/ad/banner3.jpg) center no-repeat; background-color: #081f3c; padding-left: 180px;"></a>
                 <a href="javascript:;" class="d1" style="background: url(<%=path %>/webtheme/theme/img/ad/banner4.jpg) center no-repeat; background-color: #4684ff; padding-left: 180px;"></a>
-                <a href="javascript:;" class="d1" style="background: url(<%=path %>/webtheme/theme/img/ad/banner5.jpg) center no-repeat; background-color: #a89d9f; padding-left: 180px;"></a> --%>
-                <div class="d2" id="banner_id">
+                <a href="javascript:;" class="d1" style="background: url(<%=path %>/webtheme/theme/img/ad/banner5.jpg) center no-repeat; background-color: #a89d9f; padding-left: 180px;"></a>
+                --%>
+          <div class="pic">
+
+           <ul>
+                     <c:forEach items="${carousels}" var="c">
+                       <li>
+		             	 <a href="${c.slideurl}" class="d1" style="background: url(${sysconfig.webUrl}${c.slidepic}) center no-repeat; background-color: white;"></a>
+		               </li>
+		            </c:forEach>
+            </ul>
+       
+        </div>
+               <!--  <div class="d2" id="banner_id">
                     <ul style="left:0;">
                         <li></li>
                         <li></li>
@@ -330,6 +383,7 @@ String weburl=WXContants.Website;
                         <li></li>
                     </ul>
                 </div>
+         -->
             </div>
             <!-- <div style="text-align: center; clear: both"></div> -->
             <div class="frame-right" style="width:250px; height:100%; position:absolute; right:0; top:0; text-align:center;">
@@ -559,10 +613,11 @@ String weburl=WXContants.Website;
         </div>
     </div>
     </c:forEach> 
-      <div id="sse">
+     <!--  <div id="sse">
          <a href="javascript:WebSocketTest()">运行 WebSocket</a>
           <a href="javascript:sendMess()">发送消息</a>
-      </div>
+          
+      </div> -->
     <div class="containers main-banner">
        <%--  <img src="<%=path %>/webtheme/theme/img/ad/br1.jpg" width="1200" height="105"></a> </div> --%>
 
@@ -689,7 +744,7 @@ String weburl=WXContants.Website;
         </div>
 
     </div>
-
+    
 
     
     
