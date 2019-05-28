@@ -413,6 +413,7 @@ public class MerchantController extends BaseController {
 		user.setMerchant(null);
 
 		conn_merchant.delete(merchant);
+		conn_userinfo.delete(user);
 		return "success";
 	}
 

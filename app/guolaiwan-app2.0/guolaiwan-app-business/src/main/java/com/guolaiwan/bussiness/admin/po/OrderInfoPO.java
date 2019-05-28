@@ -2,7 +2,6 @@ package com.guolaiwan.bussiness.admin.po;
 
 import java.util.Date;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -126,36 +125,45 @@ public class OrderInfoPO extends AbstractBasePO {
 	private Date settleDate;
 
 	private String userName;
-	//这是活动商品关联Id，不是活动Id
+	// 这是活动商品关联Id，不是活动Id
 	private long activityId;
-	
+
 	private long roomId;
-	
+
 	private String roomName;
-	
+
 	private long roomStatusId;
-	
+
 	private long logisticsId;
-	
+
 	private String logisticsContent;
-	
+
 	private long comboId;
-	
+
 	private String idNum;
-	
+
 	private String photo;
-	
-	//4/23新增拒绝理由
+
+	// 4/23新增拒绝理由
 	private String justification;
-	
-	//4/26新增comId
+
+	// 4/26新增comId
 	private long comId;
-	
-	//4/28 新增退款限制 ----张羽
+
+	// 4/28 新增退款限制 ----张羽
 	private int productIsRefund;
-	
-	
-	
+
+	// 新增快递单号--------------Dongsuyan
+	private String trackingnumber;
+
+	public String getTrackingnumber() {
+		return trackingnumber;
+	}
+
+	public void setTrackingnumber(String trackingnumber) {
+		this.trackingnumber = trackingnumber;
+	}
+
 	public int getProductIsRefund() {
 		return productIsRefund;
 	}
@@ -591,17 +599,17 @@ public class OrderInfoPO extends AbstractBasePO {
 	public void setOrderType(OrderType orderType) {
 		this.orderType = orderType;
 	}
-	
+
 	@Override
-    public Object clone(){
-        OrderInfoPO order = null;
-        try {
-            order = (OrderInfoPO)super.clone();
-        }catch (CloneNotSupportedException e){
-            e.printStackTrace();
-        }
-        return order;
-    }
+	public Object clone() {
+		OrderInfoPO order = null;
+		try {
+			order = (OrderInfoPO) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return order;
+	}
 
 	public Date getEndBookDate() {
 		return endBookDate;
@@ -634,6 +642,7 @@ public class OrderInfoPO extends AbstractBasePO {
 	public void setRoomStatusId(long roomStatusId) {
 		this.roomStatusId = roomStatusId;
 	}
+
 	@Lob
 	@Column(length = 16777216)
 	public String getPhoto() {
@@ -651,7 +660,5 @@ public class OrderInfoPO extends AbstractBasePO {
 	public void setIdNum(String idNum) {
 		this.idNum = idNum;
 	}
-
-
 
 }

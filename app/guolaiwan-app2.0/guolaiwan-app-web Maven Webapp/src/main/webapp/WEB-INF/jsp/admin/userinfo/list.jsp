@@ -106,6 +106,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         ,{field:"userHeadimg",title:"头像"}
                         ,{field:"userNickname",title:"昵称"} 
                         ,{field:"userOpenID",title:"openID"}
+                        ,{field:"wallet",title:"钱包余额（单位：分）",sort:true}
                         ,{field:"updateTime",title:"创建时间"}
                     ]]
                     ,done:function(res, curr, count){

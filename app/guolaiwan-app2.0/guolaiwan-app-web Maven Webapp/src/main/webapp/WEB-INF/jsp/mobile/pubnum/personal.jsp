@@ -483,7 +483,15 @@ html, body {
 	    font-size:12px;
     }
     
+    .weui-grid{
     
+    width:25% !important;
+    }
+    
+    .qianbao{
+    width:22px !important;
+    height:22px !important;
+    }
 
 </style>
 
@@ -532,7 +540,7 @@ html, body {
 			      </div>
 			      <div class="weui-media-box__bd">
 			        <h4 class="weui-media-box__title" style="font-size:12px;" id="userName">${user.userNickname}</h4>
-			        <p class="weui-media-box__desc" style="font-size:12px;">积分:0</p>
+			        <p class="weui-media-box__desc" style="font-size:12px;">积分: ${user.userIntegral}</p>
 			      </div>
     		    </a>
 			</div>
@@ -551,6 +559,14 @@ html, body {
 			    </div>
 			    <p class="weui-grid__label">
 			                我的订单
+			    </p>
+			  </a>
+			  <a href="pubnum/wallet" class="weui-grid js_grid">
+			    <div class="weui-grid__icon">
+			      <img src="lib/images/qianbao.png" class="qianbao" alt="">
+			    </div>
+			    <p class="weui-grid__label">
+			                我的钱包
 			    </p>
 			  </a>
 			  <a href="pubnum/basket/index" class="weui-grid js_grid">
@@ -572,7 +588,16 @@ html, body {
 			    <div class="weui-cell__ft">
 			    </div>
 			  </a>
+			</div>
 			
+			<div class="weui-cells" style="font-size:12px">
+			  <a class="weui-cell weui-cell_access" href="integral/visitors/home">
+			    <div class="weui-cell__bd">
+			      <p>积分商城</p>
+			    </div>
+			    <div class="weui-cell__ft">
+			    </div>
+			  </a>
 			</div>
 			
 			

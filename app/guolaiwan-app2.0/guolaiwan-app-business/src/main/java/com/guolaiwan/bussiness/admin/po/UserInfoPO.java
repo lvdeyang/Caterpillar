@@ -38,13 +38,10 @@ public class UserInfoPO extends AbstractBasePO {
     private MerchantPO merchant;
     // 关联分销商
     private DistributorPO distributor;
-    
     //评论
     private List<CommentPO> comments;
-    
     //收藏
     private List<CollectionPO> collections;
-    
     //真实姓名
     private String trueName;
     //工作单位
@@ -53,8 +50,16 @@ public class UserInfoPO extends AbstractBasePO {
     private String childId;//景区导览点id
     
     private int firstTime;//0表示是，1表示不是
+    //钱包余额
+    private long wallet;
     
     
+	public long getWallet() {
+		return wallet;
+	}
+	public void setWallet(long wallet) {
+		this.wallet = wallet;
+	}
 	public String getChildId() {
 		return childId;
 	}

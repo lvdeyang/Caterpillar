@@ -403,6 +403,25 @@
                     <input type="text" id="productntegral" name="productntegral"
                         autocomplete="off" class="layui-input">
                  	</div>
+                 	
+                 </div>
+                 <div class="layui-inline">
+                    <label for="Integra" class="layui-form-label">
+						积分商品：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="Integra" value="0" name="Integra" 
+                        	autocomplete="off" class="layui-input">
+                 	</div>
+                 </div>
+                 <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
+						领取地址：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="site" value="遵化市法院对面万乘晟象12楼" name="site" 
+                        	autocomplete="off" class="layui-input">
+                 	</div>
                  </div>
                  
                  <div class="layui-inline">
@@ -800,6 +819,12 @@
 				var CommissionPrice =$("#productCommissionPrice").val();
 				if(!(/^\d+(\.\d+)?$/).test(CommissionPrice)){
 						layer.msg("提成为数字！",{time: 5000, icon:5});
+						return false;
+				} 
+				//积分商品
+				var IntegralGoods =$("#Integra").val();
+				if( IntegralGoods!=0 && IntegralGoods !=1){
+						layer.msg("是否是积分商品0不是1是",{time: 5000, icon:5});
 						return false;
 				} 
 				

@@ -57,7 +57,11 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 
 	//现价
 	private String productPrice;
-
+	// 积分商品  0是 1不是
+	private int IntegralGoods;
+	// 积分商品自领取地址  0是 1不是
+	private String site;
+	
 	//提成模式（0：佣金1：比例）
 	private int productCommissionCode;
 
@@ -145,6 +149,8 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	
 	private int isEffective;//是否在有效时间内(0:还没开始,1:在,2:已经结束)
 	
+	private int productIsRefund;
+	
 	private int ifFace;
 	
 	private int isSurpport;
@@ -155,6 +161,19 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	private int productRestrictNumber;
 	
 	
+	
+	
+	public int getIntegralGoods() {
+		return IntegralGoods;
+	}
+
+
+	public ProductVO setIntegralGoods(int integralGoods) {
+		this.IntegralGoods = integralGoods;
+		return this;
+	}
+
+
 	public int getProductRestrictNumber() {
 		return productRestrictNumber;
 	}
@@ -385,7 +404,18 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	}
 
 
+     
 
+
+	public String getSite() {
+		return site;
+	}
+
+
+	public ProductVO setSite(String site) {
+		this.site = site;
+		return this;
+	}
 
 
 	public String getProductMerchantJson() {
@@ -1167,6 +1197,9 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setShopLongitude(entity.getProductMerchantJson())
 		.setTraffic(entity.getTraffic())
 		.setIfFace(entity.getIfFace())
+		.setIntegralGoods(entity.getIntegralGoods())
+		.setProductIsRefund(entity.getProductIsRefund())
+		.setSite(entity.getSite())
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)));
 		
 		return this;
@@ -1206,6 +1239,17 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 
 	public ProductVO setIfFace(int ifFace) {
 		this.ifFace = ifFace;
+		return this;
+	}
+
+
+	public int getProductIsRefund() {
+		return productIsRefund;
+	}
+
+
+	public ProductVO setProductIsRefund(int productIsRefund) {
+		this.productIsRefund = productIsRefund;
 		return this;
 	}
 	

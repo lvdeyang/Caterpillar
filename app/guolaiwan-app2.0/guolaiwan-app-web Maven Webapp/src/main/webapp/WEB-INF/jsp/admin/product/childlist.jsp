@@ -49,11 +49,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<thead>
 				<tr>
 					<th><input type="checkbox" id="chooseAll" onclick="chooseAll()" ></th>
+					<th>id</th>
 					<th>子商品名称</th>
 					<th>图片</th>
 					<th>声音</th>
 					<th>经度</th>
 					<th>纬度</th>
+					<th>微信经度</th>
+					<th>微信纬度</th>
 					<th>语言</th>
 					<th>讲解范围</th>
 					<th>是否讲解</th>
@@ -83,6 +86,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <td>
                             <input type="checkbox" value="{{ item.uuid }}" name="selected" >
                         </td>
+                        <td>
+                            {{ item.id }}
+                        </td>
 						<td>
                             {{ item.childName }}
                         </td>
@@ -98,6 +104,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </td>
 						<td>
                             {{ item.childLatitude }}
+                        </td>
+						<td>
+                            {{ item.wxChildLongitude }}
+                        </td>
+						<td>
+                            {{ item.wxChildLatitude }}
                         </td>
                         <td>
                             {{ item.lanId }}

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -225,6 +226,8 @@ public class ProductController extends BaseController {
 		ProductPO product = new ProductPO();
 		// 名称、副标题、板块、分类、时间
 		String modularCode = request.getParameter("modularCode");
+		String Integra = request.getParameter("Integra"); //积分商品
+		String site = request.getParameter("site"); //积分商品
 		String modularName = request.getParameter("modularName");
 		String productName = request.getParameter("productName");
 		String modularClassId = request.getParameter("modularClassId");
@@ -259,6 +262,8 @@ public class ProductController extends BaseController {
 			product.setProductDayCount(Integer.parseInt(productDayCount));	
 		}
 		product.setDatesOn(datesOn);
+		product.setIntegralGoods(Integer.parseInt(Integra)); //添加积分商品
+		product.setSite(site);//添加到店领取地址
 		product.setCostMessage(costMessage);
 		product.setNotes(notes);
 		product.setRemarks(remarks);
@@ -444,7 +449,8 @@ public class ProductController extends BaseController {
 		String modularName = request.getParameter("modularName");
 		String modularClassId = request.getParameter("modularClassId");
 		String modularClass = request.getParameter("modularClass");
-
+		String Integra = request.getParameter("Integra"); //积分商品
+		String site = request.getParameter("site"); //积分商品
 		// 商家
 		long productMerchantID = Long.parseLong(request.getParameter("productMerchantID"));
 		String productMerchantName = request.getParameter("productMerchantName");
@@ -480,7 +486,10 @@ public class ProductController extends BaseController {
 		int ifFace = 1;
 		if (request.getParameter("ifFace") == null)
 			ifFace = 0;
-		
+		int productIsRefund=1;
+		if(request.getParameter("productIsRefund")==null)
+			productIsRefund=0;
+		product.setProductIsRefund(productIsRefund);
 		// 显示、推荐
 		int productIsShow = 1;
 		if (request.getParameter("productIsShow") == null)
@@ -543,6 +552,9 @@ public class ProductController extends BaseController {
 		// 审核状态
 		String productAuditstates = request.getParameter("productAuditstates");
 
+		//积分商品
+		product.setIntegralGoods(Integer.parseInt(Integra));
+		product.setSite(site);//添加到店领取地址
 		// 商品、副标题
 		product.setProductName(productName);
 		product.setProductSubtitle(productSubtitle);
@@ -552,7 +564,7 @@ public class ProductController extends BaseController {
 		product.setProductModularCodeName(modularName);
 		product.setProductClassCode(modularClassId);
 		product.setProductClassName(modularClass);
-
+ 
 		// 商家
 		product.setProductMerchantID(productMerchantID);
 		product.setProductMerchantName(productMerchantName);
@@ -927,7 +939,7 @@ public class ProductController extends BaseController {
 		String chineseboy = request.getParameter("chineseboy");
 		String englishgirl = request.getParameter("englishgirl");
 		String englishboy = request.getParameter("englishboy");
-
+        String linkedPoint=request.getParameter("linkedPoint");
 		long productID = Long.parseLong(request.getParameter("productID"));
 
 		ChildProductPO child = new ChildProductPO();
@@ -953,6 +965,7 @@ public class ProductController extends BaseController {
 		child.setChildScale(scale);
 		String imgids = request.getParameter("imgids");
 		child.setChildPic(imgids);
+		child.setLinkedPoint(linkedPoint);
 		conn_childProduct.saveOrUpdate(child);
 		ChildPicAndContentPO cpac = new ChildPicAndContentPO();
 		cpac.setChildPic(imgids);
@@ -995,6 +1008,8 @@ public class ProductController extends BaseController {
 		String childVoice = request.getParameter("childVoice");
 		String childLongitude = request.getParameter("childLongitude");
 		String childLatitude = request.getParameter("childLatitude");
+		String wxChildLongitude = request.getParameter("wxChildLongitude");
+		String wxChildLatitude = request.getParameter("wxChildLatitude");
 		String uuid = request.getParameter("uuid");
 		String content = request.getParameter("desc");
 		String lanId = request.getParameter("lan");
@@ -1002,7 +1017,7 @@ public class ProductController extends BaseController {
 		String schildid = request.getParameter("schildid");
 		String scope = request.getParameter("scope");
 		String isTaught = request.getParameter("isTaught");
-
+		String linkedPoint=request.getParameter("linkedPoint");
 		ChildProductPO child = conn_childProduct.get(uuid);
 		child.setUpdateTime(new Date());
 		child.setChildName(childName);
@@ -1010,9 +1025,12 @@ public class ProductController extends BaseController {
 		child.setChineseGirl(childVoice);
 		child.setChildLongitude(childLongitude);
 		child.setChildLatitude(childLatitude);
+		child.setWxChildLongitude(wxChildLongitude);
+		child.setWxChildLatitude(wxChildLatitude);
 		child.setContent(content);
 		child.setLanId(Long.parseLong(lanId));
 		child.setChildScale(scale);
+		child.setLinkedPoint(linkedPoint);
 		child.setScope(scope);
 		child.setIsTaught(Integer.parseInt(isTaught));
 		String imgids = request.getParameter("imgids");

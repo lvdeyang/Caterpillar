@@ -495,6 +495,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -508,9 +509,43 @@ html, body {
 
       var _uriRecomment = window.BASEPATH + 'phoneApp/orderInfo?orderId=${orderId}';
 		
-		$.get(_uriRecomment, null, function(data){
+		$.get(_uriRecomment, null, function(data){ 
 			data = parseAjaxResult(data);
 			if(data === -1) return;
+			
+			if("积分"==data.order.payMode){ //判断是否是积分订单
+			alert(114111);
+			    if(data.order.productPic.indexOf('null')==-1){
+			       $('#proPic').attr('src',data.order.productPic);
+			    }
+			    $('#proName').html(data.order.productName);
+			    $('#proPrice').html(data.order.productPrice*100);
+			    $('#amount').val(data.order.orderAllMoney*100);
+			    $('#payAmount').val(data.order.payMoney*100);
+			    $('#ydImage').attr('src',data.order.ydNO);
+			    $('#largeYd').attr('src',data.order.ydNO);
+			    $('#orderNo').html(data.order.id);
+			    $('#orderDate').html(data.order.payDate);
+			    $('#combo').html(data.order.comboName);
+			    $('#logistics').html(data.order.logisticsName);
+			    $('#cuserName').html(data.address.consigneeName);
+			    $('#cphone').html(data.address.consigneePhone);
+			    $('#bookspan').html(data.order.orderBookDate);
+			    $('#startspan').html(data.order.orderBookDate);
+			    $('#endspan').html(data.order.endBookDate);
+			    $('#caddress').html(data.address.province+data.address.city+data.address.district+'&nbsp;&nbsp;&nbsp;&nbsp;'+data.address.consigneeAddress);
+			
+			    
+			    
+ 			    if(data.order.bkCode=='0002'){
+			    	$('#startDate').show();
+			    	$('#endDate').show();
+			    }else if(data.order.bkCode=='0003'||data.order.bkCode=='0001'){
+			    	$('#bookDate').show();
+			    } 
+			     return;
+			}
+			
 			if(data){
 			    if(data.order.productPic.indexOf('null')==-1){
 			       $('#proPic').attr('src',data.order.productPic);
@@ -538,8 +573,15 @@ html, body {
 			    $('#bookspan').html(data.order.orderBookDate);
 			    $('#startspan').html(data.order.orderBookDate);
 			    $('#endspan').html(data.order.endBookDate);
-			    $('#caddress').html(data.address.province+data.address.city+data.address.district+'&nbsp;&nbsp;&nbsp;&nbsp;'+data.address.consigneeAddress);
-			    
+			    $('#caddress').html(data.address.province+data.address.city+data.address.district+'&nbsp;&nbsp;&nbsp;&nbsp;'+data.address.consigneeAddress);				        
+			   if( data.order.orderState=="已发货"){
+			   var html="";
+	          
+			    html=html+"<div class='weui-cell__hd'><label class='weui-label'>快递单号:</label></div>"; 
+			    html=html+" <div class='weui-cell__bd'><span style='font-size:12px;' id='caddress'>"+data.order.trackingnumber+"</span></div>"
+			  	$("#weui-cell-1").html(html);
+         
+			}
  			    if(data.order.bkCode=='0002'){
 			    	$('#startDate').show();
 			    	$('#endDate').show();
@@ -691,7 +733,9 @@ html, body {
 					         <span style="font-size:12px;" id="caddress"></span>
 					    </div>
 					  </div>
-					  
+					  <div class="weui-cell" id="weui-cell-1">
+					 
+					  </div>
 				    
 		     </div>
 		     

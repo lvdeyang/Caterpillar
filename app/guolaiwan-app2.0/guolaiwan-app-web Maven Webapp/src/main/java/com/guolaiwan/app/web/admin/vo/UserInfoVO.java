@@ -22,7 +22,6 @@ public class UserInfoVO extends AbstractBaseVO<UserInfoVO,UserInfoPO>{
     private String userHeadimg;
     //昵称
     private String  userNickname;
-    
     //真实姓名
     private String trueName;
     //工作单位
@@ -31,8 +30,16 @@ public class UserInfoVO extends AbstractBaseVO<UserInfoVO,UserInfoPO>{
     private String childId;//景区导览点id
     
     private String activitypelId;//活动商品ID用来做限购
+    //钱包余额
+    private long wallet;
     
-    public String getActivitypelId() {
+    public long getWallet() {
+		return wallet;
+	}
+	public void setWallet(long wallet) {
+		this.wallet = wallet;
+	}
+	public String getActivitypelId() {
 		return activitypelId;
 	}
 	public UserInfoVO setActivitypelId(String activitypelId) {
@@ -118,7 +125,8 @@ public class UserInfoVO extends AbstractBaseVO<UserInfoVO,UserInfoPO>{
 			.setUserNickname(entity.getUserNickname())
 			.setTrueName(entity.getTrueName())
 			.setChildId(entity.getChildId())
-			.setCompanyName(entity.getCompanyName());
+			.setCompanyName(entity.getCompanyName())
+			.setWallet(entity.getWallet());
 		return this;
 	}
 }

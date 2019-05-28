@@ -1449,12 +1449,23 @@ input[type="datetime-local"]:before{
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					
+					$.modal({
+						  title: "付款方式",
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+						    	$.confirm("确定支付？", function() {
+								    payByWallet(data.orderId);
+								  }, function() {});
+						    } },
+						    { text: "微信支付", onClick: function(){ 
+							    $.confirm("确定支付？", function() {
+								    payPublic(data.orderId);
+								  }, function() {});
+						    } },
+						    { text: "取消", className: "default", onClick: function(){ } },
+						  ]
+						});
 					
-					$.confirm("确定支付？", function() {
-					    payPublic(data.orderId);
-					  }, function() {
-					  
-					  });
 
 				});
 					
@@ -1465,7 +1476,23 @@ input[type="datetime-local"]:before{
 		
 		
 		
-		
+		function payByWallet(orderId){
+			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
+			var userId=${userId};
+			$.post(url,{'orderId':orderId,'userId':userId},function(data){
+						data = parseAjaxResult(data);
+				if(data==1){
+						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
+						    if(data.data=="PAYSUCCESS"){
+						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						    }
+						});
+				}else{
+					$.alert('您的余额不足！');
+				}
+                   
+			})
+		}
 		
 		var prepay_id;
 		var paySign;

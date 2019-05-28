@@ -76,7 +76,7 @@ public class ActivityController extends BaseController {
 		strMap.put("code", "0");
 		strMap.put("msg", "");
 		strMap.put("count", count);
-		strMap.put("data", activityVOs);
+		strMap.put("data", activitys);
 		return strMap;
 	}
 
@@ -217,7 +217,7 @@ public class ActivityController extends BaseController {
 			case "FIXEDPRICE":
 				int fixedPrice = (int) (Double.parseDouble(request.getParameter("fixedPrice")) * 100);
 				activity.setFixedPrice(fixedPrice);
-				;
+				
 				break;
 			}
 
@@ -232,6 +232,11 @@ public class ActivityController extends BaseController {
 		}else if(field.equals("activityRule")){
 			String activityRule = request.getParameter("value");
 			activity.setActivityRule(activityRule);
+			conn_activity.save(activity);
+			return "success";
+		}else if(field.equals("fixedPrice")){
+			String fixedPrice = request.getParameter("value");
+			activity.setFixedPrice(Long.parseLong(fixedPrice));
 			conn_activity.save(activity);
 			return "success";
 		}
