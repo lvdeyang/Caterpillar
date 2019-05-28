@@ -115,7 +115,7 @@ String weburl=WXContants.Website;
                 <ul class="yMenuIndex">
                 	
                 <li><a href="<%=path%>/index">首页</a></li>
-        		<li><a href="<%=path%>/web/creating">攻略</a></li>
+        		<%-- <li><a href="<%=path%>/web/creating">攻略</a></li> --%>
         		<li><a href="<%=path%>/web/creating">关于我们</a></li>
         		<li><a href="<%=path%>/web/distributor/distributorlist"> 分销商店铺</a></li>
         		<li><a href="<%=path%>/web/videoPic/list">我发布</a></li>

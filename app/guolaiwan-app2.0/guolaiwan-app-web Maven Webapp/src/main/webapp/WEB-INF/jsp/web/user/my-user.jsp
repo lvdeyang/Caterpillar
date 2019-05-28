@@ -21,6 +21,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="<%=path %>/webtheme/theme/css/base.css">
 	<link rel="stylesheet" type="text/css" href="<%=path %>/webtheme/theme/css/home.css">
 	<link rel="stylesheet" type="text/css" href="<%=path %>/webtheme/theme/css/member.css">
+   <style type="text/css">
+    .member-head{ 
+       background: -ms-linear-gradient(top, #FF5F00, red);       /* IE 10 */  
+       background:-moz-linear-gradient(top,#FF5F00,red);/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#FF5F00), to(red));/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#FF5F00), to(red));      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #FF5F00, red);  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #FF5F00, red); /*Opera 11.10+*/  
+   }
+   </style>
+   
     <script type="text/javascript" src="<%=path %>/webtheme/theme/js/jquery.js"></script>
     <script type="text/javascript">
          (function(a){

@@ -74,6 +74,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      	.count-all-info label, 
      	.count-all-info #total-price{margin-right:50px;}
      	.count-all-info #count-all{height:100%; width:100px; display:inline-block; background-color:#ea4949; text-align:center; color:#fff; cursor:pointer; border:0;}
+    
+       #count-all,.member-head{ 
+       background: -ms-linear-gradient(top, #FF5F00, red);       /* IE 10 */  
+       background:-moz-linear-gradient(top,#FF5F00,red);/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#FF5F00), to(red));/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#FF5F00), to(red));      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #FF5F00, red);  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #FF5F00, red); /*Opera 11.10+*/  
+   		}   
+   		.member-whole ul .cur a{
+   		  color:#FF4401;
+   		  font-weight: bold;
+         
+   		}
+   		
+   		.member-circle .ci7 .gr3{
+   		padding-top:5px;
+   		}
+   		.member-whole,.member-whole ul li a{
+   		background:#DADADA;
+   		}
      </style>
  </head>
  <body>
