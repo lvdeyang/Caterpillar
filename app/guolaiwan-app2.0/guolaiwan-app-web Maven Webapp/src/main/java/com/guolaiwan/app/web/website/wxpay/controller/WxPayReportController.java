@@ -123,7 +123,6 @@ public class WxPayReportController extends WebBaseControll {
 						Long bundleOrderId=Long.parseLong(tradeNum.split("-")[1]);
 						BundleOrder bundleOrder=conn_bundleorder.get(bundleOrderId);
 						rIds=bundleOrder.getOrderStr().split("A");
-						
 					}
 					for (String ridStr : rIds) { //退款
 						OrderInfoPO order = conn_orderInfo.get(Long.parseLong(ridStr));
@@ -131,7 +130,6 @@ public class WxPayReportController extends WebBaseControll {
 						conn_orderInfo.save(order);
 						sendMessage(order);
 					}
-				
 					stringBuffer.append("<xml><return_code><![CDATA[");
 					stringBuffer.append("SUCCESS");
 					stringBuffer.append("]]></return_code>");
@@ -170,6 +168,12 @@ public class WxPayReportController extends WebBaseControll {
 								order.setYdDate(new Date());
 							}
 						}else{
+							long userIntegral = order.getPayMoney()/100;
+							if ( userIntegral >= 1){  
+							List<UserInfoPO>  UserInfoPO  =  conn_user.getUserByUid(order.getUserId());
+							long Integral =  UserInfoPO.get(0).getUserIntegral();
+							UserInfoPO.get(0).setUserIntegral(Integral+userIntegral);
+							}
 							order.setOrderState(OrderStateType.PAYSUCCESS); 
 						}
 						conn_orderInfo.saveOrUpdate(order);

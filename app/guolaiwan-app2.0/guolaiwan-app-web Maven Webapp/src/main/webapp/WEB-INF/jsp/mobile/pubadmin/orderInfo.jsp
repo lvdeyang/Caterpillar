@@ -483,10 +483,13 @@ html, body {
 	    font-size:12px;
     }
     
-    
+    .butn{
+      margin:0 auto;
+    }
 
 </style>
-
+<script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 </head>
 
 <!-- 公共脚本引入 -->
@@ -532,6 +535,14 @@ html, body {
 			    $('#bookspan').html(data.order.orderBookDate);
 			    $('#startspan').html(data.order.orderBookDate);
 			    $('#endspan').html(data.order.endBookDate);
+			    $('#trackingnumber').val(data.order.trackingnumber);
+			    $('#updateId').val(data.order.id);
+			    if(data.order.orderState=="已发货"||data.order.orderState=="支付成功"){
+			    var html="";	      
+			    html=html+"<button onclick='buttrackingnum()' type='button' class='btn btn-success' style='text-align: center;margin:0 auto;'>输入快递单号后修改</button>"; 
+			  	$("#btn122").html(html);
+         
+			}
 			    if(data.order.bkCode=='0002'){
 			    	$('#startDate').show();
 			    	$('#endDate').show();
@@ -585,6 +596,7 @@ html, body {
 				<div class="header-content">订单详情</div>
 			</div>
 		</div>
+		<input type="hidden" id="updateId" value=""> 
 		<div class="content">
 			
 			<div class="weui-panel__bd">
@@ -677,22 +689,60 @@ html, body {
 					         <span style="font-size:12px;" id="caddress"></span>
 					    </div>
 					  </div>
-				    
-		     </div>
-		     <div id="viewPeopleDiv" style="display:none;padding-bottom:50px;">
+					  
+					    <div class="weui-cell">
+					    <div class="weui-cell__hd"><label class="weui-label">快递单号:</label></div>
+					    <div class="weui-cell__bd">
+					       <input type="text" name="trackingnumber" id="trackingnumber"  style="border:none;outline: none;"> 
+					    </div>
+					  </div>
+					  
+					  <div id="btn122" class="weui-cell" style="width:100%;">			          
+						</div>
+					  
+					  
+					  
+					  
+	<div id="viewPeopleDiv" style="display:none;padding-bottom:50px;">
 		       <div class="weui-cells__title">游览人</div>
 		       <div class="weui-cells" id="viewPeoples">
 		          
 		         
         	   </div>
+        	   
+        	   
+        	  
 			</div>
 			
-		</div>
+	</div>
 	</div>
 	
 	
 </div>
-	
+
+     <!-- 修改快递单号的jqurey -->
+	 <script type="text/javascript"> 
+        function buttrackingnum(){
+              
+        
+               if(isNaN($("#trackingnumber").val())){
+		                $.alert("请重新输入正确的快递单号")		   
+		                return;
+		             }   
+                 if($("#trackingnumber").val()==""){
+                   $.alert("快递单号不能为空");
+                     return;		  
+                  }
+              var _urichangeorder = window.BASEPATH + 'pubnum/changeOrdernumbers?orderId='+$('#updateId').val()+'&trackingnumber='+$("#trackingnumber").val();
+	          $.get(_urichangeorder, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				   location.href=location.href;
+				}
+			});	      
+          }
+     </script>
 </body>
 
 

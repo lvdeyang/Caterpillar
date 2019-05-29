@@ -64,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>订单管理</title>
+<title>订单详情</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -486,17 +486,17 @@ html, body {
     
 
 </style>
-
+<script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 </head>
 
 <!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
+<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 
 <script type="text/javascript">
 
 	$(function() {
 	  window.BASEPATH = '<%=basePath%>';
-	  
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
 				$.toptip('data.message', 'error');
@@ -507,186 +507,30 @@ html, body {
 	  };
 		
 
-      var _uriMyOrder = window.BASEPATH + 'pubnum/getOrder?type=${status}';
-			$.get(_uriMyOrder, null, function(data){
-			
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				 var html=[];
-			    if('${status}'=='TESTED')
-			    {
-			    	$('#buydate').hide();
-			    	$('#checkdate').show();
-			    }
-				if(data){
-			
-				   for(var i=0;i<data.length;i++){
-				   if(data[i].productName==null){
-				      data[i].productName='到店支付订单';
-				   }
-				   html.push('<a href="javascript:void(0);" id="order-'+data[i].id+'"  class="order weui-media-box weui-media-box_appmsg">');
-				   html.push('   <div class="weui-media-box__hd">');
-				   html.push('     <img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].productPic+'">');
-				   html.push('   </div>');
-				   html.push('   <div class="weui-media-box__bd">');
-				   html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].productName+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+data[i].productPrice+'x'+data[i].productNum+'</h4>');
-				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+data[i].createDate+'</p>');
-				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">验单时间'+data[i].ydDate+'</p>');
-				   html.push('   </div>');
-				   if('${status}'=='REFUNDING'){
-				       html.push('<a class="weui-media-box__desc" style="margin-left:15px;font-size:12px;" href="javascript:void(0)">退款理由:&nbsp;'+data[i].refundReason+'</p>');
-				       //html.push('<a style="font-size:12px;margin-left:15px" id="relay-'+data[i].id+'" class="icon-ok" href="javascript:void(0)">&nbsp;&nbsp;同意退款</a>')
-				    }
-				    if('${status}'=='PAYSUCCESS'){
-				       html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
-				    }
-				   html.push(' </a>');
-				   }
-				   if(data.length==0)
-				   {
-				   		html.push("<div style='margin-top:100px;text-align: center;'>暂无数据");
-				   }
-				}
-				$('#orderContent').append(html.join(""));
-			});
-			
-			
-			
-			var _uriMyProduct = window.BASEPATH + 'pubnum/getMerchantAllPro';
+      var _uriRecomment = window.BASEPATH + 'phoneApp/logisticspage?orderId=${orderId}';
 		
-			$.get(_uriMyProduct, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				 var html=[];
-				if(data){
-				   html.push('<option value="0">全部</option>');
-				   for(var i=0;i<data.length;i++){
-				      html.push('<option value="'+data[i].id+'">'+data[i].productName+'</option>');
-				   }
-				   html.push('<option value="-1">到店支付</option>');
-				}
-				$('#proSel').append(html.join(""));
-			});
-			
-			
-			$(document).on('click','.order',function(){
-		          var ids=this.id.split('-');
-		          location.href=window.BASEPATH + 'pubnum/admin/orderinfo?orderId='+ids[1];
-		      });
-			
-			$(document).on('click','.icon-ok',function(){
-		          var ids=this.id.split('-');
-		          
-		          var _urirefund = window.BASEPATH + '/website/wxpay/refund?orderId='+ids[1];
-			          $.get(_urirefund, null, function(data){
-
-				        changeOrderStatus(ids[1],'REFUNDED');
-				        
-					});
-		       
-		      });
-		      
-		      $(document).on('click','.icon-check',function(){
-		          var ids=this.id.split('-');
-		          $.prompt("请输入快递单号", function(text) {		             
-		        		             
-		             if(!isNaN(text)){
-		                 changeOrderStatus(ids[1],'DELIVER',text);
-		             }else{
-		                $.alert("请重新输入正确的快递单号")		   
-		                return;
-		             } 
-		                                         	        					  
-					}, function() {
-					  //点击取消后的回调函数
-					});
-		      });
-			
-        function changeOrderStatus(orderId,status,trackingnumber){
-		   var _urichangeorder = window.BASEPATH + 'pubnum/changeOrderStatus?orderId='+orderId+'&status='+status+'&trackingnumber='+trackingnumber;
-	          $.get(_urichangeorder, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data){
-				   location.href=location.href;
-				}
-				
-				
-			});
-		
-		}
-	
-	function searchOrder(){
-	
-	
-	$('#orderContent').children().remove();
-		if('${status}'=='TESTED'){
-			var _uriseaOrder = window.BASEPATH + 'pubnum/searchOrder?type=${status}&proId='+
-	     		$('#proSel').val()+'&start='+$('#checkstart').val()+'&end='+$('#checkend').val();
-		}else{
-	     	var _uriseaOrder = window.BASEPATH + 'pubnum/searchOrder?type=${status}&proId='+
-	     		$('#proSel').val()+'&start='+$('#start').val()+'&end='+$('#end').val();
-		}
-		
-			$.get(_uriseaOrder, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				 var html=[];
-				if(data){
-				   for(var i=0;i<data.length;i++){
-				   if(data[i].productName==null){
-				      data[i].productName='到店支付订单';
-				   }
-				   html.push('<a href="javascript:void(0);" id="order-'+data[i].id+'"  class="order weui-media-box weui-media-box_appmsg">');
-				   html.push('   <div class="weui-media-box__hd">');
-				   html.push('     <img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].productPic+'">');
-				   html.push('   </div>');
-				   html.push('   <div class="weui-media-box__bd">');
-				   html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].productName+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+data[i].productPrice+'x'+data[i].productNum+'</h4>');
-				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+data[i].createDate+'</p>');
-				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">验单时间'+data[i].ydDate+'</p>');
-				   html.push('   </div>');
-				   if('${status}'=='REFUNDING'){
-				       html.push('<a class="weui-media-box__desc" style="margin-left:15px;font-size:12px;" href="javascript:void(0)">退款理由:&nbsp;'+data[i].refundReason+'</p>');
-				    }
-				    if('${status}'=='PAYSUCCESS'){
-				       html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
-				    }
-				   html.push(' </a>');
-				   }
-				   if(data.length==0)
-				   {
-				   		html.push("<div style='margin-top:100px;text-align: center;'>暂无数据");
-				   }
-				}
-				$('#orderContent').append(html.join(""));
-			});
-	
-	
-	}
-	
-	$(document).on('change','#proSel',function(){
-	searchOrder();
-	
-	});
-	$(document).on('change','#start',function(){
-	searchOrder();
-	
-	});
-	$(document).on('change','#end',function(){
-	searchOrder();
-	
-	});
-	$(document).on('change','#checkstart',function(){
-	searchOrder();
-	
-	});
-	$(document).on('change','#checkend',function(){
-	searchOrder();
-	
-	});
-	
-	});
+		$.get(_uriRecomment, null, function(data){ 
+		  var html=[];
+		for(var i=0;i<data.length;i++){		
+		       if(i%4==0){
+		           html.push('<li class="list-group-item list-group-item-success">'+data[i].AcceptTime+"&nbsp&nbsp"+data[i].AcceptStation+'</li>'); 
+		       }
+		        if(i%4==1){
+		            html.push('<li class="list-group-item list-group-item-info">'+data[i].AcceptTime+"&nbsp&nbsp"+data[i].AcceptStation+'</li>'); 
+		       }
+		        if(i%4==2){
+		           html.push('<li class="list-group-item list-group-item-warning">'+data[i].AcceptTime+"&nbsp&nbsp"+data[i].AcceptStation+'</li>'); 
+		       }
+		        if(i%4==3){
+		           html.push(' <li class="list-group-item list-group-item-danger">'+data[i].AcceptTime+"&nbsp&nbsp"+data[i].AcceptStation+'</li>'); 
+		       }
+		    
+		     
+		  
+          }
+			  $('.list-group').append(html.join(''));							
+		 });	
+});
 </script>
 
 
@@ -698,43 +542,29 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">订单管理</div>
+				<div class="header-content">订单详情</div>
 			</div>
 		</div>
 		<div class="content">
-			    <div class="weui-cells weui-cells_form">
-			       <div class="weui-cell">
-				    <div class="weui-cell__hd"><label class="weui-label">选择商品</label></div>
-				    <div class="weui-cell__bd">
-				      <select id="proSel" class="weui-select" name="select2">
-			            
-			          </select>
-				    </div>
-				  </div>
-				  <div class="weui-cell" id="buydate">
-				    <div class="weui-cell__hd"><label for="" class="weui-label">下单日期</label></div>
-				    <div class="weui-cell__bd">
-                        <input id="start" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">--<input id="end" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">
-				    </div>
-				  </div>
-				  <div class="weui-cell" style="display:none;" id="checkdate">
-				    <div class="weui-cell__hd"><label for="" class="weui-label">验单日期</label></div>
-				    <div class="weui-cell__bd">
-                        <input id="checkstart" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">--<input id="checkend" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">
-				    </div>
-				  </div>
-				 
-			    </div>
-		
-			      <div id="orderContent" class="weui-panel__bd">
-				    
-				   
-			     </div>
-
+			
+					<ul class="list-group">
+				
+					
+					</ul>		     
 			
 			
 		</div>
 	</div>
+	
+	<div id="large" class="weui-popup__container" style="padding-bottom:50px;">
+	  <div class="weui-popup__overlay"></div>
+	  <div class="weui-popup__modal">
+	      <image id="largeYd" style="width:100%;height:350px;margin-top:10px;"/>
+	      <a style="width:96%;margin-top:50px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary close-popup">
+	      关闭</a>
+	</div>
+</div>
+	
 </body>
 
 

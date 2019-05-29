@@ -1,9 +1,13 @@
+<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
+
+request.getServerPort()
 			+ path + "/";
+	String weburl=WXContants.Website;
 %>
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
@@ -24,7 +28,9 @@
 <!-- 为移动设备添加 viewport -->
 <meta name="viewport"
 	content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
-<!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
+<!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 
+
+http://bigc.at/ios-webapp-viewport-meta.orz -->
 
 <!-- iOS 设备 begin -->
 <meta name="apple-mobile-web-app-title" content="标题">
@@ -64,7 +70,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>订单管理</title>
+<title>公众号首页</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -471,16 +477,16 @@ html, body {
        color:#18b4ed;
        font-size:20px;
     }
-    #columnTable{
+    .columnTable{
     
         width:100%;
-        margin-top:10px;
         
     }
-    #columnTable td{
-	    width:20%;
+    .columnTable td{
+	    width:10%;
 	    text-align:center;
 	    font-size:12px;
+	 
     }
     
     
@@ -490,13 +496,16 @@ html, body {
 </head>
 
 <!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
-
+<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
+<script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
+<script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript">
 
 	$(function() {
+	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
-	  
+	  var comCode='${comCode}';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
 				$.toptip('data.message', 'error');
@@ -505,186 +514,102 @@ html, body {
 				return data.data;		
 			}
 	  };
+	
+	  
 		
-
-      var _uriMyOrder = window.BASEPATH + 'pubnum/getOrder?type=${status}';
-			$.get(_uriMyOrder, null, function(data){
-			
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				 var html=[];
-			    if('${status}'=='TESTED')
-			    {
-			    	$('#buydate').hide();
-			    	$('#checkdate').show();
-			    }
-				if(data){
-			
-				   for(var i=0;i<data.length;i++){
-				   if(data[i].productName==null){
-				      data[i].productName='到店支付订单';
-				   }
-				   html.push('<a href="javascript:void(0);" id="order-'+data[i].id+'"  class="order weui-media-box weui-media-box_appmsg">');
-				   html.push('   <div class="weui-media-box__hd">');
-				   html.push('     <img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].productPic+'">');
-				   html.push('   </div>');
-				   html.push('   <div class="weui-media-box__bd">');
-				   html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].productName+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+data[i].productPrice+'x'+data[i].productNum+'</h4>');
-				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+data[i].createDate+'</p>');
-				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">验单时间'+data[i].ydDate+'</p>');
-				   html.push('   </div>');
-				   if('${status}'=='REFUNDING'){
-				       html.push('<a class="weui-media-box__desc" style="margin-left:15px;font-size:12px;" href="javascript:void(0)">退款理由:&nbsp;'+data[i].refundReason+'</p>');
-				       //html.push('<a style="font-size:12px;margin-left:15px" id="relay-'+data[i].id+'" class="icon-ok" href="javascript:void(0)">&nbsp;&nbsp;同意退款</a>')
-				    }
-				    if('${status}'=='PAYSUCCESS'){
-				       html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
-				    }
-				   html.push(' </a>');
-				   }
-				   if(data.length==0)
-				   {
-				   		html.push("<div style='margin-top:100px;text-align: center;'>暂无数据");
-				   }
-				}
-				$('#orderContent').append(html.join(""));
-			});
-			
-			
-			
-			var _uriMyProduct = window.BASEPATH + 'pubnum/getMerchantAllPro';
-		
-			$.get(_uriMyProduct, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				 var html=[];
-				if(data){
-				   html.push('<option value="0">全部</option>');
-				   for(var i=0;i<data.length;i++){
-				      html.push('<option value="'+data[i].id+'">'+data[i].productName+'</option>');
-				   }
-				   html.push('<option value="-1">到店支付</option>');
-				}
-				$('#proSel').append(html.join(""));
-			});
-			
-			
-			$(document).on('click','.order',function(){
-		          var ids=this.id.split('-');
-		          location.href=window.BASEPATH + 'pubnum/admin/orderinfo?orderId='+ids[1];
-		      });
-			
-			$(document).on('click','.icon-ok',function(){
-		          var ids=this.id.split('-');
-		          
-		          var _urirefund = window.BASEPATH + '/website/wxpay/refund?orderId='+ids[1];
-			          $.get(_urirefund, null, function(data){
-
-				        changeOrderStatus(ids[1],'REFUNDED');
-				        
-					});
-		       
-		      });
-		      
-		      $(document).on('click','.icon-check',function(){
-		          var ids=this.id.split('-');
-		          $.prompt("请输入快递单号", function(text) {		             
-		        		             
-		             if(!isNaN(text)){
-		                 changeOrderStatus(ids[1],'DELIVER',text);
-		             }else{
-		                $.alert("请重新输入正确的快递单号")		   
-		                return;
-		             } 
-		                                         	        					  
-					}, function() {
-					  //点击取消后的回调函数
-					});
-		      });
-			
-        function changeOrderStatus(orderId,status,trackingnumber){
-		   var _urichangeorder = window.BASEPATH + 'pubnum/changeOrderStatus?orderId='+orderId+'&status='+status+'&trackingnumber='+trackingnumber;
-	          $.get(_urichangeorder, null, function(data){
+	  
+	getloca()
+	  var loca={};
+          var la=0;
+          var lo=0;
+	  function getloca(){
+	      
+		  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+	
+		  var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+		    $.get(_uri, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
 				if(data){
-				   location.href=location.href;
+           
+					loca=data;
+                    setInterval(function(){getLoation()},5000); 
 				}
 				
+		  });
+	  
+	  }
+	  
+	  
+	  function getLoation(){
+	       wx.config({
+	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查
+
+看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            //                                debug : true, // 开启调试模式,调用的所有api的
+
+返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才
+
+会打印。
+	            appId : loca.appId, // 必填，公众号的唯一标识
+	            timestamp : loca.timestamp, // 必填，生成签名的时间戳
+	            nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+	            signature : loca.signature,// 必填，签名，见附录1
+	            jsApiList : ['checkJsApi','getLocation'] // 必填，需要使用的JS接口列表，所有JS
+
+接口列表见附录2
+        	});
+	        wx.ready(function() {
+	            wx.getLocation({  
+                        type: 'gcj02',
+	                success: function (res) {  
+	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+	                    var speed = res.speed; // 速度，以米/每秒计  
+	                    var accuracy = res.accuracy; // 位置精度  
+	                    $('#test').append(latitude+","+longitude+"<br>");
+                            if(la){
+                                $('#test').append("偏移："+getDistance
+
+(latitude,la,longitude,lo)+"<br>");
+                            }
+                            la=latitude;
+                            lo=longitude;
+	                    
+	                },  
+	                cancel: function (e) {  
+	                        //这个地方是用户拒绝获取地理位置  
+	                       
+					}
+	                	
+	             });     
+		         wx.error(function (res) {  
+		               
 				
-			});
-		
-		}
-	
-	function searchOrder(){
-	
-	
-	$('#orderContent').children().remove();
-		if('${status}'=='TESTED'){
-			var _uriseaOrder = window.BASEPATH + 'pubnum/searchOrder?type=${status}&proId='+
-	     		$('#proSel').val()+'&start='+$('#checkstart').val()+'&end='+$('#checkend').val();
-		}else{
-	     	var _uriseaOrder = window.BASEPATH + 'pubnum/searchOrder?type=${status}&proId='+
-	     		$('#proSel').val()+'&start='+$('#start').val()+'&end='+$('#end').val();
-		}
-		
-			$.get(_uriseaOrder, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				 var html=[];
-				if(data){
-				   for(var i=0;i<data.length;i++){
-				   if(data[i].productName==null){
-				      data[i].productName='到店支付订单';
-				   }
-				   html.push('<a href="javascript:void(0);" id="order-'+data[i].id+'"  class="order weui-media-box weui-media-box_appmsg">');
-				   html.push('   <div class="weui-media-box__hd">');
-				   html.push('     <img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].productPic+'">');
-				   html.push('   </div>');
-				   html.push('   <div class="weui-media-box__bd">');
-				   html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].productName+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+data[i].productPrice+'x'+data[i].productNum+'</h4>');
-				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+data[i].createDate+'</p>');
-				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">验单时间'+data[i].ydDate+'</p>');
-				   html.push('   </div>');
-				   if('${status}'=='REFUNDING'){
-				       html.push('<a class="weui-media-box__desc" style="margin-left:15px;font-size:12px;" href="javascript:void(0)">退款理由:&nbsp;'+data[i].refundReason+'</p>');
-				    }
-				    if('${status}'=='PAYSUCCESS'){
-				       html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
-				    }
-				   html.push(' </a>');
-				   }
-				   if(data.length==0)
-				   {
-				   		html.push("<div style='margin-top:100px;text-align: center;'>暂无数据");
-				   }
-				}
-				$('#orderContent').append(html.join(""));
-			});
-	
-	
-	}
-	
-	$(document).on('change','#proSel',function(){
-	searchOrder();
-	
-	});
-	$(document).on('change','#start',function(){
-	searchOrder();
-	
-	});
-	$(document).on('change','#end',function(){
-	searchOrder();
-	
-	});
-	$(document).on('change','#checkstart',function(){
-	searchOrder();
-	
-	});
-	$(document).on('change','#checkend',function(){
-	searchOrder();
-	
-	});
+		         });     
+	            
+	         });
+	  
+	  
+	  }
+	  
+	 
+                 function getDistance(lat1,lat2,lng1,lng2){
+ var radLat1 = rad(lat1);
+                            var radLat2 = rad(lat2);
+                            var a = radLat1 - radLat2;
+                            var b = rad(lng1) - rad(lng2);
+                            var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + 
+
+Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+                            s = s * 6378.137;
+                            // EARTH_RADIUS;
+                            s = Math.round(s * 10000) / 10000;
+                 
+
+                 }
+
+
 	
 	});
 </script>
@@ -692,49 +617,7 @@ html, body {
 
 
 <body>
-	<div id="page">
-		<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-				<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">订单管理</div>
-			</div>
-		</div>
-		<div class="content">
-			    <div class="weui-cells weui-cells_form">
-			       <div class="weui-cell">
-				    <div class="weui-cell__hd"><label class="weui-label">选择商品</label></div>
-				    <div class="weui-cell__bd">
-				      <select id="proSel" class="weui-select" name="select2">
-			            
-			          </select>
-				    </div>
-				  </div>
-				  <div class="weui-cell" id="buydate">
-				    <div class="weui-cell__hd"><label for="" class="weui-label">下单日期</label></div>
-				    <div class="weui-cell__bd">
-                        <input id="start" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">--<input id="end" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">
-				    </div>
-				  </div>
-				  <div class="weui-cell" style="display:none;" id="checkdate">
-				    <div class="weui-cell__hd"><label for="" class="weui-label">验单日期</label></div>
-				    <div class="weui-cell__bd">
-                        <input id="checkstart" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">--<input id="checkend" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">
-				    </div>
-				  </div>
-				 
-			    </div>
-		
-			      <div id="orderContent" class="weui-panel__bd">
-				    
-				   
-			     </div>
-
-			
-			
-		</div>
-	</div>
+	<div id="test" style="height:500px;width:300px;border:1px solid red"></div>
 </body>
 
 
