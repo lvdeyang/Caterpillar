@@ -4,17 +4,17 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="member-left fl">
+<div class="member-left fl" style="border: 1px solid #e4eaee;">
     <div class="member-apart clearfix">
-        <div class="fl"><a href="#"><img src="${user.userHeadimg}"></a></div>
-        <div class="fl">
-            <p>手机号：</p>
+        <div class="fl"><a href="#"><img style="border-radius:50%;" src="<%=path%>/lib/images/logo.png"></a></div>
+        <div class="fl" >
+            <p style="line-height:50px;">手机号：</p>
             <p><a href="#">${user.userPhone}</a></p>
            <%--  <p>过来玩ID：</p>
             <p>${user.id}</p> --%>
         </div>
     </div>
-    <div class="member-lists">
+    <div class="member-lists" >
         <dl>
         	<dt>我的商城</dt>
             <dd><a href="<%=path %>/user/order/list/0">我的订单</a></dd>

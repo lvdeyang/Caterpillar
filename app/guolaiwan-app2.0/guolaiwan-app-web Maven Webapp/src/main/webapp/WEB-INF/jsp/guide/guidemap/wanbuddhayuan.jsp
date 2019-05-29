@@ -673,7 +673,7 @@ input[type="radio"] {
 	            image: "lib/images/zi.png",
 	            imageSize: new AMap.Size(16,16)
 	            }),   
-				position : [ json[i].childLongitude , json[i].childLatitude ]
+				position : [ json[i].wxChildLongitude , json[i].wxChildLatitude ]
 			  });
 			   marker.proName= json[i].childName;
 			   marker.id= json[i].id;
@@ -682,8 +682,8 @@ input[type="radio"] {
 		      }); //增加点击事件; 
 		      marker.setMap(map);
 			  leng= 0;
-			  Longitude =  json[i].childLongitude;
-			  Latitude  =  json[i].childLatitude ; 
+			  Longitude =  json[i].wxChildLongitude;
+			  Latitude  =  json[i].wxChildLatitude ; 
 			  id  = json[i].id;
 			  name = json[i].childName;
 			  $("#container").show();
@@ -735,7 +735,7 @@ input[type="radio"] {
 			            image: "lib/images/huang.png",
 			            imageSize: new AMap.Size(16,16)
 		                }),   
-				       position : [ data[i].childLongitude , data[i].childLatitude ]
+				       position : [ data[i].wxChildLongitude , data[i].wxChildLatitude ]
 			         });
 					 marker.proName= data[i].childName;
 					 marker.id= data[i].id;
@@ -756,7 +756,7 @@ input[type="radio"] {
 		             image: "lib/images/hong.png",
 		             imageSize: new AMap.Size(16,16)
 	            	 }),   
-				    position : [ data[i].childLongitude , data[i].childLatitude ]
+				    position : [ data[i].wxChildLongitude , data[i].wxChildLatitude ]
 			        });
 			        marker.setAnimation('AMAP_ANIMATION_DROP'); //弹跳点 
 					marker.proName= data[i].childName;
@@ -795,11 +795,10 @@ input[type="radio"] {
 	  	  
 	    function clickHandler(){
 	      map.clearMap(); 
-	      getMark();
-	      /* var _uril = window.BASEPATH + 'guide/delectchildId';                   //清楚路线
+	      var _uril = window.BASEPATH + 'guide/delectchildId';                   //清楚路线
 		  $.post(_uril, null, function(data) {
-		  
-	      }); */
+		      getMark();
+	      }); 
 	   }
 </script>
 
@@ -822,30 +821,39 @@ input[type="radio"] {
 			});
 		}
 	
-		function getLoation() {
-			wx.config({
-				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-				//debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-				appId : loca.appId, // 必填，公众号的唯一标识
-				timestamp : loca.timestamp, // 必填，生成签名的时间戳
-				nonceStr : loca.nonceStr, // 必填，生成签名的随机串
-				signature : loca.signature, // 必填，签名，见附录1
-				jsApiList : [ 'checkJsApi', 'getLocation' ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-			});
-			wx.ready(function() {
-				wx.getLocation({
-					success : function(res) {
-						var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
-						var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
-						var speed = res.speed; // 速度，以米/每秒计  
-						var accuracy = res.accuracy; // 位置精度  
-						getCity(latitude, longitude);
+		function getLoation(){
+	       wx.config({
+	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            appId : loca.appId, // 必填，公众号的唯一标识
+	            timestamp : loca.timestamp, // 必填，生成签名的时间戳
+	            nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+	            signature : loca.signature,// 必填，签名，见附录1
+	            jsApiList : ['checkJsApi','getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        	});
+	        wx.ready(function() {
+	            wx.getLocation({  
+                        type: 'gcj02',
+	                success: function (res) {  
+	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+	                    var speed = res.speed; // 速度，以米/每秒计  
+	                    var accuracy = res.accuracy; // 位置精度  
+                         getCity(latitude, longitude);
+	                },  
+	                cancel: function (e) {  
+	                        //这个地方是用户拒绝获取地理位置  
 					}
-				});
-			});
-		}
+	             });     
+		         wx.error(function (res) {  
+		         });     
+	         });
+	  }
 		
 	    function getCity(latitude, longitude) { //通过经纬度   获取高德位置
+	    latitude = latitude.toString().match(/^\d+(?:\.\d{0,5})?/);  // 拆分保留小数后5位
+	    longitude = longitude.toString().match(/^\d+(?:\.\d{0,5})?/);
+	    alert(latitude+","+longitude);
 	     //   计算两点的距离
 	     var name;
 	     var length;  //米
@@ -857,15 +865,15 @@ input[type="radio"] {
 	     var child;
 		 for (var i = 0; i < json.length; i++) {
 	        var p1 = [latitude,longitude];
-		    var p2 = [json[i].childLongitude,json[i].childLatitude];
+		    var p2 = [json[i].wxChildLongitude,json[i].wxChildLatitude];
 		   // 返回 p1 到 p2 间的地面距离，单位：米
 			var dis = AMap.GeometryUtil.distance(p1, p2);
             if(length == null || dis < length){
                 length = dis; // 保存距离
                 latitid =  json[i].id;
                 name = json[i].childName; // 景点名称
-                Longitude = json[i].childLongitude; // 经度
-                Latitude = json[i].childLatitude; // 纬度
+                Longitude = json[i].wxChildLongitude; // 经度
+                Latitude = json[i].wxChildLatitude; // 纬度
                 mp3 = json[i].chineseGirl; //音频
                 text = json[i].chineseContent; // 文本
                 scope = json[i].scope; //距离
@@ -928,7 +936,7 @@ input[type="radio"] {
 	            image: "lib/images/huang.png",
 	            imageSize: new AMap.Size(16,16)
 	            }),   
-				position : [ json[i].childLongitude , json[i].childLatitude ]
+				position : [ json[i].wxChildLongitude , json[i].wxChildLatitude ]
 		      });
 		       marker.proName= json[i].childName;
 		       marker.id= json[i].id;
@@ -947,7 +955,7 @@ input[type="radio"] {
 	          image: "lib/images/hong.png",
 	          imageSize: new AMap.Size(16,16)
 	          }),   
-			  position : [ json[i].childLongitude , json[i].childLatitude ]
+			  position : [ json[i].wxChildLongitude , json[i].wxChildLatitude ]
 		   });
 		    marker.proName= json[i].childName;
 		    marker.id= json[i].id;
@@ -973,11 +981,9 @@ input[type="radio"] {
 			  $.post(_uril, $.toJSON(param), function(data) {
 				  data = parseAjaxResult(data);
 				  var lines = [];
-				  alert(data.length +"leng");
 				  for(var i=0;i<data.length;i++){
-					 lines.push([data[i].childLongitude , data[i].childLatitude]);
+					 lines.push([data[i].wxChildLongitude , data[i].wxChildLatitude]);
 				  }
-				  alert(lines);
 				  var polyLine = new AMap.Polyline({
 				  //折线的节点坐标数组
 				  path:lines,
@@ -987,7 +993,7 @@ input[type="radio"] {
 	    }},
 	  ]
 	}); 
-	}
+   }
 </script>
 
 <script type="text/javascript">
@@ -1993,7 +1999,7 @@ var id;
        					_this.audio.currentTime = 0;
 			             _this.audio.pause();
 			             _this.stopAudio();
-       				     setaddChild(id); // 存已浏览点
+       				     setaddChild(latitid); // 存已浏览点
        					$(".audio-play").click(function() {
        					if($buttonControl.hasClass("action-start")){
        					  	$(".audio-play").css("background-image","url(lib/images/plays.png)"); 

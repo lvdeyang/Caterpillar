@@ -38,10 +38,10 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 	private String childLatitude;
     
 	//微信经度
-    private String WxChildLongitude;
+    private String wxChildLongitude;
 		
 	//微信纬度
-	private String WxChildLatitude;
+	private String wxChildLatitude;
 	
 	// 产品ID
 	private long productID;
@@ -76,20 +76,20 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 	
 	
 	public String getWxChildLongitude() {
-		return WxChildLongitude;
+		return wxChildLongitude;
 	}
 
 	public ChildProductVO setWxChildLongitude(String wxChildLongitude) {
-		WxChildLongitude = wxChildLongitude;
+		this.wxChildLongitude = wxChildLongitude;
 		return this;
 	}
 
 	public String getWxChildLatitude() {
-		return WxChildLatitude;
+		return wxChildLatitude;
 	}
 
 	public ChildProductVO setWxChildLatitude(String wxChildLatitude) {
-		WxChildLatitude = wxChildLatitude;
+		this.wxChildLatitude = wxChildLatitude;
 		return this;
 	}
 

@@ -127,12 +127,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="layui-form-item">
 					<label for="L_title" class="layui-form-label"> 微信经度： </label>
 					<div class="layui-input-inline" style="width: 100px;">
-						<input type="text"  name="childLongitude" id="shopLongitude"  autocomplete="off" class="layui-input" value="${child.wxChildLongitude}">
+						<input type="text"  name="wxChildLongitude" id="wxChildLongitude"  autocomplete="off" class="layui-input" value="${child.wxChildLongitude}">
 					</div>
 					<div class="layui-form-mid">-</div>
 					<label for="L_title" class="layui-form-label"> 微信纬度 ：</label>
       				<div class="layui-input-inline" style="width: 100px;">
-						<input type="text" name="childLatitude" id="shopLatitude"  autocomplete="off" class="layui-input" value="${child.wxChildLatitude}">
+						<input type="text" name="wxChildLatitude" id="wxChildLatitude"  autocomplete="off" class="layui-input" value="${child.wxChildLatitude}">
 					</div>
 					<div class="layui-input-inline" style="width: 100px;">
 				  		<a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >更该坐标</a>
