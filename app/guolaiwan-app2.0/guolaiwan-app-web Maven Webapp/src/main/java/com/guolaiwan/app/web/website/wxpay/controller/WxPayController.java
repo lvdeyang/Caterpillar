@@ -285,13 +285,13 @@ public class WxPayController extends BaseController {
 	public Object mmpay(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Map<String, String> reqData = new HashMap<String, String>();
 		GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("");
-		reqData.put("partner_trade_no","mmpay-1"); //生成商户订单号
+		reqData.put("partner_trade_no","mmpay1"); //生成商户订单号
 		reqData.put("openid","opVUYv_4GAy8GhpOWKMO2eqt-j0A");            // 支付给用户openid
-		reqData.put("check_name","");    //是否验证真实姓名呢
+		reqData.put("check_name","NO_CHECK");    //是否验证真实姓名呢
 		reqData.put("re_user_name","");//收款用户姓名
 		reqData.put("amount","1000");            //企业付款金额，单位为分
-		reqData.put("desc","");    			   //企业付款操作说明信息。必填。
-		reqData.put("spbill_create_ip",""); //调用接口的机器Ip地址
+		reqData.put("desc","send back");    			   //企业付款操作说明信息。必填。
+		reqData.put("spbill_create_ip","192.165.56.64"); //调用接口的机器Ip地址
 		Map<String, String> resData = wxPay.mmpay(reqData); // 生成二维码数据
 		return resData;
 	}
