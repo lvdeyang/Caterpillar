@@ -499,6 +499,48 @@ html, body {
     #phone{
         -webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;
     }*/
+    
+    
+    
+    
+ /* 对话框样式 */   
+  input,button{outline:none;}
+	.wenwen-footer{width:100%;position:fixed;bottom:-5px;left:0;background:#fff;padding:3%;border-top:solid 1px #ddd;box-sizing:border-box;}
+	.wenwen_btn,.wenwen_help{width:15%;text-align:center;}
+	.wenwen_btn img,.wenwen_help img{height:40px;}
+	.wenwen_text{height:40px;border-radius:5px;border:solid 1px #636162;box-sizing:border-box;width:80%;text-align:center;overflow:hidden;margin-left:2%;}
+	.circle-button{padding:0 5px;}
+	.wenwen_text .circle-button{font-size:14px;color:#666;line-height:38px;}
+	.write_box{background:#fff;width:100%;height:40px;line-height:40px;}
+	.write_box input{height:40px;padding:0 5px;line-height:40px;width:100%;box-sizing:border-box;border:0;}
+	.wenwen_help button{width:100%;background:#42929d;color:#fff;border-radius:5px;border:0;height:40px;}
+	#wenwen{height:100%;}
+	.speak_window{overflow-y:scroll;height:100%;width:100%;position:fixed;top:0;left:0;}
+	.speak_box{margin-bottom:70px;padding:10px;}
+	.question,.answer{margin-bottom:1rem;}
+	.question{text-align:right;margin-top:50px;}
+	.question>div{display:inline-block;}
+	.left{float:left;}
+	.right{float:right;}
+	.clear{clear:both;}
+	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
+	.heard_img img{width:100%;height:100%}
+	.question_text,.answer_text{box-sizing:border-box;position:relative;display:table-cell;min-height:60px;}
+	.question_text{padding-right:20px;}
+	.answer_text{padding-left:20px;}
+	.question_text p,.answer_text p{border-radius:6px;padding:.5rem;margin:0;font-size:14px;line-height:40px;box-sizing:border-box;vertical-align:middle;display:table-cell;height:40px;word-wrap:break-word;}
+	.answer_text p{background:#fff;}
+	.question_text p{background:#94EB68;color:#fff;text-align:left;}
+	.question_text i,.answer_text i{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;position:absolute;top:25px;}
+	.answer_text i{border-right:10px solid #fff;left:10px;}
+	.question_text i{border-left:10px solid #94EB68;right:10px;}
+	.answer_text p a{color:#42929d;display:inline-block;}
+	audio{display:none;}
+	.saying{position:fixed;bottom:30%;left:50%;width:120px;margin-left:-60px;display:none;}
+	.saying img{width:100%;}  
+    
+    
+    
 </style>
 
 </head>
@@ -518,7 +560,7 @@ html, body {
 				return data.data;		
 			}
 	  };
-		
+	  
 		var merchantName;
 		var merchantPic;
 		var merchantUrl;
@@ -723,10 +765,113 @@ html, body {
 	
 	});
 </script>
+<script type="text/javascript">
+	var ws;
+	var target="ws://localhost:8080/guolaiwan-app-web/echo?merchantId=${merchantId}=${userId}";
+	
+	$(function() {
+	 	if ('WebSocket' in window) {
+                ws = new WebSocket(target);
+            } else if ('MozWebSocket' in window) {
+                ws = new MozWebSocket(target);
+            } else {
+            
+                $.alert('您的浏览器不支持在线咨询');
+                return;
+            }
+	 	ws.onmessage=function(msg){
+	 		var text = msg.data,
+	        
+	            	ans  = '<div class="answer"><div class="heard_img left"><img src="lib/images/man_9.png"></div>';
+	            	ans += '<div class="answer_text"><p>'+text+'</p><i></i>';
+	        		ans += '</div></div>';
+	        	$('.speak_box').append(ans);
+				for_bottom();
+	 }
+	 	
+	 	 window.onbeforeunload = function(event) {
+                ws.onclose =function(){};
+                ws.close();
+            }
+	 
+	 })
+	
+	
+	 function SubSend(){
+	 	var message=document.getElementById("left").value;
+	 	ws.send(message);
+	 		str  = '<div class="question">';
+	        str += '<div class="heard_img right"><img src="lib/images/man_9.png"></div>';
+	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
+	        str += '</div></div>';
+	        $('.speak_box').append(str);
+	 	$('.left').val("");
+	 }
+	 
+	/*显示隐藏切换  */
+	 $(document).on('click',' #socket',function(){
+	 		$(".zhuye").hide();
+	        $(".duihua").show();
+	       
+	 });
+	 
+	 $(document).on('click','.tui',function(){
+	 		$(".duihua").hide();
+	        $(".zhuye").show();
+	       
+	 });
+</script>
 
+
+
+
+
+<script type="text/javascript">
+	function to_write(){
+	    $('.wenwen_btn img').attr('src','lib/images/saying.gif');
+	    $('.write_box,.wenwen_help button').show();
+	    $('.circle-button,.wenwen_help a').hide();
+	    $('.write_box input').focus();
+	    for_bottom();
+	}
+
+	function keyup(){
+		var footer_height = $('.wenwen-footer').outerHeight(),
+			text = $('.write_box input').val();
+		
+	}
+
+	var wen  = document.getElementById('wenwen');
+	function _touch_start(event){
+        event.preventDefault();
+        $('.wenwen_text').css('background','#c1c1c1');
+        $('.wenwen_text span').css('color','#fff');
+        $('.saying').show();
+    }
+
+  
+    
+    function for_bottom(){
+		var speak_height = $('.speak_box').height();
+		$('.speak_box,.speak_window').animate({scrollTop:speak_height},500);
+	}
+	
+	function autoWidth(){
+		$('.question_text').css('max-width',$('.question').width()-60);
+	}
+	autoWidth();
+	
+	
+	
+	
+</script>
 
 
 <body>
+
+<div class="zhuye" style="">
+
+	
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
@@ -775,6 +920,7 @@ html, body {
 						<div
 							style="width:90%;margin-top:25px;margin-left:11px;font-size:12px;">
 							<a id="contact" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
+							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
 						</div>
 						<div id="payinshop"></div>
 						<div
@@ -799,6 +945,42 @@ html, body {
 			
 		</div>
 	</div>
+	
+</div>	
+</div>	
+	
+
+
+
+
+	<!-- 对话框 -->
+<div class="duihua" style="width:100%;height:100%;z-index:1111;display: none;">
+	
+<div class="speak_window" >
+<div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
+	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span>想念</span></p>	
+	</div>
+	<div class="speak_box">
+		<div class="answer">
+		</div>
+	</div>
+</div>
+<div class="wenwen-footer">
+	<div class="wenwen_btn left" onClick="to_write()"></div>
+	<div class="wenwen_text left">
+	    <div class="write_box">
+	        <input type="text" class="left" id="left" onKeyUp="keyup()" placeholder="请输入关键字" />
+	    </div> 
+	      
+	</div>
+	<div class="wenwen_help right">
+	    <button onClick="SubSend();" class="right">发送</button>
+	</div>
+	<div style="opacity:0;" class="clear"></div>
+</div>
+
+
+</div>
 </body>
 
 
