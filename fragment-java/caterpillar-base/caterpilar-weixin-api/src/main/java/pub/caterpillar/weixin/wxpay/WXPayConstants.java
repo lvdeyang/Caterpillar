@@ -47,6 +47,10 @@ public class WXPayConstants {
     public static final String SANDBOX_REPORT_URL_SUFFIX       = "/sandboxnew/payitil/report";
     public static final String SANDBOX_SHORTURL_URL_SUFFIX     = "/sandboxnew/tools/shorturl";
     public static final String SANDBOX_AUTHCODETOOPENID_URL_SUFFIX = "/sandboxnew/tools/authcodetoopenid";
+    
+    
+    //mmpaymkttransfers
+    public static final String MMPAY_MK_PROMOTION_TRANSFERS = "/mmpaymkttransfers/promotion/transfers";
 
 }
 
