@@ -49,6 +49,14 @@ public class GuolaiwanWxPay {
 		return resultMap;
 	}
 	
+	
+	public Map<String, String> mmpay(Map<String, String> reqData) throws Exception{
+		Map<String, String> resultMap=wxPay.mmpay(reqData);
+		return resultMap;
+	}
+	
+	
+	
 	public Map<String, String> processResponseXml(String xml) throws Exception {
 		return wxPay.processResponseXml(xml);
 	}

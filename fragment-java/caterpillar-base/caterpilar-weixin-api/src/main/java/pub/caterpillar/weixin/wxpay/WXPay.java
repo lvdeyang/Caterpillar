@@ -493,6 +493,10 @@ public class WXPay {
     public Map<String, String> refund(Map<String, String> reqData) throws Exception {
         return this.refund(reqData, this.config.getHttpConnectTimeoutMs(), this.config.getHttpReadTimeoutMs());
     }
+    
+    public Map<String, String> mmpay(Map<String, String> reqData) throws Exception {
+        return this.mmpay(reqData, this.config.getHttpConnectTimeoutMs(), this.config.getHttpReadTimeoutMs());
+    }
 
 
     /**
@@ -516,7 +520,16 @@ public class WXPay {
         String respXml = this.requestWithCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
     }
-
+    
+    
+    public Map<String, String> mmpay(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
+        String url;
+        url = WXPayConstants.MMPAY_MK_PROMOTION_TRANSFERS;
+        String respXml = this.requestWithCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
+        return this.processResponseXml(respXml);
+    }
+    
+    
 
     /**
      * 作用：退款查询<br>
