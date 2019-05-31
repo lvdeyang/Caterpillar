@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.UserCollectionPo;
+import com.chenxi.web.po.UserRecordPo;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 @Repository("UserRecordDao")
-public class UserRecordDao extends AbstractBaseDao<UserCollectionPo> {
+public class UserRecordDao extends AbstractBaseDao<UserRecordPo> {
 
 
 }
