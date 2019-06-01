@@ -97,8 +97,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          
 	          function initList(data){
 	               var html=[];
+	               if(!data.articles) return;
 			       for(var i=0;i<data.articles.length;i++){
-			         html.push('<li>');
+			         html.push('<li class="article" id="art-'+data.articles[i].id+'">');
 					 html.push('    <div class="ui-list-img-square">');
 					 html.push('        <span style="background-image:url(http://pic37.nipic.com/20140113/8800276_184927469000_2.png)"></span></div>');
 					 html.push('	<div class="ui-list-info ui-border-t">');
@@ -134,6 +135,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            currPage=1;
 		            getPage(true);
 		      });
+		      
+		      $(document).on('click','.article',function(){
+		         var ids=this.id.split('-');
+		         location.href='article/mobile/index?articleId='+ids[1];
+		      
+		      });
+		      
 	          
 	     });
 	

@@ -107,6 +107,23 @@ public class WXPay {
         System.out.println("4"+reqData);
         return reqData;
     }
+    
+    public Map<String, String> fillMMRequestData(Map<String, String> reqData) throws Exception {
+        reqData.put("mch_appid", config.getAppID());
+        reqData.put("mchid", config.getMchID());
+        reqData.put("nonce_str", WXPayUtil.generateUUID());
+        if (SignType.MD5.equals(this.signType)) {
+            reqData.put("sign_type", WXPayConstants.MD5);
+        }
+        else if (SignType.HMACSHA256.equals(this.signType)) {
+            reqData.put("sign_type", WXPayConstants.HMACSHA256);
+        }
+        System.out.println("3"+reqData);
+        reqData.put("sign", WXPayUtil.generateSignature(reqData, config.getKey(), this.signType));
+        System.out.println("4"+reqData);
+        return reqData;
+    }
+    
 
     /**
      * 判断xml数据的sign是否有效，必须包含sign字段，否则返回false。
@@ -525,7 +542,7 @@ public class WXPay {
     public Map<String, String> mmpay(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         url = WXPayConstants.MMPAY_MK_PROMOTION_TRANSFERS;
-        String respXml = this.requestWithCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
+        String respXml = this.requestWithCert(url, this.fillMMRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
     }
     
