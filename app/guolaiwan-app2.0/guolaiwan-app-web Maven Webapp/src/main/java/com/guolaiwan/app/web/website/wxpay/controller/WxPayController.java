@@ -288,27 +288,39 @@ public class WxPayController extends BaseController {
 		return result;
 	}
 	
+	//商家对个人支付 用作提现
 	@ResponseBody
 	@RequestMapping(value = "/mmpay", method = RequestMethod.GET)
 	public Object mmpay(HttpServletRequest request, HttpServletResponse response,Long userId,Long orderNo) throws Exception {
-		System.out.println(userId+"-----------"+orderNo);
 		UserInfoPO userpo = conn_user.get(userId);
 		InvestWalletPO walletPO = conn_investwallet.get(orderNo);
 		long money=-(walletPO.getMoney());
-		Map<String, String> reqData = new HashMap<String, String>();
-		GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("");
-		reqData.put("partner_trade_no","walletcut"+orderNo); //生成商户订单号
-		reqData.put("openid",userpo.getUserOpenID());            // 支付给用户openid
-		reqData.put("check_name","NO_CHECK");    //是否验证真实姓名呢
-		reqData.put("re_user_name","fish");//收款用户姓名
-		reqData.put("amount",money+"");            //企业付款金额，单位为分
-		reqData.put("desc","用户提现");    			   //企业付款操作说明信息。必填。
-		reqData.put("spbill_create_ip","192.165.56.64"); //调用接口的机器Ip地址
-		Map<String, String> resData = wxPay.mmpay(reqData); // 生成二维码数据
-		return resData;
+		try {
+			
+			Map<String, String> reqData = new HashMap<String, String>();
+			GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("");
+			reqData.put("partner_trade_no","walletcut"+orderNo); //生成商户订单号
+			reqData.put("openid",userpo.getUserOpenID());            // 支付给用户openid
+			reqData.put("check_name","NO_CHECK");    //是否验证真实姓名呢
+			reqData.put("re_user_name","fish");//收款用户姓名
+			reqData.put("amount",money+"");            //企业付款金额，单位为分
+			reqData.put("desc","用户提现");    			   //企业付款操作说明信息。必填。
+			reqData.put("spbill_create_ip","192.165.56.64"); //调用接口的机器Ip地址
+			wxPay.mmpay(reqData); // 生成二维码数据
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("这个是正常反应");
+		}
+		this.cutUserWallet(userpo, money);
+		return success(1);
 	}
 	
-	
+	//提现后修改用户的余额
+	public void cutUserWallet(UserInfoPO userpo,long money){
+		System.out.println("用户提现成功");
+		userpo.setWallet(userpo.getWallet()-money);
+		conn_user.saveOrUpdate(userpo);
+	}
 	
 
 }

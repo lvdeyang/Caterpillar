@@ -615,7 +615,7 @@ html, body {
 		var url=window.BASEPATH+'website/wxpay/mmpay?userId='+userId+'&orderNo='+orderNo;
 		$.get(url,null,function(data){
 				data = parseAjaxResult(data);
-					alert(11111)
+				 if(data==1)window.location.reload();
 		})
 	}
 	
@@ -634,12 +634,8 @@ html, body {
 		        		var userId=${userId};
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		                //每五秒刷新订单状态
-		               $.post(window.BASEPATH+'pubnum/wallet/updata',{'userId':userId,'orderId':orderNo},function(){
-		               		$.confirm("您已充值成功，感谢您的使用！", function() {
-									  window.location.reload();
-									  }, function() {
-									  window.location.reload();
-									  });
+		               $.post(window.BASEPATH+'pubnum/wallet/updata',{'userId':userId,'orderId':orderNo},function(data){
+									  if(data==1)window.location.reload();
 		            	}) 
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") { 
