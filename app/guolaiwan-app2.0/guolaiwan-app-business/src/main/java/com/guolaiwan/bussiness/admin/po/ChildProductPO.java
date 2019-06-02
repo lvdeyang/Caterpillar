@@ -44,10 +44,10 @@ public class ChildProductPO extends AbstractBasePO {
 	private String childLatitude;
 
 	//微信经度
-	private String WxChildLongitude;
+	private String wxChildLongitude;
 	
 	//微信纬度
-	private String WxChildLatitude;
+	private String wxChildLatitude;
 	
 	//产品id
 	private long productID;
@@ -76,19 +76,19 @@ public class ChildProductPO extends AbstractBasePO {
 	
 
 	public String getWxChildLongitude() {
-		return WxChildLongitude;
+		return wxChildLongitude;
 	}
 
 	public void setWxChildLongitude(String wxChildLongitude) {
-		WxChildLongitude = wxChildLongitude;
+		this.wxChildLongitude = wxChildLongitude;
 	}
 
 	public String getWxChildLatitude() {
-		return WxChildLatitude;
+		return wxChildLatitude;
 	}
 
 	public void setWxChildLatitude(String wxChildLatitude) {
-		WxChildLatitude = wxChildLatitude;
+		this.wxChildLatitude = wxChildLatitude;
 	}
 
 	public String getEnglishContent() {

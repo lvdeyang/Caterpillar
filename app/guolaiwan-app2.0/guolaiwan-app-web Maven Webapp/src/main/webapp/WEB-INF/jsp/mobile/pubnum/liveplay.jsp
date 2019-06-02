@@ -570,20 +570,29 @@ html, body {
 	  
 	  
 	  $(document).on('click','#save',function(){
-	      var _uriaddMsg = window.BASEPATH + 'phoneApp/addMessage';
-		  var params={};
-		  params.liveId=${live.id};
-		  params.userId=${userId};
-		  params.message=$('#message').val();
-			$.post(_uriaddMsg, $.toJSON(params), function(data){
-				data = parseAjaxResult(data);
-			
-				 if(valve == 1 ){
-				   $.toast("评论成功!");
-				} 
-				 $('#message').val('');
-				  refreshMsg();	
-			});
+	      if($(".pushGift").hasClass("show")){
+	      
+	      			$('.readyBuy').fadeOut().removeClass("show");
+		            // 其他
+		            $('.giftNumber').val(1);
+		            $(".pushGift").fadeOut().removeClass("show");
+	      
+	      }else{
+		      var _uriaddMsg = window.BASEPATH + 'phoneApp/addMessage';
+			  var params={};
+			  params.liveId=${live.id};
+			  params.userId=${userId};
+			  params.message=$('#message').val();
+				$.post(_uriaddMsg, $.toJSON(params), function(data){
+					data = parseAjaxResult(data);
+				
+					 if(valve == 1 ){
+					   $.toast("评论成功!");
+					} 
+					 $('#message').val('');
+					  refreshMsg();	
+				});
+			}
 	  });
 	  
 	  

@@ -156,7 +156,7 @@ public class GuideController extends WebBaseControll  {
 	
 	/**
 	 * 
-	 * 查询       贴图  xy   导览图片      初始显示位置
+	 * 清除用户浏览记录
 	 * @param productId
 	 * @param page
 	 * @param request
@@ -170,7 +170,6 @@ public class GuideController extends WebBaseControll  {
 			throws Exception {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 		List<UserInfoPO> upolist = conn_userInfo.getUserByUid(userId);
-		String childId =   upolist.get(0).getChildId();
 		String str = "";
 		upolist.get(0).setChildId(str);
 		conn_userInfo.saveOrUpdate(upolist.get(0));

@@ -3,9 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
-
-request.getServerPort()
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	String weburl=WXContants.Website;
 %>
@@ -28,9 +26,7 @@ request.getServerPort()
 <!-- 为移动设备添加 viewport -->
 <meta name="viewport"
 	content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
-<!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 
-
-http://bigc.at/ios-webapp-viewport-meta.orz -->
+<!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
 
 <!-- iOS 设备 begin -->
 <meta name="apple-mobile-web-app-title" content="标题">
@@ -520,7 +516,7 @@ html, body {
 	  
 	getloca()
 	  var loca={};
-          var la=0;
+           var la=0;
           var lo=0;
 	  function getloca(){
 	      
@@ -533,7 +529,7 @@ html, body {
 				if(data){
            
 					loca=data;
-                    setInterval(function(){getLoation()},5000); 
+                                        setInterval(function(){getLoation()},5000); 
 				}
 				
 		  });
@@ -543,21 +539,13 @@ html, body {
 	  
 	  function getLoation(){
 	       wx.config({
-	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查
-
-看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            //                                debug : true, // 开启调试模式,调用的所有api的
-
-返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才
-
-会打印。
+	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 	            appId : loca.appId, // 必填，公众号的唯一标识
 	            timestamp : loca.timestamp, // 必填，生成签名的时间戳
 	            nonceStr : loca.nonceStr, // 必填，生成签名的随机串
 	            signature : loca.signature,// 必填，签名，见附录1
-	            jsApiList : ['checkJsApi','getLocation'] // 必填，需要使用的JS接口列表，所有JS
-
-接口列表见附录2
+	            jsApiList : ['checkJsApi','getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         	});
 	        wx.ready(function() {
 	            wx.getLocation({  
@@ -568,10 +556,8 @@ html, body {
 	                    var speed = res.speed; // 速度，以米/每秒计  
 	                    var accuracy = res.accuracy; // 位置精度  
 	                    $('#test').append(latitude+","+longitude+"<br>");
-                            if(la){
-                                $('#test').append("偏移："+getDistance
-
-(latitude,la,longitude,lo)+"<br>");
+                            if(la!=0){
+                                $('#test').append("偏移："+GetDistance(la,lo,latitude,longitude)+"<br>");
                             }
                             la=latitude;
                             lo=longitude;
@@ -594,22 +580,17 @@ html, body {
 	  }
 	  
 	 
-                 function getDistance(lat1,lat2,lng1,lng2){
- var radLat1 = rad(lat1);
-                            var radLat2 = rad(lat2);
-                            var a = radLat1 - radLat2;
-                            var b = rad(lng1) - rad(lng2);
-                            var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + 
-
-Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
-                            s = s * 6378.137;
-                            // EARTH_RADIUS;
-                            s = Math.round(s * 10000) / 10000;
-                 
-
-                 }
-
-
+                function GetDistance( lat1,  lng1,  lat2,  lng2){
+    var radLat1 = lat1*Math.PI / 180.0;
+    var radLat2 = lat2*Math.PI / 180.0;
+    var a = radLat1 - radLat2;
+    var  b = lng1*Math.PI / 180.0 - lng2*Math.PI / 180.0;
+    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
+    Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+    s = s *6378.137 ;// EARTH_RADIUS;
+    s = Math.round(s * 10000) / 10000;
+    return s;
+}
 	
 	});
 </script>

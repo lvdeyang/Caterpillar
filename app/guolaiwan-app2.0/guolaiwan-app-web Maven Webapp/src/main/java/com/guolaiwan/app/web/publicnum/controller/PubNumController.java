@@ -63,6 +63,7 @@ import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
+import com.guolaiwan.bussiness.admin.dao.OlChatMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderPeopleDao;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
@@ -90,6 +91,7 @@ import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
+import com.guolaiwan.bussiness.admin.po.OlChatMessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SurpportBuyPo;
@@ -117,9 +119,11 @@ public class PubNumController extends WebBaseControll {
 
 	private boolean istest = WXContants.istest;
 	@Autowired
-	SystemCacheDao conn_systemcache;
+	private SystemCacheDao conn_systemcache;
 	@Autowired
-	InvestWalletDAO conn_investwallet;
+	private InvestWalletDAO conn_investwallet;
+	@Autowired
+	private OlChatMessageDAO conn_olchatmessage;
 
 	@RequestMapping(value = "/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
@@ -252,6 +256,14 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubnum/merchant");
 		mv.addObject("merchantId", merchantId);
+		long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		long merchantUserId=conn_merchant.get(merchantId).getUser().getId();
+		//判断此时登录的人是不是该商户房间的商户
+		if(userId==merchantUserId){
+			mv.addObject("ismerchant", 1);
+		}else{
+			mv.addObject("ismerchant", 2);
+		}
 		return mv;
 	}
 
@@ -266,6 +278,14 @@ public class PubNumController extends WebBaseControll {
 		case "MERCHANT":
 			mv = new ModelAndView("mobile/pubnum/merchant");
 			mv.addObject("merchantId", code);
+			long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+			long merchantUserId=conn_merchant.get(code).getUser().getId();
+			//判断此时登录的人是不是该商户房间的商户
+			if(userId==merchantUserId){
+				mv.addObject("ismerchant", 1);
+			}else{
+				mv.addObject("ismerchant", 2);
+			}
 			break;
 
 		case "PRODUCT":
@@ -1237,7 +1257,16 @@ public class PubNumController extends WebBaseControll {
 		Long productid = Long.valueOf(request.getParameter("productId"));
 		ProductPO productPO = conn_product.get(productid);
 		mv = new ModelAndView("mobile/pubnum/merchant");
-		mv.addObject("merchantId", productPO.getProductMerchantID());
+		long merchantId=productPO.getProductMerchantID();
+		mv.addObject("merchantId", merchantId);
+		long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		long merchantUserId=conn_merchant.get(merchantId).getUser().getId();
+		//判断此时登录的人是不是该商户房间的商户
+		if(userId==merchantUserId){
+			mv.addObject("ismerchant", 1);
+		}else{
+			mv.addObject("ismerchant", 2);
+		}
 		return mv;
 
 	}
@@ -2025,14 +2054,18 @@ public class PubNumController extends WebBaseControll {
 			conn_investwallet.save(order);
 			return success(order);
 		} else {
-			money = -(money * 100);
-			System.out.println(money + "----------------------提现");
 			UserInfoPO user = conn_user.get(id);
-			order.setUsername(user.getUserNickname());
-			order.setUserid(id);
-			order.setMoney(money);
-			conn_investwallet.save(order);
-			return success(order);
+			if(user.getWallet()>=money*100){
+				money = -(money * 100);
+				System.out.println(money + "----------------------提现");
+				order.setUsername(user.getUserNickname());
+				order.setUserid(id);
+				order.setMoney(money);
+				conn_investwallet.save(order);
+				return success(order);
+			}else{
+				return success(2);
+			}
 		}
 
 	}
@@ -2099,8 +2132,7 @@ public class PubNumController extends WebBaseControll {
 		OrderInfoPO order = conn_order.get(orderId);
 		long productPrice = order.getPayMoney();
 		long userMoney = user.getWallet();
-		System.out
-				.println(orderId + "--------" + id + "--------" + productPrice + "--------" + userMoney + "---------");
+		System.out.println(orderId + "--------" + id + "--------" + productPrice + "--------" + userMoney + "---------");
 		if (userMoney >= productPrice) {
 			user.setWallet(userMoney - productPrice);
 			order.setOrderState(OrderStateType.PAYSUCCESS);
@@ -2494,5 +2526,75 @@ public class PubNumController extends WebBaseControll {
 		mv.addObject("orderId", orderId);
 		return mv;
 	}
-
+	
+	/**
+	 * 轮询消息的方法
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getolchat")
+	public List<OlChatMessagePO> getOlChat(HttpServletRequest request){
+		//商户id
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		
+		System.out.println("-------"+merchantId);
+		List<OlChatMessagePO> msgs = conn_olchatmessage.findByFlag(merchantId);
+		System.out.println(msgs.size()+"++++++++++000000000000000000");
+		return msgs;
+	}
+	
+	
+	/**
+	 * 页面发送消息的方法
+	 * @param request
+	 * @return
+	 */
+	@JsonBody
+	@RequestMapping("/pullolchat")
+	public Object pullolchat(HttpServletRequest request){
+		//fromuserId
+		long userId=Long.parseLong(request.getParameter("userId"));
+		//商户的id
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		//发送的数据
+		String msg=request.getParameter("message");
+		//发给的userID
+		long touser;
+		//如果页面带回来有touser 就对这个id发送 没有就是给商户发送
+		if(request.getParameter("touser")!=""&request.getParameter("touser")!=null){
+			touser=Long.parseLong(request.getParameter("touser"));
+		}else{
+			//商家的userId
+			touser=conn_merchant.get(merchantId).getUser().getId();
+		}
+		UserInfoPO userpo = conn_user.get(userId);
+		OlChatMessagePO ol=new OlChatMessagePO();
+		ol.setFlag(false);
+		ol.setFromuser(userpo.getUserNickname());
+		ol.setFromuserId(userId);
+		ol.setMerchantId(merchantId);
+		ol.setMessage(msg);
+		ol.setTouserId(touser);
+		ol.setUserheadimg(userpo.getUserHeadimg());
+		conn_olchatmessage.save(ol);
+		return request;
+	}
+	
+	/**
+	 * 在页面展示之后 将是否发送过修改为是
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/updateflag")
+	public Object updateflag(HttpServletRequest request){
+		//需要修改的消息id
+		long id=Long.parseLong(request.getParameter("id"));
+		OlChatMessagePO ol = conn_olchatmessage.get(id);
+		//发送过就修改成已发送  true:已发送  flase：未发送
+		ol.setFlag(true);
+		conn_olchatmessage.saveOrUpdate(ol);
+		return success();
+	}
 }
