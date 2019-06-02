@@ -23,7 +23,7 @@
     	function initMenu(num){
     	   var menuHtml=[];
 		
-		   menuHtml.push('<div class="weui-navbar" style="position:fixed;bottom:0px;top:auto">');
+		   menuHtml.push('<div class="weui-navbar" style="position:fixed;bottom:0px;top:auto;">');
 		   menuHtml.push('<div id="index" class="bottomMenu weui-navbar__item '+(num==1?'weui_bar__item_on':'')+'">');
 		   menuHtml.push('<span class="icon-home"></span>主页');
 		   menuHtml.push('</div>');
@@ -114,7 +114,7 @@
 		   nameHeader='全域休闲';
 		   phone='010-89991991';
 		}
-		$('.header-content').html('<image src="lib/images/logo.jpg" style="position:absolute;margin-top:5px;width:25px;height:25px;display:inline-block;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="headerName">'+nameHeader+'</span><div id="phone" style="font-size:10px;position:absolute;margin-top:-38px;z-index:1000;right:40px">'+phone+'</div>'
+		$('.header-content').html('<image src="lib/images/logo.jpg" style="position:absolute;margin-top:5px;width:25px;height:25px;display:inline-block;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="headerName" style="font-size:14px">'+nameHeader+'</span><div id="phone" style="font-size:10px;position:absolute;margin-top:-38px;z-index:1000;right:40px">'+phone+'</div>'
 		+str);
 		$('.header').css('background',"#FFF").css('color','#000');
 		

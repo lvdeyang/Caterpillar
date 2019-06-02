@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.interfac.util.HttpUtils;
 import com.guolaiwan.app.web.admin.vo.BalanceVO;
 import com.guolaiwan.app.web.admin.vo.ChildProductVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
@@ -63,6 +66,8 @@ import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
+import com.guolaiwan.bussiness.admin.dao.MessageDAO;
+import com.guolaiwan.bussiness.admin.dao.OlChatMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderPeopleDao;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
@@ -90,6 +95,8 @@ import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
+import com.guolaiwan.bussiness.admin.po.MessagePO;
+import com.guolaiwan.bussiness.admin.po.OlChatMessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SurpportBuyPo;
@@ -117,9 +124,13 @@ public class PubNumController extends WebBaseControll {
 
 	private boolean istest = WXContants.istest;
 	@Autowired
-	SystemCacheDao conn_systemcache;
+	private SystemCacheDao conn_systemcache;
 	@Autowired
-	InvestWalletDAO conn_investwallet;
+	private InvestWalletDAO conn_investwallet;
+	@Autowired
+	private OlChatMessageDAO conn_olchatmessage;
+	@Autowired
+	private MessageDAO messagedao;
 
 	@RequestMapping(value = "/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
@@ -252,6 +263,14 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubnum/merchant");
 		mv.addObject("merchantId", merchantId);
+		long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		long merchantUserId = conn_merchant.get(merchantId).getUser().getId();
+		// 判断此时登录的人是不是该商户房间的商户
+		if (userId == merchantUserId) {
+			mv.addObject("ismerchant", 1);
+		} else {
+			mv.addObject("ismerchant", 2);
+		}
 		return mv;
 	}
 
@@ -266,6 +285,14 @@ public class PubNumController extends WebBaseControll {
 		case "MERCHANT":
 			mv = new ModelAndView("mobile/pubnum/merchant");
 			mv.addObject("merchantId", code);
+			long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+			long merchantUserId = conn_merchant.get(code).getUser().getId();
+			// 判断此时登录的人是不是该商户房间的商户
+			if (userId == merchantUserId) {
+				mv.addObject("ismerchant", 1);
+			} else {
+				mv.addObject("ismerchant", 2);
+			}
 			break;
 
 		case "PRODUCT":
@@ -1237,7 +1264,16 @@ public class PubNumController extends WebBaseControll {
 		Long productid = Long.valueOf(request.getParameter("productId"));
 		ProductPO productPO = conn_product.get(productid);
 		mv = new ModelAndView("mobile/pubnum/merchant");
-		mv.addObject("merchantId", productPO.getProductMerchantID());
+		long merchantId = productPO.getProductMerchantID();
+		mv.addObject("merchantId", merchantId);
+		long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		long merchantUserId = conn_merchant.get(merchantId).getUser().getId();
+		// 判断此时登录的人是不是该商户房间的商户
+		if (userId == merchantUserId) {
+			mv.addObject("ismerchant", 1);
+		} else {
+			mv.addObject("ismerchant", 2);
+		}
 		return mv;
 
 	}
@@ -2025,14 +2061,18 @@ public class PubNumController extends WebBaseControll {
 			conn_investwallet.save(order);
 			return success(order);
 		} else {
-			money = -(money * 100);
-			System.out.println(money + "----------------------提现");
 			UserInfoPO user = conn_user.get(id);
-			order.setUsername(user.getUserNickname());
-			order.setUserid(id);
-			order.setMoney(money);
-			conn_investwallet.save(order);
-			return success(order);
+			if (user.getWallet() >= money * 100) {
+				money = -(money * 100);
+				System.out.println(money + "----------------------提现");
+				order.setUsername(user.getUserNickname());
+				order.setUserid(id);
+				order.setMoney(money);
+				conn_investwallet.save(order);
+				return success(order);
+			} else {
+				return success(2);
+			}
 		}
 
 	}
@@ -2493,6 +2533,156 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/logisticspage");
 		mv.addObject("orderId", orderId);
 		return mv;
+	}
+
+	/**
+	 * 轮询消息的方法
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getolchat")
+	public List<OlChatMessagePO> getOlChat(HttpServletRequest request) {
+		// 商户id
+		long merchantId = Long.parseLong(request.getParameter("merchantId"));
+
+		System.out.println("-------" + merchantId);
+		List<OlChatMessagePO> msgs = conn_olchatmessage.findByFlag(merchantId);
+		System.out.println(msgs.size() + "++++++++++000000000000000000");
+		return msgs;
+	}
+
+	/**
+	 * 页面发送消息的方法
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@JsonBody
+	@RequestMapping("/pullolchat")
+	public Object pullolchat(HttpServletRequest request) {
+		// fromuserId
+		long userId = Long.parseLong(request.getParameter("userId"));
+		// 商户的id
+		long merchantId = Long.parseLong(request.getParameter("merchantId"));
+		// 发送的数据
+		String msg = request.getParameter("message");
+		// 发给的userID
+		long touser;
+		// 如果页面带回来有touser 就对这个id发送 没有就是给商户发送
+		if (request.getParameter("touser") != "" & request.getParameter("touser") != null) {
+			touser = Long.parseLong(request.getParameter("touser"));
+		} else {
+			// 商家的userId
+			touser = conn_merchant.get(merchantId).getUser().getId();
+		}
+		UserInfoPO userpo = conn_user.get(userId);
+		OlChatMessagePO ol = new OlChatMessagePO();
+		ol.setFlag(false);
+		ol.setFromuser(userpo.getUserNickname());
+		ol.setFromuserId(userId);
+		ol.setMerchantId(merchantId);
+		ol.setMessage(msg);
+		ol.setTouserId(touser);
+		ol.setUserheadimg(userpo.getUserHeadimg());
+		conn_olchatmessage.save(ol);
+		return request;
+	}
+
+	/**
+	 * 在页面展示之后 将是否发送过修改为是
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/updateflag")
+	public Object updateflag(HttpServletRequest request) {
+		// 需要修改的消息id
+		long id = Long.parseLong(request.getParameter("id"));
+		OlChatMessagePO ol = conn_olchatmessage.get(id);
+		// 发送过就修改成已发送 true:已发送 flase：未发送
+		ol.setFlag(true);
+		conn_olchatmessage.saveOrUpdate(ol);
+		return success();
+	}
+
+	// 调用阿里云接口发送base64的编码返回信息
+	@ResponseBody
+	@RequestMapping(value = "/IdentityCard", method = RequestMethod.POST)
+	public Map<String, String> IdentityCard(String localData) throws Exception {
+		String host = "https://yixi.market.alicloudapi.com";
+		String path = "/ocr/idcard";
+		String method = "POST";
+		String appcode = "7fe03d3c707e4f1699cf999a30b6bf90";
+		String image = localData;
+		Map<String, String> headers = new HashMap<String, String>();
+		// 最后在header中的格式(中间是英文空格)为Authorization:APPCODE
+		// 83359fd73fe94948385f570e3c139105
+		headers.put("Authorization", "APPCODE " + appcode);
+		// 根据API的要求，定义相对应的Content-Type
+		headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		Map<String, String> bodys = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
+		bodys.put("image", image);
+		bodys.put("side", "front");
+		try {
+			HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+			String ss = EntityUtils.toString(response.getEntity());
+			String aString = "[" + ss + "]";
+			System.out.println(aString);
+			List<Map> list = JSONObject.parseArray(aString, Map.class);
+			String name = list.get(0).get("data").toString();
+
+			name = name.substring(0, name.length() - 1);
+			name = name.substring(1);
+			String[] str1 = name.split(",");
+			// 创建Map对象
+
+			// 循环加入map集合
+			for (int i = 0; i < str1.length; i++) {
+				// 根据":"截取字符串数组
+				String[] str2 = str1[i].split(":");
+				String name1 = str2[0].substring(1);
+				name1 = name1.substring(0, name1.length() - 1);
+				String name2 = str2[1].substring(1);
+				name2 = name2.substring(0, name2.length() - 1);
+				map.put(name1, name2);
+			}
+			Map<String, String> hashMap = new HashMap<String, String>();
+			hashMap.put("name", map.get("姓名"));
+			hashMap.put("sfz", map.get("公民身份号码"));
+			hashMap.put("msg", "0");
+			System.out.println(map);
+			return hashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("msg", "1");
+			return map;
+		}
+
+	}
+
+	// 保存身份证信息
+	@ResponseBody
+	@RequestMapping(value = "/addmessage", method = RequestMethod.POST)
+	public Map<String, String> addmessage(String localData, String idnums, String name) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			MessagePO messagePO = new MessagePO();
+			messagePO.setName(name);
+			messagePO.setBase(localData);
+			messagePO.setNumber(idnums);
+			messagedao.save(messagePO);
+			map.put("msg", "0");
+			return map;
+		} catch (Exception e) {
+			// TODO: handle exception
+			map.put("msg", "1");
+		}
+		return map;
 	}
 
 }
