@@ -27,7 +27,6 @@
 <meta name="viewport"
 	content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
 <!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
-
 <!-- iOS 设备 begin -->
 <meta name="apple-mobile-web-app-title" content="标题">
 <!-- 添加到主屏后的标题（iOS 6 新增） -->
@@ -88,6 +87,7 @@ html, body {
 	position: relative;
 	-webkit-text-size-adjust: none;
 	background-color: #fbfbfb;
+	text-decoration: none !important;
 }
 
 * {
@@ -485,8 +485,23 @@ html, body {
 	 
     }
     
-    
+    a:link {
+	 text-decoration: none !important;
+	}
+	a:visited {
+	 text-decoration: none !important;
+	}
+	a:hover {
+	 text-decoration: none !important;
+	}
+	a:active {
+	 text-decoration: none !important;
+	}
 
+  .weui-search-bar__label{
+  
+  border-radius:20px;
+  }
 </style>
 
 </head>
@@ -496,8 +511,36 @@ html, body {
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
 <script type="text/javascript">
 
+/*记录历史位置  */
+       $(function () {
+var str = window.location.href;
+str = str.substring(str.lastIndexOf("/") + 1);
+if ($.cookie(str)) {
+$("html,body").animate({ scrollTop: $.cookie(str) }, 1000);
+}
+});
+$(window).scroll(function () {
+var str = window.location.href;
+str = str.substring(str.lastIndexOf("/") + 1);
+var top = $(document).scrollTop();
+$.cookie(str, top, { path: '/' });
+return $.cookie(str);
+});  
+/*  $(function() {
+        var loading = '<div id="loading"><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504002746731&di=a7d82714e2b6a150ecb6ab45d2dc73b9&imgtype=0&src=http%3A%2F%2Falcastongallery.com.au%2Fassets%2Fimages%2Fajax-loader.gif"></div>';
+        $('body').append($(loading));
+ 
+        setTimeout(function () {
+            $('#loading').remove();
+        }, 3000);
+    }); */
+
+
+   
 	$(function() {
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
@@ -693,7 +736,8 @@ html, body {
 					$('#headerWrapper').append(html.join(''));
 					$("#headerSwiper").swiper({
 				        loop: true,
-				        autoplay: 3000
+				        autoplay: 3000,
+				        autoplayDisableOnInteraction : false
 				      });
 				}
 		 });
@@ -850,8 +894,8 @@ html, body {
 	              continue;
 	           }
 	         
-	           html.push('<p style="height:1px;"></p>');
-	           html.push('<div style="width:100%;height:30px;text-align:center;font-weight:bold;background-color: #f4f4f4;font-size:20px;">'+modals[i].modularName+'<div class="hrefModal" id="hmodal-'+modals[i].modularCode+'" style="font-size:10px;position:absolute;margin-top:-20px;z-index:499;color:#a6a6a6;right:10px">查看全部></div></div>');
+	           /* html.push('<p style="height:1px;"></p>'); */
+	           html.push('<div style="width:100%;height:30px;text-align:center;font-weight:bold;background-color: #f4f4f4;font-size:20px;">'+modals[i].modularName+'<div class="hrefModal" id="hmodal-'+modals[i].modularCode+'" style="font-size:14px;position:absolute;margin-top:-23px;z-index:499;color:#a6a6a6;right:10px">查看全部></div></div>');
 	           html.push('<br />');
 	           html.push('<div class="zong" style="width:100%;position: relative;">');
 	              html.push('<button id="fav"class="collect" value="'+merchants[0].id+'" style="position: absolute;top:30%;left:80%;float:right;width:17%;height:35px;font-size:14px;border-radius: 25px;color:#F6A2A2;background:#ffffff;border:1px solid #F6A2A2 ;outline:none;margin-right:5%;z-index:10;">+ 收藏</button>');
@@ -863,9 +907,11 @@ html, body {
 		       html.push('<div style="width:80%;float:left;font-size:12px;padding-left:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+merchants[0].shopAddress+'</div>');
                html.push('<div style="width;100%;margin-top:15px;height:90px;float:left;margin-left:12px">');
                var morePics=merchants[0].shopMpic.split(',');
-               html.push('<image style="width:32%;height:90px;float:left;" src="'+morePics[0]+'"/>');
-		       html.push('<image style="width:32%;height:90px;float:left;margin-left:1%" src="'+morePics[1]+'"/>');
-		       html.push('<image style="width:32%;height:90px;float:left;margin-left:1%" src="'+morePics[2]+'"/>');
+               html.push('<image style="width:32%;height:90px;display: inline-block;" src="'+morePics[0]+'"/>');
+		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" src="'+morePics[1]+'"/>');
+		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" src="'+morePics[2]+'"/>');
+		       html.push('<div style="width:100%;height:47px;display:block;">');
+	           html.push('</div>');
 		       html.push('</div>');
 		       html.push('</div>');
 		       html.push('<div id="commnetUser-'+merchants[0].id+'" style="height:25px;width:90%;margin-left:12px;margin-top:30px;float:left;">');
@@ -876,7 +922,7 @@ html, body {
 		       html.push('<div style="margin-top:50px;'+addStyle+'" class="weui-panel__bd" class="columnRecomments">');
 			   html.push('<div class="weui-panel__bd">'); 
 			   for(var j=1;j<merchants.length;j++){
-				   html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'">');
+				   html.push('<a  href="javascript:void(0);"  class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'">');
 				   html.push('<div class="weui-media-box__hd">');
 				   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].shopHeading+'">');
 				   html.push('</div>');
@@ -889,6 +935,7 @@ html, body {
 			   
 			   }
 			   html.push('</div></div>');
+			  
 			    $('#content').append(html.join(''));
                getCommentUser(merchants[0].id);
 	        }
@@ -1046,19 +1093,23 @@ html, body {
 	            
 	       });
         }
+	   
+
+   
 	
-	
+
 	
 	});
 </script>
 
 
 
+
+
 <body>
-	<div id="page">
-		<!-- 主页 -->
+			<!-- 主页 -->
 		
-		
+
 		<div class="header">
 			<div class="wrapper">
 					<!-- <select style="float:left;font-size:11px;width:120px;height:40px;" class="weui-select" id="com"></select> -->
@@ -1082,9 +1133,13 @@ html, body {
 			  </div>
 			</div>
             
-           <div id="searchimg" style="width:100%;height:50px">
-              <image src="lib/images/search.jpg" style="width:100%;height:50px"/>
-           </div>
+            <div id="searchimg" style="width:80%;margin:0 auto;opacity:0.5;height:45px;position: relative;top:10px;z-index:11111;cursor: pointer;">
+              <!-- <image src="lib/images/search.jpg" style="width:100%;height:50px"/> -->
+               <label style="border:1px solid #9B9B9B" class="weui-search-bar__label" id="searchText">
+				      <i style="margin: auto;margin-top: 3%;" class="weui-icon-search"></i>
+				      <span style="margin: auto;margin-top: 3%;">搜索</span>
+				    </label>
+           </div> 
             
 		    
 		    
@@ -1121,6 +1176,7 @@ html, body {
 		    
 		</div>
 	</div>
+	 
 </body>
 
 

@@ -482,6 +482,12 @@ html, body {
 	text-align: center;
 	font-size: 12px;
 }
+.weui-count .weui-count__btn:after {
+    height: 11px;
+    width: 1px;
+    margin-top: -4.5px;
+    margin-left: -0.5px;
+}
 </style>
 
 </head>
