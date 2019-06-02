@@ -112,17 +112,14 @@ public class WXPay {
         reqData.put("mch_appid", config.getAppID());
         reqData.put("mchid", config.getMchID());
         reqData.put("nonce_str", WXPayUtil.generateUUID());
-        if (SignType.MD5.equals(this.signType)) {
-            reqData.put("sign_type", WXPayConstants.MD5);
-        }
-        else if (SignType.HMACSHA256.equals(this.signType)) {
-            reqData.put("sign_type", WXPayConstants.HMACSHA256);
-        }
         System.out.println("3"+reqData);
         reqData.put("sign", WXPayUtil.generateSignature(reqData, config.getKey(), this.signType));
         System.out.println("4"+reqData);
         return reqData;
     }
+    
+    
+    
     
 
     /**

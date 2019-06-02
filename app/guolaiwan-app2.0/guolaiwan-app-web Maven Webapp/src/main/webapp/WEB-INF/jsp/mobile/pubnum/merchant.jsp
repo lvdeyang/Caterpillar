@@ -766,46 +766,69 @@ html, body {
 	});
 </script>
 <script type="text/javascript">
-	var ws;
-	var target="ws://localhost:8080/guolaiwan-app-web/echo?merchantId=${merchantId}=${userId}";
-	
 	$(function() {
-	 	if ('WebSocket' in window) {
-                ws = new WebSocket(target);
-            } else if ('MozWebSocket' in window) {
-                ws = new MozWebSocket(target);
-            } else {
-            
-                $.alert('您的浏览器不支持在线咨询');
-                return;
-            }
-	 	ws.onmessage=function(msg){
-	 		var text = msg.data,
-	        
-	            	ans  = '<div class="answer"><div class="heard_img left"><img src="lib/images/man_9.png"></div>';
-	            	ans += '<div class="answer_text"><p>'+text+'</p><i></i>';
-	        		ans += '</div></div>';
-	        	$('.speak_box').append(ans);
-				for_bottom();
-	 }
-	 	
-	 	 window.onbeforeunload = function(event) {
-                ws.onclose =function(){};
-                ws.close();
-            }
+		//轮询任务
+		window.setInterval(function () {
+			var url=window.BASEPATH+'pubnum/getolchat';
+			var userId=${userId};
+			var merchantId=${merchantId};
+				$.post(url,{"merchantId":merchantId},function(data){
+					//从属于这个商户房间信息中查询未发送的信息遍历
+					for(var i=0;i<data.length;i++){	
+							//查找出这个房间touser是登录人的信息展示出来
+							if(data[i].touserId==userId&&data[i].merchantId==merchantId){
+								$('.ltname').text(data[i].fromuser);
+								ans  = '<div class="answer"><div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
+				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
+				        		ans += '</div></div>';
+				        		$('.speak_box').append(ans);
+								for_bottom();
+								//记录消息来自谁放到三方待用
+								$('.touser').val(data[i].fromuserId);
+								//修改展示完成的数据flag
+								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
+							}
+							
+						}
+					})
+		},5000);
+    })   
+	            	
 	 
-	 })
 	
-	
+	//消息发送方法
 	 function SubSend(){
-	 	var message=document.getElementById("left").value;
-	 	ws.send(message);
+	 	var message="";
+	 	var userId=${userId};
+		var merchantId=${merchantId};
+		//是否是商家
+		var ismerchant=${ismerchant};
+		//存数据库的路径
+	 	var url=window.BASEPATH+'pubnum/pullolchat';
+		//获取要发送的对象 
+		var touser="";
+		//如果是商家就获得touser对象 不是就为""后台判定touser为商家
+		if(ismerchant==1){
+			touser=$('.touser').val();
+		}else{
+			touser="";
+		}
+	 	//输入框判空
+	 	if(document.getElementById("left").value!=""&&document.getElementById("left").value!=null){
+	 		message=document.getElementById("left").value;
+	 	}else{
+	 		$.alert('输入不能为空！');
+	 		return;
+	 	}
 	 		str  = '<div class="question">';
-	        str += '<div class="heard_img right"><img src="lib/images/man_9.png"></div>';
+	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
 	 	$('.left').val("");
+	 	//将发送的信息存入数据库 
+	 	$.post(url,{"userId":userId,"merchantId":merchantId,"message":message,"touser":touser},function(data){
+	 	})
 	 }
 	 
 	/*显示隐藏切换  */
@@ -862,7 +885,16 @@ html, body {
 	autoWidth();
 	
 	
-	
+	$(document).on('click','.olline',function(){
+	 		if( $(".chatline").hasClass("show") ){
+		            // 执行隐藏
+		            $(".chatline").fadeOut().removeClass("show");
+		            // 其他
+		        }else{
+		            // 显示
+		            $(".chatline").fadeIn().addClass("show");
+		        }
+	 });
 	
 </script>
 
@@ -871,7 +903,7 @@ html, body {
 
 <div class="zhuye" style="">
 
-	
+	<input type="text" class="touser" hidden="hidden" value="">
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
@@ -951,14 +983,17 @@ html, body {
 	
 
 
-
+<div class="chatline" style="background-color: black;height: 50px;z-index: 111111111111111;"></div>
 
 	<!-- 对话框 -->
 <div class="duihua" style="width:100%;height:100%;z-index:1111;display: none;">
 	
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
-	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span>想念</span></p>	
+	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
+		<c:if test="${ismerchant==1}">
+		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
+		</c:if>
 	</div>
 	<div class="speak_box">
 		<div class="answer">

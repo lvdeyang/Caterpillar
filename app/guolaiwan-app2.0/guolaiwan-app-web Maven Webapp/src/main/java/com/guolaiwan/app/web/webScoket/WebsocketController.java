@@ -17,10 +17,17 @@ import javax.websocket.server.ServerEndpoint;
 
 
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
+import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
 import pub.caterpillar.commons.context.SpringContext;
 import pub.caterpillar.mvc.controller.BaseController;
 
+/**
+ * webview不支持websocket 没用的类
+ * @author Administrator
+ *
+ * @param <session>
+ */
 @ServerEndpoint(value = "/echo")
 public class WebsocketController<session> extends BaseController{
 	private String merchantId;
@@ -34,7 +41,7 @@ public class WebsocketController<session> extends BaseController{
 	 * 在进入商家页面时就打开
 	 * @param session
 	 */
-	@OnOpen
+	@OnOpen 
 	public void open(Session session){
 		merchantId=session.getQueryString().split("=")[1];
 		userId=Long.parseLong(session.getQueryString().split("=")[2]);
@@ -84,7 +91,8 @@ public class WebsocketController<session> extends BaseController{
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String time = dateFormat.format(new Date());
 		UserInfoDAO user = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.UserInfoDAO");
-		String username=user.get(userId).getUserNickname();
+		UserInfoPO userInfoPO = user.get(userId);
+		String username=userInfoPO.getUserNickname();
 		System.out.println(username+"------------------------");
 		String relmsg=username+" "+time+"</br>"+msg;
 		chat(merchantId, relmsg,userId);
