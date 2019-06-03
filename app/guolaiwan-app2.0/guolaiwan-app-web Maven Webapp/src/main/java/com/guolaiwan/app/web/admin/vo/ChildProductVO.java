@@ -72,9 +72,23 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 	
 	private String linkedPoint;
 	
+	private String relevance; //下一个浏览点 
 	
 	
 	
+	
+
+	
+
+	public String getRelevance() {
+		return relevance;
+	}
+
+	public ChildProductVO setRelevance(String relevance) {
+		this.relevance = relevance;
+		return this;
+	}
+
 	public String getWxChildLongitude() {
 		return wxChildLongitude;
 	}
@@ -289,6 +303,7 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
                 .setWxChildLatitude(entity.getWxChildLatitude())
                 .setWxChildLongitude(entity.getWxChildLongitude())
 				.setChildPic(entity.getChildPic()).setContent(entity.getContent()).setChildScale(entity.getChildScale())
+				.setRelevance(entity.getRelevance())
 				.setChildRoad(entity.getChildRoad()).setIsCen(entity.getIsCen()).setProductID(entity.getProductID());
 		this.setScope(entity.getScope());
 		this.setIsTaught(entity.getIsTaught());
