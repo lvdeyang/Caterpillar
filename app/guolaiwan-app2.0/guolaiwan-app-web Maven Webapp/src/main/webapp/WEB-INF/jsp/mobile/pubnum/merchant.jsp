@@ -791,7 +791,7 @@ html, body {
 							
 						}
 					})
-		},5000);
+		},3000);
     })   
 	            	
 	 
@@ -983,7 +983,7 @@ html, body {
 	
 
 
-<div class="chatline" style="background-color: black;height: 50px;z-index: 111111111111111;"></div>
+<!-- <div class="chatline" style="background-color: black;height: 50px;z-index: 111111111111111;"></div> -->
 
 	<!-- 对话框 -->
 <div class="duihua" style="width:100%;height:100%;z-index:1111;display: none;">
@@ -991,9 +991,9 @@ html, body {
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
 	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
-		<c:if test="${ismerchant==1}">
+		<%-- <c:if test="${ismerchant==1}">
 		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
-		</c:if>
+		</c:if> --%>
 	</div>
 	<div class="speak_box">
 		<div class="answer">

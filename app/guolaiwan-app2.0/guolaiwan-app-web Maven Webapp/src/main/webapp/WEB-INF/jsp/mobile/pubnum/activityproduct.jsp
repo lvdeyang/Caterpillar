@@ -490,6 +490,47 @@ html, body {
     width:280px;
     height:280px;
 }
+
+
+
+
+
+/* 对话框样式 */   
+  input,button{outline:none;}
+	.wenwen-footer{width:100%;position:fixed;bottom:-5px;left:0;background:#fff;padding:3%;border-top:solid 1px #ddd;box-sizing:border-box;}
+	.wenwen_btn,.wenwen_help{width:15%;text-align:center;}
+	.wenwen_btn img,.wenwen_help img{height:40px;}
+	.wenwen_text{height:40px;border-radius:5px;border:solid 1px #636162;box-sizing:border-box;width:80%;text-align:center;overflow:hidden;margin-left:2%;}
+	.circle-button{padding:0 5px;}
+	.wenwen_text .circle-button{font-size:14px;color:#666;line-height:38px;}
+	.write_box{background:#fff;width:100%;height:40px;line-height:40px;}
+	.write_box input{height:40px;padding:0 5px;line-height:40px;width:100%;box-sizing:border-box;border:0;}
+	.wenwen_help button{width:100%;background:#42929d;color:#fff;border-radius:5px;border:0;height:40px;}
+	#wenwen{height:100%;}
+	.speak_window{overflow-y:scroll;height:100%;width:100%;position:fixed;top:0;left:0;}
+	.speak_box{margin-bottom:70px;padding:10px;}
+	.question,.answer{margin-bottom:1rem;}
+	.question{text-align:right;margin-top:50px;}
+	.question>div{display:inline-block;}
+	.left{float:left;}
+	.right{float:right;}
+	.clear{clear:both;}
+	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
+	.heard_img img{width:100%;height:100%}
+	.question_text,.answer_text{box-sizing:border-box;position:relative;display:table-cell;min-height:60px;}
+	.question_text{padding-right:20px;}
+	.answer_text{padding-left:20px;}
+	.question_text p,.answer_text p{border-radius:6px;padding:.5rem;margin:0;font-size:14px;line-height:40px;box-sizing:border-box;vertical-align:middle;display:table-cell;height:40px;word-wrap:break-word;}
+	.answer_text p{background:#fff;}
+	.question_text p{background:#94EB68;color:#fff;text-align:left;}
+	.question_text i,.answer_text i{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;position:absolute;top:25px;}
+	.answer_text i{border-right:10px solid #fff;left:10px;}
+	.question_text i{border-left:10px solid #94EB68;right:10px;}
+	.answer_text p a{color:#42929d;display:inline-block;}
+	audio{display:none;}
+	.saying{position:fixed;bottom:30%;left:50%;width:120px;margin-left:-60px;display:none;}
+	.saying img{width:100%;}  
+
 </style>
 
 </head>
@@ -1465,7 +1506,76 @@ html, body {
 	
 	});
 </script>
-
+<script type="text/javascript">
+	$(function() {
+		//轮询任务
+		window.setInterval(function () {
+			var url=window.BASEPATH+'pubnum/getolchat';
+			var userId=${userId};
+			var merchantId=${merchantId};
+				$.post(url,{"merchantId":merchantId},function(data){
+					//从属于这个商户房间信息中查询未发送的信息遍历
+					for(var i=0;i<data.length;i++){	
+							//查找出这个房间touser是登录人的信息展示出来
+							if(data[i].touserId==userId&&data[i].merchantId==merchantId){
+								$('.ltname').text(data[i].fromuser);
+								ans  = '<div class="answer"><div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
+				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
+				        		ans += '</div></div>';
+				        		$('.speak_box').append(ans);
+								//记录消息来自谁放到三方待用
+								$('.touser').val(data[i].fromuserId);
+								//修改展示完成的数据flag
+								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
+							}
+							
+						}
+					})
+		},3000);
+    })   
+	            	
+	 
+	
+	//消息发送方法
+	 function SubSend(){
+	 	var message="";
+	 	var userId=${userId};
+		var merchantId=${merchantId};
+		//存数据库的路径
+	 	var url=window.BASEPATH+'pubnum/pullolchat';
+		//获取要发送的对象 用户在这里问 
+		var touser="";
+	 	//输入框判空
+	 	if(document.getElementById("left").value!=""&&document.getElementById("left").value!=null){
+	 		message=document.getElementById("left").value;
+	 	}else{
+	 		$.alert('输入不能为空！');
+	 		return;
+	 	}
+	 		str  = '<div class="question">';
+	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
+	        str += '</div></div>';
+	        $('.speak_box').append(str);
+	 	$('.left').val("");
+	 	//将发送的信息存入数据库 
+	 	$.post(url,{"userId":userId,"merchantId":merchantId,"message":message,"touser":touser},function(data){
+	 	})
+	 }
+	 
+	/*显示隐藏切换  */
+	 $(document).on('click',' #socket',function(){
+	 		$(".zhuye").hide();
+	        $(".duihua").show();
+	       
+	 });
+	 
+	 $(document).on('click','.tui',function(){
+	 		$(".duihua").hide();
+	        $(".zhuye").show();
+	       
+	 });
+</script>
 
 
 <body>
@@ -1485,6 +1595,8 @@ html, body {
 			});
 		}
 	</script>
+	
+	<div class="zhuye" style="">
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
@@ -1585,6 +1697,7 @@ html, body {
 				<div
 					style="width:90%;margin-top:20px;margin-left:11px;font-size:12px;">
 					<a id="contact1" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
+					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
 				</div>	
 			</div>
 
@@ -1708,6 +1821,40 @@ html, body {
 
 			</div>
 		</div>
+		</div>
+	</div>	
+				<!-- 对话框 -->
+<div class="duihua" style="width:100%;height:100%;z-index:1111;display: none;">
+	
+<div class="speak_window" >
+<div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
+	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
+		<%-- <c:if test="${ismerchant==1}">
+		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
+		</c:if> --%>
+	</div>
+	<div class="speak_box">
+		<div class="answer">
+		</div>
+	</div>
+</div>
+<div class="wenwen-footer">
+	<div class="wenwen_btn left" onClick="to_write()"></div>
+	<div class="wenwen_text left">
+	    <div class="write_box">
+	        <input type="text" class="left" id="left" onKeyUp="keyup()" placeholder="请输入关键字" />
+	    </div> 
+	      
+	</div>
+	<div class="wenwen_help right">
+	    <button onClick="SubSend();" class="right">发送</button>
+	</div>
+	<div style="opacity:0;" class="clear"></div>
+</div>
+
+
+</div>
+		
 </body>
 
 

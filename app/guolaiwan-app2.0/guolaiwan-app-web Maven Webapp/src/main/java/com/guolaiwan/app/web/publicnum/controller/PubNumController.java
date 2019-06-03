@@ -299,6 +299,7 @@ public class PubNumController extends WebBaseControll {
 			mv = new ModelAndView("mobile/pubnum/product");
 			// 轮播图商品购买跳转 张羽 新增参数到页面 商品购买数量限制 5/2
 			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
+			mv.addObject("merchantId", conn_product.get(code).getProductMerchantID());
 			mv.addObject("id", code);
 			break;
 		default:
@@ -331,10 +332,12 @@ public class PubNumController extends WebBaseControll {
 			mv = new ModelAndView("mobile/pubnum/activityproduct");
 			mv.addObject("actId", activityproId);
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
+			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
 		} else {
 			mv = new ModelAndView("mobile/pubnum/product");
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
+			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
 		}
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
@@ -1458,6 +1461,7 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/activityproduct");
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(id);
 		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
+		mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 		mv.addObject("actId", activityPro.getId());
 		mv.addObject("id", id);
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
@@ -2543,10 +2547,7 @@ public class PubNumController extends WebBaseControll {
 	public List<OlChatMessagePO> getOlChat(HttpServletRequest request) {
 		// 商户id
 		long merchantId = Long.parseLong(request.getParameter("merchantId"));
-
-		System.out.println("-------" + merchantId);
 		List<OlChatMessagePO> msgs = conn_olchatmessage.findByFlag(merchantId);
-		System.out.println(msgs.size() + "++++++++++000000000000000000");
 		return msgs;
 	}
 
