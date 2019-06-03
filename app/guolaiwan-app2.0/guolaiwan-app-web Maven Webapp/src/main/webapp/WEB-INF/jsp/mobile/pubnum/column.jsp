@@ -187,6 +187,7 @@ html, body {
 	border-radius: 0;
 }
 
+
 .content {
 	
 }
@@ -667,7 +668,13 @@ html, body {
 　　			//判断是否滑动到页面底部
 		     if($(window).scrollTop() === $(document).height() - $(window).height()){
 				var flag=$('.flag').val();
-				if(flag==2)return;
+				if(flag==2){
+				  $.alert("没有更多数据");
+				  $('.flag').val(3);
+				return;
+				}
+				if(flag==3)return;
+				
 		           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
 				var classId=$('.chengjie').val();
 				var page=pageNumber;

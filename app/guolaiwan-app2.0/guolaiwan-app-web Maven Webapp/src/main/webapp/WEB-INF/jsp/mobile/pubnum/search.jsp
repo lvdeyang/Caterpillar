@@ -622,7 +622,7 @@ html, body {
 			    </div>
 			    <label class="weui-search-bar__label" id="searchText">
 			      <i class="weui-icon-search"></i>
-			      <span style="line-height: 45px;">搜索</span>
+			      <span style="line-height: 45px;font-weight: bold;">搜索</span>
 			    </label>
 			  </form>
 			  <a style="line-height:40px;" href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>

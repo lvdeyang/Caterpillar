@@ -588,8 +588,12 @@ html, body {
 				    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
 				    	 $.post(orderurl,{'money':input,'userId':userId,'type':2},function(data){
 				    		data = parseAjaxResult(data)
+				    		if(data==2){
+				    			$.alert('您的钱包余额不足！')
+				    		}else{
 				    		orderNo=data.id;
-				    		$.alert('提现成功'+orderNo)
+				    		mmpay(orderNo);
+				    		}
 						});
 				    		
 				    }else{
@@ -605,8 +609,15 @@ html, body {
 				});
 			}
 	
-	
-	
+	//提现方法
+	function mmpay(orderNo){
+		var userId=${userId};
+		var url=window.BASEPATH+'website/wxpay/mmpay?userId='+userId+'&orderNo='+orderNo;
+		$.get(url,null,function(data){
+				data = parseAjaxResult(data);
+				 if(data==1)window.location.reload();
+		})
+	}
 	
 	
 	function onBridgeReady(){
@@ -623,9 +634,8 @@ html, body {
 		        		var userId=${userId};
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		                //每五秒刷新订单状态
-		               $.post(window.BASEPATH+'pubnum/wallet/updata',{'userId':userId,'orderId':orderNo},function(){
-		               		$.alert('您已充值成功，感谢您的使用！')
-		               		window.location.reload();
+		               $.post(window.BASEPATH+'pubnum/wallet/updata',{'userId':userId,'orderId':orderNo},function(data){
+									  if(data==1)window.location.reload();
 		            	}) 
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") { 
@@ -659,7 +669,16 @@ html, body {
 
 
 <body>
+	<!-- 主页 -->
+	<div class="header">
+		<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+				class="icon-reorder icon-large"></span></a>
+			<div class="header-content">个人</div>
+		</div>
+	</div>
 	<div id="page" style="text-align:center;margin-top:30%;">
+		
 		<img class="jinbi" alt="" src="lib/images/jinbi.png">
 		<p class="lingqian">我的零钱</p>
 		<h1 class="money"></h1>

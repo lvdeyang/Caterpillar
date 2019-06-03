@@ -70,10 +70,21 @@ public class ChildProductPO extends AbstractBasePO {
 	
 	private int isTaught; // 是否讲解(Taught)
 	
-	private String linkedPoint;
+	private String linkedPoint;  //关联点
+	
+	private String relevance; //下一个浏览点 
 	
 	
+
 	
+
+	public String getRelevance() {
+		return relevance;
+	}
+
+	public void setRelevance(String relevance) {
+		this.relevance = relevance;
+	}
 
 	public String getWxChildLongitude() {
 		return wxChildLongitude;

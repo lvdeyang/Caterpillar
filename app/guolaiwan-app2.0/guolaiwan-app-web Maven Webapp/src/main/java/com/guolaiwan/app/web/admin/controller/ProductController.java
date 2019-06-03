@@ -1010,6 +1010,7 @@ public class ProductController extends BaseController {
 		String childLatitude = request.getParameter("childLatitude");
 		String wxChildLongitude = request.getParameter("wxChildLongitude");
 		String wxChildLatitude = request.getParameter("wxChildLatitude");
+		String relevance = request.getParameter("relevance");
 		String uuid = request.getParameter("uuid");
 		String content = request.getParameter("desc");
 		String lanId = request.getParameter("lan");
@@ -1027,6 +1028,7 @@ public class ProductController extends BaseController {
 		child.setChildLatitude(childLatitude);
 		child.setWxChildLongitude(wxChildLongitude);
 		child.setWxChildLatitude(wxChildLatitude);
+		child.setRelevance(relevance);
 		child.setContent(content);
 		child.setLanId(Long.parseLong(lanId));
 		child.setChildScale(scale);
