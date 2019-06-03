@@ -202,7 +202,7 @@ public class PubNumController extends WebBaseControll {
 			nickname = EmojiFilter.filterEmoji(userInfo.getString("nickname"));
 			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
 		} else {
-			openid = "opVUYv6B2eIPzpj4yCJBonei5yMg";
+			openid = "opVUYv7wr-zPKl92ilFpqB8yS82I";
 		}
 		/**/
 		// 测试
@@ -2092,11 +2092,9 @@ public class PubNumController extends WebBaseControll {
 	public Map<String, Object> walletPay(@PathVariable Long orderId, @PathVariable Long userId,
 			HttpServletRequest request) throws Exception {
 		String orderNo = "wallet-" + orderId;
-		System.out.println("---------------------------------" + orderNo + "---------支付");
 		InvestWalletPO order = conn_investwallet.get(orderId);
 		Long money = order.getMoney();
 		int price = money.intValue();
-		System.out.println(price + "-----------------");
 		UserInfoPO user = conn_user.get(userId);
 		YuebaWxPayConstants.set("http://" + WXContants.Website + "/website/wxreport/walletPayreport", WxConfig.appId,
 				WxConfig.appsrcret);
@@ -2126,7 +2124,7 @@ public class PubNumController extends WebBaseControll {
 		conn_user.saveOrUpdate(user);
 		// 调用方法推送充值消息给 李姐 刘姐 用户
 		sendWalletPayMessage(order);
-		return success();
+		return success(1);
 	}
 
 	// 余额购买成功修改用户余额并推送消息 张羽 5/21
@@ -2139,8 +2137,6 @@ public class PubNumController extends WebBaseControll {
 		OrderInfoPO order = conn_order.get(orderId);
 		long productPrice = order.getPayMoney();
 		long userMoney = user.getWallet();
-		System.out
-				.println(orderId + "--------" + id + "--------" + productPrice + "--------" + userMoney + "---------");
 		if (userMoney >= productPrice) {
 			user.setWallet(userMoney - productPrice);
 			order.setOrderState(OrderStateType.PAYSUCCESS);
