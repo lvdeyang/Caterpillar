@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 //import com.guolaiwan.app.web.enumeration.LoginCacheName;
@@ -295,23 +297,23 @@ public class WxPayController extends BaseController {
 		UserInfoPO userpo = conn_user.get(userId);
 		InvestWalletPO walletPO = conn_investwallet.get(orderNo);
 		long money=-(walletPO.getMoney());
-		try {
-			
+			try {
+				
 			Map<String, String> reqData = new HashMap<String, String>();
 			GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("");
-			reqData.put("partner_trade_no","walletcut"+orderNo); //生成商户订单号
+			reqData.put("partner_trade_no","olwalletcut"+orderNo); //生成商户订单号
 			reqData.put("openid",userpo.getUserOpenID());            // 支付给用户openid
 			reqData.put("check_name","NO_CHECK");    //是否验证真实姓名呢
 			reqData.put("re_user_name","fish");//收款用户姓名
 			reqData.put("amount",money+"");            //企业付款金额，单位为分
 			reqData.put("desc","用户提现");    			   //企业付款操作说明信息。必填。
 			reqData.put("spbill_create_ip","192.165.56.64"); //调用接口的机器Ip地址
-			wxPay.mmpay(reqData); // 生成二维码数据
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("这个是正常反应");
-		}
-		this.cutUserWallet(userpo, money);
+			Map<String, String> mmpay = wxPay.mmpay(reqData); // 生成二维码数据
+			} catch (Exception e) {
+				System.out.println("正常反应");
+			}
+			cutUserWallet(userpo, money);
+		
 		return success(1);
 	}
 	
@@ -320,6 +322,44 @@ public class WxPayController extends BaseController {
 		System.out.println("用户提现成功");
 		userpo.setWallet(userpo.getWallet()-money);
 		conn_user.saveOrUpdate(userpo);
+		JSONObject obj = new JSONObject();
+		obj.put("touser",userpo.getUserOpenID() );
+		obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+		obj.put("url", "");
+		JSONObject microProObj = new JSONObject();
+		microProObj.put("appid", "");
+		microProObj.put("pagepath", "");
+		obj.put("miniprogram", microProObj);
+		JSONObject dataObject = new JSONObject();
+		JSONObject firstObj = new JSONObject();
+		firstObj.put("value", "用户提现通知");
+		firstObj.put("color", "");
+		dataObject.put("first", firstObj);
+
+		JSONObject nameObj = new JSONObject();
+		nameObj.put("value", userpo.getUserNickname());
+		nameObj.put("color", "");
+		dataObject.put("keyword1", nameObj);
+
+		JSONObject accountObj = new JSONObject();
+		accountObj.put("value", (money/100));
+		accountObj.put("color", "");
+		dataObject.put("keyword3", accountObj);
+		JSONObject timeObj = new JSONObject();
+		timeObj.put("value", "我的钱包提现成功，金额为：" + (money/100)+"元，24小时内到账！");
+		timeObj.put("color", "");
+
+		String pNum = "";
+		if (pNum == null || pNum.isEmpty()) {
+			pNum = userpo.getUserPhone();
+		}
+		dataObject.put("keyword4", timeObj);
+		JSONObject remarkObj = new JSONObject();
+		remarkObj.put("value", "用户电话:" + pNum);
+		remarkObj.put("color", "");
+		dataObject.put("remark", remarkObj);
+		obj.put("data", dataObject);
+		SendMsgUtil.sendTemplate(obj.toJSONString());
 	}
 	
 

@@ -2112,6 +2112,7 @@ public class PubNumController extends WebBaseControll {
 	}
 
 	// 我的钱包充值成功修改用户余额 张羽 5/19
+	@ResponseBody
 	@RequestMapping(value = "/wallet/updata")
 	public Object updataUserMoney(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("userId"));
