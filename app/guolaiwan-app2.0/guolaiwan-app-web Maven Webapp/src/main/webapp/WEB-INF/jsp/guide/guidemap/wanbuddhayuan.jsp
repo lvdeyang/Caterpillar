@@ -779,16 +779,44 @@ input[type="radio"] {
 	  	 }); 
   	   }	
 	  	   
-	  	  function setaddChild(d){
-    		var _uril = window.BASEPATH + 'guide/addChildByUidCid';                   //保存浏览点id
-			var param = {};
-			param.ChildId = d;
-			$.post(_uril, $.toJSON(param), function(data) {
-				getMark();
-		        ref = setInterval(function(){
-	 			   consoleLog();
-				},5000);
-	        });
+	  	  function setaddChild(d,navigation){
+	  	    if(navigation == 0){
+		  	    var _uril = window.BASEPATH + 'guide/addChildByUidCid';                   //保存浏览点id
+				var param = {};
+				param.ChildId = d;
+				$.post(_uril, $.toJSON(param), function(data) {
+					getMark();
+			        ref = setInterval(function(){
+		 			   consoleLog();
+					},5000);
+		        });
+	  	    }else{
+	  	    var  relevance;
+	  	       var _uril = window.BASEPATH + 'guide/addChildByUidCid';                   //保存浏览点id
+				var param = {};
+				param.ChildId = d;
+				$.post(_uril, $.toJSON(param), function(data) {
+					for (var i = 0; i < json.length; i++){
+		  	            if(d  ==  json[i].id ){
+		  	              relevance =   json[i].relevance;  
+		  	            }
+		  	        }
+		  	        if(relevance != null){
+		  	          for (var i = 0; i < json.length; i++){
+		  	             if(relevance == json[i].id){
+			  	             var song = [{
+									'src': 'http://www.guolaiwan.net/file/'+json[i].chineseGirl,
+									'title': ''+json[i].childName+''
+							 }];
+						      $('#pid').html(json[i].chineseContent);
+			  	              MP3(song,d); // 播放音乐
+					          clearInterval(ref);  //停止循环 定位
+					          red(json[i].id);
+				        }
+				      }
+		  	       }
+		        });  
+	  	    }
 	  	  }
 	  	  
 	    function clickHandler(){
@@ -796,12 +824,16 @@ input[type="radio"] {
 	      var _uril = window.BASEPATH + 'guide/delectchildId';                   //清楚路线
 		  $.post(_uril, null, function(data) {
 		      getMark();
+		      ref = setInterval(function(){
+		 			   consoleLog();
+			  },5000);
 	      }); 
 	   }
 </script>
 
 <script>
  var latitid;      //当前景点id
+ var navigation = 0;      //导游模式
 	function consoleLog(){
 	    getloca();
 	    var loca = {};
@@ -922,10 +954,10 @@ input[type="radio"] {
 	 
 	});
    function red(n){
-      map.clearMap(); 
-      var cha = 0;
+    map.clearMap(); 
     for (var i = 0; i < json.length; i++){
-		 for(var j=0; j<str.length; j++){
+       var cha = 0;
+		 for(var j = 0 ; j < str.length; j++){
 		   if(json[i].id == str[j] ){   // 拆分  数组  遍历
 			  var marker = new AMap.Marker({
 			    size: new AMap.Size(20, 20), 
@@ -935,13 +967,6 @@ input[type="radio"] {
 	            }),   
 				position : [ json[i].wxChildLongitude , json[i].wxChildLatitude ]
 		      });
-		       marker.proName= json[i].childName;
-		       marker.id= json[i].id;
-		       if(json[i].id == n) marker.setAnimation('AMAP_ANIMATION_BOUNCE'); //弹跳点 
-			   marker.on('click', function(e,id){
-					showInfoM(e.target.proName,e.target.id);
-		       }); //增加点击事件; 
-		       marker.setMap(map);
 		      cha = 1;
            }
          }
@@ -954,18 +979,18 @@ input[type="radio"] {
 	          }),   
 			  position : [ json[i].wxChildLongitude , json[i].wxChildLatitude ]
 		   });
-		    marker.proName= json[i].childName;
+         }  
+            marker.proName= json[i].childName;
 		    marker.id= json[i].id;
 		    if(json[i].id == n) marker.setAnimation('AMAP_ANIMATION_BOUNCE'); //弹跳点 
 			marker.on('click', function(e,id){
 				showInfoM(e.target.proName,e.target.id);
 		    }); //增加点击事件;  
 		    marker.setMap(map);
-         }  
 		} 
    }
    
-     function showInfoM(e,id) { // 点击 坐标点
+   function showInfoM(e,id) { // 点击 坐标点
 	  $.modal({
 	  text: e,
 	  buttons: [
@@ -989,9 +1014,9 @@ input[type="radio"] {
 				  strokeOpacity: 0.5,//线透明度
                   strokeWeight: 5,//线宽
 				  }); 
-		      }); 
+		     }); 
 	    }},
-	      { text: "播放此景点", onClick: function(){ 
+	      { text: "导游模式", onClick: function(){ 
 		     for (var i = 0; i < json.length; i++){
 		       if(id ==  json[i].id){
 		           $('#pid').html(json[i].chineseContent);
@@ -1000,6 +1025,7 @@ input[type="radio"] {
 							'title': ''+json[i].childName+''
 						}
 				   ];
+				  navigation = 1;
 				  latitid = json[i].id
 			      MP3(song,latitid); // 播放音乐
 			      clearInterval(ref);  //停止循环 定位
@@ -2015,7 +2041,7 @@ var id;
        					_this.audio.currentTime = 0;
 			             _this.audio.pause();
 			             _this.stopAudio();
-       				     setaddChild(latitid); // 存已浏览点
+       				     setaddChild(latitid,navigation); // 存用户已浏览点
        					$(".audio-play").click(function() {
        					if($buttonControl.hasClass("action-start")){
        					  	$(".audio-play").css("background-image","url(lib/images/plays.png)"); 
