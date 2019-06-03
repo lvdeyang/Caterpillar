@@ -27,7 +27,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 
 @Controller
 @RequestMapping("/mobile")
-public class IndexController {
+public class MobileIndexController {
 	boolean istest=false;
 	
 	CacheDao conn_cache;

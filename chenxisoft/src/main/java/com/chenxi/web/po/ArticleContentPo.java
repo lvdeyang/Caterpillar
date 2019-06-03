@@ -9,33 +9,35 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 public class ArticleContentPo extends AbstractBasePO{
 
 	private long articleId;
-	private String image;
-	private String content;
-	private int index;
+	private String myimage;
+	private String mycontent;
+	private int myindex;
 	public long getArticleId() {
 		return articleId;
 	}
 	public void setArticleId(long articleId) {
 		this.articleId = articleId;
 	}
-	public String getImage() {
-		return image;
+	public String getMyimage() {
+		return myimage;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void setMyimage(String myimage) {
+		this.myimage = myimage;
 	}
-	public String getContent() {
-		return content;
+	public String getMycontent() {
+		return mycontent;
 	}
-	public void setContent(String content) {
-		this.content = content;
+	public void setMycontent(String mycontent) {
+		this.mycontent = mycontent;
 	}
-	public int getIndex() {
-		return index;
+	public int getMyindex() {
+		return myindex;
 	}
-	public void setIndex(int index) {
-		this.index = index;
+	public void setMyindex(int myindex) {
+		this.myindex = myindex;
 	}
+	
+	
 	
 	
 }
