@@ -360,6 +360,46 @@ public class WxPayController extends BaseController {
 		dataObject.put("remark", remarkObj);
 		obj.put("data", dataObject);
 		SendMsgUtil.sendTemplate(obj.toJSONString());
+		
+		JSONObject obj1 = new JSONObject();
+		obj1.put("touser","opVUYv9LtqKAbiaXInBqI01hlpYg" );
+		obj1.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+		obj1.put("url", "");
+		JSONObject microProObj1 = new JSONObject();
+		microProObj1.put("appid", "");
+		microProObj1.put("pagepath", "");
+		obj1.put("miniprogram", microProObj1);
+		JSONObject dataObject1 = new JSONObject();
+		JSONObject firstObj1 = new JSONObject();
+		firstObj1.put("value", "用户提现通知");
+		firstObj1.put("color", "");
+		dataObject1.put("first", firstObj1);
+
+		JSONObject nameObj1 = new JSONObject();
+		nameObj1.put("value", userpo.getUserNickname());
+		nameObj1.put("color", "");
+		dataObject1.put("keyword1", nameObj1);
+
+		JSONObject accountObj1 = new JSONObject();
+		accountObj1.put("value", (money/100));
+		accountObj1.put("color", "");
+		dataObject1.put("keyword3", accountObj1);
+		JSONObject timeObj1 = new JSONObject();
+		timeObj1.put("value", "我的钱包提现成功，金额为：" + (money/100)+"元，24小时内到账！");
+		timeObj1.put("color", "");
+
+		String pNum1 = "";
+		if (pNum1 == null || pNum1.isEmpty()) {
+			pNum1 = userpo.getUserPhone();
+		}
+		dataObject1.put("keyword4", timeObj1);
+		JSONObject remarkObj1 = new JSONObject();
+		remarkObj1.put("value", "用户电话:" + pNum1);
+		remarkObj1.put("color", "");
+		dataObject1.put("remark", remarkObj1);
+		obj1.put("data", dataObject1);
+		SendMsgUtil.sendTemplate(obj1.toJSONString());
+		
 	}
 	
 
