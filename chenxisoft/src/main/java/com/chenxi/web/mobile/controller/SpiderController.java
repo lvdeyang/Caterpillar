@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.chenxi.spider.XinlangCepingCollection;
+import com.chenxi.spider.service.XinlangCepingCollection;
 import com.chenxi.web.dao.ArticleContentDao;
 import com.chenxi.web.dao.ArticleDao;
 
@@ -31,7 +31,7 @@ public class SpiderController {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/xinlangceping", method = RequestMethod.GET)
-	public Object getxinlancepings(HttpServletRequest request, HttpServletResponse response, int currPage,int pageCount,String type)
+	public Object getxinlancepings(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		xinlangCollection.start(4);
