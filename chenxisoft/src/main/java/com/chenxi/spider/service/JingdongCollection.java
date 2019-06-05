@@ -1,10 +1,12 @@
 package com.chenxi.spider.service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,15 @@ public class JingdongCollection extends BreadthCrawler {
 		 * 如果此页面地址 确实是要求爬取网址，则进行取值
 		 */
 		if (page.matchUrl("https://item.jd.com/[0-9]{7}.html")) {	
+			
+			
+	
+			/*WebDriver driver =
+			driver.get(url);
+			String html = driver.getPageSource();
+			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);*/
+			
+			
 		    String title=page.selectText(".sku-name");
 		    
 		   
