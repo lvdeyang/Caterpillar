@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.chenxi.spider.service.JingdongCollection;
 import com.chenxi.spider.service.XinlangCepingCollection;
 import com.chenxi.web.dao.ArticleContentDao;
 import com.chenxi.web.dao.ArticleDao;
@@ -27,7 +28,8 @@ public class SpiderController {
 	@Autowired
 	private XinlangCepingCollection xinlangCollection;
 	
-	
+	@Autowired
+	private JingdongCollection jingdongCollection;
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/xinlangceping", method = RequestMethod.GET)
@@ -38,6 +40,14 @@ public class SpiderController {
 		return ret;
 	}
 	
-	
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/jingdonglt", method = RequestMethod.GET)
+	public Object jingdongluntais(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		jingdongCollection.start(4);
+		return ret;
+	}
 	
 }
