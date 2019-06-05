@@ -499,7 +499,10 @@ html, body {
     #phone{
         -webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;
     }*/
-    
+#olprompt{
+	width: 5%;
+	height: 15%;
+}   
     
     
     
@@ -782,7 +785,8 @@ html, body {
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
-								for_bottom();
+				        		$('#olprompt').show();
+				        		$('#olprompt1').show();
 								//记录消息来自谁放到三方待用
 								$('.touser').val(data[i].fromuserId);
 								//修改展示完成的数据flag
@@ -835,8 +839,9 @@ html, body {
 	 $(document).on('click',' #socket',function(){
 	 		$(".zhuye").hide();
 	        $(".duihua").show();
-	       
-	 });
+	        $("#olprompt").hide();
+	        $("#olprompt1").hide();
+ });
 	 
 	 $(document).on('click','.tui',function(){
 	 		$(".duihua").hide();
@@ -926,7 +931,7 @@ html, body {
 				      全部商品
 				    </a>
 				    <a id="tab-1" onclick="return false" class="weui-navbar__item" href="#tab1">
-				      店铺首页
+				      店铺首页 <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 -->
 				    </a>
 				  </div>	
 	             <div class="weui-tab__bd" style="padding-bottom:50px">
@@ -952,7 +957,9 @@ html, body {
 						<div
 							style="width:90%;margin-top:25px;margin-left:11px;font-size:12px;">
 							<a id="contact" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
-							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
+							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服 </a>
+							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
+							
 						</div>
 						<div id="payinshop"></div>
 						<div

@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.admin.po;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -155,16 +156,17 @@ public class MerchantPO extends AbstractBasePO {
 	
 	private int shopyd=1;
 	
+	//客服在自己的商户最后一次进入时间 用来判断商户在不在 能不能咨询 不在就推送公众号提醒
+	private Date lastexercisetime;
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	public Date getLastexercisetime() {
+		return lastexercisetime;
+	}
+
+	public void setLastexercisetime(Date lastexercisetime) {
+		this.lastexercisetime = lastexercisetime;
+	}
 
 	public String getXlongitude() {
 		return Xlongitude;
