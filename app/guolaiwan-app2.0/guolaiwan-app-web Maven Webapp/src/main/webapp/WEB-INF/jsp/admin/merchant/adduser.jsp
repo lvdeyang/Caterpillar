@@ -97,7 +97,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         {type:"checkbox"}
                         ,{field:"id",title:"Id",sort:true}
                         ,{field:"userPhone",title:"联系方式"}
-                        ,{field:"trueName",title:"业务人员"}
+                        ,{field:"userNickname",title:"业务人员"}
                         ,{fixed: 'right',width:120,minWidth:100,templet:'#zsgc',unresize:true}
                     ]]
                     ,done:function(res, curr, count){
