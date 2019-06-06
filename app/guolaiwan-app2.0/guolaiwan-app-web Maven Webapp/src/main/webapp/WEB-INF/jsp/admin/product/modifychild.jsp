@@ -138,7 +138,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				  		<a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >更该坐标</a>
 					</div>
 				</div>
-				
+				<div class="layui-form-item">
+					<label for="L_title" class="layui-form-label"> 下个浏览景点： </label>
+					<div class="layui-input-inline" style="width: 100px;">
+						<input type="text"  name="relevance" id="relevance"  autocomplete="off" class="layui-input" value="${child.relevance}">
+					</div>
+				</div>
 				<div class="layui-form-item">
 				    <label class="layui-form-label">景区规模</label>
 				    <div class="layui-input-block" style="width:190px;">

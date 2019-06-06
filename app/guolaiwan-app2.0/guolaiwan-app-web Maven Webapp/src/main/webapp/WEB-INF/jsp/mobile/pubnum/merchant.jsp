@@ -499,7 +499,10 @@ html, body {
     #phone{
         -webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;
     }*/
-    
+#olprompt{
+	width: 5%;
+	height: 15%;
+}   
     
     
     
@@ -782,7 +785,8 @@ html, body {
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
-								for_bottom();
+				        		$('#olprompt').show();
+				        		$('#olprompt1').show();
 								//记录消息来自谁放到三方待用
 								$('.touser').val(data[i].fromuserId);
 								//修改展示完成的数据flag
@@ -791,7 +795,7 @@ html, body {
 							
 						}
 					})
-		},5000);
+		},3000);
     })   
 	            	
 	 
@@ -835,8 +839,9 @@ html, body {
 	 $(document).on('click',' #socket',function(){
 	 		$(".zhuye").hide();
 	        $(".duihua").show();
-	       
-	 });
+	        $("#olprompt").hide();
+	        $("#olprompt1").hide();
+ });
 	 
 	 $(document).on('click','.tui',function(){
 	 		$(".duihua").hide();
@@ -926,7 +931,7 @@ html, body {
 				      全部商品
 				    </a>
 				    <a id="tab-1" onclick="return false" class="weui-navbar__item" href="#tab1">
-				      店铺首页
+				      店铺首页 <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 -->
 				    </a>
 				  </div>	
 	             <div class="weui-tab__bd" style="padding-bottom:50px">
@@ -952,7 +957,9 @@ html, body {
 						<div
 							style="width:90%;margin-top:25px;margin-left:11px;font-size:12px;">
 							<a id="contact" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
-							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
+							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服 </a>
+							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
+							
 						</div>
 						<div id="payinshop"></div>
 						<div
@@ -983,7 +990,7 @@ html, body {
 	
 
 
-<div class="chatline" style="background-color: black;height: 50px;z-index: 111111111111111;"></div>
+<!-- <div class="chatline" style="background-color: black;height: 50px;z-index: 111111111111111;"></div> -->
 
 	<!-- 对话框 -->
 <div class="duihua" style="width:100%;height:100%;z-index:1111;display: none;">
@@ -991,9 +998,9 @@ html, body {
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
 	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
-		<c:if test="${ismerchant==1}">
+		<%-- <c:if test="${ismerchant==1}">
 		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
-		</c:if>
+		</c:if> --%>
 	</div>
 	<div class="speak_box">
 		<div class="answer">

@@ -68,7 +68,7 @@
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
-
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <style type="text/css">
 a {
 	cursor: pointer !important;
@@ -541,6 +541,65 @@ input[type="datetime-local"]:before{
 ::-webkit-input-placeholder {
     color:red;
 }
+.left::-webkit-input-placeholder {
+    color:#B38F80;
+}
+.names::-webkit-input-placeholder {
+    color:#18b4ed;
+     font-size:14px;
+     text-align: center;
+     margin:0 auto;
+}
+.idnums::-webkit-input-placeholder {
+    color:#18b4ed;
+     font-size:14px;
+     text-align: center;
+}
+.names,.idnums{
+     margin-top:30px;
+}
+
+
+
+/* 对话框样式 */   
+  input,button{outline:none;}
+	.wenwen-footer{width:100%;position:fixed;bottom:-5px;left:0;background:#fff;padding:3%;border-top:solid 1px #ddd;box-sizing:border-box;}
+	.wenwen_btn,.wenwen_help{width:15%;text-align:center;}
+	.wenwen_btn img,.wenwen_help img{height:40px;}
+	.wenwen_text{height:40px;border-radius:5px;border:solid 1px #636162;box-sizing:border-box;width:80%;text-align:center;overflow:hidden;margin-left:2%;}
+	.circle-button{padding:0 5px;}
+	.wenwen_text .circle-button{font-size:14px;color:#666;line-height:38px;}
+	.write_box{background:#fff;width:100%;height:40px;line-height:40px;}
+	.write_box input{height:40px;padding:0 5px;line-height:40px;width:100%;box-sizing:border-box;border:0;}
+	.wenwen_help button{width:100%;background:#42929d;color:#fff;border-radius:5px;border:0;height:40px;}
+	#wenwen{height:100%;}
+	.speak_window{overflow-y:scroll;height:100%;width:100%;position:fixed;top:0;left:0;}
+	.speak_box{margin-bottom:70px;padding:10px;}
+	.question,.answer{margin-bottom:1rem;}
+	.question{text-align:right;margin-top:50px;}
+	.question>div{display:inline-block;}
+	.left{float:left;}
+	.right{float:right;}
+	.clear{clear:both;}
+	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
+	.heard_img img{width:100%;height:100%}
+	.question_text,.answer_text{box-sizing:border-box;position:relative;display:table-cell;min-height:60px;}
+	.question_text{padding-right:20px;}
+	.answer_text{padding-left:20px;}
+	.question_text p,.answer_text p{border-radius:6px;padding:.5rem;margin:0;font-size:14px;line-height:40px;box-sizing:border-box;vertical-align:middle;display:table-cell;height:40px;word-wrap:break-word;}
+	.answer_text p{background:#fff;}
+	.question_text p{background:#94EB68;color:#fff;text-align:left;}
+	.question_text i,.answer_text i{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;position:absolute;top:25px;}
+	.answer_text i{border-right:10px solid #fff;left:10px;}
+	.question_text i{border-left:10px solid #94EB68;right:10px;}
+	.answer_text p a{color:#42929d;display:inline-block;}
+	audio{display:none;}
+	.saying{position:fixed;bottom:30%;left:50%;width:120px;margin-left:-60px;display:none;}
+	.saying img{width:100%;}  
+    
+    
+
+
 </style>
 
 </head>
@@ -556,8 +615,7 @@ input[type="datetime-local"]:before{
 	rel="stylesheet" />
 <script type="text/javascript">
 
-
-
+    var base;	
 	$(function() {
 	  $(document).on('focus','.mydate',function(){
 	      $(this).removeAttr('placeholder');
@@ -921,6 +979,9 @@ input[type="datetime-local"]:before{
 		});
 		
 		
+		
+		
+		
 	    $(document).on('click','#contact',function(){
 	      openqq(qq);
 	    
@@ -1144,6 +1205,8 @@ input[type="datetime-local"]:before{
                   return false;
                }
             }
+
+addmessage();
 			$.closePopup();
 				var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${id}+'&count='+$('#proCount').val();
 			    
@@ -1169,42 +1232,173 @@ input[type="datetime-local"]:before{
 		   var count=$('#proCount').val();
 		   var html=[];
 		   for(var i=0;i<count;i++){
-		        html.push('<h1 style="font-size:16px;height:50px;line-height:50px;text-align:center;width:100%;color:red" class="demos-title">使用人'+(i+1)+'</h1>');
-		        
-		        html.push('<div class="weui-cell">');
+		        html.push('<h1 style="font-size:16px;background:#18b4ed;height:50px;line-height:50px;text-align:center;width:100%;color:#fff" class="demos-title">信息采集</h1>');   /* <span>'+(i+1)+'</span> */
+		        html.push('<div style="text-align:center;width:100%;" class="weui-cell">');
 			    html.push('	 	<div class="weui-cell__hd">');
-			    html.push('			<label class="weui-label">姓名</label>');
+			   /*  html.push('			<label class="weui-label">姓名</label>'); */
 				html.push('	</div>');
 				html.push('	<div class="weui-cell__bd">');
-				html.push('		<input style="border:1px solid black;width:160px;height:30px;line-height:30px;" class="names" id="name-'+i+'" class="weui-input" type="text"');
+				html.push('		<input placeholder="点击上传真实姓名" style="text-align:center;font-weight: bold;border-radius:6px;font-size:14px;outline: none;border:1px solid #E0DABA;width:70%;height:40px;line-height:40px;" class="names" id="name-'+i+'" class="weui-input" type="text"');
 				html.push('			placeholder="">');
 				html.push('	</div>');
 				html.push('</div>');
 		        
 		        
-		        html.push('<div class="weui-cell">');
+		        html.push('<div style="text-align:center;width:100%;" class="weui-cell">');
 			    html.push('	 	<div class="weui-cell__hd">');
-			    html.push('			<label class="weui-label">身份证</label>');
+			 /*    html.push('			<label class="weui-label">身份证</label>'); */
 				html.push('	</div>');
 				html.push('	<div class="weui-cell__bd">');
-				html.push('		<input style="border:1px solid black;width:160px;height:30px;line-height:30px;" class="idnums" id="orderIdNum-'+i+'" class="weui-input" type="text"');
+				html.push('		<input placeholder="点击上传真实身份证信息" style="font-weight: bold;text-align:center;border-radius:6px;font-size:16px;outline: none;border:1px solid #E0DABA;width:70%;height:40px;line-height:40px;" class="idnums" id="orderIdNum-'+i+'" class="weui-input" type="text"');
 				html.push('			placeholder="">');
 				html.push('	</div>');
 				html.push('</div>');
-		        html.push('<div class="weui-cell">');
-				html.push('	<div class="weui-cell__hd">');
-				html.push('		<label class="weui-label">上传照片</label>');
-				html.push('	</div>');
+		        html.push('<div style="text-align:center;width:100%;" class="weui-cell">');
+			    /* html.push('	<div style="position:absolute;color:#fff;left:50%;margin-left:-52.5px;top:75.5px" class="weui-cell__hd">');
+			 	html.push('		<label style="z-index:-2" class="weui-label">上传照片</label>');
+				html.push('	</div>'); */
 				html.push('	<div class="weui-cell__bd">');
-				html.push('		<image style="width:160px;height:120px;" class="uploadImages" id="uploadImage-'+i+'" src="<%=basePath%>/lib/fishimages/example.jpg"></image>');
+				html.push('<image style="width:60%;height:250px;border-radius:6px;z-index:1111;opacity: 0.7 ;" class="uploadImages" id="uploadImage-'+i+'" src="<%=basePath%>/lib/fishimages/asdasd.jpg"></image>');
 				html.push('	</div>');
 				html.push('</div>');
-			    html.push('</div>');
-		   
+			    html.push('</div>');		   
 		   }
 		   $('#cameraContent').append(html.join(''));
 		}
 		initpeopleList();
+		
+		
+		//点击输入框识别图片
+		$(document).on('click','.idnums',function(){
+	       discern();
+	     /*  discern(); */
+	    });
+	    //点击输入框识别图片
+		$(document).on('click','.names',function(){
+	        discern();	    
+	    });
+	    
+	    function  discern() {
+	           //人脸采集部分
+		    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+            var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			$.get(_uri, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				    
+					share=data;
+					wx.config({
+			            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            appId : share.appId, // 必填，公众号的唯一标识
+			            timestamp : share.timestamp, // 必填，生成签名的时间戳
+			            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+			            signature : share.signature,// 必填，签名，见附录1
+			            jsApiList : ['chooseImage',
+		                        'previewImage',
+		                        'uploadImage',
+		                        'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	       	        });
+                }
+            });                        
+             wx.ready(function () {
+                wx.checkJsApi({
+                    jsApiList: [
+                        'chooseImage',
+                        'previewImage',
+                        'uploadImage',
+                        'downloadImage'
+                    ],
+                    success: function (res) {
+                      
+                        if (res.checkResult.getLocation == false) {
+                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                            return;
+                        }else{
+                            choosePicone(this.id);
+                        }
+                    }
+                });
+            });
+            wx.error(function(res){
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                alert("验证失败，请重试！");
+                wx.closeWindow();
+            });
+	    }
+		
+		
+		function choosePicone(id) {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    $.toast("照片处理中...", "loading");
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    getLocalDataone(localIds[0]);
+                }
+            });
+        }
+		
+        function getLocalDataone(localid) {
+
+			//获取本地图片资源
+            wx.getLocalImgData({
+                localId: localid, // 图片的localID
+                success: function (res) {
+                    var localData = res.localData; // localData是图片的base64数据，可以用img标签显示    
+                
+                    var _uri = window.BASEPATH + 'pubnum/IdentityCard';
+                    var params = {};
+                   var str=new String();
+                    var arr=new Array();
+                    str=localData ;
+　               var sear=new RegExp(',');
+                     if(sear.test(str)) {
+                          arr=str.split(',');//注split可以用字符或字符串分割
+                          params.localData=arr[1];
+                       }else{
+                                      params.localData=localData; 
+                         }
+                     
+                                 
+                      
+		$.post(_uri, params, function(data){
+                                                   
+			           if(data.msg==0){
+                                                                    
+                                                                          
+						   $(".idnums").val(data.name)
+						   $(".names").val(data.sfz) 	
+						}			   
+					     if(data.msg==1){
+							  alert("解析失败请重新上传照片")	 		
+						 }			        
+				    });
+                }
+            });
+ 
+        }
+		
+
+		    function addmessage() {
+		            var _uri = window.BASEPATH + 'pubnum/addmessage';
+                    var params = {};
+                    params.localData=base;
+                    params.idnums= $(".idnums").val() ;
+                    params.name= $(".names").val() ;
+		          $.post(_uri, params, function(data){
+			           if(data.msg==0){
+						  alert("保存成功");
+						}			   
+					     if(data.msg==1){
+							 alert("保存失败");
+						 }			        
+				 });       
+		    }
+		
 		
 		
 		
@@ -1342,7 +1536,8 @@ input[type="datetime-local"]:before{
                 localId: localid, // 图片的localID
                 success: function (res) {
                     var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
-                    $('#'+id).attr('src','data:image/png;base64,'+localData);
+                    base=localData;
+                    $('.uploadImages').attr('src','data:image/png;base64,'+localData);
                     photos[id]=localData;
                 }
             });
@@ -1385,11 +1580,7 @@ input[type="datetime-local"]:before{
 		            return false;
 		       }
 		      var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
-			  if(reg.test($(idnums[i]).val()) === false) 
-			  { 
-			    $.toast("身份证输入不合法", "forbidden");
-			    return false; 
-			  } 
+			
 		       idnumobj.idNum=$(idnums[i]).val();
 		       var ids=$(idnums[i]).attr('id').split('-');
 		       
@@ -1474,6 +1665,7 @@ input[type="datetime-local"]:before{
 		
 		}
 		
+	
 		
 		
 		function payByWallet(orderId){
@@ -1654,6 +1846,78 @@ input[type="datetime-local"]:before{
 	});
 </script>
 
+<script type="text/javascript">
+	$(function() {
+		//轮询任务
+		window.setInterval(function () {
+			var url=window.BASEPATH+'pubnum/getolchat';
+			var userId=${userId};
+			var merchantId=${merchantId};
+				$.post(url,{"merchantId":merchantId},function(data){
+					//从属于这个商户房间信息中查询未发送的信息遍历
+					for(var i=0;i<data.length;i++){	
+							//查找出这个房间touser是登录人的信息展示出来
+							if(data[i].touserId==userId&&data[i].merchantId==merchantId){
+								$('.ltname').text(data[i].fromuser);
+								ans  = '<div class="answer"><div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
+				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
+				        		ans += '</div></div>';
+				        		$('.speak_box').append(ans);
+								//记录消息来自谁放到三方待用
+								$('.touser').val(data[i].fromuserId);
+								$('#olprompt').show();
+								//修改展示完成的数据flag
+								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
+							}
+							
+						}
+					})
+		},3000);
+    })   
+	            	
+	 
+	
+	//消息发送方法
+	 function SubSend(){
+	 	var message="";
+	 	var userId=${userId};
+		var merchantId=${merchantId};
+		//存数据库的路径
+	 	var url=window.BASEPATH+'pubnum/pullolchat';
+		//获取要发送的对象 用户在这里问 
+		var touser="";
+	 	//输入框判空
+	 	if(document.getElementById("left").value!=""&&document.getElementById("left").value!=null){
+	 		message=document.getElementById("left").value;
+	 	}else{
+	 		$.alert('输入不能为空！');
+	 		return;
+	 	}
+	 		str  = '<div class="question">';
+	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
+	        str += '</div></div>';
+	        $('.speak_box').append(str);
+	 	$('.left').val("");
+	 	//将发送的信息存入数据库 
+	 	$.post(url,{"userId":userId,"merchantId":merchantId,"message":message,"touser":touser},function(data){
+	 	})
+	 }
+	 
+	/*显示隐藏切换  */
+	 $(document).on('click',' #socket',function(){
+	 		$(".zhuye").hide();
+	        $(".duihua").show();
+	       $("#olprompt").hide();
+	 });
+	 
+	 $(document).on('click','.tui',function(){
+	 		$(".duihua").hide();
+	        $(".zhuye").show();
+	       
+	 });
+</script>
+
 
 
 <body>
@@ -1673,6 +1937,9 @@ input[type="datetime-local"]:before{
 			});
 		}
 	</script>
+	
+	
+	<div class="zhuye" style="">
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
@@ -1803,6 +2070,8 @@ input[type="datetime-local"]:before{
 				<div
 					style="width:90%;margin-top:20px;margin-left:11px;font-size:12px;">
 					<a id="contact1" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
+					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
+					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
 				</div>	
 			</div>
 					
@@ -1934,6 +2203,39 @@ input[type="datetime-local"]:before{
 
 			</div>
 		</div>
+		</div>
+		</div>
+		<!-- 对话框 -->
+<div class="duihua" style="width:100%;height:100%;z-index:1111;display: none;">
+	
+<div class="speak_window" >
+<div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
+	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
+		<%-- <c:if test="${ismerchant==1}">
+		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
+		</c:if> --%>
+	</div>
+	<div class="speak_box">
+		<div class="answer">
+		</div>
+	</div>
+</div>
+<div class="wenwen-footer">
+	<div class="wenwen_btn left" onClick="to_write()"></div>
+	<div class="wenwen_text left">
+	    <div class="write_box">
+	        <input type="text" class="left" id="left" onKeyUp="keyup()" placeholder="请输入关键字" />
+	    </div> 
+	      
+	</div>
+	<div class="wenwen_help right">
+	    <button onClick="SubSend();" class="right">发送</button>
+	</div>
+	<div style="opacity:0;" class="clear"></div>
+</div>
+
+
+</div>
 </body>
 
 

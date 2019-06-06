@@ -636,7 +636,7 @@ input[type="radio"] {
 	            }),   
 				position : [ Longitude , Latitude ]
 		      });
-		       marker.proName= name;
+		       marker.proName = name;
 		       marker.id= id;
 			   marker.on('click', function(e,id){
 					showInfoM(e.target.proName,e.target.id);
@@ -715,7 +715,7 @@ input[type="radio"] {
 			data = parseAjaxResult(data);
 			var info = data.volist;
 			json = data.result;
-               data =  json; 
+            data =  json; 
 			var html = [];
 			if(info.childId != null){
 			// 遍历拆分 存入数组
@@ -742,7 +742,6 @@ input[type="radio"] {
 					 marker.on('click', function(e,id){
 					 showInfoM(e.target.proName,e.target.id);
 	                 }); //增加点击事件; 
-	                 marker.setAnimation('AMAP_ANIMATION_DROP'); //弹跳点 
 					 map.add(marker);
 					 cildId = data[i].id;
 				     break; 
@@ -758,7 +757,6 @@ input[type="radio"] {
 	            	 }),   
 				    position : [ data[i].wxChildLongitude , data[i].wxChildLatitude ]
 			        });
-			        marker.setAnimation('AMAP_ANIMATION_DROP'); //弹跳点 
 					marker.proName= data[i].childName;
 					marker.id= data[i].id;
 					marker.on('click', function(e,id){
@@ -781,16 +779,44 @@ input[type="radio"] {
 	  	 }); 
   	   }	
 	  	   
-	  	  function   setaddChild(d){
-    		var _uril = window.BASEPATH + 'guide/addChildByUidCid';                   //保存浏览点id
-			var param = {};
-			param.ChildId = d;
-			$.post(_uril, $.toJSON(param), function(data) {
-				getMark();
-		        ref = setInterval(function(){
-	 			   consoleLog();
-				},5000);
-	        });
+	  	  function setaddChild(d,navigation){
+	  	    if(navigation == 0){
+		  	    var _uril = window.BASEPATH + 'guide/addChildByUidCid';                   //保存浏览点id
+				var param = {};
+				param.ChildId = d;
+				$.post(_uril, $.toJSON(param), function(data) {
+					getMark();
+			        ref = setInterval(function(){
+		 			   consoleLog();
+					},5000);
+		        });
+	  	    }else{
+	  	    var  relevance;
+	  	       var _uril = window.BASEPATH + 'guide/addChildByUidCid';                   //保存浏览点id
+				var param = {};
+				param.ChildId = d;
+				$.post(_uril, $.toJSON(param), function(data) {
+					for (var i = 0; i < json.length; i++){
+		  	            if(d  ==  json[i].id ){
+		  	              relevance =   json[i].relevance;  
+		  	            }
+		  	        }
+		  	        if(relevance != null){
+		  	          for (var i = 0; i < json.length; i++){
+		  	             if(relevance == json[i].id){
+			  	             var song = [{
+									'src': 'http://www.guolaiwan.net/file/'+json[i].chineseGirl,
+									'title': ''+json[i].childName+''
+							 }];
+						      $('#pid').html(json[i].chineseContent);
+			  	              MP3(song,d); // 播放音乐
+					          clearInterval(ref);  //停止循环 定位
+					          red(json[i].id);
+				        }
+				      }
+		  	       }
+		        });  
+	  	    }
 	  	  }
 	  	  
 	    function clickHandler(){
@@ -798,15 +824,18 @@ input[type="radio"] {
 	      var _uril = window.BASEPATH + 'guide/delectchildId';                   //清楚路线
 		  $.post(_uril, null, function(data) {
 		      getMark();
+		      ref = setInterval(function(){
+		 			   consoleLog();
+			  },5000);
 	      }); 
 	   }
 </script>
 
 <script>
  var latitid;      //当前景点id
+ var navigation = 0;      //导游模式
 	function consoleLog(){
 	    getloca();
-	    
 	    var loca = {};
 		function getloca() {
 			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
@@ -843,6 +872,7 @@ input[type="radio"] {
 	                },  
 	                cancel: function (e) {  
 	                        //这个地方是用户拒绝获取地理位置  
+	                        alert("请打开GPS定位,");
 					}
 	             });     
 		         wx.error(function (res) {  
@@ -851,9 +881,8 @@ input[type="radio"] {
 	  }
 		
 	    function getCity(latitude, longitude) { //通过经纬度   获取高德位置
-	    latitude = latitude.toString().match(/^\d+(?:\.\d{0,5})?/);  // 拆分保留小数后5位
-	    longitude = longitude.toString().match(/^\d+(?:\.\d{0,5})?/);
-	    alert(latitude+","+longitude);
+	     latitude =   ( parseFloat(latitude) ).toFixed(5);  //保留经纬度后5位
+	     longitude =  ( parseFloat(longitude) ).toFixed(5);
 	     //   计算两点的距离
 	     var name;
 	     var length;  //米
@@ -864,7 +893,7 @@ input[type="radio"] {
 	     var scope;
 	     var child;
 		 for (var i = 0; i < json.length; i++) {
-	        var p1 = [latitude,longitude];
+	        var p1 = [longitude,latitude];
 		    var p2 = [json[i].wxChildLongitude,json[i].wxChildLatitude];
 		   // 返回 p1 到 p2 间的地面距离，单位：米
 			var dis = AMap.GeometryUtil.distance(p1, p2);
@@ -878,7 +907,8 @@ input[type="radio"] {
                 text = json[i].chineseContent; // 文本
                 scope = json[i].scope; //距离
 	        }			
-		 }  
+		 }
+		 alert(length+" :米"+", "+name);  
 		 if(str != "" ){  // 判断是否有已浏览点
 		   for(var i = 0; i < str.length; i++){
 			 if( latitid != str[i]){   // 拆分  数组  遍历
@@ -890,20 +920,20 @@ input[type="radio"] {
 						}
 				   ];
 			      MP3(song,latitid);
-			      red(name);
 			      clearInterval(ref);  //停止循环 
+			      red(latitid);
 			   }
 			 } 
 	       }
 		 }else{  // 没有已预览点 则直接判断播放距离
-		    if( length >= scope ){  // 判断是否小于讲解范围
+		    if( length <= scope ){  // 判断是否小于讲解范围
 				  $('#pid').html(text);
 				   var song = [{
 							'src': 'http://www.guolaiwan.net/file/'+mp3,
 							'title': ''+name+''
 						}
 				   ];
-			      MP3(song,latitid); // 播放音乐
+			    MP3(song,latitid); // 播放音乐
 			    clearInterval(ref);  //停止循环 定位
 			    red(latitid);
 			}
@@ -912,23 +942,22 @@ input[type="radio"] {
 	}
 	
 	
-	
-	
+
 	
 	$(function() {
-	  var song = [{
+	/*   var song = [{
 					'src': 'lib/images/huanying.mp3',
 					'title': '孝经'
 				}
 			];
-	  MP3(song);
+	  MP3(song); */
 	 
 	});
    function red(n){
-      map.clearMap(); 
-      var cha = 0;
+    map.clearMap(); 
     for (var i = 0; i < json.length; i++){
-		 for(var j=0; j<str.length; j++){
+       var cha = 0;
+		 for(var j = 0 ; j < str.length; j++){
 		   if(json[i].id == str[j] ){   // 拆分  数组  遍历
 			  var marker = new AMap.Marker({
 			    size: new AMap.Size(20, 20), 
@@ -938,13 +967,6 @@ input[type="radio"] {
 	            }),   
 				position : [ json[i].wxChildLongitude , json[i].wxChildLatitude ]
 		      });
-		       marker.proName= json[i].childName;
-		       marker.id= json[i].id;
-		       if(json[i].id == n) marker.setAnimation('AMAP_ANIMATION_BOUNCE'); //弹跳点 
-			   marker.on('click', function(e,id){
-					showInfoM(e.target.proName,e.target.id);
-		       }); //增加点击事件; 
-		       marker.setMap(map);
 		      cha = 1;
            }
          }
@@ -957,18 +979,18 @@ input[type="radio"] {
 	          }),   
 			  position : [ json[i].wxChildLongitude , json[i].wxChildLatitude ]
 		   });
-		    marker.proName= json[i].childName;
+         }  
+            marker.proName= json[i].childName;
 		    marker.id= json[i].id;
 		    if(json[i].id == n) marker.setAnimation('AMAP_ANIMATION_BOUNCE'); //弹跳点 
 			marker.on('click', function(e,id){
 				showInfoM(e.target.proName,e.target.id);
 		    }); //增加点击事件;  
 		    marker.setMap(map);
-         }  
 		} 
    }
    
-     function showInfoM(e,id) { // 点击 坐标点
+   function showInfoM(e,id) { // 点击 坐标点
 	  $.modal({
 	  text: e,
 	  buttons: [
@@ -987,10 +1009,30 @@ input[type="radio"] {
 				  var polyLine = new AMap.Polyline({
 				  //折线的节点坐标数组
 				  path:lines,
-				  map:map
+				  map:map,
+				  strokeColor: "#0C2EF0",//线颜色
+				  strokeOpacity: 0.5,//线透明度
+                  strokeWeight: 5,//线宽
 				  }); 
-		      }); 
+		     }); 
 	    }},
+	      { text: "导游模式", onClick: function(){ 
+		     for (var i = 0; i < json.length; i++){
+		       if(id ==  json[i].id){
+		           $('#pid').html(json[i].chineseContent);
+				   var song = [{
+							'src': 'http://www.guolaiwan.net/file/'+json[i].chineseGirl,
+							'title': ''+json[i].childName+''
+						}
+				   ];
+				  navigation = 1;
+				  latitid = json[i].id
+			      MP3(song,latitid); // 播放音乐
+			      clearInterval(ref);  //停止循环 定位
+			      red(latitid);
+		       }
+ 			} 
+	     }},
 	  ]
 	}); 
    }
@@ -1814,7 +1856,7 @@ var id;
 
 			var audioFn = audioPlay({
 				song: e,
-				autoPlay: false //是否立即播放第一首，autoPlay为true且song为空，会alert文本提示并退出
+				autoPlay: true //是否立即播放第一首，autoPlay为true且song为空，会alert文本提示并退出
 			});
 
 			/* 向歌单中添加新曲目，第二个参数true为新增后立即播放该曲目，false则不播放 */
@@ -1828,7 +1870,7 @@ var id;
 			//audioFn.stopAudio();
 
 			/* 开启播放 */
-			//audioFn.playAudio();
+			  audioFn.playAudio();
 
 			/* 选择歌单中索引为3的曲目(索引是从0开始的)，第二个参数true立即播放该曲目，false则不播放 */
 			//audioFn.selectMenu(3,true);
@@ -1999,7 +2041,7 @@ var id;
        					_this.audio.currentTime = 0;
 			             _this.audio.pause();
 			             _this.stopAudio();
-       				     setaddChild(latitid); // 存已浏览点
+       				     setaddChild(latitid,navigation); // 存用户已浏览点
        					$(".audio-play").click(function() {
        					if($buttonControl.hasClass("action-start")){
        					  	$(".audio-play").css("background-image","url(lib/images/plays.png)"); 

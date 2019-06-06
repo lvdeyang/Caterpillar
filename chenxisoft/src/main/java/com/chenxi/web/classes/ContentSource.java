@@ -3,7 +3,8 @@ package com.chenxi.web.classes;
 
 public enum ContentSource {
 	YICHE("易车"),
-	XINLANG("新浪");
+	XINLANG("新浪"),
+	JINGDONG("京东");
 	
 	
     private String name;
@@ -21,6 +22,8 @@ public enum ContentSource {
 			return "易车";
 		}else if(this.equals(XINLANG)){
 			return "新浪";
+		}else if(this.equals(JINGDONG)){
+			return "京东";
 		}else {
 			throw new Exception("错误的");
 		}
@@ -31,6 +34,8 @@ public enum ContentSource {
 			return YICHE;
 		}else if("新浪".equals(name)){
 			return XINLANG;
+		}else if("京东".equals(name)){
+			return JINGDONG;
 		} else {
 			throw new Exception("错误的："+name);
 		}
@@ -41,6 +46,8 @@ public enum ContentSource {
 			return YICHE;
 		}else if("XINLANG".equals(s)){
 			return XINLANG;
+		} else if("JINGDONG".equals(s)){
+			return JINGDONG;
 		} else {
 			throw new Exception("错误的："+s);
 		}

@@ -198,22 +198,25 @@ public class GuideController extends WebBaseControll  {
 		JSONObject pageObject = JSON.parseObject(param);
 		String merchantId = pageObject.getString("ChildId");
 		if(merchantId != null){
-			List<UserInfoPO> upolist = conn_userInfo.getUserByUid(userId);
-			String[] childId =   upolist.get(0).getChildId().split(",");
-			for (String string : childId) {
-				if (merchantId.equals(string)) {
-					return success("");
+			UserInfoPO upolist = conn_userInfo.getUserByUid(userId).get(0);
+			if (upolist.getChildId() != null && upolist.getChildId() != "") {
+				String[] childId =   upolist.getChildId().split(",");
+				for (String string : childId) {
+					if (merchantId.equals(string)) {
+						return success("");
+					}
 				}
-			}
-			String child = upolist.get(0).getChildId();
+			}	
+			String child = upolist.getChildId();
 			String str = null;
-			if( !"".equals(child) && merchantId != null ){
+			if( !"".equals(child) && child != null ){
 				str = child +","+merchantId;
 			}else {
 				str = merchantId;
 			}
-			upolist.get(0).setChildId(str);
-			conn_userInfo.saveOrUpdate(upolist.get(0));
+			
+			upolist.setChildId(str);
+			conn_userInfo.saveOrUpdate(upolist);
 		}
 		
 		return success("");
