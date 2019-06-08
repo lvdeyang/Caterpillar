@@ -1581,6 +1581,7 @@ html, body {
 
 
 <body>
+<input type="text" class="touser" hidden="hidden" value="">
 	<script type="text/javascript">
 		function deletepl(data){
 			var paran={};

@@ -488,8 +488,15 @@ html, body {
    		height: 20%;
    }
    
-    
-
+ .weui-dialog .weui-dialog__btn.default, .weui-toast .weui-dialog__btn.default {
+ cursor:pointer !important;
+ }   
+.weui-dialog .weui-dialog__btn + .weui-dialog__btn, .weui-toast .weui-dialog__btn + .weui-dialog__btn{
+ cursor:pointer !important;
+}
+.weui-prompt-input .weui-input{
+cursor:pointer !important;
+}
 </style>
 
 </head>
@@ -542,8 +549,8 @@ html, body {
 	 var orderurl =window.BASEPATH+'pubnum/wallet/addOrder';
 	 var userId=${userId};
 		$.prompt({
-		  title: '请您输入充值金额：',
-		  input: '单位：（元）',
+		  title: '请您输入充值金额：（元）',
+		  input: '',
 		  empty: false, // 是否允许为空
 		  onOK: function (input) {
 		    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
@@ -581,8 +588,8 @@ html, body {
 			 var orderurl =window.BASEPATH+'pubnum/wallet/addOrder';
 			 var userId=${userId};
 				$.prompt({
-				  title: '请您输入提现金额：',
-				  input: '单位：（元）',
+				  title: '请您输入提现金额：（元）',
+				  input: '',
 				  empty: false, // 是否允许为空
 				  onOK: function (input) {
 				    if(/^[0-9]*[1-9][0-9]*$/.test(input)){

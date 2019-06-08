@@ -2537,8 +2537,8 @@ public class PubNumController extends WebBaseControll {
 		if(lasttime!=null){
 			//计算出用户发送信息的时间距离客服在商户页面内最后的活动时间差
 			cha=((new Date().getTime())-(lasttime.getTime()))/(1000*60);
-			//相差5分钟时 推送公众号提醒客服有消息
-			if(cha>5){
+			//相差20分钟时 推送公众号提醒客服有消息
+			if(cha>20){
 				sendStoreRemind(touser);
 			}
 		}else{
