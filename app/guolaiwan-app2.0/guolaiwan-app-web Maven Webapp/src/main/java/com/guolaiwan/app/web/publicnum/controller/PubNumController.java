@@ -134,6 +134,9 @@ public class PubNumController extends WebBaseControll {
 	private MessageDAO messagedao;
 	@Autowired
 	private MerchantBusinessDAO conn_merchantBusiness;
+	// 商户
+	@Autowired
+	private MerchantDAO conn_merchant;
 
 	@RequestMapping(value = "/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
@@ -276,6 +279,7 @@ public class PubNumController extends WebBaseControll {
 		// 判断此时登录的人是不是该商户房间的商户
 		if (userId == merchantUserId) {
 			mv.addObject("ismerchant", 1);
+			conn_merchant.get(merchantId).setLastexercisetime(new Date());
 		} else {
 			mv.addObject("ismerchant", 2);
 		}
@@ -303,6 +307,7 @@ public class PubNumController extends WebBaseControll {
 			// 判断此时登录的人是不是该商户房间的商户
 			if (userId == merchantUserId) {
 				mv.addObject("ismerchant", 1);
+				conn_merchant.get(code).setLastexercisetime(new Date());
 			} else {
 				mv.addObject("ismerchant", 2);
 			}
@@ -730,9 +735,7 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 
-	// 商户
-	@Autowired
-	private MerchantDAO conn_merchant;
+	
 	@Autowired
 	private SysConfigDAO conn_sys;
 
@@ -1292,6 +1295,7 @@ public class PubNumController extends WebBaseControll {
 		// 判断此时登录的人是不是该商户房间的商户
 		if (userId == merchantUserId) {
 			mv.addObject("ismerchant", 1);
+			conn_merchant.get(merchantId).setLastexercisetime(new Date());
 		} else {
 			mv.addObject("ismerchant", 2);
 		}
@@ -2145,7 +2149,7 @@ public class PubNumController extends WebBaseControll {
 		long userMoney = user.getWallet();
 		user.setWallet(userMoney + money);
 		conn_user.saveOrUpdate(user);
-		// 调用方法推送充值消息给 李姐 刘姐 用户
+		// 调用方法推送充值消息给 李姐  用户
 		sendWalletPayMessage(order);
 		return success(1);
 	}
@@ -2490,7 +2494,7 @@ public class PubNumController extends WebBaseControll {
 
 	/**
 	 * 页面发送消息的方法
-	 * 
+	 * 客服在线咨询
 	 * @param request
 	 * @return
 	 */
@@ -2505,13 +2509,14 @@ public class PubNumController extends WebBaseControll {
 		String msg = request.getParameter("message");
 		// 发给的userID
 		long touser;
+		MerchantPO merchant = conn_merchant.get(merchantId);
 		// 如果页面带回来有touser 就对这个id发送 没有就是给商户发送
 		if (request.getParameter("touser") != "" & request.getParameter("touser") != null) {
 			touser = Long.parseLong(request.getParameter("touser"));
 		} else {
 			// 商家的userId
 			if(conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId)==null){
-			touser = conn_merchant.get(merchantId).getUser().getId();
+			touser = merchant.getUser().getId();
 			}else{
 			touser =conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId).getUserId();
 			}
@@ -2526,7 +2531,49 @@ public class PubNumController extends WebBaseControll {
 		ol.setTouserId(touser);
 		ol.setUserheadimg(userpo.getUserHeadimg());
 		conn_olchatmessage.save(ol);
+		//获取到客服再商户页面内最后的活动时间
+		Date lasttime=merchant.getLastexercisetime();
+		long cha=0;
+		if(lasttime!=null){
+			//计算出用户发送信息的时间距离客服在商户页面内最后的活动时间差
+			cha=((new Date().getTime())-(lasttime.getTime()))/(1000*60);
+			//相差20分钟时 推送公众号提醒客服有消息
+			if(cha>20){
+				sendStoreRemind(touser);
+			}
+		}else{
+			//这里是客服没有在商户出现过 防止没有客服的商家提醒时发生错误
+			sendStoreRemind(touser);
+		}
+		
 		return request;
+	}
+	
+	
+	/**
+	 * 通知商家客服有新消息
+	 */
+	public void sendStoreRemind(long touser){
+		UserInfoPO user = conn_user.get(touser);
+		JSONObject obj1 = new JSONObject();
+		obj1.put("touser",user.getUserOpenID() );
+		obj1.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+		obj1.put("url", "");
+		JSONObject microProObj1 = new JSONObject();
+		microProObj1.put("appid", "");
+		microProObj1.put("pagepath", "");
+		obj1.put("miniprogram", microProObj1);
+		JSONObject dataObject1 = new JSONObject();
+		JSONObject firstObj1 = new JSONObject();
+		firstObj1.put("value", "用户在线咨询通知");
+		firstObj1.put("color", "");
+		dataObject1.put("first", firstObj1);
+		JSONObject remarkObj1 = new JSONObject();
+		remarkObj1.put("value", "有用户在您的商户在线咨询，请您尽快查看！");
+		remarkObj1.put("color", "");
+		dataObject1.put("remark", remarkObj1);
+		obj1.put("data", dataObject1);
+		SendMsgUtil.sendTemplate(obj1.toJSONString());
 	}
 
 	/**

@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -33,7 +34,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	<div style="margin-top:50px;padding-left:15px;font-size:18px;id="title">${article.title}</div>
     <div style="padding-left:15px;margin-top:5px;font-size:13px;" id="source"></div>
-    <div style="padding:15px;font-size:12px;margin-top:5px;" id="content">${article.content}</div>
+    <div style="padding:15px;font-size:12px;margin-top:5px;" id="content">
+         <c:forEach var="content" items="${contentPos}">
+		         <c:if test="${content.myimage!=null}">
+		             <image style="width:100%;margin-top:5px;" src="${content.myimage}"/>
+		         </c:if>
+		         <c:if test="${content.mycontent!=null}">
+		             <div style="width:100%;margin-top:5px;">
+		                  ${content.mycontent}
+		             </div>
+		         </c:if>
+		 </c:forEach>
+    </div>
 	<script type="text/javascript">
 	     $(function() {
 	          window.BASEPATH = '<%=basePath%>';

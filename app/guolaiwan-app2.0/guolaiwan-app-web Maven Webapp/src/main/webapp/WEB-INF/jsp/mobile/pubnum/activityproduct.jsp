@@ -1525,6 +1525,7 @@ html, body {
 				        		$('.speak_box').append(ans);
 								//记录消息来自谁放到三方待用
 								$('.touser').val(data[i].fromuserId);
+								$('#olprompt').show();
 								//修改展示完成的数据flag
 								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
 							}
@@ -1567,6 +1568,7 @@ html, body {
 	 $(document).on('click',' #socket',function(){
 	 		$(".zhuye").hide();
 	        $(".duihua").show();
+	        $("#olprompt").hide();
 	       
 	 });
 	 
@@ -1579,6 +1581,7 @@ html, body {
 
 
 <body>
+<input type="text" class="touser" hidden="hidden" value="">
 	<script type="text/javascript">
 		function deletepl(data){
 			var paran={};
@@ -1698,6 +1701,7 @@ html, body {
 					style="width:90%;margin-top:20px;margin-left:11px;font-size:12px;">
 					<a id="contact1" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
 					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
+					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
 				</div>	
 			</div>
 
