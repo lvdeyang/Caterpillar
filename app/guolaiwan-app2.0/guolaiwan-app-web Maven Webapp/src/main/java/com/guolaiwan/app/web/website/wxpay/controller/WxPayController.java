@@ -312,13 +312,13 @@ public class WxPayController extends BaseController {
 			} catch (Exception e) {
 				System.out.println("正常反应");
 			}
-			cutUserWallet(userpo, money);
+			cutUserWallet(userpo, money,orderNo);
 		
 		return success(1);
 	}
 	
 	//提现后修改用户的余额
-	public void cutUserWallet(UserInfoPO userpo,long money){
+	public void cutUserWallet(UserInfoPO userpo,long money,long orderNo){
 		System.out.println("用户提现成功");
 		userpo.setWallet(userpo.getWallet()-money);
 		conn_user.saveOrUpdate(userpo);
@@ -340,7 +340,12 @@ public class WxPayController extends BaseController {
 		nameObj.put("value", userpo.getUserNickname());
 		nameObj.put("color", "");
 		dataObject.put("keyword1", nameObj);
-
+		
+		JSONObject accountTypeObj = new JSONObject();
+		accountTypeObj.put("value", orderNo);
+		accountTypeObj.put("color", "");
+		dataObject.put("keyword2", accountTypeObj);
+		
 		JSONObject accountObj = new JSONObject();
 		accountObj.put("value", (money/100));
 		accountObj.put("color", "");
@@ -349,9 +354,9 @@ public class WxPayController extends BaseController {
 		timeObj.put("value", "我的钱包提现成功，金额为：" + (money/100)+"元，24小时内到账！");
 		timeObj.put("color", "");
 
-		String pNum = "";
-		if (pNum == null || pNum.isEmpty()) {
-			pNum = userpo.getUserPhone();
+		String pNum = userpo.getUserPhone();
+		if (pNum == null ) {
+			pNum="该用户未填写";
 		}
 		dataObject.put("keyword4", timeObj);
 		JSONObject remarkObj = new JSONObject();
@@ -379,7 +384,12 @@ public class WxPayController extends BaseController {
 		nameObj1.put("value", userpo.getUserNickname());
 		nameObj1.put("color", "");
 		dataObject1.put("keyword1", nameObj1);
-
+		
+		JSONObject accountTypeObj1 = new JSONObject();
+		accountTypeObj1.put("value", orderNo);
+		accountTypeObj1.put("color", "");
+		dataObject.put("keyword2", accountTypeObj1);
+		
 		JSONObject accountObj1 = new JSONObject();
 		accountObj1.put("value", (money/100));
 		accountObj1.put("color", "");
@@ -388,9 +398,9 @@ public class WxPayController extends BaseController {
 		timeObj1.put("value", "我的钱包提现成功，金额为：" + (money/100)+"元，24小时内到账！");
 		timeObj1.put("color", "");
 
-		String pNum1 = "";
-		if (pNum1 == null || pNum1.isEmpty()) {
-			pNum1 = userpo.getUserPhone();
+		String pNum1 = userpo.getUserPhone();
+		if (pNum1 == null ) {
+			pNum1="该用户未填写";
 		}
 		dataObject1.put("keyword4", timeObj1);
 		JSONObject remarkObj1 = new JSONObject();
