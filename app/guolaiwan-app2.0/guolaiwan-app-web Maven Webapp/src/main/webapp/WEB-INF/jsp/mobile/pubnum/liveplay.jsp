@@ -578,6 +578,10 @@ html, body {
 		            $(".pushGift").fadeOut().removeClass("show");
 	      
 	      }else{
+	      		if(/^\s*$/.test($('#message').val())){
+	      			$.alert("输入内容不能为空！");
+	      			return;
+	      		}
 		      var _uriaddMsg = window.BASEPATH + 'phoneApp/addMessage';
 			  var params={};
 			  params.liveId=${live.id};

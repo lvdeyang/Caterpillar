@@ -64,6 +64,7 @@ import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantBusinessDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.MessageDAO;
@@ -131,6 +132,11 @@ public class PubNumController extends WebBaseControll {
 	private OlChatMessageDAO conn_olchatmessage;
 	@Autowired
 	private MessageDAO messagedao;
+	@Autowired
+	private MerchantBusinessDAO conn_merchantBusiness;
+	// 商户
+	@Autowired
+	private MerchantDAO conn_merchant;
 
 	@RequestMapping(value = "/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
@@ -264,10 +270,16 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/merchant");
 		mv.addObject("merchantId", merchantId);
 		long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
-		long merchantUserId = conn_merchant.get(merchantId).getUser().getId();
+		long merchantUserId = 2;
+		if(conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId)==null){
+			merchantUserId=conn_merchant.get(merchantId).getUser().getId();
+		}else{
+			merchantUserId=conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId).getUserId();
+		}
 		// 判断此时登录的人是不是该商户房间的商户
 		if (userId == merchantUserId) {
 			mv.addObject("ismerchant", 1);
+			conn_merchant.get(merchantId).setLastexercisetime(new Date());
 		} else {
 			mv.addObject("ismerchant", 2);
 		}
@@ -286,10 +298,16 @@ public class PubNumController extends WebBaseControll {
 			mv = new ModelAndView("mobile/pubnum/merchant");
 			mv.addObject("merchantId", code);
 			long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
-			long merchantUserId = conn_merchant.get(code).getUser().getId();
+			long merchantUserId = 2;
+			if(conn_merchantBusiness.getMerchantBusinessBymerchantId(code)==null){
+				merchantUserId=conn_merchant.get(code).getUser().getId();
+			}else{
+				merchantUserId=conn_merchantBusiness.getMerchantBusinessBymerchantId(code).getUserId();
+			}
 			// 判断此时登录的人是不是该商户房间的商户
 			if (userId == merchantUserId) {
 				mv.addObject("ismerchant", 1);
+				conn_merchant.get(code).setLastexercisetime(new Date());
 			} else {
 				mv.addObject("ismerchant", 2);
 			}
@@ -299,6 +317,7 @@ public class PubNumController extends WebBaseControll {
 			mv = new ModelAndView("mobile/pubnum/product");
 			// 轮播图商品购买跳转 张羽 新增参数到页面 商品购买数量限制 5/2
 			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
+			mv.addObject("merchantId", conn_product.get(code).getProductMerchantID());
 			mv.addObject("id", code);
 			break;
 		default:
@@ -331,10 +350,12 @@ public class PubNumController extends WebBaseControll {
 			mv = new ModelAndView("mobile/pubnum/activityproduct");
 			mv.addObject("actId", activityproId);
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
+			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
 		} else {
 			mv = new ModelAndView("mobile/pubnum/product");
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
+			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
 		}
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
@@ -714,9 +735,7 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 
-	// 商户
-	@Autowired
-	private MerchantDAO conn_merchant;
+	
 	@Autowired
 	private SysConfigDAO conn_sys;
 
@@ -1267,10 +1286,16 @@ public class PubNumController extends WebBaseControll {
 		long merchantId = productPO.getProductMerchantID();
 		mv.addObject("merchantId", merchantId);
 		long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
-		long merchantUserId = conn_merchant.get(merchantId).getUser().getId();
+		long merchantUserId = 2;
+		if(conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId)==null){
+			merchantUserId=conn_merchant.get(merchantId).getUser().getId();
+		}else{
+			merchantUserId=conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId).getUserId();
+		}
 		// 判断此时登录的人是不是该商户房间的商户
 		if (userId == merchantUserId) {
 			mv.addObject("ismerchant", 1);
+			conn_merchant.get(merchantId).setLastexercisetime(new Date());
 		} else {
 			mv.addObject("ismerchant", 2);
 		}
@@ -1458,6 +1483,7 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/activityproduct");
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(id);
 		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
+		mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 		mv.addObject("actId", activityPro.getId());
 		mv.addObject("id", id);
 		mv.addObject("userId", request.getSession().getAttribute("userId"));
@@ -2112,6 +2138,7 @@ public class PubNumController extends WebBaseControll {
 	}
 
 	// 我的钱包充值成功修改用户余额 张羽 5/19
+	@ResponseBody
 	@RequestMapping(value = "/wallet/updata")
 	public Object updataUserMoney(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("userId"));
@@ -2122,7 +2149,7 @@ public class PubNumController extends WebBaseControll {
 		long userMoney = user.getWallet();
 		user.setWallet(userMoney + money);
 		conn_user.saveOrUpdate(user);
-		// 调用方法推送充值消息给 李姐 刘姐 用户
+		// 调用方法推送充值消息给 李姐  用户
 		sendWalletPayMessage(order);
 		return success(1);
 	}
@@ -2142,7 +2169,7 @@ public class PubNumController extends WebBaseControll {
 			order.setOrderState(OrderStateType.PAYSUCCESS);
 			conn_order.saveOrUpdate(order);
 			conn_user.saveOrUpdate(user);
-			// 推送购买商品成功信息给用户 商家 李姐 刘姐
+			// 推送购买商品成功信息给用户 商家 李姐 
 			sendPayMessage(order);
 		} else {
 			// 余额不足 不允许购买
@@ -2311,50 +2338,7 @@ public class PubNumController extends WebBaseControll {
 
 		// opVUYv9LtqKAbiaXInBqI01hlpYg
 
-		JSONObject obj2 = new JSONObject();
-		obj2.put("touser", "opVUYv-havBnt8CaydM5zmmhkLlw");
-		obj2.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
-		obj2.put("url", "");
-		JSONObject microProObj2 = new JSONObject();
-		microProObj2.put("appid", "");
-		microProObj2.put("pagepath", "");
-		obj2.put("miniprogram", microProObj2);
-		JSONObject dataObject2 = new JSONObject();
-		JSONObject firstObj2 = new JSONObject();
-		firstObj2.put("value", "新的过来玩订单");
-		firstObj2.put("color", "");
-		dataObject2.put("first", firstObj2);
-
-		JSONObject nameObj2 = new JSONObject();
-		if (conn_address.get(orderInfoPO.getMailAddress()) != null) {
-			nameObj2.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
-		} else {
-			nameObj2.put("value", conn_user.get(orderInfoPO.getId()).getUserNickname());
-		}
-		nameObj2.put("color", "");
-		dataObject2.put("keyword1", nameObj2);
-
-		JSONObject accountTypeObj2 = new JSONObject();
-		accountTypeObj2.put("value", orderInfoPO.getId());
-		accountTypeObj2.put("color", "");
-		dataObject2.put("keyword2", accountTypeObj2);
-
-		JSONObject accountObj2 = new JSONObject();
-		accountObj2.put("value", df.format(amount));
-		accountObj2.put("color", "");
-		dataObject2.put("keyword3", accountObj2);
-		JSONObject timeObj2 = new JSONObject();
-		timeObj2.put("value", productPO == null ? "到店支付订单:" + merchantPO.getShopName() : productPO.getProductName());
-		timeObj2.put("color", "");
-
-		dataObject2.put("keyword4", timeObj2);
-		JSONObject remarkObj2 = new JSONObject();
-		remarkObj2.put("value", "请做好接待工作(用户电话:" + pNum + ")");
-		remarkObj2.put("color", "");
-		dataObject2.put("remark", remarkObj2);
-		obj2.put("data", dataObject2);
-		SendMsgUtil.sendTemplate(obj2.toJSONString());
-
+		
 	}
 
 	/**
@@ -2455,45 +2439,7 @@ public class PubNumController extends WebBaseControll {
 
 		// opVUYv9LtqKAbiaXInBqI01hlpYg
 
-		JSONObject obj2 = new JSONObject();
-		obj2.put("touser", "opVUYv-havBnt8CaydM5zmmhkLlw");
-		obj2.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
-		obj2.put("url", "");
-		JSONObject microProObj2 = new JSONObject();
-		microProObj2.put("appid", "");
-		microProObj2.put("pagepath", "");
-		obj2.put("miniprogram", microProObj2);
-		JSONObject dataObject2 = new JSONObject();
-		JSONObject firstObj2 = new JSONObject();
-		firstObj2.put("value", "用户充值钱包通知");
-		firstObj2.put("color", "");
-		dataObject2.put("first", firstObj2);
-
-		JSONObject nameObj2 = new JSONObject();
-		nameObj2.put("value", conn_user.get(orderInfoPO.getUserid()).getUserNickname());
-		nameObj2.put("color", "");
-		dataObject2.put("keyword1", nameObj2);
-
-		JSONObject accountTypeObj2 = new JSONObject();
-		accountTypeObj2.put("value", orderInfoPO.getId());
-		accountTypeObj2.put("color", "");
-		dataObject2.put("keyword2", accountTypeObj2);
-
-		JSONObject accountObj2 = new JSONObject();
-		accountObj2.put("value", df.format(amount));
-		accountObj2.put("color", "");
-		dataObject2.put("keyword3", accountObj2);
-		JSONObject timeObj2 = new JSONObject();
-		timeObj2.put("value", "我的钱包充值成功，金额为：" + df.format(amount));
-		timeObj2.put("color", "");
-
-		dataObject2.put("keyword4", timeObj2);
-		JSONObject remarkObj2 = new JSONObject();
-		remarkObj2.put("value", "用户电话:" + pNum);
-		remarkObj2.put("color", "");
-		dataObject2.put("remark", remarkObj2);
-		obj2.put("data", dataObject2);
-		SendMsgUtil.sendTemplate(obj2.toJSONString());
+		
 
 	}
 
@@ -2542,16 +2488,13 @@ public class PubNumController extends WebBaseControll {
 	public List<OlChatMessagePO> getOlChat(HttpServletRequest request) {
 		// 商户id
 		long merchantId = Long.parseLong(request.getParameter("merchantId"));
-
-		System.out.println("-------" + merchantId);
 		List<OlChatMessagePO> msgs = conn_olchatmessage.findByFlag(merchantId);
-		System.out.println(msgs.size() + "++++++++++000000000000000000");
 		return msgs;
 	}
 
 	/**
 	 * 页面发送消息的方法
-	 * 
+	 * 客服在线咨询
 	 * @param request
 	 * @return
 	 */
@@ -2566,12 +2509,17 @@ public class PubNumController extends WebBaseControll {
 		String msg = request.getParameter("message");
 		// 发给的userID
 		long touser;
+		MerchantPO merchant = conn_merchant.get(merchantId);
 		// 如果页面带回来有touser 就对这个id发送 没有就是给商户发送
 		if (request.getParameter("touser") != "" & request.getParameter("touser") != null) {
 			touser = Long.parseLong(request.getParameter("touser"));
 		} else {
 			// 商家的userId
-			touser = conn_merchant.get(merchantId).getUser().getId();
+			if(conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId)==null){
+			touser = merchant.getUser().getId();
+			}else{
+			touser =conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId).getUserId();
+			}
 		}
 		UserInfoPO userpo = conn_user.get(userId);
 		OlChatMessagePO ol = new OlChatMessagePO();
@@ -2583,7 +2531,49 @@ public class PubNumController extends WebBaseControll {
 		ol.setTouserId(touser);
 		ol.setUserheadimg(userpo.getUserHeadimg());
 		conn_olchatmessage.save(ol);
+		//获取到客服再商户页面内最后的活动时间
+		Date lasttime=merchant.getLastexercisetime();
+		long cha=0;
+		if(lasttime!=null){
+			//计算出用户发送信息的时间距离客服在商户页面内最后的活动时间差
+			cha=((new Date().getTime())-(lasttime.getTime()))/(1000*60);
+			//相差20分钟时 推送公众号提醒客服有消息
+			if(cha>20){
+				sendStoreRemind(touser);
+			}
+		}else{
+			//这里是客服没有在商户出现过 防止没有客服的商家提醒时发生错误
+			sendStoreRemind(touser);
+		}
+		
 		return request;
+	}
+	
+	
+	/**
+	 * 通知商家客服有新消息
+	 */
+	public void sendStoreRemind(long touser){
+		UserInfoPO user = conn_user.get(touser);
+		JSONObject obj1 = new JSONObject();
+		obj1.put("touser",user.getUserOpenID() );
+		obj1.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+		obj1.put("url", "");
+		JSONObject microProObj1 = new JSONObject();
+		microProObj1.put("appid", "");
+		microProObj1.put("pagepath", "");
+		obj1.put("miniprogram", microProObj1);
+		JSONObject dataObject1 = new JSONObject();
+		JSONObject firstObj1 = new JSONObject();
+		firstObj1.put("value", "用户在线咨询通知");
+		firstObj1.put("color", "");
+		dataObject1.put("first", firstObj1);
+		JSONObject remarkObj1 = new JSONObject();
+		remarkObj1.put("value", "有用户在您的商户在线咨询，请您尽快查看！");
+		remarkObj1.put("color", "");
+		dataObject1.put("remark", remarkObj1);
+		obj1.put("data", dataObject1);
+		SendMsgUtil.sendTemplate(obj1.toJSONString());
 	}
 
 	/**

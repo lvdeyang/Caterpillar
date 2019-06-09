@@ -488,8 +488,15 @@ html, body {
    		height: 20%;
    }
    
-    
-
+ .weui-dialog .weui-dialog__btn.default, .weui-toast .weui-dialog__btn.default {
+ cursor:pointer !important;
+ }   
+.weui-dialog .weui-dialog__btn + .weui-dialog__btn, .weui-toast .weui-dialog__btn + .weui-dialog__btn{
+ cursor:pointer !important;
+}
+.weui-prompt-input .weui-input{
+cursor:pointer !important;
+}
 </style>
 
 </head>
@@ -542,8 +549,8 @@ html, body {
 	 var orderurl =window.BASEPATH+'pubnum/wallet/addOrder';
 	 var userId=${userId};
 		$.prompt({
-		  title: '请您输入充值金额：',
-		  input: '单位：（元）',
+		  title: '请您输入充值金额：（元）',
+		  input: '',
 		  empty: false, // 是否允许为空
 		  onOK: function (input) {
 		    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
@@ -581,8 +588,8 @@ html, body {
 			 var orderurl =window.BASEPATH+'pubnum/wallet/addOrder';
 			 var userId=${userId};
 				$.prompt({
-				  title: '请您输入充值金额：',
-				  input: '单位：（元）',
+				  title: '请您输入提现金额：（元）',
+				  input: '',
 				  empty: false, // 是否允许为空
 				  onOK: function (input) {
 				    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
@@ -615,7 +622,16 @@ html, body {
 		var url=window.BASEPATH+'website/wxpay/mmpay?userId='+userId+'&orderNo='+orderNo;
 		$.get(url,null,function(data){
 				data = parseAjaxResult(data);
-				 if(data==1)window.location.reload();
+				 if(data==1){
+				 $.alert({
+				  title: '提现提醒',
+				  text: '提现成功，24小时内到账！',
+				  onOK: function () {
+				    //点击确认
+				 window.location.reload();
+				  }
+				});
+				 }
 		})
 	}
 	
@@ -635,7 +651,17 @@ html, body {
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		                //每五秒刷新订单状态
 		               $.post(window.BASEPATH+'pubnum/wallet/updata',{'userId':userId,'orderId':orderNo},function(data){
-									  if(data==1)window.location.reload();
+		               				data = parseAjaxResult(data);
+		               				if(data==1){
+									 $.alert({
+									  title: '充值提醒',
+									  text: '充值成功，感谢您使用过来玩！',
+									  onOK: function () {
+									    //点击确认
+									 window.location.reload();
+									 }
+								 });
+							  }
 		            	}) 
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") { 
