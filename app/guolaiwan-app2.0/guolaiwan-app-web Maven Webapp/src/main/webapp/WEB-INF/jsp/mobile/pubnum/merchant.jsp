@@ -518,7 +518,7 @@ html, body {
 	.write_box input{height:40px;padding:0 5px;line-height:40px;width:100%;box-sizing:border-box;border:0;}
 	.wenwen_help button{width:100%;background:#42929d;color:#fff;border-radius:5px;border:0;height:40px;}
 	#wenwen{height:100%;}
-	.speak_window{overflow-y:scroll;height:100%;width:100%;position:fixed;top:0;left:0;}
+	.speak_window{overflow-y:scroll;height:100%;width:100%;top:0;left:0;}
 	.speak_box{margin-bottom:70px;padding:10px;}
 	.question,.answer{margin-bottom:1rem;}
 	.question{text-align:right;margin-top:50px;}
@@ -543,7 +543,22 @@ html, body {
 	.saying img{width:100%;}  
     
     
-    
+    .chatline{
+     background:#FBFBFB;
+     margin-top:50px;
+     width:100%;
+     border-radius:6px;
+     overflow: hidden;
+  
+    }
+    .chatline img{
+     width:50px;
+     height:50px;
+     border-radius:6px;
+     margin:5px 5px;
+       z-index:11111111111111111111111111111111;
+    }
+
 </style>
 
 </head>
@@ -785,10 +800,13 @@ html, body {
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
+				        		
+					        		if(document.getElementById(data[i].fromuserId)==null){
+					        		imgs  = '<img id="'+data[i].fromuserId+'" name="'+data[i].fromuserId+'" onclick="changetouser(this.id)" src="'+data[i].userheadimg+'">';
+					        		$('.chatline').append(imgs);
+					        		} 
 				        		$('#olprompt').show();
 				        		$('#olprompt1').show();
-								//记录消息来自谁放到三方待用
-								$('.touser').val(data[i].fromuserId);
 								//修改展示完成的数据flag
 								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
 							}
@@ -805,18 +823,10 @@ html, body {
 	 	var message="";
 	 	var userId=${userId};
 		var merchantId=${merchantId};
-		//是否是商家
-		var ismerchant=${ismerchant};
 		//存数据库的路径
 	 	var url=window.BASEPATH+'pubnum/pullolchat';
 		//获取要发送的对象 
 		var touser="";
-		//如果是商家就获得touser对象 不是就为""后台判定touser为商家
-		if(ismerchant==1){
-			touser=$('.touser').val();
-		}else{
-			touser="";
-		}
 	 	//输入框判空
 	 	if(document.getElementById("left").value!=""&&document.getElementById("left").value!=null){
 	 		message=document.getElementById("left").value;
@@ -855,12 +865,11 @@ html, body {
 
 
 <script type="text/javascript">
-	function to_write(){
-	    $('.wenwen_btn img').attr('src','lib/images/saying.gif');
-	    $('.write_box,.wenwen_help button').show();
-	    $('.circle-button,.wenwen_help a').hide();
-	    $('.write_box input').focus();
-	    for_bottom();
+
+	//修改touser
+	function changetouser(id){
+		$('.touser').val(id);
+		alert($('.touser').val());
 	}
 
 	function keyup(){
@@ -869,15 +878,6 @@ html, body {
 		
 	}
 
-	var wen  = document.getElementById('wenwen');
-	function _touch_start(event){
-        event.preventDefault();
-        $('.wenwen_text').css('background','#c1c1c1');
-        $('.wenwen_text span').css('color','#fff');
-        $('.saying').show();
-    }
-
-  
     
     function for_bottom(){
 		var speak_height = $('.speak_box').height();
@@ -888,19 +888,6 @@ html, body {
 		$('.question_text').css('max-width',$('.question').width()-60);
 	}
 	autoWidth();
-	
-	
-	$(document).on('click','.olline',function(){
-	 		if( $(".chatline").hasClass("show") ){
-		            // 执行隐藏
-		            $(".chatline").fadeOut().removeClass("show");
-		            // 其他
-		        }else{
-		            // 显示
-		            $(".chatline").fadeIn().addClass("show");
-		        }
-	 });
-	
 </script>
 
 
@@ -908,7 +895,6 @@ html, body {
 
 <div class="zhuye" style="">
 
-	<input type="text" class="touser" hidden="hidden" value="">
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
@@ -990,17 +976,14 @@ html, body {
 	
 
 
-<!-- <div class="chatline" style="background-color: black;height: 50px;z-index: 111111111111111;"></div> -->
-
 	<!-- 对话框 -->
 <div class="duihua" style="width:100%;height:100%;z-index:1111;display: none;">
 	
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
-	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
-		<%-- <c:if test="${ismerchant==1}">
-		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
-		</c:if> --%>
+	<p style="width:100%;"><span class="tui" style="font-weight: bold;margin-left: 5%;">＜</span> <span class="ltname"></span>
+	</p>
+		
 	</div>
 	<div class="speak_box">
 		<div class="answer">
@@ -1008,7 +991,7 @@ html, body {
 	</div>
 </div>
 <div class="wenwen-footer">
-	<div class="wenwen_btn left" onClick="to_write()"></div>
+	<div class="wenwen_btn left" ></div>
 	<div class="wenwen_text left">
 	    <div class="write_box">
 	        <input type="text" class="left" id="left" onKeyUp="keyup()" placeholder="请输入关键字" />
