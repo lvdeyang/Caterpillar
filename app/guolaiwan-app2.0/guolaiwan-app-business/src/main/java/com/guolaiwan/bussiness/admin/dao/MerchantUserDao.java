@@ -30,4 +30,12 @@ public class MerchantUserDao extends AbstractBaseDao<MerchantUser>{
 		hql.andBy("merchantId", Condition.eq, merchantId);
 		this.deleteByHql(hql);
 	}
+	
+	public MerchantUser  getUserByMerchantId(Long merchantId){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("merchantId", Condition.eq, merchantId);
+		List<MerchantUser> merchantUsers =  findByHql(hql);
+		if(merchantUsers==null || merchantUsers.size()<=0) return null;
+		return merchantUsers.get(0);
+	}
 }

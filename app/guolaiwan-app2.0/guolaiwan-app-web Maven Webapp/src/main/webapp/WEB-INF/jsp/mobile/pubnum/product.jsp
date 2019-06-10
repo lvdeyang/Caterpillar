@@ -1863,8 +1863,6 @@ addmessage();
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
-								//记录消息来自谁放到三方待用
-								$('.touser').val(data[i].fromuserId);
 								$('#olprompt').show();
 								//修改展示完成的数据flag
 								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
@@ -1921,7 +1919,6 @@ addmessage();
 
 
 <body>
-<input type="text" class="touser" hidden="hidden" value="">
 	<script type="text/javascript">
 		function deletepl(data){
 			var paran={};
