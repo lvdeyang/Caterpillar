@@ -51,17 +51,17 @@ public class CarTestController {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if(type.equals("recomm")){
 			List<ArticlePo> articlePos=new ArrayList<ArticlePo>();
-			List<ProductPo> productPos=new ArrayList<ProductPo>();
+			//List<ProductPo> productPos=new ArrayList<ProductPo>();
 			List<RecommPo> recommPos=conn_recomm.findAll(currPage, pageCount);
 			for (RecommPo recommPo : recommPos) {
 				if(recommPo.getMoudular().equals(Moudular.CEPING)){
 					articlePos.add(conn_article.get(recommPo.getContentId()));
 				}else{
-					productPos.add(conn_product.get(recommPo.getContentId()));
+					//productPos.add(conn_product.get(recommPo.getContentId()));
 				}
 			}
 			ret.put("articles", articlePos);
-			ret.put("products", productPos);
+			//ret.put("products", productPos);
 		}
 		else if(type.equals("article")){
 			ret.put("articles", conn_article.findAll(currPage, pageCount));
