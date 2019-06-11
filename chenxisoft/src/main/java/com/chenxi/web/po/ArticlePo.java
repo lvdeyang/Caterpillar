@@ -76,4 +76,6 @@ public class ArticlePo extends AbstractBasePO {
 		this.title = title;
 	}
 
+	
+
 }

@@ -35,6 +35,7 @@ public class XinlangCepingCollection extends BreadthCrawler {
 	
 	public void init() {
 		this.addSeed("http://auto.sina.com.cn/review/");
+		
 		this.addRegex("http://auto.sina.com.cn/review/shipai/[0-9]{4}-[0-9]{2}-[0-9]{2}/detail-[a-z]{8}[0-9]{7}.shtml");
 		setThreads(1);
 		getConf().setTopN(100);
@@ -62,9 +63,18 @@ public class XinlangCepingCollection extends BreadthCrawler {
 				List<Node> nodes= element.childNodes();
 				for (Node node : nodes) {
 					if(node.attr("class").equals("img_wrapper")){
+						
+						
+						
 						String href=node.childNode(0).attr("src");
 					    ArticleContentPo articleContentPo=new ArticleContentPo();
 					    articleContentPo.setMyimage(href);
+					    
+					    if(articlePo.getPic()==null||articlePo.getPic().isEmpty()){
+					    	articlePo.setPic(href);
+					    	conn_article.update(articlePo);
+					    }
+					    
 					    articleContentPo.setArticleId(articlePo.getId());
 					    articleContentPo.setMyindex(index);
 					    index++;

@@ -19,5 +19,8 @@ public class ArticleDao extends AbstractBaseDao<ArticlePo> {
 		List<ArticlePo> articlePos=this.findByHql(hql);
 		return (!articlePos.isEmpty()&&articlePos.size()!=0);
 	}
+	
+	
+	
 
 }

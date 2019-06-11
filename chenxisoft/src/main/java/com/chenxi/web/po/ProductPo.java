@@ -64,4 +64,5 @@ public class ProductPo extends AbstractBasePO{
 		this.moudular = moudular;
 	}
 	
+	
 }
