@@ -60,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 	     $(function() {
 	          window.BASEPATH = '<%=basePath%>';
-	          var dic={'XINLANG':'新浪','YICHE':'易车'};
+	          var dic={'XINLANG':'新浪','YICHE':'易车','JINGDONG':'京东'};
 			  var parseAjaxResult = function(data){
 					if(data.status !== 200){
 						$.toptip('data.message', 'error');
@@ -97,17 +97,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          
 	          function initList(data){
 	               var html=[];
-	               if(!data.articles) return;
-			       for(var i=0;i<data.articles.length;i++){
-			         html.push('<li class="article" id="art-'+data.articles[i].id+'">');
-					 html.push('    <div class="ui-list-img-square">');
-					 html.push('        <span style="background-image:url(http://pic37.nipic.com/20140113/8800276_184927469000_2.png)"></span></div>');
-					 html.push('	<div class="ui-list-info ui-border-t">');
-					 html.push('		<div style="font-size:13px;">'+data.articles[i].title+'</div>');
-					 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.articles[i].source]+'</p>');
-					 html.push('	</div>');
-					 html.push('</li>'); 
-			       }
+
+	               if(data.articles){
+	                  for(var i=0;i<data.articles.length;i++){
+				         html.push('<li class="article" id="art-'+data.articles[i].id+'">');
+						 html.push('    <div class="ui-list-img-square">');
+						 html.push('        <span style="background-image:url('+data.articles[i].pic+')"></span></div>');
+						 html.push('	<div class="ui-list-info ui-border-t">');
+						 html.push('		<div style="font-size:13px;">'+data.articles[i].title+'</div>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.articles[i].source]+'</p>');
+						 html.push('	</div>');
+						 html.push('</li>'); 
+				       }
+	               
+	               }
+			       
+			       if(data.products){
+		               for(var i=0;i<data.products.length;i++){
+				         html.push('<li style="margin-top:10px" class="article" id="art-'+data.products[i].id+'">');
+						 html.push('    <div class="ui-list-img-square">');
+						 html.push('        <span style="background-image:url('+data.products[i].pic+')"></span></div>');
+						 html.push('	<div class="ui-list-info ui-border-t">');
+						 html.push('		<div style="font-size:13px;">'+data.products[i].shortContent+'</div>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.products[i].source]+
+						           '￥<span style="font-size:14px;color:red">'+data.products[i].price+'</span></p>');
+						 html.push('	</div>');
+						 html.push('</li>'); 
+				       }
+	               
+	               }
+			       
+
 			       $('#articleList').append(html.join(''));
 	          }
 	          

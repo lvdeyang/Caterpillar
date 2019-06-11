@@ -20,4 +20,6 @@ public class ProductDao extends AbstractBaseDao<ProductPo> {
 		List<ProductPo> productPos=this.findByHql(hql);
 		return (!productPos.isEmpty()&&productPos.size()!=0);
 	}
+	
+	
 }

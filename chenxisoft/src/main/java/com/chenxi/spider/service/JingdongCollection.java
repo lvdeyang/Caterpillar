@@ -80,7 +80,7 @@ public class JingdongCollection extends BreadthCrawler {
 		    String image="";
 		    for (Element element : images) {
 		    	
-		    	image="https"+element.attr("data-origin");
+		    	image="https:"+element.attr("data-origin");
 			}
 		 
 			if(conn_product.ifhasBysContent(title)){
