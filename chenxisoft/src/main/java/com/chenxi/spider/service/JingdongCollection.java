@@ -91,6 +91,7 @@ public class JingdongCollection extends BreadthCrawler {
 		    productPo.setSource(ContentSource.JINGDONG);
 		    productPo.setShortContent(title);
 		    productPo.setPic(image);
+		    productPo.setUrl(url);
 		    productPo.setPrice(Double.parseDouble(price));
 		    conn_product.save(productPo);
 		

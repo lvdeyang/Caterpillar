@@ -112,6 +112,12 @@
 				</div>
 			</div>
 			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 分销商id</label>
+				<div class="layui-input-block">
+					<input type="text" name="distributionId"  autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 商户头像 </label>
 				<div class="layui-input-inline" style="width: 100px">
 				    <img alt="" src="" id="shopImg" style=" height:100px;width:100px ">

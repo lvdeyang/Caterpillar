@@ -138,6 +138,17 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		System.out.println("共有：" + allcount);
 		return allcount;
 	}
+	
+	// 获取商品ID
+	public MerchantPO getDistributionId(int distributionId) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("distributionId", Condition.eq, distributionId);
+		List<MerchantPO> list = findByHql(hql);
+		List<MerchantPO> findByHql = findByHql(hql);
+	    if(findByHql == null || findByHql.size() ==0) return null;
+	    return findByHql.get(0);
+	}
+	
 
 	// 通过用户id获取商户
 	public MerchantPO getMerByUser(UserInfoPO user) {
