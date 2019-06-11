@@ -241,9 +241,19 @@ html, body {
 				h = checkTime(h)
 				m = checkTime(m)
 				s = checkTime(s)
+				if(h<10){
+				h="0"+h;
+				}
+				if(m<10){
+				m="0"+m;
+				}
+				if(s<10){
+				s="0"+s;
+				}
 				document.getElementById('times').innerHTML = h + ":" + m + ":" + s
 				tt = setTimeout('startTime()', 1000)
-			}
+				
+			}     
           function checkTime(i) {
                 
 				if(h < 0){
@@ -435,7 +445,6 @@ html, body {
 
 
 		<div class="header_on" style="margin:47% 0 0 0;">
-
 			<p style="padding:5% 0 0 6%; display: inline-block;">进场时间</p>
 			<p style=" padding:5% 8% 0 0 ;float:right;display: inline-block;" >停车时长</p>
 		</div>

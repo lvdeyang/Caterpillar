@@ -712,7 +712,7 @@ html, body {
 				    </div>
 				  </div>
 				  <div class="weui-cell" id="buydate">
-				    <div class="weui-cell__hd"><label for="" class="weui-label">下单日期</label></div>
+				    <div class="weui-cell__hd"><label for="" class="weui-label">支付时间</label></div>
 				    <div class="weui-cell__bd">
                         <input id="start" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">--<input id="end" style="width:100px;font-size:12px;background-color: #f0eff4;height:30px;" class="weui-input" type="date" value="">
 				    </div>
