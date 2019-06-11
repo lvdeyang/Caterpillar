@@ -1552,7 +1552,7 @@ html, body {
 	 		return;
 	 	}
 	 		str  = '<div class="question">';
-	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="heard_img right"><img src="${userHeadimg}"></div>';
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
@@ -1830,9 +1830,6 @@ html, body {
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
 	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
-		<%-- <c:if test="${ismerchant==1}">
-		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
-		</c:if> --%>
 	</div>
 	<div class="speak_box">
 		<div class="answer">
@@ -1843,7 +1840,7 @@ html, body {
 	<div class="wenwen_btn left" onClick="to_write()"></div>
 	<div class="wenwen_text left">
 	    <div class="write_box">
-	        <input type="text" class="left" id="left" onKeyUp="keyup()" placeholder="请输入关键字" />
+	        <input type="text" class="left" id="left"  placeholder="请输入关键字" />
 	    </div> 
 	      
 	</div>

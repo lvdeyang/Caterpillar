@@ -64,6 +64,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script id="updateUserName" type="text/html">
   <a href="javascript:;" onclick="merchant_edit1('添加业务人员','toUpdateUserName','{{ d.id }}','','510')">{{ d.userName }}</a>
 </script>
+<script id="updateChatUser" type="text/html">
+  <a href="javascript:;" onclick="merchant_edit2('添加客服人员','toUpdateUserName','{{ d.id }}','','510')">{{ d.chatUserId }}</a>
+</script>
 <script type="text/html" id="shenheTpl">                                      
   {{#  if(d.shopAuditState === '草稿'||d.shopAuditState === '未通过'){ }}
     <span id="introduce" style="color: #F581B1;">{{ d.shopAuditState }}</span>
@@ -183,7 +186,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             }
             
             function merchant_edit1 (title,url,id,w,h) {
-                x_admin_show(title,url+"?merchantId="+id,w,h); 
+                x_admin_show(title,url+"?merchantId="+id+"&type="+1,w,h); 
+            }
+            //type=2是添加客服
+            function merchant_edit2 (title,url,id,w,h) {
+                x_admin_show(title,url+"?merchantId="+id+"&type="+2,w,h); 
             }
             
             /*删除*/
@@ -230,6 +237,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           ,{field: 'shopName', title: '商家名称',sort: true,templet:'#shopNameTpl'}  
           ,{field: 'shopAddress', title: '商户地址',sort: true}
           ,{field: 'userName', title: '业务人员',sort: true,templet:'#updateUserName'}
+          ,{field: 'chatUserId', title: '客服人员',sort: true,templet:'#updateChatUser'}
           ,{field: 'shopLinkperson', title: '联系人',width:80,sort: true} 
           ,{field: 'shopTel', title: '联系电话',width:160,sort: true} 
           ,{field: 'shopAuditopinion', title: '审核意见',width:100,sort: true} 
