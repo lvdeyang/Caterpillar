@@ -658,7 +658,9 @@ public class MerchantController extends BaseController {
 	public ModelAndView toUpdateUserName(HttpServletRequest request) {
 		ModelAndView mav = null;
 		String merchantId = request.getParameter("merchantId");
+		String type = request.getParameter("type");
 		request.setAttribute("merchantId", merchantId);
+		request.setAttribute("type", type);
 		mav = new ModelAndView("admin/merchant/adduser");
 		return mav;
 	}
@@ -745,20 +747,30 @@ public class MerchantController extends BaseController {
 	public String chooseUser(HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		String merchantId = request.getParameter("merchantId");
-		MerchantBusinessPO merchantBusiness = conn_merchantBusiness
-				.getMerchantBusinessBymerchantId(Long.parseLong(merchantId));
-		List<UserInfoPO> user = conn_userinfo.getUserByUid(Long.parseLong(userId));
-		List<MerchantPO> merchant = conn_merchant.getMerchantById(Long.parseLong(merchantId));
-		merchant.get(0).setUserName(user.get(0).getUserPhone());
-		conn_merchant.saveOrUpdate(merchant.get(0));
-		if (merchantBusiness == null) {
-			merchantBusiness = new MerchantBusinessPO();
-			merchantBusiness.setMerchantId(Long.parseLong(merchantId));
-			merchantBusiness.setUserId(Long.parseLong(userId));
-			conn_merchantBusiness.save(merchantBusiness);
-			return "success";
-		} else {
-			merchantBusiness.setUserId(Long.parseLong(userId));
+		int type = Integer.parseInt(request.getParameter("type"));
+		if(type==1){
+			MerchantBusinessPO merchantBusiness = conn_merchantBusiness
+					.getMerchantBusinessBymerchantId(Long.parseLong(merchantId));
+			List<UserInfoPO> user = conn_userinfo.getUserByUid(Long.parseLong(userId));
+			List<MerchantPO> merchant = conn_merchant.getMerchantById(Long.parseLong(merchantId));
+			merchant.get(0).setUserName(user.get(0).getUserPhone());
+			conn_merchant.saveOrUpdate(merchant.get(0));
+			if (merchantBusiness == null) {
+				merchantBusiness = new MerchantBusinessPO();
+				merchantBusiness.setMerchantId(Long.parseLong(merchantId));
+				merchantBusiness.setUserId(Long.parseLong(userId));
+				conn_merchantBusiness.save(merchantBusiness);
+				return "success";
+			} else {
+				merchantBusiness.setUserId(Long.parseLong(userId));
+				return "success";
+			}
+		}else{
+			System.out.println("这是选择客服人员");
+			List<UserInfoPO> user = conn_userinfo.getUserByUid(Long.parseLong(userId));
+			List<MerchantPO> merchant = conn_merchant.getMerchantById(Long.parseLong(merchantId));
+			merchant.get(0).setChatUserId(user.get(0).getId());
+			conn_merchant.saveOrUpdate(merchant.get(0));
 			return "success";
 		}
 	}

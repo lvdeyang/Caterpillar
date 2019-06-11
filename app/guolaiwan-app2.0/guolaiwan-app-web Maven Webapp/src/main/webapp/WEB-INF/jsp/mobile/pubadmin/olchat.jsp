@@ -274,20 +274,44 @@ audio {
 }
 
 .chatline {
-	background: #FBFBFB;
+	background:#fff;
 	margin-top: 50px;
-	width: 100%;
+	height:auto;
 	border-radius: 6px;
-	overflow: hidden;
+	width:100%;
+	position: fixed;
+	top:0;
+	z-index: 111111111;
 }
 
 .chatline img {
 	width: 50px;
 	height: 50px;
 	border-radius: 6px;
-	margin: 5px 5px;
-	z-index: 11111111111111111111111111111111;
+	z-index: 1111111111111;
 }
+
+	/*显示动态选项卡*/
+		
+			.tab-btn li{
+				list-style: none;
+				float: left;
+				width: 50px;
+				
+				font-weight: bold;
+				line-height: 30px;
+				font-size: 16px;
+				text-align: center;
+				
+				margin: 5px 5px;
+				z-index:111111111111111;
+			}
+			.btn-active{
+				/* background: orange; */
+				
+				border-bottom: solid 2px #36BD5B;
+				
+			}
 </style>
 </head>
 
@@ -298,6 +322,11 @@ audio {
 	$(function() {
 		//轮询任务
 		window.setInterval(function () {
+			//心跳
+			var url=window.BASEPATH+'pubnum/admin/merchantbeat';
+			var merchantId=${merchantId};
+				$.post(url,{"merchantId":merchantId},function(){})
+			
 			var url=window.BASEPATH+'pubnum/getolchat';
 			var userId=${userId};
 			var merchantId=${merchantId};
@@ -305,7 +334,7 @@ audio {
 					//从属于这个商户房间信息中查询未发送的信息遍历
 					for(var i=0;i<data.length;i++){	
 							//查找出这个房间touser是登录人的信息展示出来
-							if(data[i].merchantId==merchantId){
+							if(data[i].fromuserId!=userId&&data[i].merchantId==merchantId){
 								$('.ltname').text(data[i].fromuser);
 								ans  = '<div class="answer"><div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
@@ -313,11 +342,9 @@ audio {
 				        		$('.speak_box').append(ans);
 				        		
 					        		if(document.getElementById(data[i].fromuserId)==null){
-					        		imgs  = '<img id="'+data[i].fromuserId+'" name="'+data[i].fromuserId+'" onclick="changetouser(this.id)" src="'+data[i].userheadimg+'">';
-					        		$('.chatline').append(imgs);
+					        		imgs  = '<li><img id="'+data[i].fromuserId+'" name="'+data[i].fromuser+'" onclick="changetouser(this.id,this.name)" src="'+data[i].userheadimg+'"></li>';
+					        		$('#userlist').append(imgs);
 					        		} 
-				        		$('#olprompt').show();
-				        		$('#olprompt1').show();
 								//记录消息来自谁放到三方待用
 								$('.touser').val(data[i].fromuserId);
 								//修改展示完成的数据flag
@@ -327,6 +354,7 @@ audio {
 						}
 					})
 		},3000);
+		
     })   
 	            	
 	 
@@ -350,7 +378,7 @@ audio {
 	 		return;
 	 	}
 	 		str  = '<div class="question">';
-	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="heard_img right"><img src="${userHeadimg}"></div>';
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
@@ -360,8 +388,9 @@ audio {
 	 	})
 	 }
 	 //修改touser
-	function changetouser(id){
+	function changetouser(id,name){
 		$('.touser').val(id);
+		$('.ltname').text(name);
 	}
 	$(document).on('click','.olline',function(){
 	 		if( $(".chatline").hasClass("show") ){
@@ -372,12 +401,28 @@ audio {
 		            // 显示
 		            $(".chatline").fadeIn().addClass("show");
 		        }
+		        
+		        
+		        	<!--选项卡  -->
+	$(".tab-btn li").click(function(){
+	//为按钮添加样式
+	$(this).addClass("btn-active")
+	.siblings()
+	.removeClass("btn-active");	
 	 });
+	 $(".left").click(function(){
+	    $(".chatline").fadeOut().removeClass("show");
+	  });
+	}); 
+
 </script>
+
 <body>
 	<input type="text" class="touser" hidden="hidden" value="">
 	<div class="chatline" id="chatline" style="display: none;">
-		<p style="font-size:14px;text-align: center;">请选择回复对象</p>
+	    <ul class="tab-btn active" id="userlist">
+		</ul>
+		<p style="font-size:14px;text-align: center;clear:both">请选择回复对象</p>
 	</div>
 	<div>
 	<!-- 对话框 -->
@@ -386,8 +431,8 @@ audio {
 		<div class="speak_window">
 			<div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
 				<p style="width:100%;">
-					<a class="link-left" href="#side-menu">
-					<span class="icon-reorder icon-large"></span></a>
+					<a class="link-left" href="#side-menu" style="padding-left:5%;">
+					<span class="icon-reorder icon-large" "></span></a>
 					<span class="ltname"></span> <span class="olline"><a style="float: right;z-index: 111111;margin-right:5%;">聊天列表</a></span>
 				</p>
 

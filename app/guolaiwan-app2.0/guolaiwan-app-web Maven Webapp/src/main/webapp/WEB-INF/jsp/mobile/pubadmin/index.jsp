@@ -521,7 +521,7 @@ html, body {
 				$.post(url,{"merchantId":merchantId},function(){
 							
 					})
-		},300000);	
+		},10000);	
 		
 		
 		
