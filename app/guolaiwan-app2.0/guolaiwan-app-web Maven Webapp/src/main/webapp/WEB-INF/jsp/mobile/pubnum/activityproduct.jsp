@@ -702,14 +702,14 @@ html, body {
 		function getProDate(data , miao , isXianGou){
 			var html=[];
 			if(isXianGou==1){
-				html.push('<a id="notaddOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
-				html.push('<a id="notbuy" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
+				html.push('<a id="notaddOrder" style="width:47.5%;font-size:12px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
+				html.push('<a id="notbuy" style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
 			}
 			if(data.isEffective == 0){
 				date = miao;
 			}else if(data.isEffective == 1 && data.productStock>0){
-				html.push('<a id="addOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
-				html.push('<a id="buy" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
+				html.push('<a id="addOrder" style="width:47.5%;font-size:12px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
+				html.push('<a id="buy" style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
 				$('#proDate').append(html.join(''));
 				if($('#price').html()%1==0){
 				  	$('#total').html(parseInt($('#price').html())*$('#proCount').val()+'.00');
@@ -718,8 +718,8 @@ html, body {
 				  	$('#total').html(pri);
 				}
 			}else if(data.isEffective == 2){
-				html.push('<a id="endaddOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
-				html.push('<a id="endbuy" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
+				html.push('<a id="endaddOrder" style="width:47.5%;font-size:12px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
+				html.push('<a id="endbuy" style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
 				$('#proDate').append(html.join(''));
 			}else if(data.isEffective == 1 && data.productStock == 0){
 				html.push('<a id="endaddOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
@@ -759,7 +759,7 @@ html, body {
 				}else if(data<=0){
 				    clearInterval(iCount);
 					html.push('<a id="addOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
-					html.push('<a id="buy" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
+					html.push('<a id="buy" style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
 				}
 				
 				$('#proDate').append(html.join(''));

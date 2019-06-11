@@ -560,7 +560,6 @@ input[type="datetime-local"]:before{
 }
 
 
-
 /* 对话框样式 */   
   input,button{outline:none;}
 	.wenwen-footer{width:100%;position:fixed;bottom:-5px;left:0;background:#fff;padding:3%;border-top:solid 1px #ddd;box-sizing:border-box;}
@@ -1973,7 +1972,7 @@ addmessage();
 				<div class="weui-cell">
 					<div class="weui-cell__ft">
 						<div class="weui-count">
-							<a class="weui-count__btn weui-count__decrease"></a> <input
+							<a class="weui-count__btn weui-count__decrease"></a> <input style="font-size:14px;width:30px;"
 								disabled="disabled" class="weui-count__number" id="proCount"
 								type="number" value="${productRestrictNumber}"> <a
 								class="weui-count__btn weui-count__increase"></a>
@@ -2087,10 +2086,10 @@ addmessage();
 
 			<div style="width:100%;height:40px;position:fixed;z-index:10;bottom:2px">
 				<a id="addOrder"
-					style="width:47.5%;font-size:13px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
+					style="width:47.5%;font-size:12px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 					href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a> <a
 					id="buy"
-					style="width:47.5%;font-size:13px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
+					style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
 					href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span
 					id="total">0</span>）
 				</a>

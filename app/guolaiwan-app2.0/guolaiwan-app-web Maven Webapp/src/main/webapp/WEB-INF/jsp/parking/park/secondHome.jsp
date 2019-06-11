@@ -11,7 +11,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 <html>
-
 <head>
 <!-- 声明文档使用的字符编码 -->
 <meta charset='utf-8'>
@@ -88,8 +87,8 @@
 }
 
 .header-pic img {
-	width: 75px;
-	height: 75px;
+	width: 70px;
+	height: 70px;
 	border-radius: 50%;
 	margin: 3% auto;
 }
@@ -126,22 +125,16 @@
 }
 
 .banner {
-	height:50%;
-	width: 100%;
-	 position:fixed;
-	bottom:0;
-	margin:0;
-	padding:0;
+
 }
 
 .banner img {
-    height:100%;
+ 
+   height: 55%;
     width: 100%;
-	/* height:100%;
-	padding-top:6px; */
-  
-	margin:0;
-	padding:0;
+    position:fixed;
+    bottom:0;
+	object-fit:cover;
 }
 
 .btn {
@@ -165,33 +158,38 @@
 }
 
 #img_car {
-	position: absolute;
-	top: 15%;
-	right: 40%;
+	position: fixed;
+	top: 52%;
+	right: 38%;
+
 }
 
 #img_navigation {
-	position: absolute;
-	top: 40%;
+	position: fixed;
+	top:65%;
 	right: 65%;
+
 }
 
 #img_order {
-	position: absolute;
-	top: 40%;
-	right: 15%;
+position: fixed;
+	top:65%;
+	right: 10%;
+
 }
 
 #img_parking {
-	position: absolute;
-	top: 69%;
-	right: 40%;
+position: fixed;
+	top:83%;
+	right: 38%;
+
 }
 
 #img_Renewal {
-	position: absolute;
-	top: 42%;
-	right: 40%;
+position: fixed;
+	top:67%;
+	right: 38%;
+
 }
 
 html{
@@ -279,47 +277,47 @@ height:auto;
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/dingdan.png';
+						Order.src = 'lib/images/xiangqings.png';
 						
 						setTimeout(function(){
 						window.location.href = "vice/merchant/information";
-						 },300);
+						 },500);
 					};
 				}
 				if ( data[i]=="PARKING" ) {//停车
 					var navigation = document.getElementById('img_navigation');
 					navigation.onclick = function() {
 						var Navigation = document.getElementById('test1');
-						Navigation.src = 'lib/images/daohang.png';
+						Navigation.src = 'lib/images/daohangs.png';
 						setTimeout(function(){
 						window.location.href = "vice/merchant/navigation";
-						 },300);
+						 },500);
 					};
 					//进入停车界面
 					var parking = document.getElementById('img_parking');
 					parking.onclick = function() {
 						var Parking = document.getElementById('test1');
-						Parking.src = 'lib/images/tingche.png';
+						Parking.src = 'lib/images/tingches.png';
 							setTimeout(function(){
 						window.location.href = "vice/merchant/parkings";
-						 },300);
+						 },500);
 					};
 					//进入续费界面
 					var renew = document.getElementById('img_Renewal');
 					renew.onclick = function() {
 						var Renew = document.getElementById('test1');
-						Renew.src = 'lib/images/xufei.png';
+						Renew.src = 'lib/images/xufeis.png';
 						setTimeout(function(){
 						window.location.href = "pubnum/product/index/merchant/renewall";
-							 },300);
+							 },500);
 					};
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/dingdan.png';
+						Order.src = 'lib/images/xiangqings.png';
 						setTimeout(function(){
 						window.location.href = "vice/merchant/information";
-							 },300);
+							 },500);
 					};
 
 				}
@@ -329,28 +327,28 @@ height:auto;
 					var navigation = document.getElementById('img_navigation');
 					navigation.onclick = function() {
 						var Navigation = document.getElementById('test1');
-						Navigation.src = 'lib/images/daohang.png';
+						Navigation.src = 'lib/images/daohangs.png';
 						setTimeout(function(){
 						window.location.href = "vice/merchant/navigation";
-						 },300);
+						 },500);
 
 					};
 					//进入续费界面
 					var renew = document.getElementById('img_Renewal');
 					renew.onclick = function() {
 						var Renew = document.getElementById('test1');
-						Renew.src = 'lib/images/xufei.png';
+						Renew.src = 'lib/images/xufeis.png';
 						setTimeout(function(){
 						window.location.href = "pubnum/product/index/merchant/renewall";
-						 },300);
+						 },500);
 					};
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/dingdan.png';
+						Order.src = 'lib/images/xiangqings.png';
 						setTimeout(function(){
 						window.location.href = "vice/merchant/information";
-						},300);
+						},500);
 					};
 				}
 				;
@@ -362,10 +360,10 @@ height:auto;
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/dingdan.png';
+						Order.src = 'lib/images/xiangqings.png';
 						setTimeout(function(){
 						window.location.href = "vice/merchant/information";
-						},300);
+						},500);
 					}
 				};
 				
@@ -374,10 +372,10 @@ height:auto;
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/dingdan.png';
+						Order.src = 'lib/images/xiangqings.png';
 						setTimeout(function(){
 						window.location.href = "vice/merchant/information";
-						},300);
+						},500);
 					}
 				};
 				//进入订单界面
@@ -385,10 +383,10 @@ height:auto;
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/dingdan.png';
+						Order.src = 'lib/images/xiangqings.png';
 						setTimeout(function(){
 						window.location.href = "vice/merchant/information";
-						},300);
+						},500);
 					}
 				};
 				
@@ -400,10 +398,10 @@ height:auto;
 			var parkingspace = document.getElementById('img_car');
 			parkingspace.onclick = function() {
 				var Parkingspace = document.getElementById('test1');
-				Parkingspace.src = 'lib/images/chewei.png';
+				Parkingspace.src = 'lib/images/cheweis.png';
 				setTimeout(function(){
 				window.location.href = "vice/merchant/scenic";
-				},300);
+				},500);
 			};
 
 		});
@@ -581,7 +579,7 @@ height:auto;
 	  <span style="color:#ffffff;line-height:40px;font-size:18px;">我的车位</span>
 	</div>  -->
 	<div class='header-pic'>
-		<div id="img"></div>
+		<div id="img" style="height:80px;"></div>
 		<div class="conformity">
 			<div class="phone"></div>
 		</div>
@@ -605,25 +603,25 @@ height:auto;
 			
 		</div>
 		<button class="btn"
-				style="width: 202px;height: 35px;margin: 8% auto;background-color: #02A1E9;border:none;outline:none;">
+				style="width: 202px;height: 35px;margin: 5% auto;background-color: #02A1E9;border:none;outline:none;">
 				<a href="smart/merchant/parking?sal=1">退出</a>
 			</button>
 	</div>
 
 	<div class="banner">
-		<img src="lib/images/zhuanpan.png " class="img-responsive1 "
+		<img src="lib/images/ditus.png " class="img-responsive1 "
 			id="test1" alt=" ">
-		<div id="img_car" style="width:20%;height: 20%;border-radius:50%;"
+		<div id="img_car" style="width:100px;height:100px;border-radius:50%;"
 			onclick="data()"></div>
 		<!--我要找车位-->
 		<div id="img_navigation"
-			style="width:20%;height: 20%;border-radius:50%;"></div>
+			style="width:100px;height:100px;border-radius:50%;"></div>
 		<!--导航-->
-		<div id="img_order" style="width:20%;height: 20%;border-radius:50%;"></div>
+		<div id="img_order" style="width:100px;height:100px;border-radius:50%;"></div>
 		<!--订单详情-->
-		<div id="img_parking" style="width:20%;height: 20%;border-radius:50%;"></div>
+		<div id="img_parking" style="width:100px;height:100px;border-radius:50%;"></div>
 		<!--正在停车-->
-		<div id="img_Renewal" style="width:20%;height: 20%;border-radius:50%;"></div>
+		<div id="img_Renewal" style="width:100px;height:100px;border-radius:50%;"></div>
 		<!--续费-->
 	</div>
 </body>
