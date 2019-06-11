@@ -158,6 +158,7 @@ public class MerchantController extends BaseController {
 		String shopLoginPwd = request.getParameter("shopLoginPwd");
 		String shopHeading = request.getParameter("shopHeading");
 		String shopQualifications = request.getParameter("shopQualifications");
+		String distributionId = request.getParameter("distributionId");
 		String shopQQ = request.getParameter("shopQQ");
 		String shopTel = request.getParameter("shopTel");
 		String shopAddress = request.getParameter("shopAddress");
@@ -212,7 +213,9 @@ public class MerchantController extends BaseController {
 		user.setUserPassword(Sha1Util.getSha1(shopLoginPwd));
 		user.setUpdateTime(new Date());
 		user.setSource(0);
-
+        
+		
+		merchant.setDistributionId(Integer.parseInt(distributionId));
 		merchant.setShopName(shopName);
 		merchant.setShopLoginName(shopLoginName);
 		merchant.setShopLoginPwd(Sha1Util.getSha1(shopLoginPwd));

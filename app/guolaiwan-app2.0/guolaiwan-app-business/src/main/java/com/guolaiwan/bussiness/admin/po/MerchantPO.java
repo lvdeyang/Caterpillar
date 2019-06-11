@@ -85,7 +85,8 @@ public class MerchantPO extends AbstractBasePO {
 	private String modularClass;
 	// 板块分类Id
 	private String modularClassId;
-	
+	//分销账户id
+	private int distributionId;
 	
 	// 板块名称1
 	private String modularName1;
@@ -627,6 +628,14 @@ public class MerchantPO extends AbstractBasePO {
 
 	public void setModularClassId2(String modularClassId2) {
 		this.modularClassId2 = modularClassId2;
+	}
+
+	public int getDistributionId() {
+		return distributionId;
+	}
+
+	public void setDistributionId(int distributionId) {
+		this.distributionId = distributionId;
 	}
 	
 	
