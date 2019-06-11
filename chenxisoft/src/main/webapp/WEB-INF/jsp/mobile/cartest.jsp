@@ -114,7 +114,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			       
 			       if(data.products){
 		               for(var i=0;i<data.products.length;i++){
-				         html.push('<li style="margin-top:10px" class="article" id="art-'+data.products[i].id+'">');
+				         html.push('<li style="margin-top:10px" id="pro-'+data.products[i].id+'" data="'+data.products[i].url+'" class="product">');
 						 html.push('    <div class="ui-list-img-square">');
 						 html.push('        <span style="background-image:url('+data.products[i].pic+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
@@ -159,6 +159,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		      $(document).on('click','.article',function(){
 		         var ids=this.id.split('-');
 		         location.href='article/mobile/index?articleId='+ids[1];
+		      
+		      });
+		      
+		      $(document).on('click','.product',function(){
+		         
+		          var productId=this.id.split('-')[1];
+
+	              var _uriRecord = window.BASEPATH + 'product/mobile/record?productId='+productId;
+				  $.get(_uriArticle, null, function(data){
+				       
+				  });
+	         
+	          
+		         
+		         
+		         location.href=$(this).attr('data');
 		      
 		      });
 		      
