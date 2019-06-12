@@ -131,6 +131,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 分销商Id </label>
+				<div class="layui-input-block">
+					<input type="text" name="distributionId" 
+						lay-verify="title" value="${list.distributionId}" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 显示图片 </label>
 				<div class="layui-input-inline" style="width: 100px">
 					<img alt="" src="${sysConfig.webUrl}${list.shopPic}" id="shopImg" style=" height:100px;width:100px ">

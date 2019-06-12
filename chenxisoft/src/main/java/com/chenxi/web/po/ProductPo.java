@@ -19,6 +19,8 @@ public class ProductPo extends AbstractBasePO{
 	private String content;
 	private ContentSource source;
 	private Moudular moudular;
+	private String url;
+	private long classesId;
 	public String getPic() {
 		return pic;
 	}
@@ -62,6 +64,18 @@ public class ProductPo extends AbstractBasePO{
 	}
 	public void setMoudular(Moudular moudular) {
 		this.moudular = moudular;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public long getClassesId() {
+		return classesId;
+	}
+	public void setClassesId(long classesId) {
+		this.classesId = classesId;
 	}
 	
 	

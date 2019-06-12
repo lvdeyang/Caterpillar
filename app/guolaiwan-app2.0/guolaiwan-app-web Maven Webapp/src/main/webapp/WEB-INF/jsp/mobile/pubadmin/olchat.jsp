@@ -282,35 +282,45 @@ audio {
 	position: fixed;
 	top:0;
 	z-index: 111111111;
+	
 }
 
 .chatline img {
-	width: 50px;
-	height: 50px;
-	border-radius: 6px;
+	width: 60px;
+	height: 60px;
+	margin-left:5%;
 	z-index: 1111111111111;
 }
+
 
 	/*显示动态选项卡*/
 		
 			.tab-btn li{
 				list-style: none;
-				float: left;
-				width: 50px;
-				
+			
+				width: 100%;
+				height:60px;
+				margin-left:5%;
 				font-weight: bold;
-				line-height: 30px;
 				font-size: 16px;
-				text-align: center;
-				
-				margin: 5px 5px;
-				z-index:111111111111111;
+				margin: 5px 0px;
+				z-index:1111;
+				position: relative;
 			}
 			.btn-active{
-				/* background: orange; */
-				
-				border-bottom: solid 2px #36BD5B;
-				
+				/* background: orange; */				
+				background:#F2F2F2;
+			}
+			.ming{
+			  width:250px;
+			  height:60px;
+			  line-height:60px;
+			  display: inline-block;
+			  position: absolute;
+			  left:25%;
+		      overflow: hidden;
+			  text-overflow: ellipsis;
+			  white-space: nowrap;
 			}
 </style>
 </head>
@@ -342,7 +352,7 @@ audio {
 				        		$('.speak_box').append(ans);
 				        		
 					        		if(document.getElementById(data[i].fromuserId)==null){
-					        		imgs  = '<li><img id="'+data[i].fromuserId+'" name="'+data[i].fromuser+'" onclick="changetouser(this.id,this.name)" src="'+data[i].userheadimg+'"></li>';
+					        		imgs  = '<li ><a id="'+data[i].fromuserId+'" name="'+data[i].fromuser+'" onclick="changetouser(this.id,this.name)"><img  src="'+data[i].userheadimg+'"><p class="ming">'+data[i].fromuser+'</p></a></li>';
 					        		$('#userlist').append(imgs);
 					        		} 
 								//记录消息来自谁放到三方待用
@@ -378,7 +388,7 @@ audio {
 	 		return;
 	 	}
 	 		str  = '<div class="question">';
-	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="heard_img right"><img src="${userHeadimg}"></div>';
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
@@ -391,6 +401,8 @@ audio {
 	function changetouser(id,name){
 		$('.touser').val(id);
 		$('.ltname').text(name);
+	
+	
 	}
 	$(document).on('click','.olline',function(){
 	 		if( $(".chatline").hasClass("show") ){
@@ -431,9 +443,9 @@ audio {
 		<div class="speak_window">
 			<div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
 				<p style="width:100%;">
-					<a class="link-left" href="#side-menu" style="padding-left:5%;">
+					<a class="link-left" href="#side-menu" style="padding-left:5%;float:left;">
 					<span class="icon-reorder icon-large" "></span></a>
-					<span class="ltname"></span> <span class="olline"><a style="float: right;z-index: 111111;margin-right:5%;">聊天列表</a></span>
+					<span class="ltname" style="float:left;margin-left:8%;width:150px;overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span> <span class="olline"><a style="float: right;z-index: 111111;margin-right:5%;">聊天列表</a></span>
 				</p>
 
 			</div>

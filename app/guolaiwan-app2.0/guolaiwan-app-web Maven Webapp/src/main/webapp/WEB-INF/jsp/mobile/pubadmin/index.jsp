@@ -515,16 +515,6 @@ html, body {
 			}
 	  };
 		
-	window.setInterval(function () {
-			var url=window.BASEPATH+'pubnum/admin/merchantbeat';
-			var merchantId=${merchantId};
-				$.post(url,{"merchantId":merchantId},function(){
-							
-					})
-		},10000);	
-		
-		
-		
 		
      var _uriModal = window.BASEPATH + 'phoneApp/getModulars?comCode=0001';
 		

@@ -85,7 +85,8 @@ public class MerchantPO extends AbstractBasePO {
 	private String modularClass;
 	// 板块分类Id
 	private String modularClassId;
-	
+	//分销账户id
+	private int distributionId;
 	
 	// 板块名称1
 	private String modularName1;
@@ -155,11 +156,21 @@ public class MerchantPO extends AbstractBasePO {
 	private String userName;//业务人员名字
 	
 	private int shopyd=1;
+	//客服
+	private long chatUserId;
 	
 	//客服在自己的商户最后一次进入时间 用来判断商户在不在 能不能咨询 不在就推送公众号提醒
 	private Date lastexercisetime;
 	
 	
+	public long getChatUserId() {
+		return chatUserId;
+	}
+
+	public void setChatUserId(long chatUserId) {
+		this.chatUserId = chatUserId;
+	}
+
 	public Date getLastexercisetime() {
 		return lastexercisetime;
 	}
@@ -617,6 +628,14 @@ public class MerchantPO extends AbstractBasePO {
 
 	public void setModularClassId2(String modularClassId2) {
 		this.modularClassId2 = modularClassId2;
+	}
+
+	public int getDistributionId() {
+		return distributionId;
+	}
+
+	public void setDistributionId(int distributionId) {
+		this.distributionId = distributionId;
 	}
 	
 	

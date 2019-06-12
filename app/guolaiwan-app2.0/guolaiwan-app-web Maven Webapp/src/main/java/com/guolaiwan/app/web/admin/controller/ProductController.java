@@ -171,6 +171,9 @@ public class ProductController extends BaseController {
 		String beginDate = sdf.format(productp.getProductBeginDate());
 		String ectiveDate = sdf.format(productp.getProductEctivedate());
 		String endDate = sdf.format(productp.getProductEnddate());
+		if(productV.getProductCommissionCode()==1){
+			productV.setProductCommissionPrice(productV.getProductCommissionPrice()/100);
+		}
 		ModelAndView mv = new ModelAndView("admin/product/modify");
 		strMap.put("product", productV);
 		strMap.put("beginDate", beginDate);

@@ -76,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			function sel(data){
 				$.ajax({
 					type:"post",
-					url:"chooseUser.do?userId=" + data + "&merchantId=" + ${merchantId},
+					url:"chooseUser.do?userId=" + data + "&merchantId=" + ${merchantId}+"&type="+${type},
 					success:function(msg){
 						if(msg == "success"){
 							layer.msg("选择成功");
