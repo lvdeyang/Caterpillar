@@ -598,7 +598,7 @@ html, body {
 			    var html=[];
 			    var pics=data.shopMpic.split(',');
 				for(var i=0; i<pics.length; i++){
-					html.push('<div class="swiper-slide" style="height:200px;"><img style="height:200px;" src="'+pics[i]+'" alt=""></div>');
+					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
 				}
 			    $('.header-content').html(data.shopName);
 				$('.swiper-wrapper').append(html.join(''));
@@ -835,7 +835,7 @@ html, body {
 	 		return;
 	 	}
 	 		str  = '<div class="question">';
-	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="heard_img right"><img src="${userHeadimg}"></div>';
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
@@ -889,7 +889,56 @@ html, body {
 	}
 	autoWidth();
 </script>
+<script type="text/javascript">
 
+		$.fn.ImgZoomIn = function() {
+
+			bgstr = '<div id="ImgZoomInBG" style=" background:#000000; filter:Alpha(Opacity=70); opacity:0.7; position:fixed; left:0; top:0; z-index:10000; width:100%; height:100%; display:none;"><iframe src="about:blank" frameborder="5px" scrolling="yes" style="width:100%; height:100%;"></iframe></div>';
+
+			//alert($(this).attr('src'));
+
+			imgstr = '<img id="ImgZoomInImage" src="' + $(this).attr('src') + '" onclick=$(\'#ImgZoomInImage\').hide();$(\'#ImgZoomInBG\').hide(); style="cursor:pointer; display:none; position:absolute; z-index:10001;width:100%; height:60%;" />';
+
+			if($('#ImgZoomInBG').length < 1) {
+
+				$('body').append(bgstr);
+
+			}
+
+			if($('#ImgZoomInImage').length < 1) {
+
+				$('body').append(imgstr);
+
+			} else {
+
+				$('#ImgZoomInImage').attr('src', $(this).attr('src'));
+
+			}
+
+			//alert($(window).scrollLeft());
+
+			//alert( $(window).scrollTop());
+
+			$('#ImgZoomInImage').css('left', $(window).scrollLeft() + ($(window).width() - $('#ImgZoomInImage').width()) / 2);
+
+			$('#ImgZoomInImage').css('top', $(window).scrollTop() + ($(window).height() - $('#ImgZoomInImage').height()) / 2);
+
+			$('#ImgZoomInBG').show();
+
+			$('#ImgZoomInImage').show();
+
+		};
+          
+		$(document).ready(function() {
+
+				$(document).on('click','#imgTest',function(){
+	 		    
+				$(this).ImgZoomIn();
+
+	 });
+
+		});
+	</script>
 
 <body>
 
@@ -917,7 +966,7 @@ html, body {
 				      全部商品
 				    </a>
 				    <a id="tab-1" onclick="return false" class="weui-navbar__item" href="#tab1">
-				      店铺首页 <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 -->
+				      店铺首页 <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 -->
 				    </a>
 				  </div>	
 	             <div class="weui-tab__bd" style="padding-bottom:50px">
@@ -941,10 +990,10 @@ html, body {
 								style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 						</div>
 						<div
-							style="width:90%;margin-top:25px;margin-left:11px;font-size:12px;">
+							style="width:90%;margin-top:25px;margin-left:11px;font-size:16px;">
 							<a id="contact" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
 							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服 </a>
-							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
+							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 							
 						</div>
 						<div id="payinshop"></div>
