@@ -917,7 +917,7 @@ html, body {
 				      全部商品
 				    </a>
 				    <a id="tab-1" onclick="return false" class="weui-navbar__item" href="#tab1">
-				      店铺首页 <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 -->
+				      店铺首页 <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 -->
 				    </a>
 				  </div>	
 	             <div class="weui-tab__bd" style="padding-bottom:50px">
@@ -941,10 +941,10 @@ html, body {
 								style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 						</div>
 						<div
-							style="width:90%;margin-top:25px;margin-left:11px;font-size:12px;">
+							style="width:90%;margin-top:25px;margin-left:11px;font-size:16px;">
 							<a id="contact" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
 							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服 </a>
-							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
+							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 							
 						</div>
 						<div id="payinshop"></div>
