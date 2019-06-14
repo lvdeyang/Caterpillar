@@ -167,7 +167,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		          var productId=this.id.split('-')[1];
 
 	              var _uriRecord = window.BASEPATH + 'product/mobile/record?productId='+productId;
-				  $.get(_uriArticle, null, function(data){
+				  $.get(_uriRecord, null, function(data){
 				       
 				  });
 	         
