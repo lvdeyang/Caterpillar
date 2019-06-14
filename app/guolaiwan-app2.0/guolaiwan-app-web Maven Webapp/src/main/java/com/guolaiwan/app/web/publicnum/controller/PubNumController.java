@@ -2300,7 +2300,7 @@ public class PubNumController extends WebBaseControll {
 		if (conn_address.get(orderInfoPO.getMailAddress()) != null) {
 			nameObj.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
 		} else {
-			nameObj.put("value", conn_user.get(orderInfoPO.getId()).getUserNickname());
+			nameObj.put("value", conn_user.get(orderInfoPO.getUserId()).getUserNickname());
 		}
 
 		nameObj.put("color", "");
@@ -2569,7 +2569,7 @@ public class PubNumController extends WebBaseControll {
 		obj1.put("miniprogram", microProObj1);
 		JSONObject dataObject1 = new JSONObject();
 		JSONObject firstObj1 = new JSONObject();
-		firstObj1.put("value", "用户在线咨询通知");
+		firstObj1.put("value", "在线咨询通知");
 		firstObj1.put("color", "");
 		dataObject1.put("first", firstObj1);
 		
@@ -2584,12 +2584,12 @@ public class PubNumController extends WebBaseControll {
 		dataObject1.put("keyword2", accountTypeObj);
 
 		JSONObject accountObj = new JSONObject();
-		accountObj.put("value", "有用户在您的商户在线咨询");
+		accountObj.put("value", "上帝光临并在线咨询!请尽快查看~");
 		accountObj.put("color", "");
 		dataObject1.put("keyword3", accountObj);
 		
 		JSONObject remarkObj1 = new JSONObject();
-		remarkObj1.put("value", "请您尽快查看！");
+		remarkObj1.put("value", "查看方法：点击客户服务→商户中心→登录商户（如已登录请忽略）→在线咨询");
 		remarkObj1.put("color", "");
 		dataObject1.put("remark", remarkObj1);
 		obj1.put("data", dataObject1);
