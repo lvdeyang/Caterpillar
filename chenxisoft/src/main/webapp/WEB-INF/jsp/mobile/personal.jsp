@@ -42,12 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    </li>
     </ul>
     <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">收藏</h4>
-	           
-	        </div>
-	    </li>
+	  
 	    <li class="ui-border-t">
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4>

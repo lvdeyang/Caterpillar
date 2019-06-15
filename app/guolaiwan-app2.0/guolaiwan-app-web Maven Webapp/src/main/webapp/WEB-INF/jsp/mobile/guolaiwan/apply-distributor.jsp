@@ -552,7 +552,7 @@ html, body {
 							multiple>
 					</div>
 					
-					<video autoplay  src="${weburl}${distributor.contractUrl}" controls="controls" id="showContract" style="margin-left:15px;width:100px;height:100px;"/>
+					<video autoplay  src="${weburl}${distributor.contractUrl}" controls="controls" x5-playsinline=""  webkit-playsinline="true" x-webkit-airplay="true" x5-video-player-type="h5" x5-video-player-fullscreen="" x5-video-orientation="portraint" id="showContract" style="margin-left:15px;width:100px;height:100px;"/>
 				</div>
 				</div>
 				

@@ -13,7 +13,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 
 <body class="layui-layout-body">
-    <script type="text/html" id="bar">
+
+   <script type="text/html" id="bar">
        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 	</script>
 
@@ -23,94 +24,69 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <input class="layui-input" name="id" id="searchtxt" autocomplete="off">
 	  </div>
 	  <button class="layui-btn" id="search" data-type="reload">搜索</button>
-	  <button class="layui-btn" id="online" lay-event="online">上架</button>
+	  <button class="layui-btn" id="addRecomm" lay-event="addRecomm">添加推荐</button>
 	</div>
 	<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
     
+   
 	<script>
 		//JavaScript代码区域
-		layui.use('table',function(){
+		layui.use(['table','tree','layer'],function(){
 		   var $ = layui.jquery;
-		   var table = layui.table;
-  
-              
-              $('#search').on('click',function(){
-                  table.reload('dataTable', {
-			        page: {
-			          curr: 1 //重新从第 1 页开始
-			        }
-			        ,where: {
-			          key: {
-			            content:$('#searchtxt').val()
-			          }
+		   var layer = layui.layer;
+		   
+          
+          $('#addRecomm').on('click',function(){
+             addRecomm('recomm/article/index');
+          });
+		   
+		   
+		   
+		   function addRecomm(url){
+		       
+	             layer.open({
+			        type: 2 //此处以iframe举例
+			        ,title: '添加推荐'
+			        ,area: ['1200px', '600px']
+			        ,shade: 0
+			        ,maxmin: true
+			        ,offset: [ //为了演示，随机坐标
+			         50,300
+			          
+			        ] 
+			        ,content: url
+			        //layer.closeAll();
+			        ,zIndex: layer.zIndex //
+			        ,success: function(layero){
+			          layer.setTop(layero); //
 			        }
 			      });
+		   
+		   }
+		   
+		   
+		   
+		   
+		   var table = layui.table;
+		    $('#search').on('click',function(){
+                  
               
               });
               
               
-              $('#online').click(function(){
-                   var checkStatus = table.checkStatus('dataTable');
-                   var data = checkStatus.data;
-                   var datas=[];
-                   for(var i=0;i<data.length;i++){
-                       datas.push(data[i].id);
-                   }
-                   if(datas.length==0){
-                        var index=layer.alert("请选择一个商品", {icon: 2},function () {
-		        
-		            
-		                    layer.close(index);
-				        
-				        });
-                        return false;
-                   }
-                   var classId=$("#selClassId",window.parent.document).val();
-                   $.ajax({
-                	  type:"post",
-           			  url:"product/addonline.do",
-                      data:{ids:datas.join(','),classId:classId},
-                      success:function(msg){
-                        if(msg=="success"){
-                          layer.alert("增加成功", {icon: 6},function () {
-                           // 获得frame索引
-                           var index = parent.layer.getFrameIndex(window.name);
-                           //关闭当前frame
-                           parent.layui.table.reload('dataTable');
-                           parent.layer.close(index);
-                           });
-                        }
-                        //提示
-                        else{
-                        
-                        }
-                       }
-                  });
-              })
-              
-              
-              
-              
-              
 			  table.render({
 			    elem: '#dataTable'
-			    ,url:'/chenxisoft/product/list'
-			    ,title: '商品列表'
+			    ,url:'/chenxisoft/recomm/list'
+			    ,title: '推荐列表'
 			    ,cols: [[
 			      {type: 'checkbox', fixed: 'left'}
 			      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-			      ,{field:'name', title:'名称', width:300, edit: 'text'}
-			      ,{field:'price', title:'价格', width:200, edit: 'text', templet: function(res){
-			        return '<em>￥'+ res.price +'</em>'
-			      }}
-			      ,{field:'updateTime', title:'生产时间', width:180, edit: 'text', sort: true}
-			      ,{field:'source', title:'来源', width:200}
+			      ,{field:'contentName', title:'内容名称', width:500, edit: 'text'}
+			      ,{field:'moudular', title:'所属板块', width:200, edit: 'text'}
 			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}
 			    ]]
 			    ,page: true
 			  });
-			  
-			  
 			  
 			  
 			  table.on('tool(dataTable)', function(obj){
@@ -118,27 +94,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    //console.log(obj)
 			    if(obj.event === 'del'){
 			      layer.confirm('真的删除行么', function(index){
-			        
-			      
-			        $.ajax({
-	                	  type:"post",
-	           			  url:"product//delproduct.do",
-	                      data:{id:data.id},
-	                      success:function(msg){
-	                        if(msg=="success"){
-	                            obj.del();
-			        			layer.close(index);
-	                        }
-	                      }
-	                });
-			        
+			         
+			         
+			         $.ajax({
+			              url:'recomm/del.do',
+			              type:'post',
+			              data:{id:data.id},
+			              success:function(data){
+			                 obj.del();
+			        		 layer.close(index);
+			              }
+			          });
 			      });
 			    } 
 			    
 			  });  
-			  
-			  
-			  
+
+          
 			
 		});
 	</script>
