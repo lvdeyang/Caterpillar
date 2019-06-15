@@ -1304,7 +1304,7 @@ public class PubNumController extends WebBaseControll {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/delCollectionPro", method = RequestMethod.POST)
-	public Map<String, Object> delCollectionPro(HttpServletRequest request, HttpServletResponse response)
+	public Object delCollectionPro(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		// 解析json
 		HttpServletRequestParser parser = new HttpServletRequestParser(request);

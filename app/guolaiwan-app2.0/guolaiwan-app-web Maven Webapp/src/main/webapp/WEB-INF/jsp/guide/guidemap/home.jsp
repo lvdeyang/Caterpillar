@@ -267,6 +267,7 @@ var commodityId; //商品id
 			});  
 		}  
 	    
+	    
      
 </script>
 
@@ -274,7 +275,7 @@ var commodityId; //商品id
 
 <body id ="body">
 	<div style="width:100%;height:40px;background:#ffffff;text-align: center;line-height: 40px;position:relative;z-index:10;">
-			<span style="color:black;font-weight: bold;float:left;line-height: 40px;font-size:20px;margin-left:3%;">< </span> 	
+			<span style="color:black;font-weight: bold;float:left;line-height: 40px;font-size:20px;margin-left:3%;"><a style="color: black;" href="javascript:history.go(-1)">< </a></span> 	
 			<span style="text-align:center;">积分商城</span>
     </div>
 	
