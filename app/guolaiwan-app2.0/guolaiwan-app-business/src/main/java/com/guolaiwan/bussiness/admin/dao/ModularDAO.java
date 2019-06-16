@@ -107,9 +107,7 @@ public class ModularDAO extends AbstractBaseDao<ModularPO>{
 	//获取公司下面的所有有效分类
 	public List<ModularPO> findByComIsv(long comId) {
 		QueryHql hql = this.newQueryHql();
-		if(comId!=1l){
-			hql.andBy("comId", Condition.eq, comId);
-		}
+		hql.andBy("comId", Condition.eq, comId);
 		hql.andBy("modularIsv", Condition.eq, 1);
 		hql.orderBy("updateTime", true);
 		List<ModularPO> modulars =findByHql(hql);

@@ -61,6 +61,12 @@ public class GuideController extends WebBaseControll  {
 		mv = new ModelAndView("guide/guidemap/home");
 		return mv;
 	}
+	@RequestMapping(value = "/visitors/app")
+	public ModelAndView app(HttpServletRequest request ) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("guide/guidemap/homepage");
+		return mv;
+	}
 	
 	
 	

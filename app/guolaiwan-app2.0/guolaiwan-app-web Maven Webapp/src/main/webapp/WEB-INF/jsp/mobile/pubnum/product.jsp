@@ -616,6 +616,10 @@ input[type="datetime-local"]:before{
 
     var base;	
 	$(function() {
+	    var id = '${id}';
+		if( id == 34){
+	   $("#guide").show();
+	  }
 	  $(document).on('focus','.mydate',function(){
 	      $(this).removeAttr('placeholder');
 	  });
@@ -1907,6 +1911,19 @@ addmessage();
 	        $(".duihua").show();
 	       $("#olprompt").hide();
 	 });
+	/*显示隐藏切换  */
+	 $(document).on('click',' #guide',function(){
+	  window.location.href="guide/visitors/app?userId="+${userId}; 
+			/* var _urifav = window.BASEPATH + 'guide/visitors/app';
+			$.get(_urifav , null , function(dat){
+		    });                              */
+	  /*  // $('body').append("<a href='app://guolaiwan'>唤醒你的 APP</a>");
+	 
+	 	//此操作会调起app并阻止接下来的js执行，进入已安装的app
+        $('body').append(" <a href='app://media_resource_system.guolaiwan/guideActivity?userId=${userId}&merchantId=15&longitude=117.625103&latitude=40.188278'></a>");
+        //没有安装应用会执行下面的语句
+        setTimeout(function(){window.location='http://a.app.qq.com/o/simple.jsppkgname=com.bjyijiequ.community'},5000);  */
+	 });
 	 
 	 $(document).on('click','.tui',function(){
 	 		$(".duihua").hide();
@@ -2068,6 +2085,7 @@ addmessage();
 					style="width:90%;margin-top:20px;margin-left:11px;font-size:12px;">
 					<a id="contact1" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
 					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
+					<a id="guide" href="javascript:void(0);" style="display: none;" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;导览</a>
 					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
 				</div>	
 			</div>
