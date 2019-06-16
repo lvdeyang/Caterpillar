@@ -375,7 +375,7 @@ public class WxPayController extends BaseController {
 		JSONObject accountTypeObj1 = new JSONObject();
 		accountTypeObj1.put("value", DateUtil.getNowDate());
 		accountTypeObj1.put("color", "");
-		dataObject.put("keyword2", accountTypeObj1);
+		dataObject1.put("keyword2", accountTypeObj1);
 		
 		JSONObject remarkObj1 = new JSONObject();
 		remarkObj1.put("value", "用户:"+userpo.getUserNickname()+" 提现成功，金额为：" + (money/100)+"元");

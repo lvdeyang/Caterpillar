@@ -15,6 +15,7 @@ public class RecommPo extends AbstractBasePO{
 	private long contentId;
 	private long isrecomm;
 	private Moudular moudular;
+	private String contentName;
 	public long getContentId() {
 		return contentId;
 	}
@@ -33,6 +34,12 @@ public class RecommPo extends AbstractBasePO{
 	}
 	public void setMoudular(Moudular moudular) {
 		this.moudular = moudular;
+	}
+	public String getContentName() {
+		return contentName;
+	}
+	public void setContentName(String contentName) {
+		this.contentName = contentName;
 	}
 	
 }
