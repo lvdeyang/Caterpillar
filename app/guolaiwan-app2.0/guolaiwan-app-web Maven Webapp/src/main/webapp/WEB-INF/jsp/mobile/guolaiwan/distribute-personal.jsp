@@ -478,6 +478,12 @@ html, body {
         $(document).on('click','#delDis',function(){
            location.href=window.BASEPATH + 'distributor/delete?disId=${distributorId}';
         });
+        $(document).on('click','#a1',function(){
+           location.href=window.BASEPATH + 'distributor/off/sell?disId=${distributorId}';
+        });
+	
+	  
+	
 	
 	});
 </script>
@@ -631,10 +637,18 @@ html, body {
 					     个人信息
 					    </p>
 					  </a> -->
+					   <a id="a1" href="javascript:void(0)" class="weui-grid js_grid">
+					    <div class="weui-grid__icon">
+					      <img src="lib/images/icon_nav_msg.png" alt="">
+					    </div>
+					    <p class="weui-grid__label">
+					      我的店铺
+					    </p>
+					  </a>
 					</div>
 			</c:if>
 			</c:if>
-		
+		 
 		    
 		</div>
 	</div>
