@@ -809,7 +809,11 @@ public class WxPayReportController extends WebBaseControll {
     	}
     	dataObject.put("keyword4", timeObj);
     	JSONObject remarkObj=new JSONObject();
-    	remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+")");
+    	if(conn_address.getAddressByUserId(buyUser.getId()).get(0)!=null){
+    		remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址:"+conn_address.getAddressByUserId(buyUser.getId()).get(0).getConsigneeAddress()+")");
+    	}else{
+    		remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址: 此用户未填写详细地址)");
+    	}
     	remarkObj.put("color", "");
     	dataObject.put("remark", remarkObj);
     	obj.put("data", dataObject);
@@ -861,7 +865,11 @@ public class WxPayReportController extends WebBaseControll {
     	
     	dataObject2.put("keyword4", timeObj2);
     	JSONObject remarkObj2=new JSONObject();
-    	remarkObj2.put("value", "请做好接待工作(用户电话:"+pNum+")");
+    	if(conn_address.getAddressByUserId(buyUser.getId()).get(0)!=null){
+    		remarkObj2.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址:"+conn_address.getAddressByUserId(buyUser.getId()).get(0).getConsigneeAddress()+")");
+    	}else{
+    		remarkObj2.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址: 此用户未填写详细地址)");
+    	}
     	remarkObj2.put("color", "");
     	dataObject2.put("remark", remarkObj2);
     	obj2.put("data", dataObject2);

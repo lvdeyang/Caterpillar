@@ -284,6 +284,43 @@
                 
                 
                 <div class="layui-form-item">
+                	<div class="layui-inline">
+                	
+		               	<label class="layui-form-label">
+								是否拼团：
+		                   </label>
+		                   <div class="layui-input-block" onclick="changeGroup()">
+		                       <input type="checkbox" name="group" lay-skin="switch" id="group" lay-text="ON|OFF" 
+		                       lay-filter="switchTest" value="${product.isgroup}">
+		                       <div class="layui-unselect layui-form-switch" lay-skin="_switch" >
+		                       	<em>OFF</em>
+		                       	<i></i>
+		                       </div>
+		                   </div>
+                	
+                    </div>
+                    <div class="layui-inline" >
+                    	<label class="layui-form-label" >
+ 							<font id="LimitNum1" style="color:#757575">拼团人数：</font>
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="groupnum" name="groupnum"  placeholder="人数"
+                        	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.groupnum}">
+                    	</div>
+                    </div>
+                    <div class="layui-inline" >
+                    	<label class="layui-form-label" >
+ 							<font id="LimitNum2" style="color:#757575">拼团价格：</font>
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="groupprice" name="groupprice"  placeholder="价格"
+                        	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.groupprice}">
+                    	</div>
+                    </div>
+                </div>
+                
+                
+                <div class="layui-form-item">
                     <label class="layui-form-label">
  						是否人脸：
                     </label>
@@ -553,12 +590,23 @@
                 $('.proLine').hide();
               }
               
+              
             //是否限购
             if($("#productLimitType").val()=="1"){
              		$("#productLimitType").prop("checked",true);
              		$("#productLimitNum").removeAttr("disabled");
            			$("#LimitNum").removeAttr("style");
             }
+            
+             //是否拼团
+            if($("#group").val()=="1"){
+             		$("#group").prop("checked",true);
+             		$("#groupnum").removeAttr("disabled");
+             		$("#groupprice").removeAttr("disabled");
+           			$("#LimitNum1").removeAttr("style");
+           			$("#LimitNum2").removeAttr("style");
+            }
+            
             if($("#productLimitType").val()=="0"){
              		$("#productLimitNum").val("");
             }
@@ -669,7 +717,21 @@
 					
            		}
            }
-           
+           function changeGroup(){
+           		if($("#group").prop("checked")){
+           			$("#groupnum").removeAttr("disabled");
+           			$("#groupprice").removeAttr("disabled");
+           			$("#LimitNum1").removeAttr("style");
+           			$("#LimitNum2").removeAttr("style");
+           		}else{
+           			$("#groupnum").prop("disabled", "disabled");
+           			$("#groupprice").prop("disabled", "disabled");
+           			$("#LimitNum1").prop("style", "color:#757575");
+           			$("#LimitNum2").prop("style", "color:#757575");
+					$("#groupnum").val("");
+					$("#groupprice").val("");
+           		}
+           }
            
            function add(data,message){
            		//多图字段          

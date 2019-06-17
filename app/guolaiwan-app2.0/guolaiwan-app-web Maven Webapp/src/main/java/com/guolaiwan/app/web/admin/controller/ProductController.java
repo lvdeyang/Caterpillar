@@ -37,6 +37,7 @@ import com.guolaiwan.bussiness.admin.dao.ChildPicAndContentDAO;
 import com.guolaiwan.bussiness.admin.dao.ChildProductDAO;
 import com.guolaiwan.bussiness.admin.dao.CityInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
+import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.LanDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
@@ -53,6 +54,7 @@ import com.guolaiwan.bussiness.admin.po.ChildPicAndContentPO;
 import com.guolaiwan.bussiness.admin.po.ChildProductPO;
 import com.guolaiwan.bussiness.admin.po.CityInfoPO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
+import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
 import com.guolaiwan.bussiness.admin.po.LanPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.ModularClassPO;
@@ -121,7 +123,10 @@ public class ProductController extends BaseController {
 	
 	@Autowired
 	private ProductComboDAO conn_productcombo;
-
+	@Autowired
+	private GroupBuyDAO conn_groupbuydao;
+	
+	
 	// 列表页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView home(HttpServletRequest request) {
@@ -175,6 +180,10 @@ public class ProductController extends BaseController {
 			productV.setProductCommissionPrice(productV.getProductCommissionPrice()/100);
 		}
 		ModelAndView mv = new ModelAndView("admin/product/modify");
+		if(conn_groupbuydao.findByProductId(productV.getId())!=null){
+			GroupBuyPO groupBuyPO = conn_groupbuydao.findByProductId(productV.getId());
+			strMap.put("groupbuypo", groupBuyPO);
+		}
 		strMap.put("product", productV);
 		strMap.put("beginDate", beginDate);
 		strMap.put("ectiveDate", ectiveDate);
@@ -253,6 +262,14 @@ public class ProductController extends BaseController {
 		String regionThird=request.getParameter("regionThird");
 		//张羽 新增 5/1 商品购买最低数量限制
 		String productRestrictNumber=request.getParameter("productRestrictNumber");
+		int isgroup=0;
+		//是不是拼团的商品
+		if(request.getParameter("group")!=null&&request.getParameter("group")!=""){
+			isgroup=Integer.parseInt(request.getParameter("group"));
+		}
+		product.setIsgroup(isgroup);
+		
+		
 		product.setProductRestrictNumber(Integer.parseInt(productRestrictNumber));
 		
 		product.setRegionId(Long.parseLong(regionFirst));
@@ -432,9 +449,19 @@ public class ProductController extends BaseController {
 		} else {
 
 		}
-
-
 		conn_product.save(product);
+		//如果是的话
+		if(isgroup==1){
+			int groupnum=Integer.parseInt(request.getParameter("groupnum"));
+			long groupprice=Long.parseLong(request.getParameter("groupprice"));
+			long productId=product.getId();
+			GroupBuyPO group=new GroupBuyPO();
+			group.setGroupnum(groupnum);
+			group.setGroupprice(groupprice);
+			group.setProductid(productId);
+			conn_groupbuydao.save(group);
+		}
+
 		return "success";
 	}
 
@@ -465,7 +492,11 @@ public class ProductController extends BaseController {
 		if (!(merMId.length() == 0 || merMId == null)) {
 			product.setMerMId(Long.parseLong(merMId));
 		}
-
+		int isgroup=0;
+		//是不是拼团的商品
+		if(request.getParameter("group")!=null&&request.getParameter("group")!=""){
+			isgroup=Integer.parseInt(request.getParameter("group"));
+		}
 		// 原价、现价、库存
 		long productOldPrice = (long) (Double.parseDouble(request.getParameter("productOldPrice")) * 100);
 		long productPrice = (long) (Double.parseDouble(request.getParameter("productPrice")) * 100);
@@ -630,6 +661,18 @@ public class ProductController extends BaseController {
 		product.setIfFace(ifFace);
 		
 		conn_product.saveOrUpdate(product);
+		//如果是的话
+		if(isgroup==1){
+			int groupnum=Integer.parseInt(request.getParameter("groupnum"));
+			long groupprice=Long.parseLong(request.getParameter("groupprice"));
+			long productId=product.getId();
+			GroupBuyPO group=conn_groupbuydao.findByProductId(productId);
+			group.setGroupnum(groupnum);
+			group.setGroupprice(groupprice);
+			group.setProductid(productId);
+			conn_groupbuydao.saveOrUpdate(group);
+		}
+		
 		return "success";
 	}
 
@@ -730,6 +773,10 @@ public class ProductController extends BaseController {
 		String beginDate = sdf.format(product.getProductBeginDate());
 		String ectiveDate = sdf.format(product.getProductEctivedate());
 		String endDate = sdf.format(product.getProductEnddate());
+		if(conn_groupbuydao.findByProductId(productV.getId())!=null){
+			GroupBuyPO groupBuyPO = conn_groupbuydao.findByProductId(productV.getId());
+			strMap.put("groupbuypo", groupBuyPO);
+		}
 		strMap.put("product", productV);
 		strMap.put("beginDate", beginDate);
 		strMap.put("ectiveDate", ectiveDate);
@@ -782,6 +829,11 @@ public class ProductController extends BaseController {
 		String ectiveDate = sdf.format(product.getProductEctivedate());
 		String endDate = sdf.format(product.getProductEnddate());
 		productV.setProductRestrictNumber(product.getProductRestrictNumber());
+		if(conn_groupbuydao.findByProductId(productV.getId())!=null){
+			GroupBuyPO groupBuyPO = conn_groupbuydao.findByProductId(productV.getId());
+			strMap.put("groupbuypo", groupBuyPO);
+		}
+		
 		strMap.put("product", productV);
 		strMap.put("beginDate", beginDate);
 		strMap.put("ectiveDate", ectiveDate);// sysConfig

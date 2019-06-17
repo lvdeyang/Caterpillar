@@ -160,9 +160,20 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	//张羽 新增 5/1 商品购买最低数量限制
 	private int productRestrictNumber;
 	
+	//是否可拼团
+	private int isgroup;
 	
 	
-	
+	public int getIsgroup() {
+		return isgroup;
+	}
+
+
+	public void setIsgroup(int isgroup) {
+		this.isgroup = isgroup;
+	}
+
+
 	public int getIntegralGoods() {
 		return IntegralGoods;
 	}
@@ -1200,7 +1211,8 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setIntegralGoods(entity.getIntegralGoods())
 		.setProductIsRefund(entity.getProductIsRefund())
 		.setSite(entity.getSite())
-		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)));
+		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)))
+		.setIsgroup(entity.getIsgroup());
 		
 		return this;
 	}
