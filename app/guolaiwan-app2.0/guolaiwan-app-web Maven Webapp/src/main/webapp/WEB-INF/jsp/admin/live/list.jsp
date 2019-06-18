@@ -134,6 +134,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180,templet:'#switchTpl'}
         		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180}
         		,{field: 'delectMessage',title: '评论管理',align:  'center',sort: true,width:180,templet:'#zsgc'}
+        		,{field: 'sendMessage',title: '直播推送通知',align:  'center',sort: true,width:180,templet:'#zbtstz'}
    			]]
 		})
 	}
@@ -219,9 +220,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </script>
 
 
-	<script type="text/html" id="zsgc">
-
+<script type="text/html" id="zsgc">
 	<a title="评论管理" href="javascript:;" onclick="stock_show('评论管理','<%=path%>/admin/live/liveDelect','{{d.id}}','','')" class="layui-btn layui-btn-xs">评论管理</a>
+</script>
+<script type="text/html" id="zbtstz">
+	<a title="推送通知编辑" href="javascript:;" onclick="stock_show('推送通知编辑--直播间：{{d.id}}','<%=path%>/admin/live/addWxMessage','{{d.id}}','','5100')" class="layui-btn layui-btn-xs">推送通知编辑</a>
 </script>
 	<script type="text/html" id="switchTpl">
 	<input type="checkbox" name="liveStatusType" id='{{d.id}}' value='{{ d.liveStatusType }}'  lay-skin="switch" lay-text="正常|封号" lay-filter="enable" {{ d.liveStatusType == 'FORBID' ? '' : 'checked' }} >
