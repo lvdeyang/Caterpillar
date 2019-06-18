@@ -205,7 +205,13 @@ public class PubNumController extends WebBaseControll {
 			params.put("lang", "zh_CN");
 			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
 			JSONObject userInfo = JSON.parseObject(result);
-			nickname = EmojiFilter.filterEmoji(userInfo.getString("nickname"));
+			try {
+				nickname = EmojiFilter.filterEmoji(userInfo.getString("nickname"));
+			} catch (Exception e) {
+				// TODO: handle exception
+				nickname = "无法获取用户名";
+			}
+			
 			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
 		} else {
 			openid = "opVUYv7wr-zPKl92ilFpqB8yS82I";
