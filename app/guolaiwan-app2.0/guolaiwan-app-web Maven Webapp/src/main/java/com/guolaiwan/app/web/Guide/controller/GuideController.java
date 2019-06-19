@@ -61,6 +61,12 @@ public class GuideController extends WebBaseControll  {
 		mv = new ModelAndView("guide/guidemap/home");
 		return mv;
 	}
+	@RequestMapping(value = "/visitors/app")
+	public ModelAndView app(HttpServletRequest request ) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("guide/guidemap/homepage");
+		return mv;
+	}
 	
 	
 	
@@ -97,7 +103,6 @@ public class GuideController extends WebBaseControll  {
 			return success(null);
 		}
 		List<ChildProductPO> childProcucts = conn_childProduct.getChildByProductId(product.getId());
-		System.out.println(childProcucts.size()+"------------");
 		List<ChildProductVO> _childProcucts = ChildProductVO.getConverter(ChildProductVO.class).convert(childProcucts,
 				ChildProductVO.class);
 		List<ChildProductVO> result = new ArrayList<ChildProductVO>();
@@ -109,6 +114,9 @@ public class GuideController extends WebBaseControll  {
 		}
 		List<UserInfoPO> polist = conn_userInfo.getUserByUid(userId);
 		List<UserInfoVO> volist = UserInfoVO.getConverter(UserInfoVO.class).convert(polist, UserInfoVO.class);
+		for (UserInfoVO userInfoVO : volist) {
+			System.out.println(userInfoVO.getChildId());
+		}
 		map.put("result", result);
 		map.put("volist", volist.get(0));
 		return success(map);

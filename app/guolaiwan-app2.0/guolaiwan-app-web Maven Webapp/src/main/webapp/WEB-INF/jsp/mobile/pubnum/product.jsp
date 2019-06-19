@@ -560,7 +560,6 @@ input[type="datetime-local"]:before{
 }
 
 
-
 /* 对话框样式 */   
   input,button{outline:none;}
 	.wenwen-footer{width:100%;position:fixed;bottom:-5px;left:0;background:#fff;padding:3%;border-top:solid 1px #ddd;box-sizing:border-box;}
@@ -617,6 +616,10 @@ input[type="datetime-local"]:before{
 
     var base;	
 	$(function() {
+	    var id = '${id}';
+		if( id == 34){
+	   $("#guide").show();
+	  }
 	  $(document).on('focus','.mydate',function(){
 	      $(this).removeAttr('placeholder');
 	  });
@@ -1863,8 +1866,6 @@ addmessage();
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
-								//记录消息来自谁放到三方待用
-								$('.touser').val(data[i].fromuserId);
 								$('#olprompt').show();
 								//修改展示完成的数据flag
 								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
@@ -1894,7 +1895,7 @@ addmessage();
 	 		return;
 	 	}
 	 		str  = '<div class="question">';
-	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="heard_img right"><img src="${userHeadimg}"></div>';
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
@@ -1910,6 +1911,19 @@ addmessage();
 	        $(".duihua").show();
 	       $("#olprompt").hide();
 	 });
+	/*显示隐藏切换  */
+	 $(document).on('click',' #guide',function(){
+	  window.location.href="guide/visitors/app?userId="+${userId}; 
+			/* var _urifav = window.BASEPATH + 'guide/visitors/app';
+			$.get(_urifav , null , function(dat){
+		    });                              */
+	  /*  // $('body').append("<a href='app://guolaiwan'>唤醒你的 APP</a>");
+	 
+	 	//此操作会调起app并阻止接下来的js执行，进入已安装的app
+        $('body').append(" <a href='app://media_resource_system.guolaiwan/guideActivity?userId=${userId}&merchantId=15&longitude=117.625103&latitude=40.188278'></a>");
+        //没有安装应用会执行下面的语句
+        setTimeout(function(){window.location='http://a.app.qq.com/o/simple.jsppkgname=com.bjyijiequ.community'},5000);  */
+	 });
 	 
 	 $(document).on('click','.tui',function(){
 	 		$(".duihua").hide();
@@ -1921,7 +1935,6 @@ addmessage();
 
 
 <body>
-<input type="text" class="touser" hidden="hidden" value="">
 	<script type="text/javascript">
 		function deletepl(data){
 			var paran={};
@@ -1976,7 +1989,7 @@ addmessage();
 				<div class="weui-cell">
 					<div class="weui-cell__ft">
 						<div class="weui-count">
-							<a class="weui-count__btn weui-count__decrease"></a> <input
+							<a class="weui-count__btn weui-count__decrease"></a> <input style="font-size:14px;width:30px;"
 								disabled="disabled" class="weui-count__number" id="proCount"
 								type="number" value="${productRestrictNumber}"> <a
 								class="weui-count__btn weui-count__increase"></a>
@@ -2069,10 +2082,13 @@ addmessage();
 					style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 					
 				<div
-					style="width:90%;margin-top:20px;margin-left:11px;font-size:12px;">
+					style="width:90%;margin-top:20px;margin-left:11px;font-size:16px;">
 					<a id="contact1" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
 					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
-					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
+					<a id="guide" href="javascript:void(0);" style="display: none;" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;导览</a>
+					
+					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
+
 				</div>	
 			</div>
 					
@@ -2090,10 +2106,10 @@ addmessage();
 
 			<div style="width:100%;height:40px;position:fixed;z-index:10;bottom:2px">
 				<a id="addOrder"
-					style="width:47.5%;font-size:13px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
+					style="width:47.5%;font-size:12px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 					href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a> <a
 					id="buy"
-					style="width:47.5%;font-size:13px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
+					style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
 					href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span
 					id="total">0</span>）
 				</a>

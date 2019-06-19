@@ -191,11 +191,21 @@ public class ProductPO extends AbstractBasePO {
 	private int productIsRefund;
 	//张羽 新增 5/1 商品购买最低数量限制
 	private int productRestrictNumber;
+	//是否可拼团
+	private int isgroup;
 	
 
 	
 	
 	
+	public int getIsgroup() {
+		return isgroup;
+	}
+
+	public void setIsgroup(int isgroup) {
+		this.isgroup = isgroup;
+	}
+
 	public String getSite() {
 		return site;
 	}

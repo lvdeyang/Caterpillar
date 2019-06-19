@@ -56,6 +56,13 @@ public class ClassesController {
 		conn_classes.save(classesPo);
 		return "success";
 	}
-	
-	
+	@ResponseBody
+	@RequestMapping(value="/del.do", method= RequestMethod.POST)
+	public String del(HttpServletRequest request) throws Exception {
+		if(request.getParameter("id")!=null){
+			conn_classes.delete(Long.parseLong(request.getParameter("id")));
+		}
+
+		return "success";
+	}
 }

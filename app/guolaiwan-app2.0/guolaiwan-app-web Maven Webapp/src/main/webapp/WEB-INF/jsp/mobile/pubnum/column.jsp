@@ -486,7 +486,9 @@ html, body {
 	    font-size:12px;
     }
     
-    
+    .weui-panel__bd{
+        padding-bottom:0px !important;
+    }
 
 </style>
 
@@ -669,8 +671,9 @@ html, body {
 		     if($(window).scrollTop() === $(document).height() - $(window).height()){
 				var flag=$('.flag').val();
 				if(flag==2){
-				  $.alert("没有更多数据");
-				  $('.flag').val(3);
+				   $('.weui-loadmores').fadeIn().addClass("show")
+				   setTimeout(function(){$('.weui-loadmores').fadeOut().addClass("show")},2000);
+				 
 				return;
 				}
 				if(flag==3)return;
@@ -704,11 +707,13 @@ html, body {
 		$(document).on('click','.merchant',function(){
 	       var codes=this.id.split('-');
 	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       $('.flag').val(1);
 	    });
 	    
 	    $(document).on('click','.merchant1',function(){
 	       var codes=this.id.split('-');
 	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       $('.flag').val(1);
 	    });
 		
 		function getLine(modal){
@@ -824,6 +829,10 @@ html, body {
 	<div class="weui-loadmore" hidden="hidden" style="position:fixed;bottom: 5%;left:18%;z-index: 10000">
 			  <i class="weui-loading"></i>
 			  <span class="weui-loadmore__tips">正在加载</span>
+	</div>
+	<div class="weui-loadmores" hidden="hidden" style="position:fixed;bottom: 7%;left:50%;margin-left:-40px;z-index: 10000">
+			  <span class="weui-loadmore__tips">没有内容了</span>
 	</div>		
+	<div style="height:50px;width:100%;"></div>	
 </body>
 </html>

@@ -18,8 +18,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet"
 	href="lib/css/font-awesome.css" />
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="http://demo.mycodes.net/kuangjia/frozenui/frozenjs/lib/zepto.min.js"></script>
-<script src="http://demo.mycodes.net/kuangjia/frozenui/frozenjs/1.0.1/frozen.js"></script>
+<script src="http://ryanbay.cn/vipstyle/qui/2.0.0/demo/js/lib/zepto.min.js"></script>
+<script src="http://i.gtimg.cn/vipstyle/frozenjs/1.0.1/frozen.js"></script>
 </head>
 
 <body>
@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </header>
 	<div class="ui-tab" style="margin-top:40px;">
 		<ul class="ui-tab-nav ui-border-b">
-               <li id="recomm" class="mytab">推荐</li>
+               <li style="display:none;" id="recomm" class="mytab">推荐</li>
                <li id="article" class="mytab">文章</li>
                <li id="product" class="mytab">比价</li>
 	    </ul>
@@ -60,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 	     $(function() {
 	          window.BASEPATH = '<%=basePath%>';
-	          var dic={'XINLANG':'新浪','YICHE':'易车'};
+	          var dic={'XINLANG':'新浪','YICHE':'易车','JINGDONG':'京东'};
 			  var parseAjaxResult = function(data){
 					if(data.status !== 200){
 						$.toptip('data.message', 'error');
@@ -71,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  };
 	          var pageCount=10;
 	          var currPage=1;
-	          var type='recomm';
+	          var type='article';
 	          
 	          function getPage(isinit){
 	              var _uriArticle = window.BASEPATH + 'cartest/list?currPage='+currPage+'&pageCount='+pageCount+
@@ -97,17 +97,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          
 	          function initList(data){
 	               var html=[];
-	               if(!data.articles) return;
-			       for(var i=0;i<data.articles.length;i++){
-			         html.push('<li class="article" id="art-'+data.articles[i].id+'">');
-					 html.push('    <div class="ui-list-img-square">');
-					 html.push('        <span style="background-image:url(http://pic37.nipic.com/20140113/8800276_184927469000_2.png)"></span></div>');
-					 html.push('	<div class="ui-list-info ui-border-t">');
-					 html.push('		<div style="font-size:13px;">'+data.articles[i].title+'</div>');
-					 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.articles[i].source]+'</p>');
-					 html.push('	</div>');
-					 html.push('</li>'); 
-			       }
+
+	               if(data.articles){
+	                  for(var i=0;i<data.articles.length;i++){
+				         html.push('<li class="article" id="art-'+data.articles[i].id+'">');
+						 html.push('    <div class="ui-list-img-square">');
+						 html.push('        <span style="background-image:url('+data.articles[i].pic+')"></span></div>');
+						 html.push('	<div class="ui-list-info ui-border-t">');
+						 html.push('		<div style="font-size:13px;">'+data.articles[i].title+'</div>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.articles[i].source]+'</p>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">'+data.articles[i].classesName+'</p>');
+						 html.push('	</div>');
+						 html.push('</li>'); 
+				       }
+	               
+	               }
+			       
+			       if(data.products){
+		               for(var i=0;i<data.products.length;i++){
+				         html.push('<li style="margin-top:10px" id="pro-'+data.products[i].id+'" data="'+data.products[i].url+'" class="product">');
+						 html.push('    <div class="ui-list-img-square">');
+						 html.push('        <span style="background-image:url('+data.products[i].pic+')"></span></div>');
+						 html.push('	<div class="ui-list-info ui-border-t">');
+						 html.push('		<div style="font-size:13px;">'+data.products[i].shortContent+'</div>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.products[i].source]+
+						           '￥<span style="font-size:14px;color:red">'+data.products[i].price+'</span></p>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">'+data.products[i].classesName+'</p>');      
+						 html.push('	</div>');
+						 html.push('</li>'); 
+				       }
+	               
+	               }
+			       
+
 			       $('#articleList').append(html.join(''));
 	          }
 	          
@@ -139,6 +161,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		      $(document).on('click','.article',function(){
 		         var ids=this.id.split('-');
 		         location.href='article/mobile/index?articleId='+ids[1];
+		      
+		      });
+		      
+		      $(document).on('click','.product',function(){
+		         
+		          var productId=this.id.split('-')[1];
+
+	              var _uriRecord = window.BASEPATH + 'product/mobile/record?productId='+productId;
+				  $.get(_uriRecord, null, function(data){
+				       
+				  });
+	         
+	          
+		         
+		         
+		         location.href=$(this).attr('data');
 		      
 		      });
 		      

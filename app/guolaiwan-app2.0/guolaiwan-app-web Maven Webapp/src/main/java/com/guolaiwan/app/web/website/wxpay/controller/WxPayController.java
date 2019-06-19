@@ -312,19 +312,19 @@ public class WxPayController extends BaseController {
 			} catch (Exception e) {
 				System.out.println("正常反应");
 			}
-			cutUserWallet(userpo, money,orderNo);
+			cutUserWallet(userpo, money);
 		
 		return success(1);
 	}
 	
 	//提现后修改用户的余额
-	public void cutUserWallet(UserInfoPO userpo,long money,long orderNo){
+	public void cutUserWallet(UserInfoPO userpo,long money){
 		System.out.println("用户提现成功");
 		userpo.setWallet(userpo.getWallet()-money);
 		conn_user.saveOrUpdate(userpo);
 		JSONObject obj = new JSONObject();
 		obj.put("touser",userpo.getUserOpenID() );
-		obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+		obj.put("template_id", "7dxE9XPji2fPCvF4hEDC5ukPdLAZDhGpeXxF0noGUVg");
 		obj.put("url", "");
 		JSONObject microProObj = new JSONObject();
 		microProObj.put("appid", "");
@@ -332,43 +332,30 @@ public class WxPayController extends BaseController {
 		obj.put("miniprogram", microProObj);
 		JSONObject dataObject = new JSONObject();
 		JSONObject firstObj = new JSONObject();
-		firstObj.put("value", "用户提现通知");
+		firstObj.put("value", "用户提现成功通知");
 		firstObj.put("color", "");
 		dataObject.put("first", firstObj);
 
 		JSONObject nameObj = new JSONObject();
-		nameObj.put("value", userpo.getUserNickname());
+		nameObj.put("value", (money/100)+"元");
 		nameObj.put("color", "");
 		dataObject.put("keyword1", nameObj);
 		
 		JSONObject accountTypeObj = new JSONObject();
-		accountTypeObj.put("value", orderNo);
+		accountTypeObj.put("value", DateUtil.getNowDate());
 		accountTypeObj.put("color", "");
 		dataObject.put("keyword2", accountTypeObj);
 		
-		JSONObject accountObj = new JSONObject();
-		accountObj.put("value", (money/100));
-		accountObj.put("color", "");
-		dataObject.put("keyword3", accountObj);
-		JSONObject timeObj = new JSONObject();
-		timeObj.put("value", "我的钱包提现成功，金额为：" + (money/100)+"元，24小时内到账！");
-		timeObj.put("color", "");
-
-		String pNum = userpo.getUserPhone();
-		if (pNum == null ) {
-			pNum="该用户未填写";
-		}
-		dataObject.put("keyword4", timeObj);
 		JSONObject remarkObj = new JSONObject();
-		remarkObj.put("value", "用户电话:" + pNum);
+		remarkObj.put("value", "我的钱包提现成功，金额为：" + (money/100)+"元，24小时内到账！");
 		remarkObj.put("color", "");
 		dataObject.put("remark", remarkObj);
 		obj.put("data", dataObject);
 		SendMsgUtil.sendTemplate(obj.toJSONString());
 		
 		JSONObject obj1 = new JSONObject();
-		obj1.put("touser","opVUYv9LtqKAbiaXInBqI01hlpYg" );
-		obj1.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+		obj1.put("touser","opVUYv9LtqKAbiaXInBqI01hlpYg");
+		obj1.put("template_id", "7dxE9XPji2fPCvF4hEDC5ukPdLAZDhGpeXxF0noGUVg");
 		obj1.put("url", "");
 		JSONObject microProObj1 = new JSONObject();
 		microProObj1.put("appid", "");
@@ -376,35 +363,22 @@ public class WxPayController extends BaseController {
 		obj1.put("miniprogram", microProObj1);
 		JSONObject dataObject1 = new JSONObject();
 		JSONObject firstObj1 = new JSONObject();
-		firstObj1.put("value", "用户提现通知");
+		firstObj1.put("value", "用户提现成功通知");
 		firstObj1.put("color", "");
 		dataObject1.put("first", firstObj1);
 
 		JSONObject nameObj1 = new JSONObject();
-		nameObj1.put("value", userpo.getUserNickname());
+		nameObj1.put("value", (money/100)+"元");
 		nameObj1.put("color", "");
 		dataObject1.put("keyword1", nameObj1);
 		
 		JSONObject accountTypeObj1 = new JSONObject();
-		accountTypeObj1.put("value", orderNo);
+		accountTypeObj1.put("value", DateUtil.getNowDate());
 		accountTypeObj1.put("color", "");
-		dataObject.put("keyword2", accountTypeObj1);
+		dataObject1.put("keyword2", accountTypeObj1);
 		
-		JSONObject accountObj1 = new JSONObject();
-		accountObj1.put("value", (money/100));
-		accountObj1.put("color", "");
-		dataObject1.put("keyword3", accountObj1);
-		JSONObject timeObj1 = new JSONObject();
-		timeObj1.put("value", "我的钱包提现成功，金额为：" + (money/100)+"元，24小时内到账！");
-		timeObj1.put("color", "");
-
-		String pNum1 = userpo.getUserPhone();
-		if (pNum1 == null ) {
-			pNum1="该用户未填写";
-		}
-		dataObject1.put("keyword4", timeObj1);
 		JSONObject remarkObj1 = new JSONObject();
-		remarkObj1.put("value", "用户电话:" + pNum1);
+		remarkObj1.put("value", "用户:"+userpo.getUserNickname()+" 提现成功，金额为：" + (money/100)+"元");
 		remarkObj1.put("color", "");
 		dataObject1.put("remark", remarkObj1);
 		obj1.put("data", dataObject1);

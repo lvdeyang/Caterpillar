@@ -205,7 +205,13 @@ public class PubNumController extends WebBaseControll {
 			params.put("lang", "zh_CN");
 			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
 			JSONObject userInfo = JSON.parseObject(result);
-			nickname = EmojiFilter.filterEmoji(userInfo.getString("nickname"));
+			try {
+				nickname = EmojiFilter.filterEmoji(userInfo.getString("nickname"));
+			} catch (Exception e) {
+				// TODO: handle exception
+				nickname = "无法获取用户名";
+			}
+			
 			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
 		} else {
 			openid = "opVUYv7wr-zPKl92ilFpqB8yS82I";
@@ -269,26 +275,17 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubnum/merchant");
 		mv.addObject("merchantId", merchantId);
-		long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
-		long merchantUserId = 2;
-		if(conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId)==null){
-			merchantUserId=conn_merchant.get(merchantId).getUser().getId();
-		}else{
-			merchantUserId=conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId).getUserId();
-		}
-		// 判断此时登录的人是不是该商户房间的商户
-		if (userId == merchantUserId) {
-			mv.addObject("ismerchant", 1);
-			conn_merchant.get(merchantId).setLastexercisetime(new Date());
-		} else {
-			mv.addObject("ismerchant", 2);
-		}
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		String userHeadimg = conn_user.get(userId).getUserHeadimg();
+		mv.addObject("userHeadimg", userHeadimg);
 		return mv;
 	}
 
 	@RequestMapping(value = "/merchant/index1")
 	public ModelAndView carouselIndex(HttpServletRequest request, long code, String classify) throws Exception {
 		ModelAndView mv = null;
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		String userHeadimg = conn_user.get(userId).getUserHeadimg();
 		switch (classify) {
 		case "ACTIVITY":
 			mv = new ModelAndView("mobile/pubnum/activity");
@@ -297,20 +294,7 @@ public class PubNumController extends WebBaseControll {
 		case "MERCHANT":
 			mv = new ModelAndView("mobile/pubnum/merchant");
 			mv.addObject("merchantId", code);
-			long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
-			long merchantUserId = 2;
-			if(conn_merchantBusiness.getMerchantBusinessBymerchantId(code)==null){
-				merchantUserId=conn_merchant.get(code).getUser().getId();
-			}else{
-				merchantUserId=conn_merchantBusiness.getMerchantBusinessBymerchantId(code).getUserId();
-			}
-			// 判断此时登录的人是不是该商户房间的商户
-			if (userId == merchantUserId) {
-				mv.addObject("ismerchant", 1);
-				conn_merchant.get(code).setLastexercisetime(new Date());
-			} else {
-				mv.addObject("ismerchant", 2);
-			}
+			mv.addObject("userHeadimg", userHeadimg);
 			break;
 
 		case "PRODUCT":
@@ -319,6 +303,7 @@ public class PubNumController extends WebBaseControll {
 			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(code).getProductMerchantID());
 			mv.addObject("id", code);
+			mv.addObject("userHeadimg", userHeadimg);
 			break;
 		default:
 			break;
@@ -346,19 +331,23 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/product/index")
 	public ModelAndView productIndex(HttpServletRequest request, long id, String activityproId) throws Exception {
 		ModelAndView mv = null;
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		String userHeadimg = conn_user.get(userId).getUserHeadimg();
 		if (activityproId != null && activityproId != "" && activityproId.length() != 0 && !activityproId.equals("0")) {
 			mv = new ModelAndView("mobile/pubnum/activityproduct");
 			mv.addObject("actId", activityproId);
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
+			mv.addObject("userHeadimg", userHeadimg);
 		} else {
 			mv = new ModelAndView("mobile/pubnum/product");
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
+			mv.addObject("userHeadimg", userHeadimg);
 		}
-		mv.addObject("userId", request.getSession().getAttribute("userId"));
+		mv.addObject("userId", userId);
 		return mv;
 	}
 
@@ -734,6 +723,29 @@ public class PubNumController extends WebBaseControll {
 		mv.addObject("muserId", muserId);
 		return mv;
 	}
+	
+	/**
+	 * 商户中心页面心跳
+	 * @param request
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/admin/merchantbeat")
+	public void merchantBeat(HttpServletRequest request) throws Exception {
+		Long merchantId = Long.parseLong(request.getParameter("merchantId"));
+		conn_merchant.get(merchantId).setLastexercisetime(new Date());
+	}
+	
+	@RequestMapping(value = "/admin/olchat")
+	public ModelAndView olchat(HttpServletRequest request) throws Exception {
+		Long merchantId = Long.parseLong(request.getSession().getAttribute("merchantId").toString());
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		String userHeadimg = conn_user.get(userId).getUserHeadimg();
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubadmin/olchat");
+		mv.addObject("merchantId", merchantId);
+		mv.addObject("userHeadimg", userHeadimg);
+		return mv;
+	}
 
 	
 	@Autowired
@@ -789,7 +801,7 @@ public class PubNumController extends WebBaseControll {
 				}
 			}
 		}
-
+		conn_merchant.get(merchant.getId()).setLastexercisetime(new Date());
 		session.setAttribute("merchantId", merchant.getId());
 		session.setAttribute("userName", phone);
 		session.setAttribute("password", password);
@@ -1285,20 +1297,9 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/merchant");
 		long merchantId = productPO.getProductMerchantID();
 		mv.addObject("merchantId", merchantId);
-		long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
-		long merchantUserId = 2;
-		if(conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId)==null){
-			merchantUserId=conn_merchant.get(merchantId).getUser().getId();
-		}else{
-			merchantUserId=conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId).getUserId();
-		}
-		// 判断此时登录的人是不是该商户房间的商户
-		if (userId == merchantUserId) {
-			mv.addObject("ismerchant", 1);
-			conn_merchant.get(merchantId).setLastexercisetime(new Date());
-		} else {
-			mv.addObject("ismerchant", 2);
-		}
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		String userHeadimg = conn_user.get(userId).getUserHeadimg();
+		mv.addObject("userHeadimg", userHeadimg);
 		return mv;
 
 	}
@@ -1309,7 +1310,7 @@ public class PubNumController extends WebBaseControll {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/delCollectionPro", method = RequestMethod.POST)
-	public Map<String, Object> delCollectionPro(HttpServletRequest request, HttpServletResponse response)
+	public Object delCollectionPro(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		// 解析json
 		HttpServletRequestParser parser = new HttpServletRequestParser(request);
@@ -1480,13 +1481,16 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/product/index/{id}")
 	public ModelAndView productIndexN(@PathVariable long id, HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		String userHeadimg = conn_user.get(userId).getUserHeadimg();
 		mv = new ModelAndView("mobile/pubnum/activityproduct");
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(id);
 		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 		mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 		mv.addObject("actId", activityPro.getId());
 		mv.addObject("id", id);
-		mv.addObject("userId", request.getSession().getAttribute("userId"));
+		mv.addObject("userHeadimg", userHeadimg);
+		mv.addObject("userId", userId);
 		return mv;
 	}
 
@@ -2302,7 +2306,7 @@ public class PubNumController extends WebBaseControll {
 		if (conn_address.get(orderInfoPO.getMailAddress()) != null) {
 			nameObj.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
 		} else {
-			nameObj.put("value", conn_user.get(orderInfoPO.getId()).getUserNickname());
+			nameObj.put("value", conn_user.get(orderInfoPO.getUserId()).getUserNickname());
 		}
 
 		nameObj.put("color", "");
@@ -2509,16 +2513,20 @@ public class PubNumController extends WebBaseControll {
 		String msg = request.getParameter("message");
 		// 发给的userID
 		long touser;
+		//客服人员
+		long chatUserId = conn_merchant.get(merchantId).getChatUserId();
 		MerchantPO merchant = conn_merchant.get(merchantId);
 		// 如果页面带回来有touser 就对这个id发送 没有就是给商户发送
 		if (request.getParameter("touser") != "" & request.getParameter("touser") != null) {
 			touser = Long.parseLong(request.getParameter("touser"));
 		} else {
-			// 商家的userId
-			if(conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId)==null){
-			touser = merchant.getUser().getId();
+			if(conn_merchantuser.getUserByMerchantId(merchantId)!=null){
+				// 商家的userId
+				touser = conn_merchantuser.getUserByMerchantId(merchantId).getUserId();
+			}else if(chatUserId!=0){
+				touser =chatUserId;
 			}else{
-			touser =conn_merchantBusiness.getMerchantBusinessBymerchantId(merchantId).getUserId();
+				touser=0;
 			}
 		}
 		UserInfoPO userpo = conn_user.get(userId);
@@ -2537,13 +2545,13 @@ public class PubNumController extends WebBaseControll {
 		if(lasttime!=null){
 			//计算出用户发送信息的时间距离客服在商户页面内最后的活动时间差
 			cha=((new Date().getTime())-(lasttime.getTime()))/(1000*60);
-			//相差20分钟时 推送公众号提醒客服有消息
-			if(cha>20){
-				sendStoreRemind(touser);
+			//相差1分钟时 推送公众号提醒客服有消息
+			if(cha>1){
+				sendStoreRemind(touser,userId,merchantId);
 			}
 		}else{
 			//这里是客服没有在商户出现过 防止没有客服的商家提醒时发生错误
-			sendStoreRemind(touser);
+			sendStoreRemind(touser,userId,merchantId);
 		}
 		
 		return request;
@@ -2553,11 +2561,13 @@ public class PubNumController extends WebBaseControll {
 	/**
 	 * 通知商家客服有新消息
 	 */
-	public void sendStoreRemind(long touser){
+	public void sendStoreRemind(long touser,long userId,long merchantId){
+		if(touser==0)return;
 		UserInfoPO user = conn_user.get(touser);
+		UserInfoPO user1 = conn_user.get(userId);
 		JSONObject obj1 = new JSONObject();
 		obj1.put("touser",user.getUserOpenID() );
-		obj1.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+		obj1.put("template_id", "v9eHHHq4Fu-Q45Pa0oBfibxd032Yq_9rAkqDZZ-V2G4");
 		obj1.put("url", "");
 		JSONObject microProObj1 = new JSONObject();
 		microProObj1.put("appid", "");
@@ -2565,15 +2575,33 @@ public class PubNumController extends WebBaseControll {
 		obj1.put("miniprogram", microProObj1);
 		JSONObject dataObject1 = new JSONObject();
 		JSONObject firstObj1 = new JSONObject();
-		firstObj1.put("value", "用户在线咨询通知");
+		firstObj1.put("value", "在线咨询通知");
 		firstObj1.put("color", "");
 		dataObject1.put("first", firstObj1);
+		
+		JSONObject nameObj = new JSONObject();
+		nameObj.put("value", user1.getUserNickname());
+		nameObj.put("color", "");
+		dataObject1.put("keyword1", nameObj);
+
+		JSONObject accountTypeObj = new JSONObject();
+		accountTypeObj.put("value",DateUtil.getNowDate());
+		accountTypeObj.put("color", "");
+		dataObject1.put("keyword2", accountTypeObj);
+
+		JSONObject accountObj = new JSONObject();
+		accountObj.put("value", "上帝光临并在线咨询!请尽快查看~");
+		accountObj.put("color", "");
+		dataObject1.put("keyword3", accountObj);
+		
 		JSONObject remarkObj1 = new JSONObject();
-		remarkObj1.put("value", "有用户在您的商户在线咨询，请您尽快查看！");
+		remarkObj1.put("value", "查看方法：点击客户服务→商户中心→登录商户（如已登录请忽略）→在线咨询");
 		remarkObj1.put("color", "");
 		dataObject1.put("remark", remarkObj1);
 		obj1.put("data", dataObject1);
 		SendMsgUtil.sendTemplate(obj1.toJSONString());
+		
+		conn_merchant.get(merchantId).setLastexercisetime(new Date());
 	}
 
 	/**

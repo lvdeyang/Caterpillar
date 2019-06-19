@@ -22,12 +22,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.ActivityVO;
 import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
 import com.guolaiwan.app.web.admin.vo.LiveRebroadcastVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.PictureVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.bussiness.admin.dao.ActivityDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
@@ -38,6 +40,7 @@ import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
+import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
@@ -52,7 +55,9 @@ import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.PicturePO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
@@ -80,6 +85,9 @@ public class LiveController extends BaseController {
 	private MerchantDAO conn_merchant;
 	@Autowired
 	private ActivityDAO conn_activity;
+	@Autowired
+	private UserInfoDAO conn_user;
+	
 	// 列表页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(HttpServletRequest request) throws Exception {
@@ -133,6 +141,67 @@ public class LiveController extends BaseController {
 		ModelAndView mv = new ModelAndView("admin/live/liveDelect");
 		request.setAttribute("liveId", liveId);
 		return mv;
+	}
+	
+	// 直播推送通知设置参数
+	@RequestMapping(value = "/addWxMessage", method = RequestMethod.GET)
+	public ModelAndView addWxMessage(HttpServletRequest request) {
+		String liveId = request.getParameter("liveId");
+		ModelAndView mv = new ModelAndView("admin/live/addWxMessage");
+		request.setAttribute("liveId", liveId);
+		return mv;
+	}
+	
+	// 直播推送通知设置参数
+	@ResponseBody
+	@RequestMapping(value = "/pushalluser")
+	public int pushAllUser(HttpServletRequest request) {
+		//直播推送标题
+		String livetitle = request.getParameter("livetitle");
+		//自己设置的时间段（自己填）
+		String livetime = request.getParameter("livetime");
+		//推送的内容梗概
+		String livecontent = request.getParameter("livecontent");
+		//推送人数
+		int number=Integer.parseInt(request.getParameter("number"));
+		//随机数拿出起始的下标
+		int math=(int) (Math.random()*8000);
+		//查询所有的用户
+		List<UserInfoPO> allUser = conn_user.findAll();
+		//挨个推送
+		for (int i=math;i<=number+math;i++) {
+		JSONObject obj = new JSONObject();
+		obj.put("touser",allUser.get(i).getUserOpenID());
+		obj.put("template_id", "_pArfTDsaRwLXVWC5iDBqzkZ3ixxrlo4etPnpS0jFqo");
+		obj.put("url", "http://www.guolaiwan.net/guolaiwan/pubnum/liveplay?id=58");
+		JSONObject microProObj = new JSONObject();
+		microProObj.put("appid", "");
+		microProObj.put("pagepath", "");
+		obj.put("miniprogram", microProObj);
+		JSONObject dataObject = new JSONObject();
+		JSONObject firstObj = new JSONObject();
+		firstObj.put("value", "过来玩直播开播啦~~~~");
+		firstObj.put("color", "red");
+		dataObject.put("first", firstObj);
+
+		JSONObject nameObj = new JSONObject();
+		nameObj.put("value", livetitle);
+		nameObj.put("color", "");
+		dataObject.put("keyword1", nameObj);
+		
+		JSONObject accountTypeObj = new JSONObject();
+		accountTypeObj.put("value", livetime);
+		accountTypeObj.put("color", "");
+		dataObject.put("keyword2", accountTypeObj);
+		
+		JSONObject remarkObj = new JSONObject();
+		remarkObj.put("value", livecontent);
+		remarkObj.put("color", "red");
+		dataObject.put("remark", remarkObj);
+		obj.put("data", dataObject);
+		SendMsgUtil.sendTemplate(obj.toJSONString());
+		}
+		return 1;
 	}
 
 	// 删除评论

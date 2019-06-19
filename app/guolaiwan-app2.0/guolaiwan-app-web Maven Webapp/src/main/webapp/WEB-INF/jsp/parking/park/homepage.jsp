@@ -80,17 +80,17 @@
 }
 
 .header-pic {
-	height: 80px;
+		
 	width: 100%;
 	text-align: center;
 	
 }
 
 .header-pic img {
-	width: 75px;
-	height: 75px;
+	width: 70px;
+	height: 70px;
 	border-radius: 50%;
-	margin: 3% auto;
+	margin: 3% auto 1%;
 }
 
 .conformity {
@@ -125,21 +125,17 @@
 	border: 1px solid #CDCDCD;
 }
 
-.banner {
-    height:auto;
-	width: 100%;
-	bottom: 0;
-	
-	padding-top:60%;
-}
-
-.banner img {
+/* .banner img {
+   
+} */
+.img-responsive{
+ 
+   height: 55%;
     width: 100%;
-	height:50%;
-	padding:0;
-	
+    position:fixed;
+    bottom:0;
+	object-fit:cover;
 }
-
 .btn {
 	color: white;
 	border-radius: 5px;
@@ -163,6 +159,7 @@ html,body{
 	height: 100%;
 	background-color:#E6E6E6 ;
 }
+
 </style>
 
 </head>
@@ -221,15 +218,23 @@ html,body{
 			}
 		});
 	});
-
-	
+   var h=$(window).height();
+   $(window).resize(function(){
+      if($(window).height()<h){
+        $(".img-responsive").hide();
+      }
+      if($(window).height()>=h){
+        $(".img-responsive").show();
+      }
+   
+   })
 </script>
 
 
 <body>
 
 	<div class='header-pic'>
-		<div id="img"></div>
+		<div id="img" style="height:80px;"></div>
 		<div class="conformity">
 			
 			<div class="phone"></div>
@@ -255,14 +260,15 @@ html,body{
                   </select>
                    
 				</div>
-				 <button class="btn"style="width: 202px;height: 35px;margin: 8% auto;background-color: #02A1E9";>保存
+				 <button class="btn"style="z-index:222;width: 202px;height: 35px;margin: 5% auto;background-color: #02A1E9";>保存
 					</button>
 			</div>
 		</div>
 
-		<div class="banner img">
-			<img class="img-responsive" src="lib/images/wu.jpg" />
-		</div>
+		<!-- <div class="banner img">
+			
+		</div> -->
+		<img class="img-responsive" src="lib/images/chundi.png" />
 </body>
 
 </html>

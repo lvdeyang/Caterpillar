@@ -257,11 +257,11 @@ public class IndexController extends BaseController{
 			String password = request.getParameter("password");
 			AdminPO loginpo = conn_admin.getByField("adminName", username);
 			
-			if(loginpo != null&&!"Admin".equals(username)) {
+			if(loginpo != null) {
 				if(!loginpo.getPassword().equals(Sha1Util.getSha1(password))) {
 					return "error";
 				}
-			} else if(!"Admin".equals(username)){
+			} else {
 				return "error";
 			}
 			

@@ -243,6 +243,52 @@
                     </div>
                 </div>
                 
+                <div class="layui-form-item">
+                	<div class="layui-inline">
+                	
+		               	<label class="layui-form-label">
+								是否拼团：
+		                   </label>
+		                   <div class="layui-input-block" onclick="changeGroup()">
+		                       <input type="checkbox" name="group" lay-skin="switch" id="group" lay-text="ON|OFF" 
+		                       lay-filter="switchTest" value="${product.isgroup}" disabled="disabled">
+		                       <div class="layui-unselect layui-form-switch" lay-skin="_switch" >
+		                       	<em>OFF</em>
+		                       	<i></i>
+		                       </div>
+		                   </div>
+                	
+                    </div>
+                    <div class="layui-inline" >
+                    	<label class="layui-form-label" >
+ 							<font id="LimitNum1" style="color:#757575">拼团人数：</font>
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="groupnum" name="groupnum"  placeholder="人数"
+                        	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.groupnum}">
+                    	</div>
+                    </div>
+                    <div class="layui-inline" >
+                    	<label class="layui-form-label" >
+ 							<font id="LimitNum2" style="color:#757575">拼团价格：</font>
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="groupprice" name="groupprice"  placeholder="价格"
+                        	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.groupprice}">
+                    	</div>
+                    </div>
+                    <div class="layui-inline" >
+                    	<label class="layui-form-label" >
+ 							<font id="LimitNum3" style="color:#757575">拼团时限：</font>
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="grouptime" name="grouptime"  placeholder="时间限制（小时）"
+                        	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.grouptime}">
+                    	</div>
+                    </div>
+                </div>
+                
+                
                 
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -490,6 +536,10 @@
              		$("#productLimitNum").val("");
             }
             
+              //是否拼团
+            if($("#group").val()=="1"){
+             		$("#group").prop("checked",true);
+            }
             //佣金
             if("${product.productCommissionCode}"=="1"){
             	var commission = "(佣金)"+(${product.productCommissionPrice/100}).toFixed(2)+"元";

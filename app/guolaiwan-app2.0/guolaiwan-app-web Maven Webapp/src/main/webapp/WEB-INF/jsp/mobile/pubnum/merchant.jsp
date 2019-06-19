@@ -518,7 +518,7 @@ html, body {
 	.write_box input{height:40px;padding:0 5px;line-height:40px;width:100%;box-sizing:border-box;border:0;}
 	.wenwen_help button{width:100%;background:#42929d;color:#fff;border-radius:5px;border:0;height:40px;}
 	#wenwen{height:100%;}
-	.speak_window{overflow-y:scroll;height:100%;width:100%;position:fixed;top:0;left:0;}
+	.speak_window{overflow-y:scroll;height:100%;width:100%;top:0;left:0;}
 	.speak_box{margin-bottom:70px;padding:10px;}
 	.question,.answer{margin-bottom:1rem;}
 	.question{text-align:right;margin-top:50px;}
@@ -543,7 +543,22 @@ html, body {
 	.saying img{width:100%;}  
     
     
-    
+    .chatline{
+     background:#FBFBFB;
+     margin-top:50px;
+     width:100%;
+     border-radius:6px;
+     overflow: hidden;
+  
+    }
+    .chatline img{
+     width:50px;
+     height:50px;
+     border-radius:6px;
+     margin:5px 5px;
+       z-index:11111111111111111111111111111111;
+    }
+
 </style>
 
 </head>
@@ -583,7 +598,7 @@ html, body {
 			    var html=[];
 			    var pics=data.shopMpic.split(',');
 				for(var i=0; i<pics.length; i++){
-					html.push('<div class="swiper-slide" style="height:200px;"><img style="height:200px;" src="'+pics[i]+'" alt=""></div>');
+					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
 				}
 			    $('.header-content').html(data.shopName);
 				$('.swiper-wrapper').append(html.join(''));
@@ -785,10 +800,13 @@ html, body {
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
+				        		
+					        		if(document.getElementById(data[i].fromuserId)==null){
+					        		imgs  = '<img id="'+data[i].fromuserId+'" name="'+data[i].fromuserId+'" onclick="changetouser(this.id)" src="'+data[i].userheadimg+'">';
+					        		$('.chatline').append(imgs);
+					        		} 
 				        		$('#olprompt').show();
 				        		$('#olprompt1').show();
-								//记录消息来自谁放到三方待用
-								$('.touser').val(data[i].fromuserId);
 								//修改展示完成的数据flag
 								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
 							}
@@ -805,18 +823,10 @@ html, body {
 	 	var message="";
 	 	var userId=${userId};
 		var merchantId=${merchantId};
-		//是否是商家
-		var ismerchant=${ismerchant};
 		//存数据库的路径
 	 	var url=window.BASEPATH+'pubnum/pullolchat';
 		//获取要发送的对象 
 		var touser="";
-		//如果是商家就获得touser对象 不是就为""后台判定touser为商家
-		if(ismerchant==1){
-			touser=$('.touser').val();
-		}else{
-			touser="";
-		}
 	 	//输入框判空
 	 	if(document.getElementById("left").value!=""&&document.getElementById("left").value!=null){
 	 		message=document.getElementById("left").value;
@@ -825,7 +835,7 @@ html, body {
 	 		return;
 	 	}
 	 		str  = '<div class="question">';
-	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="heard_img right"><img src="${userHeadimg}"></div>';
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
@@ -855,12 +865,11 @@ html, body {
 
 
 <script type="text/javascript">
-	function to_write(){
-	    $('.wenwen_btn img').attr('src','lib/images/saying.gif');
-	    $('.write_box,.wenwen_help button').show();
-	    $('.circle-button,.wenwen_help a').hide();
-	    $('.write_box input').focus();
-	    for_bottom();
+
+	//修改touser
+	function changetouser(id){
+		$('.touser').val(id);
+		alert($('.touser').val());
 	}
 
 	function keyup(){
@@ -869,15 +878,6 @@ html, body {
 		
 	}
 
-	var wen  = document.getElementById('wenwen');
-	function _touch_start(event){
-        event.preventDefault();
-        $('.wenwen_text').css('background','#c1c1c1');
-        $('.wenwen_text span').css('color','#fff');
-        $('.saying').show();
-    }
-
-  
     
     function for_bottom(){
 		var speak_height = $('.speak_box').height();
@@ -888,27 +888,62 @@ html, body {
 		$('.question_text').css('max-width',$('.question').width()-60);
 	}
 	autoWidth();
-	
-	
-	$(document).on('click','.olline',function(){
-	 		if( $(".chatline").hasClass("show") ){
-		            // 执行隐藏
-		            $(".chatline").fadeOut().removeClass("show");
-		            // 其他
-		        }else{
-		            // 显示
-		            $(".chatline").fadeIn().addClass("show");
-		        }
-	 });
-	
 </script>
+<script type="text/javascript">
 
+		$.fn.ImgZoomIn = function() {
+
+			bgstr = '<div id="ImgZoomInBG" style=" background:#000000; filter:Alpha(Opacity=70); opacity:0.7; position:fixed; left:0; top:0; z-index:10000; width:100%; height:100%; display:none;"><iframe src="about:blank" frameborder="5px" scrolling="yes" style="width:100%; height:100%;"></iframe></div>';
+
+			//alert($(this).attr('src'));
+
+			imgstr = '<img id="ImgZoomInImage" src="' + $(this).attr('src') + '" onclick=$(\'#ImgZoomInImage\').hide();$(\'#ImgZoomInBG\').hide(); style="cursor:pointer; display:none; position:absolute; z-index:10001;width:100%; height:60%;" />';
+
+			if($('#ImgZoomInBG').length < 1) {
+
+				$('body').append(bgstr);
+
+			}
+
+			if($('#ImgZoomInImage').length < 1) {
+
+				$('body').append(imgstr);
+
+			} else {
+
+				$('#ImgZoomInImage').attr('src', $(this).attr('src'));
+
+			}
+
+			//alert($(window).scrollLeft());
+
+			//alert( $(window).scrollTop());
+
+			$('#ImgZoomInImage').css('left', $(window).scrollLeft() + ($(window).width() - $('#ImgZoomInImage').width()) / 2);
+
+			$('#ImgZoomInImage').css('top', $(window).scrollTop() + ($(window).height() - $('#ImgZoomInImage').height()) / 2);
+
+			$('#ImgZoomInBG').show();
+
+			$('#ImgZoomInImage').show();
+
+		};
+          
+		$(document).ready(function() {
+
+				$(document).on('click','#imgTest',function(){
+	 		    
+				$(this).ImgZoomIn();
+
+	 });
+
+		});
+	</script>
 
 <body>
 
 <div class="zhuye" style="">
 
-	<input type="text" class="touser" hidden="hidden" value="">
 	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
@@ -931,7 +966,7 @@ html, body {
 				      全部商品
 				    </a>
 				    <a id="tab-1" onclick="return false" class="weui-navbar__item" href="#tab1">
-				      店铺首页 <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 -->
+				      店铺首页 <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 -->
 				    </a>
 				  </div>	
 	             <div class="weui-tab__bd" style="padding-bottom:50px">
@@ -955,10 +990,10 @@ html, body {
 								style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 						</div>
 						<div
-							style="width:90%;margin-top:25px;margin-left:11px;font-size:12px;">
+							style="width:90%;margin-top:25px;margin-left:11px;font-size:16px;">
 							<a id="contact" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
 							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服 </a>
-							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
+							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 							
 						</div>
 						<div id="payinshop"></div>
@@ -990,17 +1025,14 @@ html, body {
 	
 
 
-<!-- <div class="chatline" style="background-color: black;height: 50px;z-index: 111111111111111;"></div> -->
-
 	<!-- 对话框 -->
 <div class="duihua" style="width:100%;height:100%;z-index:1111;display: none;">
 	
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
-	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
-		<%-- <c:if test="${ismerchant==1}">
-		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
-		</c:if> --%>
+	<p style="width:100%;"><span class="tui" style="font-weight: bold;margin-left: 5%;">＜</span> <span class="ltname"></span>
+	</p>
+		
 	</div>
 	<div class="speak_box">
 		<div class="answer">
@@ -1008,7 +1040,7 @@ html, body {
 	</div>
 </div>
 <div class="wenwen-footer">
-	<div class="wenwen_btn left" onClick="to_write()"></div>
+	<div class="wenwen_btn left" ></div>
 	<div class="wenwen_text left">
 	    <div class="write_box">
 	        <input type="text" class="left" id="left" onKeyUp="keyup()" placeholder="请输入关键字" />

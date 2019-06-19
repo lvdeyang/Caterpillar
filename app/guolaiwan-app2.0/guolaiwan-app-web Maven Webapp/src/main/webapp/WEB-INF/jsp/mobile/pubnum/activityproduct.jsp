@@ -702,14 +702,14 @@ html, body {
 		function getProDate(data , miao , isXianGou){
 			var html=[];
 			if(isXianGou==1){
-				html.push('<a id="notaddOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
-				html.push('<a id="notbuy" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
+				html.push('<a id="notaddOrder" style="width:47.5%;font-size:12px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
+				html.push('<a id="notbuy" style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
 			}
 			if(data.isEffective == 0){
 				date = miao;
 			}else if(data.isEffective == 1 && data.productStock>0){
-				html.push('<a id="addOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
-				html.push('<a id="buy" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
+				html.push('<a id="addOrder" style="width:47.5%;font-size:12px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
+				html.push('<a id="buy" style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
 				$('#proDate').append(html.join(''));
 				if($('#price').html()%1==0){
 				  	$('#total').html(parseInt($('#price').html())*$('#proCount').val()+'.00');
@@ -718,8 +718,8 @@ html, body {
 				  	$('#total').html(pri);
 				}
 			}else if(data.isEffective == 2){
-				html.push('<a id="endaddOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
-				html.push('<a id="endbuy" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
+				html.push('<a id="endaddOrder" style="width:47.5%;font-size:12px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
+				html.push('<a id="endbuy" style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
 				$('#proDate').append(html.join(''));
 			}else if(data.isEffective == 1 && data.productStock == 0){
 				html.push('<a id="endaddOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#d9d9d9;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
@@ -759,7 +759,7 @@ html, body {
 				}else if(data<=0){
 				    clearInterval(iCount);
 					html.push('<a id="addOrder" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">加入购物车</a>');
-					html.push('<a id="buy" style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
+					html.push('<a id="buy" style="width:47.5%;font-size:12px;margin-right:2%;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"" href="javascript:;" class="weui-btn weui-btn_primary">立即购买（￥<span id="total">0</span>）</a>');
 				}
 				
 				$('#proDate').append(html.join(''));
@@ -1523,8 +1523,6 @@ html, body {
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
-								//记录消息来自谁放到三方待用
-								$('.touser').val(data[i].fromuserId);
 								$('#olprompt').show();
 								//修改展示完成的数据flag
 								$.post(window.BASEPATH+'pubnum/updateflag',{"id":data[i].id},function(){})								
@@ -1554,7 +1552,7 @@ html, body {
 	 		return;
 	 	}
 	 		str  = '<div class="question">';
-	        str += '<div class="heard_img right"><img src="lib/images/shopheadimg.png"></div>';
+	        str += '<div class="heard_img right"><img src="${userHeadimg}"></div>';
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
@@ -1581,7 +1579,6 @@ html, body {
 
 
 <body>
-<input type="text" class="touser" hidden="hidden" value="">
 	<script type="text/javascript">
 		function deletepl(data){
 			var paran={};
@@ -1698,10 +1695,10 @@ html, body {
 					style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 					
 				<div
-					style="width:90%;margin-top:20px;margin-left:11px;font-size:12px;">
+					style="width:90%;margin-top:20px;margin-left:11px;font-size:16px;">
 					<a id="contact1" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
 					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
-					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/newmsg.png"><!--这个标志是信息提醒 --></a>
+					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 				</div>	
 			</div>
 
@@ -1833,9 +1830,6 @@ html, body {
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
 	<p style="width:100%;margin-left: 5%;"><span class="tui" style="font-weight: bold;">＜</span> <span class="ltname"></span></p>
-		<%-- <c:if test="${ismerchant==1}">
-		<div style="float: right;z-index: 111111;" class="olline"><p>聊天列表</p></div>	
-		</c:if> --%>
 	</div>
 	<div class="speak_box">
 		<div class="answer">
@@ -1846,7 +1840,7 @@ html, body {
 	<div class="wenwen_btn left" onClick="to_write()"></div>
 	<div class="wenwen_text left">
 	    <div class="write_box">
-	        <input type="text" class="left" id="left" onKeyUp="keyup()" placeholder="请输入关键字" />
+	        <input type="text" class="left" id="left"  placeholder="请输入关键字" />
 	    </div> 
 	      
 	</div>

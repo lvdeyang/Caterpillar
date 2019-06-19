@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.chenxi.web.classes.ContentSource;
 import com.chenxi.web.classes.Moudular;
@@ -18,6 +19,7 @@ public class ArticlePo extends AbstractBasePO {
 	private ContentSource source;
 	private Moudular moudular;
 	private long classesId;
+	private String classesName;
 	private String autor;
 
 	public String getPic() {
@@ -75,5 +77,15 @@ public class ArticlePo extends AbstractBasePO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	@Transient
+	public String getClassesName() {
+		return classesName;
+	}
+
+	public void setClassesName(String classesName) {
+		this.classesName = classesName;
+	}
+
+	
 
 }

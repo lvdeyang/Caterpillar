@@ -444,8 +444,16 @@ html, body {
 float:right;font-size:12px;margin-right:5px;
 }
 
+ .weui-btn_warn{
+background:#fff !important;
+color:black !important;
 
-     
+border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+.weui-btn:after {
+
+border:none !important;
+}   
 
 </style>
 
@@ -455,7 +463,7 @@ float:right;font-size:12px;margin-right:5px;
 <jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-    
+     var _ur = window.BASEPATH + 'vice/selePay';
 	$(function() {
 	     window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
@@ -466,56 +474,87 @@ float:right;font-size:12px;margin-right:5px;
 				return data.data;		
 			}
 	  };
-		
-
-      var _uriAddress = window.BASEPATH + 'distributor/getallOfforder?proId=${proId}';
-		
+      var _uriAddress = window.BASEPATH +'distributor/getCommodity/${disId}';
 		$.get(_uriAddress, null, function(data){
 			data = parseAjaxResult(data);
-			if(data === -1) return;
-			if(data && data.length>0){
-			    var html=[];
-				for(var i=0; i<data.length; i++){
-					 html.push('<div class="weui-media-box weui-media-box_text">');
-			         html.push('<h4 class="weui-media-box__title">'+data[i].userName+'（'+data[i].phone+'）</h4>');
-			         html.push('<p class="weui-media-box__desc">'+data[i].address+'</p>');
-			         html.push('<p style="margin-top:5px;" class="weui-media-box__desc"><a style="font-size:15px;font-weight:bold;color:red" href="javascript:void(0)" class="icon-trash del" id="del-'+data[i].id+'"></a>&nbsp;&nbsp;<a href="javascript:void(0)" style="display:none;" id="setDef-'+data[i].id+'"></a></p>');
-			         html.push('</div>');
-				}
-			    $('#offList').append(html.join(''));
-			}
-			
+			var html=[];
+			for(var i=0;i<data.length;i++){
+			   html.push(' <div class="main" style="width:100%;">');
+			   html.push('  <div class="main_in" style="width:47.5%;margin:5px 1%;display: inline-block;text-align: center;float:left;">');
+			   html.push(' <img style="width:100%;height:120px;margin:5px 0; "  src="'+ 'http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
+			   html.push(' 名称：<span>'+data[i].productName+'</span>');
+			   html.push('<a href="javascript:;" onclick="Withdraw('+data[i].id+')" class="weui-btn weui-btn_warn" style="font-size:14px;">库存：<span>'+data[i].productStock+'</span></a>');
+			   html.push(' <a href="javascript:;" onclick="invest('+data[i].id+')" class="weui-btn weui-btn_warn" style="font-size:14px;">金额：<span>'+data[i].productPrice+'</span></a>');
+			   html.push(' <div style="margin-top:10px;">');
+			   html.push('<a onclick="putaWay('+data[i].id+')" style="width:46.5%;border-radius:20px;font-size:14px;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">上架</a>');
+			   html.push('<a onclick="below('+data[i].id+')"   style="width:46.5%;border-radius:20px;font-size:14px;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">下架 </a>  ');
+			   html.push(' </div> ');
+			   html.push(' </div> ');
+			};
+			   $('#page').append(html.join(''));
 		});
 	    
 	    
-	    $(document).on('click','#add',function(){
-		
-		   location.href=window.BASEPATH + 'distributor/offorder/edit?proId=${proId}';
-		});
-		
-		$(document).on('click','.del',function(){
-		var ids=this.id.split('-');
-		    var _uriDel = window.BASEPATH + 'distributor/delOff?offId='+ids[1];
-		
-			$.get(_uriDel, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				$.toast("删除成功");
-	
-				   setTimeout(function(){
-				   
-				   location.href=location.href;
-				   
-				   },1000);
-				   
-				   
-			
-			});
-		   
-		});
 	    
 	
 	});
+	
+	function Withdraw(ProductId){
+		$.prompt({
+		  title: '请您输入上传库存：（个）',
+		  empty: false, // 是否允许为空
+		  onOK: function (input) {
+		    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
+		    	 $.get(window.BASEPATH+'distributor/amendInventory/'+ProductId+'/'+input+'/'+1,null,function(data){
+		    	  window.location.reload();
+				});
+		    }else{
+		    	$.alert('您的输入有误！')
+				return;		    	
+		    }
+		  },
+		  onCancel: function () {
+		    //点击取消
+		    $.alert('您已取消本次操作，感谢您的使用！')
+		    return;
+		  }
+		});
+	}
+	function invest(ProductId){
+		$.prompt({
+		  title: '请您输入商品金额：（元）',
+		 empty: false, // 是否允许为空
+		  onOK: function (input) {
+		    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
+		    	 $.get(window.BASEPATH+'distributor/amendInventory/'+ProductId+'/'+input+'/'+0,null,function(data){
+		    	  window.location.reload();
+				});
+		    }else{
+		    	$.alert('您的输入有误！')
+				return;		    	
+		    }
+		  },
+		  onCancel: function () {
+		    //点击取消
+		    $.alert('您已取消本次操作，感谢您的使用！')
+		    return;
+		  }
+		});
+	  }
+	
+	
+	function putaWay(ProductId){ //上架
+		$.get(window.BASEPATH+'distributor/amendState/'+ProductId+'/T',null,function(data){
+		    window.location.reload();
+		});
+	}
+	
+	function below(ProductId){//上架
+		$.get(window.BASEPATH+'distributor/amendState/'+ProductId+'/D',null,function(data){
+		    window.location.reload();
+		});
+	}
+	
 </script>
 
 
@@ -527,27 +566,27 @@ float:right;font-size:12px;margin-right:5px;
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">线下销售</div>
+				<div class="header-content">我的店铺</div>
 			</div>
 		</div>
-		<div class="content">
-	          <div class="weui-cell">
-			    <div class="weui-cell__hd"><label for="" class="weui-label">选择日期查询</label></div>
-			    <div class="weui-cell__bd">
-                       <input class="weui-input" type="date" value="">
-			    </div>
-			  </div>
-			  
-			  <div class="weui-panel__bd" id="offList" style="padding-bottom:40px;">
-	         
-	        </div>
-	
-			<a id="add" style="position:fixed;bottom:2px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">添加线下订单</a>
-			  
-			  
-			  
-	    </div>
+		
+	  
+	       <!--   <div class="main_in" style="width:47%;margin:5px 1%;display: inline-block;text-align: center;">
+	           <img style="width:100%;height:120px;margin:5px 0; "  src="lib/images/1.jpg"/>
+	            <a href="javascript:;" onclick="Withdraw()" class="weui-btn weui-btn_warn" style="font-size:14px;">库存：<span>111</span></a>
+	             <a href="javascript:;" onclick="invest()" class="weui-btn weui-btn_warn" style="font-size:14px;">金额：<span>111</span></a>
+	            	<div style="margin-top:10px;">
+	            	<a id="shang"
+					style="width:47.5%;border-radius:20px;font-size:14px;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
+					href="javascript:;" class="weui-btn weui-btn_primary">上架</a> <a
+					id="xia"
+					style="width:47.5%;border-radius:20px;font-size:14px;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0"
+					href="javascript:;" class="weui-btn weui-btn_primary">下架
+				</a>  
+	             </div>
+	         </div> -->
 	    
+	    </div>
 	    
 </div>
 

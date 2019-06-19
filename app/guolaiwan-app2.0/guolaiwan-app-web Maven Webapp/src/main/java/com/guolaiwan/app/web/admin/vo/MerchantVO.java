@@ -88,7 +88,17 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 	private long isGuide;//是否支持导览
 	
 	private String userName;//业务人员名字
+	//客服
+	private long chatUserId;
 	
+	public long getChatUserId() {
+		return chatUserId;
+	}
+
+	public void setChatUserId(long chatUserId) {
+		this.chatUserId = chatUserId;
+	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -482,7 +492,8 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 		.setAveragePrice(entity.getAveragePrice())
 		.setUserName(entity.getUserName())
 		.setIsGuide(entity.getIsGuide())
-		.setSignPic(entity.getSignPic());
+		.setSignPic(entity.getSignPic())
+		.setChatUserId(entity.getChatUserId());
 		return this;
 	}
 	

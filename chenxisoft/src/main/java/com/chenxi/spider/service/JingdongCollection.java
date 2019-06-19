@@ -6,7 +6,10 @@ import java.util.concurrent.TimeUnit;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +62,17 @@ public class JingdongCollection extends BreadthCrawler {
 			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);*/
 			
 			
+			System.getProperties().setProperty("webdriver.chrome.driver","D:\\迅雷下载\\chromedriver.exe");
+            WebDriver driver=new ChromeDriver();
+           
+            driver.get(url);
+            WebElement welement=driver.findElement(By.className("price"));
+            String price=welement.getText();
+            System.out.println(welement.getText());
+            driver.close();
+			
+			
+			
 		    String title=page.selectText(".sku-name");
 		    
 		   
@@ -66,13 +80,9 @@ public class JingdongCollection extends BreadthCrawler {
 		    String image="";
 		    for (Element element : images) {
 		    	
-		    	image="https"+element.attr("data-origin");
+		    	image="https:"+element.attr("data-origin");
 			}
-		    Elements prices=page.select(".J-summary-price");
-		    String price="";
-		    for (Element element : prices) {
-		    	price=element.child(1).child(0).child(1).text();
-			}
+		 
 			if(conn_product.ifhasBysContent(title)){
 				return;
 			}
@@ -81,7 +91,9 @@ public class JingdongCollection extends BreadthCrawler {
 		    productPo.setSource(ContentSource.JINGDONG);
 		    productPo.setShortContent(title);
 		    productPo.setPic(image);
+		    productPo.setUrl(url);
 		    productPo.setPrice(Double.parseDouble(price));
+		    conn_product.save(productPo);
 		
 		}
 		

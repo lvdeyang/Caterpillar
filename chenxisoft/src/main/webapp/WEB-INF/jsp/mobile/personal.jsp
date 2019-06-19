@@ -18,8 +18,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet"
 	href="lib/css/font-awesome.css" />
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="http://demo.mycodes.net/kuangjia/frozenui/frozenjs/lib/zepto.min.js"></script>
-<script src="http://demo.mycodes.net/kuangjia/frozenui/frozenjs/1.0.1/frozen.js"></script>
+<script src="http://ryanbay.cn/vipstyle/qui/2.0.0/demo/js/lib/zepto.min.js"></script>
+<script src="http://i.gtimg.cn/vipstyle/frozenjs/1.0.1/frozen.js"></script>
 </head>
 
 <body>
@@ -42,12 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    </li>
     </ul>
     <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">收藏</h4>
-	           
-	        </div>
-	    </li>
+	  
 	    <li class="ui-border-t">
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.guolaiwan.bussiness.admin.dto.MerchantDTO;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
+import com.guolaiwan.bussiness.admin.po.MerchantUser;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -137,6 +138,17 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		System.out.println("共有：" + allcount);
 		return allcount;
 	}
+	
+	// 获取商品ID
+	public MerchantPO getDistributionId(int distributionId) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("distributionId", Condition.eq, distributionId);
+		List<MerchantPO> list = findByHql(hql);
+		List<MerchantPO> findByHql = findByHql(hql);
+	    if(findByHql == null || findByHql.size() ==0) return null;
+	    return findByHql.get(0);
+	}
+	
 
 	// 通过用户id获取商户
 	public MerchantPO getMerByUser(UserInfoPO user) {
@@ -574,5 +586,18 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		hql.orderBy("updateTime", true);
 		List<MerchantPO> merchants = findByHql(hql);
 		return merchants;
+	}
+	
+	/**
+	 * 通过商户id查找客服人员
+	 * @param merchantId
+	 * @return
+	 */
+	public MerchantPO  getUserByMerchantId(Long merchantId){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("merchantId", Condition.eq, merchantId);
+		List<MerchantPO> merchant =  findByHql(hql);
+		if(merchant==null || merchant.size()<=0) return null;
+		return merchant.get(0);
 	}
 }

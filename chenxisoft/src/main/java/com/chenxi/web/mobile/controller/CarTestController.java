@@ -16,8 +16,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.chenxi.web.classes.Moudular;
 import com.chenxi.web.dao.ArticleDao;
+import com.chenxi.web.dao.ClassesDao;
+import com.chenxi.web.dao.OnlineClassesDao;
 import com.chenxi.web.dao.ProductDao;
+import com.chenxi.web.dao.RecommDao;
+import com.chenxi.web.po.ArticlePo;
+import com.chenxi.web.po.ClassesPo;
+import com.chenxi.web.po.OnlineClassesPo;
+import com.chenxi.web.po.ProductPo;
+import com.chenxi.web.po.RecommPo;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
@@ -35,7 +44,12 @@ public class CarTestController {
 	ArticleDao conn_article;
 	@Autowired 
 	ProductDao conn_product;
-	
+	@Autowired
+	RecommDao conn_recomm;
+	@Autowired
+	OnlineClassesDao conn_onlineClass;
+	@Autowired
+	ClassesDao conn_classes;
 	
 	@JsonBody
 	@ResponseBody
@@ -44,13 +58,38 @@ public class CarTestController {
 			throws Exception {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if(type.equals("recomm")){
-			
+			List<ArticlePo> articlePos=new ArrayList<ArticlePo>();
+			//List<ProductPo> productPos=new ArrayList<ProductPo>();
+			List<RecommPo> recommPos=conn_recomm.findAll(currPage, pageCount);
+			for (RecommPo recommPo : recommPos) {
+				if(recommPo.getMoudular().equals(Moudular.CEPING)){
+					articlePos.add(conn_article.get(recommPo.getContentId()));
+				}else{
+					//productPos.add(conn_product.get(recommPo.getContentId()));
+				}
+			}
+			ret.put("articles", articlePos);
+			//ret.put("products", productPos);
 		}
 		else if(type.equals("article")){
-			ret.put("articles", conn_article.findAll(currPage, pageCount));
+			List<OnlineClassesPo> onlineList=conn_onlineClass.findOnlineBymodular(Moudular.CEPING, currPage, pageCount);
+			List<ArticlePo> articlePos=new ArrayList<ArticlePo>();
+			for (OnlineClassesPo onlineClassesPo : onlineList) {
+				ArticlePo articlePo=conn_article.get(onlineClassesPo.getContentId());
+				articlePo.setClassesName(conn_classes.get(onlineClassesPo.getClassesId()).getName());
+				articlePos.add(articlePo);
+			}
+			ret.put("articles", articlePos);
 		}
 		else if(type.equals("product")){
-			ret.put("products", conn_product.findAll(currPage, pageCount));
+			List<OnlineClassesPo> onlineList=conn_onlineClass.findOnlineBymodular(Moudular.WEIXIU, currPage, pageCount);
+			List<ProductPo> productPos=new ArrayList<ProductPo>();
+			for (OnlineClassesPo onlineClassesPo : onlineList) {
+				ProductPo productPo=conn_product.get(onlineClassesPo.getContentId());
+				productPo.setClassesName(conn_classes.get(onlineClassesPo.getClassesId()).getName());
+				productPos.add(productPo);
+			}
+			ret.put("products", productPos);
 		}
 	    
 		return ret;

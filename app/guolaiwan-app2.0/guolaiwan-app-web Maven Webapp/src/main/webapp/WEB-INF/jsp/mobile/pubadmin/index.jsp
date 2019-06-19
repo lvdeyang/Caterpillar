@@ -515,7 +515,7 @@ html, body {
 			}
 	  };
 		
-
+		
      var _uriModal = window.BASEPATH + 'phoneApp/getModulars?comCode=0001';
 		
 		$.get(_uriModal, null, function(data){
@@ -766,6 +766,14 @@ html, body {
 			  <a id="scan" class="weui-cell weui-cell_access" href="javascript:void(0);">
 			    <div class="weui-cell__bd">
 			      <p>扫码验单</p>
+			    </div>
+			    <div class="weui-cell__ft">
+			    </div>
+			  </a>
+			  
+			  <a id="scan" class="weui-cell weui-cell_access" href="pubnum/admin/olchat">
+			    <div class="weui-cell__bd">
+			      <p>在线咨询</p>
 			    </div>
 			    <div class="weui-cell__ft">
 			    </div>
