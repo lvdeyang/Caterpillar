@@ -18,8 +18,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet"
 	href="lib/css/font-awesome.css" />
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="http://demo.mycodes.net/kuangjia/frozenui/frozenjs/lib/zepto.min.js"></script>
-<script src="http://demo.mycodes.net/kuangjia/frozenui/frozenjs/1.0.1/frozen.js"></script>
+<script src="http://ryanbay.cn/vipstyle/qui/2.0.0/demo/js/lib/zepto.min.js"></script>
+<script src="http://i.gtimg.cn/vipstyle/frozenjs/1.0.1/frozen.js"></script>
 </head>
 
 <body>
@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </header>
 	<div class="ui-tab" style="margin-top:40px;">
 		<ul class="ui-tab-nav ui-border-b">
-               <li id="recomm" class="mytab">推荐</li>
+               <li style="display:none;" id="recomm" class="mytab">推荐</li>
                <li id="article" class="mytab">文章</li>
                <li id="product" class="mytab">比价</li>
 	    </ul>
@@ -71,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  };
 	          var pageCount=10;
 	          var currPage=1;
-	          var type='recomm';
+	          var type='article';
 	          
 	          function getPage(isinit){
 	              var _uriArticle = window.BASEPATH + 'cartest/list?currPage='+currPage+'&pageCount='+pageCount+
@@ -106,6 +106,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						 html.push('	<div class="ui-list-info ui-border-t">');
 						 html.push('		<div style="font-size:13px;">'+data.articles[i].title+'</div>');
 						 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.articles[i].source]+'</p>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">'+data.articles[i].classesName+'</p>');
 						 html.push('	</div>');
 						 html.push('</li>'); 
 				       }
@@ -121,6 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						 html.push('		<div style="font-size:13px;">'+data.products[i].shortContent+'</div>');
 						 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.products[i].source]+
 						           '￥<span style="font-size:14px;color:red">'+data.products[i].price+'</span></p>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">'+data.products[i].classesName+'</p>');      
 						 html.push('	</div>');
 						 html.push('</li>'); 
 				       }

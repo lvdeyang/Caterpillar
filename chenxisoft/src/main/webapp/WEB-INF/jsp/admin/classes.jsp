@@ -18,7 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="layui-col-xs2">
       <div class="grid-demo grid-demo-bg1">
          <button id="addClasses" class="layui-btn layui-btn-primary layui-btn-sm">添加</button>
-         <button class="layui-btn layui-btn-primary layui-btn-sm">删除</button>
+         <button id="deleteClasses" class="layui-btn layui-btn-primary layui-btn-sm">删除</button>
          <ul id="classes" style="margin-top:10px;"></ul>
 
 
@@ -191,6 +191,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    } 
 			    
 			  });  
+			  
+			  
+			  
+			  $('#deleteClasses').on('click',function(){
+		  		  $.ajax({
+		              url:'classes/del.do',
+		              type:'post',
+		              data:{id:$('#selClassId').val()},
+		              success:function(data){
+		                 window.location.reload();
+		              }
+		          });
+			  });
 
           
 			

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.chenxi.web.classes.ContentSource;
 import com.chenxi.web.classes.Moudular;
@@ -21,6 +22,7 @@ public class ProductPo extends AbstractBasePO{
 	private Moudular moudular;
 	private String url;
 	private long classesId;
+	private String classesName;
 	public String getPic() {
 		return pic;
 	}
@@ -76,6 +78,13 @@ public class ProductPo extends AbstractBasePO{
 	}
 	public void setClassesId(long classesId) {
 		this.classesId = classesId;
+	}
+	@Transient
+	public String getClassesName() {
+		return classesName;
+	}
+	public void setClassesName(String classesName) {
+		this.classesName = classesName;
 	}
 	
 	
