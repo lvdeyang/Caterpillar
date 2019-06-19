@@ -16,6 +16,17 @@ public class GroupBuyPO extends AbstractBasePO {
 	private int groupnum;
 	
 	private long groupprice;
+	
+	private long grouptime;
+	
+
+	public long getGrouptime() {
+		return grouptime;
+	}
+
+	public void setGrouptime(long grouptime) {
+		this.grouptime = grouptime;
+	}
 
 	public long getProductid() {
 		return productid;
