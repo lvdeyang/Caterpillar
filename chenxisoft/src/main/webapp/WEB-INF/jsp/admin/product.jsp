@@ -99,7 +99,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    ,cols: [[
 			      {type: 'checkbox', fixed: 'left'}
 			      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-			      ,{field:'name', title:'名称', width:300, edit: 'text'}
+			      ,{field:'shortContent', title:'名称', width:300, edit: 'text'}
 			      ,{field:'price', title:'价格', width:200, edit: 'text', templet: function(res){
 			        return '<em>￥'+ res.price +'</em>'
 			      }}

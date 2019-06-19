@@ -64,7 +64,7 @@ public class ProductContoller extends BaseController {
 				OnlineClassesPo onlineClassesPo=new OnlineClassesPo();
 				onlineClassesPo.setClassesId(classId);
 				onlineClassesPo.setContentId(productPo.getId());
-				onlineClassesPo.setContentName(productPo.getName());
+				onlineClassesPo.setContentName(productPo.getShortContent());
 				onlineClassesPo.setContentMouduler(productPo.getMoudular());
 				conn_onlineclasses.save(onlineClassesPo);
 			}

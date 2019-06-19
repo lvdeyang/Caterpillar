@@ -18,9 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.chenxi.web.classes.Moudular;
 import com.chenxi.web.dao.ArticleDao;
+import com.chenxi.web.dao.ClassesDao;
+import com.chenxi.web.dao.OnlineClassesDao;
 import com.chenxi.web.dao.ProductDao;
 import com.chenxi.web.dao.RecommDao;
 import com.chenxi.web.po.ArticlePo;
+import com.chenxi.web.po.ClassesPo;
+import com.chenxi.web.po.OnlineClassesPo;
 import com.chenxi.web.po.ProductPo;
 import com.chenxi.web.po.RecommPo;
 
@@ -42,6 +46,10 @@ public class CarTestController {
 	ProductDao conn_product;
 	@Autowired
 	RecommDao conn_recomm;
+	@Autowired
+	OnlineClassesDao conn_onlineClass;
+	@Autowired
+	ClassesDao conn_classes;
 	
 	@JsonBody
 	@ResponseBody
@@ -64,10 +72,24 @@ public class CarTestController {
 			//ret.put("products", productPos);
 		}
 		else if(type.equals("article")){
-			ret.put("articles", conn_article.findAll(currPage, pageCount));
+			List<OnlineClassesPo> onlineList=conn_onlineClass.findOnlineBymodular(Moudular.CEPING, currPage, pageCount);
+			List<ArticlePo> articlePos=new ArrayList<ArticlePo>();
+			for (OnlineClassesPo onlineClassesPo : onlineList) {
+				ArticlePo articlePo=conn_article.get(onlineClassesPo.getContentId());
+				articlePo.setClassesName(conn_classes.get(onlineClassesPo.getClassesId()).getName());
+				articlePos.add(articlePo);
+			}
+			ret.put("articles", articlePos);
 		}
 		else if(type.equals("product")){
-			ret.put("products", conn_product.findAll(currPage, pageCount));
+			List<OnlineClassesPo> onlineList=conn_onlineClass.findOnlineBymodular(Moudular.WEIXIU, currPage, pageCount);
+			List<ProductPo> productPos=new ArrayList<ProductPo>();
+			for (OnlineClassesPo onlineClassesPo : onlineList) {
+				ProductPo productPo=conn_product.get(onlineClassesPo.getContentId());
+				productPo.setClassesName(conn_classes.get(onlineClassesPo.getClassesId()).getName());
+				productPos.add(productPo);
+			}
+			ret.put("products", productPos);
 		}
 	    
 		return ret;
