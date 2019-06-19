@@ -452,10 +452,12 @@ public class ProductController extends BaseController {
 		conn_product.save(product);
 		//如果是的话
 		if(isgroup==1){
+			long grouptime=Long.parseLong(request.getParameter("grouptime"));
 			int groupnum=Integer.parseInt(request.getParameter("groupnum"));
 			long groupprice=Long.parseLong(request.getParameter("groupprice"));
 			long productId=product.getId();
 			GroupBuyPO group=new GroupBuyPO();
+			group.setGrouptime(grouptime);
 			group.setGroupnum(groupnum);
 			group.setGroupprice(groupprice);
 			group.setProductid(productId);

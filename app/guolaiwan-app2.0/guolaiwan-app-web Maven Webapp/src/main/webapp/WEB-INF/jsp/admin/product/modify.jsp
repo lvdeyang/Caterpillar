@@ -317,6 +317,15 @@
                         	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.groupprice}">
                     	</div>
                     </div>
+                    <div class="layui-inline" >
+                    	<label class="layui-form-label" >
+ 							<font id="LimitNum3" style="color:#757575">拼团时限：</font>
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="grouptime" name="grouptime"  placeholder="时间限制（小时）"
+                        	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.grouptime}">
+                    	</div>
+                    </div>
                 </div>
                 
                 
@@ -601,10 +610,6 @@
              //是否拼团
             if($("#group").val()=="1"){
              		$("#group").prop("checked",true);
-             		$("#groupnum").removeAttr("disabled");
-             		$("#groupprice").removeAttr("disabled");
-           			$("#LimitNum1").removeAttr("style");
-           			$("#LimitNum2").removeAttr("style");
             }
             
             if($("#productLimitType").val()=="0"){
