@@ -35,6 +35,13 @@ public class DistributorPo extends AbstractBasePO{
 	private long region;
 	private DistributorApplyStatus status;
 	private String checkReason;
+	private String password;
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getLegalPerson() {
 		return legalPerson;
 	}

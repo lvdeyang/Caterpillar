@@ -20,14 +20,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 	<div class="x-body">
-	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
-		<xblock>
-		<span class="x-right" style="line-height:40px">共有数据：<span id="count">${count}</span>条</span>
-	    </xblock>
+		<a class="layui-btn layui-btn-small"
+			style="line-height:1.6em;margin-top:3px;float:right"
+			href="javascript:location.replace(location.href);" title="刷新"><i
+			class="layui-icon" style="line-height:30px">ဂ</i></a>
+		<xblock> <span class="x-right" style="line-height:40px">共有数据：<span
+			id="count">${count}</span>条
+		</span> </xblock>
 		<table class="layui-table">
 			<thead>
 				<tr>
-					
+
 					<th>缩略图</th>
 					<th>文件名</th>
 					<th>上传时间</th>
@@ -40,7 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</table>
 
 		<div id="page"></div>
-	
+
 		<script id="alist" type="text/html">
 {{#  layui.each(d.list, function(index, item){ }}
                         <tr>
@@ -73,91 +76,100 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </script>
 	</div>
 
-	<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js" charset="utf-8"></script>
+	<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"
+		charset="utf-8"></script>
 	<script>
 	
-	var ipage ;	
-	var ilimit;
-	var doneCount = 0;
-	var path = '<%=path%>';
-	var webpath ="${sysConfig.webUrl}";
-	var sId = '${sId}';
-	layui.use(['element','layer','laytpl','upload','laydate','laypage'], function(){
-    	$ = layui.jquery;//jquery
-        lement = layui.element;//面包导航
-        layer = layui.layer;//弹出层
-        laytpl = layui.laytpl;//模板引擎
-        laypage = layui.laypage;//分页
-        upload = layui.upload;
-        laydate = layui.laydate;
-       
- 		//以上模块根据需要引入
- 		fenye();
-});
-	         
-	//异步加载列表
-	function getlist(pagecurr,ilimit){
-		$.ajax({
-			type:"post",
-			url:path+"/admin/picture/picList.do",
-			async:false,
-            data:{'pagecurr':pagecurr,'ilimit':ilimit},
-			success:function(msg){
-			
-				var data = {
-           		"list":msg.list
-       	 		}
-       	 		console.log(data);
-				//操作模板引擎
-				var getTpl = alist.innerHTML;
-				laytpl(getTpl).render(data, function(html){
-            		view.innerHTML = html;
-        		});
-			}
-		})
-	}
+		var ipage;
+		var ilimit;
+		var doneCount = 0;
+		var path = '<%=path%>';
+		var webpath = "${sysConfig.webUrl}";
+		var sId = '${sId}';
+		layui.use([ 'element', 'layer', 'laytpl', 'upload', 'laydate', 'laypage' ], function() {
+			$ = layui.jquery; //jquery
+			lement = layui.element; //面包导航
+			layer = layui.layer; //弹出层
+			laytpl = layui.laytpl; //模板引擎
+			laypage = layui.laypage; //分页
+			upload = layui.upload;
+			laydate = layui.laydate;
 	
-	function fenye(){
- 			laypage.render({
-                elem: 'page'
-                ,count: parseInt($("#count").text())
-                ,first: '首页'
-    			,last: '尾页'
-    			,prev: '<em><</em>'
-    			,next: '<em>></em>'
-    			,layout: ['limit', 'page', 'skip']
-                ,jump: function(obj){
-                	ilimit =obj.limit;
-                	ipage = obj.curr;
-                	console.log(obj.count);
-                	getlist(obj.curr,obj.limit);
-                   }
-              });
- 		}
- 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
- 		function sel(folde,url,picId)
- 		{
- 			console.log(path);
- 		  var pic = "/"+folde+"/"+url;
- 		  layer.load();
- 		  $.ajax({
- 		  	type:'post',
- 		  	data:{'pic':pic,'picId':picId,'id':sId},
- 		  	url:path+"/admin/${source}/${picdo}",
- 		  	success:function(msg){
- 		  		if(msg=='success'){
- 		  			layer.closeAll("loading");
- 		  			parent.$("#${sImg}").attr("src",webpath+"/"+folde+"/"+url);
- 		  			parent.layer.close(index);
- 		  			
- 		  		}
- 		  	}
- 		  	
- 		  })
- 		  
- 		  
- 		}
-</script>
+			//以上模块根据需要引入
+			fenye();
+		});
+	
+		//异步加载列表
+		function getlist(pagecurr, ilimit) {
+			$.ajax({
+				type : "post",
+				url : path + "/admin/picture/picList.do",
+				async : false,
+				data : {
+					'pagecurr' : pagecurr,
+					'ilimit' : ilimit
+				},
+				success : function(msg) {
+	
+					var data = {
+						"list" : msg.list
+					}
+					console.log(data);
+					//操作模板引擎
+					var getTpl = alist.innerHTML;
+					laytpl(getTpl).render(data, function(html) {
+						view.innerHTML = html;
+					});
+				}
+			})
+		}
+	
+		function fenye() {
+			laypage.render({
+				elem : 'page',
+				count : parseInt($("#count").text()),
+				first : '首页',
+				last : '尾页',
+				prev : '<em><</em>',
+				next : '<em>></em>',
+				layout : [ 'limit', 'page', 'skip' ],
+				jump : function(obj) {
+					ilimit = obj.limit;
+					ipage = obj.curr;
+					console.log(obj.count);
+					getlist(obj.curr, obj.limit);
+				}
+			});
+		}
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		function sel(folde, url, picId) {
+			console.log(path);
+			var pic = "/" + folde + "/" + url;
+			layer.load();
+			$.ajax({
+				type : 'post',
+				data : {
+					'pic' : pic,
+					'picId' : picId,
+					'id' : sId
+				},
+				url : path + "/admin/${source}/${picdo}",
+				success : function(msg) {
+					if (msg == 'success') {
+						layer.closeAll("loading");
+						parent.$("#${sImg}").attr("src", webpath + "/" + folde + "/" + url);
+						parent.layer.close(index);												
+					}
+					if(msg == 'liveImg'){
+					 layer.closeAll("loading");
+					 parent.$("#${sImg}").attr("src", webpath + "/" + folde + "/" + url);
+					 parent.layer.close(index);
+					}
+				}
+			})
+	
+		}
+	</script>
 
 </body>
 </html>

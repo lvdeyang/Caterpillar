@@ -499,6 +499,24 @@ html, body {
 				
 				<div class="weui-cell">
 					<div class="weui-cell__hd">
+						<label class="weui-label">密码</label>
+					</div>
+					<div class="weui-cell__bd">
+						<input name="password" id="addresspassword" value="" class="weui-input" type="password"  >
+					</div>
+				   
+				</div>
+				<div class="weui-cell">
+					<div class="weui-cell__hd">
+						<label class="weui-label">重复密码</label>
+					</div>
+					<div class="weui-cell__bd">
+						<input name="resetpassword" id="resetpassword" value="" class="weui-input" type="password" >
+					</div>	   					 
+				</div>
+		
+				<div class="weui-cell">
+					<div class="weui-cell__hd">
 						<label class="weui-label">分销地区</label>
 					</div>
 					<div class="weui-cell__bd">
@@ -679,6 +697,18 @@ html, body {
 				 $.toast("请填写手机号", "forbidden"); 
 				 return false; 
 			}
+			if($('#addressword').val() == ''){
+				 $.toast("请填写密码", "forbidden"); 
+				 return false; 
+			}
+			if($('#resetpassword').val() == ''){
+				 $.toast("请填写重复密码", "forbidden"); 
+				 return false; 
+			}
+			if($('#addresspassword').val() != $('#resetpassword').val()){
+				$.toast("密码与重复密码不符", "forbidden"); 
+				return false; 
+			}											
 	        if($('#selLicense').val() == ''){
 				 $.toast("请上传营业执照", "forbidden"); 
 				 return false; 
