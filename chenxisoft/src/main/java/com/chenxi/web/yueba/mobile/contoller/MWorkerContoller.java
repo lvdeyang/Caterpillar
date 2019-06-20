@@ -1,4 +1,4 @@
-package com.chenxi.web.yueba.admin.controller;
+package com.chenxi.web.yueba.mobile.contoller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +25,20 @@ import com.chenxi.web.po.ProductPo;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
-@RequestMapping("/worker")
-public class WorkerContoller extends BaseController {
-	
+@RequestMapping("/worker/mobile")
+public class MWorkerContoller extends BaseController {
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public ModelAndView index(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		ModelAndView mv = new ModelAndView("yuebamobile/worker", strMap);
+		return mv;
+	}
+	@RequestMapping(value = "/apply", method = RequestMethod.GET)
+	public ModelAndView apply(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		ModelAndView mv = new ModelAndView("yuebamobile/apply", strMap);
+		return mv;
+	}
 	
 	
 }

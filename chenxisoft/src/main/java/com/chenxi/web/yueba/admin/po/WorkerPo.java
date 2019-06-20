@@ -15,9 +15,15 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 public class WorkerPo extends AbstractBasePO{
 	private String userName;
 	private String openId;
+	private String realName;
 	private String photo;
 	private String idCard;
+	private String idCardPhoto;
 	private double price;
+	private String labelStr;
+	private String address;
+	private int age;
+
 	public String getUserName() {
 		return userName;
 	}
@@ -47,6 +53,37 @@ public class WorkerPo extends AbstractBasePO{
 	}
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	public String getRealName() {
+		return realName;
+	}
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+	public String getIdCardPhoto() {
+		return idCardPhoto;
+	}
+	public void setIdCardPhoto(String idCardPhoto) {
+		this.idCardPhoto = idCardPhoto;
+	}
+	@Transient
+	public String getLabelStr() {
+		return labelStr;
+	}
+	public void setLabelStr(String labelStr) {
+		this.labelStr = labelStr;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
 	}
 	
 }

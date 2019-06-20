@@ -20,6 +20,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="http://ryanbay.cn/vipstyle/qui/2.0.0/demo/js/lib/zepto.min.js"></script>
 <script src="http://i.gtimg.cn/vipstyle/frozenjs/1.0.1/frozen.js"></script>
+<style>
+   .ftitle{
+     width:96%;
+     height:40px;
+     padding-left:10px;
+     line-height:40px;
+     color:#7CAE23;
+     
+   }
+   .ftitle a{
+     display:inline-block;
+     float:right;
+     margin-right:20px;
+     font-size:14px;
+   }
+</style>
+
+
 </head>
 
 <body>
@@ -36,22 +54,93 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <span style="background-image:url(http://placeholder.qiniudn.com/100x100)"></span>
 	        </div>
 	        <div class="ui-list-info ui-border-t">
-	            <h4 class="ui-nowrap">fish</h4>
-	            <p>积分:0</p>
+	            <h4 class="ui-nowrap">黄靖宇</h4>
+	            <p>未提取佣金:￥18000</p>
 	        </div>
 	    </li>
     </ul>
+    <div class="ftitle">
+	              订单管理
+	</div>
     <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	  
 	    <li class="ui-border-t">
 	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4>
-	            
+	            <h4 class="ui-nowrap" style="font-size:14px;">已预定</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">进行中</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">已完成</h4> 
 	        </div>
 	    </li>
 	</ul>
 	
 	
+	<div class="ftitle">
+	             通用
+	</div>
+    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">申请成为月嫂</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4> 
+	        </div>
+	    </li>
+	    
+	</ul>
+	
+	
+	<div class="ftitle">
+	             商户设置
+	</div>
+    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">佣金提现</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">账户中心</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">用户评论</h4> 
+	        </div>
+	    </li>
+	</ul>
+	
+	<div class="ftitle">
+	            月嫂订单
+	</div>
+    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">已预定</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">进行中</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">已完成</h4> 
+	        </div>
+	    </li>
+	   
+	</ul>
 
 	<script type="text/javascript">
 	     $(function() {
