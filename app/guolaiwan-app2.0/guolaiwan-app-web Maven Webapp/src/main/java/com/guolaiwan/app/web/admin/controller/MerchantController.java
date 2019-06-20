@@ -1,5 +1,6 @@
 package com.guolaiwan.app.web.admin.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.bussiness.admin.dao.CityInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.MerModularDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantBusinessDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantChildrenDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularDAO;
@@ -38,6 +40,7 @@ import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.admin.po.CityInfoPO;
 import com.guolaiwan.bussiness.admin.po.MerModularPO;
 import com.guolaiwan.bussiness.admin.po.MerchantBusinessPO;
+import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
@@ -823,5 +826,53 @@ public class MerchantController extends BaseController {
 		ExportExcelSeedBack ex = new ExportExcelSeedBack(title, headers, dataList);// 没有标题
 		ex.export(out);
 	}
-
+	@Autowired	 
+	private MerchantChildrenDao conn_merch;
+	/**
+	 *  跳轉添加子商戶頁面
+	 * 
+	 * */	
+	@RequestMapping(value = "/skip.do" )
+	public ModelAndView merchantSkip(HttpServletRequest request) throws UnsupportedEncodingException {
+		ModelAndView  mView = new ModelAndView("admin/merchant/addmerchant");
+		String id =request.getParameter("merchantId");		
+		String str =request.getParameter("shopName");
+		String inputer   = new String( str.getBytes("ISO-8859-1") , "utf8"); 		
+		mView.addObject("merchantId", id);
+		mView.addObject("shopName", inputer);
+		
+		return mView;
+	}
+	/**
+	 *  添加商戶與子商戶信息
+	 * 
+	 * */
+	@RequestMapping(value = "/subordinate.do", method=RequestMethod.GET)
+	public ModelAndView addSubordinate(HttpServletRequest request) throws UnsupportedEncodingException{
+	ModelAndView mv = new ModelAndView("admin/merchant/addmerchant");
+	//前台数据获取
+	String childrenId=request.getParameter("childrenId").trim();
+	String str1=request.getParameter("childrenName");
+	String childrenName = new String( str1.getBytes("ISO-8859-1") , "utf8").trim(); 
+	String merchantId =	request.getParameter("merchantId").trim();
+	String str2 =request.getParameter("shopName");
+	String merchantName = new String( str2.getBytes("ISO-8859-1") , "utf8").trim();
+	
+	try {
+		//数据封装保存
+		MerchantChildrenPO merChil = new MerchantChildrenPO();
+		merChil.setChildrenId(Long.parseLong(childrenId));
+		merChil.setMerchantId(Long.parseLong(merchantId));
+		merChil.setMerchantName(merchantName);
+		merChil.setChildrenName(childrenName);
+		conn_merch.save(merChil);
+	} catch (Exception e) {
+	  System.err.println("错误 sql");
+	}
+	
+	//二次封装
+	mv.addObject("merchantId",merchantId);
+	mv.addObject("shopName",merchantName);	
+	return mv;
+	}
 }

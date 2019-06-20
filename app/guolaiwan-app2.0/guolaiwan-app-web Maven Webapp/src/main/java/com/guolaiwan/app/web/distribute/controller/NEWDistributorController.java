@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +43,7 @@ import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
+import com.guolaiwan.bussiness.admin.dao.DistributorUserDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
@@ -52,6 +54,7 @@ import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.admin.po.live.DistributorUser;
 import com.guolaiwan.bussiness.distribute.classify.DistributorApplyStatus;
 import com.guolaiwan.bussiness.distribute.classify.DistributorOrderStatus;
 import com.guolaiwan.bussiness.distribute.classify.DistributorType;
@@ -974,6 +977,87 @@ public class NEWDistributorController {
 		conn_offorder.save(order);
 		return "";
 	}
+	
+	
+	@Autowired
+	private DistributorUserDao conn_distributorUser;
 
+	/**
+	 * 分销商登录
+	 * 
+	 */
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/admin/login", method = RequestMethod.POST)
+	public String distributorLogin(HttpServletRequest request) throws Exception {
+	    	//返回页面的状态值
+	    	String state = null;
+	    	//创建 seession 获取 用户信息
+	    	HttpSession  session =  request.getSession();
+			//获取用户的手机账号
+			String phone = request.getParameter("phone");		
+			//获取 用户的 密码
+			String password = request.getParameter("password");
+			if(phone != null){
+			//根据手机号 获取 分销商 信息
+		    List<DistributorPo> distributorPos = conn_distributor.findByField("phone", phone);
+		    if(distributorPos != null){ 
+			//判断分销商属于什么状态
+		   if( distributorPos.get(0).getStatus().equals(DistributorApplyStatus.PASSED)){
+			if (password != null && password.equals(distributorPos.get(0).getPassword())) {
+				//登录成功  获的分销商 id 
+				   long distributorId =  distributorPos.get(0).getId();				   				 
+				   // 根据 分销商id 查询出中间表 用户id
+				   List<DistributorUser> distributorUsers= conn_distributorUser.getDistrUserByIds(distributorId);
+			        long userid=  distributorPos.get(0).getUserId();
+						for(DistributorUser distributorUser :distributorUsers){						
+							 if(userid == distributorUser.getUserId()) 
+							 { session.setAttribute("userId", distributorUser.getUserId());
+							   state= "success";
+							 }else{
+								  DistributorUser str = new DistributorUser();
+								  str.setDistributorId(distributorPos.get(0).getId());
+								  str.setUserId(distributorPos.get(0).getUserId());
+								   conn_distributorUser.save(distributorUser);
+								   session.setAttribute("userId", distributorPos.get(0).getUserId());
+								   state = "success";	
+								 }     					
+							 }
+						}else{state ="1";}
+						}else{state = "2";}		 						 					      	 
+						}else{state ="0";}
+						}else{state = "0";}
+				           return state;                	   				
+	              }
+
+	/**
+	 * 请求转发
+	 * 
+	 */
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/skip/register")
+	public ModelAndView skipRegister() {
+		Map<String, Object> stra = new HashMap<String, Object>();
+		return new ModelAndView("mobile/guolaiwan/distribute-register", stra);
+	}
+	/**
+	 * 
+	 *  退出功能
+	 * 
+	 *
+	 * */
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/admin/exitPage")
+	public ModelAndView exitPage(HttpServletRequest request){		
+		Map<String, Object> stre = new HashMap<String, Object>();
+		HttpSession session = request.getSession();
+		String str = session.getAttribute("userId").toString();		
+		stre.put("userId", str);
+		stre.put("msg", "0");
+		session.setAttribute("userId", "0");
+		return new ModelAndView("mobile/guolaiwan/distribute-personal", stre);
+	}
 
 }
