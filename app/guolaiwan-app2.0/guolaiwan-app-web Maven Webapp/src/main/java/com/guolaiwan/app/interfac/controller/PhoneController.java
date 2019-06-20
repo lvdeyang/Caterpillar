@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -3390,7 +3391,7 @@ public class PhoneController extends WebBaseControll {
 			}
 			if (orderInfoPO.getOrderBookDate() != null && orderInfoPO.getProductId() != 0) {
 				MerchantPO merchantPO = conn_merchant.get(orderInfoPO.getShopId());
-				if (merchantPO.getModularCode().equals("0001")||merchantPO.getModularCode().equals("0002")) {
+				if (merchantPO.getModularCode().equals("0001") || merchantPO.getModularCode().equals("0002")) {
 					String today = DateUtil.format(new Date(), "yyyy-MM-dd");
 					Date sDate = DateUtil.parse(today + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
 					Date eDate = DateUtil.parse(today + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
@@ -7247,6 +7248,45 @@ public class PhoneController extends WebBaseControll {
 		List<Map> list = JSONObject.parseArray(aString, Map.class);
 		List<Map> list1 = (List<Map>) list.get(0).get("Traces");
 		return list1;
+	}
+
+	// 封装农行需要的数据
+	@RequestMapping(value = "/agriculturepay", method = RequestMethod.GET)
+	public ModelAndView Agriculturalbanktopay(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("demo/MerchantPaymentIE");
+		String sdate;
+		Date ddate = new Date();
+		sdate = (new SimpleDateFormat("YYYY/MM/DD"/* 日期格式 */)).format(ddate);
+		String mm = (new SimpleDateFormat("HH:MM:ss"/* 时分秒格式 */)).format(ddate);
+		request.setAttribute("PayTypeID", "ImmediatePay");// 设定交易类型
+		request.setAttribute("OrderDate", "2019/06/15");// 设定订单日期
+		request.setAttribute("OrderTime", mm);// 设定订单时间
+		request.setAttribute("orderTimeoutDate", "20141019104901");// 设定订单有效期
+		request.setAttribute("OrderNo", "ON20140924004");// 设定订单编号（必要信息）
+		request.setAttribute("CurrencyCode", "156");// 设定交易币种
+		request.setAttribute("PaymentRequestAmount", "2.0");// 设定交易金额
+		request.setAttribute("Fee", "1.0");// 设定手续费金额
+		request.setAttribute("AccountNo", "6228481259151909273");// 设定支付账户
+		request.setAttribute("OrderDesc", "测试一下");// 说明
+		request.setAttribute("OrderURL", "测试一下");// 订单地址
+		request.setAttribute("ReceiverAddress", "收货地址");// 说明
+		request.setAttribute("InstallmentMark", "0");// 分期标识
+		request.setAttribute("CommodityType", "0101");// 商品种类
+		request.setAttribute("BuyIP", "127.0.0.1");// 客户交易ip
+		request.setAttribute("ExpiredDate", "1");// 订单保存时间
+		request.setAttribute("PaymentType", "1");// 支付类型
+		request.setAttribute("PaymentLinkType", "1");// 交易渠道1：internet网络接入////2：手机网络接入
+														// 3：数字电视网络接入////4：智能客户端
+		request.setAttribute("NotifyType", "0");// 通知方式 0：URL页面通知 1：服务器通知
+		request.setAttribute("ResultNotifyURL", "http://yourwebsite/appname/MerchantResult.jsp");// 通知//URL////地址
+		request.setAttribute("IsBreakAccount", "0");// 交易是否分账；是否支持向二级商户入账必须设定，////0:否1:是（二次清分商户必须填
+													// 1）
+		request.setAttribute("ReceiveAccount", "622848125915190921273");// 收款方账号
+		request.setAttribute("MerchantRemarks", "测试一下咯");
+		request.setAttribute("ReceiveAccName", "董谡焱");// ReceiveAccName
+		request.setAttribute("SplitAccTemplate", "123465");
+		return mv;
 	}
 
 }
