@@ -137,6 +137,7 @@ public class BusinessController extends WebBaseControll {
 				int compareTo = activityRelPO.getEndDate().compareTo(date2);
 				if (compareTo == 1) {
 					HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
+					hashMap.put("id", productPO.getId());
 					hashMap.put("activityRelPO", activityRelPO);
 					hashMap.put("img", productPO.getProductShowPic());
 					hashMap.put("ProductPrice", df.format(Double.parseDouble(productPO.getProductPrice() + "") / 100));
@@ -222,6 +223,7 @@ public class BusinessController extends WebBaseControll {
 					df.format(Double.parseDouble(productlist.get(arr[i]).getProductOldPrice() + "") / 100));
 
 			hashMap.put("url", productlist.get(arr[i]).getProductShowPic());
+			hashMap.put("id", productlist.get(arr[i]).getId());
 			// 根据id统计多少人来个
 			List<OrderInfoPO> newgetAllOrder = orderInfoDao.newgetAllOrder(productlist.get(arr[i]).getId());
 
@@ -236,4 +238,37 @@ public class BusinessController extends WebBaseControll {
 		return list;
 	}
 
+	// 跳转活动页面的
+	@ResponseBody
+	@RequestMapping(value = "/getdetermineorder", method = RequestMethod.GET)
+	public ModelAndView getdetermineorder(long id) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/determineorder");
+		mv.addObject("productid", id);
+		return mv;
+	}
+
+	// 封装确认订单的页面
+	@ResponseBody
+	@RequestMapping(value = "/affirmorder", method = RequestMethod.GET)
+	public Map<String, Object> affirmorder(long productid) throws Exception {
+		List<ProductPO> productlist = productDAO.getProductByProId(productid);
+		DecimalFormat df = new DecimalFormat("0.00");
+		Map<String, Object> hashMap = new HashMap<String, Object>();
+		hashMap.put("ProductName", productlist.get(0).getProductName());
+		hashMap.put("ProductPrice", df.format(Double.parseDouble(productlist.get(0).getProductPrice() + "") / 100));
+		hashMap.put("productOldPrice",df.format(Double.parseDouble(productlist.get(0).getProductOldPrice() + "") / 100));
+		hashMap.put("url", productlist.get(0).getProductShowPic());
+		return hashMap;
+	}
+
+	// 跳转商品详情页面的方法
+	@ResponseBody
+	@RequestMapping(value = "/productdetails", method = RequestMethod.GET)
+	public ModelAndView productdetails(long id) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/commodity");
+		mv.addObject("productId", id);
+		return mv;
+	}
 }

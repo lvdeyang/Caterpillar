@@ -243,11 +243,9 @@ $(function() {
 					    
 					}
 					$('#com').append(html.join(''));
-				}
-				
-		  });
-	  
-	  }
+				}				
+		  });	  
+	 }
       /**/	
 	  function getRecomment(){
 	     var _uriRecomment = window.BASEPATH + 'phoneApp/getRecommend?comCode='+comCode;
@@ -335,11 +333,11 @@ $(function() {
 			var html=[];
 			for(var i=0;i<data.length;i++){		 
 			     html.push("<div style='position: relative;width:90%;height:110px;line-height:110px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>")
-			     html.push("<img style='height:80px;width:30%;vertical-align: middle;display: inline-block;margin-left:3%;' src='http://www.guolaiwan.net/file"+data[i].img+"'/>")
+			     html.push("<img  onclick='activity("+data[i].id+")' style='height:80px;width:30%;vertical-align: middle;display: inline-block;margin-left:3%;' src='http://www.guolaiwan.net/file"+data[i].img+"'/>")
 			     html.push("<div class='huodong' style='display: inline-block;'>")
-			     html.push("<p style='position: absolute;top:-15px;font-size:16px;'>【活动】 "+data[i].activityRelPO.productName+"</p>")
-			     html.push("<p style='position: absolute;top:20px;color:#EC6D1E;font-size:16px;'>&nbsp￥"+data[i].ProductPrice+"起</p>")
-			     html.push("<button style='position: absolute;right:3%;top:60px;line-height:30px;font-size:14px;width:15%;outline: none;border:none;height:30px;border-radius:16px;background:#EC6D1E;color:#fff;'>抢 &gt;</button>")
+			     html.push("<p onclick='activity("+data[i].id+")'  style='position: absolute;top:-15px;font-size:14px;'>【活动】 "+data[i].activityRelPO.productName+"</p>")
+			     html.push("<p onclick='activity("+data[i].id+")' style='position: absolute;top:20px;color:#EC6D1E;font-size:16px;'>&nbsp￥"+data[i].ProductPrice+"起</p>")
+			     html.push("<button style='position: absolute;right:3%;top:60px;line-height:30px;font-size:14px;width:15%;outline: none;border:none;height:30px;border-radius:16px;background:#EC6D1E;color:#fff;' onclick='getorderinfo("+data[i].id+")'>抢 &gt;</button>")
 			     html.push("</div>")
 			     html.push("</div>")	
 			     if(i==2){
@@ -349,6 +347,12 @@ $(function() {
 			 $('#hd').append(html.join(''));			
 		});
 	}	
+	
+	
+	function getorderinfo(id){
+	    location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
+	}
+	
 	// 南山攻略需要的数据
 	  function getVideoPics(){       
 		var url = window.BASEPATH + 'business/getVideoPics';
@@ -383,8 +387,7 @@ $(function() {
 		   });
 		}
 		
-		 function guessyoulive(){       
-		 
+	function guessyoulive(){       		 
 		var url = window.BASEPATH + 'business/guessyoulive?id='+${merchantId};
 		$.get(url, null, function(data){
 			var html=[];
@@ -392,18 +395,21 @@ $(function() {
 			       html.push("<div style='position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
 			       html.push("<img style='height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data[i].url+"'/>");
 			       html.push("<div class='youxuan-in' style='display: inline-block;'>");
-			       html.push("<p style='position: absolute;top:-40px;font-size:14px;max-width: 130px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data[i].ProductName+"</p>");
+			       html.push("<p style='position: absolute;top:-40px;font-size:14px;max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data[i].ProductName+"</p>");
 			       html.push("<p style='position: absolute;top:0px;font-size:12px;color:#C0C0C0;'><span style='color:#EC6D1E;'>5.0分</span>   <span>"+data[i].number+"人来过</span></p>");
 			       html.push("<p style='position: absolute;top:40px;font-size:12px;color:#C0C0C0;'>739m</p>");
 			       html.push("<p style='color:#EC6D1E;position: absolute;top:-40px;right:0%;font-size:14px;'>$"+data[i].ProductPrice+"起</p>");
-			       html.push("	<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#EC6D1E;color:#fff;'>立即预订</button>");
+			       html.push("<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#EC6D1E;color:#fff;' onclick='getorderinfo("+data[i].id+")'>立即预订</button>");
 			       html.push("</div>");
 			       html.push("</div>");     			       
 			   }
-			    $('.youxuan').append(html.join(''));	      
-			   
-		   });
-		}		
+			    $('.youxuan').append(html.join(''));	      			   
+		   });				  	    
+}	
+
+   function activity(id){
+        location.href=window.BASEPATH + 'business/productdetails?id='+id;
+   }	
 </script>
 
 
@@ -411,21 +417,21 @@ $(function() {
 
 
 <body>
-			<!-- 主页 -->
-		<div class="header">
+	<!-- 主页 -->
+	<div class="header">
 			<div class="wrapper">
 				<div class="header-content">商户</div>
 			</div>
-		</div>
-		<div class="content" id="content" >
+	</div>
+	<div class="content" id="content" >
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-		</div>
+	</div>
 	</div>
 	
-	   <!-- 分类  -->
+	 <!-- 分类  -->
 	  <div  style="background:#fff;width:96%;height:230px;margin:0 auto;z-index:1;border-top-left-radius: 10px;border-top-right-radius: 10px;top:12px;position: relative;overflow: hidden;">
 	     <div style="height:60px;width:100%;clear:both">
 	     <img style="width:30px;height:30px;display:inline-block;margin:0 0.5% 0 5%;" src="lib/images/dizhiss.png"/>
@@ -474,7 +480,7 @@ $(function() {
 	  </div>
 	     
 	   <!-- 活动  -->
-	  	<div  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="hd">
+	  	<div  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="hd"">
 	     <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><img style="width:30px;height:30px;" src="lib/images/huodongss.png"/>活动<span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>
 	     	
     
@@ -496,8 +502,4 @@ $(function() {
             <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> <span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
         </div> 
 </body>
-
-
-
-
 </html>
