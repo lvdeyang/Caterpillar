@@ -135,6 +135,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180}
         		,{field: 'delectMessage',title: '评论管理',align:  'center',sort: true,width:180,templet:'#zsgc'}
         		,{field: 'sendMessage',title: '直播推送通知',align:  'center',sort: true,width:180,templet:'#zbtstz'}
+                ,{title: '礼物缩略图',templet:"#picTpls",width:100}
+        		,{title: '操作',templet:'#zsgcTpl',width:150}
    			]]
 		})
 	}
@@ -198,7 +200,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		})
 	}
 	
-	function show_pic(id){
+	 /*打开地址窗口*/
+            function open_win(title,url,w,h){
+				x_admin_show(title,url,w,h)								
+			}
+	
+	 function show_picc(id){
 		idn = "#"+id;
         $(idn).css('width','600px').css('height','400px');
         layer.open({
@@ -206,17 +213,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			title: false,
   			closeBtn: 0,
   			area:'600',
+  			
   			skin: 'layui-layer-nobg', //没有背景色
   			shadeClose: true,
   			content: $(idn),
   			end: function(){
   				$(idn).css("height","35px");
 				$(idn).css("width","35px");
+			
   			}
 		})
+		
     }
-    
-     
+  
 </script>
 
 
@@ -239,6 +248,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	 {{#  } else { }}
      {{ d.cType }}
      {{#  } }}
+</script>
+
+<script type="text/html" id="picTpls">
+ <a href="javascript:show_picc('caIm{{d.id}}')"><img id="caIm{{d.id}}"  src= "http://www.guolaiwan.net/file/{{ d.cover}}" alt="" style="width:35px;height:35px"></a>
+</script>
+
+<script type="text/html" id="zsgcTpl">
+	
+	<a class='layui-btn layui-btn-xs' href="javascript:open_win('选择图片','<%=path%>/admin/picture/addlist?sImg=caIm{{d.id}}&sId={{ d.id }}&source=live2','600','500')">选择图片</a>
+				
 </script>
 
 </body>

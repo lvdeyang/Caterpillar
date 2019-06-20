@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.ActivityVO;
 import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
 import com.guolaiwan.app.web.admin.vo.LiveRebroadcastVO;
@@ -699,6 +701,24 @@ public class LiveController extends BaseController {
 			conn_liveAdvertisement.saveOrUpdate(liveAdvertisementPO);
 			
 			return "success";
+		}
+		
+		//添加图片
+		@ResponseBody
+		@RequestMapping(value="/addImg.do",method= RequestMethod.POST)
+		public String  addImg(HttpServletRequest request){
+			
+			try{
+			String pic = request.getParameter("pic");		
+			long id = Long.parseLong(request.getParameter("id"));
+			LivePO live = conn_live.get(id);			
+			live.setCover(pic);
+			conn_live.saveOrUpdate(live);	    
+			}catch(Exception e){
+				System.err.println(e.getMessage());
+				return null;
+			}
+			return "liveImg";
 		}
 		
 }
