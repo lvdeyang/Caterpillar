@@ -280,6 +280,15 @@
                         	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.groupprice}">
                     	</div>
                     </div>
+                    <div class="layui-inline" >
+                    	<label class="layui-form-label" >
+ 							<font id="LimitNum3" style="color:#757575">拼团时限：</font>
+                    	</label>
+                    	<div class="layui-input-inline">
+                        	<input type="text" id="grouptime" name="grouptime"  placeholder="时间限制（小时）"
+                        	autocomplete="off" class="layui-input" disabled="disabled" value="${groupbuypo.grouptime}">
+                    	</div>
+                    </div>
                 </div>
                 
                 <div class="layui-form-item">
@@ -490,13 +499,17 @@
            		console.log("进来了");
            			$("#groupnum").removeAttr("disabled");
            			$("#groupprice").removeAttr("disabled");
+           			$("#grouptime").removeAttr("disabled");
            			$("#LimitNum1").removeAttr("style");
            			$("#LimitNum2").removeAttr("style");
+           			$("#LimitNum3").removeAttr("style");
            		}else{
            			$("#groupnum").prop("disabled", "disabled");
            			$("#groupprice").prop("disabled", "disabled");
+           			$("#grouptime").prop("disabled", "disabled");
            			$("#LimitNum1").prop("style", "color:#757575");
            			$("#LimitNum2").prop("style", "color:#757575");
+           			$("#LimitNum3").prop("style", "color:#757575");
 					$("#groupnum").val("");
 					$("#groupprice").val("");
            		}
@@ -530,10 +543,6 @@
               //是否拼团
             if($("#group").val()=="1"){
              		$("#group").prop("checked",true);
-             		$("#groupnum").removeAttr("disabled");
-             		$("#groupprice").removeAttr("disabled");
-           			$("#LimitNum1").removeAttr("style");
-           			$("#LimitNum2").removeAttr("style");
             }
             
             //是否显示
