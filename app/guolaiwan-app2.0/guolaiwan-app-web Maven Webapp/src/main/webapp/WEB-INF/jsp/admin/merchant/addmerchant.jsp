@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
 
 <!DOCTYPE html>
@@ -17,39 +18,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
-<link rel="stylesheet" href="<%=path %>/layui/css/x-admin.css"
+<link rel="stylesheet" href="<%=path%>/layui/css/x-admin.css"
 	media="all">
-<link rel="stylesheet" href="<%=path %>/webtheme/theme/css/admin/merchant/list.css">	
-
 </head>
 <body>
-	<div class="x-nav">
-		<span class="layui-breadcrumb"> <a><cite>首页</cite></a> <a><cite>商户管理</cite></a>
-		</span> <a class="layui-btn layui-btn-small merflash"
-			style="line-height:1.6em;margin-top:3px;float:right"
-			href="javascript:location.replace(location.href);" title="刷新"><i
-			class="layui-icon" style="line-height:30px">ဂ</i></a>
-	</div>
 	<div class="x-body">
-
-		<xblock>
-		<button class="layui-btn layui-btn-danger" onclick="delAll()">
-			<i class="layui-icon">&#xe640;</i>批量删除
-		</button>
-		<button class="layui-btn" 
-			onclick="merchant_add('添加权限','addv','900','750')">
-			<i class="layui-icon">&#xe608;</i>添加
-		</button>
-		<span class="x-right lheight4">共有${allcount}
-			个商家</span>
 		<div class="layui-inline">
   			商家：
   			<div class="layui-inline">
     			<input class="layui-input" name="mName" id="mName" autocomplete="off">
   			</div>
   			<button class="layui-btn" data-type="reload" onclick="select(this)" >搜索</button>
-	   		<button type="button" class="layui-btn" id="exportallmerchant"
-			onclick="exportallmerchant()">导出商户</button>	
 	    </div>	
 			
 			
@@ -60,12 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 <script id="shopNameTpl" type="text/html">      
   <a href="productList?merchant={{ d.uuid }}">{{ d.shopName }}</a>
-</script>
-<script id="updateUserName" type="text/html">
-  <a href="javascript:;" onclick="merchant_edit1('添加业务人员','toUpdateUserName','{{ d.id }}','','510')">{{ d.userName }}</a>
-</script>
-<script id="updateChatUser" type="text/html">
-  <a href="javascript:;" onclick="merchant_edit2('添加客服人员','toUpdateUserName','{{ d.id }}','','510')">{{ d.chatUserId }}</a>
+ <!--  <span class="noticed">{{ d.productCount }}</span> -->
 </script>
 <script type="text/html" id="shenheTpl">                                      
   {{#  if(d.shopAuditState === '草稿'||d.shopAuditState === '未通过'){ }}
@@ -79,27 +53,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/html" id="bankuaiTpl">
     {{ d.modularName }}&nbsp{{ d.modularClass }}               
 </script>
-<script type="text/html" id="zsgc">  
-    {{#  if(d.shopAuditState === '草稿'||d.shopAuditState === '未通过'){ }}
-                <a title="修改" href="javascript:;" onclick="merchant_edit('修改','updatev','{{ d.uuid }}','','510')" 
-                              class="tdn">
-                              <i class="layui-icon">&#xe642;</i>
-                </a>
-                <a title="删除" href="javascript:;" onclick="merchant_del(this,'{{ d.uuid }}')" 
-                              class="tdn">
-                              <i class="layui-icon">&#xe640;</i>
-                </a>
-              {{#  } else { }}
-                <a title="详情" href="javascript:;" onclick="merchant_info('商家详情','info','{{d.uuid}}','','510')" 
-                              class="tdn">
-                              <i class="layui-icon">&#xe62d;</i>
-                </a>
-                  <a title="删除" href="javascript:;" onclick="merchant_del(this,'{{ d.uuid }}','{{ d.shopName }}')" 
-                              class="tdn">
-                              <i class="layui-icon">&#xe640;</i>
-                </a>
-                {{#  } }}    
-</script> 
 	</div>
 	<script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
 	<script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
@@ -137,7 +90,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  
               //工具
                //分类删除
-              table.on('tool(merchantList)',function(obj){                                      
+              table.on('tool(merchantList)',function(obj){                                  
                   var data = obj.data;
                   if(obj.event === 'detail'){
                       layer.msg('ID：'+ data.id + ' 的查看操作');
@@ -165,9 +118,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 }) 
               });
 	         
-	         function merchant_add(title,url,w,h,id){	             
-                x_admin_show(title,url,w,h);
-             }
 	         
 	         
 			
@@ -186,14 +136,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             //编辑
             function merchant_edit (title,url,id,w,h) {
                 x_admin_show(title,url+"?uuid="+id,w,h); 
-            }
-            
-            function merchant_edit1 (title,url,id,w,h) {
-                x_admin_show(title,url+"?merchantId="+id+"&type="+1,w,h); 
-            }
-            //type=2是添加客服
-            function merchant_edit2 (title,url,id,w,h) {
-                x_admin_show(title,url+"?merchantId="+id+"&type="+2,w,h); 
             }
             
             /*删除*/
@@ -237,18 +179,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          ,cols: [[
           {type: 'checkbox'}
           ,{field: 'id', title: 'ID',sort: true,width:60} 
-          ,{field: 'shopName', title: '商家名称',sort: true,templet:'#shopNameTpl'}  
-          ,{field: 'shopAddress', title: '商户地址',sort: true}
-          ,{field: 'userName', title: '业务人员',sort: true,templet:'#updateUserName'}
-          ,{field: 'chatUserId', title: '客服人员',sort: true,templet:'#updateChatUser'}
-          ,{field: 'shopLinkperson', title: '联系人',width:80,sort: true} 
-          ,{field: 'shopTel', title: '联系电话',width:160,sort: true} 
-          ,{field: 'shopAuditopinion', title: '审核意见',width:100,sort: true} 
-          ,{title: '板块',width:160,templet:'#bankuaiTpl'} 
-          ,{field: 'updateTime', title: '上传时间',width:180,sort: true} 
-          ,{field: 'productCount', title: '商品数',width:80,sort: true}
+          ,{field: 'shopName', title: '商家名称',sort: true}  
+          ,{field: 'shopAddress', title: '商户地址',sort: true} 
+          ,{field: 'shopLinkperson', title: '联系人',width:80,sort: true}         
           ,{title: '操作',templet:'#zsgcTpl'}
-          ,{fixed: 'right',width:120,minWidth:100,templet:'#zsgc',unresize:true}
          ]]
          ,done:function(res, curr, count){
          	layer.closeAll("loading");
@@ -263,17 +197,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		active[type] ? active[type].call(this) : '';
 		}
       
-      
-      //导出所有商户
-		function exportallmerchant() {
-			var url = "<%=path%>/admin/merchant/exportallmerchant"+"?mName="+$("#mName").val();
-			window.open(url);
-			layer.close(index);
-		}
-				  	
-    </script>
-       <script type="text/html" id="zsgcTpl">
-         <a class='layui-btn layui-btn-xs' href="javascript:merchant_add('添加信息','<%= path%>/admin/merchant/skip.do?merchantId={{d.id}}&shopName={{d.shopName}}','900','600')">添加</a>       
-</script>     
+      var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+      	              	      
+            </script>
+            <script type="text/html" id="zsgcTpl">
+        <a class='layui-btn layui-btn-danger layui-btn-xs' href='<%=basePath%>admin/merchant/subordinate.do?childrenId={{d.id}}
+         &childrenName={{d.shopName}}&merchantId=${merchantId}&shopName=${shopName}'>选择</a>       
+</script>  
 </body>
 </html>

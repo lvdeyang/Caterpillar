@@ -4,7 +4,6 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-			String regionCode=request.getParameter("regionCode");
 %>
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
@@ -65,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>个人中心</title>
+<title>商户主页</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -446,7 +445,7 @@ html, body {
         width: 100%;
         padding:0;
         margin:0;
-        height:120px;
+        height:200px;
       } 
 
       .swiper-container img {
@@ -454,7 +453,35 @@ html, body {
         width: 100%;
       }
     
- 
+    #distributeList{
+       margin-top:10px;
+       padding-left:10px;
+       border-bottom:solid 2px #18b4ed;
+       width:100%;height:35px;
+       
+    }
+    
+    #distributeList a{
+       text-decoration:none;
+       color:#CCC;
+       font-size:12px;
+    }
+    #distributeList a.current{
+       text-decoration:none;
+       color:#18b4ed;
+       font-size:20px;
+    }
+    #columnTable{
+    
+        width:100%;
+        margin-top:10px;
+        
+    }
+    #columnTable td{
+	    width:20%;
+	    text-align:center;
+	    font-size:12px;
+    }
     
     
 
@@ -464,199 +491,102 @@ html, body {
 
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
-
-<script type="text/javascript">
-
-	$(function() {
-
-		$(document).on('click','#applyDistributor',function(){
-		   location.href=window.BASEPATH + 'distributor/apply/index?disId=0';
-		});
-		$(document).on('click','#modDis',function(){
-		   location.href=window.BASEPATH + 'distributor/apply/index?disId=${distributorId}';
-		});
-        $(document).on('click','#delDis',function(){
-           location.href=window.BASEPATH + 'distributor/delete?disId=${distributorId}';
-        });
-        $(document).on('click','#a1',function(){
-           location.href=window.BASEPATH + 'distributor/off/sell?disId=${distributorId}';
-        });
-	
-	  
-	
-	
-	});
+<script src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+<script type="text/javascript"> 
+     
+     function regist(){
+      var re=/^(13[0-9]{9})|(15[89][0-9]{8})$/;       
+          if($("#password").val() == ""){
+             $.toast("请输入密码","forbidden");      
+              return false;
+         }
+         if(!re.test(  $("#addressphone").val())){  
+            $.toast("手机号有误", "forbidden");            		
+            return false;	
+            }
+         else{
+              
+              var url = "<%=request.getContextPath()%>/distributor/admin/login";
+			  var date= {"phone":$("#addressphone").val(),
+			             "password":$("#password").val()
+			             };    			                  
+              $.post(url,date,function(msg){          
+                  if (msg == 0){
+                   $.toast("手机号有误","forbidden");
+                  } 
+                   if (msg == 1){
+                    $.toast("密码错误","forbidden");            
+                   }
+                   if(msg == 2){
+                    $.toast("账号正在审核中","forbidden");
+                   }
+                   if (msg == "success"){
+                      $("#addressphone").val(" ");
+	                  $("#password").val(" ");                             
+                    window.location.href="<%=request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/"%>distributor/app/login/0?'null'="          
+                   }
+              })    
+         }
+     }
+     
+  
 </script>
-
-
-
 <body>
+<form class="form" method="post" id="form" o action="">
 	<div id="page">
-		<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-				<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">分销</div>
-			</div>
-		</div>
+		
 		<div class="content">
-		    
-		
-		
-		   <c:if test="${status=='null'}">
-		    <c:if test="${distributorId=='0'}"> 
-		    	<a id="applyDistributor" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">
-		    	申请分销商</a>
-		    	<a id="egisterDistributor" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"  class="weui-btn weui-btn_primary"
-		    	    href='<%=basePath %>distributor/skip/register'>登录</a>
-		     
-			</c:if>
-			</c:if>
-			<c:if test="${status=='CHECKED'||status=='NOTPASSED'}">
-			    <div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">法人</label>
-					</div>
-					<div class="weui-cell__bd">
-						<input name="legalPerson"  disabled="disabled" value="${distributor.legalPerson }"  class="weui-input" type="text" placeholder="">
-					</div>
-				</div>
-				<div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">开户行账号</label>
-					</div>
-					<div class="weui-cell__bd">
-						<input name="bankNo" disabled="disabled" value="${distributor.bankNo }"  class="weui-input" type="number" pattern="[0-9]*"
-							placeholder="">
-					</div>
-				</div>
-
-				<div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">地址</label>
-					</div>
-					<div class="weui-cell__bd">
-						<input name="address" disabled="disabled" value="${distributor.address }" class="weui-input" type="text"
-							placeholder="">
-					</div>
-				</div>
-
-				<div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">电话</label>
-					</div>
-					<div class="weui-cell__bd">
-						<input name="phone" disabled="disabled" value="${distributor.phone }" class="weui-input" type="number" pattern="[0-9]*"
-							placeholder="">
-					</div>
-				</div>
-				
-				<div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">分销地区</label>
-					</div>
-					<div class="weui-cell__bd">
-						${region}
-					</div>
-				</div>
+			<div class="weui-msg">
+			  <div class="weui-msg__icon-area"><image style="width:100px;height:100px;" src="lib/images/logo.jpg"/></div>
+			  <div class="weui-msg__text-area">
+			    <h2 class="weui-msg__title">分销商登录</h2>
+			    <p class="weui-msg__desc">分销商请登录<a href="javascript:void(0);"></a></p>
+			  </div>
+			  
+			  
+			  <div class="weui-cells weui-cells_form">
+				  <div class="weui-cell">
+				    <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
+				    <div class="weui-cell__bd">
+				      <input id="addressphone" name="phone" class="weui-input" type="text"   value="" pattern="[0-9]*">
+				    </div>
+				  </div>
+				  <div class="weui-cell">
+				    <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
+				    <div class="weui-cell__bd">
+				      <input id="password" class="weui-input" type="password" name="password" value="">
+				    </div>
+				  </div>
+			  </div>
+			  
+			  
+			  <div class="weui-msg__opr-area">
+			    <p class="weui-btn-area">
+			      <a  href="javascript:void(0);" class="weui-btn weui-btn_primary" onclick="regist()">登录</a>	
+			     
+			    </p>
+			  </div>
+			  
+			   <div class="weui-msg__opr-area">
+			    <p class="weui-btn-area">
+			      <a  href="<%=request.getContextPath()%>/distributor/apply/index?disId=0" class="weui-btn weui-btn_primary" >注册</a>		  
+			    </p>
+			  </div>
+			  
+			  <div class="weui-msg__extra-area">
+			    <div class="weui-footer">
+			      <p class="weui-footer__links">
+			        <a href="javascript:void(0);" class="weui-footer__link"></a>
+			      </p>
+			      <p class="weui-footer__text"></p>
+			    </div>
+			  </div>
+			</div>
 			
-			
-		    
-		        <div style="margin-top:20px;width:100%;height:100px;background:#18b4ed;color:#FFF;text-align:center">
-				  
-				  <c:if test="${status=='CHECKED'}">
-				         
-				  审核中
-				  </c:if>
-				  <c:if test="${status=='NOTPASSED'}">
-				 审核未通过        
-				  
-				  </c:if>
-	
-				
-				
-				       <br><br><span>${reason}</span>
-	
-				
-				</div>
-				
-				<a id="modDis" style="margin-top:10px;width:46%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
-				<a id="delDis" style="margin-top:10px;width:46%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消申请</a>
-		    </c:if>
-		   
-			<c:if test="${status=='PASSED'}">
-			<c:if test="${distributorId!='0'}"> 
-			<a  href="<%=request.getContextPath()%>/distributor/admin/exitPage" style="float:right;margin-right:5%; " ><button class="btn" style="width:100px;height:30px;background:#18b4ed;border:none;outline: none;border-radius:22px;color:#fff;margin-top:35px;">退出登录</button></a>					    
-			        <div style="width:100%;height:100px;">
-					    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-					      <div class="weui-media-box__hd">
-					        <img style="border-radius:50%;width:60px;height:60px;" class="weui-media-box__thumb" src="${user.userHeadimg}">
-					      </div>
-					      <div class="weui-media-box__bd">
-					        <h4 class="weui-media-box__title" style="font-size:12px;">${user.userNickname}(${region})</h4>
-					        <p class="weui-media-box__desc" style="font-size:12px;">${distributor.address }</p>
-					      </div>
-		    		    </a>
-					</div>
-			
-			    	<div class="weui-grids">
-					  <a href="<%=basePath%>/distributor/my/index" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      商品管理
-					    </p>
-					  </a>
-					  <a href="<%=basePath%>/distributor/order/index" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      采购订单
-					    </p>
-					  </a>
-					  <a href="<%=basePath%>/distributor/sellorder/index" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      卖出订单
-					    </p>
-					  </a>
-					    <!-- <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      分销首页
-					    </p>
-					  </a> -->
-					   <!-- <a href="javascript:void(0)" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					     个人信息
-					    </p>
-					  </a> -->
-					   <a id="a1" href="javascript:void(0)" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      我的店铺
-					    </p>
-					  </a>
-					</div>
-			</c:if>
-			</c:if>
-		 
-		    
 		</div>
 	</div>
-</body>
+</boday>
 
 
 </html>
