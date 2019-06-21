@@ -13,8 +13,8 @@ public class SubOrderPo extends AbstractBasePO{
 
 	private double amount;
 	private long orderId;
-	private Date from;
-	private Date to;
+	private Date fromDate;
+	private Date toDate;
 	public double getAmount() {
 		return amount;
 	}
@@ -27,17 +27,18 @@ public class SubOrderPo extends AbstractBasePO{
 	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
-	public Date getFrom() {
-		return from;
+	public Date getFromDate() {
+		return fromDate;
 	}
-	public void setFrom(Date from) {
-		this.from = from;
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
-	public Date getTo() {
-		return to;
+	public Date getToDate() {
+		return toDate;
 	}
-	public void setTo(Date to) {
-		this.to = to;
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
 	}
+	
 	
 }
