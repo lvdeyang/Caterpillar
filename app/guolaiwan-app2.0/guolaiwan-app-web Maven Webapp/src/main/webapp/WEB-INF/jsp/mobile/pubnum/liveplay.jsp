@@ -941,7 +941,7 @@ html, body {
 				preload="auto" width="100%" height="100%" poster=""
 				x-webkit-airplay="allow" data-setup="{}">
 				<source
-					src="http://<%=weburl%>/video/live/${live.userId}A${live.id}.m3u8"
+					src="http://bro.guolaiwan.net/live/${pubName}.m3u8"
 					type="application/x-mpegURL">
 			</video>
 
