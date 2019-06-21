@@ -6,7 +6,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.chenxi.web.classes.ContentSource;
+import com.chenxi.web.classes.WorkerStatus;
 import com.chenxi.web.classes.Moudular;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
@@ -23,6 +23,9 @@ public class WorkerPo extends AbstractBasePO{
 	private String labelStr;
 	private String address;
 	private int age;
+	private String phone;
+	private WorkerStatus status;
+	private String checkMsg;
 
 	public String getUserName() {
 		return userName;
@@ -84,6 +87,25 @@ public class WorkerPo extends AbstractBasePO{
 	}
 	public void setAge(int age) {
 		this.age = age;
+	}
+	@Enumerated(EnumType.STRING)
+	public WorkerStatus getStatus() {
+		return status;
+	}
+	public void setStatus(WorkerStatus status) {
+		this.status = status;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getCheckMsg() {
+		return checkMsg;
+	}
+	public void setCheckMsg(String checkMsg) {
+		this.checkMsg = checkMsg;
 	}
 	
 }

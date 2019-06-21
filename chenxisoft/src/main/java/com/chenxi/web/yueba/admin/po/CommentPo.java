@@ -6,7 +6,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.chenxi.web.classes.ContentSource;
+import com.chenxi.web.classes.WorkerStatus;
 import com.chenxi.web.classes.Moudular;
 
 import pub.caterpillar.orm.po.AbstractBasePO;

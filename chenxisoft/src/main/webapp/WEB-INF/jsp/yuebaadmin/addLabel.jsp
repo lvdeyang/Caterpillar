@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
                 $.ajax({
                 	  type:"post",
-           			  url:"classes/add.do",
+           			  url:"label/add.do",
                       data:data.field,
                       success:function(msg){
                         if(msg=="success"){
