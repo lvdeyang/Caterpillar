@@ -11,6 +11,8 @@ public class UserPo extends AbstractBasePO {
 	private String nickName;
 	private String headPic;
 	private String openId;
+	private String phone;
+	private String address;
 	public String getNickName() {
 		return nickName;
 	}
@@ -28,6 +30,18 @@ public class UserPo extends AbstractBasePO {
 	}
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
 }

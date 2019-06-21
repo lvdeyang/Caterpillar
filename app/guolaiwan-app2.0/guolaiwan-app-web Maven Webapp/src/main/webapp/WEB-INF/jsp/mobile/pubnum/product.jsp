@@ -1930,6 +1930,12 @@ addmessage();
 	        $(".zhuye").show();
 	       
 	 });
+	 
+	 
+	  $(document).on('click','#gotogroup',function(){
+	  		location.href=window.BASEPATH + 'pubnum/grouping?productId=${id}&userId=${userId}';
+	 });
+	 
 </script>
 
 
@@ -2002,6 +2008,9 @@ addmessage();
 			<div style="font-size:12px;padding:12px;float:left;width:25%;overflow-x:scroll" id="proStock"></div>
 			<div style="font-size:12px;padding:12px;overflow-x:hidden;width:155px;padding-left:70px;margin-top:-5px;">
 			    <a href="javascript:;" style="background:#18b4ed;width:80px;font-size:12px" class="weui-btn weui-btn_mini weui-btn_primary" id="gotoshop">进入店铺</a>
+			    <c:if test="${isgroup==1}">
+			    	<a href="javascript:;" style="background:#18b4ed;width:80px;font-size:12px;position: absolute;" class="weui-btn weui-btn_mini weui-btn_primary" id="gotogroup">拼团购买</a>
+			    </c:if>
 			</div></div>
 			<div id="choosediv"
 				style="display:none;width:95%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">购买设置</div>

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.chenxi.web.classes.WorkerStatus;
 import com.chenxi.web.dao.ArticleDao;
 import com.chenxi.web.dao.OnlineClassesDao;
 import com.chenxi.web.dao.ProductDao;
@@ -25,22 +24,21 @@ import com.chenxi.web.po.ProductPo;
 import com.chenxi.web.yueba.admin.dao.LabelDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
 import com.chenxi.web.yueba.admin.po.LabelPo;
-import com.chenxi.web.yueba.admin.po.WorkerPo;
 
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
-@RequestMapping("/worker")
-public class WorkerContoller extends BaseController {
+@RequestMapping("/label")
+public class LabelContoller extends BaseController {
 	@Autowired
-	WorkerDao conn_worker;
+	LabelDao conn_label;
 	
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		
-		ModelAndView mv = new ModelAndView("yuebaadmin/worker", strMap);
+		ModelAndView mv = new ModelAndView("yuebaadmin/label", strMap);
 		return mv;
 	}
 	
@@ -49,8 +47,8 @@ public class WorkerContoller extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Map<String, Object> list(int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		strMap.put("count", conn_worker.countAll());
-		strMap.put("data", conn_worker.findAll(page, limit));
+		strMap.put("count", conn_label.countAll());
+		strMap.put("data", conn_label.findAll(page, limit));
 		strMap.put("code", 0);
 		strMap.put("msg", "");
 		return strMap;
@@ -59,40 +57,27 @@ public class WorkerContoller extends BaseController {
 	@RequestMapping(value="/del.do", method= RequestMethod.POST)
 	public String del(HttpServletRequest request) throws Exception {
 		if(request.getParameter("id")!=null){
-			conn_worker.delete(Long.parseLong(request.getParameter("id")));
+			conn_label.delete(Long.parseLong(request.getParameter("id")));
 		}
 		return "success";
 	}
 	
-	@RequestMapping("/check")
-	public ModelAndView check(long id){
-		ModelAndView mv = new ModelAndView("yuebaadmin/checkworker");
-		mv.addObject("id", id);
+	@RequestMapping("/add")
+	public ModelAndView addClasses(){
+		ModelAndView mv = new ModelAndView("yuebaadmin/addLabel");
 		return mv;
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value="/agree.do", method= RequestMethod.POST)
-	public String agree(HttpServletRequest request) throws Exception {
-		String checkMsg = request.getParameter("checkMsg");
-        String id=request.getParameter("id");
-		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
-		workerPo.setStatus(WorkerStatus.PASSED);
-		workerPo.setCheckMsg(checkMsg);
-		conn_worker.update(workerPo);
-		return "success";
-	}
-	
-	@ResponseBody
-	@RequestMapping(value="/refuse.do", method= RequestMethod.POST)
-	public String refuse(HttpServletRequest request) throws Exception {
-		String checkMsg = request.getParameter("checkMsg");
-        String id=request.getParameter("id");
-		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
-		workerPo.setStatus(WorkerStatus.REFUSE);
-		workerPo.setCheckMsg(checkMsg);
-		conn_worker.save(workerPo);
+	@RequestMapping(value="/add.do", method= RequestMethod.POST)
+	public String add(HttpServletRequest request) throws Exception {
+		String code = request.getParameter("code");
+		String name = request.getParameter("name");
+		LabelPo labelPo=new LabelPo();
+		labelPo.setName(name);
+		labelPo.setCode(code);
+		conn_label.save(labelPo);
 		return "success";
 	}
 	

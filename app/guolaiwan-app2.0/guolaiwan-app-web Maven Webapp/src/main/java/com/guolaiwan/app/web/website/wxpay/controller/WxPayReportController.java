@@ -779,7 +779,7 @@ public class WxPayReportController extends WebBaseControll {
     	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
     		nameObj.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
     	}else{
-    		nameObj.put("value",conn_user.get(orderInfoPO.getId()).getUserNickname());
+    		nameObj.put("value",conn_user.get(orderInfoPO.getUserId()).getUserNickname());
     	}
     	
     	nameObj.put("color", "");
@@ -842,7 +842,7 @@ public class WxPayReportController extends WebBaseControll {
     	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
     		nameObj2.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
     	}else{
-    		nameObj2.put("value",conn_user.get(orderInfoPO.getId()).getUserNickname());
+    		nameObj2.put("value",conn_user.get(orderInfoPO.getUserId()).getUserNickname());
     	}
     	nameObj2.put("color", "");
     	dataObject2.put("keyword1", nameObj2);

@@ -459,7 +459,8 @@ public class ProductController extends BaseController {
 			GroupBuyPO group=new GroupBuyPO();
 			group.setGrouptime(grouptime);
 			group.setGroupnum(groupnum);
-			group.setGroupprice(groupprice);
+			//存入数据库转成单位为 分
+			group.setGroupprice(groupprice*100);
 			group.setProductid(productId);
 			conn_groupbuydao.save(group);
 		}

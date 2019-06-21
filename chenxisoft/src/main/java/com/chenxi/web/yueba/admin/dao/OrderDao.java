@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.ProductPo;
+import com.chenxi.web.yueba.admin.po.OrderPo;
 import com.chenxi.web.yueba.admin.po.WorkerPo;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
@@ -13,6 +14,6 @@ import pub.caterpillar.orm.hql.Condition;
 import pub.caterpillar.orm.hql.QueryHql;
 
 @Repository("OrderDao")
-public class OrderDao extends AbstractBaseDao<WorkerPo> {
+public class OrderDao extends AbstractBaseDao<OrderPo> {
 	
 }
