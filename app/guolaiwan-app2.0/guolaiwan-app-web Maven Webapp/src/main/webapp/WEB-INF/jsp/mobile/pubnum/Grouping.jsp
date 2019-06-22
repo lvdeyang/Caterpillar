@@ -257,9 +257,12 @@ html, body {
     }
   
  	$(document).on('click','.fukuan',function(){
- 		
+ 		$("#startteam").popup();
  	}) 
-  
+  	
+  	$(document).on('click','.cancel',function(){
+ 		$.closePopup();
+ 	})
 });
 
 
@@ -286,8 +289,11 @@ function getRecomment(){
   }
 </script>
 <script>
+var grouptime=${groupBuyPO.grouptime*60*60*1000-1000};
+var newtime=new Date().getTime();
+var begintime=new Date('${team.updateTime}').getTime();
    /*倒计时  */
-var intDiff = parseInt(600); //倒计时总秒数量
+var intDiff =parseInt((grouptime-(newtime-begintime))/1000); //倒计时总秒数量
 function timer(intDiff) {
   window.setInterval(function () {
     var day = 0,
@@ -343,28 +349,75 @@ $(function () {
              <p style="width:100%;position: absolute;top:10px;"><span style="margin-left:10%;">拼购玩法</span><span style="float:right;margin-right:2%;">详细规则❯</span></p>
              <p style="font-size:12px;position: absolute;bottom:10px;right:0%;color:#949494;margin:0;">（不满自动退款）</p>
           </div>
-          <div style="height:100px;weight:100%;text-align:center;border-bottom:1px solid #A6A6A6;vertical-align:middle;position: relative;">
-            <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="lib/images/logo.png"/>
-            <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;">想念</span>
-            <span style="font-weight:bold;margin-left:-10px;line-height: 100px;">还差<span style="color:#F46837;">1人</span>拼团成功</span>
-            <button style="background:#F46837;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;">去拼单</button>
-             <p style="color:#949494;font-size:12px;position: absolute;top:60px;left:50%;margin-left:-30px">剩余时间<span id="times">00：00：00</span></p>
-          </div>
-           <div style="height:100px;weight:100%;text-align:center;border-bottom:1px solid #A6A6A6;vertical-align:middle;position: relative;">
-            <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="lib/images/logo.png"/>
-            <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;">想念</span>
-            <span style="font-weight:bold;margin-left:-10px;line-height: 100px;">还差<span style="color:#F46837;">1人</span>拼团成功</span>
-            <button style="background:#F46837;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;">去拼单</button>
-             <p style="color:#949494;font-size:12px;position: absolute;top:60px;left:50%;margin-left:-30px">剩余时间<span id="times">00：00：00</span></p>
+          <!-- 后面动态写进来各个团 -->
+          <div>
+	          <div style="height:100px;weight:100%;text-align:center;border-bottom:1px solid #A6A6A6;vertical-align:middle;position: relative;">
+	            <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="lib/images/logo.png"/>
+	            <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;">想念</span>
+	            <span style="font-weight:bold;margin-left:-10px;line-height: 100px;">还差<span style="color:#F46837;">1人</span>拼团成功</span>
+	            <button style="background:#F46837;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;">去拼单</button>
+	             <p style="color:#949494;font-size:12px;position: absolute;top:60px;left:50%;margin-left:-30px">剩余时间<span id="times">00：00：00</span></p>
+	          </div>
+	           <div style="height:100px;weight:100%;text-align:center;border-bottom:1px solid #A6A6A6;vertical-align:middle;position: relative;">
+	            <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="lib/images/logo.png"/>
+	            <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;">想念</span>
+	            <span style="font-weight:bold;margin-left:-10px;line-height: 100px;">还差<span style="color:#F46837;">1人</span>拼团成功</span>
+	            <button style="background:#F46837;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;">去拼单</button>
+	             <p style="color:#949494;font-size:12px;position: absolute;top:60px;left:50%;margin-left:-30px">剩余时间<span id="times">00：00：00</span></p>
+	          </div>
           </div>
              
 	     <div style="background:#F56938;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
 	     	<p style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">￥<span id="zong">${product.productPrice/100}0</span><span style="font-size:14px;margin-left:5%;">原价购买</span></p>
-	        <p class="fukuan" style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">￥<span id="zong">${groupBuyPO.groupprice/100}0</span><span style="font-size:14px;margin-left:5%;">我要开团</span></p>
+	        <p class="fukuan" style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">￥<span id="zong">${groupBuyPO.groupprice/100}0</span><span style="font-size:14px;margin-left:5%;" >我要开团</span></p>
 	     </div>
 	
 	     
-           <div style="height:60px;width:100%;"></div> 
+           <div id="startteam" class="weui-popup__container">
+			  <div class="weui-popup__overlay"></div>
+			  <div class="weui-popup__modal">
+			   		
+			   		
+			   		
+			   	<div class="weui-cells weui-cells_form">
+					  <div class="weui-cell">
+					    <div class="weui-cell__hd"><label class="weui-label">qq</label></div>
+					    <div class="weui-cell__bd">
+					      <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入qq号">
+					    </div>
+					  </div>
+					  <div class="weui-cell weui-cell_vcode">
+					    <div class="weui-cell__hd">
+					      <label class="weui-label">手机号</label>
+					    </div>
+					    <div class="weui-cell__bd">
+					      <input class="weui-input" type="tel" placeholder="请输入手机号">
+					    </div>
+					    <div class="weui-cell__ft">
+					      <button class="weui-vcode-btn">获取验证码</button>
+					    </div>
+					  </div>
+					  <div class="weui-cell">
+					    <div class="weui-cell__hd"><label for="" class="weui-label">日期</label></div>
+					    <div class="weui-cell__bd">
+					      <input class="weui-input" type="date" value="">
+					    </div>
+					  </div>
+					  <div class="weui-cell">
+					    <div class="weui-cell__hd"><label for="" class="weui-label">时间</label></div>
+					    <div class="weui-cell__bd">
+					      <input class="weui-input" type="datetime-local" value="" placeholder="">
+					    </div>
+					  </div>
+					  
+					  	<div style="background:#F56938;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
+					     	<p style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;" class="cancel"><span style="font-size:14px;margin-left:5%;">取消开团</span></p>
+					        <p class="fukuan" style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;"><span style="font-size:14px;margin-left:5%;" >开团支付</span></p>
+					    </div>
+			</div>
+			   		
+			  </div>
+			</div>
 </body>
 
 

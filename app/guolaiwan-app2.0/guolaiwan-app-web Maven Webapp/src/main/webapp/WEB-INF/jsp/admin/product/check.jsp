@@ -539,6 +539,10 @@
               //是否拼团
             if($("#group").val()=="1"){
              		$("#group").prop("checked",true);
+            }else{
+            		$("#groupnum").val("");
+					$("#groupprice").val("");
+					$("#grouptime").val("");
             }
             //佣金
             if("${product.productCommissionCode}"=="1"){

@@ -724,17 +724,21 @@
            }
            function changeGroup(){
            		if($("#group").prop("checked")){
+           			$("#group").val(1);
            			$("#groupnum").removeAttr("disabled");
            			$("#groupprice").removeAttr("disabled");
+           			$("#grouptime").removeAttr("disabled");
            			$("#LimitNum1").removeAttr("style");
            			$("#LimitNum2").removeAttr("style");
            		}else{
            			$("#groupnum").prop("disabled", "disabled");
            			$("#groupprice").prop("disabled", "disabled");
+           			$("#grouptime").prop("disabled", "disabled");
            			$("#LimitNum1").prop("style", "color:#757575");
            			$("#LimitNum2").prop("style", "color:#757575");
 					$("#groupnum").val("");
 					$("#groupprice").val("");
+					$("#grouptime").val("");
            		}
            }
            

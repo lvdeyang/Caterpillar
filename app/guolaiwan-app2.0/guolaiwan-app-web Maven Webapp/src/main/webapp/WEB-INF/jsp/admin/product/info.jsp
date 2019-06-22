@@ -512,6 +512,7 @@
            			$("#LimitNum3").prop("style", "color:#757575");
 					$("#groupnum").val("");
 					$("#groupprice").val("");
+					$("#grouptime").val("");
            		}
            }
               
