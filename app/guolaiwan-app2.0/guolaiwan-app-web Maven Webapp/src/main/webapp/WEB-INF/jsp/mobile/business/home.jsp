@@ -409,7 +409,10 @@ $(function() {
 
    function activity(id){
         location.href=window.BASEPATH + 'business/productdetails?id='+id;
-   }	
+   }
+    function cate(){
+        location.href=window.BASEPATH + 'business/cate?modularCode=0003';
+   }
 </script>
 
 
@@ -444,12 +447,12 @@ $(function() {
 	     <li><img src="lib/images/goupiaos.png"/></li>
    	     <li><img src="lib/images/zhusus.png"/></li>
          <li><img src="lib/images/tingchess.png"/></li>
-         <li><img src="lib/images/meishis.png"/></li>
+         <li><img onclick="cate()" src="lib/images/meishis.png"/></li>
          <li><img src="lib/images/fenxiaos.png"/></li>
          <li><span>购票</span></li>
    	     <li><span>住宿</span></li>
          <li><span>停车</span></li>
-         <li><span>美食</span></li>
+         <li onclick="cate()"><span>美食</span></li>
          <li><span>分销</span></li>
          <li><img src="lib/images/huodongs.png"/></li>
    	     <li><img src="lib/images/pintuans.png"/></li>
