@@ -91,6 +91,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					        }
 					    });
 				    
+				    }else if(obj.event==='comment'){
+				        layer.open({
+					        type: 2 //此处以iframe举例
+					        ,title: '审核'
+					        ,area: ['1200px', '500px']
+					        ,shade: 0
+					        ,maxmin: true
+					        ,offset: [ //为了演示，随机坐标
+					         200,300
+					          
+					        ] 
+					        ,content: 'comment/index?workerId='+data.id
+				
+					        ,zIndex: layer.zIndex //
+					        ,success: function(layero){
+					          layer.setTop(layero); //
+					        }
+					    });
+				    
+				    
+				    
 				    }
 			    
 			    

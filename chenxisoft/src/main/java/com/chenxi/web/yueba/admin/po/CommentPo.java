@@ -19,6 +19,7 @@ public class CommentPo extends AbstractBasePO{
 	private long userId;
 	private String userName;
 	private String userPhoto;
+	private long workerId;
 	
 	public long getUserId() {
 		return userId;
@@ -55,6 +56,12 @@ public class CommentPo extends AbstractBasePO{
 	}
 	public void setAnswer(String answer) {
 		this.answer = answer;
+	}
+	public long getWorkerId() {
+		return workerId;
+	}
+	public void setWorkerId(long workerId) {
+		this.workerId = workerId;
 	}
 	
 	
