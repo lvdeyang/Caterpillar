@@ -6,7 +6,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.chenxi.web.classes.ContentSource;
+import com.chenxi.web.classes.WorkerStatus;
 import com.chenxi.web.classes.Moudular;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
@@ -15,9 +15,18 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 public class WorkerPo extends AbstractBasePO{
 	private String userName;
 	private String openId;
+	private String realName;
 	private String photo;
 	private String idCard;
+	private String idCardPhoto;
 	private double price;
+	private String labelStr;
+	private String address;
+	private int age;
+	private String phone;
+	private WorkerStatus status;
+	private String checkMsg;
+
 	public String getUserName() {
 		return userName;
 	}
@@ -47,6 +56,56 @@ public class WorkerPo extends AbstractBasePO{
 	}
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	public String getRealName() {
+		return realName;
+	}
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+	public String getIdCardPhoto() {
+		return idCardPhoto;
+	}
+	public void setIdCardPhoto(String idCardPhoto) {
+		this.idCardPhoto = idCardPhoto;
+	}
+	@Transient
+	public String getLabelStr() {
+		return labelStr;
+	}
+	public void setLabelStr(String labelStr) {
+		this.labelStr = labelStr;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	@Enumerated(EnumType.STRING)
+	public WorkerStatus getStatus() {
+		return status;
+	}
+	public void setStatus(WorkerStatus status) {
+		this.status = status;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getCheckMsg() {
+		return checkMsg;
+	}
+	public void setCheckMsg(String checkMsg) {
+		this.checkMsg = checkMsg;
 	}
 	
 }

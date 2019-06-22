@@ -8,29 +8,32 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.chenxi.web.classes.ContentSource;
+import com.chenxi.web.classes.WorkerStatus;
 import com.chenxi.web.classes.Moudular;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 @Entity
-@Table(name = "order")
+@Table(name = "chenxiorder")
 public class OrderPo extends AbstractBasePO{
-	private Date from;
-	private Date to;
+	private Date fromDate;
+	private Date toDate;
 	private long workerId;
+	private String workName;
 	private long userId;
+	private String userName;
 	private double price;
-	public Date getFrom() {
-		return from;
+    
+	public Date getFromDate() {
+		return fromDate;
 	}
-	public void setFrom(Date from) {
-		this.from = from;
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
-	public Date getTo() {
-		return to;
+	public Date getToDate() {
+		return toDate;
 	}
-	public void setTo(Date to) {
-		this.to = to;
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
 	}
 	public long getWorkerId() {
 		return workerId;
@@ -49,6 +52,20 @@ public class OrderPo extends AbstractBasePO{
 	}
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	@Transient
+	public String getWorkName() {
+		return workName;
+	}
+	public void setWorkName(String workName) {
+		this.workName = workName;
+	}
+	@Transient
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 	

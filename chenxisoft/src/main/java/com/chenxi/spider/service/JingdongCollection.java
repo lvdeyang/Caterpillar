@@ -13,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chenxi.web.classes.WorkerStatus;
 import com.chenxi.web.classes.ContentSource;
 import com.chenxi.web.classes.Moudular;
 import com.chenxi.web.dao.ArticleContentDao;

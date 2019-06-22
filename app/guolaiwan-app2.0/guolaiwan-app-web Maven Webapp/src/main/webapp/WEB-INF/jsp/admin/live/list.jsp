@@ -30,11 +30,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<span class="layui-breadcrumb"> <a><cite>首页</cite></a> <a><cite>直播管理</cite></a>
 	</div>
 	<div class="x-body">
-		<xblock> <a class="layui-btn layui-btn-sm"
-			style="line-height:1.6em;margin-top:3px;float:right"
-			href="javascript:getCompanyList();" title="刷新"><i
-			class="layui-icon" style="line-height:30px">ဂ</i></a> </xblock>
+		<xblock> <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a> </xblock>
+			
+		<xblock>
+		<button type="button" class="layui-btn layui-btn-normal" onclick="addlive('添加直播','add','500','600')">添加直播</button>
+		</xblock>	
 		<table id="liveList" lay-filter="liveList"></table>
+		
 	</div>
 
 
@@ -82,7 +84,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         
         //是否显示
-              form.on('switch(enable)', function(obj){
+         form.on('switch(enable)', function(obj){
                 layer.load();
                 var str;
                 var bl = obj.elem.checked;
@@ -110,9 +112,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 })
                 layer.tips(this.value+' : '+str,obj.othis);
               });
+              
+        form.on('switch(enable1)', function(obj){
+                layer.load();
+                var str;
+                var bl = obj.elem.checked;
+                var val;
+                if(bl){
+                    str = "停播";
+                    val = 'LIVING';
+                }else{
+                    str = "开播";
+                    val = 'STOP';
+                }
+                console.log(str)
+                $.ajax({
+                    type:'post',
+                    url:'edit.do',
+                    data:{'id':this.id,'value':val},
+                    success:function(msg){
+                        layer.closeAll("loading"); 
+                        if(msg=='success'){
+                           getLiveList();
+                        }else{
+                           layer.msg("系统错误！",{icon:5,time:1000}); 
+                        }
+                    }
+                })
+                layer.tips(this.value+' : '+str,obj.othis);
+              });
 		});
+		
 
-
+		
+		
+		
 	//获取列表
 	function getLiveList(){
 		table.render({
@@ -133,12 +167,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		,{field: 'liveType',title: '主播类型',align:  'center',sort: true,width:120}
         		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180,templet:'#switchTpl'}
         		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180}
+        		,{field: 'liveStatusType',title: '开播/停播',align:  'center',sort: true,width:180,templet:'#startandstop'}
         		,{field: 'delectMessage',title: '评论管理',align:  'center',sort: true,width:180,templet:'#zsgc'}
         		,{field: 'sendMessage',title: '直播推送通知',align:  'center',sort: true,width:180,templet:'#zbtstz'}
                 ,{title: '礼物缩略图',templet:"#picTpls",width:100}
         		,{title: '操作',templet:'#zsgcTpl',width:150}
    			]]
 		})
+	}
+	function addlive(title,url,w,h){
+		x_admin_show(title,url,w,h);
 	}
 	//添加
 	function addBiao(title,url,w,h){
@@ -237,6 +275,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </script>
 	<script type="text/html" id="switchTpl">
 	<input type="checkbox" name="liveStatusType" id='{{d.id}}' value='{{ d.liveStatusType }}'  lay-skin="switch" lay-text="正常|封号" lay-filter="enable" {{ d.liveStatusType == 'FORBID' ? '' : 'checked' }} >
+</script>
+     <script type="text/html" id="startandstop">
+	<input type="checkbox" name="liveStatusType" id='{{d.id}}' value='{{ d.liveStatusType }}'  lay-skin="switch" lay-text="开播|停播" lay-filter="enable1" {{ d.liveStatusType == 'STOP'||d.liveStatusType == 'FORBID' ? '' : 'checked' }} >
 </script>
 	<script type="text/html" id="picTpl">
 	<a href="javascript:show_pic('comImg{{d.id}}')"><img src='${sysConfigPO.webUrl}{{ d.pic }}' id='comImg{{d.id}}' style="width:35px;height:35px" alt='' ></a></div>

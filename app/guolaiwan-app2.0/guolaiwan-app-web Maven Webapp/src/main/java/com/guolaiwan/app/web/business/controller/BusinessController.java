@@ -119,10 +119,8 @@ public class BusinessController extends WebBaseControll {
 	@RequestMapping(value = "/merchant/nsActivity", method = RequestMethod.GET)
 	public List<HashMap> nsActivity(HttpServletRequest request, HttpServletResponse response, long id, String comCode)
 			throws Exception {
-
 		// 获取图片地址
 		SysConfigPO sys = conn_sys.getSysConfig();
-
 		List<ProductPO> list = conn_product.getactivity(id);
 		List<HashMap> activityRelPOs = new ArrayList<HashMap>();
 		// 南山活动页面判断活动日期是否已经过去
@@ -150,17 +148,6 @@ public class BusinessController extends WebBaseControll {
 		}
 		return activityRelPOs;
 	}
-
-	/**
-	 * 小视频图文列表
-	 * 
-	 * @param request
-	 * @param response
-	 * @param page
-	 * @param pageSize
-	 * @return
-	 * @throws Exception
-	 */
 
 	// 南山攻略需要的数据
 	@ResponseBody
@@ -257,7 +244,8 @@ public class BusinessController extends WebBaseControll {
 		Map<String, Object> hashMap = new HashMap<String, Object>();
 		hashMap.put("ProductName", productlist.get(0).getProductName());
 		hashMap.put("ProductPrice", df.format(Double.parseDouble(productlist.get(0).getProductPrice() + "") / 100));
-		hashMap.put("productOldPrice",df.format(Double.parseDouble(productlist.get(0).getProductOldPrice() + "") / 100));
+		hashMap.put("productOldPrice",
+				df.format(Double.parseDouble(productlist.get(0).getProductOldPrice() + "") / 100));
 		hashMap.put("url", productlist.get(0).getProductShowPic());
 		return hashMap;
 	}
@@ -271,4 +259,32 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("productId", id);
 		return mv;
 	}
+
+	// 封装商品详情页面所需要的数据
+	@ResponseBody
+	@RequestMapping(value = "/getparticulars", method = RequestMethod.GET)
+	public Map<String, Object> getparticulars(long productId) throws Exception {
+		List<OrderInfoPO> newgetAllOrder = orderInfoDao.newgetAllOrder(productId);
+		List<ProductPO> productlist = productDAO.getProductByProId(productId);
+		DecimalFormat df = new DecimalFormat("0.00");
+		Map<String, Object> hashMap = new HashMap<String, Object>();
+		hashMap.put("ProductName", productlist.get(0).getProductName());
+		hashMap.put("ProductPrice", df.format(Double.parseDouble(productlist.get(0).getProductPrice() + "") / 100));
+		hashMap.put("productOldPrice",
+				df.format(Double.parseDouble(productlist.get(0).getProductOldPrice() + "") / 100));
+		hashMap.put("url", productlist.get(0).getProductShowPic());
+		hashMap.put("number", newgetAllOrder.size());
+		return hashMap;
+	}
+
+	// 跳转美食页面
+	@ResponseBody
+	@RequestMapping(value = "/cate", method = RequestMethod.GET)
+	public ModelAndView cate(String modularCode) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/delicacy");
+		mv.addObject("modularCode", modularCode);
+		return mv;
+	}
+
 }
