@@ -413,6 +413,9 @@ $(function() {
     function cate(){
         location.href=window.BASEPATH + 'business/cate?modularCode=0003';
    }
+   function group(){
+   		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
+   }
 </script>
 
 
@@ -455,12 +458,12 @@ $(function() {
          <li onclick="cate()"><span>美食</span></li>
          <li><span>分销</span></li>
          <li><img src="lib/images/huodongs.png"/></li>
-   	     <li><img src="lib/images/pintuans.png"/></li>
+   	     <li onclick="group()"><img src="lib/images/pintuans.png"/></li>
          <li><img src="lib/images/caizhais.png"/></li>
          <li><img src="lib/images/gongluess.png"/></li>
          <li><img src="lib/images/qianbaos.png"/></li>
          <li><span>活动</span></li>
-   	     <li><span>拼团</span></li>
+   	     <li onclick="group()"><span>拼团</span></li>
          <li><span>采摘</span></li>
          <li><span>攻略</span></li>
          <li><span>钱包</span></li>

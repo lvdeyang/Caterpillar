@@ -60,6 +60,7 @@ import com.guolaiwan.bussiness.admin.dao.CollectionDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
+import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
@@ -91,6 +92,7 @@ import com.guolaiwan.bussiness.admin.po.CollectionPO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
 import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
+import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
 import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
@@ -139,8 +141,6 @@ public class PubNumController extends WebBaseControll {
 	// 商户
 	@Autowired
 	private MerchantDAO conn_merchant;
-	@Autowired
-	private GroupBuyDAO conn_groupbuy;
 
 	@RequestMapping(value = "/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
@@ -303,7 +303,6 @@ public class PubNumController extends WebBaseControll {
 
 		case "PRODUCT":
 			mv = new ModelAndView("mobile/pubnum/product");
-			mv.addObject("isgroup", conn_product.get(code).getIsgroup());
 			// 轮播图商品购买跳转 张羽 新增参数到页面 商品购买数量限制 5/2
 			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(code).getProductMerchantID());
@@ -341,14 +340,12 @@ public class PubNumController extends WebBaseControll {
 		if (activityproId != null && activityproId != "" && activityproId.length() != 0 && !activityproId.equals("0")) {
 			mv = new ModelAndView("mobile/pubnum/activityproduct");
 			mv.addObject("actId", activityproId);
-			mv.addObject("isgroup", conn_product.get(id).getIsgroup());
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
 			mv.addObject("userHeadimg", userHeadimg);
 		} else {
 			mv = new ModelAndView("mobile/pubnum/product");
-			mv.addObject("isgroup", conn_product.get(id).getIsgroup());
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
@@ -1493,7 +1490,6 @@ public class PubNumController extends WebBaseControll {
 		mv = new ModelAndView("mobile/pubnum/activityproduct");
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(id);
 		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
-		mv.addObject("isgroup", conn_product.get(id).getIsgroup());
 		mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 		mv.addObject("actId", activityPro.getId());
 		mv.addObject("id", id);
@@ -2706,23 +2702,6 @@ public class PubNumController extends WebBaseControll {
 		}
 		return map;
 	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/grouping")
-	public ModelAndView grouping(HttpServletRequest request) throws Exception {
-		ModelAndView mv = null;
-		long userId = Long.parseLong(request.getParameter("userId"));
-		long productId = Long.parseLong(request.getParameter("productId"));
-		mv = new ModelAndView("mobile/pubnum/Grouping");
-		GroupBuyPO groupBuyPO = conn_groupbuy.findByProductId(productId);
-		ProductPO product = conn_product.get(productId);
-		mv.addObject("groupBuyPO", groupBuyPO);
-		mv.addObject("product", product);
-		mv.addObject("userId", userId);
-		
-		return mv;
-	}
-	
 	
 	
 }

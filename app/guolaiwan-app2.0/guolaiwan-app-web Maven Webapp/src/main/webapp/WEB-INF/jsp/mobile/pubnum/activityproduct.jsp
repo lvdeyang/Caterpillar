@@ -1647,9 +1647,6 @@ html, body {
 			<div style="font-size:12px;padding:12px;float:left;width:25%;overflow-x:scroll" id="proStock"></div>
             <div style="font-size:12px;padding:12px;overflow-x:hidden;width:155px;padding-left:70px;margin-top:-5px;">
 			    <a href="javascript:;" style="background:#18b4ed;width:80px;font-size:12px" class="weui-btn weui-btn_mini weui-btn_primary" id="gotoshop">进入店铺</a>
-				<c:if test="${isgroup==1}">
-			    	<a href="javascript:;" style="background:#18b4ed;width:80px;font-size:12px;" class="weui-btn weui-btn_mini weui-btn_primary" id="gotogroup">拼团购买</a>
-			    </c:if>
 			</div></div>
 			
 			<div id="choosediv"

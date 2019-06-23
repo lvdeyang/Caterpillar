@@ -20,5 +20,13 @@ public class GroupTeamDAO extends AbstractBaseDao<GroupTeamPO> {
 		if(lives==null || lives.size()<=0) return null;
 		return lives.get(0);
 	}
+	
+	public List<GroupTeamPO> findByProductId(long productId) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("productid", Condition.eq, productId);
+		List<GroupTeamPO> lives = findByHql(hql);
+		if(lives==null || lives.size()<=0) return null;
+		return lives;
+	}
 
 }
