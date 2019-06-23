@@ -662,18 +662,29 @@ public class ProductController extends BaseController {
 		product.setNotes(notes);
 		product.setRemarks(remarks);
 		product.setIfFace(ifFace);
-		
+		product.setIsgroup(isgroup);
 		conn_product.saveOrUpdate(product);
 		//如果是的话
+		int groupnum=Integer.parseInt(request.getParameter("groupnum"));
+		long groupprice=Long.parseLong(request.getParameter("groupprice"));
+		long grouptime=Long.parseLong(request.getParameter("grouptime"));
+		long productId=product.getId();
 		if(isgroup==1){
-			int groupnum=Integer.parseInt(request.getParameter("groupnum"));
-			long groupprice=Long.parseLong(request.getParameter("groupprice"));
-			long productId=product.getId();
-			GroupBuyPO group=conn_groupbuydao.findByProductId(productId);
-			group.setGroupnum(groupnum);
-			group.setGroupprice(groupprice);
-			group.setProductid(productId);
-			conn_groupbuydao.saveOrUpdate(group);
+			if(conn_groupbuydao.findByProductId(productId)!=null){
+				GroupBuyPO group=conn_groupbuydao.findByProductId(productId);
+				group.setGroupnum(groupnum);
+				group.setGroupprice(groupprice*100);
+				group.setProductid(productId);
+				group.setGrouptime(grouptime);
+				conn_groupbuydao.saveOrUpdate(group);
+			}else{
+				GroupBuyPO group=new GroupBuyPO();
+				group.setGroupnum(groupnum);
+				group.setGroupprice(groupprice*100);
+				group.setProductid(productId);
+				group.setGrouptime(grouptime);
+				conn_groupbuydao.save(group);
+			}
 		}
 		
 		return "success";

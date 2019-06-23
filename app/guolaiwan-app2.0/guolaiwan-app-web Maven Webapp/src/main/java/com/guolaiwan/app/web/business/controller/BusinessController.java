@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.CollectionDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
+import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
+import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
@@ -34,6 +37,8 @@ import com.guolaiwan.bussiness.admin.dao.SystemCacheDao;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
+import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
@@ -42,6 +47,8 @@ import com.guolaiwan.bussiness.nanshan.dao.NsVideoPicDAO;
 import com.guolaiwan.bussiness.nanshan.dao.ProblemDao;
 import com.guolaiwan.bussiness.nanshan.po.NsVideoPicPO;
 import com.guolaiwan.bussiness.nanshan.po.ProblemPo;
+
+import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
 @Controller
 @RequestMapping("/business")
@@ -103,6 +110,15 @@ public class BusinessController extends WebBaseControll {
 
 	@Autowired
 	private OrderInfoDAO orderInfoDao;
+	
+	@Autowired
+	private GroupTeamDAO groupteamDao;
+	@Autowired
+	private GroupBuyDAO groupbuyDao;
+	@Autowired
+	private GroupBuyDAO conn_groupbuy;
+	@Autowired
+	private GroupTeamDAO groupteam;
 
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
@@ -286,5 +302,63 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("modularCode", modularCode);
 		return mv;
 	}
+	
+	// 跳转拼团页面
+	@ResponseBody
+	@RequestMapping(value = "/group", method = RequestMethod.GET)
+	public ModelAndView group(HttpServletRequest request,Long merchantId) throws Exception {
+		ModelAndView mv = null;
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		mv = new ModelAndView("mobile/business/groupproduct");
+		mv.addObject("merchantId", merchantId);
+		mv.addObject("userId", userId);
+		return mv;
+	}
+	
+	// 获取这个商户的所有拼团商品
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getgroupproduct", method = RequestMethod.GET)
+	public List<ProductVO> getgroupproduct(Long merchantId) throws Exception {
+		List<ProductPO> productlist = productDAO.getactivity(merchantId);
+		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(productlist, ProductVO.class);
+		List<GroupBuyPO> findAll = groupbuyDao.findAll();
+		for (ProductVO productVO : listvo) {
+			for (GroupBuyPO GroupBuyPO : findAll) {
+				if(productVO.getId()==GroupBuyPO.getProductid()){
+					productVO.setGroupnum(GroupBuyPO.getGroupnum());
+					productVO.setGroupprice(GroupBuyPO.getGroupprice());
+				}
+			}
+		}
+		return listvo;
+	}
+	
+	// 获取这个商品的所拼的团
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getallteam", method = RequestMethod.GET)
+	public List<GroupTeamPO> getallteam(Long productId) throws Exception {
+		List<GroupTeamPO> teams = groupteamDao.findByProductId(productId);
+		return teams;
+	}
 
+	//进入拼团的开团页面
+	@ResponseBody
+	@RequestMapping(value = "/grouping")
+	public ModelAndView grouping(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long userId = Long.parseLong(request.getParameter("userId"));
+		long productId = Long.parseLong(request.getParameter("productId"));
+		mv = new ModelAndView("mobile/business/Grouping");
+		GroupBuyPO groupBuyPO = conn_groupbuy.findByProductId(productId);
+		ProductPO product = conn_product.get(productId);
+		GroupTeamPO team = groupteam.findByUserId(userId);
+		mv.addObject("groupBuyPO", groupBuyPO);
+		mv.addObject("product", product);
+		mv.addObject("userId", userId);
+		mv.addObject("team", team);
+		return mv;
+	}
+	
 }

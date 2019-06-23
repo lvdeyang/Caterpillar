@@ -162,8 +162,32 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	
 	//是否可拼团
 	private int isgroup;
+	//拼团人数
+	private long groupnum;
+	//拼团价格
+	private String groupprice;
 	
 	
+	public long getGroupnum() {
+		return groupnum;
+	}
+
+
+	public void setGroupnum(long groupnum) {
+		this.groupnum = groupnum;
+	}
+
+
+	public String getGroupprice() {
+		return groupprice;
+	}
+
+
+	public void setGroupprice(long groupprice) {
+		this.groupprice = new DecimalFormat("0.00").format(((double)groupprice/100));
+	}
+
+
 	public int getIsgroup() {
 		return isgroup;
 	}
