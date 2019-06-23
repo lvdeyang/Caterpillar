@@ -22,6 +22,9 @@ public class OrderPo extends AbstractBasePO{
 	private long userId;
 	private String userName;
 	private double price;
+	private long comboId;
+	private String region;
+	private int days;
     
 	public Date getFromDate() {
 		return fromDate;
@@ -66,6 +69,24 @@ public class OrderPo extends AbstractBasePO{
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	public long getComboId() {
+		return comboId;
+	}
+	public void setComboId(long comboId) {
+		this.comboId = comboId;
+	}
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	public int getDays() {
+		return days;
+	}
+	public void setDays(int days) {
+		this.days = days;
 	}
 	
 	

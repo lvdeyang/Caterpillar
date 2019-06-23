@@ -88,6 +88,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            <input type="text" placeholder="请输入详细地址">
 		           
 		        </div>
+		        <div class="ui-form-item ui-border-b">
+		            <label>
+		                                        上传照片*
+		            </label>
+		           
+		        </div>
+		        <div class="ui-form-item ui-border-b">
+		            <label>
+		                                        上传身份证照片*
+		            </label>
+		           
+		        </div>
+		        <div class="ui-form-item ui-border-b">
+		            <label>上传健康证明*
+		            </label>
+		           
+		        </div>
+		        <div class="ui-form-item ui-border-b">
+		            <label>
+		                                        上传证书*
+		            </label>
+		           
+		        </div>
 		        
 		    </form>
 	        
@@ -98,7 +121,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	</div>
 	
-	
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
 	<script type="text/javascript">
 	     $(function() {
@@ -112,8 +135,80 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
-	         
-		     
+	         var share={};
+		     function  discern() {
+	           //人脸采集部分
+				    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+		            var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+					$.get(_uri, null, function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+						if(data){
+						    
+							share=data;
+							wx.config({
+					            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					            //debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					            appId : share.appId, // 必填，公众号的唯一标识
+					            timestamp : share.timestamp, // 必填，生成签名的时间戳
+					            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+					            signature : share.signature,// 必填，签名，见附录1
+					            jsApiList : ['chooseImage',
+				                        'previewImage',
+				                        'uploadImage',
+				                        'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			       	        });
+		                }
+		            });                        
+		             wx.ready(function () {
+		                wx.checkJsApi({
+		                    jsApiList: [
+		                        'chooseImage',
+		                        'previewImage',
+		                        'uploadImage',
+		                        'downloadImage'
+		                    ],
+		                    success: function (res) {
+		                      
+		                        if (res.checkResult.getLocation == false) {
+		                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+		                            return;
+		                        }else{
+		                            choosePicone(this.id);
+		                        }
+		                    }
+		                });
+		            });
+		            wx.error(function(res){
+		                alert("验证失败，请重试！");
+		                wx.closeWindow();
+		            });
+			    }
+			    function choosePicone(id) {
+		            wx.chooseImage({
+		                count: 1, // 默认9
+		                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+		                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+		                success: function (res) {
+		                    $.toast("照片处理中...", "loading");
+		                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+		                    getLocalDataone(localIds[0]);
+		                }
+		            });
+		        }
+				
+		        function getLocalDataone(localid) {
+		
+					//获取本地图片资源
+		            wx.getLocalImgData({
+		                localId: localid, // 图片的localID
+		                success: function (res) {
+		                    var localData = res.localData; 
+		                }
+		                
+		            )};
+		 
+		        }
 	          
 	     });
 	

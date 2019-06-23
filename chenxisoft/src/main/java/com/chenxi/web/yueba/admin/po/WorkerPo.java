@@ -19,13 +19,15 @@ public class WorkerPo extends AbstractBasePO{
 	private String photo;
 	private String idCard;
 	private String idCardPhoto;
+	private String healthPhoto;
+	private String expertPhoto;
 	private double price;
-	private String labelStr;
 	private String address;
 	private int age;
 	private String phone;
 	private WorkerStatus status;
 	private String checkMsg;
+	
 
 	public String getUserName() {
 		return userName;
@@ -69,13 +71,7 @@ public class WorkerPo extends AbstractBasePO{
 	public void setIdCardPhoto(String idCardPhoto) {
 		this.idCardPhoto = idCardPhoto;
 	}
-	@Transient
-	public String getLabelStr() {
-		return labelStr;
-	}
-	public void setLabelStr(String labelStr) {
-		this.labelStr = labelStr;
-	}
+	
 	public String getAddress() {
 		return address;
 	}
@@ -106,6 +102,18 @@ public class WorkerPo extends AbstractBasePO{
 	}
 	public void setCheckMsg(String checkMsg) {
 		this.checkMsg = checkMsg;
+	}
+	public String getHealthPhoto() {
+		return healthPhoto;
+	}
+	public void setHealthPhoto(String healthPhoto) {
+		this.healthPhoto = healthPhoto;
+	}
+	public String getExpertPhoto() {
+		return expertPhoto;
+	}
+	public void setExpertPhoto(String expertPhoto) {
+		this.expertPhoto = expertPhoto;
 	}
 	
 }
