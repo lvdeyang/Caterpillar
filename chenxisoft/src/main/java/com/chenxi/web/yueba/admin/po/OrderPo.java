@@ -10,6 +10,7 @@ import javax.persistence.Transient;
 
 import com.chenxi.web.classes.WorkerStatus;
 import com.chenxi.web.classes.Moudular;
+import com.chenxi.web.classes.OrderStatus;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 @Entity
@@ -22,9 +23,9 @@ public class OrderPo extends AbstractBasePO{
 	private long userId;
 	private String userName;
 	private double price;
-	private long comboId;
 	private String region;
 	private int days;
+	private OrderStatus orderStatus;
     
 	public Date getFromDate() {
 		return fromDate;
@@ -70,12 +71,7 @@ public class OrderPo extends AbstractBasePO{
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public long getComboId() {
-		return comboId;
-	}
-	public void setComboId(long comboId) {
-		this.comboId = comboId;
-	}
+	
 	public String getRegion() {
 		return region;
 	}
@@ -87,6 +83,13 @@ public class OrderPo extends AbstractBasePO{
 	}
 	public void setDays(int days) {
 		this.days = days;
+	}
+	@Enumerated(EnumType.STRING)
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
+	}
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 	
 	

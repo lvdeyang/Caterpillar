@@ -27,6 +27,11 @@ public class WorkerPo extends AbstractBasePO{
 	private String phone;
 	private WorkerStatus status;
 	private String checkMsg;
+	private String lan;//位置信息，经纬度
+	private String lon;
+	private int ration;//百分比
+	private int orderCount;
+	
 	
 
 	public String getUserName() {
@@ -115,5 +120,31 @@ public class WorkerPo extends AbstractBasePO{
 	public void setExpertPhoto(String expertPhoto) {
 		this.expertPhoto = expertPhoto;
 	}
+	public String getLan() {
+		return lan;
+	}
+	public void setLan(String lan) {
+		this.lan = lan;
+	}
+	public String getLon() {
+		return lon;
+	}
+	public void setLon(String lon) {
+		this.lon = lon;
+	}
+	public int getRation() {
+		return ration;
+	}
+	public void setRation(int ration) {
+		this.ration = ration;
+	}
+	@Transient
+	public int getOrderCount() {
+		return orderCount;
+	}
+	public void setOrderCount(int orderCount) {
+		this.orderCount = orderCount;
+	}
+	
 	
 }

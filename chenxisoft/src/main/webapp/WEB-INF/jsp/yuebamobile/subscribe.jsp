@@ -39,24 +39,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      margin-right:20px;
      font-size:14px;
    }
-   #priceTable{
-     width:90%;
-     margin-left:15px;
-   }
-   #priceTable tr td{
-     width:70px;
-     height:30px;
-     font-size:13px;
-     border:1px solid #CCC;
-   }
-   #imageContent{
-     width:90%;margin-left:15px;border:1px solid #CCC;height:100px;
-   }
-   #imageContent img{
-     width:100px;
-     height:100px;
-     float:left;
-   }
 </style>
 </head>
 
@@ -65,11 +47,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        </h2><a><i class="ui-icon-personal"></i></a>
     <header class="ui-header ui-header-positive ui-border-b">
          
-         <h1 style="font-size:14px;width:80px;float:left;">详情</h1>
+         <h1 style="font-size:14px;width:80px;float:left;"></h1>
          <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
     </header>
-	<image src="/chenxisoft${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
-	<div class="ui-form ui-border-t">
+	
+	<div class="ui-form ui-border-t" style="margin-top:45px;">
 	        <div class="ftitle">
 	                                    基本信息
 	        </div>
@@ -77,64 +59,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="width:100px;">
 	                                     姓名
 	            </label>
-                <label style="margin-left:20px;">${worker.realName}<span style="color:red;margin-left:5px;">(带过${worker.orderCount}个孩子)</span></label>
+                <label style="margin-left:20px;">${worker.realName}</label>
+	           
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                     选择天数
+	            </label>
+	            <div class="ui-select" style="margin-left:20px">
+	                <select id="dayTypes" name="days" style="font-size:13px;line-height:40px;">
+	                     <c:forEach items="${daystypes}" var="day">
+			                <option value="${day.days}">${day.days}天</option>
+			             </c:forEach>
+	                </select>
+	            </div>
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                     选择地区
+	            </label>
+	            <div class="ui-select" style="margin-left:20px">
+	                <select id="region" name="region" style="font-size:13px;line-height:40px;">
+		                <c:forEach items="${regions}" var="region">
+			                <option value="${region.regionName}">${region.regionName}</option>
+			            </c:forEach>
+	                </select>
+                </div>
+	        </div>
+	        <div class="ftitle">
+	                                    客户信息
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                     姓名
+	            </label>
+                <label style="margin-left:20px;">Miss张</label>
+	           
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                     电话
+	            </label>
+                <label style="margin-left:20px;">13832536088</label>
 	           
 	        </div>
 	       
-	        <div class="ui-form-item ui-border-b">
-	            <label style="width:100px;">
-	                                    身份证号
-	            </label>
-	            <label style="margin-left:20px;">${worker.idCard}</label>
-	        </div>
-	        <div class="ui-form-item ui-border-b">
-	            <label style="width:100px;">
-	                                   电话
-	            </label>
-	            <label style="margin-left:20px;">${worker.phone}</label>
-	        </div>
-	        <div class="ui-form-item ui-border-b">
-	            <label style="width:100px;">
-	                                    家庭住址
-	            </label>
-	            <label style="margin-left:20px;">${worker.address}</label>
-	        </div>
-	        <div class="ftitle">
-	                                    价格表(单位:元)
-	        </div>
-	        <table id="priceTable">
-	           ${priceHtml}
-	        </table>
-	        <div class="ftitle">
-	                                    证件照片
-	        </div>
-	        <div id="imageContent">
-	            
-	            <image src="/chenxisoft${worker.idCardPhoto}">
-	            <image src="/chenxisoft${worker.healthPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
-	            <image src="/chenxisoft${worker.expertPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
-	        </div>
-	        <div class="ftitle">
-	                                    评论列表<a href="#" style="">查看更多</a>
-	        </div>
-	        
-	        
-	        <ul class="ui-list ui-border-tb" style="font-size:12px;">
-		        <c:forEach items="${comments}" var="comment">
-	                <li>
-	                    <div class="ui-avatar-lg">
-	                        <span style="background-image:url(/chenxisoft/${comment.userPhoto})"></span>
-	                    </div>
-	                    <div class="ui-list-info ui-border-t">
-	                         ${comment.content}
-	                    </div>
-	                </li>
-	            </c:forEach>
-            </ul>
 
 	        <div class="ui-btn-wrap">
-	            <button class="ui-btn-lg ui-btn-primary" id="addOrder">
-	                                     立即预订
+	            <button class="ui-btn-lg ui-btn-primary">
+	                                     立即支付
 	            </button>
 	        </div>
 	</div>
@@ -154,9 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}
 			  };
 	         
-		     $(document).on('click','#addOrder',function(){
-		         location.href=window.BASEPATH+'/worker/mobile/addorder?workerId='+${worker.id};
-		     });
+		     
 	          
 	     });
 	

@@ -31,7 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
     </header>
 	
-	<div class="demo-item" style="margin-top:50px;">
+	<div class="demo-item">
 		<div class="demo-block">
 			<ul id="workerList" class="ui-list ui-border-tb ">
 				
@@ -63,12 +63,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	       
 	          
 	          function getPage(isinit){
-	              var _uriWorker = window.BASEPATH + 'home/getworkers?currPage='+currPage+'&pageCount='+pageCount;
+	              var _uriWorker = window.BASEPATH + 'worker/list?currPage='+currPage+'&pageCount='+pageCount;
 		
 				  $.get(_uriWorker, null, function(data){
 				       currPage+=1;
 				       data = parseAjaxResult(data);
-				       if(!isinit&&data.length!=0){
+				       if(data.workers.length!=0){
 				          $('#loading').fadeIn().show();
 				       }
 				       if(isinit){
@@ -86,29 +86,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          function initList(data){
 	               var html=[];
 
-	               if(data){
-	                  for(var i=0;i<data.length;i++){
-	                     
-				         html.push('<li class="worker" id="wor-'+data[i].id+'">');
+	               if(data.workers){
+	                  for(var i=0;i<data.workers.length;i++){
+				         html.push('<li class="worker" id="wor-'+data.workers[i].id+'">');
 						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url(/chenxisoft/'+data[i].photo+')"></span></div>');
+						 html.push('        <span style="background-image:url('+data.workers[i].photo+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
-						 html.push('		<p style="font-size:13px;">'+data[i].realName+'<span style="color:red;margin-left:5px;">(带过'+data[i].orderCount+'个孩子)</span></p>');
-						 html.push('<div style="height:5px;">&nbsp;</div>');
-						 html.push('		<p class="ui-nowrap" style="font-size:13px;">');
-						 var subHtml=[];
-						 if(data[i].idCardPhoto){
-						    subHtml.push('<span style="color:green">身份证</span>');
-						 }
-						 if(data[i].healthPhoto){
-						    subHtml.push('<span style="color:green">健康证明</span>');
-						 }
-						 if(data[i].expertPhoto){
-						    subHtml.push('<span style="color:green">职业证书</span>');
-						 }
-						 html.push(subHtml.join('&nbsp;&nbsp;&nbsp;&nbsp;'))
-                         html.push('</p>');
-                         html.push('<p style="font-size:13px;">12.85km</p>');
+						 html.push('		<div style="font-size:13px;">'+data.workers[i].realName+'</div>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">'+data.workers[i].labelStr+'</p>');
 						 html.push('	</div>');
 						 html.push('</li>'); 
 				       }
@@ -133,7 +118,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		      
 		      $(document).on('click','.worker',function(){
 		         var ids=this.id.split('-');
-	             location.href=window.BASEPATH +'worker/mobile/index?workerId='+ids[1];
+	
 		      
 		      });
 		      

@@ -55,12 +55,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	        <div class="ui-list-info ui-border-t">
 	            <h4 class="ui-nowrap">黄靖宇</h4>
-	            <p>积分:0</p>
+	            <p>未提取佣金:￥18000</p>
 	        </div>
 	    </li>
     </ul>
-    <div class="ftitle">
-	              订单管理
+    
+	<div class="ftitle">
+	             基本设置
+	</div>
+    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">佣金提现</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">账户中心</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">用户评论</h4> 
+	        </div>
+	    </li>
+	</ul>
+	
+	<div class="ftitle">
+	            月嫂订单
 	</div>
     <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
 	    <li class="ui-border-t">
@@ -78,24 +100,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <h4 class="ui-nowrap" style="font-size:14px;">已完成</h4> 
 	        </div>
 	    </li>
-	</ul>
-	
-	
-	<div class="ftitle">
-	             通用
-	</div>
-    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂中心</h4> 
-	        </div>
-	    </li>
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4> 
-	        </div>
-	    </li>
-	    
+	   
 	</ul>
 
 	<script type="text/javascript">
