@@ -664,12 +664,13 @@ public class ProductController extends BaseController {
 		product.setIfFace(ifFace);
 		product.setIsgroup(isgroup);
 		conn_product.saveOrUpdate(product);
-		//如果是的话
-		int groupnum=Integer.parseInt(request.getParameter("groupnum"));
-		long groupprice=Long.parseLong(request.getParameter("groupprice"));
-		long grouptime=Long.parseLong(request.getParameter("grouptime"));
-		long productId=product.getId();
+		
 		if(isgroup==1){
+			//如果是的话
+			int groupnum=Integer.parseInt(request.getParameter("groupnum"));
+			long groupprice=Long.parseLong(request.getParameter("groupprice"));
+			long grouptime=Long.parseLong(request.getParameter("grouptime"));
+			long productId=product.getId();
 			if(conn_groupbuydao.findByProductId(productId)!=null){
 				GroupBuyPO group=conn_groupbuydao.findByProductId(productId);
 				group.setGroupnum(groupnum);

@@ -110,9 +110,6 @@ public class BusinessController extends WebBaseControll {
 
 	@Autowired
 	private OrderInfoDAO orderInfoDao;
-	
-	@Autowired
-	private GroupTeamDAO groupteamDao;
 	@Autowired
 	private GroupBuyDAO groupbuyDao;
 	@Autowired
@@ -339,7 +336,7 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getallteam", method = RequestMethod.GET)
 	public List<GroupTeamPO> getallteam(Long productId) throws Exception {
-		List<GroupTeamPO> teams = groupteamDao.findByProductId(productId);
+		List<GroupTeamPO> teams = groupteam.findByProductId(productId);
 		return teams;
 	}
 
@@ -358,6 +355,21 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("product", product);
 		mv.addObject("userId", userId);
 		mv.addObject("team", team);
+		return mv;
+	}
+	
+	// 跳转team详情页面
+	@ResponseBody
+	@RequestMapping(value = "/groupteam", method = RequestMethod.GET)
+	public ModelAndView cate(Long teamId) throws Exception {
+		ModelAndView mv = null;
+		GroupTeamPO team = groupteam.get(teamId);
+		ProductPO product = conn_product.get(team.getProductid());
+		GroupBuyPO groupBuyPO = conn_groupbuy.findByProductId(team.getProductid());
+		mv = new ModelAndView("mobile/business/groupteam");
+		mv.addObject("team", team);
+		mv.addObject("product", product);
+		mv.addObject("groupBuyPO", groupBuyPO);
 		return mv;
 	}
 	

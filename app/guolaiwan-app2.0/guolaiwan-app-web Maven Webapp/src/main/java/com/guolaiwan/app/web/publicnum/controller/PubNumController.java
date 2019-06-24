@@ -59,8 +59,6 @@ import com.guolaiwan.bussiness.admin.dao.ChildProductDAO;
 import com.guolaiwan.bussiness.admin.dao.CollectionDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
-import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
-import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
@@ -91,8 +89,6 @@ import com.guolaiwan.bussiness.admin.po.ChildProductPO;
 import com.guolaiwan.bussiness.admin.po.CollectionPO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
-import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
-import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
 import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
@@ -215,7 +211,7 @@ public class PubNumController extends WebBaseControll {
 				// TODO: handle exception
 				nickname = "无法获取用户名";
 			}
-			
+
 			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
 		} else {
 			openid = "opVUYv7wr-zPKl92ilFpqB8yS82I";
@@ -727,9 +723,10 @@ public class PubNumController extends WebBaseControll {
 		mv.addObject("muserId", muserId);
 		return mv;
 	}
-	
+
 	/**
 	 * 商户中心页面心跳
+	 * 
 	 * @param request
 	 * @throws Exception
 	 */
@@ -738,7 +735,7 @@ public class PubNumController extends WebBaseControll {
 		Long merchantId = Long.parseLong(request.getParameter("merchantId"));
 		conn_merchant.get(merchantId).setLastexercisetime(new Date());
 	}
-	
+
 	@RequestMapping(value = "/admin/olchat")
 	public ModelAndView olchat(HttpServletRequest request) throws Exception {
 		Long merchantId = Long.parseLong(request.getSession().getAttribute("merchantId").toString());
@@ -751,7 +748,6 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 
-	
 	@Autowired
 	private SysConfigDAO conn_sys;
 
@@ -1314,8 +1310,7 @@ public class PubNumController extends WebBaseControll {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/delCollectionPro", method = RequestMethod.POST)
-	public Object delCollectionPro(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public Object delCollectionPro(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 解析json
 		HttpServletRequestParser parser = new HttpServletRequestParser(request);
 		JSONObject pageObject = parser.parseJSON();
@@ -2157,7 +2152,7 @@ public class PubNumController extends WebBaseControll {
 		long userMoney = user.getWallet();
 		user.setWallet(userMoney + money);
 		conn_user.saveOrUpdate(user);
-		// 调用方法推送充值消息给 李姐  用户
+		// 调用方法推送充值消息给 李姐 用户
 		sendWalletPayMessage(order);
 		return success(1);
 	}
@@ -2177,7 +2172,7 @@ public class PubNumController extends WebBaseControll {
 			order.setOrderState(OrderStateType.PAYSUCCESS);
 			conn_order.saveOrUpdate(order);
 			conn_user.saveOrUpdate(user);
-			// 推送购买商品成功信息给用户 商家 李姐 
+			// 推送购买商品成功信息给用户 商家 李姐
 			sendPayMessage(order);
 		} else {
 			// 余额不足 不允许购买
@@ -2346,7 +2341,6 @@ public class PubNumController extends WebBaseControll {
 
 		// opVUYv9LtqKAbiaXInBqI01hlpYg
 
-		
 	}
 
 	/**
@@ -2447,8 +2441,6 @@ public class PubNumController extends WebBaseControll {
 
 		// opVUYv9LtqKAbiaXInBqI01hlpYg
 
-		
-
 	}
 
 	// 修改快递单号的接口
@@ -2501,8 +2493,8 @@ public class PubNumController extends WebBaseControll {
 	}
 
 	/**
-	 * 页面发送消息的方法
-	 * 客服在线咨询
+	 * 页面发送消息的方法 客服在线咨询
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -2517,20 +2509,20 @@ public class PubNumController extends WebBaseControll {
 		String msg = request.getParameter("message");
 		// 发给的userID
 		long touser;
-		//客服人员
+		// 客服人员
 		long chatUserId = conn_merchant.get(merchantId).getChatUserId();
 		MerchantPO merchant = conn_merchant.get(merchantId);
 		// 如果页面带回来有touser 就对这个id发送 没有就是给商户发送
 		if (request.getParameter("touser") != "" & request.getParameter("touser") != null) {
 			touser = Long.parseLong(request.getParameter("touser"));
 		} else {
-			if(conn_merchantuser.getUserByMerchantId(merchantId)!=null){
+			if (conn_merchantuser.getUserByMerchantId(merchantId) != null) {
 				// 商家的userId
 				touser = conn_merchantuser.getUserByMerchantId(merchantId).getUserId();
-			}else if(chatUserId!=0){
-				touser =chatUserId;
-			}else{
-				touser=0;
+			} else if (chatUserId != 0) {
+				touser = chatUserId;
+			} else {
+				touser = 0;
 			}
 		}
 		UserInfoPO userpo = conn_user.get(userId);
@@ -2543,34 +2535,34 @@ public class PubNumController extends WebBaseControll {
 		ol.setTouserId(touser);
 		ol.setUserheadimg(userpo.getUserHeadimg());
 		conn_olchatmessage.save(ol);
-		//获取到客服再商户页面内最后的活动时间
-		Date lasttime=merchant.getLastexercisetime();
-		long cha=0;
-		if(lasttime!=null){
-			//计算出用户发送信息的时间距离客服在商户页面内最后的活动时间差
-			cha=((new Date().getTime())-(lasttime.getTime()))/(1000*60);
-			//相差1分钟时 推送公众号提醒客服有消息
-			if(cha>1){
-				sendStoreRemind(touser,userId,merchantId);
+		// 获取到客服再商户页面内最后的活动时间
+		Date lasttime = merchant.getLastexercisetime();
+		long cha = 0;
+		if (lasttime != null) {
+			// 计算出用户发送信息的时间距离客服在商户页面内最后的活动时间差
+			cha = ((new Date().getTime()) - (lasttime.getTime())) / (1000 * 60);
+			// 相差1分钟时 推送公众号提醒客服有消息
+			if (cha > 1) {
+				sendStoreRemind(touser, userId, merchantId);
 			}
-		}else{
-			//这里是客服没有在商户出现过 防止没有客服的商家提醒时发生错误
-			sendStoreRemind(touser,userId,merchantId);
+		} else {
+			// 这里是客服没有在商户出现过 防止没有客服的商家提醒时发生错误
+			sendStoreRemind(touser, userId, merchantId);
 		}
-		
+
 		return request;
 	}
-	
-	
+
 	/**
 	 * 通知商家客服有新消息
 	 */
-	public void sendStoreRemind(long touser,long userId,long merchantId){
-		if(touser==0)return;
+	public void sendStoreRemind(long touser, long userId, long merchantId) {
+		if (touser == 0)
+			return;
 		UserInfoPO user = conn_user.get(touser);
 		UserInfoPO user1 = conn_user.get(userId);
 		JSONObject obj1 = new JSONObject();
-		obj1.put("touser",user.getUserOpenID() );
+		obj1.put("touser", user.getUserOpenID());
 		obj1.put("template_id", "v9eHHHq4Fu-Q45Pa0oBfibxd032Yq_9rAkqDZZ-V2G4");
 		obj1.put("url", "");
 		JSONObject microProObj1 = new JSONObject();
@@ -2582,14 +2574,14 @@ public class PubNumController extends WebBaseControll {
 		firstObj1.put("value", "在线咨询通知");
 		firstObj1.put("color", "");
 		dataObject1.put("first", firstObj1);
-		
+
 		JSONObject nameObj = new JSONObject();
 		nameObj.put("value", user1.getUserNickname());
 		nameObj.put("color", "");
 		dataObject1.put("keyword1", nameObj);
 
 		JSONObject accountTypeObj = new JSONObject();
-		accountTypeObj.put("value",DateUtil.getNowDate());
+		accountTypeObj.put("value", DateUtil.getNowDate());
 		accountTypeObj.put("color", "");
 		dataObject1.put("keyword2", accountTypeObj);
 
@@ -2597,14 +2589,14 @@ public class PubNumController extends WebBaseControll {
 		accountObj.put("value", "上帝光临并在线咨询!请尽快查看~");
 		accountObj.put("color", "");
 		dataObject1.put("keyword3", accountObj);
-		
+
 		JSONObject remarkObj1 = new JSONObject();
 		remarkObj1.put("value", "查看方法：点击客户服务→商户中心→登录商户（如已登录请忽略）→在线咨询");
 		remarkObj1.put("color", "");
 		dataObject1.put("remark", remarkObj1);
 		obj1.put("data", dataObject1);
 		SendMsgUtil.sendTemplate(obj1.toJSONString());
-		
+
 		conn_merchant.get(merchantId).setLastexercisetime(new Date());
 	}
 
@@ -2702,6 +2694,4 @@ public class PubNumController extends WebBaseControll {
 		}
 		return map;
 	}
-	
-	
 }

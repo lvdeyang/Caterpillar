@@ -12,6 +12,10 @@ public class GroupTeamPO extends AbstractBasePO {
 	private static final long serialVersionUID = 8185751348556679850L;
 	//用户id
 	private long userid;
+	//用户昵称
+	private String usernickname;
+	//用户头像
+	private String userheadimg;
 	//是否是队长
 	private boolean iscaptain;
 	//队长id
@@ -20,6 +24,28 @@ public class GroupTeamPO extends AbstractBasePO {
 	private	long groupbuyid;
 	//拼团商品id
 	private long productid;
+	//拼团时间限制
+	private int grouptime;
+	
+	
+	public int getGrouptime() {
+		return grouptime;
+	}
+	public void setGrouptime(int grouptime) {
+		this.grouptime = grouptime;
+	}
+	public String getUsernickname() {
+		return usernickname;
+	}
+	public void setUsernickname(String usernickname) {
+		this.usernickname = usernickname;
+	}
+	public String getUserheadimg() {
+		return userheadimg;
+	}
+	public void setUserheadimg(String userheadimg) {
+		this.userheadimg = userheadimg;
+	}
 	public long getUserid() {
 		return userid;
 	}

@@ -20,9 +20,64 @@ public class DistributeProductVo extends AbstractBaseVO<DistributeProductVo, Dis
     private String address;
     private String openTime;
     private String tel;
+    private int proleft; //库存
+    private long store; // 店铺上下架
+	private double retailPrice; // 零售价钱
+	private long retailRepertory; // 零售库存
     
-    
-    
+	
+	public long getStore() {
+		return store;
+	}
+
+
+
+	public DistributeProductVo setStore(long store) {
+		this.store = store;
+		return this;
+	}
+
+
+
+	public double getRetailPrice() {
+		return retailPrice;
+	}
+
+
+
+	public DistributeProductVo setRetailPrice(double retailPrice) {
+		this.retailPrice = retailPrice;
+		return this;
+	}
+
+
+
+	public long getRetailRepertory() {
+		return retailRepertory;
+	}
+
+
+
+	public DistributeProductVo setRetailRepertory(long retailRepertory) {
+		this.retailRepertory = retailRepertory;
+		return this;
+	}
+
+
+
+	public int getProleft() {
+		return proleft;
+	}
+
+
+
+	public DistributeProductVo setProleft(int proleft) {
+		this.proleft = proleft;
+		return this;
+	}
+
+
+
 	public String getAddress() {
 		return address;
 	}
@@ -124,7 +179,10 @@ public class DistributeProductVo extends AbstractBaseVO<DistributeProductVo, Dis
 		.setSellPrice(entity.getSellPrice())
 		.setAddress(entity.getProduct().getProductCityName())
 		.setTel("")
-		
+		.setStore(entity.getStore())
+		.setRetailPrice(entity.getRetailPrice())
+		.setRetailRepertory(entity.getRetailRepertory())
+		.setProleft(entity.getProleft())
 		.setOpenTime(DateUtil.format(entity.getProduct().getProductEctivedate()))
 		.setPrice(entity.getPrice());
 		
