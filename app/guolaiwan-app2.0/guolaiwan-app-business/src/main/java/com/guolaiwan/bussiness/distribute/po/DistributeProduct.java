@@ -26,7 +26,7 @@ public class DistributeProduct extends AbstractBasePO {
 	private ProductPO product;
 	private long distributorId;
 	private DistributorType distributorType;
-	private int proleft;
+	private int proleft; //库存
 	private int minAmount;
 	private double price;//分
 	private double sellPrice;
@@ -35,9 +35,30 @@ public class DistributeProduct extends AbstractBasePO {
 	private int online;
 	private long regionId;
 	private long proRegionId;
+	private long store; // 店铺上下架
+	private double retailPrice; // 零售价钱
+	private long retailRepertory; // 零售库存
 	
 	
 	
+	public double getRetailPrice() {
+		return retailPrice;
+	}
+	public void setRetailPrice(double retailPrice) {
+		this.retailPrice = retailPrice;
+	}
+	public long getRetailRepertory() {
+		return retailRepertory;
+	}
+	public void setRetailRepertory(long retailRepertory) {
+		this.retailRepertory = retailRepertory;
+	}
+	public long getStore() {
+		return store;
+	}
+	public void setStore(long store) {
+		this.store = store;
+	}
 	public long getRegionId() {
 		return regionId;
 	}
