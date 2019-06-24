@@ -22,10 +22,12 @@ public class OrderPo extends AbstractBasePO{
 	private String workName;
 	private long userId;
 	private String userName;
+	private String worderPhoto;
 	private double price;
 	private String region;
 	private int days;
 	private OrderStatus orderStatus;
+	private String fromDateStr;
     
 	public Date getFromDate() {
 		return fromDate;
@@ -90,6 +92,20 @@ public class OrderPo extends AbstractBasePO{
 	}
 	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+	
+	public String getWorderPhoto() {
+		return worderPhoto;
+	}
+	public void setWorderPhoto(String worderPhoto) {
+		this.worderPhoto = worderPhoto;
+	}
+	@Transient
+	public String getFromDateStr() {
+		return fromDateStr;
+	}
+	public void setFromDateStr(String fromDateStr) {
+		this.fromDateStr = fromDateStr;
 	}
 	
 	
