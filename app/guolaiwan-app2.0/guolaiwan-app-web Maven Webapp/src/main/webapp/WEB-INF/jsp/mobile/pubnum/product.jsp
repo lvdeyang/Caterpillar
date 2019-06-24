@@ -513,12 +513,12 @@ html, body {
 
 
 #proContent img{
-    width:250px;
-    height:250px;
+    width:320px;
+  
 }
 #proContent image{
-    width:250px;
-    height:250px;
+    width:320px;
+  
 }
  #roomList{
        width:100%;
@@ -559,7 +559,9 @@ input[type="datetime-local"]:before{
 .names,.idnums{
      margin-top:30px;
 }
-
+.icon-map-marker,.icon-mobile-phone{
+ font-size:18px;
+}
 
 /* 对话框样式 */   
   input,button{outline:none;}
