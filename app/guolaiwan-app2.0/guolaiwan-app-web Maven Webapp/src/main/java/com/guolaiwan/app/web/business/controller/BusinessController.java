@@ -36,6 +36,7 @@ import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.SystemCacheDao;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
+import com.guolaiwan.bussiness.admin.dao.VideoPicDAO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
 import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
@@ -43,10 +44,11 @@ import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.admin.po.VideoPicPO;
+import com.guolaiwan.bussiness.coupleback.dao.CoupleBackDao;
+import com.guolaiwan.bussiness.coupleback.po.CoupleBackPO;
 import com.guolaiwan.bussiness.nanshan.dao.NsVideoPicDAO;
 import com.guolaiwan.bussiness.nanshan.dao.ProblemDao;
-import com.guolaiwan.bussiness.nanshan.po.NsVideoPicPO;
-import com.guolaiwan.bussiness.nanshan.po.ProblemPo;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
@@ -110,7 +112,7 @@ public class BusinessController extends WebBaseControll {
 
 	@Autowired
 	private OrderInfoDAO orderInfoDao;
-	
+
 	@Autowired
 	private GroupTeamDAO groupteamDao;
 	@Autowired
@@ -119,6 +121,10 @@ public class BusinessController extends WebBaseControll {
 	private GroupBuyDAO conn_groupbuy;
 	@Autowired
 	private GroupTeamDAO groupteam;
+	@Autowired
+	private VideoPicDAO videopicDao;
+	@Autowired
+	private CoupleBackDao coupleBackDao;
 
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
@@ -168,11 +174,11 @@ public class BusinessController extends WebBaseControll {
 	// 南山攻略需要的数据
 	@ResponseBody
 	@RequestMapping(value = "/getVideoPics", method = RequestMethod.GET)
-	public List<Map<String, Object>> getVideoPics() throws Exception {
+	public List<Map<String, Object>> getVideoPics(long merchantId) throws Exception {
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		List<NsVideoPicPO> _videoPics = nsvideopicDao.findAll();
-		for (NsVideoPicPO nsVideoPicPO : _videoPics) {
+		List<VideoPicPO> _videoPics = videopicDao.getbymerchantId(merchantId);
+		for (VideoPicPO nsVideoPicPO : _videoPics) {
 			Map<String, Object> hashMap = new HashMap<String, Object>();
 			List<UserInfoPO> usInfoPO = userDao.getUserByUid(nsVideoPicPO.getUserId());
 			hashMap.put("userimg", usInfoPO.get(0).getUserHeadimg());
@@ -187,10 +193,10 @@ public class BusinessController extends WebBaseControll {
 	// 南山常见问题的列表
 	@ResponseBody
 	@RequestMapping(value = "/getProblem", method = RequestMethod.GET)
-	public List<Map<String, Object>> getProblem() throws Exception {
-		List<ProblemPo> ProblemPoList = problemDao.findAll();
+	public List<Map<String, Object>> getProblem(long merchantId) throws Exception {
+		List<CoupleBackPO> ProblemPoList = coupleBackDao.getbymerchantId(merchantId);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for (ProblemPo problemPo : ProblemPoList) {
+		for (CoupleBackPO problemPo : ProblemPoList) {
 			Map<String, Object> hashMap = new HashMap<String, Object>();
 			hashMap.put("content", problemPo.getContent());
 			hashMap.put("replycontent", problemPo.getReplycontent());
@@ -302,11 +308,11 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("modularCode", modularCode);
 		return mv;
 	}
-	
+
 	// 跳转拼团页面
 	@ResponseBody
 	@RequestMapping(value = "/group", method = RequestMethod.GET)
-	public ModelAndView group(HttpServletRequest request,Long merchantId) throws Exception {
+	public ModelAndView group(HttpServletRequest request, Long merchantId) throws Exception {
 		ModelAndView mv = null;
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		mv = new ModelAndView("mobile/business/groupproduct");
@@ -314,7 +320,7 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("userId", userId);
 		return mv;
 	}
-	
+
 	// 获取这个商户的所有拼团商品
 	@JsonBody
 	@ResponseBody
@@ -325,7 +331,7 @@ public class BusinessController extends WebBaseControll {
 		List<GroupBuyPO> findAll = groupbuyDao.findAll();
 		for (ProductVO productVO : listvo) {
 			for (GroupBuyPO GroupBuyPO : findAll) {
-				if(productVO.getId()==GroupBuyPO.getProductid()){
+				if (productVO.getId() == GroupBuyPO.getProductid()) {
 					productVO.setGroupnum(GroupBuyPO.getGroupnum());
 					productVO.setGroupprice(GroupBuyPO.getGroupprice());
 				}
@@ -333,7 +339,7 @@ public class BusinessController extends WebBaseControll {
 		}
 		return listvo;
 	}
-	
+
 	// 获取这个商品的所拼的团
 	@JsonBody
 	@ResponseBody
@@ -343,7 +349,7 @@ public class BusinessController extends WebBaseControll {
 		return teams;
 	}
 
-	//进入拼团的开团页面
+	// 进入拼团的开团页面
 	@ResponseBody
 	@RequestMapping(value = "/grouping")
 	public ModelAndView grouping(HttpServletRequest request) throws Exception {
@@ -360,5 +366,5 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("team", team);
 		return mv;
 	}
-	
+
 }
