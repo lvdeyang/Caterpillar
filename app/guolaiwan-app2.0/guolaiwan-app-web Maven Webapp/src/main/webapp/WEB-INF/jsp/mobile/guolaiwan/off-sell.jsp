@@ -474,27 +474,39 @@ border:none !important;
 				return data.data;		
 			}
 	  };
+	  
+	  	var _uriProduct = window.BASEPATH + 'distributor/query/dispro/${disId}';
+		$.get(_uriProduct, null, function(data){
+			data = parseAjaxResult(data);
+			if(data === -1) return;
+			if(data && data.length>0){
+			   var html=[];
+			   for(var i=0;i<data.length;i++){
+				   html.push(' <div class="main" style="width:100%;">');
+				   html.push('  <div class="main_in" style="width:47.5%;margin:5px 1%;display: inline-block;text-align: center;float:left;">');
+				   html.push(' <img style="width:100%;height:120px;margin:5px 0; "  src="'+ data[i].pic+'"/>');
+				   html.push(' 名称：<span>'+data[i].name+'</span>');
+				   html.push('<a href="javascript:;" onclick="Withdraw('+data[i].id+')" class="weui-btn weui-btn_warn" style="font-size:14px;">库存：<span>'+data[i].retailRepertory+'</span></a>');
+				   html.push(' <a href="javascript:;" onclick="invest('+data[i].id+')" class="weui-btn weui-btn_warn" style="font-size:14px;">金额：<span>'+data[i].retailPrice+'</span></a>');
+				   html.push(' <div style="margin-top:10px;">');
+				   html.push('<a onclick="putaWay('+data[i].id+')" style="width:46.5%;border-radius:20px;font-size:14px;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">上架</a>');
+				   html.push('<a onclick="below('+data[i].id+')"   style="width:46.5%;border-radius:20px;font-size:14px;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">下架 </a>  ');
+				   html.push(' </div> ');
+				   html.push(' </div> ');
+			  };
+			   $('#page').append(html.join(''));
+				
+			}
+			
+		});
+     
+ 
+	    
       var _uriAddress = window.BASEPATH +'distributor/getCommodity/${disId}';
 		$.get(_uriAddress, null, function(data){
 			data = parseAjaxResult(data);
-			var html=[];
-			for(var i=0;i<data.length;i++){
-			   html.push(' <div class="main" style="width:100%;">');
-			   html.push('  <div class="main_in" style="width:47.5%;margin:5px 1%;display: inline-block;text-align: center;float:left;">');
-			   html.push(' <img style="width:100%;height:120px;margin:5px 0; "  src="'+ 'http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
-			   html.push(' 名称：<span>'+data[i].productName+'</span>');
-			   html.push('<a href="javascript:;" onclick="Withdraw('+data[i].id+')" class="weui-btn weui-btn_warn" style="font-size:14px;">库存：<span>'+data[i].productStock+'</span></a>');
-			   html.push(' <a href="javascript:;" onclick="invest('+data[i].id+')" class="weui-btn weui-btn_warn" style="font-size:14px;">金额：<span>'+data[i].productPrice+'</span></a>');
-			   html.push(' <div style="margin-top:10px;">');
-			   html.push('<a onclick="putaWay('+data[i].id+')" style="width:46.5%;border-radius:20px;font-size:14px;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">上架</a>');
-			   html.push('<a onclick="below('+data[i].id+')"   style="width:46.5%;border-radius:20px;font-size:14px;float:right;background-color:#18b4ed;height:40px;line-height:40px;margin-top:0" href="javascript:;" class="weui-btn weui-btn_primary">下架 </a>  ');
-			   html.push(' </div> ');
-			   html.push(' </div> ');
-			};
-			   $('#page').append(html.join(''));
+			
 		});
-	    
-	    
 	    
 	
 	});
@@ -525,7 +537,7 @@ border:none !important;
 		  title: '请您输入商品金额：（元）',
 		 empty: false, // 是否允许为空
 		  onOK: function (input) {
-		    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
+		    if(/^[0-9]+([.]{1}[0-9]+){0,1}$/.test(input)){
 		    	 $.get(window.BASEPATH+'distributor/amendInventory/'+ProductId+'/'+input+'/'+0,null,function(data){
 		    	  window.location.reload();
 				});

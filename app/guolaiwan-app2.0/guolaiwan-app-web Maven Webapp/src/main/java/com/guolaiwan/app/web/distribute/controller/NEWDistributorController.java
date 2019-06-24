@@ -881,36 +881,36 @@ public class NEWDistributorController {
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/amendInventory/{ProductId}/{input}/{judge}", method = RequestMethod.GET)
-	public Object AmendInventory( @PathVariable Long ProductId,@PathVariable Long input,@PathVariable Long judge,HttpServletRequest request) throws Exception {
-		ProductPO productCount =  conn_product.getProductByProId(ProductId).get(0);
+	public Object AmendInventory( @PathVariable Long ProductId,@PathVariable Double input,@PathVariable Long judge,HttpServletRequest request) throws Exception {
+		DistributeProduct products  =	conn_dispro.getByField("id",ProductId);
 		if (judge == 1 && judge !=null) {
-			productCount.setProductStock(input);
+			products.setRetailRepertory(input.intValue());
 		}else if (judge != null) {
-			productCount.setProductPrice(input*100);
+			products.setRetailPrice(input);
 		}
-		conn_product.save(productCount);
+		conn_dispro.save(products);
 		return "";
 	}
 	
 	/**
-	 * 修改状态
+	 * 修改状态 上下架
 	 * @param disId
 	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
+	//TODO
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/amendState/{ProductId}/{judge}", method = RequestMethod.GET)
 	public Object AmendState( @PathVariable Long ProductId,@PathVariable String judge,HttpServletRequest request) throws Exception {
-		ProductPO productCount =  conn_product.getProductByProId(ProductId).get(0);
-		System.out.println(judge);
-		if ("T" .equals(judge)  && judge !=null) {
-			productCount.setProductAuditstatus(ShopAuditStateType.T);
-		}else if (judge != null) {
-			productCount.setProductAuditstatus(ShopAuditStateType.D);
+		DistributeProduct products  =	conn_dispro.getByField("id",ProductId);
+		if ("T" .equals(judge)  && judge !=null&&products != null) {
+			products.setStore(1);
+		}else if (judge != null&&products != null) {
+			products.setStore(0);
 		}
-		conn_product.save(productCount);
+		conn_dispro.save(products);
 		return "";
 	}
 

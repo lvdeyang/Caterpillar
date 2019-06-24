@@ -499,7 +499,7 @@ html, body {
                      html.push('<a href="javascript:void(0)" class="modify" id="mod-'+data[i].id+'">修改</a>|'
                      +'<a href="javascript:void(0)" class="online" id="online-'+data[i].id+'">上架</a>|'
                      +'<a href="javascript:void(0)" class="offline" id="offline-'+data[i].id+'">下架</a>|'
-                     +'<a href="javascript:void(0)" class="offsell" id="offsell-'+data[i].id+'">线下销售</a>');
+                     +'<a href="javascript:void(0)" class="offsell" id="offsell-'+data[i].id+'">店铺上架</a>');
                      html.push('</div>');
                      html.push('</td>');
                      
@@ -561,7 +561,7 @@ html, body {
 		});
 		$(document).on('click','.offsell',function(){
 		     var ids=this.id.split('-');
-		     location.href=window.BASEPATH + "distributor/off/sell?proId="+ids[1];
+		     location.href=window.BASEPATH + "distributor/off/sell?disId="+${distributorId};
 		});
 		
 		

@@ -14,7 +14,7 @@ import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
 import pub.caterpillar.orm.hql.QueryHql;
 
-@Repository("CommentDao")
+@Repository("YueBaCommentDao")
 public class CommentDao extends AbstractBaseDao<CommentPo> {
 	public int countByworkerId(long workerId){
 		return countByField("workerId", workerId);
