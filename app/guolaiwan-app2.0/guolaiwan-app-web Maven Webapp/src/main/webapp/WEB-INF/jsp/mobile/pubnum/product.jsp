@@ -8,7 +8,6 @@
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
 <head>
-
 <!-- 声明文档使用的字符编码 -->
 <meta charset='utf-8'>
 <!-- 优先使用 IE 最新版本和 Chrome -->
@@ -25,7 +24,6 @@
 <meta name="viewport"
 	content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
 <!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
-
 <!-- iOS 设备 begin -->
 <meta name="apple-mobile-web-app-title" content="标题">
 <!-- 添加到主屏后的标题（iOS 6 新增） -->
@@ -566,12 +564,12 @@ input[type="datetime-local"]:before{
 /* 对话框样式 */   
   input,button{outline:none;}
 	.wenwen-footer{width:100%;position:fixed;bottom:-5px;left:0;background:#fff;padding:3%;border-top:solid 1px #ddd;box-sizing:border-box;}
-	.wenwen_btn,.wenwen_help{width:15%;text-align:center;}
+	.wenwen_btn,.wenwen_help{width:15%;text-align:center;-webkit-user-select:text !important;}
 	.wenwen_btn img,.wenwen_help img{height:40px;}
 	.wenwen_text{height:40px;border-radius:5px;border:solid 1px #636162;box-sizing:border-box;width:80%;text-align:center;overflow:hidden;margin-left:2%;}
 	.circle-button{padding:0 5px;}
 	.wenwen_text .circle-button{font-size:14px;color:#666;line-height:38px;}
-	.write_box{background:#fff;width:100%;height:40px;line-height:40px;}
+	.write_box{background:#fff;width:100%;height:40px;line-height:40px;-webkit-user-select:text !important;}
 	.write_box input{height:40px;padding:0 5px;line-height:40px;width:100%;box-sizing:border-box;border:0;}
 	.wenwen_help button{width:100%;background:#42929d;color:#fff;border-radius:5px;border:0;height:40px;}
 	#wenwen{height:100%;}
@@ -581,7 +579,7 @@ input[type="datetime-local"]:before{
 	.question{text-align:right;margin-top:50px;}
 	.question>div{display:inline-block;}
 	.left{float:left;cursor:pointer}
-	.right{float:right;cursor:pointer}
+	.right{float:right;cursor:pointer;}
 	.clear{clear:both;}
 	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
 	.heard_img img{width:100%;height:100%}
@@ -773,7 +771,7 @@ input[type="datetime-local"]:before{
 		
 		function initLogistics(data){
 		   var html=[];
-		   for(var i=0;i<2;i++){
+		   for(var i=0;i<data.length;i++){
 		      html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
 		   }
 		   $('#logisticsList').append(html.join(''));
@@ -1881,9 +1879,16 @@ addmessage();
     })   
 	            	
 	 
-	
+	 $(document).on('click',' #left',function(){
+        setTimeout(function(){ 
+            document.body.scrollTop = document.body.scrollHeight; 
+        },200); 
+    })
 	//消息发送方法
 	 function SubSend(){
+	 
+	   
+	 
 	 	var message="";
 	 	var userId=${userId};
 		var merchantId=${merchantId};
@@ -2254,7 +2259,7 @@ addmessage();
 	<div class="wenwen_btn left" onClick="to_write()"></div>
 	<div class="wenwen_text left">
 	    <div class="write_box">
-	        <input type="text" class="left" id="left" onKeyUp="keyup()" placeholder="请输入关键字" />
+	        <input type="text" class="left" id="left"  placeholder="请输入关键字" />
 	    </div> 
 	      
 	</div>
