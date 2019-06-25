@@ -23,6 +23,7 @@ public class OrderPo extends AbstractBasePO{
 	private long userId;
 	private String userName;
 	private String worderPhoto;
+	private String userPhone;
 	private double price;
 	private String region;
 	private int days;
@@ -106,6 +107,12 @@ public class OrderPo extends AbstractBasePO{
 	}
 	public void setFromDateStr(String fromDateStr) {
 		this.fromDateStr = fromDateStr;
+	}
+	public String getUserPhone() {
+		return userPhone;
+	}
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
 	}
 	
 	

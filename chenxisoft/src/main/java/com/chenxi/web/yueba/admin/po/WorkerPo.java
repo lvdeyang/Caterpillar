@@ -31,7 +31,7 @@ public class WorkerPo extends AbstractBasePO{
 	private String lon;
 	private int ration;//百分比
 	private int orderCount;
-	
+	private String level;
 	
 
 	public String getUserName() {
@@ -144,6 +144,12 @@ public class WorkerPo extends AbstractBasePO{
 	}
 	public void setOrderCount(int orderCount) {
 		this.orderCount = orderCount;
+	}
+	public String getLevel() {
+		return level;
+	}
+	public void setLevel(String level) {
+		this.level = level;
 	}
 	
 	

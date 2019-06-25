@@ -59,28 +59,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	    </li>
     </ul>
-    <div class="ftitle">
-	              订单管理
-	</div>
-    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">已预定</h4> 
-	        </div>
-	    </li>
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">进行中</h4> 
-	        </div>
-	    </li>
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">已完成</h4> 
-	        </div>
-	    </li>
-	</ul>
-	
-	
+    
 	<div class="ftitle">
 	             通用
 	</div>
@@ -88,6 +67,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <li class="ui-border-t">
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂中心</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">浏览记录</h4> 
 	        </div>
 	    </li>
 	    <li class="ui-border-t">

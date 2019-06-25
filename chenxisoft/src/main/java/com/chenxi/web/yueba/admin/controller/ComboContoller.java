@@ -24,6 +24,7 @@ import com.chenxi.web.po.ProductPo;
 import com.chenxi.web.yueba.admin.dao.ComboDao;
 import com.chenxi.web.yueba.admin.dao.DaysTypeDao;
 import com.chenxi.web.yueba.admin.dao.LabelDao;
+import com.chenxi.web.yueba.admin.dao.LevelDao;
 import com.chenxi.web.yueba.admin.dao.RegionDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
 import com.chenxi.web.yueba.admin.po.ComboPo;
@@ -40,6 +41,8 @@ public class ComboContoller extends BaseController {
 	DaysTypeDao conn_daystype;
 	@Autowired
 	RegionDao conn_region;
+	@Autowired
+	LevelDao conn_level;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
@@ -74,6 +77,7 @@ public class ComboContoller extends BaseController {
 		ModelAndView mv = new ModelAndView("yuebaadmin/addCombo");
 		mv.addObject("regionList", conn_region.findAll());
 		mv.addObject("daysList", conn_daystype.findAll());
+		mv.addObject("levelList",conn_level.findAll());
 		return mv;
 	}
 	

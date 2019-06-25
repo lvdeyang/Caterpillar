@@ -42,6 +42,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  </div>
 	  
 	  <div class="layui-form-item">
+	    <label class="layui-form-label">级别选择</label>
+	    <div class="layui-input-block">
+	      <select name="level" lay-filter="level">
+	        <c:forEach items="${levelList}" var="level">
+                <option value="${level.name}">${level.name}</option>
+             </c:forEach>
+	        
+	      </select>
+	    </div>
+	  </div>
+	  
+	  
+	  <div class="layui-form-item">
 	    <label class="layui-form-label">价格</label>
 	    <div class="layui-input-block">
 	      <input type="text" name="price" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
