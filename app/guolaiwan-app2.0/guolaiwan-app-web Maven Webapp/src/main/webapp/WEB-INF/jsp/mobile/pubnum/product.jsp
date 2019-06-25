@@ -773,7 +773,7 @@ input[type="datetime-local"]:before{
 		
 		function initLogistics(data){
 		   var html=[];
-		   for(var i=0;i<data.length;i++){
+		   for(var i=0;i<2;i++){
 		      html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
 		   }
 		   $('#logisticsList').append(html.join(''));
