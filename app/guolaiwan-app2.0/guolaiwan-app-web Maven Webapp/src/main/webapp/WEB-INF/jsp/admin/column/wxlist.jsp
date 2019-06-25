@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 	<div class="x-nav">
 		<span class="layui-breadcrumb"> <a><cite>首页</cite></a> <a><cite>商户管理</cite></a>
-		</span> <a class="layui-btn layui-btn-small merflash"
+		</span> <a class="layui-btn layui-btn-small merflash" id = "brush"
 			style="line-height:1.6em;margin-top:3px;float:right"
 			href="javascript:location.replace(location.href);" title="刷新"><i
 			class="layui-icon" style="line-height:30px">ဂ</i></a>
@@ -184,7 +184,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           ,{field: 'modularCode', title: '模块编号',sort: true}
           ,{field: 'shopLinkperson', title: '联系人',width:80,sort: true}
           ,{field: 'shopTel', title: '联系电话',width:160,sort: true}
-          ,{fixed: 'right',width:120,minWidth:100,templet:'#zsgc',unresize:true}
+          ,{fixed: 'right',width:120,minWidth:100,templet:'#zsgc',unresize:true},
+          { title : '显示顺序', width:150, toolbar:'#zsc'}
          ]]
         });
        }
@@ -195,6 +196,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		active[type] ? active[type].call(this) : '';
 		}
       
-            </script>
+      
+       function amend_info(id,state,code){ //上移下移
+         　　　　　 $.ajax({
+              type:"post",
+              url:"../shopmodification.do",
+              data:{"merchantId":id,"state":state,"code":code},
+              success:function(msg){
+            	 if(msg.data == "success"){
+	                var el =   document.getElementById("brush");
+	                el.click();
+            	 }else{
+            	   alert(msg.data);
+            	 }
+              }
+          })
+      }
+      
+  </script>
+            
+   <script type="text/html" id="zsc">
+				 <button type="button" style="margin-top:-5px;height:25px;line-height:25px;"  class="layui-btn layui-btn-primary" onclick="amend_info('{{ d.id }}','T','{{ d.modularCode }}')">上移</button>
+                 <button type="button" style="margin-top:-5px;height:25px;line-height:25px;" class="layui-btn layui-btn-primary" onclick="amend_info('{{ d.id }}','D','{{ d.modularCode }}')">下移</button>
+   </script>
 </body>
 </html>

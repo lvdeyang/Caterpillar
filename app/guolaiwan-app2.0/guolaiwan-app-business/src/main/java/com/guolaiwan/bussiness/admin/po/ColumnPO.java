@@ -20,6 +20,17 @@ public class ColumnPO extends AbstractBasePO {
 	private ColumnType type;//推荐类型
 	
 	private String code;//模块编码
+    
+	private long sortindex;// 排序显示
+	
+	
+	public long getSortindex() {
+		return sortindex;
+	}
+
+	public void setSortindex(long sortindex) {
+		this.sortindex = sortindex;
+	}
 
 	public String getCode() {
 		return code;

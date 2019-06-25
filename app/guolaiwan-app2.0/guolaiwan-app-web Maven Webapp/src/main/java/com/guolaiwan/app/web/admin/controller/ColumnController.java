@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -84,6 +85,18 @@ public class ColumnController extends BaseController {
 		List<MerchantPO> listpo = new ArrayList<MerchantPO>();
 		List<ColumnPO> columnByCode = conn_column.getColumnByCode(modular.getModularCode());
 		for(ColumnPO cpo : columnByCode){
+			if (cpo.getSortindex()== 0 ) {
+				ColumnPO columnBy = conn_column.getsortindex(modular.getModularCode()).get(0);
+				if (columnBy.getSortindex()  == 0 && columnBy != null) {
+					cpo.setSortindex(1L);
+					conn_column.saveOrUpdate(cpo);
+					conn_column.flush();
+				}else {
+					cpo.setSortindex(columnBy.getSortindex()+1);
+					conn_column.saveOrUpdate(cpo);
+					conn_column.flush();
+				}
+			}
 			List<MerchantPO> tempMerchantPOs=conn_merchant.getMerchantById(cpo.getMerchantId());
 			if(tempMerchantPOs!=null && !tempMerchantPOs.isEmpty()){
 				listpo.add(tempMerchantPOs.get(0));
@@ -172,12 +185,92 @@ public class ColumnController extends BaseController {
 	@RequestMapping(value = "/modularlist.do" , method = RequestMethod.POST)
 	public Map<String, Object> getModularList(int page, int limit){
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<ModularPO> list = conn_modular.findAll(page, limit);
+		List<ModularPO> list = conn_modular.getfindAll(page, limit);
 		int allcount = conn_modular.countAll();
 		map.put("data", list);
 		map.put("code", "0");
 		map.put("count", allcount);
 		map.put("msg", "");
+		return map;
+	}
+	
+	@Transactional
+	@ResponseBody
+	@RequestMapping(value = "/modification.do" , method = RequestMethod.POST)
+	public Map<String, Object> getModiFication(long id, String state){
+		Map<String, Object> map = new HashMap<String, Object>();
+		if ("T".equals(state)) {
+			ModularPO list = conn_modular.getByField("id",id);
+			long index  =  list.getSortindex();
+			ModularPO Sortindex = conn_modular.getByField("sortindex",index-1);
+			if (Sortindex != null && list.getComId() == Sortindex.getComId() ){
+				list.setSortindex(index-1);
+				conn_modular.saveOrUpdate(list);
+				conn_modular.flush();
+				Sortindex.setSortindex(index);
+				conn_modular.saveOrUpdate(Sortindex);
+				conn_modular.flush();
+			}else {
+		     map.put("data", "已是优先显示");
+			 return  map;
+			}
+		}else {
+			ModularPO list = conn_modular.getByField("id",id);
+			long index  =  list.getSortindex();
+			ModularPO Sortindex = conn_modular.getByField("sortindex",index+1);
+			if (Sortindex != null && list.getComId() == Sortindex.getComId()) {
+				list.setSortindex(index+1);
+				conn_modular.saveOrUpdate(list);
+				conn_modular.flush();
+				Sortindex.setSortindex(index);
+				conn_modular.saveOrUpdate(Sortindex);
+				conn_modular.flush();
+			}else {
+		     map.put("data", "没有下一条");
+			 return  map;
+			}
+			
+		}
+		map.put("data", "success");
+		return map;
+	}
+   //TODO	
+	@ResponseBody
+	@RequestMapping(value = "/shopmodification.do" , method = RequestMethod.POST)
+	public Map<String, Object> getShopModiFication(long merchantId, String state,String code){
+		Map<String, Object> map = new HashMap<String, Object>();
+		if ("T".equals(state)) { // 上架
+			ColumnPO columnBy = conn_column.getColumnByCode(merchantId,code);
+			long index  =  columnBy.getSortindex();
+			ColumnPO column = conn_column.getByCode(code,index-1);
+			if (column != null){
+				columnBy.setSortindex(index-1);
+				conn_column.saveOrUpdate(columnBy);
+				conn_column.flush();
+				column.setSortindex(index);
+				conn_column.saveOrUpdate(column);
+				conn_column.flush();
+			}else {
+				map.put("data", "已是优先显示");
+				return  map;
+			}
+		}else { // 下架
+			ColumnPO columnBy = conn_column.getColumnByCode(merchantId,code);
+			long index  =  columnBy.getSortindex();
+			ColumnPO column = conn_column.getByCode(code,index+1);
+			if (column != null){
+				columnBy.setSortindex(index+1);
+				conn_column.saveOrUpdate(columnBy);
+				conn_column.flush();
+				column.setSortindex(index);
+				conn_column.saveOrUpdate(column);
+				conn_column.flush();
+			}else {
+				map.put("data", "已是最尾");
+				return  map;
+			}
+		}
+		map.put("data", "success");
 		return map;
 	}
 	

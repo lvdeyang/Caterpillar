@@ -33,7 +33,7 @@
 		<span class="layui-breadcrumb"> <a><cite>首页</cite></a> <a><cite>系统管理</cite></a>
 			<a><cite>板块管理</cite></a>
 		</span> <a class="layui-btn layui-btn-small"
-			style="line-height:1.6em;margin-top:3px;float:right"
+			style="line-height:1.6em;margin-top:3px;float:right" id = "brush"
 			href="javascript:location.replace(location.href);" title="刷新"><i
 			class="layui-icon" style="line-height:30px">ဂ</i></a>
 	</div>
@@ -202,6 +202,7 @@
 						field : 'modularCode',
 						title : '模块标识',
 						align : 'center',
+					    width:100,
 						sort : true,
 					}
 					, {
@@ -210,13 +211,39 @@
 						align : 'center',
 						sort : true,
 						templet:'#productNameTpl'
+					},{
+					    title : '显示顺序',
+					     width:250,
+					     toolbar:'#zsc'
 					}
 				] ]
 			})
 		}
+		
+		
+		   function amend_info(id,state){
+               　　　　　　　　 $.ajax({
+                    type:"post",
+                    url:"modification.do",
+                    data:{"id":id,"state":state},
+                    success:function(msg){
+                  	 if(msg.data == "success"){
+                      var el =   document.getElementById("brush");
+                      el.click();
+                  	 }else{
+                  	   alert(msg.data);
+                  	 }
+                    }
+                }) 
+            }
+  
+		
 	</script>
 
-
+   <script type="text/html" id="zsc">
+				 <button type="button" class="layui-btn layui-btn-primary" onclick="amend_info('{{ d.id }}','T')">上移</button>
+                 <button type="button" class="layui-btn layui-btn-primary" onclick="amend_info('{{ d.id }}','D')">下移</button>
+   </script>
 
 </body>
 </html>
