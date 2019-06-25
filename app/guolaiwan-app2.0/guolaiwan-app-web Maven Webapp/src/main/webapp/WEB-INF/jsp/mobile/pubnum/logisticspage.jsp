@@ -555,17 +555,7 @@ html, body {
 			
 		</div>
 	</div>
-	
-	<div id="large" class="weui-popup__container" style="padding-bottom:50px;">
-	  <div class="weui-popup__overlay"></div>
-	  <div class="weui-popup__modal">
-	      <image id="largeYd" style="width:100%;height:350px;margin-top:10px;"/>
-	      <a style="width:96%;margin-top:50px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary close-popup">
-	      关闭</a>
-	</div>
-</div>
-	
-</body>
+	</body>
 
 
 </html>

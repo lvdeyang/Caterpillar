@@ -2694,4 +2694,24 @@ public class PubNumController extends WebBaseControll {
 		}
 		return map;
 	}
+
+	// 新的保存快递单号的方法-----董
+	@ResponseBody
+	@RequestMapping(value = "/UpdateKd", method = RequestMethod.GET)
+	public Object UpdateKd(String orderId, String kdname, String id) throws Exception {
+		try {
+			String a[] = orderId.split("-");
+			OrderInfoPO orderInfoPO = conn_order.get(Long.parseLong(a[1]));
+			orderInfoPO.setTrackingnumber(kdname);
+			orderInfoPO.setLogisticsId(Long.parseLong(id));
+			orderInfoPO.setOrderState(OrderStateType.DELIVER);
+			conn_order.saveOrUpdate(orderInfoPO);
+			return "success";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "error";
+		}
+
+	}
 }

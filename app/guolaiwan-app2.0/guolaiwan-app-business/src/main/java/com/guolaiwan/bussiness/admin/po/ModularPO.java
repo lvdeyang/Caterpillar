@@ -1,9 +1,15 @@
 package com.guolaiwan.bussiness.admin.po;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Sort;
 
 import com.guolaiwan.bussiness.admin.enumeration.ModularType;
 
@@ -35,11 +41,22 @@ public class ModularPO extends AbstractBasePO {
 
 	// 模块图片
 	private String comName;
-
-
-
+	
+	// 排序显示
+	private long sortindex;
+    
+	
 	public String getModularCode() {
 		return modularCode;
+		
+	}
+	
+	public long getSortindex() {
+		return sortindex;
+	}
+
+	public void setSortindex(long sortindex) {
+		this.sortindex = sortindex;
 	}
 
 	public void setModularCode(String modularCode) {
