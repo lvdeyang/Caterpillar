@@ -722,10 +722,8 @@ public class LiveController extends BaseController {
 	@RequestMapping(value = "/addlive", method = RequestMethod.GET)
 	public String addlive(HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
 		String livename = httpServletRequest.getParameter("livename").toString();
-		livename = new String(livename.getBytes("ISO-8859-1"), "utf8");
 		String liveType = httpServletRequest.getParameter("liveType").toString();
 		String pubName = httpServletRequest.getParameter("pubName").toString();
-		pubName = new String(pubName.getBytes("ISO-8859-1"), "utf8");
 		LivePO newLive = new LivePO();
 		if (liveType.equals("0")) {
 			newLive.setLiveType(LiveType.USER);

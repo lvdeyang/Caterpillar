@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -12,7 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
-<title>详情</title>
+<title>月嫂详情</title>
 <!-- 引入 FrozenUI -->
 <link rel="stylesheet"
 	href="http://i.gtimg.cn/vipstyle/frozenui/2.0.0/css/frozen.css" />
@@ -39,37 +38,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      margin-right:20px;
      font-size:14px;
    }
-   #priceTable{
-     width:90%;
-     margin-left:15px;
-   }
-   #priceTable tr td{
-     width:70px;
-     height:30px;
-     font-size:13px;
-     border:1px solid #CCC;
-   }
-   #imageContent{
-     width:90%;margin-left:15px;border:1px solid #CCC;height:100px;
-   }
-   #imageContent img{
-     width:100px;
-     height:100px;
-     float:left;
-   }
 </style>
 </head>
 
 <body>
-    <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">详情
+    <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">月嫂详情
        </h2><a><i class="ui-icon-personal"></i></a>
     <header class="ui-header ui-header-positive ui-border-b">
          
-         <h1 style="font-size:14px;width:80px;float:left;">详情</h1>
+         <h1 style="font-size:14px;width:80px;float:left;">月嫂详情</h1>
          <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
     </header>
-	<image src="/chenxisoft${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
-	<div class="ui-form ui-border-t">
+	
+	<div class="ui-form ui-border-t" style="margin-top:45px;">
 	        <div class="ftitle">
 	                                    基本信息
 	        </div>
@@ -77,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="width:100px;">
 	                                     姓名
 	            </label>
-                <label style="margin-left:20px;">${worker.realName}<span style="color:red;margin-left:5px;">(带过${worker.orderCount}个孩子)</span></label>
+                <label style="margin-left:20px;">黄靖宇</label>
 	           
 	        </div>
 	       
@@ -85,34 +66,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="width:100px;">
 	                                    身份证号
 	            </label>
-	            <label style="margin-left:20px;">${worker.idCard}</label>
+	            <label style="margin-left:20px;">13028119840715201x</label>
 	        </div>
 	        <div class="ui-form-item ui-border-b">
 	            <label style="width:100px;">
 	                                   电话
 	            </label>
-	            <label style="margin-left:20px;">${worker.phone}</label>
+	            <label style="margin-left:20px;">13810728953</label>
 	        </div>
 	        <div class="ui-form-item ui-border-b">
 	            <label style="width:100px;">
 	                                    家庭住址
 	            </label>
-	            <label style="margin-left:20px;">${worker.address}</label>
+	            <label style="margin-left:20px;">13028119840715201x</label>
 	        </div>
-	        <div class="ftitle">
-	                                    价格表(单位:元)
-	        </div>
-	        <table id="priceTable">
-	           ${priceHtml}
-	        </table>
-	        <div class="ftitle">
-	                                    证件照片
-	        </div>
-	        <div id="imageContent">
-	            
-	            <image src="/chenxisoft${worker.idCardPhoto}">
-	            <image src="/chenxisoft${worker.healthPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
-	            <image src="/chenxisoft${worker.expertPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                    价格
+	            </label>
+	            <label style="margin-left:20px;">￥6000/月</label>
 	        </div>
 	        <div class="ftitle">
 	                                    评论列表<a href="#" style="">查看更多</a>
@@ -120,20 +92,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        
 	        
 	        <ul class="ui-list ui-border-tb" style="font-size:12px;">
-		        <c:forEach items="${comments}" var="comment">
-	                <li>
-	                    <div class="ui-avatar-lg">
-	                        <span style="background-image:url(/chenxisoft/${comment.userPhoto})"></span>
-	                    </div>
-	                    <div class="ui-list-info ui-border-t">
-	                         ${comment.content}
-	                    </div>
-	                </li>
-	            </c:forEach>
+                <li>
+                    <div class="ui-avatar-lg">
+                        <span style="background-image:url(http://placeholder.qiniudn.com/140x140)"></span>
+                    </div>
+                    <div class="ui-list-info ui-border-t">
+                                                                          这个必须要赞，服务态度特别好，做饭也好吃，很有耐心。
+                    </div>
+                </li>
+                <li>
+                    <div class="ui-avatar-lg">
+                        <span style="background-image:url(http://placeholder.qiniudn.com/140x140)"></span>
+                    </div>
+                    <div class="ui-list-info ui-border-t">
+                                                                          这个必须要赞，服务态度特别好，做饭也好吃，很有耐心。
+                    </div>
+                </li>
+               
             </ul>
-
+	        
+	        
+	        
+	        
 	        <div class="ui-btn-wrap">
-	            <button class="ui-btn-lg ui-btn-primary" id="addOrder">
+	            <button class="ui-btn-lg ui-btn-primary">
 	                                     立即预订
 	            </button>
 	        </div>
@@ -154,9 +136,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}
 			  };
 	         
-		     $(document).on('click','#addOrder',function(){
-		         location.href=window.BASEPATH+'/worker/mobile/addorder?workerId='+${worker.id};
-		     });
+		     
 	          
 	     });
 	

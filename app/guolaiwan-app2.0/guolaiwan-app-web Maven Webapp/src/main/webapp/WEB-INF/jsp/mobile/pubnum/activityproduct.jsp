@@ -512,8 +512,8 @@ html, body {
 	.question,.answer{margin-bottom:1rem;}
 	.question{text-align:right;margin-top:50px;}
 	.question>div{display:inline-block;}
-	.left{float:left;}
-	.right{float:right;}
+	.left{float:left;cursor:pointer}
+	.right{float:right;cursor:pointer}
 	.clear{clear:both;}
 	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
 	.heard_img img{width:100%;height:100%}

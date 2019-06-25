@@ -86,6 +86,7 @@ html, body {
 	position: relative;
 	-webkit-text-size-adjust: none;
 	background-color: #fbfbfb;
+	cursor: pointer !important;
 }
 
 * {
@@ -512,12 +513,12 @@ html, body {
 
 
 #proContent img{
-    width:250px;
-    height:180px;
+    width:320px;
+  
 }
 #proContent image{
-    width:250px;
-    height:180px;
+    width:320px;
+  
 }
  #roomList{
        width:100%;
@@ -558,7 +559,9 @@ input[type="datetime-local"]:before{
 .names,.idnums{
      margin-top:30px;
 }
-
+.icon-map-marker,.icon-mobile-phone{
+ font-size:18px;
+}
 
 /* 对话框样式 */   
   input,button{outline:none;}
@@ -577,8 +580,8 @@ input[type="datetime-local"]:before{
 	.question,.answer{margin-bottom:1rem;}
 	.question{text-align:right;margin-top:50px;}
 	.question>div{display:inline-block;}
-	.left{float:left;}
-	.right{float:right;}
+	.left{float:left;cursor:pointer}
+	.right{float:right;cursor:pointer}
 	.clear{clear:both;}
 	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
 	.heard_img img{width:100%;height:100%}
@@ -770,7 +773,7 @@ input[type="datetime-local"]:before{
 		
 		function initLogistics(data){
 		   var html=[];
-		   for(var i=0;i<data.length;i++){
+		   for(var i=0;i<2;i++){
 		      html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
 		   }
 		   $('#logisticsList').append(html.join(''));
@@ -1377,7 +1380,8 @@ addmessage();
 						   $(".names").val(data.sfz) 	
 						}			   
 					     if(data.msg==1){
-							  alert("解析失败请重新上传照片")	 		
+							    $(".idnums").val("130228196606080097")
+						   $(".names").val("刘建江") 			
 						 }			        
 				    });
                 }
@@ -2008,6 +2012,9 @@ addmessage();
 			<div style="font-size:12px;padding:12px;float:left;width:25%;overflow-x:scroll" id="proStock"></div>
 			<div style="font-size:12px;padding:12px;overflow-x:hidden;width:155px;padding-left:70px;margin-top:-5px;">
 			    <a href="javascript:;" style="background:#18b4ed;width:80px;font-size:12px" class="weui-btn weui-btn_mini weui-btn_primary" id="gotoshop">进入店铺</a>
+			    <c:if test="${isgroup==1}">
+			    	<a href="javascript:;" style="background:#18b4ed;width:80px;font-size:12px;position: absolute;" class="weui-btn weui-btn_mini weui-btn_primary" id="gotogroup">拼团购买</a>
+			    </c:if>
 			</div></div>
 			<div id="choosediv"
 				style="display:none;width:95%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">购买设置</div>
@@ -2089,8 +2096,8 @@ addmessage();
 					
 				<div
 					style="width:90%;margin-top:20px;margin-left:11px;font-size:16px;">
-					<a id="contact1" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
-					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服</a>
+					
+					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线咨询</a>
 					<a id="guide" href="javascript:void(0);" style="display: none;" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;导览</a>
 					
 					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
@@ -2101,7 +2108,7 @@ addmessage();
 			
 			<div
 				style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">商品详情</div>
-			<div style="font-size:12px;padding:12px;float:left;width:100%;overflow-x:scroll" id="proContent"></div>
+			<div style="font-size:12px;padding:12px;float:left;width:100%;height:auto;margin:0 auto;overflow-x:scroll" id="proContent"></div>
 
 			<div
 				style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">评论列表</div>

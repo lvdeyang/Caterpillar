@@ -283,12 +283,8 @@ function getRecomment(){
 </script>
 <script>
 
-function timer() {
-var grouptime=${groupBuyPO.grouptime*60*60*1000-1000};
-var newtime=new Date().getTime();
-var begintime=new Date('${team.updateTime}').getTime();
+function timer(times,intDiff) {
    /*倒计时  */
-var intDiff =parseInt((grouptime-(newtime-begintime))/1000); //倒计时总秒数量
   window.setInterval(function () {
     var day = 0,
       hour = 0,
@@ -303,32 +299,43 @@ var intDiff =parseInt((grouptime-(newtime-begintime))/1000); //倒计时总秒�
      if(hour<10){hour="0"+hour;}
 	if(minute<10){minute="0"+minute;}
 	if(second<10){second="0"+second;}
-    $('#times').html(hour + ":" + minute + ":" + second);
+    $("#"+times).html(hour + ":" + minute + ":" + second);
     intDiff--;
   }, 1000);
 }
-$(function () {
+ 
+ $(function () {
   getallteam();
 });
- 
+
  function getallteam(){
      var _uricoms = window.BASEPATH + '/business/getallteam?productId=${product.id}';	
      $.get(_uricoms, null, function(data){
          for(var i=0;i<data.length;i++){
+  				var times='times'+data[i].id;
+	 			var begintime=data[i].updateTime;
+	 			var grouptime=data[i].grouptime*60*60*1000-1000;
+	 			var newtime=new Date().getTime();
+	 			var intDiff =parseInt((grouptime-(newtime-begintime))/1000);
          		var html=[];
-         		if(data[i].productid==${product.id}){
+         		if(data[i].productid==${product.id}&&data[i].iscaptain==1){
 		           html.push('<div style="height:100px;weight:100%;text-align:center;border-bottom:1px solid #A6A6A6;vertical-align:middle;position: relative;">');
-		           html.push(' <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="lib/images/logo.png"/>');
-		           html.push(' <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;">想念</span>');
+		           html.push(' <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="'+data[i].userheadimg+'"/>');
+		           html.push(' <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;white-space: nowrap;text-overflow:ellipsis;overflow: hidden;width:70px;">'+data[i].usernickname+'</span>');
 		           html.push(' <span style="font-weight:bold;margin-left:-10px;line-height: 100px;">还差<span style="color:#F46837;">1人</span>拼团成功</span>');
-		           html.push(' <button style="background:#F46837;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;">去拼单</button>');
-		           html.push('<p style="color:#949494;font-size:12px;position: absolute;top:60px;left:50%;margin-left:-30px">剩余时间<span id="times'+data[i].id+'">00：00：00</span></p>');
+		           html.push(' <button id="'+data[i].id+'" style="background:#F46837;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;" onclick="gototeam(this.id)">去拼单</button>');
+		           html.push('<p style="color:#949494;font-size:12px;position: absolute;top:60px;left:55%;margin-left:-30px">剩余时间<span id="times'+data[i].id+'">00：00：00</span></p>');
 		           html.push('	</div>');
 		           }
 		 		$('.allteam').append(html.join(''));
+		 			
+		 			timer(times,intDiff);
 	     	}
 	 });
 }
+ function gototeam(id){
+ 		location.href=window.BASEPATH + 'business/groupteam?teamId='+id;
+ }
  
  function getorderinfo(id){
 	    location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
@@ -394,15 +401,8 @@ $(function () {
 					      <input class="weui-input" type="date" value="">
 					    </div>
 					  </div>
-					  <div class="weui-cell">
-					    <div class="weui-cell__hd"><label for="" class="weui-label">时间</label></div>
-					    <div class="weui-cell__bd">
-					      <input class="weui-input" type="datetime-local" value="" placeholder="">
-					    </div>
-					  </div>
-					  
-					  	<div style="background:#F56938;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
-					     	<p style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;" class="cancel"><span style="font-size:14px;margin-left:5%;">取消开团</span></p>
+					  	<div style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
+					     	<p style="background:#F56938;height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;" class="cancel"><span style="font-size:14px;margin-left:5%;">取消开团</span></p>
 					        <p class="pay" style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;"><span style="font-size:14px;margin-left:5%;" >开团支付</span></p>
 					    </div>
 			</div>

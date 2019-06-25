@@ -355,7 +355,7 @@ $(function() {
 	
 	// 南山攻略需要的数据
 	  function getVideoPics(){       
-		var url = window.BASEPATH + 'business/getVideoPics';
+		var url = window.BASEPATH + 'business/getVideoPics?merchantId='+${merchantId};
 		$.get(url, null, function(data){
 		    var html=[];
 		   	for(var i=0;i<data.length;i++){
@@ -373,7 +373,7 @@ $(function() {
 		});
 	} 
 	 function getProblem(){       
-		var url = window.BASEPATH + 'business/getProblem';
+		var url = window.BASEPATH + 'business/getProblem?merchantId='+${merchantId};
 		$.get(url, null, function(data){
 		 var html=[];
 		 	for(var i=0;i<data.length;i++){

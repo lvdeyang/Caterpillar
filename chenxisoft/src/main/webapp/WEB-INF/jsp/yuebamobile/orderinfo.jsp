@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -39,24 +38,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      margin-right:20px;
      font-size:14px;
    }
-   #priceTable{
-     width:90%;
-     margin-left:15px;
-   }
-   #priceTable tr td{
-     width:70px;
-     height:30px;
-     font-size:13px;
-     border:1px solid #CCC;
-   }
-   #imageContent{
-     width:90%;margin-left:15px;border:1px solid #CCC;height:100px;
-   }
-   #imageContent img{
-     width:100px;
-     height:100px;
-     float:left;
-   }
 </style>
 </head>
 
@@ -68,6 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <h1 style="font-size:14px;width:80px;float:left;">详情</h1>
          <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
     </header>
+	
 	<image src="/chenxisoft${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
 	<div class="ui-form ui-border-t">
 	        <div class="ftitle">
@@ -100,45 +82,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="margin-left:20px;">${worker.address}</label>
 	        </div>
 	        <div class="ftitle">
-	                                    价格表(单位:元)
+	                                    订单信息
 	        </div>
-	        <table id="priceTable">
-	           ${priceHtml}
-	        </table>
-	        <div class="ftitle">
-	                                    证件照片
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                    开始日期
+	            </label>
+	            <label style="margin-left:20px;">${order.fromDate}</label>
 	        </div>
-	        <div id="imageContent">
-	            
-	            <image src="/chenxisoft${worker.idCardPhoto}">
-	            <image src="/chenxisoft${worker.healthPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
-	            <image src="/chenxisoft${worker.expertPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                    时间长度
+	            </label>
+	            <label style="margin-left:20px;">${order.days}</label>
 	        </div>
-	        <div class="ftitle">
-	                                    评论列表<a href="#" style="">查看更多</a>
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                    服务地区
+	            </label>
+	            <label style="margin-left:20px;">${order.region}</label>
 	        </div>
-	        
-	        
-	        <ul class="ui-list ui-border-tb" style="font-size:12px;">
-		        <c:forEach items="${comments}" var="comment">
-	                <li>
-	                    <div class="ui-avatar-lg">
-	                        <span style="background-image:url(/chenxisoft/${comment.userPhoto})"></span>
-	                    </div>
-	                    <div class="ui-list-info ui-border-t">
-	                         ${comment.content}
-	                    </div>
-	                </li>
-	            </c:forEach>
-            </ul>
-
-	        <div class="ui-btn-wrap">
-	            <button class="ui-btn-lg ui-btn-primary" id="addOrder">
-	                                     立即预订
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                    价格
+	            </label>
+	            <label style="margin-left:20px;">${order.price}</label>
+	        </div>
+	   </div>
+	   <div class="ui-btn-wrap">
+	            <button class="ui-btn-lg ui-btn-primary" id="gotolist">
+	                                     返回订单列表
 	            </button>
-	        </div>
-	</div>
-	
+	   </div>
 	
 
 	<script type="text/javascript">
@@ -154,8 +129,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}
 			  };
 	         
-		     $(document).on('click','#addOrder',function(){
-		         location.href=window.BASEPATH+'/worker/mobile/addorder?workerId='+${worker.id};
+		     $(document).on('click','#gotolist',function(){
+		     
+		        location.href=window.BASEPATH+"/order/mobile/list";
 		     });
 	          
 	     });

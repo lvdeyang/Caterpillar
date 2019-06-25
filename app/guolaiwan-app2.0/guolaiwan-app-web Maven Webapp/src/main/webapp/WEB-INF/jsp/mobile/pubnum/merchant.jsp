@@ -523,8 +523,8 @@ html, body {
 	.question,.answer{margin-bottom:1rem;}
 	.question{text-align:right;margin-top:50px;}
 	.question>div{display:inline-block;}
-	.left{float:left;}
-	.right{float:right;}
+	.left{float:left;cursor:pointer}
+	.right{float:right;cursor:pointer}
 	.clear{clear:both;}
 	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
 	.heard_img img{width:100%;height:100%}
@@ -991,7 +991,6 @@ html, body {
 						</div>
 						<div
 							style="width:90%;margin-top:25px;margin-left:11px;font-size:16px;">
-							<a id="contact" href="javascript:void(0);" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qq客服</a>
 							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线客服 </a>
 							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 							

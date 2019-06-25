@@ -170,10 +170,12 @@ input, button {
 
 .left {
 	float: left;
+	cursor:pointer
 }
 
 .right {
 	float: right;
+	cursor:pointer
 }
 
 .clear {
