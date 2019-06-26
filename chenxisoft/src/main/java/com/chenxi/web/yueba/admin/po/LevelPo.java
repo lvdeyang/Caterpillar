@@ -10,4 +10,13 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 public class LevelPo extends AbstractBasePO{
 
 	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

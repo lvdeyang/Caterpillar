@@ -14,10 +14,11 @@ import pub.caterpillar.orm.hql.QueryHql;
 @Repository("CommentDao")
 public class ComboDao extends AbstractBaseDao<ComboPo> {
 
-	public ComboPo findByRegionAndDays(String region,int days){
+	public ComboPo findByRegionAndDays(String region,int days,String level){
 		QueryHql hql=this.newQueryHql();
 		hql.andBy("region",Condition.eq,region);
 		hql.andBy("days",Condition.eq,days);
+		hql.andBy("level",Condition.eq,level);
 		List<ComboPo> comboPos=this.findByHql(hql);
 		if(comboPos!=null&&!comboPos.isEmpty()){
 			return comboPos.get(0);
