@@ -31,7 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
     </header>
 	
-	<div class="demo-item">
+	<div class="demo-item" style="margin-top:45px;">
 		<div class="demo-block">
 			<ul id="commentList" class="ui-list ui-border-tb ">
 				
@@ -63,12 +63,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	       
 	          
 	          function getPage(isinit){
-	              var _uriComment = window.BASEPATH + 'worker/comment/list?currPage='+currPage+'&pageCount='+pageCount;
+	              var _uriComment = window.BASEPATH + 'comment/mobile/list?currPage='+currPage+'&pageCount='+pageCount
+	              +'&workerId=${workerId}';
 		
 				  $.get(_uriComment, null, function(data){
 				       currPage+=1;
 				       data = parseAjaxResult(data);
-				       if(data.comments.length!=0){
+				       if(data.length!=0&&!isinit){
 				          $('#loading').fadeIn().show();
 				       }
 				       if(isinit){
@@ -86,20 +87,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          function initList(data){
 	               var html=[];
 
-	               if(data.comments){
-	                  for(var i=0;i<data.comments.length;i++){
-				         html.push('<li class="comment" id="com-'+data.comments[i].id+'">');
+	               if(data){
+	                  for(var i=0;i<data.length;i++){
+				         html.push('<li class="comment" id="com-'+data[i].id+'">');
 						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url('+data.comments[i].userphoto+')"></span></div>');
+						 html.push('        <span style="background-image:url(/chenxisoft/'+data[i].userPhoto+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
-						 html.push('		<div style="font-size:13px;">'+data.comments[i].labelStr+'</div>');
-						 html.push('		<p class="ui-nowrap" style="font-size:13px;">'+data.workers[i].labelStr+'</p>');
+						 html.push('		<div style="font-size:13px;">'+data[i].content+'</div>');
 						 html.push('	</div>');
 						 html.push('</li>'); 
+						 
+						
 				       }
 	               
 	               }
-			       $('#workerList').append(html.join(''));
+			       $('#commentList').append(html.join(''));
 	          }
 	          
 	          

@@ -141,9 +141,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        
 	        
 	        <div class="ftitle">
-	                                    评论列表<a href="#" style="">查看更多</a>
+	                                    评论列表<a href="javascript:void(0)" id="moreComment" style="">查看更多</a>
 	        </div>
-	        
+	        <section class="ui-input-wrap ui-border-t">
+			    <div class="ui-input ui-border-radius">
+			        <input  style="font-size:12px;" type="text" id="commentContent" placeholder="我也说一句...">
+			    </div>
+			    <button id="addCommnet" class="ui-btn" style="font-size:12px;">评论</button>
+			</section>
 	        
 	        <ul class="ui-list ui-border-tb" style="font-size:12px;">
 		        <c:forEach items="${comments}" var="comment">
@@ -157,7 +162,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                </li>
 	            </c:forEach>
             </ul>
-
+            
 	        <div class="ui-btn-wrap">
 	            <button class="ui-btn-lg ui-btn-primary" id="addOrder">
 	                                     电话咨询
@@ -173,7 +178,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          
 			  var parseAjaxResult = function(data){
 					if(data.status !== 200){
-						$.toptip('data.message', 'error');
 						return -1;
 					}else{
 						return data.data;		
@@ -183,13 +187,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		     $(document).on('click','#addOrder',function(){
 		         //location.href=window.BASEPATH+'/worker/mobile/addorder?workerId='+${worker.id};
 		     });
+		     $(document).on('click','#moreComment',function(){
+		         location.href=window.BASEPATH+'/comment/mobile/index?workerId='+${worker.id};
+		     });
+		     
+		     $(document).on('click','#addCommnet',function(){
+		         var _uriAddComment = window.BASEPATH + 'comment/mobile/add';
+		         var data={};
+		         data.content=$('#commentContent').val();
+		         data.workerId=${worker.id};
+		         $.post(_uriAddComment, data, function(data){
+				      
+				       data = parseAjaxResult(data);
+				       $('#commentContent').val('');
+				       location.href=location.href;
+				  });
+		     
+		     });
 		     
 	         laydate.render({
 			   elem: '#seeDate'
 			   ,position: 'static',
 			   zIndex: 1,
 			   min:'2019-06-26',
-			   max:'2019-08-28'
+			   max:'2019-08-28',
+			   theme:'#18b4ed'
 			 });
 			 $('.layui-laydate-main').css('width','100%');
 	          

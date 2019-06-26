@@ -32,6 +32,7 @@ public class WorkerPo extends AbstractBasePO{
 	private int ration;//百分比
 	private int orderCount;
 	private String level;
+	private String moreMsg;
 	
 
 	public String getUserName() {
@@ -150,6 +151,12 @@ public class WorkerPo extends AbstractBasePO{
 	}
 	public void setLevel(String level) {
 		this.level = level;
+	}
+	public String getMoreMsg() {
+		return moreMsg;
+	}
+	public void setMoreMsg(String moreMsg) {
+		this.moreMsg = moreMsg;
 	}
 	
 	
