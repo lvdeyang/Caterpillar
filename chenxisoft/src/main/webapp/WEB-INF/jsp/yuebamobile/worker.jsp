@@ -57,6 +57,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      height:100px;
      float:left;
    }
+   #layui-laydate1{
+     font-size:12px;
+     width:100%;
+   }
+   .layui-laydate-footer{
+     display:none;
+   }
+   .layui-laydate-main .layui-laydate-content{
+     width:100%;
+   }
+   .layui-laydate-content table{
+     width:100%
+   }
+   .layui-laydate-content table tbody tr td{
+     font-size:14px;
+   }
+  
 </style>
 </head>
 
@@ -114,6 +131,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        <table id="priceTable">
 	           ${priceHtml}
 	        </table>
+	        <div class="ftitle">
+	                                    查看档期
+	        </div>
+	        <div style="width:90%;margin-left:15px;height:300px;">
+	            <div id="seeDate"></div>
+	        </div>
+	        
+	        
 	        
 	        <div class="ftitle">
 	                                    评论列表<a href="#" style="">查看更多</a>
@@ -141,7 +166,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	
 	
-
+    <script type="text/javascript" src="lib/laydate/laydate.js" charset="utf-8"></script>
 	<script type="text/javascript">
 	     $(function() {
 	          window.BASEPATH = '<%=basePath%>';
@@ -156,8 +181,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  };
 	         
 		     $(document).on('click','#addOrder',function(){
-		         location.href=window.BASEPATH+'/worker/mobile/addorder?workerId='+${worker.id};
+		         //location.href=window.BASEPATH+'/worker/mobile/addorder?workerId='+${worker.id};
 		     });
+		     
+	         laydate.render({
+			   elem: '#seeDate'
+			   ,position: 'static',
+			   zIndex: 1,
+			   min:'2019-06-26',
+			   max:'2019-08-28'
+			 });
+			 $('.layui-laydate-main').css('width','100%');
 	          
 	     });
 	
