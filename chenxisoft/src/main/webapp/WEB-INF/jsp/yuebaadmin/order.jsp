@@ -17,7 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    
     
        <script type="text/html" id="bar">
-              <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="subOrder">结算订单</a>
+              <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="subOrder">结算订单</a>-->
 	   </script>
 	  
 		<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
@@ -61,9 +61,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    ,cols: [[
 			       {type: 'checkbox', fixed: 'left'}
 			      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-			      ,{field:'workerName', title:'月嫂', width:200, edit: 'text'}
+			      ,{field:'workName', title:'月嫂', width:200, edit: 'text'}
 			      ,{field:'userName', title:'用户', width:200, edit: 'text'}
-			      ,{field:'price', title:'价格', width:200, edit: 'text'}
+			      ,{field:'userPhone', title:'用户电话', width:200, edit: 'text'}
+			      ,{field:'days', title:'天数', width:200, edit: 'text'}
+			      ,{field:'region', title:'地区', width:200, edit: 'text'}
+			      ,{field:'fromDate', title:'开始时间', width:200, edit: 'text'}
+			      ,{field:'price', title:'佣金', width:200, edit: 'text'}
+			      ,{field:'mleft', title:'提成', width:200, edit: 'text'}
 			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}
 			    ]]
 			    ,page: true

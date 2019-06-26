@@ -20,6 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
               <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
               <a class="layui-btn layui-btn-xs" lay-event="level">级别设置</a>
+              <a class="layui-btn layui-btn-xs" lay-event="addorder">添加订单</a>
               <a class="layui-btn layui-btn-xs" lay-event="comment">查看评论</a>
 	   </script>
 	   <table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
@@ -53,7 +54,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			      ,{field:'price', title:'价格', width:100, edit: 'text'}
 			      ,{field:'level', title:'级别', width:200, edit: 'text'}
 			      ,{field:'status', title:'状态', width:200, edit: 'text'}
-			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:250}
+			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:330}
 			    ]]
 			    ,page: true
 			  });
@@ -114,7 +115,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					        }
 					    });
 				    
+				    }else if(obj.event==='addorder'){
+				        layer.open({
+					        type: 2 //此处以iframe举例
+					        ,title: '添加订单'
+					        ,area: ['800px', '500px']
+					        ,shade: 0
+					        ,maxmin: true
+					        ,offset: [ //为了演示，随机坐标
+					         200,300
+					          
+					        ] 
+					        ,content: 'order/addorder?workerId='+data.id
+					        //layer.closeAll();
+					        ,zIndex: layer.zIndex //
+					        ,success: function(layero){
+					          layer.setTop(layero); //
+					        }
+					    });
+				    
 				    }
+				    
 				    else if(obj.event==='comment'){
 				        layer.open({
 					        type: 2 //此处以iframe举例
