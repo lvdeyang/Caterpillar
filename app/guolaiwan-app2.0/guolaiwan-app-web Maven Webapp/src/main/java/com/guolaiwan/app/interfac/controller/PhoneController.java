@@ -94,6 +94,8 @@ import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.DistributorDAO;
 import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
 import com.guolaiwan.bussiness.admin.dao.ExpressDao;
+import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
+import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.LanDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
@@ -157,6 +159,8 @@ import com.guolaiwan.bussiness.admin.po.CompanyPO;
 import com.guolaiwan.bussiness.admin.po.DistributorPO;
 import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
 import com.guolaiwan.bussiness.admin.po.ExpressPO;
+import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
+import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
 import com.guolaiwan.bussiness.admin.po.LanPO;
 import com.guolaiwan.bussiness.admin.po.LiveAdvertisementPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
@@ -291,7 +295,8 @@ public class PhoneController extends WebBaseControll {
 	private LiveAdvertisementDAO conn_liveAdvertisementDao;
 	@Autowired
 	private ExpressDao expressdao;
-
+	@Autowired
+	private GroupTeamDAO conn_groupteam;
 	/**
 	 * 首页搜索
 	 * 
@@ -7288,5 +7293,278 @@ public class PhoneController extends WebBaseControll {
 		request.setAttribute("SplitAccTemplate", "123465");
 		return mv;
 	}
+	
+	
+	
+	@Autowired
+	private GroupBuyDAO conn_groupbuy;
+	/**
+	 * 订单：拼团的订单
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/grouporder/add", method = RequestMethod.POST)
+	public Map<String, Object> addGroupOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+		Map<String, Object> data = new HashMap<String, Object>();
+		
+		long productId = Long.parseLong(request.getParameter("productId"));		
+		int num = 1;
+		Long userId = Long.parseLong( request.getParameter("userId"));
+		String paytype = "WEICHAT";
+		String activityId = request.getParameter("activityId");
+		String comboId = request.getParameter("comboId");
+		String logisticsId = request.getParameter("logisticsId");
+		String roomId = request.getParameter("roomId");
+		String roomName = request.getParameter("roomName");
+		ProductPO productPO = conn_product.get(productId);
+
+		OrderInfoPO order = new OrderInfoPO();
+		// 4/26添加comId 张羽 4/28 添加退款限制
+		ProductPO productPO2 = conn_product.get(productId);
+		order.setComId(productPO2.getComId());
+		order.setProductIsRefund(productPO2.getProductIsRefund());
+
+		if (logisticsId != null) {
+			order.setLogisticsId(Long.parseLong(logisticsId));
+		}
+		if (comboId != null) {
+			order.setComboId(Long.parseLong(comboId));
+		}
+
+		String orderStartDate = request.getParameter("startDate");
+		if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
+			orderStartDate = orderStartDate.replace("T", " ");
+			order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.dateTimePattenWithoutSecind));
+		}
+		String endBookDate = request.getParameter("endDate");
+		if (endBookDate != null && endBookDate != "" && endBookDate.length() != 0) {
+			endBookDate = endBookDate.replace("T", " ");
+			order.setEndBookDate(DateUtil.parse(endBookDate, DateUtil.dateTimePattenWithoutSecind));
+		}
+		if (roomId != null && roomId != "" && roomId.length() != 0) {
+
+			order.setRoomId(Long.parseLong(roomId));
+			order.setRoomName(roomName);
+
+			RoomStatusPO roomStatus = new RoomStatusPO();
+			roomStatus.setStartDate(order.getOrderBookDate());
+			roomStatus.setEndDate(order.getEndBookDate());
+			roomStatus.setRoomId(order.getRoomId());
+			roomStatus.setStatus(1);
+			conn_roomstatus.save(roomStatus);
+			order.setRoomStatusId(roomStatus.getId());
+		}
+
+		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date date = new Date();
+
+		System.out.println(conn_groupbuy.findByProductId(productId).getGroupprice()+"--------------");
+		long productprice = conn_groupbuy.findByProductId(productId).getGroupprice();
+		// 支付金额
+		long payMoney = num * productprice;
+		// 订单总金额
+		long orderAllMoney = payMoney;
+		// 获取产品
+
+		// 获取商家
+		MerchantPO merchant = conn_merchant.get(productPO.getProductMerchantID());
+		UserInfoPO user = conn_user.get(userId);
+		String orderBookDate = request.getParameter("bookDate");
+		if (orderBookDate != null && orderBookDate != "" && orderBookDate.length() != 0) {
+			orderBookDate = orderBookDate.replace("T", " ");
+			order.setOrderBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
+		}
+
+		// 会员ID
+		order.setUserId(userId);
+		if (user.getUserPhone() != null) {
+			// 会员手机号
+			order.setUserTel(user.getUserPhone());
+			// 会员信息
+			// 会员坐标经度
+			// 会员坐标维度
+			// 提成金额比例
+		}
+		if (user.getUserNickname() != null) {
+			order.setUserName(user.getUserNickname());
+		}
+
+		// 订单号（城市编码+商家id+板块Code+时间戳+用户ID）
+		String orderNO = getCityCodeByDomain() + merchant.getId() + productPO.getProductModularCode() + df.format(date)
+				+ userId;
+		order.setOrderNO(orderNO);
+		// 验单码
+
+		// 下单时间
+		order.setCreateDate(date);
+		order.setUpdateTime(date);
+		// 验单时间
+
+		// 供应商ID
+		order.setShopId(merchant.getId());
+		// 供应商名称
+		order.setShopName(merchant.getShopName());
+		// 站点ID
+		// 站点名称
+		// 商品ID
+		order.setProductId(productPO.getId());
+		// 商品图片
+		order.setProductPic(productPO.getProductShowPic());
+		// 商品名称
+		order.setProductName(productPO.getProductName());
+		// 商品数量
+		order.setProductNum(num);
+		
+		// 获取用户
+		if (activityId != null) {
+
+			UserOneDayBuyPO buyPO = new UserOneDayBuyPO();
+			buyPO.setUpdateTime(new Date());
+			buyPO.setUserId(userId);
+			buyPO.setProId(Long.parseLong(activityId));
+			if (orderBookDate != null && orderBookDate != "" && orderBookDate.length() != 0) {
+				orderBookDate = orderBookDate.replace("T", " ");
+				buyPO.setBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
+			}
+			conn_userone.save(buyPO);
+			order.setActivityId(Long.parseLong(activityId));
+			conn_surpportbuy.delSurpport(userId, Long.parseLong(activityId));
+
+			ActivityRelPO activityRelPO = new ActivityRelPO();
+			activityRelPO = conn_activityRel.get(Long.parseLong(activityId));
+			payMoney = num* (activityRelPO.getPrice());
+			orderAllMoney = payMoney;
+			productprice = activityRelPO.getPrice();
+		}
+
+		// 张羽 修改支付时的价钱按照页面的计算来 4/30
+		long bet =1;
+		payMoney = payMoney * bet;
+		orderAllMoney = payMoney;
+		System.out.println(orderAllMoney + "-------------------------");
+		// 商品单价
+		order.setProductPrice(productprice);
+		// 所属板块DI
+		order.setBkCode(productPO.getProductModularCode());
+		// 所属板块名称
+		order.setBkName(productPO.getProductModularCodeName());
+
+		// 套餐ID
+		// 套餐名称
+
+		long proportion = productPO.getProductCommissionPrice();
+		if (productPO.getProductCommissionCode() == 1) {
+			order.setProportion(proportion);
+		}
+		// 提成方式（0：佣金1：比例）
+		order.setRoyaltyName(productPO.getProductCommissionCode());
+		// 积分数
+		long integralNum =num * productPO.getProductntegral();
+		order.setIntegralNum(integralNum);
+		// 订单佣金金额(分)
+		long proportionMoney;
+		if (productPO.getProductCommissionCode() == 1) {
+			proportionMoney = num * productPO.getProductPrice() * proportion / 100;
+		} else {
+			proportionMoney = num * proportion;
+		}
+		order.setProportionMoney(proportionMoney);
+		// 支付金额
+		order.setPayMoney(payMoney);
+		// 订单总金额
+		order.setOrderAllMoney(orderAllMoney);
+		// 订单说明
+		if (request.getParameter("orderRemark") != null && request.getParameter("orderRemark").length() > 0) {
+			order.setOrderRemark(request.getParameter("orderRemark"));
+		}
+		// 订单状态
+		order.setOrderState(OrderStateType.NOTPAY);
+		// 订单支付类型 //ALIPAY WEICHAT
+		order.setPayMode(PayType.fromString(paytype));
+		// 是否评价
+		order.setCommentIs(0);
+		order.setSource(OrderSource.fromString("PUBLICADDRESS"));
+		order.setOrderType(OrderType.MERCHANT);
+		productPO.setProductSaleNum(productPO.getProductSaleNum() + 1);
+		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
+		conn_product.update(productPO);
+		conn_order.saveOrUpdate(order);
+
+		long PayMoney = order.getPayMoney();
+		String orderIdStr = "G"+String.valueOf(order.getId());
+		// 调微信和支付宝
+		if (paytype.equals("WEICHAT")) { // 微信
+			Map<String, String> weichatPay = weichatPay(PayMoney, orderIdStr);
+			weichatPay.put("orderId", order.getId() + "");
+			return success(weichatPay);
+		} else if (paytype.equals("ALIPAY")) {
+			String productnum = String.valueOf(order.getProductNum());
+			String pname = order.getProductName();
+			String sign = AliAppOrderInfo.getInstance().getSign(productnum, PayMoney, pname, orderIdStr);
+			data.put("orderId", order.getId());
+			data.put("orderInfo", sign);
+			return success(data);
+		} else {
+			return ERROR("系统错误！");
+		}
+	}
+
+	
+	// 发起拼团成功建立新团
+	@ResponseBody
+	@RequestMapping(value = "/groupteam")
+	public Object newGroupTeam(HttpServletRequest request) throws Exception {
+		System.out.println("66666666666666666666666666");
+		long userId = Long.parseLong(request.getParameter("userId"));
+		long orderId = Long.parseLong(request.getParameter("orderId"));
+		int type =Integer.parseInt( request.getParameter("type"));
+		
+		UserInfoPO user = conn_user.get(userId);
+		
+		OrderInfoPO order = conn_order.get(orderId);
+		
+		GroupBuyPO GroupBuy = conn_groupbuy.findByProductId(order.getProductId());
+		System.out.println(userId+"---"+orderId+"---"+type);
+		//1：发起拼团的逻辑  2：参与拼团的逻辑
+		switch (type) {
+		case 1:
+			GroupTeamPO team=new GroupTeamPO();
+				team.setCaptain(0);
+				team.setGroupbuyid(GroupBuy.getId());
+				team.setGrouptime(GroupBuy.getGrouptime());
+				team.setIscaptain(true);
+				team.setProductid(order.getProductId());
+				team.setUserheadimg(user.getUserHeadimg());
+				team.setUserid(userId);
+				team.setUsernickname(user.getUserNickname());
+				team.setOrderId(orderId);
+				team.setTeamnum(1);
+				conn_groupteam.save(team);
+			break;
+		case 2:
+			long teamId=Long.parseLong(request.getParameter("teamId"));
+			GroupTeamPO captain = conn_groupteam.get(teamId);
+			GroupTeamPO team1=new GroupTeamPO();
+			team1.setCaptain(captain.getUserid());
+			team1.setGroupbuyid(GroupBuy.getId());
+			team1.setGrouptime(GroupBuy.getGrouptime());
+			team1.setIscaptain(false);
+			team1.setProductid(order.getProductId());
+			team1.setUserheadimg(user.getUserHeadimg());
+			team1.setUserid(userId);
+			team1.setUsernickname(user.getUserNickname());
+			team1.setOrderId(orderId);
+			team1.setBelongtoteam(captain.getId());
+			captain.setTeamnum(captain.getTeamnum()+1);
+			conn_groupteam.saveOrUpdate(captain);
+			conn_groupteam.save(team1);
+			break;
+		}
+		return success();
+	}
 }

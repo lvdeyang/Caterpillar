@@ -25,13 +25,37 @@ public class GroupTeamPO extends AbstractBasePO {
 	//拼团商品id
 	private long productid;
 	//拼团时间限制
-	private int grouptime;
+	private long grouptime;
+	//订单号
+	private long orderId;
+	//team人数
+	private long teamnum;
+	//所属team
+	private long belongtoteam;
 	
 	
-	public int getGrouptime() {
+	public long getBelongtoteam() {
+		return belongtoteam;
+	}
+	public void setBelongtoteam(long belongtoteam) {
+		this.belongtoteam = belongtoteam;
+	}
+	public long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(long orderId) {
+		this.orderId = orderId;
+	}
+	public long getTeamnum() {
+		return teamnum;
+	}
+	public void setTeamnum(long teamnum) {
+		this.teamnum = teamnum;
+	}
+	public long getGrouptime() {
 		return grouptime;
 	}
-	public void setGrouptime(int grouptime) {
+	public void setGrouptime(long grouptime) {
 		this.grouptime = grouptime;
 	}
 	public String getUsernickname() {

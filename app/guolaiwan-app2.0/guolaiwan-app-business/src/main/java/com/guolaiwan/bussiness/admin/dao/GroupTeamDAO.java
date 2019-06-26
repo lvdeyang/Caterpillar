@@ -24,6 +24,16 @@ public class GroupTeamDAO extends AbstractBaseDao<GroupTeamPO> {
 	public List<GroupTeamPO> findByProductId(long productId) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("productid", Condition.eq, productId);
+		hql.andBy("iscaptain", Condition.eq, true);
+		List<GroupTeamPO> lives = findByHql(hql);
+		if(lives==null || lives.size()<=0) return null;
+		return lives;
+	}
+	
+	public List<GroupTeamPO> findByCaptainAndTeamId(long captain,long teamId) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("captain", Condition.eq, captain);
+		hql.andBy("belongtoteam", Condition.eq, teamId);
 		List<GroupTeamPO> lives = findByHql(hql);
 		if(lives==null || lives.size()<=0) return null;
 		return lives;

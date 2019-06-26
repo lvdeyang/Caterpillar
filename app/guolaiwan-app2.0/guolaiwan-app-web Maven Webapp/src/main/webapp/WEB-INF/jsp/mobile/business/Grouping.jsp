@@ -331,7 +331,7 @@ function timer(times,intDiff) {
 	 			var newtime=new Date().getTime();
 	 			var intDiff =parseInt((grouptime-(newtime-begintime))/1000);
          		var html=[];
-         		if(data[i].productid==${product.id}&&data[i].iscaptain==1){
+         		if(data[i].productid==${product.id}&&data[i].iscaptain==1&&intDiff>0){
 		           html.push('<div style="height:100px;weight:100%;text-align:center;border-bottom:1px solid #A6A6A6;vertical-align:middle;position: relative;">');
 		           html.push(' <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="'+data[i].userheadimg+'"/>');
 		           html.push(' <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;white-space: nowrap;text-overflow:ellipsis;overflow: hidden;width:70px;">'+data[i].usernickname+'</span>');
@@ -363,7 +363,6 @@ function timer(times,intDiff) {
 					 html.push('<div class="weui-media-box weui-media-box_text mailAddress" id="mailadd-'+data[i].id+'">');
 					 html.push('<input style="float:left;height:27px;width:20px"  type="radio" name="radio1" class="" id="radio-'+data[i].id+'" '+chkattr+'>');
 			         html.push('<h4 style="width:80%;margin-left:35px;" class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）</h4>');
-			         //html.push('<p class="weui-media-box__desc">身份证'+(data[i].idNum?data[i].idNum:'-')+'</p>');
 			         if(data[i].province!=null&&data[i].city!=null&&data[i].district!=null)html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
 			         html.push('</div>');
 				}
@@ -420,7 +419,9 @@ function timer(times,intDiff) {
 				if(data==1){
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
 						    if(data.data=="PAYSUCCESS"){
+						    $.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":1},function(){
 						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+		                		})
 						    }
 						});
 				}else{
@@ -458,14 +459,13 @@ function timer(times,intDiff) {
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		                $.confirm("交易成功");
-		                		$.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":1},function(){
-		                		
-		                		})
 		                
 		                setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
 								    if(data.data=="PAYSUCCESS"){
-								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+		                				$.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":1},function(){
+								      		 location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+		                				})
 								    }
 								});
                         }, 1000);

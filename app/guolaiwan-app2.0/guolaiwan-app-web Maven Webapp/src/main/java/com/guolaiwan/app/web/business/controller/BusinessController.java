@@ -13,11 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
@@ -26,6 +28,7 @@ import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantChildrenDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.MessageDAO;
@@ -39,6 +42,8 @@ import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
 import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
+import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
@@ -49,6 +54,8 @@ import com.guolaiwan.bussiness.nanshan.po.NsVideoPicPO;
 import com.guolaiwan.bussiness.nanshan.po.ProblemPo;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
+import pub.caterpillar.orm.hql.Condition;
+import pub.caterpillar.orm.hql.QueryHql;
 
 @Controller
 @RequestMapping("/business")
@@ -56,6 +63,9 @@ public class BusinessController extends WebBaseControll {
 
 	@Autowired
 	private SystemCacheDao conn_systemcache;
+	
+	@Autowired
+	private MerchantDAO Mer_chant;
 
 	@Autowired
 	private InvestWalletDAO conn_investwallet;
@@ -95,6 +105,9 @@ public class BusinessController extends WebBaseControll {
 
 	@Autowired
 	private SysConfigDAO conn_sysConfig;
+	
+	@Autowired
+	private MerchantChildrenDao merchant_Children;
 
 	@Autowired
 	private NsVideoPicDAO nsvideopicDao;
@@ -288,8 +301,48 @@ public class BusinessController extends WebBaseControll {
 		hashMap.put("url", productlist.get(0).getProductShowPic());
 		hashMap.put("number", newgetAllOrder.size());
 		return hashMap;
+	} 
+	
+	// 南山首页 商家轮播
+	@ResponseBody
+	@RequestMapping(value = "/getPicture", method = RequestMethod.POST)
+	public List<String> getShopMpic(long merchantId) throws Exception {
+		System.out.println(merchantId+" ---------------------------------");
+		List<String> list = new ArrayList<String>();
+		MerchantPO Merchant =  Mer_chant.getMerchantById(merchantId).get(0);
+		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		String[] shop = Merchant.getShopMpic().split(",");
+		for (String string : shop) {
+			System.out.println(sysConfig.getWebUrl()+string);
+			list.add(sysConfig.getWebUrl()+string);
+		}
+		System.out.println(list);
+		return list;
 	}
-
+	
+	// 南山采摘页面
+	@ResponseBody
+	@RequestMapping(value = "/getpark", method = RequestMethod.POST)
+	public List<Object> getPark(long merchantId) throws Exception {
+		List<Object> list = new ArrayList<Object>();
+		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		List<MerchantChildrenPO>  merchant = merchant_Children.findByField("merchantId",merchantId);
+		for (MerchantChildrenPO merchantChildrenPO : merchant) {
+			List<MerchantPO> Merchant = Mer_chant.getMerchantById(merchantChildrenPO.getChildrenId());	
+			for (MerchantPO merchantPO : Merchant) {
+				if ( Merchant!= null && "006".equals(merchantPO.getModularClassId())) {
+					MerchantVO  merch  = new MerchantVO();
+					merch.setId(merchantPO.getId());
+					merch.setShopName(merchantPO.getShopName());
+					merch.setShopPic(sysConfig.getWebUrl()+merchantPO.getShopPic());
+					list.add(merch);
+				}
+			}
+		}
+		return list;
+	}
+	
+	
 	// 跳转美食页面
 	@ResponseBody
 	@RequestMapping(value = "/cate", method = RequestMethod.GET)
@@ -372,5 +425,28 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("groupBuyPO", groupBuyPO);
 		return mv;
 	}
+	
+
+	// 获取这个商品的所拼的团
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getteamman")
+	public List<GroupTeamPO> getTeamMan(HttpServletRequest request) throws Exception {
+		Long captain=Long.parseLong(request.getParameter("captain"));
+		Long  teamId=Long.parseLong(request.getParameter("teamId"));
+		List<GroupTeamPO> teams = groupteam.findByCaptainAndTeamId(captain, teamId);
+		return teams;
+	}
+
+	// 跳转采摘页面
+	@ResponseBody
+	@RequestMapping(value = "/pick", method = RequestMethod.GET)
+	public ModelAndView pick(HttpServletRequest request ,long Merchantid ) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/picking");
+		mv.addObject("merchantid", Merchantid);
+		return mv;
+	}
+	 
 	
 }
