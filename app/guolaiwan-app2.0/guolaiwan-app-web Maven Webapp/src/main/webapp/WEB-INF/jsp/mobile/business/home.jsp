@@ -416,6 +416,10 @@ $(function() {
    function group(){
    		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
    }
+   function wallet(){
+   		location.href=window.BASEPATH + 'pubnum/wallet';
+   }
+   
 </script>
 
 
@@ -426,6 +430,8 @@ $(function() {
 	<!-- 主页 -->
 	<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 	</div>
@@ -461,12 +467,12 @@ $(function() {
    	     <li onclick="group()"><img src="lib/images/pintuans.png"/></li>
          <li><img src="lib/images/caizhais.png"/></li>
          <li><img src="lib/images/gongluess.png"/></li>
-         <li><img src="lib/images/qianbaos.png"/></li>
+         <li onclick="wallet()"><img src="lib/images/qianbaos.png"/></li>
          <li><span>活动</span></li>
    	     <li onclick="group()"><span>拼团</span></li>
          <li><span>采摘</span></li>
          <li><span>攻略</span></li>
-         <li><span>钱包</span></li>
+         <li onclick="wallet()"><span>钱包</span></li>
 	     </ul>
 	    </div> 
 	  </div>
