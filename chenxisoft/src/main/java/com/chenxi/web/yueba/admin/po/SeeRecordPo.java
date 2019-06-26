@@ -10,6 +10,8 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 public class SeeRecordPo extends AbstractBasePO {
 
 	private long userId;
+	private String userName;
+	private String userPic;
 	private long workerId;
 	private String workerName;
 	private String workerPic;
@@ -39,5 +41,21 @@ public class SeeRecordPo extends AbstractBasePO {
 	public void setWorkerPic(String workerPic) {
 		this.workerPic = workerPic;
 	}
+	@Transient
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	@Transient
+	public String getUserPic() {
+		return userPic;
+	}
+	public void setUserPic(String userPic) {
+		this.userPic = userPic;
+	}
+	
+	
 	
 }

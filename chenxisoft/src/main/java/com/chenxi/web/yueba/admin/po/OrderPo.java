@@ -29,6 +29,7 @@ public class OrderPo extends AbstractBasePO{
 	private int days;
 	private OrderStatus orderStatus;
 	private String fromDateStr;
+	private double mleft;
     
 	public Date getFromDate() {
 		return fromDate;
@@ -60,14 +61,14 @@ public class OrderPo extends AbstractBasePO{
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	@Transient
+
 	public String getWorkName() {
 		return workName;
 	}
 	public void setWorkName(String workName) {
 		this.workName = workName;
 	}
-	@Transient
+
 	public String getUserName() {
 		return userName;
 	}
@@ -113,6 +114,12 @@ public class OrderPo extends AbstractBasePO{
 	}
 	public void setUserPhone(String userPhone) {
 		this.userPhone = userPhone;
+	}
+	public double getMleft() {
+		return mleft;
+	}
+	public void setMleft(double mleft) {
+		this.mleft = mleft;
 	}
 	
 	

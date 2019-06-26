@@ -143,7 +143,7 @@ html, body {
  
 .renshu ul li{
 float:left;
-margin:25px 10px;
+margin:10px 10px;
 width:40px;
 height:40px;
 border-radius:50%;
@@ -262,7 +262,7 @@ height:40px;
         }
 	   
 timer();
-   
+getAllTeamMan();   
 	
 
 	
@@ -293,6 +293,142 @@ function timer() {
     intDiff--;
   }, 1000);
 }
+
+function dobuy(){
+		    var productId=${product.id};
+		    var userId=${userId};
+            $.closePopup();
+			var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+productId+'&count=1';
+			$.get(chkStockUrl, null, function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+				if(data.stock==0){
+				   $.toast("抱歉，库存不足", "forbidden");
+				   return;
+				}	
+				var _uriPay = window.BASEPATH + 'phoneApp/grouporder/add';
+				$.post(_uriPay,{"productId":productId,"userId":userId}, function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					$.modal({
+						  title: "付款方式",
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+						    	$.confirm("确定支付？", function() {
+								    payByWallet(data.orderId);
+								  }, function() {});
+						    } },
+						    { text: "微信支付", onClick: function(){ 
+							    $.confirm("确定支付？", function() {
+								    payPublic(data.orderId);
+								  }, function() {});
+						    } },
+						    { text: "取消", className: "default", onClick: function(){ } },
+						  ]
+						});
+				});
+			});
+		}
+
+
+
+		function payByWallet(orderId){
+			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
+			var userId=${userId};
+			$.post(url,{'orderId':orderId,'userId':userId},function(data){
+						data = parseAjaxResult(data);
+				if(data==1){
+						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
+						    if(data.data=="PAYSUCCESS"){
+						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						    }
+						});
+				}else{
+					$.alert('您的余额不足！');
+				}
+                   
+			})
+		}
+		
+		function payPublic(orderId){
+			$.get(window.BASEPATH +"pubnum/prev/pay/"+orderId, null, function(data){
+				prepay_id = data.prepay_id;
+		        paySign = data.paySign;
+		        appId = data.appId;
+		        timeStamp = data.timeStamp;
+		        nonceStr = data.nonceStr;
+		        packageStr = data.packageStr;
+		        signType = data.signType;
+		        orderNo = data.orderNo;
+		        callpay(orderNo);
+			});
+		}
+		
+	
+		function onBridgeReady(orderNo){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		                $.confirm("交易成功");
+		                		$.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":2},function(){
+		                		})
+		                
+		                setInterval(function(){ 
+                                $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
+								    if(data.data=="PAYSUCCESS"){
+								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+								    }
+								});
+                        }, 1000);
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
+		                alert("交易取消");  
+	
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
+		                alert(res.err_desc); 
+
+		            }  
+		        }
+		    );
+		}
+		function callpay(orderNo){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady(orderNo);
+		    }
+		}
+		
+		function getAllTeamMan(){
+        var url = window.BASEPATH + 'business/getteamman';
+		var captain=${team.userid};
+		var teamId=${team.id};
+		$.post(url, {"captain":captain,"teamId":teamId}, function(data){
+			if(data === -1) return;
+			if(data && data.length>0){
+			    var html=[];
+				for(var i=0; i<data.length; i++){
+					 html.push('<li style="border:1px solid #989898;"><img src="'+data[i].userheadimg+'"/></li>');
+				}
+			    $('.teamman').append(html.join(''));
+			}
+		});
+     }
+
 </script>
 
 
@@ -302,6 +438,8 @@ function timer() {
 			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
@@ -321,20 +459,18 @@ function timer() {
             <p style="position: absolute;font-weight:bold;color:#989898;top:140px;font-size:12px;right:7%;">单买价：￥<span>${product.productPrice/100}0</span></p>
           </div>
           <div style="height:90px;width:100%;line-height: 90px;position:relative;">
-             <p style="width:100%;text-align: center;font-weight:bold;font-size:14px;letter-spacing:2px">还差<span style="color:#E50012;">1人</span>拼团成功，剩余时间<span id="times" style="color:#fff;letter-spacing:7px;background:#E6393F;padding:10px 0;border-radius:6px;font-size:16px;text-align: center;margin-left:10px;">00:00:00</span></p>
+             <p style="width:100%;text-align: center;font-weight:bold;font-size:14px;letter-spacing:2px">还差<span style="color:#E50012;">${groupBuyPO.groupnum-team.teamnum}人</span>拼团成功，剩余时间<span id="times" style="color:#fff;letter-spacing:7px;background:#E6393F;padding:10px 0;border-radius:6px;font-size:16px;text-align: center;margin-left:10px;">00:00:00</span></p>
           </div>
           <div class="renshu" style="width:100%;height:90px;position: relative;text-align: center;">
-          <ul style="margin:0 auto;  display: inline-block;overflow: auto;position: relative;">
+          <ul class="teamman" style="margin:0 auto;  display: inline-block;overflow: auto;position: relative;width:80%;">
+           <button style="color:#fff;padding:0 6px;top:0px;left:10px;background:#E6393F;border:none;outline:none;width:auto;height:20px;position: absolute;border-radius:12px;">团长</button>
            <li style="border:1px solid #E6393F;"><img src="${team.userheadimg}"/></li>
-           <li style="border:1px solid #989898;"><img src="lib/images/logo.png"/></li>
-           <li style="border:1px dashed #989898;"></li>
-           <button style="color:#fff;padding:0 6px;top:13px;left:10px;background:#E6393F;border:none;outline:none;width:auto;height:20px;position: absolute;border-radius:12px;">团长</button>
           </ul>
            <p style="color:#FD7C13;margin:0;">邀请好友&nbsp&nbsp&nbsp&nbsp>></p>
             
           </div>
           <div style="margin:0 auto;text-align: center;width:100%;position: fixed;bottom:10px;">
-          <button style="width:90%;height:40px;color:#fff;background:#E6393F;border:none;outline:none;border-radius:12px;">确定</button>
+          <button onclick="dobuy()" style="width:90%;height:40px;color:#fff;background:#E6393F;border:none;outline:none;border-radius:12px;">确定</button>
           </div>
           <div style="height:40px;width:100%;"></div>
 </body>

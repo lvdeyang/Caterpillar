@@ -72,7 +72,7 @@ public class MWorkerContoller extends BaseController {
         for (DaysTypePo daysTypePo : daysTypePos) {
         	sb.append("<tr><td>"+daysTypePo.getDays()+"天</td>");
         	for (RegionsPo regionsPo : regionsPos) {
-        		ComboPo comboPo=conn_combo.findByRegionAndDays(regionsPo.getRegionName(), daysTypePo.getDays());
+        		ComboPo comboPo=conn_combo.findByRegionAndDays(regionsPo.getRegionName(), daysTypePo.getDays(),workerPo.getLevel());
     			sb.append("<td>"+(comboPo==null?"-":comboPo.getPrice())+"</td>");
     			
     		}
