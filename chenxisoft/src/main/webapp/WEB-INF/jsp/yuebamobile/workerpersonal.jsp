@@ -55,7 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	        <div class="ui-list-info ui-border-t">
 	            <h4 class="ui-nowrap">黄靖宇</h4>
-	            <p>未提取佣金:￥18000</p>
+	            <p>历史佣金:￥18000</p>
 	        </div>
 	    </li>
     </ul>
@@ -66,12 +66,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
 	    <li class="ui-border-t">
 	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">佣金提现</h4> 
+	            <h4 class="ui-nowrap" style="font-size:14px;">谁看过我</h4> 
 	        </div>
 	    </li>
 	    <li class="ui-border-t">
 	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">账户中心</h4> 
+	            <h4 class="ui-nowrap" style="font-size:14px;">历史订单</h4> 
 	        </div>
 	    </li>
 	    <li class="ui-border-t">
@@ -81,27 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    </li>
 	</ul>
 	
-	<div class="ftitle">
-	            月嫂订单
-	</div>
-    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">已预定</h4> 
-	        </div>
-	    </li>
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">进行中</h4> 
-	        </div>
-	    </li>
-	    <li class="ui-border-t">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">已完成</h4> 
-	        </div>
-	    </li>
-	   
-	</ul>
+	
 
 	<script type="text/javascript">
 	     $(function() {

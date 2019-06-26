@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -16,52 +15,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body class="layui-layout-body">
 <div class="x-body">
     <form class="layui-form" action="">
-	  
+
 	  <div class="layui-form-item">
-	    <label class="layui-form-label">地区选择</label>
+	    <label class="layui-form-label">名称</label>
 	    <div class="layui-input-block">
-	      <select name="region" lay-filter="region">
-	         <c:forEach items="${regionList}" var="region">
-                <option value="${region.regionName}">${region.regionName}</option>
-             </c:forEach>
-	        
-	      </select>
+	      <input type="text" name="days" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
 	    </div>
 	  </div>
-	  
-	  <div class="layui-form-item">
-	    <label class="layui-form-label">天数选择</label>
-	    <div class="layui-input-block">
-	      <select name="days" lay-filter="days">
-	        <c:forEach items="${daysList}" var="days">
-                <option value="${days.days}">${days.days}</option>
-             </c:forEach>
-	        
-	      </select>
-	    </div>
-	  </div>
-	  
-	  <div class="layui-form-item">
-	    <label class="layui-form-label">级别选择</label>
-	    <div class="layui-input-block">
-	      <select name="level" lay-filter="level">
-	        <c:forEach items="${levelList}" var="level">
-                <option value="${level.name}">${level.name}</option>
-             </c:forEach>
-	        
-	      </select>
-	    </div>
-	  </div>
-	  
-	  
-	  <div class="layui-form-item">
-	    <label class="layui-form-label">价格</label>
-	    <div class="layui-input-block">
-	      <input type="text" name="price" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
-	    </div>
-	  </div>
-	  
-	  
       <div class="layui-form-item" style="margin-left:50px;">
            <button class="layui-btn" lay-filter="add" lay-submit>
                                                               保存
@@ -82,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
                 $.ajax({
                 	  type:"post",
-           			  url:"combo/add.do",
+           			  url:"days/add.do",
                       data:data.field,
                       success:function(msg){
                         if(msg=="success"){

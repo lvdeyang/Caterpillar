@@ -68,6 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			      ,{field:'region', title:'地区', width:500, edit: 'text'}
 			      ,{field:'days', title:'天数', width:200, edit: 'text'}
 			      ,{field:'price', title:'价格', width:200, edit: 'text'}
+			      ,{field:'level', title:'级别', width:200, edit: 'text'}
 			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}
 			    ]]
 			    ,page: true

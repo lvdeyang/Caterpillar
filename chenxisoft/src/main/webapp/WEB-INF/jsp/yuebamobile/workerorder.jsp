@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <h1 style="font-size:14px;width:80px;float:left;">微官网首页</h1>
          <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
     </header>
-	<div class="ui-tab" style="margin-top:40px;">
+	<!-- <div class="ui-tab" style="margin-top:40px;">
 		<ul class="ui-tab-nav ui-border-b">
                <li id="PAYSUCCESS" class="mytab">已支付</li>
                <li id="COMPLETE" class="mytab">已完成</li>
@@ -43,8 +43,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        <li></li>
 	        <li></li>
 	    </ul>
-    </div>
-	<div class="demo-item">
+    </div> -->
+	<div class="demo-item" style="margin-top:45px;">
 		<div class="demo-block">
 			<ul id="orderList" class="ui-list ui-border-tb ">
 				
@@ -73,11 +73,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  };
 	          var pageCount=10;
 	          var currPage=1;
-	          var orderStatus="PAYSUCCESS";
 	          
 	          function getPage(isinit){
-	              var _uriOrder = window.BASEPATH + 'order/mobile/list.do?currPage='+currPage+
-	              '&pageCount='+pageCount+'&orderStatus='+orderStatus;
+	              var _uriOrder = window.BASEPATH + 'order/mobile/wlist.do?currPage='+currPage+
+	              '&pageCount='+pageCount;
 		
 				  $.get(_uriOrder, null, function(data){
 				       currPage+=1;
@@ -102,7 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	               if(data){
 	                  for(var i=0;i<data.length;i++){
-				         html.push('<li class="orders" id="order-'+data.id+'">');
+				         html.push('<li class="order" id="order-'+data[i].id+'">');
 						 html.push('    <div class="ui-list-img-square">');
 						 html.push('        <span style="background-image:url(/chenxisoft/'+data[i].worderPhoto+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
@@ -131,7 +130,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  });
 	          
 	          
-	          var tab = new fz.Scroll('.ui-tab', {
+	          /*var tab = new fz.Scroll('.ui-tab', {
 		            role: 'tab',
 		            autoplay: false,
 		            interval: 3000
@@ -142,13 +141,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            orderStatus=$(this).attr('id');
 		            currPage=1;
 		            getPage(true);
-		      });
+		      });*/
 	          
 		      
 		      $(document).on('click','.order',function(){
 		         var ids=this.id.split('-');
-	
-		      
+	             location.href=window.BASEPATH + 'order/mobile/winfo?orderId='+ids[1];
 		      });
 		      
 		     

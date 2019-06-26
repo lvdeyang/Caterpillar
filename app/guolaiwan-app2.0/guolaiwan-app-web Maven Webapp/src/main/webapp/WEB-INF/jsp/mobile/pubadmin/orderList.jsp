@@ -493,7 +493,7 @@ html, body {
 <jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-
+var oderinfoid;
 	$(function() {
 	  window.BASEPATH = '<%=basePath%>';
 	  
@@ -509,7 +509,6 @@ html, body {
 
       var _uriMyOrder = window.BASEPATH + 'pubnum/getOrder?type=${status}';
 			$.get(_uriMyOrder, null, function(data){
-			
 				data = parseAjaxResult(data);
 				if(data === -1) return;
 				 var html=[];
@@ -537,8 +536,10 @@ html, body {
 				       html.push('<a class="weui-media-box__desc" style="margin-left:15px;font-size:12px;" href="javascript:void(0)">退款理由:&nbsp;'+data[i].refundReason+'</p>');
 				       //html.push('<a style="font-size:12px;margin-left:15px" id="relay-'+data[i].id+'" class="icon-ok" href="javascript:void(0)">&nbsp;&nbsp;同意退款</a>')
 				    }
-				    if('${status}'=='PAYSUCCESS'){
-				       html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
+				    if('${status}'=='PAYSUCCESS'){				   
+					    if(data[i].logisticsId=="1"){
+					         html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)" value="'+data[i].id+'">&nbsp;&nbsp;发货</a>')
+					    }				       
 				    }
 				   html.push(' </a>');
 				   }
@@ -586,40 +587,31 @@ html, body {
 		       
 		      });
 		      
-		      $(document).on('click','.icon-check',function(){
-		          var ids=this.id.split('-');
-		          $.prompt("请输入快递单号", function(text) {		             
-		        		             
-		             if(!isNaN(text)){
-		                 changeOrderStatus(ids[1],'DELIVER',text);
-		             }else{
-		                $.alert("请重新输入正确的快递单号")		   
-		                return;
-		             } 
-		                                         	        					  
-					}, function() {
-					  //点击取消后的回调函数
-					});
-		      });
-			
-        function changeOrderStatus(orderId,status,trackingnumber){
-		   var _urichangeorder = window.BASEPATH + 'pubnum/changeOrderStatus?orderId='+orderId+'&status='+status+'&trackingnumber='+trackingnumber;
-	          $.get(_urichangeorder, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data){
-				   location.href=location.href;
-				}
-				
-				
-			});
-		
-		}
+		     //下拉框选择啥快递
+			 $(document).on('click','.icon-check',function(){
+			 oderinfoid=$(this).attr("id");
+			     $(".xianshi").fadeIn();
+			     var html=[];
+			     var _uriMyOrder = window.BASEPATH + 'admin/logistic/getMerchantLogistics';
+				 $.get(_uriMyOrder, null, function(data){
+				     for(var i=0;i<data.length;i++){
+				          html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+				     }
+			         $('#xuanze').append(html.join(''));
+				 });
+			          
+			 });
+			 //取消狂框
+			  $(document).on('click','.quxiao',function(){			         
+			          $("#kuaidi").val("");
+			          $(".xianshi").fadeOut();			       
+			 });
+			 
+			 
+	
 	
 	function searchOrder(){
-	
-	
-	$('#orderContent').children().remove();
+ 	$('#orderContent').children().remove();
 		if('${status}'=='TESTED'){
 			var _uriseaOrder = window.BASEPATH + 'pubnum/searchOrder?type=${status}&proId='+
 	     		$('#proSel').val()+'&start='+$('#checkstart').val()+'&end='+$('#checkend').val();
@@ -636,7 +628,7 @@ html, body {
 				   for(var i=0;i<data.length;i++){
 				   if(data[i].productName==null){
 				      data[i].productName='到店支付订单';
-				   }
+				   }				   
 				   html.push('<a href="javascript:void(0);" id="order-'+data[i].id+'"  class="order weui-media-box weui-media-box_appmsg">');
 				   html.push('   <div class="weui-media-box__hd">');
 				   html.push('     <img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].productPic+'">');
@@ -649,7 +641,7 @@ html, body {
 				   if('${status}'=='REFUNDING'){
 				       html.push('<a class="weui-media-box__desc" style="margin-left:15px;font-size:12px;" href="javascript:void(0)">退款理由:&nbsp;'+data[i].refundReason+'</p>');
 				    }
-				    if('${status}'=='PAYSUCCESS'){
+				    if('${status}'=='PAYSUCCESS'){				  
 				       html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
 				    }
 				   html.push(' </a>');
@@ -687,6 +679,27 @@ html, body {
 	});
 	
 	});
+	
+	
+		//点击确定以后发送请求保存快递单号和快递类型
+     function addlogistics(){
+        var kdname=$("#kuaidi").val();
+        var id=$("#xuanze").val();
+            if(!isNaN(kdname)){		              
+		          }else{
+		             $.alert("请重新输入正确的快递单号")		   
+		            return;
+		     }         
+		var _urichangeorder = window.BASEPATH + 'pubnum/UpdateKd?orderId='+oderinfoid+'&kdname='+kdname+'&id='+id;
+	       $.get(_urichangeorder, null, function(data){
+			  if(data=="success"){
+				   location.href=location.href;
+			}	
+			 if(data=="error"){
+				   alert("保存失败");
+			}							
+		}); 		
+	}
 </script>
 
 
@@ -735,6 +748,16 @@ html, body {
 			
 		</div>
 	</div>
+	 <div class="xianshi" style="width:300px;height:200px;background:#fff;overflow: hidden;text-align: center;margin:0 auto;position: fixed;top:50%;left:50%;margin:-100px 0 0 -150px;border:1px solid #D3D3D3;display: none;">
+	  <p style="color:black;margin-top:10px;font-size:18px;">提示</p>
+	  <p style="color:black;margin-top:10px;color:#999999;font-size:12px;">请输入快递单号并选择快递种类</p>
+	  <input id="kuaidi" placeholder="请输入快递单号"  type="text" style="height:30px;width:40%;margin-top:20px;" >
+	  <select id="xuanze" style="height:30px;width:40%;margin-top:20px;">
+	   </select>
+	   <button class="quxiao" style="position:absolute;left:0;bottom:0;width:50%;height:50px;font-size:18px;border:none;outline:none;border:1px solid #D3D3D3;background:#fff;">取消</button>
+	   <button style="position:absolute;right:0;bottom:0;width:50%;height:50px;font-size:18px;border:none;outline:none;border:1px solid #D3D3D3;background:#fff;" onclick="addlogistics()" >确定</button>
+	 </div>
+
 </body>
 
 

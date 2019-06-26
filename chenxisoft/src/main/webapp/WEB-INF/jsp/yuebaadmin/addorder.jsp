@@ -16,6 +16,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body class="layui-layout-body">
 <div class="x-body">
     <form class="layui-form" action="">
+	  <input type="hidden" name="workerId" value="${workerId}"/>
+	  
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">入户日期</label>
+	    <div class="layui-input-block">
+	        <input type="text" name="fromDate" id="fromDate" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" lay-key="1">
+	    </div>
+	  </div>
 	  
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">地区选择</label>
@@ -28,7 +36,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	      </select>
 	    </div>
 	  </div>
-	  
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">天数选择</label>
 	    <div class="layui-input-block">
@@ -40,26 +47,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	      </select>
 	    </div>
 	  </div>
-	  
 	  <div class="layui-form-item">
-	    <label class="layui-form-label">级别选择</label>
-	    <div class="layui-input-block">
-	      <select name="level" lay-filter="level">
-	        <c:forEach items="${levelList}" var="level">
-                <option value="${level.name}">${level.name}</option>
-             </c:forEach>
-	        
-	      </select>
-	    </div>
-	  </div>
-	  
-	  
-	  <div class="layui-form-item">
-	    <label class="layui-form-label">价格</label>
+	    <label class="layui-form-label">佣金</label>
 	    <div class="layui-input-block">
 	      <input type="text" name="price" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
 	    </div>
 	  </div>
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">提成</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="left" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">用户名称</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="userName" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+	    </div>
+	  </div>
+	  
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">用户电话</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="userPhone" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+	    </div>
+	  </div>
+	  
 	  
 	  
       <div class="layui-form-item" style="margin-left:50px;">
@@ -71,18 +84,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 	<script>
 		//JavaScript代码区域
-		layui.use(['form','layer'],function(){
+		layui.use(['form','layer','laydate'],function(){
 		   var $ = layui.jquery;
 		   var form = layui.form
-              ,layer = layui.layer;
+              ,layer = layui.layer
+              ,laydate = layui.laydate;
 
+
+               laydate.render({
+				    elem: '#fromDate'
+			   });
+               
               //监听提交
               form.on('submit(add)', function(data){
               console.log(data.field);
           
                 $.ajax({
                 	  type:"post",
-           			  url:"combo/add.do",
+           			  url:"order/add.do",
                       data:data.field,
                       success:function(msg){
                         if(msg=="success"){
@@ -90,7 +109,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            // 获得frame索引
                            var index = parent.layer.getFrameIndex(window.name);
                            //关闭当前frame
-                           parent.window.location.reload();
+                           //parent.window.location.reload();
                            parent.layer.close(index);
                            });
                         }

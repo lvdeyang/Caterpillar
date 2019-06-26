@@ -16,31 +16,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body class="layui-layout-body">
 <div class="x-body">
     <form class="layui-form" action="">
-	  
-	  <div class="layui-form-item">
-	    <label class="layui-form-label">地区选择</label>
-	    <div class="layui-input-block">
-	      <select name="region" lay-filter="region">
-	         <c:forEach items="${regionList}" var="region">
-                <option value="${region.regionName}">${region.regionName}</option>
-             </c:forEach>
-	        
-	      </select>
-	    </div>
-	  </div>
-	  
-	  <div class="layui-form-item">
-	    <label class="layui-form-label">天数选择</label>
-	    <div class="layui-input-block">
-	      <select name="days" lay-filter="days">
-	        <c:forEach items="${daysList}" var="days">
-                <option value="${days.days}">${days.days}</option>
-             </c:forEach>
-	        
-	      </select>
-	    </div>
-	  </div>
-	  
+	  <input type="hidden" value="${id}" name="id"/>
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">级别选择</label>
 	    <div class="layui-input-block">
@@ -52,16 +28,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	      </select>
 	    </div>
 	  </div>
-	  
-	  
-	  <div class="layui-form-item">
-	    <label class="layui-form-label">价格</label>
-	    <div class="layui-input-block">
-	      <input type="text" name="price" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
-	    </div>
-	  </div>
-	  
-	  
       <div class="layui-form-item" style="margin-left:50px;">
            <button class="layui-btn" lay-filter="add" lay-submit>
                                                               保存
@@ -82,11 +48,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
                 $.ajax({
                 	  type:"post",
-           			  url:"combo/add.do",
+           			  url:"worker/setlevel.do",
                       data:data.field,
                       success:function(msg){
                         if(msg=="success"){
-                          layer.alert("增加成功", {icon: 6},function () {
+                          layer.alert("设置成功", {icon: 6},function () {
                            // 获得frame索引
                            var index = parent.layer.getFrameIndex(window.name);
                            //关闭当前frame

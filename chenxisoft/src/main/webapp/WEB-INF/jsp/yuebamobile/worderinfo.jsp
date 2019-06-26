@@ -50,37 +50,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
     </header>
 	
-	<image src="/chenxisoft${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
-	<div class="ui-form ui-border-t">
+
+	<div class="ui-form ui-border-t" style="margin-top:45px;">
 	        <div class="ftitle">
-	                                    基本信息
+	                                    用户信息
 	        </div>
 	        <div class="ui-form-item ui-border-b">
 	            <label style="width:100px;">
 	                                     姓名
 	            </label>
-                <label style="margin-left:20px;">${worker.realName}<span style="color:red;margin-left:5px;">(带过${worker.orderCount}个孩子)</span></label>
+                <label style="margin-left:20px;">${order.userName}<span style="color:red;margin-left:5px;">(带过${worker.orderCount}个孩子)</span></label>
 	           
-	        </div>
-	       
-	        <div class="ui-form-item ui-border-b">
-	            <label style="width:100px;">
-	                                    身份证号
-	            </label>
-	            <label style="margin-left:20px;">${worker.idCard}</label>
 	        </div>
 	        <div class="ui-form-item ui-border-b">
 	            <label style="width:100px;">
 	                                   电话
 	            </label>
-	            <label style="margin-left:20px;">${worker.phone}</label>
+	            <label style="margin-left:20px;">${order.userPhone}</label>
 	        </div>
-	        <div class="ui-form-item ui-border-b">
-	            <label style="width:100px;">
-	                                    家庭住址
-	            </label>
-	            <label style="margin-left:20px;">${worker.address}</label>
-	        </div>
+	        
 	        <div class="ftitle">
 	                                    订单信息
 	        </div>

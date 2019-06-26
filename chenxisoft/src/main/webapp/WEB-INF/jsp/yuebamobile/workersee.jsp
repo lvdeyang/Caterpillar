@@ -30,25 +30,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <h1 style="font-size:14px;width:80px;float:left;">微官网首页</h1>
          <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
     </header>
-	<div class="ui-tab" style="margin-top:40px;">
-		<ul class="ui-tab-nav ui-border-b">
-               <li id="PAYSUCCESS" class="mytab">已支付</li>
-               <li id="COMPLETE" class="mytab">已完成</li>
-               <li id="REFUNDING" class="mytab">退款中</li>
-               <li id="REFUNDED" class="mytab">已退款</li>
-	    </ul>
-	    <ul class="ui-tab-content" style="width:200%">
-	        <li></li>
-	        <li></li>
-	        <li></li>
-	        <li></li>
-	    </ul>
-    </div>
-	<div class="demo-item">
+	
+	<div class="demo-item" style="margin-top:50px;">
 		<div class="demo-block">
-			<ul id="orderList" class="ui-list ui-border-tb ">
-				
-				
+			<ul id="userList" class="ui-list ui-list-link ui-list-single ui-border-tb">
+			    
 			</ul>
 		</div>
 		
@@ -73,16 +59,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  };
 	          var pageCount=10;
 	          var currPage=1;
-	          var orderStatus="PAYSUCCESS";
+	       
 	          
 	          function getPage(isinit){
-	              var _uriOrder = window.BASEPATH + 'order/mobile/list.do?currPage='+currPage+
-	              '&pageCount='+pageCount+'&orderStatus='+orderStatus;
+	              var _uriUser = window.BASEPATH + 'seerecord/mobile/seeuserslist?currPage='+currPage+'&pageCount='+pageCount;
 		
-				  $.get(_uriOrder, null, function(data){
+				  $.get(_uriUser, null, function(data){
 				       currPage+=1;
 				       data = parseAjaxResult(data);
-				       if(data.length!=0&&!isinit){
+				       if(!isinit&&data.length!=0){
 				          $('#loading').fadeIn().show();
 				       }
 				       if(isinit){
@@ -102,20 +87,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	               if(data){
 	                  for(var i=0;i<data.length;i++){
-				         html.push('<li class="orders" id="order-'+data.id+'">');
-						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url(/chenxisoft/'+data[i].worderPhoto+')"></span></div>');
-						 html.push('	<div class="ui-list-info ui-border-t">');
-						 html.push('		<div style="font-size:14px;">'+data[i].workName+'</div>');
-						 html.push('		<p class="ui-nowrap" style="font-size:12px;">'+data[i].price+'元/'+
-						           data[i].days+'天/'+data[i].region+'</p>');
-						 html.push('		<p class="ui-nowrap" style="font-size:12px;">开始日期:'+data[i].fromDateStr+'</p>');
-						 html.push('	</div>');
-						 html.push('</li>'); 
+	                        html.push('<li>');
+						    html.push('    <div class="ui-avatar-s">');
+						    html.push('        <span style="background-image:url(/chenxisoft'+data[i].userPic+')"></span>');
+						    html.push('    </div>');
+						    html.push('    <div class="ui-list-info ui-border-t">');
+						    html.push('        <h4 class="ui-nowrap" style="font-size:12px;">'+data[i].userName+'</h4>');
+						    html.push('    </div>');
+						    html.push('</li>');
 				       }
 	               
 	               }
-			       $('#orderList').append(html.join(''));
+			       $('#userList').append(html.join(''));
 	          }
 	          
 	          
@@ -131,27 +114,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  });
 	          
 	          
-	          var tab = new fz.Scroll('.ui-tab', {
-		            role: 'tab',
-		            autoplay: false,
-		            interval: 3000
-		      });
 		      
-		      $('.mytab').on('click',function(){
-		            $('#orderList').children().remove();
-		            orderStatus=$(this).attr('id');
-		            currPage=1;
-		            getPage(true);
-		      });
-	          
-		      
-		      $(document).on('click','.order',function(){
-		         var ids=this.id.split('-');
-	
-		      
-		      });
-		      
-		     
+		    
 	          
 	     });
 	

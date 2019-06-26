@@ -29,8 +29,12 @@ public class ModularDAO extends AbstractBaseDao<ModularPO>{
 		if(modulars==null || modulars.size()<=0) return null;
 		return modulars;
 	}
-
-
+ 
+	public List<ModularPO> getfindAll(final int page, final int pageSize) {
+		QueryHql hql = newQueryHql();
+		hql.orderBy("sortindex", false);
+		return findByHql(hql, page, pageSize);
+	}
 
 
 
@@ -150,6 +154,7 @@ public class ModularDAO extends AbstractBaseDao<ModularPO>{
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("comId", Condition.eq, comId);
 		hql.andBy("modularIsv", Condition.eq, 1);
+		hql.orderBy("sortindex", false);
 		List<ModularPO> modulars = findByHql(hql);
 		if(modulars==null || modulars.size()<=0) return null;
 		return modulars;

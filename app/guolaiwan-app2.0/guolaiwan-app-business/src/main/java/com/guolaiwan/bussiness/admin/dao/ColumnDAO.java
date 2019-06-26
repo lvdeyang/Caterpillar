@@ -46,6 +46,34 @@ public class ColumnDAO extends AbstractBaseDao<ColumnPO> {
 	public List<ColumnPO> getColumnByCode(String code){
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("code", Condition.eq, code);
+		hql.orderBy("sortindex", false);
+		List<ColumnPO> list = findByHql(hql);
+		return list;
+	}
+	
+	public ColumnPO getColumnByCode(Long merchantId ,String code){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("code", Condition.eq, code);
+		hql.andBy("merchantId", Condition.eq, merchantId);
+		List<ColumnPO> list = findByHql(hql);
+		return list.get(0);
+	}
+	public ColumnPO getByCode(String code,long index){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("code", Condition.eq, code);
+		hql.andBy("sortindex", Condition.eq, index);
+		List<ColumnPO> list = findByHql(hql);
+		if (list.size()==0) {
+			return null;
+		}else {
+			return list.get(0);
+		}
+	}
+	
+	public List<ColumnPO> getsortindex(String code){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("code", Condition.eq, code);
+		hql.orderBy("sortindex", true);
 		List<ColumnPO> list = findByHql(hql);
 		return list;
 	}

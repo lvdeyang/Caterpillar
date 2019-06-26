@@ -81,30 +81,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	           
 	        </div>
 	       
-	        <div class="ui-form-item ui-border-b">
+	        <div class="ui-form-item ui-border-b" style="display:none">
 	            <label style="width:100px;">
 	                                    身份证号
 	            </label>
 	            <label style="margin-left:20px;">${worker.idCard}</label>
 	        </div>
-	        <div class="ui-form-item ui-border-b">
+	        <div class="ui-form-item ui-border-b" >
 	            <label style="width:100px;">
 	                                   电话
 	            </label>
-	            <label style="margin-left:20px;">${worker.phone}</label>
+	            <label style="margin-left:20px;">0315-6659872</label>
 	        </div>
-	        <div class="ui-form-item ui-border-b">
+	        <div class="ui-form-item ui-border-b" style="display:none">
 	            <label style="width:100px;">
 	                                    家庭住址
 	            </label>
 	            <label style="margin-left:20px;">${worker.address}</label>
 	        </div>
-	        <div class="ftitle">
-	                                    价格表(单位:元)
-	        </div>
-	        <table id="priceTable">
-	           ${priceHtml}
-	        </table>
 	        <div class="ftitle">
 	                                    证件照片
 	        </div>
@@ -114,6 +108,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <image src="/chenxisoft${worker.healthPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
 	            <image src="/chenxisoft${worker.expertPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
 	        </div>
+	        <div class="ftitle">
+	                                    价格表(单位:元)
+	        </div>
+	        <table id="priceTable">
+	           ${priceHtml}
+	        </table>
+	        
 	        <div class="ftitle">
 	                                    评论列表<a href="#" style="">查看更多</a>
 	        </div>
@@ -134,7 +135,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	        <div class="ui-btn-wrap">
 	            <button class="ui-btn-lg ui-btn-primary" id="addOrder">
-	                                     立即预订
+	                                     电话咨询
 	            </button>
 	        </div>
 	</div>

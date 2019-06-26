@@ -23,4 +23,10 @@ public class OrderDao extends AbstractBaseDao<OrderPo> {
 		hql.andBy("orderStatus",Condition.eq,OrderStatus.COMPLETE);
 		return countByHql(hql);
 	}
+	
+	public List<OrderPo> findOrderByStatus(OrderStatus status,int pageNum,int pageSize){
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("orderStatus",Condition.eq,status);
+		return this.findByHql(hql, pageNum, pageSize);
+	}
 }

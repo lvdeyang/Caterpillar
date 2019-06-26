@@ -21,34 +21,26 @@ import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
 import com.chenxi.web.po.ProductPo;
-import com.chenxi.web.yueba.admin.dao.ComboDao;
 import com.chenxi.web.yueba.admin.dao.DaysTypeDao;
 import com.chenxi.web.yueba.admin.dao.LabelDao;
-import com.chenxi.web.yueba.admin.dao.LevelDao;
-import com.chenxi.web.yueba.admin.dao.RegionDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
-import com.chenxi.web.yueba.admin.po.ComboPo;
+import com.chenxi.web.yueba.admin.po.DaysTypePo;
 import com.chenxi.web.yueba.admin.po.LabelPo;
 
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
-@RequestMapping("/combo")
-public class ComboContoller extends BaseController {
-	@Autowired
-	ComboDao conn_combo;
+@RequestMapping("/days")
+public class DaysTypeContoller extends BaseController {
 	@Autowired
 	DaysTypeDao conn_daystype;
-	@Autowired
-	RegionDao conn_region;
-	@Autowired
-	LevelDao conn_level;
+	
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		
-		ModelAndView mv = new ModelAndView("yuebaadmin/combo", strMap);
+		ModelAndView mv = new ModelAndView("yuebaadmin/daystype", strMap);
 		return mv;
 	}
 	
@@ -57,8 +49,8 @@ public class ComboContoller extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Map<String, Object> list(int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		strMap.put("count", conn_combo.countAll());
-		strMap.put("data", conn_combo.findAll(page, limit));
+		strMap.put("count", conn_daystype.countAll());
+		strMap.put("data", conn_daystype.findAll(page, limit));
 		strMap.put("code", 0);
 		strMap.put("msg", "");
 		return strMap;
@@ -67,17 +59,14 @@ public class ComboContoller extends BaseController {
 	@RequestMapping(value="/del.do", method= RequestMethod.POST)
 	public String del(HttpServletRequest request) throws Exception {
 		if(request.getParameter("id")!=null){
-			conn_combo.delete(Long.parseLong(request.getParameter("id")));
+			conn_daystype.delete(Long.parseLong(request.getParameter("id")));
 		}
 		return "success";
 	}
 	
 	@RequestMapping("/add")
 	public ModelAndView addClasses(){
-		ModelAndView mv = new ModelAndView("yuebaadmin/addCombo");
-		mv.addObject("regionList", conn_region.findAll());
-		mv.addObject("daysList", conn_daystype.findAll());
-		mv.addObject("levelList",conn_level.findAll());
+		ModelAndView mv = new ModelAndView("yuebaadmin/adddaystype");
 		return mv;
 	}
 	
@@ -86,25 +75,9 @@ public class ComboContoller extends BaseController {
 	@RequestMapping(value="/add.do", method= RequestMethod.POST)
 	public String add(HttpServletRequest request) throws Exception {
 		String days = request.getParameter("days");
-		String region = request.getParameter("region");
-		String price =request.getParameter("price");
-		String level= request.getParameter("level");
-		
-		ComboPo comboPo=conn_combo.findByRegionAndDays(region, Integer.parseInt(days), level);
-		if(comboPo==null){
-			comboPo=new ComboPo();
-			comboPo.setDays(Integer.parseInt(days));
-			comboPo.setRegion(region);
-			comboPo.setPrice(Double.parseDouble(price));
-			comboPo.setLevel(level);
-			conn_combo.save(comboPo);
-			
-		}else{
-			comboPo.setPrice(Double.parseDouble(price));
-			conn_combo.update(comboPo);
-		}
-		
-		
+		DaysTypePo daysTypePo=new DaysTypePo();
+		daysTypePo.setDays(Integer.parseInt(days));
+		conn_daystype.save(daysTypePo);
 		return "success";
 	}
 	

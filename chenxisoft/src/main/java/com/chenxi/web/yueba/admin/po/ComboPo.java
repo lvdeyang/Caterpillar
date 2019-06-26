@@ -11,6 +11,7 @@ public class ComboPo extends AbstractBasePO{
 	private String region;
 	private int days;
 	private double price;
+	private String level;
 	public String getRegion() {
 		return region;
 	}
@@ -28,6 +29,12 @@ public class ComboPo extends AbstractBasePO{
 	}
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	public String getLevel() {
+		return level;
+	}
+	public void setLevel(String level) {
+		this.level = level;
 	}
 	
 

@@ -1,5 +1,6 @@
 package com.chenxi.web.yueba.admin.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.chenxi.web.dao.UserDao;
+import com.chenxi.web.yueba.admin.dao.DaysTypeDao;
+import com.chenxi.web.yueba.admin.dao.LevelDao;
 import com.chenxi.web.yueba.admin.dao.OrderDao;
+import com.chenxi.web.yueba.admin.dao.RegionDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
+import com.chenxi.web.yueba.admin.po.ComboPo;
 import com.chenxi.web.yueba.admin.po.OrderPo;
+
+import pub.caterpillar.commons.util.date.DateUtil;
 
 @Controller
 @RequestMapping("/order")
@@ -34,6 +41,12 @@ public class OrderContoller {
 	UserDao conn_user;
 	@Autowired
 	WorkerDao conn_worker;
+	@Autowired
+	DaysTypeDao conn_daystype;
+	@Autowired
+	RegionDao conn_region;
+	@Autowired
+	LevelDao conn_level;
 	
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -49,4 +62,44 @@ public class OrderContoller {
 		strMap.put("msg", "");
 		return strMap;
 	}
+	
+	
+	@RequestMapping(value = "/addorder", method = RequestMethod.GET)
+	public ModelAndView addorder(HttpServletRequest request,long workerId) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("workerId", workerId);
+		strMap.put("regionList", conn_region.findAll());
+		strMap.put("daysList", conn_daystype.findAll());
+		strMap.put("levelList",conn_level.findAll());
+		ModelAndView mv = new ModelAndView("yuebaadmin/addorder", strMap);
+		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/add.do", method= RequestMethod.POST)
+	public String add(HttpServletRequest request) throws Exception {
+		String days = request.getParameter("days");
+		String region = request.getParameter("region");
+		String price =request.getParameter("price");
+		String level= request.getParameter("level");
+		String fromDate= request.getParameter("fromDate");
+		String userName= request.getParameter("userName");
+		String userPhone= request.getParameter("userPhone");
+		String workerId= request.getParameter("workerId");
+		String left=request.getParameter("left");
+		OrderPo orderPo=new OrderPo();
+		orderPo.setWorkerId(Long.parseLong(workerId));
+		orderPo.setWorkName(conn_worker.get(Long.parseLong(workerId)).getRealName());
+		orderPo.setDays(Integer.parseInt(days));
+		orderPo.setRegion(region);
+		orderPo.setPrice(Double.parseDouble(price));
+		orderPo.setFromDate(DateUtil.parse(fromDate, "yyyy-MM-dd"));
+		orderPo.setUserName(userName);
+		orderPo.setUserPhone(userPhone);
+		orderPo.setMleft(Double.parseDouble(left));
+		conn_order.save(orderPo);
+		
+		return "success";
+	}
+	
 }

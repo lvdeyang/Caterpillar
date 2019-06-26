@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			         200,300
 			          
 			        ] 
-			        ,content: 'label/add'
+			        ,content: 'regions/add'
 			        ,zIndex: layer.zIndex //
 			        ,success: function(layero){
 			          layer.setTop(layero); //
@@ -60,13 +60,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		      var table = layui.table;
 			  table.render({
 			    elem: '#dataTable'
-			    ,url:'/chenxisoft/label/list'
+			    ,url:'/chenxisoft/regions/list'
 			    ,title: '标签列表'
 			    ,cols: [[
 			       {type: 'checkbox', fixed: 'left'}
 			      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-			      ,{field:'name', title:'名称', width:500, edit: 'text'}
-			      ,{field:'code', title:'code', width:200, edit: 'text'}
+			      ,{field:'regionName', title:'名称', width:500, edit: 'text'}
 			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}
 			    ]]
 			    ,page: true
@@ -81,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			         
 			         
 			         $.ajax({
-			              url:'label/del.do',
+			              url:'regions/del.do',
 			              type:'post',
 			              data:{id:data.id},
 			              success:function(data){
@@ -93,7 +92,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    } 
 			    
 			  });  
-			  
 			  
 			  
 			 
