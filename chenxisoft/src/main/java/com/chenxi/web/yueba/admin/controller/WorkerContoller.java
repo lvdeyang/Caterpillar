@@ -23,6 +23,7 @@ import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
 import com.chenxi.web.po.ProductPo;
 import com.chenxi.web.yueba.admin.dao.LabelDao;
+import com.chenxi.web.yueba.admin.dao.LevelDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
 import com.chenxi.web.yueba.admin.po.LabelPo;
 import com.chenxi.web.yueba.admin.po.WorkerPo;
@@ -94,7 +95,32 @@ public class WorkerContoller extends BaseController {
 		workerPo.setCheckMsg(checkMsg);
 		conn_worker.save(workerPo);
 		return "success";
+	
+	}
+	@Autowired
+	LevelDao conn_level;
+	
+	
+	@RequestMapping(value = "/setlevel", method = RequestMethod.GET)
+	public ModelAndView setlevel(HttpServletRequest request,long id) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("levelList", conn_level.findAll());
+		strMap.put("id", id);
+		ModelAndView mv = new ModelAndView("yuebaadmin/setlevel", strMap);
+		return mv;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/setlevel.do", method= RequestMethod.POST)
+	public String setleveldo(HttpServletRequest request) throws Exception {
+		String level = request.getParameter("level");
+		String id=request.getParameter("id");
+		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
+		workerPo.setLevel(level);
+		conn_worker.update(workerPo);
+       
+		return "success";
+	
+	}
 	
 }

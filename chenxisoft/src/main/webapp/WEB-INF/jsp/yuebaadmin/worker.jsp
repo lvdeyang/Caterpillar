@@ -19,6 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        <script type="text/html" id="bar">
               <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
               <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+              <a class="layui-btn layui-btn-xs" lay-event="level">级别设置</a>
               <a class="layui-btn layui-btn-xs" lay-event="comment">查看评论</a>
 	   </script>
 	   <table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
@@ -50,8 +51,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			      ,{field:'address', title:'地址', width:250, edit: 'text'}
 			      ,{field:'age', title:'年龄', width:100, edit: 'text'}
 			      ,{field:'price', title:'价格', width:100, edit: 'text'}
+			      ,{field:'level', title:'级别', width:200, edit: 'text'}
 			      ,{field:'status', title:'状态', width:200, edit: 'text'}
-			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:200}
+			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:250}
 			    ]]
 			    ,page: true
 			  });
@@ -91,10 +93,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					        }
 					    });
 				    
-				    }else if(obj.event==='comment'){
+				    }
+				    
+				    else if(obj.event==='level'){
 				        layer.open({
 					        type: 2 //此处以iframe举例
-					        ,title: '审核'
+					        ,title: '设置级别'
+					        ,area: ['500px', '300px']
+					        ,shade: 0
+					        ,maxmin: true
+					        ,offset: [ //为了演示，随机坐标
+					         200,300
+					          
+					        ] 
+					        ,content: 'worker/setlevel?id='+data.id
+					        //layer.closeAll();
+					        ,zIndex: layer.zIndex //
+					        ,success: function(layero){
+					          layer.setTop(layero); //
+					        }
+					    });
+				    
+				    }
+				    else if(obj.event==='comment'){
+				        layer.open({
+					        type: 2 //此处以iframe举例
+					        ,title: '查看评论'
 					        ,area: ['1200px', '500px']
 					        ,shade: 0
 					        ,maxmin: true
