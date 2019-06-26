@@ -69,6 +69,7 @@ public class WorkerContoller extends BaseController {
 	public ModelAndView check(long id){
 		ModelAndView mv = new ModelAndView("yuebaadmin/checkworker");
 		mv.addObject("id", id);
+		mv.addObject("worker",conn_worker.get(id));
 		return mv;
 	}
 	

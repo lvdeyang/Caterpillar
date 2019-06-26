@@ -79,11 +79,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				        layer.open({
 					        type: 2 //此处以iframe举例
 					        ,title: '审核'
-					        ,area: ['500px', '300px']
+					        ,area: ['800px', '800px']
 					        ,shade: 0
 					        ,maxmin: true
 					        ,offset: [ //为了演示，随机坐标
-					         200,300
+					         100,400
 					          
 					        ] 
 					        ,content: 'worker/check?id='+data.id

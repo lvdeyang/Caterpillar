@@ -17,6 +17,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <form class="layui-form" action="">
 	  <input type="hidden" name="id" value="${id}"/>
 	  <div class="layui-form-item">
+	    <label class="layui-form-label">身份证照片</label>
+	    <div class="layui-input-block">
+	      <image src="/chenxisoft/${worker.idCardPhoto}" style="width:300px;height:200px;"/>
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">健康证明</label>
+	    <div class="layui-input-block">
+	      <image src="/chenxisoft/${worker.healthPhoto}" style="width:300px;height:200px;"/>
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">专业照片</label>
+	    <div class="layui-input-block">
+	      <image src="/chenxisoft/${worker.expertPhoto}" style="width:300px;height:200px;"/>
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
 	    <label class="layui-form-label">回复</label>
 	    <div class="layui-input-block">
 	      <input type="text" name="checkMsg" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
