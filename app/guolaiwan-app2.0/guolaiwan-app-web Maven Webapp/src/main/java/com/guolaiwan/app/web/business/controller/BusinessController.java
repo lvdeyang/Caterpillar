@@ -426,6 +426,18 @@ public class BusinessController extends WebBaseControll {
 		return mv;
 	}
 	
+
+	// 获取这个商品的所拼的团
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getteamman")
+	public List<GroupTeamPO> getTeamMan(HttpServletRequest request) throws Exception {
+		Long captain=Long.parseLong(request.getParameter("captain"));
+		Long  teamId=Long.parseLong(request.getParameter("teamId"));
+		List<GroupTeamPO> teams = groupteam.findByCaptainAndTeamId(captain, teamId);
+		return teams;
+	}
+
 	// 跳转采摘页面
 	@ResponseBody
 	@RequestMapping(value = "/pick", method = RequestMethod.GET)
@@ -436,6 +448,5 @@ public class BusinessController extends WebBaseControll {
 		return mv;
 	}
 	 
-	
 	
 }

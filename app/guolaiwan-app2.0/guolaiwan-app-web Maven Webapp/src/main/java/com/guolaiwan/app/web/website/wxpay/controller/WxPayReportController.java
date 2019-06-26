@@ -514,13 +514,19 @@ public class WxPayReportController extends WebBaseControll {
 				//获取订单号
 				String vehicle = null;
 				String tradeNum = respData.get("out_trade_no");
-						stringBuffer.append("<xml><return_code><![CDATA[");
-						stringBuffer.append("SUCCESS");
-						stringBuffer.append("]]></return_code>");
-						stringBuffer.append("<return_msg><![CDATA[");
-						stringBuffer.append("OK");
-						stringBuffer.append("]]></return_msg>");
-						System.out.println("微信支付付款成功!订单号："+tradeNum);
+				//获取订单号
+				Long orderId= Long.parseLong(tradeNum.split("-")[1]);
+				OrderInfoPO order = conn_orderInfo.get(orderId);
+				//生成验单码,和二维码图片
+				String ydNO = ydNoCode(order.getOrderNO());
+				order.setYdNO(ydNO);
+				stringBuffer.append("<xml><return_code><![CDATA[");
+				stringBuffer.append("SUCCESS");
+				stringBuffer.append("]]></return_code>");
+				stringBuffer.append("<return_msg><![CDATA[");
+				stringBuffer.append("OK");
+				stringBuffer.append("]]></return_msg>");
+				System.out.println("微信支付付款成功!订单号："+tradeNum);
 			}else{
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("FAIL");

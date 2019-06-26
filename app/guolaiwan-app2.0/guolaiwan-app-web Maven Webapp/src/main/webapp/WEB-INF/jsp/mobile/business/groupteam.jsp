@@ -215,17 +215,17 @@ height:40px;
 	
 	               
 	            wx.onMenuShareTimeline({
-                            title: '畅游华夏，尽在过来玩', // 分享标题
-                            link: 'http://<%=weburl%>/guolaiwan/pubnum/index', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            title: '快来啊，就差几个人了，外人我不告诉他~', // 分享标题
+                            link: 'http://<%=weburl%>/business/groupteam?teamId=${team.id}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                             imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
                             success: function () {
                                	
                             }
                         });
 	            wx.onMenuShareAppMessage({
-					title : '畅游华夏，尽在过来玩', // 分享标题
+					title : '快来啊，就差几个人了，外人我不告诉他~', // 分享标题
 					desc : '<%=weburl%>，联系电话:0315-6681288/6686299', // 分享描述
-					link : 'http://<%=weburl%>/guolaiwan/pubnum/index', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					link : 'http://<%=weburl%>/business/groupteam?teamId=${team.id}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 					imgUrl : 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
 					success : function() {}
 				});
@@ -340,7 +340,9 @@ function dobuy(){
 				if(data==1){
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
 						    if(data.data=="PAYSUCCESS"){
+						    $.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":2},function(){
 						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+		                		})
 						    }
 						});
 				}else{
@@ -378,13 +380,13 @@ function dobuy(){
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		                $.confirm("交易成功");
-		                		$.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":2},function(){
-		                		})
 		                
 		                setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
 								    if(data.data=="PAYSUCCESS"){
-								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+				                		$.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":2},function(){
+									       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+				                		})
 								    }
 								});
                         }, 1000);
