@@ -415,6 +415,9 @@ $(function() {
    }
    function group(){
    		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
+   }  
+   function pick(){
+   		location.href=window.BASEPATH + 'business/pick?merchantId=${merchantId}';
    }
 </script>
 
@@ -464,7 +467,7 @@ $(function() {
          <li><img src="lib/images/qianbaos.png"/></li>
          <li><span>活动</span></li>
    	     <li onclick="group()"><span>拼团</span></li>
-         <li><span>采摘</span></li>
+         <li onclick="pick()"><span>采摘</span></li>
          <li><span>攻略</span></li>
          <li><span>钱包</span></li>
 	     </ul>

@@ -897,7 +897,7 @@ html, body {
 
 			//alert($(this).attr('src'));
 
-			imgstr = '<img id="ImgZoomInImage" src="' + $(this).attr('src') + '" onclick=$(\'#ImgZoomInImage\').hide();$(\'#ImgZoomInBG\').hide(); style="cursor:pointer; display:none; position:absolute; z-index:10001;width:100%; height:60%;" />';
+			imgstr = '<img id="ImgZoomInImage" src="' + $(this).attr('src') + '" onclick=$(\'#ImgZoomInImage\').hide();$(\'#ImgZoomInBG\').hide(); style="cursor:pointer; display:none; position:absolute; z-index:10001;width:100%;" />';
 
 			if($('#ImgZoomInBG').length < 1) {
 
