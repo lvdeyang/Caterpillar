@@ -248,16 +248,16 @@ $(function() {
 	 }
       /**/	
 	  function getRecomment(){
-	     var _uriRecomment = window.BASEPATH + 'phoneApp/getRecommend?comCode='+comCode;
+	    var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=198&userId=${userId}';
 		
-		 $.get(_uriRecomment, null, function(data){
+		 $.get(_uriMerchantInfo, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
-				if(data && data.length>0){
+				if(data){
 				    var html=[];
-					for(var i=0; i<data.length; i++){
-						html.push('<div style="height:200px;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].productId+'-'+data[i].classify+'" style="height:200px;" src="'+data[i].slidepic+'" alt="">');
-						html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].name+'</div></div>');
+				    var pics=data.shopMpic.split(',');
+					for(var i=0; i<pics.length; i++){
+						html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
 					}
 					$('#headerWrapper').append(html.join(''));
 					$("#headerSwiper").swiper({
