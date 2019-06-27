@@ -999,7 +999,7 @@ public class PhoneController extends WebBaseControll {
 		int count = conn_product.countProductsByMer(merchantID);
 		for (ProductVO productVO : _products) {
 			ActivityRelPO relPO = conn_activityRel.getActivityRelByProductId(productVO.getId());
-			if (relPO != null) {
+			/*if (relPO != null) {
 				ProductVO origProductVO = (ProductVO) productVO.clone();
 				origProductVO.setProductShowPic(sysConfig.getWebUrl() + origProductVO.getProductShowPic()); // 显示图片
 				retProductVOs.add(origProductVO);
@@ -1026,7 +1026,7 @@ public class PhoneController extends WebBaseControll {
 			} else {
 				productVO.setActivityReId(0);
 				productVO.setIsSurpport(0);
-			}
+			}*/
 
 			productVO.setProductShowPic(sysConfig.getWebUrl() + productVO.getProductShowPic()); // 显示图片
 			retProductVOs.add(productVO);

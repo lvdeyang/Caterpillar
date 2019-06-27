@@ -596,7 +596,7 @@ html, body {
 			    $('#proName').html(data.product.productName+'￥<span id="price">'+data.activityPro.price+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
 			    $('#proContent').html(data.product.productIntroduce);
 			    $('#total').html(data.activityPro.price);
-			    $('#proShowNum').html('销量'+data.product.productShowNum);
+			    $('#proShowNum').html('销量'+data.product.productSaleNum);
 			    $('#proStock').html('库存'+data.product.productStock);
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
 				$('#addressphone1').html('<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopTel);
@@ -674,14 +674,12 @@ html, body {
 		function initLogistics(data){
 		   var html=[];
 		   for(var i=0;i<data.length;i++){
-		      html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
-		   }
-		   $('#logisticsList').append(html.join(''));
-		}
-		
-		$(document).on('click','#tel',function(){
-	       var phones=phone.split('/');
-	       location.href ='tel://' + phones[0];
+		       if(i==0){
+		          html.push('<option value="'+data[i+1].id+'">'+data[i+1].name+'</option>');
+		     }
+		     if(i==1){
+		          html.push('<option value="'+data[i-1].id+'">'+data[i-1].name+'</option>');
+		     }
 	    });
 		
 		
