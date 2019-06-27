@@ -772,7 +772,12 @@ input[type="datetime-local"]:before{
 		function initLogistics(data){
 		   var html=[];
 		   for(var i=0;i<data.length;i++){
-		      html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+		     if(i==0){
+		          html.push('<option value="'+data[i+1].id+'">'+data[i+1].name+'</option>');
+		     }
+		     if(i==1){
+		          html.push('<option value="'+data[i-1].id+'">'+data[i-1].name+'</option>');
+		     }
 		   }
 		   $('#logisticsList').append(html.join(''));
 		}
