@@ -991,7 +991,7 @@ html, body {
 								style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 						</div>
 						<div
-							style="width:90%;margin-top:25px;margin-left:11px;font-size:16px;">
+							style="width:90%;margin-top:25px;margin-left:11px;font-size:14px;">
 							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线咨询</a>
 							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 							
