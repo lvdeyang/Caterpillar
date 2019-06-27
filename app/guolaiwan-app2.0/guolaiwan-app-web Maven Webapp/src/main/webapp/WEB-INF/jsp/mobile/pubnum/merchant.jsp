@@ -796,7 +796,8 @@ html, body {
 							//查找出这个房间touser是登录人的信息展示出来
 							if(data[i].touserId==userId&&data[i].merchantId==merchantId){
 								$('.ltname').text(data[i].fromuser);
-								ans  = '<div class="answer"><div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
+								ans  = '<div class="answer" style="margin-top:30px;">';
+								ans += '<div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
