@@ -2564,7 +2564,7 @@ public class PubNumController extends WebBaseControll {
 		JSONObject obj1 = new JSONObject();
 		obj1.put("touser", user.getUserOpenID());
 		obj1.put("template_id", "v9eHHHq4Fu-Q45Pa0oBfibxd032Yq_9rAkqDZZ-V2G4");
-		obj1.put("url", "");
+		obj1.put("url", "http://www.guolaiwan.net/guolaiwan/pubnum/admin/index?null=");
 		JSONObject microProObj1 = new JSONObject();
 		microProObj1.put("appid", "");
 		microProObj1.put("pagepath", "");

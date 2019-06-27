@@ -1,6 +1,7 @@
 <%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -457,8 +458,8 @@ function dobuy(){
           <div style="width:92%;height:180px;border:1px solid #CECECE;margin:0 auto;border-radius:6px;position: relative;">
             <img style="height:140px;margin:20px 0px 20px 10px; width:55%;" src="http://www.guolaiwan.net/file/${product.productShowPic}"/>
             <p style="position: absolute;font-weight:bold;color:black;top:30px;font-size:12px;right:7%;">${product.productName}</p>
-            <p style="position: absolute;font-weight:bold;color:#E50012;top:110px;font-size:12px;right:7%;"><span>${groupBuyPO.groupnum}</span>人拼购价：￥<span>${groupBuyPO.groupprice/100}0</span></p>
-            <p style="position: absolute;font-weight:bold;color:#989898;top:140px;font-size:12px;right:7%;">单买价：￥<span>${product.productPrice/100}0</span></p>
+            <p style="position: absolute;font-weight:bold;color:#E50012;top:110px;font-size:12px;right:7%;"><span>${groupBuyPO.groupnum}</span>人拼购价：￥<span><fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/></span></p>
+            <p style="position: absolute;font-weight:bold;color:#989898;top:140px;font-size:12px;right:7%;">单买价：￥<span><fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span></p>
           </div>
           <div style="height:90px;width:100%;line-height: 90px;position:relative;">
              <p style="width:100%;text-align: center;font-weight:bold;font-size:14px;letter-spacing:2px">还差<span style="color:#E50012;">${groupBuyPO.groupnum-team.teamnum}人</span>拼团成功，剩余时间<span id="times" style="color:#fff;letter-spacing:7px;background:#E6393F;padding:10px 0;border-radius:6px;font-size:16px;text-align: center;margin-left:10px;">00:00:00</span></p>

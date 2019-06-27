@@ -1,6 +1,7 @@
 <%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -532,8 +533,8 @@ function timer(times,intDiff) {
 		style="height:100px;width:100%;border-bottom:1px solid #A6A6A6;">
 		<p
 			style="color:#F46837;font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:10%;">
-			￥${groupBuyPO.groupprice/100}0<span
-				style="text-decoration:line-through;font-size:14px;color:#C7C7C7;">￥${product.productPrice/100}0</span>
+			￥<fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/><span
+				style="text-decoration:line-through;font-size:14px;color:#C7C7C7;" >￥<fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span>
 		</p>
 		<p
 			style="color:black;font-size:18px;height:50px;line-height:25px;margin-left:10%;">${product.productName}</p>
@@ -560,13 +561,13 @@ function timer(times,intDiff) {
 		style="background:#F56938;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
 		<p
 			style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-			￥<span id="zong">${product.productPrice/100}0</span><span
+			￥<span id="zong"><fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span><span
 				style="font-size:14px;margin-left:5%;"
 				onclick="gotoproduct(${product.id})">原价购买</span>
 		</p>
 		<p class="fukuan"
 			style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-			￥<span id="zong">${groupBuyPO.groupprice/100}0</span><span
+			￥<span id="zong"><fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/></span><span
 				style="font-size:14px;margin-left:5%;">我要开团</span>
 		</p>
 	</div>
