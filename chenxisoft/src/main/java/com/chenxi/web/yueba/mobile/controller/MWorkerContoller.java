@@ -105,5 +105,12 @@ public class MWorkerContoller extends BaseController {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/mobile/wpersonal", method = RequestMethod.GET)
+	public ModelAndView workerpersonal(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		ModelAndView mv = new ModelAndView("yuebamobile/workerpersonal", strMap);
+		return mv;
+	}
+	
 	
 }

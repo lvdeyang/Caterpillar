@@ -46,7 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <header class="ui-header ui-header-positive ui-border-b">
          
          <h1 style="font-size:14px;width:80px;float:left;">个人中心</h1>
-         <a href="cartest/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-home"></i></a>
+         <a  style="display:none;" href="cartest/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-home"></i></a>
     </header>
 	<ul class="ui-list ui-list-function ui-border-tb" style="margin-top:50px;">
 	    <li>
@@ -64,18 +64,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	             通用
 	</div>
     <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t">
+	    <li class="ui-border-t" data="worker/mobile/wpersonal">
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂中心</h4> 
 	        </div>
 	    </li>
-	    <li class="ui-border-t">
+	    <li class="ui-border-t" data="seerecord/mobile/seeworkers">
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap" style="font-size:14px;">浏览记录</h4> 
 	        </div>
 	    </li>
 	    <li class="ui-border-t">
-	        <div class="ui-list-info">
+	        <div class="ui-list-info" data="javascript:void(0)">
 	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4> 
 	        </div>
 	    </li>
@@ -95,9 +95,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}
 			  };
 	          
-	          
+	          $(document).on('click','.ui-border-t',function(){
+	              location.href=$(this).attr('data');
+	          });
 	     });
 	
 	</script>
+	<jsp:include page="../common.jsp"></jsp:include>
 </body>
 </html>

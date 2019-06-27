@@ -41,9 +41,9 @@ public class MCommentController {
 	}
 	
 	@RequestMapping(value = "/mobile/index", method = RequestMethod.GET)
-	public ModelAndView index(HttpServletRequest request,long workerId) {
+	public ModelAndView index(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		strMap.put("workerId", workerId);
+		strMap.put("workerId", 1);
 		ModelAndView mv = new ModelAndView("yuebamobile/comment", strMap);
 		return mv;
 	}
