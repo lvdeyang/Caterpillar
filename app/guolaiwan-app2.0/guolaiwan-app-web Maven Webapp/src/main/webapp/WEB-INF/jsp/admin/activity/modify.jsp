@@ -76,14 +76,14 @@
                 
                 <div class="layui-form-item">
                 	<div class="layui-inline">
-                    	<label class="layui-form-label">每天开始时间：</label>
+                    	<label class="layui-form-label">有效开始时间：</label>
                     	<div class="layui-input-inline">
                         	<input type="text" id="productBeginTime" name="productBeginTime" placeholder="HH:mm:ss" required lay-verify="required"
                         	class="layui-input" value="${startTime}">
                     	</div>
                     </div>
                     <div class="layui-inline">
-                    	<label class="layui-form-label">每天结束时间：</label>
+                    	<label class="layui-form-label">有效结束时间：</label>
                     	<div class="layui-input-inline">
                         	<input type="text" id="productEndTime" name="productEndTime" placeholder="HH:mm:ss" required lay-verify="required"
                         	class="layui-input"  value="${endTime}">
