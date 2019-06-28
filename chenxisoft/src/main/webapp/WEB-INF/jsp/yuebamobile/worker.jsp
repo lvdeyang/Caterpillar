@@ -250,16 +250,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			            wx.onMenuShareTimeline({
                             title: '[小青月嫂]${worker.realName}', // 分享标题
                             link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: 'http://<%=weburl%>/chenxisoft${worker.photo}', // 分享图标
+                            imgUrl: window.BASEPATH+'/chenxisoft${worker.photo}', // 分享图标
                             success: function () {
                                	
                             }
 		                });
 			            wx.onMenuShareAppMessage({
 							title : '[小青月嫂]${worker.realName}', // 分享标题
-							desc : '<%=weburl%>，联系电话:0315-6681288/6686299', // 分享描述
+							desc : '联系电话:0315-6681288/6686299', // 分享描述
 							link : location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-							imgUrl : 'http://<%=weburl%>/chenxisoft${worker.photo}', // 分享图标
+							imgUrl : window.BASEPATH+'/chenxisoft${worker.photo}', // 分享图标
 							success : function() {}
 						});
 			            

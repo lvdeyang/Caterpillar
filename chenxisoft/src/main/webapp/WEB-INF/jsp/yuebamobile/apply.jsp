@@ -266,7 +266,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	                }
 	                
-	            )};
+	            });
 	 
 	        }
 	        $(document).on('click','#doApply',function(){

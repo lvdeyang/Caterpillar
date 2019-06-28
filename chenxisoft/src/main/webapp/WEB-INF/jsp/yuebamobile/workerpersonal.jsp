@@ -63,10 +63,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    </ul>
     </c:if>
     <c:if test="${worker.status eq 'CHECKING'}">
-	   <div style="text-align:center;font-size:12px;color:red">审核中......</div>
+	   <div style="text-align:center;font-size:12px;color:red;margin-top:45px;">审核中......</div>
 	</c:if>
 	<c:if test="${worker.status eq 'REFUSE'}">
-	   <div style="text-align:center;font-size:12px;color:red">审核不通过:${worker.checkMsg}</div>
+	   <div style="text-align:center;font-size:12px;color:red;margin-top:45px;">审核不通过:${worker.checkMsg}</div>
 	   <div class="ui-btn-wrap">
            <button id="reapply" class="ui-btn-lg ui-btn-primary">
                                     重新申请

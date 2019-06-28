@@ -108,7 +108,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						 }
 						 html.push(subHtml.join('&nbsp;&nbsp;&nbsp;&nbsp;'))
                          html.push('</p>');
-                         html.push('<p style="font-size:13px;">12.85km</p>');
+                         //html.push('<p style="font-size:13px;">12.85km</p>');
 						 html.push('	</div>');
 						 html.push('</li>'); 
 				       }

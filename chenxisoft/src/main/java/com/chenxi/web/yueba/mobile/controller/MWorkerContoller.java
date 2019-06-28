@@ -1,11 +1,13 @@
 package com.chenxi.web.yueba.mobile.controller;
 
 import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -22,6 +24,7 @@ import com.chenxi.web.classes.WorkerStatus;
 import com.chenxi.web.dao.ArticleDao;
 import com.chenxi.web.dao.OnlineClassesDao;
 import com.chenxi.web.dao.ProductDao;
+import com.chenxi.web.dao.UserDao;
 import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
@@ -32,6 +35,7 @@ import com.chenxi.web.yueba.admin.dao.CommentDao;
 import com.chenxi.web.yueba.admin.dao.DaysTypeDao;
 import com.chenxi.web.yueba.admin.dao.OrderDao;
 import com.chenxi.web.yueba.admin.dao.RegionDao;
+import com.chenxi.web.yueba.admin.dao.SeeRecordDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
 import com.chenxi.web.yueba.admin.po.ComboPo;
 import com.chenxi.web.yueba.admin.po.DaysTypePo;
@@ -60,6 +64,8 @@ public class MWorkerContoller extends BaseController {
 	CommentDao conn_comment;
 	@Autowired
 	OrderDao conn_order;
+	@Autowired
+	SeeRecordDao conn_seerecord;
 	
 	@RequestMapping(value = "/mobile/index", method = RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request,long workerId) {
@@ -91,7 +97,15 @@ public class MWorkerContoller extends BaseController {
         
         strMap.put("comments",conn_comment.findByworkerId(workerId, 1, 3));
         
+        
 		
+        SeeRecordPo seeRecordPo=new SeeRecordPo();
+        seeRecordPo.setUpdateTime(new Date());
+    	HttpSession session = request.getSession();
+    	Object userId=session.getAttribute("userId");
+        seeRecordPo.setUserId(Long.parseLong(userId+""));
+        seeRecordPo.setWorkerId(workerId);
+        conn_seerecord.save(seeRecordPo);
 		ModelAndView mv = new ModelAndView("yuebamobile/worker", strMap);
 		return mv;
 	}
@@ -107,17 +121,22 @@ public class MWorkerContoller extends BaseController {
 		ModelAndView mv = new ModelAndView("yuebamobile/subscribe", strMap);
 		return mv;
 	}
+	@Autowired
+	UserDao conn_user;
+	
 	@RequestMapping(value = "/mobile/apply", method = RequestMethod.GET)
 	public ModelAndView apply(HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		Object workerId=session.getAttribute("workerId");
+		Object openid=session.getAttribute("openid");
+		List<WorkerPo> workerPos=conn_worker.findByField("openId", openid);
 		ModelAndView mv =null;
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		if(workerId==null){
+		if(workerPos==null||workerPos.isEmpty()){
 			mv = new ModelAndView("yuebamobile/apply", strMap);
 		}else{
-			strMap.put("workerId", workerId);
-			strMap.put("worker", conn_worker.get(Long.parseLong(workerId+"")));
+			strMap.put("workerId", workerPos.get(0).getId());
+			strMap.put("worker", workerPos.get(0));
+			session.setAttribute("workerId", workerPos.get(0).getId());
 			mv = new ModelAndView("yuebamobile/workerpersonal", strMap);
 		}
 		return mv;
@@ -156,6 +175,9 @@ public class MWorkerContoller extends BaseController {
 		workerPo.setRealName(realName);
 		workerPo.setStatus(WorkerStatus.CHECKING);
 		
+		HttpSession session = request.getSession();
+		Object openid=session.getAttribute("openid");
+		workerPo.setOpenId(openid+"");
 		String shortPhotoPath="file"+File.separator+UUID.randomUUID()+".jpg";
 		String photoPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoPath;
 		Img2Base64Util.generateImage(photo,photoPath);

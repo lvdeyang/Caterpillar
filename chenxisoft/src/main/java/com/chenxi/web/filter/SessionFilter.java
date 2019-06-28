@@ -13,6 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,9 @@ import pub.caterpillar.commons.context.SpringContext;
 import pub.caterpillar.weixin.constants.WXContants;
 
 public class SessionFilter implements Filter {
-
+    private boolean istest=true;
+    private boolean adminIsTest=false;
+	
 	public FilterConfig config;
 
 	public void destroy() {
@@ -34,19 +37,32 @@ public class SessionFilter implements Filter {
 		HttpServletRequest hrequest = (HttpServletRequest) request;
 		HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) response);
 
+		
+		HttpSession session = hrequest.getSession();
+		
 		String userAgent = "";
 		if (hrequest.getHeader("user-agent") != null) {
 			userAgent = hrequest.getHeader("user-agent").toLowerCase();
 		}
-		if (userAgent.indexOf("micromessenger") > -1) {
-			if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")) {
-				chain.doFilter(request, response);
-			} else {
-				wrapper.sendRedirect("http://www.yueba.net.cn/mobile/index1?rUrl="
-						+ hrequest.getRequestURL().toString() + "?" + hrequest.getQueryString());
+		if(!adminIsTest&&session.getAttribute("userId")==null){
+			if (userAgent.indexOf("micromessenger") > -1&&!istest) {
+				if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")) {
+					chain.doFilter(request, response);
+				} else {
+					wrapper.sendRedirect("http://www.yueba.net.cn/login/mobile/index1?rUrl="
+							+ hrequest.getRequestURL().toString() + "?" + hrequest.getQueryString());
+				}
+				return;
+			}else{
+				if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")) {
+					chain.doFilter(request, response);
+				} else {
+					wrapper.sendRedirect("../../login/mobile/index1?rUrl=" + hrequest.getRequestURL().toString());
+				}
+				return;
 			}
-			return;
 		}
+		
 
 		chain.doFilter(request, response);
 		return;

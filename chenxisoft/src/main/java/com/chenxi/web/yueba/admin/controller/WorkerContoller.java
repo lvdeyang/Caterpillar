@@ -94,7 +94,7 @@ public class WorkerContoller extends BaseController {
 		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
 		workerPo.setStatus(WorkerStatus.REFUSE);
 		workerPo.setCheckMsg(checkMsg);
-		conn_worker.save(workerPo);
+		conn_worker.update(workerPo);
 		return "success";
 	
 	}
