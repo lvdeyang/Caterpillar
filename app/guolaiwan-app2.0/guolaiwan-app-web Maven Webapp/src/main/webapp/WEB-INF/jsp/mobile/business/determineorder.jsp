@@ -152,7 +152,7 @@ html, body {
     border:1px solid  rgb(230, 230, 230);
 }
 .fukuan{
-  background: -webkit-linear-gradient(left,rgba(255,142,4,1),rgba(255,63,74,1)); /* Safari 5.1 - 6 */
+  background: -webkit-linear-gradient(left,rgba(254,187,56,1),rgba(254,104,33,1)); /* Safari 5.1 - 6 */
 }
 </style>
 

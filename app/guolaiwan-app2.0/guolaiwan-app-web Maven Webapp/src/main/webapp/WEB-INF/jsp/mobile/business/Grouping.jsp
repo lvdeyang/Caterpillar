@@ -337,7 +337,7 @@ function timer(times,intDiff) {
 		           html.push(' <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="'+data[i].userheadimg+'"/>');
 		           html.push(' <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;white-space: nowrap;text-overflow:ellipsis;overflow: hidden;width:70px;">'+data[i].usernickname+'</span>');
 		           html.push(' <span style="font-weight:bold;margin-left:-10px;line-height: 100px;">还差<span style="color:#F46837;">'+teamnum+'人</span>拼团成功</span>');
-		           html.push(' <button id="'+data[i].id+'" style="background:#F46837;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;" onclick="gototeam(this.id)">去拼单</button>');
+		           html.push(' <button id="'+data[i].id+'" style="background:#FF4900;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;" onclick="gototeam(this.id)">去拼单</button>');
 		           html.push('<p style="color:#949494;font-size:12px;position: absolute;top:60px;left:55%;margin-left:-30px">剩余时间<span id="times'+data[i].id+'">00：00：00</span></p>');
 		           html.push('	</div>');
 		           }
@@ -560,14 +560,24 @@ function timer(times,intDiff) {
 	<div
 		style="background:#F56938;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
 		<p
+<<<<<<< HEAD
+			style="height:100%;background:#FFB200;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
+			￥<span id="zong">${product.productPrice/100}0</span><span
+=======
 			style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
 			￥<span id="zong"><fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span><span
+>>>>>>> refs/remotes/origin/master
 				style="font-size:14px;margin-left:5%;"
 				onclick="gotoproduct(${product.id})">原价购买</span>
 		</p>
 		<p class="fukuan"
+<<<<<<< HEAD
+			style="height:100%;background:#FF4900;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
+			￥<span id="zong">${groupBuyPO.groupprice/100}0</span><span
+=======
 			style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
 			￥<span id="zong"><fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/></span><span
+>>>>>>> refs/remotes/origin/master
 				style="font-size:14px;margin-left:5%;">我要开团</span>
 		</p>
 	</div>
