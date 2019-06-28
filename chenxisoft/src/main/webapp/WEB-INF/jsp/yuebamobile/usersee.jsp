@@ -92,7 +92,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						    html.push('        <span style="background-image:url(/chenxisoft'+data[i].workerPic+')"></span>');
 						    html.push('    </div>');
 						    html.push('    <div class="ui-list-info ui-border-t">');
-						    html.push('        <h4 class="ui-nowrap" style="font-size:12px">'+data[i].workerName+'</h4>');
+						    html.push('        <h4 class="ui-nowrap" style="font-size:12px">'+
+						                  data[i].workerName+'&nbsp;&nbsp;'+data[i].dateStr+'</h4>');
 						    html.push('    </div>');
 						    html.push('</li>');
 				       }

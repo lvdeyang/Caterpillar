@@ -49,6 +49,7 @@ public class MSeeRecordController {
 		for (SeeRecordPo seeRecordPo : recordPos) {
 			seeRecordPo.setWorkerName("黄靖宇");
 			seeRecordPo.setWorkerPic("/lib/images/1.jpg");
+			seeRecordPo.setDateStr(DateUtil.format(seeRecordPo.getUpdateTime(),"yyyy-MM-dd HH:mm:ss"));;
 		}
 		return recordPos;
 	}
@@ -61,6 +62,7 @@ public class MSeeRecordController {
 		for (SeeRecordPo seeRecordPo : recordPos) {
 			seeRecordPo.setUserName("黄靖宇");
 			seeRecordPo.setUserPic("/lib/images/1.jpg");
+			seeRecordPo.setDateStr(DateUtil.format(seeRecordPo.getUpdateTime(),"yyyy-MM-dd HH:mm:ss"));;
 		}
 		return recordPos;
 	}

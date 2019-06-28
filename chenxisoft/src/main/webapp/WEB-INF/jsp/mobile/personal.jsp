@@ -64,7 +64,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	             通用
 	</div>
     <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t" data="worker/mobile/wpersonal">
+	    <li class="ui-border-t" data="worker/mobile/apply">
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂中心</h4> 
 	        </div>

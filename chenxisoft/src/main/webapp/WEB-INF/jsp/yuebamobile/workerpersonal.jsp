@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -48,38 +49,54 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <h1 style="font-size:14px;width:80px;float:left;">个人中心</h1>
          <a  style="display:none;" href="cartest/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-home"></i></a>
     </header>
-	<ul class="ui-list ui-list-function ui-border-tb" style="margin-top:50px;">
-	    <li>
-	        <div class="ui-avatar">
-	            <span style="background-image:url(http://placeholder.qiniudn.com/100x100)"></span>
-	        </div>
-	        <div class="ui-list-info ui-border-t">
-	            <h4 class="ui-nowrap">黄靖宇</h4>
-	            <p>历史佣金:￥18000</p>
-	        </div>
-	    </li>
-    </ul>
-    
-	<div class="ftitle">
+    <c:if test="${worker.status eq 'PASSED'}">
+		<ul class="ui-list ui-list-function ui-border-tb" style="margin-top:50px;">
+		    <li>
+		        <div class="ui-avatar">
+		            <span style="background-image:url(http://placeholder.qiniudn.com/100x100)"></span>
+		        </div>
+		        <div class="ui-list-info ui-border-t">
+		            <h4 class="ui-nowrap">黄靖宇</h4>
+		            <p>历史佣金:0</p>
+		        </div>
+		    </li>
+	    </ul>
+    </c:if>
+    <c:if test="${worker.status eq 'CHECKING'}">
+	   <div style="text-align:center;font-size:12px;color:red">审核中......</div>
+	</c:if>
+	<c:if test="${worker.status eq 'REFUSE'}">
+	   <div style="text-align:center;font-size:12px;color:red">审核不通过:${worker.checkMsg}</div>
+	   <div class="ui-btn-wrap">
+           <button id="reapply" class="ui-btn-lg ui-btn-primary">
+                                    重新申请
+           </button>   
+	   </div>
+	</c:if>
+	<c:if test="${worker.status eq 'PASSED'}">
+	    <div class="ftitle">
 	             基本设置
-	</div>
-    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t" data="seerecord/mobile/seeusers">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">谁看过我</h4> 
-	        </div>
-	    </li>
-	    <li class="ui-border-t" data="order/mobile/wlist">
-	        <div class="ui-list-info"  >
-	            <h4 class="ui-nowrap" style="font-size:14px;">历史订单</h4> 
-	        </div>
-	    </li>
-	    <li class="ui-border-t" data="comment/mobile/index">
-	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">用户评论</h4> 
-	        </div>
-	    </li>
-	</ul>
+		</div>
+	    <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
+		    <li class="ui-border-t" data="seerecord/mobile/seeusers">
+		        <div class="ui-list-info">
+		            <h4 class="ui-nowrap" style="font-size:14px;">谁看过我</h4> 
+		        </div>
+		    </li>
+		    <li class="ui-border-t" data="order/mobile/wlist">
+		        <div class="ui-list-info"  >
+		            <h4 class="ui-nowrap" style="font-size:14px;">历史订单</h4> 
+		        </div>
+		    </li>
+		    <li class="ui-border-t" data="comment/mobile/index">
+		        <div class="ui-list-info">
+		            <h4 class="ui-nowrap" style="font-size:14px;">用户评论</h4> 
+		        </div>
+		    </li>
+		</ul>
+	</c:if>
+    
+	
 	
 	
 
@@ -96,6 +113,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}
 			  };
 	          
+	          
+	         $(document).on('click','#reapply',function(){
+	              location.href=window.BASEPATH+'worker/mobile/reapply';
+	         }); 
 	         $(document).on('click','.ui-border-t',function(){
 	              location.href=$(this).attr('data');
 	         }); 
