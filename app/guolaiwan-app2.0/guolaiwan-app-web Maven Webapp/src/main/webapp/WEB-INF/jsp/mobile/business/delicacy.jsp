@@ -166,6 +166,7 @@ html, body {
 <script type="text/javascript">
 $(function(){
    getRecomment();
+   getCate();
 });
  
 //轮播图以及下面的图片   	
@@ -189,11 +190,33 @@ function getRecomment(){
 			        autoplay: 3000
 			      });
 			}
-			initShare();
 		});
 } 
+
+function getCate(){
+     var _uriRecomment = window.BASEPATH + 'business/getCate?merchantId=${merchantId}';
+		$.get(_uriRecomment, null, function(data){
+		    var html=[];
+		    for(var i=0;i<data.length;i++){
+		         html.push('<div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
+		         html.push('<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="'+data[i].ShopPic+'"/>');  
+		         html.push('<div class="youxuan-in" style="display: inline-block;">');  
+		         html.push('<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">'+data[i].ShopName+'</p>');
+		         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data[i].ModularClass+'</span></p>');
+		         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>');
+		         html.push('<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>');
+		         html.push('<p style="color:#757575;position: absolute;top:-40px;right:1%;font-size:14px">人均<span>38</span>元</p>');
+		         html.push('<button style="position: absolute;top:130px;margin-left:10px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">有包间</button>');
+		         html.push('<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>');
+		         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>');
+		         html.push('</div>');
+		         html.push('</div>');  		        
+		    }
+		     $('.youxuan').append(html.join(''));
+		});
+}
 </script>
-<script>
+<!--  <script>
 $(function(){
     $(window).scroll(function(){
         var aa = $(window).scrollTop(); //当前滚动条滚动的距离
@@ -222,7 +245,7 @@ $(function(){
 	});
 });
 </script>
-
+-->
 
 
 
@@ -244,46 +267,8 @@ $(function(){
          <!-- 美食  -->
 	  	<div class="youxuan"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">
          
-             <div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">
-	        	<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="lib/images/1.jpg"/>
-	        	<div class="youxuan-in" style="display: inline-block;">
-	          	<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">临街小馆</p>
-	          	<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">家常菜</span>   <span>快餐</span></p>
-	          	<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>
-	          	<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>
-	          	<p style="color:#757575;position: absolute;top:-40px;right:1%;font-size:14px">人均<span>38</span>元</p>
-	          	<button style="position: absolute;top:130px;margin-left:10px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">有包间</button>
-	        	<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>
-	        	<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>
-	        	</div>
-	     	 </div>
-	     	  <div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">
-	        	<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="lib/images/1.jpg"/>
-	        	<div class="youxuan-in" style="display: inline-block;">
-	          	<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">临街小馆</p>
-	          	<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">家常菜</span>   <span>快餐</span></p>
-	          	<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>
-	          	<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>
-	          	<p style="color:#757575;position: absolute;top:-40px;right:1%;font-size:14px">人均<span>38</span>元</p>
-	          	<button style="position: absolute;top:130px;margin-left:10px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">有包间</button>
-	        	<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>
-	        	<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>
-	        	</div>
-	     	 </div> <div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">
-	        	<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="lib/images/1.jpg"/>
-	        	<div class="youxuan-in" style="display: inline-block;">
-	          	<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">临街小馆</p>
-	          	<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">家常菜</span>   <span>快餐</span></p>
-	          	<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>
-	          	<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>
-	          	<p style="color:#757575;position: absolute;top:-40px;right:1%;font-size:14px">人均<span>38</span>元</p>
-                <button style="position: absolute;top:130px;margin-left:10px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">有包间</button>
-	        	<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>
-	        	<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>
-	        	</div>
-	     	 </div> 
-	     	 </div>
-        </div> 
+           
+       </div> 
           <!-- 置顶 -->
 			<div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/hometop.png"></a></div>
 </body>
