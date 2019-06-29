@@ -15,6 +15,7 @@ public class SeeRecordPo extends AbstractBasePO {
 	private long workerId;
 	private String workerName;
 	private String workerPic;
+	private String dateStr;
 	public long getUserId() {
 		return userId;
 	}
@@ -54,6 +55,13 @@ public class SeeRecordPo extends AbstractBasePO {
 	}
 	public void setUserPic(String userPic) {
 		this.userPic = userPic;
+	}
+	@Transient
+	public String getDateStr() {
+		return dateStr;
+	}
+	public void setDateStr(String dateStr) {
+		this.dateStr = dateStr;
 	}
 	
 	

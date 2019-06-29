@@ -26,13 +26,13 @@ import pub.caterpillar.communication.http.client.HttpClient;
 import pub.caterpillar.weixin.constants.WXContants;
 
 @Controller
-@RequestMapping("/mobile")
+@RequestMapping("/login")
 public class MobileIndexController {
-	boolean istest=false;
-	
+	boolean istest=true;
+	@Autowired
 	CacheDao conn_cache;
 	
-	@RequestMapping(value = "/index1", method = RequestMethod.GET)
+	@RequestMapping(value = "/mobile/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
 
 		ModelAndView mv = null;
@@ -46,7 +46,7 @@ public class MobileIndexController {
 				conn_cache.save(cachePo);
 			}
 
-			String redirect = "http://www.yueba.net.cn/chexisoft/mobile/index2";
+			String redirect = "http://www.yueba.net.cn/chexisoft/login/mobile/index2";
 			redirect = URLEncoder.encode(redirect);
 			StringBufferWrapper weixinLogin = new StringBufferWrapper()
 					.append("https://open.weixin.qq.com/connect/oauth2/authorize?appid=").append("")
@@ -60,7 +60,7 @@ public class MobileIndexController {
 			cachePo.setWxKey(gState);
 			cachePo.setWxVal(rUrl);
 			conn_cache.save(cachePo);
-			mv = new ModelAndView("redirect:index2");
+			mv = new ModelAndView("redirect:/login/mobile/index2");
 		}
 		return mv;
 	}
@@ -68,7 +68,7 @@ public class MobileIndexController {
 	@Autowired
 	private UserDao conn_user;
 
-	@RequestMapping(value = "/index2", method = RequestMethod.GET)
+	@RequestMapping(value = "/mobile/index2", method = RequestMethod.GET)
 	public ModelAndView index2(String code, String state, HttpServletRequest request) throws Exception {
 		List<CachePo> cachePos = conn_cache.findByField("wxKey", state);
 
@@ -128,7 +128,6 @@ public class MobileIndexController {
 			conn_user.save(user);
 		}
 		HttpSession session = request.getSession();
-		session.setAttribute("type", "PHONENUM");
 		session.setAttribute("userId", user.getId());
 		session.setAttribute("openid", openid);
 		mv = new ModelAndView("redirect:" + rUrl);

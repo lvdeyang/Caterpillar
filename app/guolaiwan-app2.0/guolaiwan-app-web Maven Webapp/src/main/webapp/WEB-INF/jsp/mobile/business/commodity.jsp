@@ -209,7 +209,7 @@ function getparticulars(){
 		 html1.push("<div class='piaowus' style='height:100px;background:#F4F8F9;margin:0;display: none;'>");
 		 html1.push("<p style='height:30px;line-height: 30px;margin:0;'><span style='margin-left:5%;line-height: 30px;'>提前1天预订，出票后即可立即入园</span><span style='float:right;color:#E17421;font-size: 16px;font-weight: bold;margin-right:20px;'>￥"+data.ProductPrice+"</span></p> "); 
 		 html1.push("<button style='border:none;outline:none;width:60px;color:#E17421;height:25px;margin-left:7%;background:#fff;line-height:0px;vertical-align:middle ;float:left;border:1px solid #E17421;border-radius:6px;'>无条件退</button>");  
-		 html1.push("<button style='border:none;outline:none;width:80px;color:#fff;height:25px;margin-left:45%;background:#E17421;line-height:0px;vertical-align:middle ;float:left;border:1px solid #E17421;border-radius:6px;'>立即预订</button>");  
+		 html1.push("<button style='border:none;outline:none;width:80px;color:#fff;height:25px;margin-left:45%;background:#FF4900;line-height:0px;vertical-align:middle ;float:left;border:1px solid #E17421;border-radius:6px;'>立即预订</button>");  
 		 html1.push("<p style='height:30px;line-height: 30px;margin:0;color:#838383;float:left;width:100%;'><span style='margin-left:5%;line-height: 30px;'>月售笔"+data.number+"</span> | <span style=''>预订须知></span></p>  ");  
 		 html1.push("</div>");
 		 $('.wenti').append(html1.join(''));  
