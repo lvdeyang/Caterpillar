@@ -1,6 +1,7 @@
 <%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -457,22 +458,22 @@ function dobuy(){
           <div style="width:92%;height:180px;border:1px solid #CECECE;margin:0 auto;border-radius:6px;position: relative;">
             <img style="height:140px;margin:20px 0px 20px 10px; width:55%;" src="http://www.guolaiwan.net/file/${product.productShowPic}"/>
             <p style="position: absolute;font-weight:bold;color:black;top:30px;font-size:12px;right:7%;">${product.productName}</p>
-            <p style="position: absolute;font-weight:bold;color:#E50012;top:110px;font-size:12px;right:7%;"><span>${groupBuyPO.groupnum}</span>人拼购价：￥<span>${groupBuyPO.groupprice/100}0</span></p>
-            <p style="position: absolute;font-weight:bold;color:#989898;top:140px;font-size:12px;right:7%;">单买价：￥<span>${product.productPrice/100}0</span></p>
+            <p style="position: absolute;font-weight:bold;color:#E50012;top:110px;font-size:12px;right:7%;"><span>${groupBuyPO.groupnum}</span>人拼购价：￥<span><fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/></span></p>
+            <p style="position: absolute;font-weight:bold;color:#989898;top:140px;font-size:12px;right:7%;">单买价：￥<span><fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span></p>
           </div>
           <div style="height:90px;width:100%;line-height: 90px;position:relative;">
-             <p style="width:100%;text-align: center;font-weight:bold;font-size:14px;letter-spacing:2px">还差<span style="color:#E50012;">${groupBuyPO.groupnum-team.teamnum}人</span>拼团成功，剩余时间<span id="times" style="color:#fff;letter-spacing:7px;background:#E6393F;padding:10px 0;border-radius:6px;font-size:16px;text-align: center;margin-left:10px;">00:00:00</span></p>
+             <p style="width:100%;text-align: center;font-weight:bold;font-size:14px;letter-spacing:2px">还差<span style="color:#FF4900;font-size:18px;">${groupBuyPO.groupnum-team.teamnum}人</span>拼团成功，剩余时间<span id="times" style="color:#fff;letter-spacing:7px;background:#FF4900;padding:10px 0;border-radius:6px;font-size:16px;text-align: center;margin-left:10px;">00:00:00</span></p>
           </div>
           <div class="renshu" style="width:100%;height:90px;position: relative;text-align: center;">
           <ul class="teamman" style="margin:0 auto;  display: inline-block;overflow: auto;position: relative;width:80%;">
-           <button style="color:#fff;padding:0 6px;top:0px;left:10px;background:#E6393F;border:none;outline:none;width:auto;height:20px;position: absolute;border-radius:12px;">团长</button>
-           <li style="border:1px solid #E6393F;"><img src="${team.userheadimg}"/></li>
+           <button style="color:#fff;padding:0 6px;top:0px;left:10px;background:#FF4900;border:none;outline:none;width:auto;height:20px;position: absolute;border-radius:12px;">团长</button>
+           <li style="border:1px solid #FF4900;"><img src="${team.userheadimg}"/></li>
           </ul>
            <p style="color:#FD7C13;margin:0;">邀请好友&nbsp&nbsp&nbsp&nbsp>></p>
             
           </div>
           <div style="margin:0 auto;text-align: center;width:100%;position: fixed;bottom:10px;">
-          <button onclick="dobuy()" style="width:90%;height:40px;color:#fff;background:#E6393F;border:none;outline:none;border-radius:12px;">确定</button>
+          <button onclick="dobuy()" style="width:90%;height:40px;color:#fff;background:#FF4900;border:none;outline:none;border-radius:12px;">确定</button>
           </div>
           <div style="height:40px;width:100%;"></div>
 </body>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,13 +77,17 @@ public class MOrderController {
 		return orderPos;
 	}
 	
+	
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/mobile/wlist.do", method = RequestMethod.GET)
 	public Object getwObjectOrders(HttpServletRequest request,int currPage,int pageCount) throws Exception {
-		List<OrderPo> orderPos=conn_order.findAll(currPage, pageCount);
+		HttpSession session = request.getSession();
+		List<OrderPo> orderPos=conn_order.findOrderByWorkerPage(Long.parseLong(session.getAttribute("workerId")+""),currPage, pageCount);
 		for (OrderPo orderPo : orderPos) {
-			orderPo.setWorkName("黄靖宇");
+			WorkerPo workerPo=conn_worker.get(orderPo.getWorkerId());
+			orderPo.setWorkName(workerPo.getRealName());
 			orderPo.setFromDateStr(DateUtil.format(orderPo.getFromDate(), "yyyy-MM-dd"));
 		}
 		return orderPos;

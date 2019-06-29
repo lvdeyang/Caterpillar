@@ -184,5 +184,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     });
 	
 	</script>
+	<jsp:include page="../common.jsp"></jsp:include>
 </body>
 </html>

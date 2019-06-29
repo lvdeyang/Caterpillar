@@ -29,4 +29,10 @@ public class OrderDao extends AbstractBaseDao<OrderPo> {
 		hql.andBy("orderStatus",Condition.eq,status);
 		return this.findByHql(hql, pageNum, pageSize);
 	}
+	
+	public List<OrderPo> findOrderByWorkerPage(Long workerId,int pageNum,int pageSize){
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("workerId",Condition.eq,workerId);
+		return this.findByHql(hql, pageNum, pageSize);
+	}
 }

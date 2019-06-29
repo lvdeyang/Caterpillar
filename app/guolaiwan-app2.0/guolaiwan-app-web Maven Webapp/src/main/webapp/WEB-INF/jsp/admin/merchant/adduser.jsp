@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </head>
     <body>
     <script type="text/html" id="zsgc">
-		<a title="选择" href="javascript:;" onclick="sel('{{ d.id }}' , '')" 
+		<a title="选择" href="javascript:;" onclick="sel('{{ d.id }}' , '{{d.userNickname}}')" 
                            	style="text-decoration:none">
                             	<i>选择</i>
                         	</a>
@@ -84,16 +84,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              
             });
 
-			function sel(data){
-				$.ajax({
-					type:"post",
-					url:"chooseUser.do?userId=" + data + "&merchantId=" + ${merchantId}+"&type="+${type},
-					success:function(msg){
-						if(msg == "success"){
-							layer.msg("选择成功");
+			function sel(id,userNickname){
+				if(${type!=1}&&${type!=2}){
+					parent.$("input[name='olchatId']").val(id);
+					parent.$("input[name='olchatName']").val(userNickname);
+				}else{
+					$.ajax({
+						type:"post",
+						url:"chooseUser.do?userId=" + id + "&merchantId=${merchantId}&type=${type}",
+						success:function(msg){
+							if(msg == "success"){
+								layer.msg("选择成功");
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 
             function getUserList(){

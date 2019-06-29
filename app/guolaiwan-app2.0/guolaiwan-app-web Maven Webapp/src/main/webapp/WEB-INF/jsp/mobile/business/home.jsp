@@ -336,8 +336,8 @@ $(function() {
 			     html.push("<img  onclick='activity("+data[i].id+")' style='height:80px;width:30%;vertical-align: middle;display: inline-block;margin-left:3%;' src='http://www.guolaiwan.net/file"+data[i].img+"'/>")
 			     html.push("<div class='huodong' style='display: inline-block;'>")
 			     html.push("<p onclick='activity("+data[i].id+")'  style='position: absolute;top:-15px;font-size:14px;'>【活动】 "+data[i].activityRelPO.productName+"</p>")
-			     html.push("<p onclick='activity("+data[i].id+")' style='position: absolute;top:20px;color:#EC6D1E;font-size:16px;'>&nbsp￥"+data[i].ProductPrice+"起</p>")
-			     html.push("<button style='position: absolute;right:3%;top:60px;line-height:30px;font-size:14px;width:15%;outline: none;border:none;height:30px;border-radius:16px;background:#EC6D1E;color:#fff;' onclick='getorderinfo("+data[i].id+")'>抢 &gt;</button>")
+			     html.push("<p onclick='activity("+data[i].id+")' style='position: absolute;top:20px;color:#FF4900;font-size:16px;'>&nbsp￥"+data[i].ProductPrice+"起</p>")
+			     html.push("<button style='position: absolute;right:3%;top:60px;line-height:30px;font-size:14px;width:15%;outline: none;border:none;height:30px;border-radius:16px;background:#FF4900;color:#fff;' onclick='getorderinfo("+data[i].id+")'>抢 &gt;</button>")
 			     html.push("</div>")
 			     html.push("</div>")	
 			     if(i==2){
@@ -399,7 +399,7 @@ $(function() {
 			       html.push("<p style='position: absolute;top:0px;font-size:12px;color:#C0C0C0;'><span style='color:#EC6D1E;'>5.0分</span>   <span>"+data[i].number+"人来过</span></p>");
 			       html.push("<p style='position: absolute;top:40px;font-size:12px;color:#C0C0C0;'>739m</p>");
 			       html.push("<p style='color:#EC6D1E;position: absolute;top:-40px;right:0%;font-size:14px;'>$"+data[i].ProductPrice+"起</p>");
-			       html.push("<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#EC6D1E;color:#fff;' onclick='getorderinfo("+data[i].id+")'>立即预订</button>");
+			       html.push("<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#FF4900;color:#fff;' onclick='getorderinfo("+data[i].id+")'>立即预订</button>");
 			       html.push("</div>");
 			       html.push("</div>");     			       
 			   }
