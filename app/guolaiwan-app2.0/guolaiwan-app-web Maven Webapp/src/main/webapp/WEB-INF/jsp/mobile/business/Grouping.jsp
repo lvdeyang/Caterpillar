@@ -559,26 +559,13 @@ function timer(times,intDiff) {
 
 	<div
 		style="background:#F56938;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
-		<p
-<<<<<<< HEAD
-			style="height:100%;background:#FFB200;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-			￥<span id="zong">${product.productPrice/100}0</span><span
-=======
-			style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-			￥<span id="zong"><fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span><span
->>>>>>> refs/remotes/origin/master
-				style="font-size:14px;margin-left:5%;"
-				onclick="gotoproduct(${product.id})">原价购买</span>
+		<p style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
+			￥<span id="zong"><fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span>
+			<span style="font-size:14px;margin-left:5%;" onclick="gotoproduct(${product.id})">原价购买</span>
 		</p>
-		<p class="fukuan"
-<<<<<<< HEAD
-			style="height:100%;background:#FF4900;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-			￥<span id="zong">${groupBuyPO.groupprice/100}0</span><span
-=======
-			style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-			￥<span id="zong"><fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/></span><span
->>>>>>> refs/remotes/origin/master
-				style="font-size:14px;margin-left:5%;">我要开团</span>
+		<p class="fukuan" style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
+			￥<span id="zong"><fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/></span>
+			<span style="font-size:14px;margin-left:5%;">我要开团</span>
 		</p>
 	</div>
 

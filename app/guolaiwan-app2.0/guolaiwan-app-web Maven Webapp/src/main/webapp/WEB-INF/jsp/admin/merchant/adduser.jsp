@@ -85,13 +85,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             });
 
 			function sel(id,userNickname){
-				if(${type=="PHONENUM"}){
+				if(${type!=1}&&${type!=2}){
 					parent.$("input[name='olchatId']").val(id);
 					parent.$("input[name='olchatName']").val(userNickname);
 				}else{
 					$.ajax({
 						type:"post",
-						url:"chooseUser.do?userId=" + id + "&merchantId=" + ${merchantId}+"&type="+${type},
+						url:"chooseUser.do?userId=" + id + "&merchantId=${merchantId}&type=${type}",
 						success:function(msg){
 							if(msg == "success"){
 								layer.msg("选择成功");
