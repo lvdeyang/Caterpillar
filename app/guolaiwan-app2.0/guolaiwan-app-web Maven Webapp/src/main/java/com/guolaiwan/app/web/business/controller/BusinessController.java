@@ -308,10 +308,11 @@ public class BusinessController extends WebBaseControll {
 	// 跳转美食页面
 	@ResponseBody
 	@RequestMapping(value = "/cate", method = RequestMethod.GET)
-	public ModelAndView cate(String modularCode) throws Exception {
+	public ModelAndView cate(String modularCode, String merchantId) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/business/delicacy");
 		mv.addObject("modularCode", modularCode);
+		mv.addObject("merchantId", merchantId);
 		return mv;
 	}
 
@@ -407,6 +408,35 @@ public class BusinessController extends WebBaseControll {
 		mv = new ModelAndView("mobile/business/picking");
 		mv.addObject("merchantid", Merchantid);
 		return mv;
+	}
+
+	// 封装南山美食页面需要的数据
+	@Autowired
+	private MerchantChildrenDao merchantChildrenDao;
+	@Autowired
+	private MerchantDAO Merchantdao;
+
+	@ResponseBody
+	@RequestMapping(value = "/getCate", method = RequestMethod.GET)
+	public List<Map<String, Object>> getCate(long merchantId) throws Exception {
+		String modularName = "地方美食";
+		List<MerchantChildrenPO> merchantChildrenList = merchantChildrenDao.getCate(merchantId);
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<MerchantPO> Merchantlist = new ArrayList<MerchantPO>();
+		for (int i = 0; i < merchantChildrenList.size(); i++) {
+			MerchantPO po = Merchantdao.getfood(merchantChildrenList.get(i).getChildrenId(), modularName);
+			if (po != null) {
+				Merchantlist.add(po);
+			}
+		}
+		for (int i = 0; i < Merchantlist.size(); i++) {
+			Map<String, Object> hashMap = new HashMap<String, Object>();
+			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
+			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
+			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
+			list.add(hashMap);
+		}
+		return list;
 	}
 
 }

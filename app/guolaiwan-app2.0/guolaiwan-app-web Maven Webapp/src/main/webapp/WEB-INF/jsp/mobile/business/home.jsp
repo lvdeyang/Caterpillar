@@ -411,7 +411,7 @@ $(function() {
         location.href=window.BASEPATH + 'business/productdetails?id='+id;
    }
     function cate(){
-        location.href=window.BASEPATH + 'business/cate?modularCode=0003';
+        location.href=window.BASEPATH + 'business/cate?modularCode=0003&merchantId=${merchantId}';
    }
    function group(){
    		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
