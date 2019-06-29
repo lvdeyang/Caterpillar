@@ -74,12 +74,21 @@
 				</div>				
 			</div>
 			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> QQ </label>
-				<div class="layui-input-block">
-					<input type="text" name="shopQQ" 
-						autocomplete="off" class="layui-input">
+					<div class="layui-inline">
+						<label class="layui-form-label">客服人员</label>
+						<div class="layui-input-inline">
+							<input type="text" id="L_title" name="olchatName" placeholder="选填"
+							lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
+							<input type="text" id="L_title" name="olchatId" 
+							lay-verify="title" autocomplete="off" class="layui-input" style="display: none">
+						</div>
+					</div>
+					<div class="layui-inline">
+				 		<div class="layui-input-inline" style="width: 100px;">
+				  			<a id="merclass" href="javascript:openMap('添加客服人员','toUpdateUserName','800','600')" class="layui-btn " >添加客服人员</a>
+						</div>
+					</div>
 				</div>
-			</div>
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 联系电话 </label>
 				<div class="layui-input-block">
