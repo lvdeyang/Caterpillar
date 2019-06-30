@@ -93,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						    html.push('    </div>');
 						    html.push('    <div class="ui-list-info ui-border-t">');
 						    html.push('        <h4 class="ui-nowrap" style="font-size:12px;">'+
-                                       		data[i].workerName+'&nbsp;&nbsp;'+data[i].dateStr+'</h4>');   
+                                       		data[i].userName+'&nbsp;&nbsp;'+data[i].dateStr+'</h4>');   
 						    html.push('</li>');
 				       }
 	               
