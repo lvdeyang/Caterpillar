@@ -544,7 +544,7 @@ function timer(times,intDiff) {
 		<p
 			style="line-height:100px;margin:0;font-weight:bold;text-align:center;">
 			<span style="float:left;padding-left:10%;">①开团/参团
-				&nbsp&nbsp&nbsp❯</span><span>②邀请好友 &nbsp&nbsp&nbsp❯</span><span
+				&nbsp&nbsp&nbsp❯</span><span>②好友分享 &nbsp&nbsp&nbsp❯</span><span
 				style="float:right;margin-right:2%;">③满员发货</span>
 		</p>
 		<p style="width:100%;position: absolute;top:10px;">

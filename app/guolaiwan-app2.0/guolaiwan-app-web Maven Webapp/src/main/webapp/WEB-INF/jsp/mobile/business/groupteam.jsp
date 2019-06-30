@@ -449,7 +449,6 @@ function dobuy(){
 	   
 
          <!-- 发起拼团  -->
-         <div style="width:100%;height:20px;background:#EEEEEE;"></div> 
          <div style="height:100px;weight:100%;text-align:center;vertical-align:middle;position: relative;">
           <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="${team.userheadimg}"/>
           <span style="font-weight:bold;position: absolute;top:30px;left:30%">${team.usernickname}</span>
@@ -469,7 +468,7 @@ function dobuy(){
            <button style="color:#fff;padding:0 6px;top:0px;left:10px;background:#FF4900;border:none;outline:none;width:auto;height:20px;position: absolute;border-radius:12px;">团长</button>
            <li style="border:1px solid #FF4900;"><img src="${team.userheadimg}"/></li>
           </ul>
-           <p style="color:#FD7C13;margin:0;">邀请好友&nbsp&nbsp&nbsp&nbsp>></p>
+           <p style="color:#FD7C13;margin:0;">团员列表</p>
             
           </div>
           <div style="margin:0 auto;text-align: center;width:100%;position: fixed;bottom:10px;">
