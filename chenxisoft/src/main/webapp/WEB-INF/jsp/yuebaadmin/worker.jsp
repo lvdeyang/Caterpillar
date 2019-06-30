@@ -83,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					        ,shade: 0
 					        ,maxmin: true
 					        ,offset: [ //为了演示，随机坐标
-					         100,400
+					         0,400
 					          
 					        ] 
 					        ,content: 'worker/check?id='+data.id

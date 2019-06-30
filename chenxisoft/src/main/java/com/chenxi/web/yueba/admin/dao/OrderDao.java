@@ -10,6 +10,7 @@ import com.chenxi.web.po.ProductPo;
 import com.chenxi.web.yueba.admin.po.OrderPo;
 import com.chenxi.web.yueba.admin.po.WorkerPo;
 
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
 import pub.caterpillar.orm.hql.CountHql;
@@ -24,9 +25,25 @@ public class OrderDao extends AbstractBaseDao<OrderPo> {
 		return countByHql(hql);
 	}
 	
+	public OrderPo findMaxWorderOrder(long workerId){
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("workerId",Condition.eq,workerId);
+		hql.orderBy("fromDate", true);
+		List<OrderPo> orderPos = this.findByHql(hql);
+		if(orderPos.isEmpty())return null;
+		return orderPos.get(0);
+	}
+	
+	public List<OrderPo> findOrderByWorkerPage(Long workerId,int pageNum,int pageSize){
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("workerId",Condition.eq,workerId);
+		return this.findByHql(hql, pageNum, pageSize);
+	}
+	
 	public List<OrderPo> findOrderByStatus(OrderStatus status,int pageNum,int pageSize){
 		QueryHql hql=this.newQueryHql();
 		hql.andBy("orderStatus",Condition.eq,status);
 		return this.findByHql(hql, pageNum, pageSize);
 	}
+	
 }

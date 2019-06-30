@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>拼团列表</title>
+<title>购票</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -82,6 +82,7 @@ html, body {
 	background-color: #EEEEEE !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
+	background-color:#fff !important;
 	text-decoration: none !important;
 }
 
@@ -151,13 +152,6 @@ html, body {
 	    opacity: 0.8;
 	    z-index:111111;
 	}
-	.pin{
-	  font-size: 40px;
-	  font-family: "Just Another Hand",cursive;
-	  font-weight:800;
-	  color:#fff;
-	  text-transform: uppercase;
-	}
 </style>
 
 </head>
@@ -168,12 +162,15 @@ html, body {
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
 <script type="text/javascript">
 
 
 
    
 	$(function() {
+	getallteam(); 
+	 getRecomment();
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -193,6 +190,7 @@ html, body {
 			    comCode='0001';
 			}
 			getCom();
+            getRecomment();
 		    getModal();
 			getActivityBundle();
 			initSharewx();
@@ -214,7 +212,7 @@ html, body {
 				if(data === -1) return;
 				if(data){
 					loca=data;
-					getLoation();
+					
 				}
 				
 		  });
@@ -222,53 +220,7 @@ html, body {
 	  }
 	  
 	  
-	  function getLoation(){
-	       wx.config({
-	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            appId : loca.appId, // 必填，公众号的唯一标识
-	            timestamp : loca.timestamp, // 必填，生成签名的时间戳
-	            nonceStr : loca.nonceStr, // 必填，生成签名的随机串
-	            signature : loca.signature,// 必填，签名，见附录1
-	            jsApiList : ['checkJsApi','getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        	});
-	        wx.ready(function() {
-	            wx.getLocation({  
-	                success: function (res) {  
-	                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
-	                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
-	                    var speed = res.speed; // 速度，以米/每秒计  
-	                    var accuracy = res.accuracy; // 位置精度  
-	                    getCity(latitude,longitude);
-	                    
-	                },  
-	                cancel: function (e) {  
-	                        //这个地方是用户拒绝获取地理位置  
-	                        if(comCode=='0000'){
-							    comCode='0001';
-							}
-							getCom();
-						    getModal();
-							getActivityBundle();
-							initSharewx();
-					}
-	                	
-	             });     
-		         wx.error(function (res) {  
-		                if(comCode=='0000'){
-						    comCode='0001';
-						}
-						getCom();
-					    getModal();
-						getActivityBundle();
-						initSharewx();
-				
-		         });     
-	            
-	         });
-	  
-	  
-	  }
+	 
 	  
 	  function getCity(la,lo){
 	  
@@ -294,7 +246,10 @@ html, body {
 					    comCode='0001';
 					}
 				}
+				
+				
 				getCom();
+                getRecomment();
 			    getModal();
 				getActivityBundle();
 				initSharewx();
@@ -328,6 +283,43 @@ html, body {
 	  }
 	  
 
+      /**/
+		
+	  function getRecomment(){
+	      var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${productMerchantID}&userId=${userId}';
+		
+		$.get(_uriMerchantInfo, null, function(data){
+			data = parseAjaxResult(data);
+			merchantName = data.shopName + '-过来玩';
+			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
+			merchantUrl = window.location.href;
+			if(data === -1) return;
+			if(data){
+			    var html=[];
+			    var pics=data.shopMpic.split(',');
+				for(var i=0; i<pics.length; i++){
+					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+				}
+			    $('.header-content').html(data.shopName);
+				$('.swiper-wrapper').append(html.join(''));
+				$(".swiper-container").swiper({
+			        loop: true,
+			        autoplay: 3000
+			    });
+			    }
+			    });
+	  }
+		
+      
+		
+	  
+		
+		
+	    
+	    
+	  
+	   
+
 	    
 	    var share={};
 	    function initSharewx(){
@@ -340,86 +332,21 @@ html, body {
 					if(data){
 					    
 						share=data;
-						doScanShare();
+						
 					}
 					
 			});
 	    
 	    }
 	    
-	    
-	    
-	    function doScanShare(){
-            wx.config({
-	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            appId : share.appId, // 必填，公众号的唯一标识
-	            timestamp : share.timestamp, // 必填，生成签名的时间戳
-	            nonceStr : share.nonceStr, // 必填，生成签名的随机串
-	            signature : share.signature,// 必填，签名，见附录1
-	            jsApiList : ['checkJsApi', 'onMenuShareTimeline' , 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        	});
-	        wx.ready(function() {
-	
-	               
-	            wx.onMenuShareTimeline({
-                            title: '畅游华夏，尽在过来玩', // 分享标题
-                            link: 'http://<%=weburl%>/guolaiwan/pubnum/index', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
-                            success: function () {
-                               	
-                            }
-                        });
-	            wx.onMenuShareAppMessage({
-					title : '畅游华夏，尽在过来玩', // 分享标题
-					desc : '<%=weburl%>，联系电话:0315-6681288/6686299', // 分享描述
-					link : 'http://<%=weburl%>/guolaiwan/pubnum/index', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-					imgUrl : 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
-					success : function() {}
-				});
-	            
-	       });
-        }
-	    
-	    function doScan(){
-            wx.config({
-	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            appId : paras.appId, // 必填，公众号的唯一标识
-	            timestamp : paras.timestamp, // 必填，生成签名的时间戳
-	            nonceStr : paras.nonceStr, // 必填，生成签名的随机串
-	            signature : paras.signature,// 必填，签名，见附录1
-	            jsApiList : ['checkJsApi', 'scanQRCode'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        	});
-	        wx.ready(function() {
-	
-	               wx.scanQRCode({ 
-		                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-		                scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-		                success: function (res) {
+	  
 
-		                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-		                    location.href=window.BASEPATH + 'pubnum/product/index/payinshop/'+result;
-		                }
-		            });
-	       });
-        }
+	
 	});
 </script>
 <script>
 $(function(){
-	getgroupproduct();
-
-
-    $(window).scroll(function(){
-        var aa = $(window).scrollTop(); //当前滚动条滚动的距离
-        var bb = $(window).height();//浏览器当前窗口可视区域高度
-        var cc = $(document).height(); //浏览器当前窗口文档的高度 
-      
-        if(cc <= aa+bb){
-            $(".youxuan").append($(".goupiao").clone()); 
-        }
-    })
+ 
   })
  /*返回顶部  */
   $(function(){
@@ -437,58 +364,110 @@ $(function(){
         return false;
 	});
 });
-</script>
-<script>
-function getgroupproduct(){
-     var _uricoms = window.BASEPATH + '/business/getgroupproduct?merchantId=${merchantId}';	
-     $.get(_uricoms, null, function(data){
-         var html=[];
-         for(var i=0;i<data.length;i++){
-         		if(data[i].isgroup==1){
-		         	html.push('<div class="goupiao" style="position: relative;background:#fff;width:100%;height:180px;line-height:180px;border:none;border-left:none;border-right:none;margin:0 0 10px 0;">');
-			        html.push('	<img style="height:130px;width:45%;vertical-align: middle;margin-left:2%;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
-			        html.push('	<div class="youxuan-in" style="display: inline-block;">');
-			        html.push('  	<p style="position: absolute;top:-50px;font-weight:bold;font-size:14px;color:black;">'+data[i].productName+'</p>');
-			        html.push('  	<p style="position: absolute;top:30px;font-size:14px;color:#EC6D1E;"><span style="">拼团价：</span>   <span>￥'+data[i].groupprice+'</span></p>');
-			        html.push('  	<p style="position: absolute;top:50px;font-size:12px;color:black;"><span style="">原商品价：</span>   <span style="text-decoration:line-through;">￥'+data[i].productPrice+'</span></p>');
-			        html.push(' 	<p style="color:black;position: absolute;top:0px;right:5%;font-size:14px">'+data[i].groupnum+'人团</p>');
-			        html.push(' 	<button id="'+data[i].id+'" style="position: absolute;right:3%;top:113px;line-height:35px;font-size:14px;width:15%;outline: none;border:none;height:35px;border-radius:6px;background:#FF4900;color:#fff;" onclick="grouping(this.id)">去开团</button>');
-			        html.push('</div>');
-			     	html.push('</div>');
-	     		}
+    var page = 2;
+    //下拉加载
+    $(window).scroll(function(){
+　　			//判断是否滑动到页面底部
+		     if($(document).height()<=$(window).scrollTop()  + $(window).height()){
+
+				
+		           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
+		        var pageNumber=page;			
+				var date={ "productMerchantID":${productMerchantID},"pageNum":pageNumber}				
+				$.post('<%=basePath%>product/package/list', date, function(data){				   			 									
+					if(data.productPOs !== undefined){
+					  getLine(data);
+					  $('.weui-loadmores').hide();
+					 $('.weui-loadmore').show();
+					
+					page+=1;
+						}
+						else{
+						$('.weui-loadmore').hide();
+						  $('.weui-loadmores').show();
+				          setTimeout(function(){$('.weui-loadmores').hide()},1000);
+						}
+					});
+			     }
+			});
+
+
+	function getLine(data){
+	         var html=[];
+                 var list = data.productPOs;
+                 var  str = data.strArryList;                                                                                 
+	       //后面的
+		   for(var j=0;j<list.length;j++){			   	   
+		   	   html.push('<div class="weui-panel__bd">');
+					html.push('<div class="youxuan"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">');
+		           html.push('<div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
+		           html.push('<img style="height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[j].productShowPic+'"/> ');
+		           html.push('<div class="youxuan-in" style="display: inline-block;">');
+		           html.push('<p style="position: absolute;top:-40px;font-size:14px;">【套餐】'+list[j].productName+'</p>');
+		           html.push('<p style="position: absolute;top:0px;font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;">5.0分</span>   <span>23人来过</span></p>');
+		           html.push('<p style="position: absolute;top:40px;font-size:12px;color:#C0C0C0;">739m</p>');
+		           html.push('<p style="color:#EC6D1E;position: absolute;top:-40px;right:1%;font-size:14px">$'+str[j]+'</p>');
+		           html.push('<button style="position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#EC6D1E;color:#fff;">立即预订</button>');
+		   }
+		   html.push('</div>');
+
+	        $('#content').append(html.join(''));
+	    }
+    
+ function getallteam(){
+     var _uricoms = window.BASEPATH + '/product/package/list?productMerchantID='+${productMerchantID}+'&pageNum=1';	
+     $.get(_uricoms, null, function(data){  
+           var list =  data.productPOs;
+           var  str = data.strArryList;
+         for(var i=0;i<list.length;i++){
+         		var html=[];
+         		if(data.productPOs.length>0){
+		           html.push('<div class="youxuan"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">');
+		           html.push('<div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
+		           html.push('<img style="height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'"/> ');
+		           html.push('<div class="youxuan-in" style="display: inline-block;">');
+		           html.push('<p style="position: absolute;top:-40px;font-size:14px;">【套餐】'+list[i].productName+'</p>');
+		           html.push('<p style="position: absolute;top:0px;font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;">5.0分</span>   <span>23人来过</span></p>');
+		           html.push('<p style="position: absolute;top:40px;font-size:12px;color:#C0C0C0;">739m</p>');
+		           html.push('<p style="color:#EC6D1E;position: absolute;top:-40px;right:1%;font-size:14px">$'+str[i]+'</p>');
+		           html.push('<button style="position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#FF4900;color:#fff;">立即预订</button>');
+		           html.push('</div></div></div> ');
+		           }
+		 		$('#content').append(html.join(''));
 	     	}
-		 $('.youxuan').append(html.join(''));
 	 });
 }
-
-function grouping(id){
-	location.href=window.BASEPATH + 'business/grouping?productId='+id+'&userId=${userId}';
-}
-
 </script>
-
-
-
 <body>
 			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
-	   
-
-         <!-- 拼团列表  -->
-         <div style="height:120px;width:100%;background:#FF5742;text-align: center;line-height: 120px;">
-          <p class="pin" style="">拼团优惠</p>
-         </div>
-	  	<div class="youxuan"  style="width:100%;height:auto;margin:0 auto;position: relative;overflow: hidden;">
-         
-        </div> 
+		<div class="content" id="content" >
+			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
+			  </div>
+			</div>
+		</div>
+	</div>     
+	
+         <!-- 购票  -->
+	           <div id="content" class="content">		        	    
           <!-- 置顶 -->
 			<div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/hometop.png"></a></div>
+        
+         <div class="weui-loadmore" hidden="hidden" style="position:fixed;bottom: 5%;left:18%;z-index: 10000">
+			  <i class="weui-loading"></i>
+			  <span class="weui-loadmore__tips">正在加载</span>
+	</div>
+	<div class="weui-loadmores" hidden="hidden" style="position:fixed;bottom: 7%;left:50%;margin-left:-40px;z-index: 10000">
+			  <span class="weui-loadmore__tips">没有内容了</span>
+	</div>		
+     <div style="height:50px;width:100%;"></div>
+
+
 </body>
 
 

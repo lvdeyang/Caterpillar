@@ -83,28 +83,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            <label>
 		                                        姓名*
 		            </label>
-		            <input type="text" placeholder="请输入姓名">
+		            <input id="name" type="text" placeholder="请输入姓名">
+		            
+		        </div>
+		        <div class="ui-form-item ui-border-b">
+		            <label>
+		                                        年龄*
+		            </label>
+		            <input id="age" type="text" placeholder="请输入年龄">
 		            
 		        </div>
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                                        身份证号*
 		            </label>
-		            <input type="text" placeholder="18位身份证号码">
+		            <input id="idStr" type="text" placeholder="18位身份证号码">
 		            
 		        </div>
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                                        电话*
 		            </label>
-		            <input type="text" placeholder="请输入手机号">
+		            <input id="phone" type="text" placeholder="请输入手机号">
 		            
 		        </div>
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                                        家庭住址*
 		            </label>
-		            <input type="text" placeholder="请输入详细地址">
+		            <input id="address" type="text" placeholder="请输入详细地址">
 		           
 		        </div>
 		        <div class="ui-form-item ui-border-b" style="height:60px;">
@@ -150,12 +157,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    </form>
 	        
 	        <div class="ui-btn-wrap">
-	            <button class="ui-btn-lg ui-btn-primary">
+	            <button id="doApply" class="ui-btn-lg ui-btn-primary">
 	                                     立即申请
 	            </button>
-	            <button style="display:none;" class="ui-btn-lg ui-btn-primary">
-	                                     取消申请
-	            </button>
+	            
 	        </div>
 	</div>
 	
@@ -184,7 +189,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		     function  getPhoto() {
 	    
 			    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	            var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+	            var _uri = window.BASEPATH + 'login/wx/prev?url='+reqUrl;
 				$.get(_uri, null, function(data){
 					data = parseAjaxResult(data);
 					if(data === -1) return;
@@ -247,14 +252,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                localId: localid, // 图片的localID
 	                success: function (res) {
 	                    var localData = res.localData;
-	                    $('#'+photoId+'-pic').attr('src',localData);
+	                    var sear=new RegExp(',');
+                        if(sear.test(str)) {
+                          arr=str.split(',');//注split可以用字符或字符串分割
+                          localData=arr[1];
+                        }else{
+                          localData=localData; 
+                        }
+                       
+					    $('#'+photoId+'-pic').attr('src','data:image/png;base64,'+localData);
 	                    $('#'+photoId+'-pic').show();
 	                    $('#'+photoId+'-input').val(localData);
+
 	                }
 	                
-	            )};
+	            });
 	 
 	        }
+	        $(document).on('click','#doApply',function(){
+	            var params={};
+	            params.realName=$('#name').val();
+	            params.idCard=$('#idStr').val();
+	            params.phone=$('#phone').val();
+	            params.address=$('#address').val();
+	            params.photo=$('#photo-input').val();
+	            params.idCardPhoto=$('#idcard-input').val();
+	            params.healthPhoto=$('#health-input').val();
+	            params.expertPhoto=$('#certificate-input').val();
+	            params.age=$('#age').val();
+                var _uri = window.BASEPATH + 'worker/mobile/apply.do';
+		        $.post(_uri, params, function(data){
+			        location.href=location.href;
+				});       
+	        });
 	          
 	     });
 	

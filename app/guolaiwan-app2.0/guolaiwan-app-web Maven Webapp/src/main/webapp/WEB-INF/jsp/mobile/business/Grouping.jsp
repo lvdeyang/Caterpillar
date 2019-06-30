@@ -1,6 +1,7 @@
 <%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -336,7 +337,7 @@ function timer(times,intDiff) {
 		           html.push(' <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="'+data[i].userheadimg+'"/>');
 		           html.push(' <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;white-space: nowrap;text-overflow:ellipsis;overflow: hidden;width:70px;">'+data[i].usernickname+'</span>');
 		           html.push(' <span style="font-weight:bold;margin-left:-10px;line-height: 100px;">还差<span style="color:#F46837;">'+teamnum+'人</span>拼团成功</span>');
-		           html.push(' <button id="'+data[i].id+'" style="background:#F46837;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;" onclick="gototeam(this.id)">去拼单</button>');
+		           html.push(' <button id="'+data[i].id+'" style="background:#FF4900;width:50px;height:30px;margin:35px 5% 35px 0;border:none;outline: none;border-radius:6px;color:#fff;float:right;" onclick="gototeam(this.id)">去拼单</button>');
 		           html.push('<p style="color:#949494;font-size:12px;position: absolute;top:60px;left:55%;margin-left:-30px">剩余时间<span id="times'+data[i].id+'">00：00：00</span></p>');
 		           html.push('	</div>');
 		           }
@@ -532,8 +533,8 @@ function timer(times,intDiff) {
 		style="height:100px;width:100%;border-bottom:1px solid #A6A6A6;">
 		<p
 			style="color:#F46837;font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:10%;">
-			￥${groupBuyPO.groupprice/100}0<span
-				style="text-decoration:line-through;font-size:14px;color:#C7C7C7;">￥${product.productPrice/100}0</span>
+			￥<fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/><span
+				style="text-decoration:line-through;font-size:14px;color:#C7C7C7;" >￥<fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span>
 		</p>
 		<p
 			style="color:black;font-size:18px;height:50px;line-height:25px;margin-left:10%;">${product.productName}</p>
@@ -543,7 +544,7 @@ function timer(times,intDiff) {
 		<p
 			style="line-height:100px;margin:0;font-weight:bold;text-align:center;">
 			<span style="float:left;padding-left:10%;">①开团/参团
-				&nbsp&nbsp&nbsp❯</span><span>②邀请好友 &nbsp&nbsp&nbsp❯</span><span
+				&nbsp&nbsp&nbsp❯</span><span>②好友分享 &nbsp&nbsp&nbsp❯</span><span
 				style="float:right;margin-right:2%;">③满员发货</span>
 		</p>
 		<p style="width:100%;position: absolute;top:10px;">
@@ -558,16 +559,13 @@ function timer(times,intDiff) {
 
 	<div
 		style="background:#F56938;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
-		<p
-			style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-			￥<span id="zong">${product.productPrice/100}0</span><span
-				style="font-size:14px;margin-left:5%;"
-				onclick="gotoproduct(${product.id})">原价购买</span>
+		<p style="height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
+			￥<span id="zong"><fmt:formatNumber type="number" value="${product.productPrice/100}" maxFractionDigits="2"/></span>
+			<span style="font-size:14px;margin-left:5%;" onclick="gotoproduct(${product.id})">原价购买</span>
 		</p>
-		<p class="fukuan"
-			style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-			￥<span id="zong">${groupBuyPO.groupprice/100}0</span><span
-				style="font-size:14px;margin-left:5%;">我要开团</span>
+		<p class="fukuan" style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
+			￥<span id="zong"><fmt:formatNumber type="number" value="${groupBuyPO.groupprice/100}" maxFractionDigits="2"/></span>
+			<span style="font-size:14px;margin-left:5%;">我要开团</span>
 		</p>
 	</div>
 

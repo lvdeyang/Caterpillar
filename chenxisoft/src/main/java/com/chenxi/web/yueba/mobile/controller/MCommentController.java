@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,9 +42,10 @@ public class MCommentController {
 	}
 	
 	@RequestMapping(value = "/mobile/index", method = RequestMethod.GET)
-	public ModelAndView index(HttpServletRequest request,long workerId) {
+	public ModelAndView index(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		strMap.put("workerId", workerId);
+		HttpSession session = request.getSession();
+		strMap.put("workerId", session.getAttribute("workerId"));
 		ModelAndView mv = new ModelAndView("yuebamobile/comment", strMap);
 		return mv;
 	}

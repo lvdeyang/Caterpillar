@@ -248,16 +248,16 @@ $(function() {
 	 }
       /**/	
 	  function getRecomment(){
-	     var _uriRecomment = window.BASEPATH + 'phoneApp/getRecommend?comCode='+comCode;
+	    var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=198&userId=${userId}';
 		
-		 $.get(_uriRecomment, null, function(data){
+		 $.get(_uriMerchantInfo, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
-				if(data && data.length>0){
+				if(data){
 				    var html=[];
-					for(var i=0; i<data.length; i++){
-						html.push('<div style="height:200px;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].productId+'-'+data[i].classify+'" style="height:200px;" src="'+data[i].slidepic+'" alt="">');
-						html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].name+'</div></div>');
+				    var pics=data.shopMpic.split(',');
+					for(var i=0; i<pics.length; i++){
+						html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
 					}
 					$('#headerWrapper').append(html.join(''));
 					$("#headerSwiper").swiper({
@@ -336,8 +336,8 @@ $(function() {
 			     html.push("<img  onclick='activity("+data[i].id+")' style='height:80px;width:30%;vertical-align: middle;display: inline-block;margin-left:3%;' src='http://www.guolaiwan.net/file"+data[i].img+"'/>")
 			     html.push("<div class='huodong' style='display: inline-block;'>")
 			     html.push("<p onclick='activity("+data[i].id+")'  style='position: absolute;top:-15px;font-size:14px;'>【活动】 "+data[i].activityRelPO.productName+"</p>")
-			     html.push("<p onclick='activity("+data[i].id+")' style='position: absolute;top:20px;color:#EC6D1E;font-size:16px;'>&nbsp￥"+data[i].ProductPrice+"起</p>")
-			     html.push("<button style='position: absolute;right:3%;top:60px;line-height:30px;font-size:14px;width:15%;outline: none;border:none;height:30px;border-radius:16px;background:#EC6D1E;color:#fff;' onclick='getorderinfo("+data[i].id+")'>抢 &gt;</button>")
+			     html.push("<p onclick='activity("+data[i].id+")' style='position: absolute;top:20px;color:#FF4900;font-size:16px;'>&nbsp￥"+data[i].ProductPrice+"起</p>")
+			     html.push("<button style='position: absolute;right:3%;top:60px;line-height:30px;font-size:14px;width:15%;outline: none;border:none;height:30px;border-radius:16px;background:#FF4900;color:#fff;' onclick='getorderinfo("+data[i].id+")'>抢 &gt;</button>")
 			     html.push("</div>")
 			     html.push("</div>")	
 			     if(i==2){
@@ -399,7 +399,7 @@ $(function() {
 			       html.push("<p style='position: absolute;top:0px;font-size:12px;color:#C0C0C0;'><span style='color:#EC6D1E;'>5.0分</span>   <span>"+data[i].number+"人来过</span></p>");
 			       html.push("<p style='position: absolute;top:40px;font-size:12px;color:#C0C0C0;'>739m</p>");
 			       html.push("<p style='color:#EC6D1E;position: absolute;top:-40px;right:0%;font-size:14px;'>$"+data[i].ProductPrice+"起</p>");
-			       html.push("<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#EC6D1E;color:#fff;' onclick='getorderinfo("+data[i].id+")'>立即预订</button>");
+			       html.push("<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#FF4900;color:#fff;' onclick='getorderinfo("+data[i].id+")'>立即预订</button>");
 			       html.push("</div>");
 			       html.push("</div>");     			       
 			   }
@@ -411,7 +411,7 @@ $(function() {
         location.href=window.BASEPATH + 'business/productdetails?id='+id;
    }
     function cate(){
-        location.href=window.BASEPATH + 'business/cate?modularCode=0003';
+        location.href=window.BASEPATH + 'business/cate?modularCode=0003&merchantId=${merchantId}';
    }
    function group(){
    		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
@@ -422,7 +422,9 @@ $(function() {
    function wallet(){
    		location.href=window.BASEPATH + 'pubnum/wallet';
    }
-   
+   function search(){
+   		location.href=window.BASEPATH + 'pubnum/search?content=';
+   }
 </script>
 
 
@@ -451,7 +453,7 @@ $(function() {
 	     <div style="height:60px;width:100%;clear:both">
 	     <img style="width:30px;height:30px;display:inline-block;margin:0 0.5% 0 5%;" src="lib/images/dizhiss.png"/>
 	     <p style="display:inline-block;font-size:14px;font-weight: bold;color:black;margin:0;line-height: 60px;">南山长乐谷欢迎您</p>
-	     <input class="inp" placeholder="关键字/词" style="float:right;margin-top:15px;margin-right:5%;width:45%;height:30px;border:none;outline: none;padding:10px 9%;border-radius:16px;background:#EEEEEE;"></input>	     
+	     <input class="inp" placeholder="关键字/词" style="float:right;margin-top:15px;margin-right:5%;width:45%;height:30px;border:none;outline: none;padding:10px 9%;border-radius:16px;background:#EEEEEE;" onfocus="search()"></input>	     
 	     <img style="width:20px;height:20px;position: absolute;right:42%;top:20px;" src="lib/images/sousuo.png"/> 
 	     </div> 
 	    <div class="header_in" style="clear:both">

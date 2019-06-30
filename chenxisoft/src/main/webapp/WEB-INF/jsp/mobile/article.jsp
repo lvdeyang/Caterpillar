@@ -29,7 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <header class="ui-header ui-header-positive ui-border-b">
          
          <h1 style="font-size:14px;width:80px;float:left;"></h1>
-          <a href="cartest/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-home"></i></a>
+          <a style="display:none;" href="cartest/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-home"></i></a>
     </header>
 	
 	<div style="margin-top:50px;padding-left:15px;font-size:18px;id="title">${article.title}</div>

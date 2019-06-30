@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import com.guolaiwan.bussiness.admin.dto.MerchantDTO;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
-import com.guolaiwan.bussiness.admin.po.MerchantUser;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -138,17 +137,17 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		System.out.println("共有：" + allcount);
 		return allcount;
 	}
-	
+
 	// 获取商品ID
 	public MerchantPO getDistributionId(int distributionId) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("distributionId", Condition.eq, distributionId);
 		List<MerchantPO> list = findByHql(hql);
 		List<MerchantPO> findByHql = findByHql(hql);
-	    if(findByHql == null || findByHql.size() ==0) return null;
-	    return findByHql.get(0);
+		if (findByHql == null || findByHql.size() == 0)
+			return null;
+		return findByHql.get(0);
 	}
-	
 
 	// 通过用户id获取商户
 	public MerchantPO getMerByUser(UserInfoPO user) {
@@ -250,7 +249,7 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
 		hql.andBy("modularCode", Condition.eq, modularCode);
-        
+
 		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
 			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 		}
@@ -258,15 +257,14 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		List<MerchantPO> merchants = findByHqlPage(hql, pageNum, pageSize);
 		return merchants;
 	}
-	
-	
+
 	public List<MerchantPO> getMerchantByModularCode1(String modularCode, Map<String, Object> Retrievals, int pageNum,
 			int pageSize) {
 
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
 		hql.andBy("modularCode1", Condition.eq, modularCode);
-		
+
 		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
 			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 		}
@@ -274,14 +272,14 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		List<MerchantPO> merchants = findByHqlPage(hql, pageNum, pageSize);
 		return merchants;
 	}
-	
+
 	public List<MerchantPO> getMerchantByModularCode2(String modularCode, Map<String, Object> Retrievals, int pageNum,
 			int pageSize) {
 
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
 		hql.andBy("modularCode2", Condition.eq, modularCode);
-		
+
 		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
 			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 		}
@@ -289,7 +287,6 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		List<MerchantPO> merchants = findByHqlPage(hql, pageNum, pageSize);
 		return merchants;
 	}
-	
 
 	/**
 	 * 获取指定模块下的商家个数（App接口调用）
@@ -422,10 +419,9 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		return merchants;
 	}
 
-	
 	/**
-	 * app专用搜索商家 新增方法 
-	 * 修改了平谷搜索的问题去掉了comId条件
+	 * app专用搜索商家 新增方法 修改了平谷搜索的问题去掉了comId条件
+	 * 
 	 * @param comId
 	 * @return
 	 */
@@ -438,8 +434,7 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 			return new ArrayList<MerchantPO>();
 		return merchants;
 	}
-	
-	
+
 	/**
 	 * app专用搜索商家 liu
 	 * 
@@ -471,10 +466,9 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		return count;
 	}
 
-	
 	/**
-	 * app专用搜索商家（个数）
-	 * 修改了平谷搜索的功能 去掉了comId条件
+	 * app专用搜索商家（个数） 修改了平谷搜索的功能 去掉了comId条件
+	 * 
 	 * @param comId
 	 * @return
 	 */
@@ -485,8 +479,7 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		int count = countByHql(cHql);
 		return count;
 	}
-	
-	
+
 	public List<MerchantPO> getMerchantBySc(String name) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("shopName", Condition.lk, name);
@@ -587,17 +580,30 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		List<MerchantPO> merchants = findByHql(hql);
 		return merchants;
 	}
-	
+
 	/**
 	 * 通过商户id查找客服人员
+	 * 
 	 * @param merchantId
 	 * @return
 	 */
-	public MerchantPO  getUserByMerchantId(Long merchantId){
+	public MerchantPO getUserByMerchantId(Long merchantId) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("merchantId", Condition.eq, merchantId);
-		List<MerchantPO> merchant =  findByHql(hql);
-		if(merchant==null || merchant.size()<=0) return null;
+		List<MerchantPO> merchant = findByHql(hql);
+		if (merchant == null || merchant.size() <= 0)
+			return null;
 		return merchant.get(0);
+	}
+
+	// 获取南山下所有子商户下的美食
+	public MerchantPO getfood(long merchantId, String modularName) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("id", Condition.eq, merchantId);
+		hql.andBy("modularName", Condition.eq, modularName);
+		List<MerchantPO> merchantPOs = findByHql(hql);
+		if (merchantPOs == null || merchantPOs.size() == 0)
+			return null;
+		return merchantPOs.get(0);
 	}
 }

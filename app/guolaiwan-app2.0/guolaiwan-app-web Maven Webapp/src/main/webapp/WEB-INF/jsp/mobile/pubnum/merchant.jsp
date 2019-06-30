@@ -796,7 +796,8 @@ html, body {
 							//查找出这个房间touser是登录人的信息展示出来
 							if(data[i].touserId==userId&&data[i].merchantId==merchantId){
 								$('.ltname').text(data[i].fromuser);
-								ans  = '<div class="answer"><div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
+								ans  = '<div class="answer" style="margin-top:30px;">';
+								ans += '<div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
@@ -990,7 +991,7 @@ html, body {
 								style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 						</div>
 						<div
-							style="width:90%;margin-top:25px;margin-left:11px;font-size:16px;">
+							style="width:90%;margin-top:25px;margin-left:11px;font-size:14px;">
 							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线咨询</a>
 							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 							

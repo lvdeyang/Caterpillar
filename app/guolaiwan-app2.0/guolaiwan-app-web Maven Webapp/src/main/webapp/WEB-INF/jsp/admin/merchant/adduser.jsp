@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </head>
     <body>
     <script type="text/html" id="zsgc">
-		<a title="选择" href="javascript:;" onclick="sel('{{ d.id }}' , '')" 
+		<a title="选择" href="javascript:;" onclick="sel('{{ d.id }}' , '{{d.userNickname}}')" 
                            	style="text-decoration:none">
                             	<i>选择</i>
                         	</a>
@@ -34,6 +34,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
+        	
+        	<xblock>
+		
+			<div class="layui-inline">
+  			微信昵称：
+  			<div class="layui-inline">
+    			<input class="layui-input" name="nickname" id="nickname" autocomplete="off">
+  			</div>
+  			<button class="layui-btn" data-type="reload" onclick="select(this)" >搜索</button>
+			
+			</xblock>
            <table id="userList" lay-filter="userList"></table>
 
         </div>
@@ -73,16 +84,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              
             });
 
-			function sel(data){
-				$.ajax({
-					type:"post",
-					url:"chooseUser.do?userId=" + data + "&merchantId=" + ${merchantId}+"&type="+${type},
-					success:function(msg){
-						if(msg == "success"){
-							layer.msg("选择成功");
+			function sel(id,userNickname){
+				if(${type!=1}&&${type!=2}){
+					parent.$("input[name='olchatId']").val(id);
+					parent.$("input[name='olchatName']").val(userNickname);
+				}else{
+					$.ajax({
+						type:"post",
+						url:"chooseUser.do?userId=" + id + "&merchantId=${merchantId}&type=${type}",
+						success:function(msg){
+							if(msg == "success"){
+								layer.msg("选择成功");
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 
             function getUserList(){
@@ -95,9 +111,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     ,limit: 10
                     ,cols: [[
                         {type:"checkbox"}
-                        ,{field:"id",title:"Id",sort:true}
-                        ,{field:"userPhone",title:"联系方式"}
-                        ,{field:"userNickname",title:"业务人员"}
+                        ,{field:"id",title:"Id",sort:true,width:160}
+                        ,{field:"userPhone",title:"联系方式",width:160}
+                        ,{field:"userNickname",title:"业务人员",width:160}
                         ,{fixed: 'right',width:120,minWidth:100,templet:'#zsgc',unresize:true}
                     ]]
                     ,done:function(res, curr, count){

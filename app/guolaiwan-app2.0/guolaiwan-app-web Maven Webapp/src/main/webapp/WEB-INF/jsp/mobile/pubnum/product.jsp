@@ -701,7 +701,7 @@ input[type="datetime-local"]:before{
 			    $('#proName').html(data.product.productName+'￥<span id="price">'+data.product.productPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
 			    $('#proContent').html(data.product.productIntroduce);
 			    $('#total').html((data.product.productPrice*${productRestrictNumber}).toFixed(2));
-			    $('#proShowNum').html('销量'+data.product.productShowNum);
+			    $('#proShowNum').html('销量'+data.product.productSaleNum);
 			    $('#proStock').html('库存'+data.product.productStock);
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
 				$('#addressphone1').html('<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopTel);
@@ -772,7 +772,12 @@ input[type="datetime-local"]:before{
 		function initLogistics(data){
 		   var html=[];
 		   for(var i=0;i<data.length;i++){
-		      html.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
+		     if(i==0){
+		          html.push('<option value="'+data[i+1].id+'">'+data[i+1].name+'</option>');
+		     }
+		     if(i==1){
+		          html.push('<option value="'+data[i-1].id+'">'+data[i-1].name+'</option>');
+		     }
 		   }
 		   $('#logisticsList').append(html.join(''));
 		}
@@ -1551,7 +1556,7 @@ addmessage();
 		
 		//$(document).on('click','.mailAddress',function(){
 		$(document).on('click','#buynow',function(){
-		    if(ifFace==0||productModular!='0001'){
+		    if(ifFace==0){
 		    	dobuy();
 		    	return;
 		    }else{
@@ -1864,7 +1869,8 @@ addmessage();
 							//查找出这个房间touser是登录人的信息展示出来
 							if(data[i].touserId==userId&&data[i].merchantId==merchantId){
 								$('.ltname').text(data[i].fromuser);
-								ans  = '<div class="answer"><div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
+								ans  = '<div class="answer" style="margin-top:30px;">';
+								ans += '<div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
 				        		$('.speak_box').append(ans);
@@ -2059,7 +2065,7 @@ addmessage();
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">房间选择</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			      <input id="selRoom" readonly="readonly" class="weui-input" type="text" placeholder="">
+			      <input id="selRoom" readonly="readonly" class="weui-input" type="text" placeholder="" value="默认">
 			      <input type="hidden" id="selRoomId"/>
 			    </div>
 			    <div class="weui-cell__bd"></div>
@@ -2100,7 +2106,7 @@ addmessage();
 					style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 					
 				<div
-					style="width:90%;margin-top:20px;margin-left:11px;font-size:16px;">
+					style="width:90%;margin-top:20px;margin-left:11px;font-size:14px;">
 					
 					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线咨询</a>
 					<a id="guide" href="javascript:void(0);" style="display: none;" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;导览</a>
