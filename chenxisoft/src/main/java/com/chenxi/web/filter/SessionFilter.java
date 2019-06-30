@@ -24,7 +24,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 
 public class SessionFilter implements Filter {
     private boolean istest=true;
-    private boolean adminIsTest=false;
+    private boolean adminIsTest=true;
 	
 	public FilterConfig config;
 
