@@ -1556,7 +1556,7 @@ addmessage();
 		
 		//$(document).on('click','.mailAddress',function(){
 		$(document).on('click','#buynow',function(){
-		    if(ifFace==0||productModular!='0001'){
+		    if(ifFace==0){
 		    	dobuy();
 		    	return;
 		    }else{

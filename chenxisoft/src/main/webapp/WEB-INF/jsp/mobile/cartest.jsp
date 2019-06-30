@@ -102,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                  for(var i=0;i<data.articles.length;i++){
 				         html.push('<li class="article" id="art-'+data.articles[i].id+'">');
 						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url('+data.articles[i].pic+')"></span></div>');
+						 html.push('        <span style="background-image:url('+(data.articles[i].pic==null?"/chenxisoft/lib/images/xlye.jpg":data.articles[i].pic)+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
 						 html.push('		<div style="font-size:13px;">'+data.articles[i].title+'</div>');
 						 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.articles[i].source]+'</p>');
