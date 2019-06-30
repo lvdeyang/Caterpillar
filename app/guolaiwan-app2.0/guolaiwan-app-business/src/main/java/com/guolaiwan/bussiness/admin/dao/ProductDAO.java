@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.guolaiwan.bussiness.admin.enumeration.ProductSaleType;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -606,6 +607,19 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 
 		List<ProductPO> products = findByHql(hql);
 		return products;
+	}
+	
+	// 后台检索专用
+	public List<ProductPO> findByPageC(Map<String, Object> map, int pageNum, int pageSize) {
+		QueryHql hql = this.newQueryHql();
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			
+				hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
+			
+		}
+		
+		List<ProductPO> productPos = findByHqlPage(hql, pageNum, pageSize);
+		return productPos;
 	}
 
 }
