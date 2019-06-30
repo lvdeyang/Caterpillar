@@ -80,7 +80,7 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#fff !important; 
+	background:#E1E1E1 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	
@@ -146,6 +146,7 @@ html, body {
     text-align: right;
     margin-left: 2%;
     padding: 0 10%;
+    border-radius:6px;
     border:none;
     background:#fff;
     outline: none;
@@ -179,7 +180,7 @@ html, body {
 	 $.get(url, null, function(data){
 	     var html=[];
 		 html.push("<div style='position: relative;width:100%;height:150px;line-height:150px;border:none;border-left:none;border-right:none;margin:0 auto;'>");
-		 html.push("<img style='height:110px;width:40%;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data.url+"'/>");
+		 html.push("<img style='height:110px;width:40%;margin-left:8%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data.url+"'/>");
 		 html.push("<div class='huodong' style='display: inline-block;'>");
 		 html.push("<p style='position: absolute;top:-43px;font-size:16px;margin-left:10px;'>"+data.ProductName+"</p>");
 		 html.push("<p style='position: absolute;top:43px;color:#EC6D1E;font-size:16px;'>&nbsp￥<span id='spans'>"+data.ProductPrice+"</span><span style='text-decoration:line-through;color:#666666;margin-left:5%;'>￥"+data.productOldPrice+"</span></p>");
@@ -271,11 +272,8 @@ html, body {
 		    <p class="p2" style="position: absolute;top:110px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
 		    </li>
 		    <li>
-		    <input type="button">
-		    <img style="width:40px;height:40px;position: absolute;top:180px;left:9%;" src="lib/images/renlians.png"/>
-	        <p style="position: absolute;top:183px;left:23%;font-weight:bold;">人脸识别</p>
-	        <p style="position: absolute;top:203px;left:23%;font-size:12px;">请保持正脸</p>
-		    <p style="position: absolute;top:190px;right:4%;font-size:22px;color:#fff;background:#0FB2FF;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
+		    <input type="text" placeholder="请输入身份证号码" minlength="4" maxlength="4" style="padding:0 7%" >
+		    <p style="position: absolute;top:190px;left:10%;">身份证号码</p>
 		    </li>
 		    <li>
 		    <input type="text" placeholder="请输入您的姓名" minlength="4" maxlength="4" style="padding:0 7%" >
@@ -285,25 +283,23 @@ html, body {
 		     <input class="phone" type="text" placeholder="请输入正确的手机号码" minlength="11" maxlength="11" style="padding:0 7%" >
 		    <p style="position: absolute;top:350px;left:10%;">联系电话</p>
 		    </li>
-		    <li>
+		   <!--  <li>
 		    <input type="button">
 		    <p style="position: absolute;top:430px;left:10%;">优惠卷</p>
 		    <p style="position: absolute;top:430px;right:7%;"><span>0</span>张可用</p>
-		    </li>
-		    <li>
-		    <input type="text" placeholder="备注留言" style="text-align:left;padding:0 7%;">
-		    </li>
+		    </li> -->
 		    </ul>	 
 	  </div>
-	 
-	     
+      <div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;">
+          <img style="width:140px;height:171px;position: absolute;left:50%;margin:40px 0 0 -70px;" alt="" src="lib/images/renliansss.png">
+          <p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-126px;">请保持正脸，平视屏幕，面部足够清晰。</p>
+          <button style="position: absolute;left:50%;top:300px;font-size:18px;margin-left:-100px;width:200px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>
+      </div>   
 	 <div style="background:#fff;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
 	     	<p style="height:100%;float:left;text-align:center;width:55%;line-height: 60px;color:#EC6D1E;font-size:20px;font-weight:bold;display: inline-block;">￥<span id="zong">39.9</span></p>
 	        <p class="fukuan" style="height:100%;float:right;text-align:center;width:45%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">去付款</p>
 	 </div>
-     <div style="height:60px;width:100%;">
-          
-     </div> 
+     <div style="height:90px;width:100%;"> </div> 
 </body>
 
 

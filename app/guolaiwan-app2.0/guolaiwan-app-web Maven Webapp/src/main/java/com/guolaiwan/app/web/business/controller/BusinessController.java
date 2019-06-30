@@ -127,9 +127,7 @@ public class BusinessController extends WebBaseControll {
 					hashMap.put("id", productPO.getId());
 					hashMap.put("activityRelPO", activityRelPO);
 					hashMap.put("img", productPO.getProductShowPic());
-					hashMap.put("ProductPrice", df.format(Double.parseDouble(productPO.getProductPrice() + "") / 100));
-					hashMap.put("productOldPrice",
-							df.format(Double.parseDouble(productPO.getProductOldPrice() + "") / 100));
+					hashMap.put("ProductPrice", df.format(Double.parseDouble(activityRelPO.getPrice() + "") / 100));
 					hashMap.put("url", sys.getWebUrl());
 					activityRelPOs.add(hashMap);
 				}
