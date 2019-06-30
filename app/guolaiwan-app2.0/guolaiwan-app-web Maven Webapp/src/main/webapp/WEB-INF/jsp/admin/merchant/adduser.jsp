@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             });
 
 			function sel(id,userNickname){
-				if(${type!=1}&&${type!=2}){
+				if(${type!="1"}&&${type!="2"}){
 					parent.$("input[name='olchatId']").val(id);
 					parent.$("input[name='olchatName']").val(userNickname);
 				}else{
