@@ -209,8 +209,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   elem: '#seeDate'
 			   ,position: 'static',
 			   zIndex: 1,
-			   min:'2019-06-26',
-			   max:'2019-08-28',
+			   min:'${minDate}',
+			   max:'2029-09-28',
 			   theme:'#18b4ed'
 			 });
 			 $('.layui-laydate-main').css('width','100%');

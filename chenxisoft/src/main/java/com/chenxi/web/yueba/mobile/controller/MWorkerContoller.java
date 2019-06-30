@@ -39,6 +39,7 @@ import com.chenxi.web.yueba.admin.dao.SeeRecordDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
 import com.chenxi.web.yueba.admin.po.ComboPo;
 import com.chenxi.web.yueba.admin.po.DaysTypePo;
+import com.chenxi.web.yueba.admin.po.OrderPo;
 import com.chenxi.web.yueba.admin.po.RegionsPo;
 import com.chenxi.web.yueba.admin.po.SeeRecordPo;
 import com.chenxi.web.yueba.admin.po.WorkerPo;
@@ -97,8 +98,13 @@ public class MWorkerContoller extends BaseController {
         
         strMap.put("comments",conn_comment.findByworkerId(workerId, 1, 3));
         
+        OrderPo currentOrder=conn_order.findMaxWorderOrder(workerId);
+        String minDate=DateUtil.format(new Date(),"yyyy-MM-dd");
+        if(currentOrder!=null){
+        	minDate=DateUtil.format(DateUtil.addHour(currentOrder.getFromDate(),currentOrder.getDays()+1),"yyyy-MM-dd");
+        }
         
-		
+		strMap.put("minDate", minDate);
         SeeRecordPo seeRecordPo=new SeeRecordPo();
         seeRecordPo.setUpdateTime(new Date());
     	HttpSession session = request.getSession();
