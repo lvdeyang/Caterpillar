@@ -413,6 +413,9 @@ $(function() {
     function cate(){
         location.href=window.BASEPATH + 'business/cate?modularCode=0003&merchantId=${merchantId}';
    }
+    function activity(){
+        location.href=window.BASEPATH + '/product/activity/jump';
+   }
    function group(){
    		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
    }  
@@ -473,7 +476,7 @@ $(function() {
          <li><img src="lib/images/caizhais.png"/></li>
          <li><img src="lib/images/gongluess.png"/></li>
          <li onclick="wallet()"><img src="lib/images/qianbaos.png"/></li>
-         <li><span>活动</span></li>
+         <li onclick="activity()"><span>活动</span></li>
    	     <li onclick="group()"><span>拼团</span></li>
          <li onclick="pick()"><span>采摘</span></li>
          <li><span>攻略</span></li>
@@ -498,7 +501,7 @@ $(function() {
 	     
 	   <!-- 活动  -->
 	  	<div  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="hd"">
-	     <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><img style="width:30px;height:30px;" src="lib/images/huodongss.png"/>活动<span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>
+	     <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><img style="width:30px;height:30px;" src="lib/images/huodongss.png"/>活动<span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px" onclick="activity()">查看更多&gt;</span></p>
 	     	
     
 	  </div>	
