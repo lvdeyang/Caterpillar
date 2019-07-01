@@ -24,7 +24,6 @@ import pub.caterpillar.weixin.constants.WXContants;
 
 public class SessionFilter implements Filter {
     private boolean istest=true;
-    private boolean adminIsTest=false;
 	
 	public FilterConfig config;
 
@@ -44,7 +43,8 @@ public class SessionFilter implements Filter {
 		if (hrequest.getHeader("user-agent") != null) {
 			userAgent = hrequest.getHeader("user-agent").toLowerCase();
 		}
-		if(!adminIsTest&&session.getAttribute("userId")==null){
+		if(!hrequest.getRequestURI().contains("/login/index")&&!hrequest.getRequestURI().contains("/login/login.do")&&
+				!"admin".equals(session.getAttribute("type"))&&session.getAttribute("userId")==null){
 			if (userAgent.indexOf("micromessenger") > -1&&!istest) {
 				if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")) {
 					chain.doFilter(request, response);
@@ -62,7 +62,6 @@ public class SessionFilter implements Filter {
 				return;
 			}
 		}
-		
 
 		chain.doFilter(request, response);
 		return;

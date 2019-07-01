@@ -8,9 +8,36 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Entity
 @Table(name = "Message")
 public class MessagePO extends AbstractBasePO {
-	private String name;
-	private String number;
-	private String base;
+	private String name;// 姓名
+	private String number;// 身份证号
+	private String base;// 图片base64的编码
+	private String oderId;// 订单id
+	private String merchantid;// 商户id
+	private String state;// 支付状态 0代表未支付，1代表已支付
+
+	public String getOderId() {
+		return oderId;
+	}
+
+	public void setOderId(String oderId) {
+		this.oderId = oderId;
+	}
+
+	public String getMerchantid() {
+		return merchantid;
+	}
+
+	public void setMerchantid(String merchantid) {
+		this.merchantid = merchantid;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
 
 	public String getName() {
 		return name;
@@ -38,7 +65,8 @@ public class MessagePO extends AbstractBasePO {
 
 	@Override
 	public String toString() {
-		return "MessagePO [name=" + name + ", number=" + number + ", base=" + base + "]";
+		return "MessagePO [name=" + name + ", number=" + number + ", base=" + base + ", oderId=" + oderId
+				+ ", merchantid=" + merchantid + ", state=" + state + "]";
 	}
 
 }

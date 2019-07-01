@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      height:40px;
      padding-left:10px;
      line-height:40px;
-     color:#7CAE23;
+     color:#FFC0CB;
      
    }
    .ftitle a{
@@ -38,6 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      float:right;
      margin-right:20px;
      font-size:14px;
+     color:#FFC0CB
    }
    #priceTable{
      width:90%;
@@ -80,10 +81,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
     <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">详情
        </h2><a><i class="ui-icon-personal"></i></a>
-    <header class="ui-header ui-header-positive ui-border-b">
+    <header class="ui-header ui-header-positive ui-border-b" style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
          
-         <h1 style="font-size:14px;width:80px;float:left;">详情</h1>
-         <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
+       
     </header>
 	<image src="/chenxisoft${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
 	<div class="ui-form ui-border-t">
@@ -106,9 +106,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	        <div class="ui-form-item ui-border-b" >
 	            <label style="width:100px;">
-	                                   电话
+	                                   客服电话
 	            </label>
-	            <label style="margin-left:20px;">0315-6659872</label>
+	            <label style="margin-left:20px;">18617856189</label>
 	        </div>
 	        <div class="ui-form-item ui-border-b" style="display:none">
 	            <label style="width:100px;">
@@ -164,7 +164,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </ul>
             
 	        <div class="ui-btn-wrap">
-	            <button class="ui-btn-lg ui-btn-primary" id="addOrder">
+	            <button class="ui-btn-lg ui-btn-primary" id="addOrder" style="background:#FFC0CB">
 	                                     电话咨询
 	            </button>
 	        </div>
@@ -211,7 +211,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   zIndex: 1,
 			   min:'${minDate}',
 			   max:'2029-09-28',
-			   theme:'#18b4ed'
+			   theme:'#FFC0CB'
 			 });
 			 $('.layui-laydate-main').css('width','100%');
 			 
@@ -266,10 +266,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			       });
 		     }
 			 
+			 $(document).on('click','#addOrder',function(){
+			      window.location.href = 'tel://18617856189';
 			 
+			 });
 	          
 	     });
 	
 	</script>
+	<jsp:include page="../common.jsp"></jsp:include>
 </body>
 </html>
