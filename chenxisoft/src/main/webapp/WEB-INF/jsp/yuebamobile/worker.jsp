@@ -106,9 +106,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	        <div class="ui-form-item ui-border-b" >
 	            <label style="width:100px;">
-	                                   电话
+	                                   客服电话
 	            </label>
-	            <label style="margin-left:20px;">0315-6659872</label>
+	            <label style="margin-left:20px;">18617856189</label>
 	        </div>
 	        <div class="ui-form-item ui-border-b" style="display:none">
 	            <label style="width:100px;">
@@ -266,7 +266,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			       });
 		     }
 			 
+			 $(document).on('click','#addOrder',function(){
+			      window.location.href = 'tel://18617856189';
 			 
+			 });
 	          
 	     });
 	
