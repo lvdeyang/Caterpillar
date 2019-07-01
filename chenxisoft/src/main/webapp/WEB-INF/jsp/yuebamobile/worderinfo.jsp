@@ -59,7 +59,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="width:100px;">
 	                                     姓名
 	            </label>
-                <label style="margin-left:20px;">${order.userName}<span style="color:red;margin-left:5px;">(带过${worker.orderCount}个孩子)</span></label>
+                <label style="margin-left:20px;">${order.userName}</label>
 	           
 	        </div>
 	        <div class="ui-form-item ui-border-b">
@@ -119,7 +119,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         
 		     $(document).on('click','#gotolist',function(){
 		     
-		        location.href=window.BASEPATH+"/order/mobile/list";
+		        location.href=window.BASEPATH+"/order/mobile/wlist";
 		     });
 	          
 	     });

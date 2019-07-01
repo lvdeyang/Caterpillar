@@ -87,8 +87,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	               if(data){
 	                  for(var i=0;i<data.length;i++){
-	                        html.push('<li>');
-						    html.push('    <div id="wor-'+data[i].workerId+'" class="worker ui-avatar-s">');
+	                        html.push('<li id="wor-'+data[i].workerId+'" class="worker">');
+						    html.push('    <div class=" ui-avatar-s">');
 						    html.push('        <span style="background-image:url(/chenxisoft'+data[i].workerPic+')"></span>');
 						    html.push('    </div>');
 						    html.push('    <div class="ui-list-info ui-border-t">');
