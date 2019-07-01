@@ -621,5 +621,19 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		List<ProductPO> productPos = findByHqlPage(hql, pageNum, pageSize);
 		return productPos;
 	}
+	
+	/**
+	 * 按照classcode查找相关的商品
+	 * @param productClassCode
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	public List<ProductPO> findByProductClassCode(String productClassCode, int pageNum, int pageSize) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("productClassCode", Condition.eq, productClassCode);
+		List<ProductPO> products = findByHqlPage(hql, pageNum, pageSize);
+		return products;
+	}
 
 }

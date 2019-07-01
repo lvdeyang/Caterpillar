@@ -194,7 +194,7 @@ public class MerchantController extends BaseController {
 		String signPic = request.getParameter("signPic");
 		String shopyd = request.getParameter("shopyd");
 		String olchat=request.getParameter("olchatId");
-		System.out.println(olchat);
+		
 		MerchantPO merchant = new MerchantPO();
 		MerchantPO check = conn_merchant.getByField("shopLoginName", shopLoginName);
 		if (check != null) {
@@ -264,7 +264,9 @@ public class MerchantController extends BaseController {
 		merchant.setComName(getLoginInfo().getComName());
 		merchant.setCityCode(getLoginInfo().getCityCode());
 		merchant.setCityName(getLoginInfo().getCityName());
-		merchant.setChatUserId(Long.parseLong(olchat));
+		if(olchat!=""){
+			merchant.setChatUserId(Long.parseLong(olchat));
+		}
 		user.setMerchant(merchant);
 		merchant.setUser(user);
 
