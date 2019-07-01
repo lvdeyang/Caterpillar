@@ -44,10 +44,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
     <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">详情
        </h2><a><i class="ui-icon-personal"></i></a>
-    <header class="ui-header ui-header-positive ui-border-b">
+    <header class="ui-header ui-header-positive ui-border-b" style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
          
-         <h1 style="font-size:14px;width:80px;float:left;">详情</h1>
-         <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
+      
     </header>
 	
 	<image src="/chenxisoft${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
@@ -137,5 +136,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     });
 	
 	</script>
+	<jsp:include page="../common.jsp"></jsp:include>
 </body>
 </html>
