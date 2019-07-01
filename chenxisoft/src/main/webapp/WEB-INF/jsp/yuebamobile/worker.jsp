@@ -94,7 +94,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="width:100px;">
 	                                     姓名
 	            </label>
-                <label style="margin-left:20px;">${worker.realName}<span style="color:red;margin-left:5px;">(带过${worker.orderCount}个孩子)</span></label>
+                <label style="margin-left:20px;">${worker.realName}<span style="color:red;margin-left:5px;">(带过${childCount}个孩子)</span></label>
 	           
 	        </div>
 	       
