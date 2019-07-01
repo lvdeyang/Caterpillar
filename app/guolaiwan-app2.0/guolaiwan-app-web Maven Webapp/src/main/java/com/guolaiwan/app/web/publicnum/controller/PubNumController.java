@@ -2678,13 +2678,18 @@ public class PubNumController extends WebBaseControll {
 	// 保存身份证信息
 	@ResponseBody
 	@RequestMapping(value = "/addmessage", method = RequestMethod.POST)
-	public Map<String, String> addmessage(String localData, String idnums, String name) throws Exception {
+	public Map<String, String> addmessage(String localData, String idnums, String name, String oderId)
+			throws Exception {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
+			OrderInfoPO orderInfoPO = conn_order.get(Long.parseLong(oderId));
 			MessagePO messagePO = new MessagePO();
 			messagePO.setName(name);
 			messagePO.setBase(localData);
 			messagePO.setNumber(idnums);
+			messagePO.setOderId(oderId);
+			messagePO.setState("0");
+			messagePO.setMerchantid(orderInfoPO.getShopId() + "");
 			messagedao.save(messagePO);
 			map.put("msg", "0");
 			return map;
@@ -2713,5 +2718,16 @@ public class PubNumController extends WebBaseControll {
 			return "error";
 		}
 
+	}
+
+	// 修改身份证采集表支付状态
+	@ResponseBody
+	@RequestMapping(value = "/updatemessage", method = RequestMethod.POST)
+	public Map<String, String> updatemessage(String oderId) {
+
+		MessagePO messagepo = messagedao.getByOderId(oderId);
+		messagepo.setState("1");
+		messagedao.saveOrUpdate(messagepo);
+		return null;
 	}
 }
