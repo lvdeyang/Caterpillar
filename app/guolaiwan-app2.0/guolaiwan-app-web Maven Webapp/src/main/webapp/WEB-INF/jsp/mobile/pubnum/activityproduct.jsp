@@ -672,7 +672,7 @@ html, body {
 		function initLogistics(data){
 		   var html=[];
 		   for(var i=0;i<data.length;i++){
-		       if(i==0){
+		     if(i==0){
 		          html.push('<option value="'+data[i+1].id+'">'+data[i+1].name+'</option>');
 		     }
 		     if(i==1){

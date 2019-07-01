@@ -392,7 +392,7 @@ $(function() {
 		$.get(url, null, function(data){
 			var html=[];
 			for(var i=0;i<data.length;i++){	
-			       html.push("<a onclick='getorderinfo("+data[i].id+")'><div style='position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
+			       html.push("<a onclick='getorderinfo("+data[i].id+")'><div style='position: relative;overflow:hidden;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
 			       html.push("<img style='height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data[i].url+"'/>");
 			       html.push("<div class='youxuan-in' style='display: inline-block;'>");
 			       html.push("<p style='position: absolute;top:-40px;font-size:14px;max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data[i].ProductName+"</p>");
@@ -413,6 +413,9 @@ $(function() {
     function cate(){
         location.href=window.BASEPATH + 'business/cate?modularCode=0003&merchantId=${merchantId}';
    }
+    function activity(){
+        location.href=window.BASEPATH + '/product/activity/jump';
+   }
    function group(){
    		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
    }  
@@ -424,6 +427,9 @@ $(function() {
    }
    function search(){
    		location.href=window.BASEPATH + 'pubnum/search?content=';
+   }
+   function preferably(){
+   		location.href=window.BASEPATH + 'business/gotopreferably?merchantId=${merchantId}';
    }
 </script>
 
@@ -473,7 +479,7 @@ $(function() {
          <li><img src="lib/images/caizhais.png"/></li>
          <li><img src="lib/images/gongluess.png"/></li>
          <li onclick="wallet()"><img src="lib/images/qianbaos.png"/></li>
-         <li><span>活动</span></li>
+         <li onclick="activity()"><span>活动</span></li>
    	     <li onclick="group()"><span>拼团</span></li>
          <li onclick="pick()"><span>采摘</span></li>
          <li><span>攻略</span></li>
@@ -498,7 +504,7 @@ $(function() {
 	     
 	   <!-- 活动  -->
 	  	<div  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="hd"">
-	     <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><img style="width:30px;height:30px;" src="lib/images/huodongss.png"/>活动<span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>
+	     <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><img style="width:30px;height:30px;" src="lib/images/huodongss.png"/>活动<span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px" onclick="activity()">查看更多&gt;</span></p>
 	     	
     
 	  </div>	
@@ -516,7 +522,10 @@ $(function() {
         </div> 
          <!-- 为你优选  -->
 	  	<div class="youxuan"   style="width:96%;height:790px;margin:0 auto;background:#fff;position: relative;top:72px;overflow: hidden;">
-            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> <span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
+            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;">
+            <span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> 
+            <span onclick="preferably()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span>
+            </p>     
         </div> 
 </body>
 </html>
