@@ -98,6 +98,7 @@ public class MWorkerContoller extends BaseController {
         
         strMap.put("comments",conn_comment.findByworkerId(workerId, 1, 3));
         
+        strMap.put("childCount", conn_order.countByField("workerId", workerId));
         OrderPo currentOrder=conn_order.findMaxWorderOrder(workerId);
         String minDate=DateUtil.format(new Date(),"yyyy-MM-dd");
         if(currentOrder!=null){

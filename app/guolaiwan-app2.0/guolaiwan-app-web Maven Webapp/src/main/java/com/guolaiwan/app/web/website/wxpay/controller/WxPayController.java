@@ -249,45 +249,55 @@ public class WxPayController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/refund", method = RequestMethod.GET)
 	public Object refund(HttpServletRequest request, HttpServletResponse response, String orderId) throws Exception {
-		long amount = 0;
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (orderId.indexOf("bundle") != -1) {
-			String[] bundleidStrs = orderId.split("-");
-			BundleOrder bOrder = conn_bundle.get(Long.parseLong(bundleidStrs[1]));
-			String[] orderStrs = bOrder.getOrderStr().split("A");
-			for (String orderIdStr : orderStrs) {
-				if (conn_orderInfo.get(Long.parseLong(orderIdStr)).getOrderState() == OrderStateType.REFUNDING) {
-
-					amount += conn_orderInfo.get(Long.parseLong(orderIdStr)).getPayMoney();
+		
+		if(conn_orderInfo.get(Long.parseLong(orderId)).isIswallet()==false){
+				long amount = 0;
+				Map<String, Object> result = new HashMap<String, Object>();
+				if (orderId.indexOf("bundle") != -1) {
+					String[] bundleidStrs = orderId.split("-");
+					BundleOrder bOrder = conn_bundle.get(Long.parseLong(bundleidStrs[1]));
+					String[] orderStrs = bOrder.getOrderStr().split("A");
+					for (String orderIdStr : orderStrs) {
+						if (conn_orderInfo.get(Long.parseLong(orderIdStr)).getOrderState() == OrderStateType.REFUNDING) {
+		
+							amount += conn_orderInfo.get(Long.parseLong(orderIdStr)).getPayMoney();
+						}
+					}
+				} else {
+					OrderInfoPO orderInfoPO = conn_orderInfo.get(Long.parseLong(orderId));
+					if (orderInfoPO.getOrderState() == OrderStateType.REFUNDING) {
+		
+						amount = orderInfoPO.getPayMoney();
+					}
 				}
+				String refundOrderNum = "refund" + orderId;
+				try {
+		
+					GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+		
+					Map<String, String> reqData = new HashMap<String, String>();
+		
+					reqData.put("out_trade_no", orderId + "");
+					reqData.put("out_refund_no", refundOrderNum);
+					reqData.put("total_fee", amount + "");
+					reqData.put("refund_fee", amount + "");
+		
+					Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据
+		
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println(e.getMessage());
+				}
+		
+				return result;
+		}else{
+			if (conn_orderInfo.get(Long.parseLong(orderId)).getOrderState() == OrderStateType.REFUNDING) {
+				UserInfoPO user = conn_user.get(conn_orderInfo.get(Long.parseLong(orderId)).getUserId());
+				user.setWallet(user.getWallet()+conn_orderInfo.get(Long.parseLong(orderId)).getPayMoney());
+				conn_user.saveOrUpdate(user);
 			}
-		} else {
-			OrderInfoPO orderInfoPO = conn_orderInfo.get(Long.parseLong(orderId));
-			if (orderInfoPO.getOrderState() == OrderStateType.REFUNDING) {
-
-				amount = orderInfoPO.getPayMoney();
-			}
+			return success();
 		}
-		String refundOrderNum = "refund" + orderId;
-		try {
-
-			GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
-
-			Map<String, String> reqData = new HashMap<String, String>();
-
-			reqData.put("out_trade_no", orderId + "");
-			reqData.put("out_refund_no", refundOrderNum);
-			reqData.put("total_fee", amount + "");
-			reqData.put("refund_fee", amount + "");
-
-			Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.getMessage());
-		}
-
-		return result;
 	}
 	
 	//商家对个人支付 用作提现

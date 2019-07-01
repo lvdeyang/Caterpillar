@@ -483,12 +483,10 @@ html, body {
 	font-size: 12px;
 }
 #proContent img{
-    width:280px;
-    height:280px;
+   width:320px;
 }
 #proContent image{
-    width:280px;
-    height:280px;
+   width:320px;
 }
 
 
@@ -946,7 +944,7 @@ html, body {
 	    });
 	
 	
-	    var MAX = 99, MIN = ${productRestrictNumber};
+	    var MAX = ${productLimitNum eq "0"? "99":productLimitNum}, MIN = ${productRestrictNumber};
 		$('.weui-count__decrease').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
 		  var number = parseInt($input.val() || "0") - 1
@@ -1695,7 +1693,7 @@ html, body {
 					style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
 					
 				<div
-					style="width:90%;margin-top:20px;margin-left:11px;font-size:16px;">
+					style="width:90%;margin-top:20px;margin-left:11px;font-size:14px;">
 					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线咨询</a>
 					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 				</div>	

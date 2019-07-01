@@ -82,7 +82,6 @@ html, body {
 	background-color: #EEEEEE !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
-	background-color:#fff !important;
 	text-decoration: none !important;
 }
 
@@ -138,9 +137,7 @@ html, body {
         text-align: center;
 }  
 
- .youxuan-in p{
-  margin-left:3%;
- }
+
  
   .gotop {
 	    position: fixed;
@@ -398,18 +395,16 @@ $(function(){
                  var  str = data.strArryList;                                                                                 
 	       //后面的
 		   for(var j=0;j<list.length;j++){			   	   
-		   	   html.push('<div class="weui-panel__bd">');
-					html.push('<div class="youxuan"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">');
-		           html.push('<div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
-		           html.push('<img style="height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[j].productShowPic+'"/> ');
-		           html.push('<div class="youxuan-in" style="display: inline-block;">');
-		           html.push('<p style="position: absolute;top:-40px;font-size:14px;">【套餐】'+list[j].productName+'</p>');
-		           html.push('<p style="position: absolute;top:0px;font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;">5.0分</span>   <span>23人来过</span></p>');
-		           html.push('<p style="position: absolute;top:40px;font-size:12px;color:#C0C0C0;">739m</p>');
-		           html.push('<p style="color:#EC6D1E;position: absolute;top:-40px;right:1%;font-size:14px">$'+str[j]+'</p>');
-		           html.push('<button style="position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#EC6D1E;color:#fff;">立即预订</button>');
+		   	       html.push('<div class="weui-panel__bd">');
+				   html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
+		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
+		           html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[j].productShowPic+'"/> ');
+		           html.push('<div class="youxuan-in">');
+		           html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+list[j].productName+'</p>'); 
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
+                   html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">$'+str[j]+'</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
 		   }
-		   html.push('</div>');
+		   html.push('</div></div></div>');
 
 	        $('#content').append(html.join(''));
 	    }
@@ -422,16 +417,14 @@ $(function(){
          for(var i=0;i<list.length;i++){
          		var html=[];
          		if(data.productPOs.length>0){
-		           html.push('<div class="youxuan"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">');
-		           html.push('<div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
-		           html.push('<img style="height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'"/> ');
-		           html.push('<div class="youxuan-in" style="display: inline-block;">');
-		           html.push('<p style="position: absolute;top:-40px;font-size:14px;">【套餐】'+list[i].productName+'</p>');
-		           html.push('<p style="position: absolute;top:0px;font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;">5.0分</span>   <span>23人来过</span></p>');
-		           html.push('<p style="position: absolute;top:40px;font-size:12px;color:#C0C0C0;">739m</p>');
-		           html.push('<p style="color:#EC6D1E;position: absolute;top:-40px;right:1%;font-size:14px">$'+str[i]+'</p>');
-		           html.push('<button style="position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#FF4900;color:#fff;">立即预订</button>');
-		           html.push('</div></div></div> ');
+		           html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
+		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
+		           html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'"/> ');
+		           html.push('<div class="youxuan-in">');
+		           html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+list[i].productName+'</p>'); 
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
+		           html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">$'+str[i]+'</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
+		           html.push('</div></div></div>');
 		           }
 		 		$('#content').append(html.join(''));
 	     	}

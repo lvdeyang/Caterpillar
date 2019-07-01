@@ -155,6 +155,16 @@ public class OrderInfoPO extends AbstractBasePO {
 
 	// 新增快递单号--------------Dongsuyan
 	private String trackingnumber;
+	//是不是钱包支付的
+	private boolean iswallet;
+
+	public boolean isIswallet() {
+		return iswallet;
+	}
+
+	public void setIswallet(boolean iswallet) {
+		this.iswallet = iswallet;
+	}
 
 	public String getTrackingnumber() {
 		return trackingnumber;
