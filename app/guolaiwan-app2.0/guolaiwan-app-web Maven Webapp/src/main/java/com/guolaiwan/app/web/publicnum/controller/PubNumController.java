@@ -2181,6 +2181,7 @@ public class PubNumController extends WebBaseControll {
 			//生成验单码,和二维码图片
 			String ydNO = ydNoCode(orderId);
 			order.setYdNO(ydNO);
+			order.setIswallet(true);
 			conn_order.saveOrUpdate(order);
 			conn_user.saveOrUpdate(user);
 			// 推送购买商品成功信息给用户 商家 李姐
