@@ -176,8 +176,10 @@ html, body {
 	});
 	
 	function affirmorder(){
+	 
 	 var url = window.BASEPATH + 'business/affirmorder?productid='+${productid};
 	 $.get(url, null, function(data){
+          document.getElementById("zong").innerText = data.ProductPrice;
 	     var html=[];
 		 html.push("<div style='position: relative;border-radius:6px;width:100%;height:150px;line-height:150px;border:none;border-left:none;border-right:none;margin:0 auto;'>");
 		 html.push("<img style='height:110px;width:40%;margin-left:8%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data.url+"'/>");
@@ -202,6 +204,7 @@ html, body {
 	  });
 	});
 	   
+	
      /*控制数量  */
 	$(document).on('click','.p1',function(){
 	 var value=parseInt($('.zhi').val())-1;
@@ -236,11 +239,18 @@ html, body {
 				       alert("请输入正确的手机号码");
 					return false;
 				}else{
+				alert("通过");
+				}
+		});			
+	 /*身份证号正则  */
+	$(document).on('click', '.fukuan', function() {	
+	var re = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+				if ($(".pid").val().search(re)) {
+				       alert("请输入正确的身份证号码");
+					return false;
+				}else{
 				 alert("通过");
 				}
-				
-	
-	
 	});	
 </script>
 <body>
@@ -272,7 +282,7 @@ html, body {
 		    <p class="p2" style="position: absolute;top:110px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
 		    </li>
 		    <li>
-		    <input type="text" placeholder="请输入身份证号码" minlength="4" maxlength="4" style="padding:0 7%" >
+		    <input class="pid"  type="text" placeholder="请输入身份证号码" minlength="18" maxlength="18" style="padding:0 7%" >
 		    <p style="position: absolute;top:190px;left:10%;">身份证号码</p>
 		    </li>
 		    <li>
