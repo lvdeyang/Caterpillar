@@ -436,5 +436,54 @@ public class BusinessController extends WebBaseControll {
 		}
 		return list;
 	}
+	
+	// 支付完成页面
+	@ResponseBody
+	@RequestMapping(value = "/gotopayment")
+	public ModelAndView goToPayMent(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/payment");
+		return mv;
+	}
+	
+	//按照商品类型分页加载所有的商品 
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getallproduct")
+	public List<ProductVO> getAllProduct(HttpServletRequest request) throws Exception {
+		int page=Integer.parseInt(request.getParameter("page"));
+		System.out.println(page);
+		List<ProductPO> allproduct = conn_product.findByProductClassCode("0016", page, 6);
+		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
+		System.out.println(listvo.size());
+		return listvo;
+	}
+	
+	// 支付完成页面
+	@ResponseBody
+	@RequestMapping(value = "/gotopreferably")
+	public ModelAndView goToPreferably(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		System.out.println(merchantId);
+		mv = new ModelAndView("mobile/business/preferably");
+		mv.addObject("merchantId", merchantId);
+		return mv; 
+	}
+	
+	
+	//按照merchantId分页加载所有的商品 为你优选 目的 强推重要的商户商品
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getallpreferably")
+	public List<ProductVO> getAllPreferably(HttpServletRequest request) throws Exception {
+		int page=Integer.parseInt(request.getParameter("page"));
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		System.out.println(page);
+		List<ProductPO> allproduct = conn_product.findByMerchant(merchantId, page, 6);
+		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
+		System.out.println(listvo.size());
+		return listvo;
+	}
 
 }

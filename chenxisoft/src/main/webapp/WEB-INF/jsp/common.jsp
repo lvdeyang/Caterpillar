@@ -5,7 +5,15 @@
 	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
     String weburl=WXContants.Website;
 %>
+<style>
+  .current{
+    color:#FFC0CB!important;
+  }
+  .ui-tab-nav li.current>p:before, .ui-tab-nav li.current>span:before{
+    background-color:#FFC0CB!important;
+  }
 
+</style>
 
 <script type="text/javascript">
     
@@ -42,6 +50,17 @@
     	   location.href=$(this).attr('data');
     	
     	});
+    	
+    	function initHeader(){
+    	     var html=[];
+    	     html.push('<div style="width:140px;margin:0 auto">');
+	         html.push('<image src="/chenxisoft/lib/images/logo.png" style="width:60px;height:38px;float:left;margin-top:5px;"/>');
+	         html.push('<h1 style="font-size:14px;width:70px;float:left;margin-left:-15px;">小青月嫂</h1></div>');
+	         html.push('<div id="tel" style="float:right;font-size:12px;">18617856189</div>');
+	         $('header').append(html.join(''));
+    	}
+    	initHeader();
+    	
     });
 	
 		
