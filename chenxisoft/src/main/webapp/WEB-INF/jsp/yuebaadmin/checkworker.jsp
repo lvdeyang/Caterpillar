@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -19,19 +20,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">身份证照片</label>
 	    <div class="layui-input-block">
-	      <image src="/chenxisoft/${worker.idCardPhoto}" style="width:300px;height:200px;"/>
+	      <c:if test="${!empty worker.idCardPhoto}">
+	           <image src="/chenxisoft/${worker.idCardPhoto}" style="width:300px;height:200px;"/>
+	      </c:if>
+	      
 	    </div>
 	  </div>
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">健康证明</label>
 	    <div class="layui-input-block">
-	      <image src="/chenxisoft/${worker.healthPhoto}" style="width:300px;height:200px;"/>
+	      <c:if test="${!empty worker.healthPhoto}">
+	           <image src="/chenxisoft/${worker.healthPhoto}" style="width:300px;height:200px;"/>
+	      </c:if>
+	   
 	    </div>
 	  </div>
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">专业照片</label>
 	    <div class="layui-input-block">
-	      <image src="/chenxisoft/${worker.expertPhoto}" style="width:300px;height:200px;"/>
+	      <c:if test="${!empty worker.healthPhoto}">
+	          <image src="/chenxisoft/${worker.expertPhoto}" style="width:300px;height:200px;"/>
+	      </c:if>
+	      
 	    </div>
 	  </div>
 	  <div class="layui-form-item">

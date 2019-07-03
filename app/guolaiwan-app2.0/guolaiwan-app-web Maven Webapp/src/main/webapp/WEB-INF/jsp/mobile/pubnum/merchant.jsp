@@ -598,7 +598,12 @@ html, body {
 			    var html=[];
 			    var pics=data.shopMpic.split(',');
 				for(var i=0; i<pics.length; i++){
+					var str = pics[i].split('.');
+					if(str[3]!="mp4"&&str[3]!="MP4"){ 
 					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+					}else{
+					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}
 				}
 			    $('.header-content').html(data.shopName);
 				$('.swiper-wrapper').append(html.join(''));
@@ -617,6 +622,11 @@ html, body {
 			    	$('#payinshop').html('<a href="pubnum/product/index/payinshop/${merchantId}" style="width:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">到店支付</a>');
 			    	html.push('</br>');
 			    } 
+			    if('${merchantId}' ==15){
+			        html.push('</br>');
+			    	$('#payinshop').html('<a href="guide/visitors/app?merchantId=${merchantId}" style="width:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">导览</a>');
+			    	html.push('</br>');
+			    }
 			    qq=data.shopQQ;
    			    iscollect=data.ifcollection;   
 			    getProduct(1);

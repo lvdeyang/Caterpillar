@@ -44,7 +44,7 @@ public class ActivityProductController {
 		List<ProductPO> product = new ArrayList<ProductPO>();
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<String> listArray = new ArrayList<String>();
-		DecimalFormat df = new DecimalFormat("0");
+		DecimalFormat df = new DecimalFormat("0.00");
 		//获取南山的商品
 		List<ProductPO> productPOs = productDao.findByMerchantId(Long.parseLong(productMerchantID));	
 		//前端判断有无活动商品
@@ -91,7 +91,7 @@ public class ActivityProductController {
 	public ModelAndView commodityPage(HttpServletRequest request){
 		String  productId = request.getParameter("productId");
 		String  productMerchantID = request.getParameter("productMerchantID");
-		DecimalFormat df = new DecimalFormat("0");
+		DecimalFormat df = new DecimalFormat("0.00");
 		//获取活动商品的内容
 		ActivityRelPO activityRelPO = activityRelDao.getActivityRelByProductId(Long.parseLong(productId));
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -109,21 +109,9 @@ public class ActivityProductController {
 		 SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日");
 		 String beginTime  =  sdf.format(beginDate);
 		 String endTime  =  sdf.format(endDate);
-		 //获取对应的时分秒
-		 if(end > begin){
-			 long  dayTime =(end - begin)/(1000*60*60*24);//天数
-	            long dayResidue = (end - begin)%(1000*60*60*24);//对天进行取余
-	            long hourTime = dayResidue/(1000*60*60); //小时
-	            long hourResidue = dayResidue%(1000*60*60);//对小时进行取余
-	            long minuteTime = hourResidue/(1000*60);//分
-	            long minuteResidue = hourResidue%(1000*60);//对分进行取余
-	            long second = minuteResidue/1000;	
-	            map.put("day",dayTime); 
-	            map.put("hour",hourTime);
-	            map.put("minute",minuteTime);
-	            map.put("second",second);
-		 }	     
+			     
 		      String price = df.format(Double.parseDouble(activityRelPO.getPrice() + "") / 100);
+		      	map.put("end",endDate);
 		        map.put("activityRelPO",activityRelPO);
 		        map.put("productMerchantID", productMerchantID);
 		        map.put("beginTime", beginTime);

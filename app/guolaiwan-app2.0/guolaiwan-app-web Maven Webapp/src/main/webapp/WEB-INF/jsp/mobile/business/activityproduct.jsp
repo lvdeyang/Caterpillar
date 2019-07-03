@@ -164,6 +164,7 @@ margin:3px 5%;
 
    
 	$(function() {
+	timer();
 	getRecomment();
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
@@ -288,7 +289,12 @@ margin:3px 5%;
 			    var html=[];
 			    var pics=data.shopMpic.split(',');
 				for(var i=0; i<pics.length; i++){
+					var str = pics[i].split('.');
+					if(str[3]!="mp4"&&str[3]!="MP4"){ 
 					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+					}else{
+					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}
 				}
 			    $('.header-content').html(data.shopName);
 				$('.swiper-wrapper').append(html.join(''));
@@ -346,6 +352,31 @@ margin:3px 5%;
 				}
     
     })
+    
+    function timer() {
+		var endDate=new Date("${end}").getTime();
+		var newtime=new Date().getTime();
+		var intDiff =parseInt((endDate-newtime)/1000);
+		alert(intDiff)
+	   /*倒计时  */
+	  window.setInterval(function () {
+	    var day = 0,
+	      hour = 0,
+	      minute = 0,
+	      second = 0; //时间默认值
+	    if (intDiff > 0) {
+	      day = Math.floor(intDiff / (60 * 60 * 24));
+	      hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+	      minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+	      second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+	    }
+	     if(hour<10){hour="0"+hour;}
+		if(minute<10){minute="0"+minute;}
+		if(second<10){second="0"+second;}
+	    $("#times").html(day+"天"+hour + "时" + minute + "分" + second+"秒");
+	    intDiff--;
+	  }, 1000);
+	}
      
      
 </script>
@@ -357,6 +388,8 @@ margin:3px 5%;
 			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
@@ -378,7 +411,7 @@ margin:3px 5%;
           <button style="color:#fff;font-size:18px;border:none;outline:none;height:60px;width:30%;background:#FF4900;float:right;display: inline-block">限时抢购</button>
        </div>
        <div style="height:40px;width:100%;line-height: 40px;background: #fff;text-align: center;border-bottom:1px solid #DDDDDD;">
-        <p style="color:#A1A1A1;">剩余<span>${day}天${hour}时${minute}分${second}秒</span></p>
+        <p style="color:#A1A1A1;">剩余<span id="times">00:00:00</span></p>
        </div>
       <!-- 商品详情 -->
        <div class=""  style="width:100%;height:50px;text-align: center;margin:0 auto;background:#fff;position: relative;overflow: hidden;">

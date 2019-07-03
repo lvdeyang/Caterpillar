@@ -908,7 +908,6 @@ input[type="radio"] {
                 scope = json[i].scope; //距离
 	        }			
 		 }
-		 alert(length+" :米"+", "+name);  
 		 if(str != "" ){  // 判断是否有已浏览点
 		   for(var i = 0; i < str.length; i++){
 			 if( latitid != str[i]){   // 拆分  数组  遍历
@@ -945,12 +944,12 @@ input[type="radio"] {
 
 	
 	$(function() {
-	/*   var song = [{
-					'src': 'lib/images/huanying.mp3',
+      /*   var song = [{
+					'src': 'http://www.guolaiwan.net/file/20190309/1552096017707.mp3',
 					'title': '孝经'
 				}
-			];
-	  MP3(song); */
+		];
+		MP3(song,44); // 播放音乐 */
 	 
 	});
    function red(n){

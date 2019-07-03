@@ -149,6 +149,7 @@ html, body {
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
 <script type="text/javascript">
+  	var page=1;
   $(function(){
     $(window).scroll(function(){
         var aa = $(window).scrollTop(); //当前滚动条滚动的距离
@@ -156,12 +157,13 @@ html, body {
         var cc = $(document).height(); //浏览器当前窗口文档的高度 
       
         if(cc <= aa+bb){
-            $(".huodong").append($(".huodongs").clone()); 
+        	 getAllProduct();
         }
     })
   })
  /*返回顶部  */
   $(function(){
+  getAllProduct();
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -176,6 +178,30 @@ html, body {
         return false;
 	});
 }); 
+
+	function getAllProduct(){
+			var url="<%=basePath%>business/getallproduct";
+	            $.post(url,{"page":page},function(data){
+	            	var html=[];
+					for(var i=0; i<data.length; i++){
+						 html.push('<a onclick="getorderinfo('+data[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
+				         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
+						 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
+						 html.push('<div class="zhifu-in">');
+						 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].productName+'</p>'); 
+						 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
+						 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+data[i].productPrice+'</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
+						 html.push('</div></div></div></a>');
+						}
+			    	$('.tuijian').append(html.join(''));
+	            	page++;
+	            })
+	}
+	
+	function getorderinfo(id){
+	    location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
+	}
+
   
 </script>
 
@@ -184,32 +210,19 @@ html, body {
    <!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+				class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
-		<div class="header-in" style="width:100%;height:150px;border-radius:0 0 100px 100px;text-align: center;">
+		<div class="header-in" style="width:100%;height:130px;border-radius:0 0 100px 100px;text-align: center;">
           <img style="width:40px;height:40px;margin:40px auto 0;" src="lib/images/xiaolian.png"/>
           <p style="color:#fff;font-weight: bold;">支付成功</p>
 		</div>
 		<p style="color:#EE7826;font-weight: bold;text-align: center;margin:10px 5px;">——<span style="margin:10px 5px;">您可能还喜欢</span>——</p>
+     		<div class="tuijian">
      		
-         <div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">
-         <div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">
-		 <img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="lib/images/1.jpg"/>
-		 <div class="zhifu-in">
-		 <p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">丛林穿越</p> 
-		 <p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>
-		 <p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>
-		 </div></div></div>
-         <div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">
-         <div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">
-		 <img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="lib/images/1.jpg"/>
-		 <div class="zhifu-in">
-		 <p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">丛林穿越</p> 
-		 <p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>
-		 <p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>
-		 </div></div></div>
-	
+			</div>
    
    <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>

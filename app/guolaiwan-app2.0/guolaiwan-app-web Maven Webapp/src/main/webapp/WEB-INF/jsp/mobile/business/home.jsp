@@ -257,8 +257,12 @@ $(function() {
 				    var html=[];
 				    var pics=data.shopMpic.split(',');
 					for(var i=0; i<pics.length; i++){
-						html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
-					}
+						var str = pics[i].split('.');
+						if(str[3]!="mp4"&&str[3]!="MP4"){ 
+							html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+						}else{
+							html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}					}
 					$('#headerWrapper').append(html.join(''));
 					$("#headerSwiper").swiper({
 				        loop: true,
@@ -392,7 +396,7 @@ $(function() {
 		$.get(url, null, function(data){
 			var html=[];
 			for(var i=0;i<data.length;i++){	
-			       html.push("<a onclick='getorderinfo("+data[i].id+")'><div style='position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
+			       html.push("<a onclick='getorderinfo("+data[i].id+")'><div style='position: relative;overflow:hidden;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
 			       html.push("<img style='height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data[i].url+"'/>");
 			       html.push("<div class='youxuan-in' style='display: inline-block;'>");
 			       html.push("<p style='position: absolute;top:-40px;font-size:14px;max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data[i].ProductName+"</p>");
@@ -427,6 +431,9 @@ $(function() {
    }
    function search(){
    		location.href=window.BASEPATH + 'pubnum/search?content=';
+   }
+   function preferably(){
+   		location.href=window.BASEPATH + 'business/gotopreferably?merchantId=${merchantId}';
    }
 </script>
 
@@ -471,7 +478,7 @@ $(function() {
          <li><span>停车</span></li>
          <li onclick="cate()"><span>美食</span></li>
          <li><span>分销</span></li>
-         <li><img src="lib/images/huodongs.png"/></li>
+         <li onclick="activity()"><img src="lib/images/huodongs.png"/></li>
    	     <li onclick="group()"><img src="lib/images/pintuans.png"/></li>
          <li><img src="lib/images/caizhais.png"/></li>
          <li><img src="lib/images/gongluess.png"/></li>
@@ -519,7 +526,10 @@ $(function() {
         </div> 
          <!-- 为你优选  -->
 	  	<div class="youxuan"   style="width:96%;height:790px;margin:0 auto;background:#fff;position: relative;top:72px;overflow: hidden;">
-            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> <span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
+            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;">
+            <span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> 
+            <span onclick="preferably()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span>
+            </p>     
         </div> 
 </body>
 </html>
