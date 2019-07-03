@@ -622,6 +622,11 @@ html, body {
 			    	$('#payinshop').html('<a href="pubnum/product/index/payinshop/${merchantId}" style="width:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">到店支付</a>');
 			    	html.push('</br>');
 			    } 
+			    if('${merchantId}' ==15){
+			        html.push('</br>');
+			    	$('#payinshop').html('<a href="guide/visitors/app?merchantId=${merchantId}" style="width:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">导览</a>');
+			    	html.push('</br>');
+			    }
 			    qq=data.shopQQ;
    			    iscollect=data.ifcollection;   
 			    getProduct(1);

@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.ChildProductVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
+import com.guolaiwan.bussiness.Parking.dao.AppMessageDao;
+import com.guolaiwan.bussiness.Parking.po.AppMessagePO;
 import com.guolaiwan.bussiness.admin.dao.ChildProductDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
@@ -47,6 +50,10 @@ public class GuideController extends WebBaseControll  {
 	@Autowired
 	private UserInfoDAO conn_userInfo;
 	
+	@Autowired
+	private AppMessageDao App_message;
+	
+	
 	
 	@RequestMapping(value = "/visitors/guidemap/{chantId}")
 	public ModelAndView camera(HttpServletRequest request ,@PathVariable String chantId) throws Exception {
@@ -62,12 +69,54 @@ public class GuideController extends WebBaseControll  {
 		return mv;
 	}
 	@RequestMapping(value = "/visitors/app")
-	public ModelAndView app(HttpServletRequest request ) throws Exception {
+	public ModelAndView app(HttpServletRequest request,HttpSession session,String merchantId) throws Exception {
+		AppMessagePO  Message =  	App_message.getMessage();
+		Long userId = (Long) request.getSession().getAttribute("userId");
+		MerchantPO  MerchantPO =   mer_chant.getMerchantById(Long.parseLong(merchantId)).get(0);
+		if (Message != null ) {
+			Message.setUserId(userId);
+			Message.setMerchantId(Long.parseLong(merchantId));
+			Message.setLocationLatitude(MerchantPO.getLocationLatitude());
+			Message.setLocationLongitude(MerchantPO.getLocationLongitude());
+			App_message.saveOrUpdate(Message);	
+		}else {
+			AppMessagePO appmess = new AppMessagePO();
+			appmess.setUserId(userId);
+			appmess.setMerchantId(Long.parseLong(merchantId));
+			appmess.setLocationLatitude(MerchantPO.getLocationLatitude());
+			appmess.setLocationLongitude(MerchantPO.getLocationLongitude());
+			App_message.saveOrUpdate(appmess);
+		}
 		ModelAndView mv = null;
 		mv = new ModelAndView("guide/guidemap/homepage");
 		return mv;
 	}
 	
+	
+	
+	
+	/**
+	 * 
+	 * app 万佛园 数据
+	 * @param productId
+	 * @param page
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getNeededMessage", method = RequestMethod.GET)
+	public Map<String, Object> getAppMessage(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		AppMessagePO  Message =  App_message.getMessage();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", Message.getUserId()); //用户id
+		map.put("merchantId", Message.getMerchantId());//景区id
+		map.put("Latitude", Message.getLocationLatitude()); //经度
+		map.put("Longitude", Message.getLocationLongitude());//纬度
+		return success(map);
+	}
 	
 	
 	
