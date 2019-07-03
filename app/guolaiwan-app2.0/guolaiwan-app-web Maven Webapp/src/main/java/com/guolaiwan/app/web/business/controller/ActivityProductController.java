@@ -44,7 +44,7 @@ public class ActivityProductController {
 		List<ProductPO> product = new ArrayList<ProductPO>();
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<String> listArray = new ArrayList<String>();
-		DecimalFormat df = new DecimalFormat("0");
+		DecimalFormat df = new DecimalFormat("0.00");
 		//获取南山的商品
 		List<ProductPO> productPOs = productDao.findByMerchantId(Long.parseLong(productMerchantID));	
 		//前端判断有无活动商品
@@ -91,7 +91,7 @@ public class ActivityProductController {
 	public ModelAndView commodityPage(HttpServletRequest request){
 		String  productId = request.getParameter("productId");
 		String  productMerchantID = request.getParameter("productMerchantID");
-		DecimalFormat df = new DecimalFormat("0");
+		DecimalFormat df = new DecimalFormat("0.00");
 		//获取活动商品的内容
 		ActivityRelPO activityRelPO = activityRelDao.getActivityRelByProductId(Long.parseLong(productId));
 		Map<String, Object> map = new HashMap<String, Object>();

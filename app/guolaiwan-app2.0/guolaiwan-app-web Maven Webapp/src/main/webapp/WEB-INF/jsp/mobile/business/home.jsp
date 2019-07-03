@@ -257,8 +257,12 @@ $(function() {
 				    var html=[];
 				    var pics=data.shopMpic.split(',');
 					for(var i=0; i<pics.length; i++){
-						html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
-					}
+						var str = pics[i].split('.');
+						if(str[3]!="mp4"&&str[3]!="MP4"){ 
+							html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+						}else{
+							html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}					}
 					$('#headerWrapper').append(html.join(''));
 					$("#headerSwiper").swiper({
 				        loop: true,
@@ -474,7 +478,7 @@ $(function() {
          <li><span>停车</span></li>
          <li onclick="cate()"><span>美食</span></li>
          <li><span>分销</span></li>
-         <li><img src="lib/images/huodongs.png"/></li>
+         <li onclick="activity()"><img src="lib/images/huodongs.png"/></li>
    	     <li onclick="group()"><img src="lib/images/pintuans.png"/></li>
          <li><img src="lib/images/caizhais.png"/></li>
          <li><img src="lib/images/gongluess.png"/></li>
