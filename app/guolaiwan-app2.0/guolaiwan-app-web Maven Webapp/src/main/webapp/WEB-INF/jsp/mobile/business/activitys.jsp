@@ -341,7 +341,12 @@ var iscollect;
 			    var html=[];
 			    var pics=data.shopMpic.split(',');
 				for(var i=0; i<pics.length; i++){
+					var str = pics[i].split('.');
+					if(str[3]!="mp4"&&str[3]!="MP4"){ 
 					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+					}else{
+					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}
 				}
 			    $('.header-content').html(data.shopName);
 				$('.swiper-wrapper').append(html.join(''));
@@ -554,6 +559,8 @@ var iscollect;
 			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>

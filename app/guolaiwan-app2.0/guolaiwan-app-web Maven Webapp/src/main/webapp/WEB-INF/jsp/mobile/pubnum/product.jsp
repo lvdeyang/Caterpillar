@@ -1042,7 +1042,7 @@ input[type="datetime-local"]:before{
 	    });
 	
 	
-	    var MAX = 99, MIN = ${productRestrictNumber};
+	    var MAX = ${productLimitNum eq "0"? "99":productLimitNum}, MIN = ${productRestrictNumber};
 		$('.weui-count__decrease').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
 		  var number = parseInt($input.val() || "0") - 1
@@ -1214,8 +1214,6 @@ input[type="datetime-local"]:before{
                   return false;
                }
             }
-
-addmessage();
 			$.closePopup();
 				var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${id}+'&count='+$('#proCount').val();
 			    
@@ -1374,35 +1372,28 @@ addmessage();
                      
                                  
                       
-		$.post(_uri, params, function(data){
-                                                   
+		$.post(_uri, params, function(data){                                                  
 			           if(data.msg==0){
-                                                                    
-                                                                          
 						   $(".idnums").val(data.name)
 						   $(".names").val(data.sfz) 	
 						}			   
 					     if(data.msg==1){
-							    $(".idnums").val("130228196606080097")
-						   $(".names").val("刘建江") 			
+						     alert("识别失败,请继续上传或者手动输入");
 						 }			        
 				    });
                 }
             });
- 
         }
 		
 
-		    function addmessage() {
+		    function addmessage(oderId) {
 		            var _uri = window.BASEPATH + 'pubnum/addmessage';
                     var params = {};
                     params.localData=base;
+                    params.oderId=oderId;
                     params.idnums= $(".idnums").val() ;
                     params.name= $(".names").val() ;
-		          $.post(_uri, params, function(data){
-			           if(data.msg==0){
-						  alert("保存成功");
-						}			   
+		          $.post(_uri, params, function(data){			        			   
 					     if(data.msg==1){
 							 alert("保存失败");
 						 }			        
@@ -1649,7 +1640,9 @@ addmessage();
 				$.post(_uriPay, $.toJSON(param), function(data){
 					data = parseAjaxResult(data);
 					if(data === -1) return;
-					
+					if(ifFace==1){
+					   addmessage(data.orderId);
+					}
 					$.modal({
 						  title: "付款方式",
 						  buttons: [
@@ -1685,7 +1678,10 @@ addmessage();
 						data = parseAjaxResult(data);
 				if(data==1){
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
-						    if(data.data=="PAYSUCCESS"){
+						    if(data.data=="PAYSUCCESS"){				
+						       	if(ifFace==1){
+					                updatemessage(orderId);
+					            }						      
 						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
 						    }
 						});
@@ -1740,6 +1736,9 @@ addmessage();
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
 								    
 								    if(data.data=="PAYSUCCESS"){
+								       if(ifFace==1){
+					                      updatemessage(orderNo);
+					                    }
 								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
 								    }
 								});
@@ -1854,6 +1853,18 @@ addmessage();
 	
 	
 	});
+	
+	    //支付成功后修改身份采集表里的状态 
+		function updatemessage(orderId){
+		    var _uri = window.BASEPATH + 'pubnum/updatemessage';
+		          var params = {};		        
+		          params.oderId=orderId;		 
+			$.post(_uri, params, function(data){					   
+					if(data.msg==1){
+						alert("保存失败");
+					}			        
+				});       	    
+		}
 </script>
 
 <script type="text/javascript">

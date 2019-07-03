@@ -40,7 +40,7 @@ public class MHomeController {
 	public Object getworkers(HttpServletRequest request,int currPage,int pageCount) throws Exception {
 		List<WorkerPo> workerPos=conn_worker.findAll(currPage, pageCount);
 		for (WorkerPo workerPo : workerPos) {
-			workerPo.setOrderCount(conn_order.countCompleteByWorker(workerPo.getId()));
+			workerPo.setOrderCount(conn_order.countByField("workerId",workerPo.getId()));
 		}
 		return workerPos;
 	}

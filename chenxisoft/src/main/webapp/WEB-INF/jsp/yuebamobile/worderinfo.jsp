@@ -44,10 +44,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
     <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">详情
        </h2><a><i class="ui-icon-personal"></i></a>
-    <header class="ui-header ui-header-positive ui-border-b">
+    <header class="ui-header ui-header-positive ui-border-b" style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
          
-         <h1 style="font-size:14px;width:80px;float:left;">详情</h1>
-         <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
+        
     </header>
 	
 
@@ -59,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="width:100px;">
 	                                     姓名
 	            </label>
-                <label style="margin-left:20px;">${order.userName}<span style="color:red;margin-left:5px;">(带过${worker.orderCount}个孩子)</span></label>
+                <label style="margin-left:20px;">${order.userName}</label>
 	           
 	        </div>
 	        <div class="ui-form-item ui-border-b">
@@ -119,11 +118,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         
 		     $(document).on('click','#gotolist',function(){
 		     
-		        location.href=window.BASEPATH+"/order/mobile/list";
+		        location.href=window.BASEPATH+"/order/mobile/wlist";
 		     });
 	          
 	     });
 	
 	</script>
+	<jsp:include page="../common.jsp"></jsp:include>
 </body>
 </html>

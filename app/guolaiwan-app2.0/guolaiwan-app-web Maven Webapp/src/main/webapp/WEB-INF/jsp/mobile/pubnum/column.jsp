@@ -757,9 +757,15 @@ html, body {
 	       html.push('<div style="width:10%;float:right;font-size:12px;padding-right:12px;"></div>');
               html.push('<div style="width;100%;margin-left:12px;margin-top:15px;" class="merchant1" id="merchant1-'+merchants[0].id+'">');
               var morePics=merchants[0].shopMpic.split(',');
-              html.push('<image style="width:32%;height:70px;float:left;" src="'+morePics[0]+'"/>');
-	       html.push('<image style="width:32%;height:70px;float:left;margin-left:1%" src="'+morePics[1]+'"/>');
-	       html.push('<image style="width:32%;height:70px;float:left;margin-left:1%" src="'+morePics[2]+'"/>');
+              for(var i=0;i<3;i++){
+              	 if(morePics[i]==null||morePics[i]=="")continue;
+              	 var str=morePics[i].split('.'); 
+	             if(i==0&&str[3]!="mp4"){
+              		html.push('<image style="width:32%;height:70px;float:left;" src="'+morePics[i]+'"/>');
+	              }else if(i!=0&&str[3]!="mp4"){
+		      		html.push('<image style="width:32%;height:70px;float:left;margin-left:1%" src="'+morePics[i]+'"/>');
+	              } 
+              }
 	       html.push('</div>');
 	       html.push('</div>');
 	       //后面的
@@ -791,7 +797,16 @@ html, body {
 	   
 	   });
 	});
-	
+	$(document).on('click','#searchimg',function(){
+	   
+	       location.href=window.BASEPATH + 'pubnum/search?content=';
+	   
+	   });
+	   $(document).on('click','#bundle',function(){
+	   
+	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0&comCode='+comCode;
+	   
+	   });
 		
 </script>
 
@@ -822,7 +837,13 @@ html, body {
 		          <select id="classes" style="width:100px;height:30px;line-height:30px"></select>
 		        </div>
 	       </div>
-	       
+	       <div id="searchimg" style="width:80%;margin:0 auto;opacity:0.5;height:40px;position: relative;top:10px;z-index:11111;cursor: pointer;">
+              <!-- <image src="lib/images/search.jpg" style="width:100%;height:50px"/> -->
+               <label style="border:1px solid #9B9B9B;border-radius: 20px;" class="weui-search-bar__label" id="searchText">
+				      <i style="margin: auto;margin-top: 2%;" class="weui-icon-search"></i>
+				      <span style="margin: auto;margin-top: 2%;">搜索</span>
+				    </label>
+           </div> 
 		</div>
 	</div>
 	

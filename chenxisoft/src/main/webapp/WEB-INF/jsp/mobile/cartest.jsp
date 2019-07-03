@@ -25,15 +25,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
     <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">微官网首页
        </h2><a><i class="ui-icon-personal"></i></a>
-    <header class="ui-header ui-header-positive ui-border-b">
+    <header class="ui-header ui-header-positive ui-border-b" style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
          
-         <h1 style="font-size:14px;width:80px;float:left;">微官网首页</h1>
-         <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
+        
     </header>
 	<div class="ui-tab" style="margin-top:40px;">
 		<ul class="ui-tab-nav ui-border-b">
                <li style="display:none;" id="recomm" class="mytab">推荐</li>
-               <li id="article" class="mytab">文章</li>
+               <li id="article" class="mytab current">文章</li>
                <li id="product" class="mytab">比价</li>
 	    </ul>
 	    <ul class="ui-tab-content" style="width:200%">
@@ -102,7 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                  for(var i=0;i<data.articles.length;i++){
 				         html.push('<li class="article" id="art-'+data.articles[i].id+'">');
 						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url('+data.articles[i].pic+')"></span></div>');
+						 html.push('        <span style="background-image:url('+(data.articles[i].pic==null?"/chenxisoft/lib/images/xlye.jpg":data.articles[i].pic)+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
 						 html.push('		<div style="font-size:13px;">'+data.articles[i].title+'</div>');
 						 html.push('		<p class="ui-nowrap" style="font-size:13px;">来源-'+dic[data.articles[i].source]+'</p>');

@@ -25,13 +25,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
     <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">微官网首页
        </h2><a><i class="ui-icon-personal"></i></a>
-    <header class="ui-header ui-header-positive ui-border-b">
+    <header class="ui-header ui-header-positive ui-border-b" style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
          
-         <h1 style="font-size:14px;width:80px;float:left;">微官网首页</h1>
-         <a href="person/index"><i style="font-size:14px;width:20px;line-height:50px;float:right"class="icon-user"></i></a>
+        
     </header>
 	
-	<div class="demo-item" style="margin-top:50px;">
+	<div class="demo-item" style="margin-top:50px;" >
 		<div class="demo-block">
 			<ul id="seeList" class="ui-list ui-list-link ui-list-single ui-border-tb">
 			    
@@ -87,8 +86,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	               if(data){
 	                  for(var i=0;i<data.length;i++){
-	                        html.push('<li>');
-						    html.push('    <div id="wor-'+data[i].workerId+'" class="worker ui-avatar-s">');
+	                        html.push('<li id="wor-'+data[i].workerId+'" class="worker">');
+						    html.push('    <div class=" ui-avatar-s">');
 						    html.push('        <span style="background-image:url(/chenxisoft'+data[i].workerPic+')"></span>');
 						    html.push('    </div>');
 						    html.push('    <div class="ui-list-info ui-border-t">');
@@ -127,5 +126,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     });
 	
 	</script>
+	<jsp:include page="../common.jsp"></jsp:include>
 </body>
 </html>

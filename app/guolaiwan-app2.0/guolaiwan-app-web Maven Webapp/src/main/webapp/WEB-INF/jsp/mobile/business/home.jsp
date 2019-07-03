@@ -257,8 +257,12 @@ $(function() {
 				    var html=[];
 				    var pics=data.shopMpic.split(',');
 					for(var i=0; i<pics.length; i++){
-						html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
-					}
+						var str = pics[i].split('.');
+						if(str[3]!="mp4"&&str[3]!="MP4"){ 
+							html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+						}else{
+							html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}					}
 					$('#headerWrapper').append(html.join(''));
 					$("#headerSwiper").swiper({
 				        loop: true,
@@ -332,14 +336,14 @@ $(function() {
 		$.get(url, null, function(data){
 			var html=[];
 			for(var i=0;i<data.length;i++){		 
-			     html.push("<div style='position: relative;width:90%;height:110px;line-height:110px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>")
+			     html.push("<a onclick='getorderinfo("+data[i].id+")'><div style='position: relative;width:90%;height:110px;line-height:110px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>")
 			     html.push("<img  onclick='activity("+data[i].id+")' style='height:80px;width:30%;vertical-align: middle;display: inline-block;margin-left:3%;' src='http://www.guolaiwan.net/file"+data[i].img+"'/>")
 			     html.push("<div class='huodong' style='display: inline-block;'>")
 			     html.push("<p onclick='activity("+data[i].id+")'  style='position: absolute;top:-15px;font-size:14px;'>【活动】 "+data[i].activityRelPO.productName+"</p>")
 			     html.push("<p onclick='activity("+data[i].id+")' style='position: absolute;top:20px;color:#FF4900;font-size:16px;'>&nbsp￥"+data[i].ProductPrice+"起</p>")
-			     html.push("<button style='position: absolute;right:3%;top:60px;line-height:30px;font-size:14px;width:15%;outline: none;border:none;height:30px;border-radius:16px;background:#FF4900;color:#fff;' onclick='getorderinfo("+data[i].id+")'>抢 &gt;</button>")
+			     html.push("<button style='position: absolute;right:3%;top:60px;line-height:30px;font-size:14px;width:15%;outline: none;border:none;height:30px;border-radius:16px;background:#FF4900;color:#fff;' >抢 &gt;</button>")
 			     html.push("</div>")
-			     html.push("</div>")	
+			     html.push("</div></a>")	
 			     if(i==2){
 			        break;
 			     }		    
@@ -392,16 +396,16 @@ $(function() {
 		$.get(url, null, function(data){
 			var html=[];
 			for(var i=0;i<data.length;i++){	
-			       html.push("<div style='position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
+			       html.push("<a onclick='getorderinfo("+data[i].id+")'><div style='position: relative;overflow:hidden;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
 			       html.push("<img style='height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data[i].url+"'/>");
 			       html.push("<div class='youxuan-in' style='display: inline-block;'>");
 			       html.push("<p style='position: absolute;top:-40px;font-size:14px;max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data[i].ProductName+"</p>");
 			       html.push("<p style='position: absolute;top:0px;font-size:12px;color:#C0C0C0;'><span style='color:#EC6D1E;'>5.0分</span>   <span>"+data[i].number+"人来过</span></p>");
 			       html.push("<p style='position: absolute;top:40px;font-size:12px;color:#C0C0C0;'>739m</p>");
 			       html.push("<p style='color:#EC6D1E;position: absolute;top:-40px;right:0%;font-size:14px;'>$"+data[i].ProductPrice+"起</p>");
-			       html.push("<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#FF4900;color:#fff;' onclick='getorderinfo("+data[i].id+")'>立即预订</button>");
+			       html.push("<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#FF4900;color:#fff;' >立即预订</button>");
 			       html.push("</div>");
-			       html.push("</div>");     			       
+			       html.push("</div></a>");     			       
 			   }
 			    $('.youxuan').append(html.join(''));	      			   
 		   });				  	    
@@ -412,6 +416,9 @@ $(function() {
    }
     function cate(){
         location.href=window.BASEPATH + 'business/cate?modularCode=0003&merchantId=${merchantId}';
+   }
+    function activity(){
+        location.href=window.BASEPATH + '/product/activity/jump';
    }
    function group(){
    		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
@@ -424,6 +431,9 @@ $(function() {
    }
    function search(){
    		location.href=window.BASEPATH + 'pubnum/search?content=';
+   }
+   function preferably(){
+   		location.href=window.BASEPATH + 'business/gotopreferably?merchantId=${merchantId}';
    }
 </script>
 
@@ -468,12 +478,12 @@ $(function() {
          <li><span>停车</span></li>
          <li onclick="cate()"><span>美食</span></li>
          <li><span>分销</span></li>
-         <li><img src="lib/images/huodongs.png"/></li>
+         <li onclick="activity()"><img src="lib/images/huodongs.png"/></li>
    	     <li onclick="group()"><img src="lib/images/pintuans.png"/></li>
          <li><img src="lib/images/caizhais.png"/></li>
          <li><img src="lib/images/gongluess.png"/></li>
          <li onclick="wallet()"><img src="lib/images/qianbaos.png"/></li>
-         <li><span>活动</span></li>
+         <li onclick="activity()"><span>活动</span></li>
    	     <li onclick="group()"><span>拼团</span></li>
          <li onclick="pick()"><span>采摘</span></li>
          <li><span>攻略</span></li>
@@ -498,7 +508,7 @@ $(function() {
 	     
 	   <!-- 活动  -->
 	  	<div  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="hd"">
-	     <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><img style="width:30px;height:30px;" src="lib/images/huodongss.png"/>活动<span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>
+	     <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><img style="width:30px;height:30px;" src="lib/images/huodongss.png"/>活动<span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px" onclick="activity()">查看更多&gt;</span></p>
 	     	
     
 	  </div>	
@@ -516,7 +526,10 @@ $(function() {
         </div> 
          <!-- 为你优选  -->
 	  	<div class="youxuan"   style="width:96%;height:790px;margin:0 auto;background:#fff;position: relative;top:72px;overflow: hidden;">
-            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> <span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
+            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;">
+            <span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> 
+            <span onclick="preferably()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span>
+            </p>     
         </div> 
 </body>
 </html>

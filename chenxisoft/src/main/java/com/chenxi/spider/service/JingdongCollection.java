@@ -41,8 +41,8 @@ public class JingdongCollection extends BreadthCrawler {
 	
 	
 	public void init() {
-		this.addSeed("https://search.jd.com/Search?keyword=%E8%BD%AE%E8%83%8E&enc=utf-8&wq=&pvid=b2160a1bc78b4897827700e1dba8e242");
-		this.addRegex("https://item.jd.com/[0-9]{7}.html");
+		this.addSeed("https://list.jd.com/list.html?cat=1319%2C1526%2C7060&go=0");
+		this.addRegex("https://item.jd.com/[0-9]{6}.html");
 		setThreads(1);
 		getConf().setTopN(100);
 	}
@@ -53,7 +53,7 @@ public class JingdongCollection extends BreadthCrawler {
 		/**
 		 * 如果此页面地址 确实是要求爬取网址，则进行取值
 		 */
-		if (page.matchUrl("https://item.jd.com/[0-9]{7}.html")) {	
+		if (page.matchUrl("https://item.jd.com/[0-9]{6}.html")) {	
 			
 			
 	

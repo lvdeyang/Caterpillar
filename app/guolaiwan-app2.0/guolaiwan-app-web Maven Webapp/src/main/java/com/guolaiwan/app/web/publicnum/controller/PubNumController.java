@@ -300,6 +300,8 @@ public class PubNumController extends WebBaseControll {
 		case "PRODUCT":
 			mv = new ModelAndView("mobile/pubnum/product");
 			// 轮播图商品购买跳转 张羽 新增参数到页面 商品购买数量限制 5/2
+			long productLimitNum=conn_product.get(code).getProductLimitNum();
+			mv.addObject("productLimitNum", productLimitNum);
 			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(code).getProductMerchantID());
 			mv.addObject("id", code);
@@ -336,12 +338,16 @@ public class PubNumController extends WebBaseControll {
 		if (activityproId != null && activityproId != "" && activityproId.length() != 0 && !activityproId.equals("0")) {
 			mv = new ModelAndView("mobile/pubnum/activityproduct");
 			mv.addObject("actId", activityproId);
+			long productLimitNum=conn_product.get(id).getProductLimitNum();
+			mv.addObject("productLimitNum", productLimitNum);
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
 			mv.addObject("userHeadimg", userHeadimg);
 		} else {
 			mv = new ModelAndView("mobile/pubnum/product");
+			long productLimitNum=conn_product.get(id).getProductLimitNum();
+			mv.addObject("productLimitNum", productLimitNum);
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
@@ -1484,6 +1490,8 @@ public class PubNumController extends WebBaseControll {
 		String userHeadimg = conn_user.get(userId).getUserHeadimg();
 		mv = new ModelAndView("mobile/pubnum/activityproduct");
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(id);
+		long productLimitNum=conn_product.get(id).getProductLimitNum();
+		mv.addObject("productLimitNum", productLimitNum);
 		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 		mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 		mv.addObject("actId", activityPro.getId());
@@ -2161,15 +2169,19 @@ public class PubNumController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/wallet/walletbuy")
 	public Object walletbuy(HttpServletRequest request) throws Exception {
-		long orderId = Long.parseLong(request.getParameter("orderId"));
+		String orderId = request.getParameter("orderId");
 		long id = Long.parseLong(request.getParameter("userId"));
 		UserInfoPO user = conn_user.get(id);
-		OrderInfoPO order = conn_order.get(orderId);
+		OrderInfoPO order = conn_order.get(Long.parseLong(orderId));
 		long productPrice = order.getPayMoney();
 		long userMoney = user.getWallet();
 		if (userMoney >= productPrice) {
 			user.setWallet(userMoney - productPrice);
 			order.setOrderState(OrderStateType.PAYSUCCESS);
+			//生成验单码,和二维码图片
+			String ydNO = ydNoCode(orderId);
+			order.setYdNO(ydNO);
+			order.setIswallet(true);
 			conn_order.saveOrUpdate(order);
 			conn_user.saveOrUpdate(user);
 			// 推送购买商品成功信息给用户 商家 李姐
@@ -2678,13 +2690,18 @@ public class PubNumController extends WebBaseControll {
 	// 保存身份证信息
 	@ResponseBody
 	@RequestMapping(value = "/addmessage", method = RequestMethod.POST)
-	public Map<String, String> addmessage(String localData, String idnums, String name) throws Exception {
+	public Map<String, String> addmessage(String localData, String idnums, String name, String oderId)
+			throws Exception {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
+			OrderInfoPO orderInfoPO = conn_order.get(Long.parseLong(oderId));
 			MessagePO messagePO = new MessagePO();
 			messagePO.setName(name);
 			messagePO.setBase(localData);
 			messagePO.setNumber(idnums);
+			messagePO.setOderId(oderId);
+			messagePO.setState("0");
+			messagePO.setMerchantid(orderInfoPO.getShopId() + "");
 			messagedao.save(messagePO);
 			map.put("msg", "0");
 			return map;
@@ -2713,5 +2730,16 @@ public class PubNumController extends WebBaseControll {
 			return "error";
 		}
 
+	}
+
+	// 修改身份证采集表支付状态
+	@ResponseBody
+	@RequestMapping(value = "/updatemessage", method = RequestMethod.POST)
+	public Map<String, String> updatemessage(String oderId) {
+
+		MessagePO messagepo = messagedao.getByOderId(oderId);
+		messagepo.setState("1");
+		messagedao.saveOrUpdate(messagepo);
+		return null;
 	}
 }
