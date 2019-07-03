@@ -78,6 +78,7 @@ public class GuideController extends WebBaseControll  {
 			Message.setMerchantId(Long.parseLong(merchantId));
 			Message.setLocationLatitude(MerchantPO.getLocationLatitude());
 			Message.setLocationLongitude(MerchantPO.getLocationLongitude());
+			Message.setMerchantName(MerchantPO.getShopName());
 			App_message.saveOrUpdate(Message);	
 		}else {
 			AppMessagePO appmess = new AppMessagePO();
@@ -85,6 +86,7 @@ public class GuideController extends WebBaseControll  {
 			appmess.setMerchantId(Long.parseLong(merchantId));
 			appmess.setLocationLatitude(MerchantPO.getLocationLatitude());
 			appmess.setLocationLongitude(MerchantPO.getLocationLongitude());
+			appmess.setMerchantName(MerchantPO.getShopName());
 			App_message.saveOrUpdate(appmess);
 		}
 		ModelAndView mv = null;
@@ -111,10 +113,13 @@ public class GuideController extends WebBaseControll  {
 			throws Exception {
 		AppMessagePO  Message =  App_message.getMessage();
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("userId", Message.getUserId()); //用户id
-		map.put("merchantId", Message.getMerchantId());//景区id
-		map.put("Latitude", Message.getLocationLatitude()); //经度
-		map.put("Longitude", Message.getLocationLongitude());//纬度
+		if (Message != null) {
+			map.put("userId", Message.getUserId()); //用户id
+			map.put("merchantId", Message.getMerchantId());//景区id
+			map.put("merchantName", Message.getMerchantName());//景区id
+			map.put("Latitude", Message.getLocationLatitude()); //经度
+			map.put("Longitude", Message.getLocationLongitude());//纬度
+		}
 		return success(map);
 	}
 	

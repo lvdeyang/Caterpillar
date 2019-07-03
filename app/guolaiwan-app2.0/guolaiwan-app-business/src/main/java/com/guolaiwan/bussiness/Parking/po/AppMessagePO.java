@@ -15,6 +15,9 @@ public class AppMessagePO  extends AbstractBasePO{  //万佛园 app信息
 	private long userId;
 	
 	private long merchantId;
+	
+	//景区名称
+	private String merchantName;
 
 	//导览  初始显示位置经度
 	private String  locationLongitude;
@@ -22,6 +25,16 @@ public class AppMessagePO  extends AbstractBasePO{  //万佛园 app信息
 	
 	//导览  初始显示位置经度
 	private String  locationLatitude;
+
+    
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
 
 
 	public long getUserId() {
