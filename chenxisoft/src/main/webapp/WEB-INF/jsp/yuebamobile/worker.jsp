@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      border:1px solid #CCC;
    }
    #imageContent{
-     width:90%;margin-left:15px;border:1px solid #CCC;height:100px;
+     width:90%;margin-left:3px;
    }
    #imageContent img{
      width:100px;
@@ -97,6 +97,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <label style="margin-left:20px;">${worker.realName}<span style="color:red;margin-left:5px;">(带过${childCount}个孩子)</span></label>
 	           
 	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label style="width:100px;">
+	                                    年龄
+	            </label>
+                <label style="margin-left:20px;">${worker.age}<span style="color:red;margin-left:5px;"></label>
+	           
+	        </div>
 	       
 	        <div class="ui-form-item ui-border-b" style="display:none">
 	            <label style="width:100px;">
@@ -120,12 +127,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                    证件照片
 	        </div>
 	        <div id="imageContent">
-	            
-	            <image src="/chenxisoft${worker.idCardPhoto}">
-	            <image src="/chenxisoft${worker.healthPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
-	            <image src="/chenxisoft${worker.expertPhoto}" style="margin-left:12px;" src="/chenxisoft/lib/images/1.jpg">
+	            <c:if test="${!empty worker.idCardPhoto}">
+	                <image src="/chenxisoft${worker.idCardPhoto}" style="margin-left:12px;">
+	            </c:if>
+	            <c:if test="${!empty worker.healthPhoto}">
+	                <image src="/chenxisoft${worker.healthPhoto}" style="margin-left:12px;">
+	            </c:if>
+	            <c:if test="${!empty worker.expertPhoto}">
+	                <image src="/chenxisoft${worker.expertPhoto}" style="margin-left:12px;">
+	            </c:if>
 	        </div>
-	        <div class="ftitle">
+	        <div class="ftitle" style="float:left">
 	                                    价格表(单位:元)
 	        </div>
 	        <table id="priceTable">
