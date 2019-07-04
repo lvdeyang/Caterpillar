@@ -624,7 +624,8 @@ html, body {
 			    } 
 			    if('${merchantId}' ==15){
 			        html.push('</br>');
-			    	$('#payinshop').html('<a href="guide/visitors/app?merchantId=${merchantId}" style="width:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">导览</a>');
+			    	$('#payinshop').html('<a id="shopa1"  style="width:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">打开app导览</a>');
+			    	$('#payinshop').append('<a href="guide/visitors/guidemap/${merchantId}" style="width:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">打开导览</a>');
 			    	html.push('</br>');
 			    }
 			    qq=data.shopQQ;
@@ -790,6 +791,16 @@ html, body {
 			});
 		
 		}
+		
+		 $(document).on('click',' #shopa1',function(){
+	 		var _uri = window.BASEPATH + 'guide/setNeeded?merchantId=${merchantId}';
+			    $.get(_uri, null, function(data){
+			          /* /*  window.location.href=  window.BASEPATH +"guide/visitors/app"; * */
+			   });
+			   window.location.href=  window.BASEPATH +"guide/visitors/app"
+        });
+		
+		
 	
 	});
 </script>
