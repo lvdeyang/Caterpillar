@@ -155,15 +155,8 @@ public class AttractionsDao extends AbstractBaseDao<AttractionsParkingPO> {
 	 * @param limit
 	 * @return
 	 */
-	public List<AttractionsParkingPO> findByPageC(Map<String, Object> map, int pageNum, int pageSize) {
+	public List<AttractionsParkingPO> findByPageC( int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
-		for (Map.Entry<String, Object> entry : map.entrySet()) {
-			if (entry.getKey().equals("parkingName") && entry.getValue() != null) {
-				hql.andBy(entry.getKey(), Condition.lk, entry.getValue());
-			} else {
-				hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
-			}
-		}
 		hql.orderBy("updateTime", true);
 		List<AttractionsParkingPO> poList = findByHqlPage(hql, pageNum, pageSize);
 		return poList;
@@ -175,15 +168,8 @@ public class AttractionsDao extends AbstractBaseDao<AttractionsParkingPO> {
 	 * @param strMap
 	 * @return
 	 */
-	public int CountByPageC(Map<String, Object> map) {
+	public int CountByPageC() {
 		CountHql cHql = newCountHql();
-		for (Map.Entry<String, Object> entry : map.entrySet()) {
-			if (entry.getKey().equals("parkingName") && entry.getValue() != null) {
-				cHql.andBy(entry.getKey(), Condition.lk, entry.getValue());
-			} else {
-				cHql.andBy(entry.getKey(), Condition.eq, entry.getValue());
-			}
-		}
 		int count = countByHql(cHql);
 		return count;
 	}
