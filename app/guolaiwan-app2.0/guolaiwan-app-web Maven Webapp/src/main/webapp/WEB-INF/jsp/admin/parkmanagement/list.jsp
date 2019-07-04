@@ -68,13 +68,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	{{#  } }}
 </script>
 <script type="text/html" id="zsgc">  
-	<a title="详情" href="javascript:;" onclick="park_info('停车场详情','info','{{d.uuid}}','','510')" class="tdn">
-		<i class="layui-icon">&#xe62d;</i>
-	</a>
-	<a title="修改" href="javascript:;" onclick="park_edit('修改','updatev','{{ d.uuid }}','','510')" class="tdn">
+	<a title="修改" href="javascript:;" onclick="park_edit('修改','updatev','{{ d.id }}','','510')" class="tdn">
 		<i class="layui-icon">&#xe642;</i>
 	</a>
-	<a title="删除" href="javascript:;" onclick="park_del(this,'{{ d.uuid }}')"  class="tdn">
+	<a title="删除" href="javascript:;" onclick="park_del(this,'{{ d.id }}')"  class="tdn">
 		<i class="layui-icon">&#xe640;</i>
 	</a>
  </script>
@@ -172,11 +169,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					  ,{field: 'usedParking', title: '已用车位',width:100,sort: true} 
 					  ,{field: 'position', title: '车位位置',width:100,sort: false} 
 					  ,{field: 'chargingColumn',title: '充电柱',width:80,templet:'#chargingColumnTpl'} 
-					  ,{field: 'parkingLayer', title: '停车层',width:80,sort: false} 
-					  ,{field: 'parkingDistrict', title: '停车区',width:80,sort: false}
+					  ,{field: 'parkingDistrict', title: '停车场经纬度',width:80,sort: false}
 					  ,{field: 'regulations', title: '停车条例',width:100,sort: false}
 					  ,{field: 'fineMultiple', title: '罚款倍数',width:100,sort: false}
-					  ,{field: 'cost', title: '停车费用',width:100,sort: true}
 					  ,{field: 'stoppingTime', title: '停车时间',width:100,sort: false}
 					  ,{fixed: 'right',title: '操作',width:120,minWidth:100,templet:'#zsgc',unresize:true}
 				 ]]

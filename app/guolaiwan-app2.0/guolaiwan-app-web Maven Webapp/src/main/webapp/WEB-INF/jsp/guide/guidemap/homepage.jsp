@@ -77,7 +77,7 @@
 }
 
 
-.fuceng{
+ .fuceng{
    position: fixed;
    width: 100%;
    height:100%;
@@ -87,7 +87,7 @@
    z-index: 10000;    
    text-align: center;
     
-}
+} 
 .tishi img{
    position: fixed;
    	top:10%;
@@ -109,11 +109,10 @@
 
 <script type="text/javascript">
     $(function() {
-    var user = <%=request.getAttribute("userId")%>;
-      //此操作会调起app并阻止接下来的js执行，进入已安装的app
-       $('body').append("<iframe src='app://media_resource_system.guolaiwan/guideActivity?userId=${userId}&merchantId=15&longitude=117.625103&latitude=40.188278' style='display:none' target='' ></iframe>");
+      //此操作会调起app并阻止接下来的js执行，进入已安装的app  ?userId=${userId}&merchantId=15&longitude=117.625103&latitude=40.188278&merchantName=万佛园
+       $('body').append("<iframe src='app://media_resource_system.guolaiwan/guideActivity' style='display:none' target='' ></iframe>");
         //没有安装应用会执行下面的语句
-        setTimeout(function(){window.location='http://www.guolaiwan.net/download/guolaiwan.apk'},10000);  
+        setTimeout(function(){window.location='http://www.guolaiwan.net/download/guolaiwan.apk'},6000);  
     });
     </script>
 
@@ -125,8 +124,10 @@
 		<div style="margin: 30% auto;text-align: center;">
           
           </div>
-		     
-		<div class="fuceng">			
+	<div class="weui-loadmore" style="position: fixed;top:50%;left:50%;font-size:18px;font-weight:bold;margin-left:-135px;">
+		<i class="weui-loading"></i> <span class="weui-loadmore__tips">正在加载</span>
+	</div>
+	<div class="fuceng">			
 		</div>
 		<div class="tishi">			
 		  <img src="lib/images/tishi.png"/>

@@ -68,19 +68,43 @@ public class GuideController extends WebBaseControll  {
 		mv = new ModelAndView("guide/guidemap/home");
 		return mv;
 	}
+	
 	@RequestMapping(value = "/visitors/app")
-	public ModelAndView app(HttpServletRequest request,HttpSession session,String merchantId) throws Exception {
+	public ModelAndView app(HttpServletRequest request,HttpSession session) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("guide/guidemap/homepage");
+		return mv;
+	}
+	
+	
+	/**
+	 * 
+	 * app 添加   数据
+	 * @param productId
+	 * @param page
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/setNeeded", method = RequestMethod.GET)
+	public Map<String, Object> setAppMessage(HttpServletRequest request, HttpServletResponse response,String merchantId)
+			throws Exception {
 		AppMessagePO  Message =  	App_message.getMessage();
 		Long userId = (Long) request.getSession().getAttribute("userId");
-		MerchantPO  MerchantPO =   mer_chant.getMerchantById(Long.parseLong(merchantId)).get(0);
-		if (Message != null ) {
+		MerchantPO  MerchantPO = null;
+		if (merchantId != null) {
+			 MerchantPO =   mer_chant.getMerchantById(Long.parseLong(merchantId)).get(0);
+		}
+		if (Message != null && MerchantPO !=null) {
 			Message.setUserId(userId);
 			Message.setMerchantId(Long.parseLong(merchantId));
 			Message.setLocationLatitude(MerchantPO.getLocationLatitude());
 			Message.setLocationLongitude(MerchantPO.getLocationLongitude());
 			Message.setMerchantName(MerchantPO.getShopName());
 			App_message.saveOrUpdate(Message);	
-		}else {
+		}else if ( MerchantPO !=null)  {
 			AppMessagePO appmess = new AppMessagePO();
 			appmess.setUserId(userId);
 			appmess.setMerchantId(Long.parseLong(merchantId));
@@ -89,10 +113,9 @@ public class GuideController extends WebBaseControll  {
 			appmess.setMerchantName(MerchantPO.getShopName());
 			App_message.saveOrUpdate(appmess);
 		}
-		ModelAndView mv = null;
-		mv = new ModelAndView("guide/guidemap/homepage");
-		return mv;
+		return success("");
 	}
+	
 	
 	
 	

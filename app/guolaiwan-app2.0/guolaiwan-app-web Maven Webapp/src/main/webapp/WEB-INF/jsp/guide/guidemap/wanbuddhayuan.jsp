@@ -704,7 +704,9 @@ input[type="radio"] {
 	   $.toast("请输入景点名称", "forbidden");
 	  }
 	});
-	
+	$(document).on('click','.hui',function(){
+	    window.location.href = "pubnum/index";
+	});
 	 
 	 function getMark(){
         map.clearMap();  
@@ -1713,7 +1715,7 @@ input[type="radio"] {
 	<div id="container" style="">
 		<div class="nav"
 			style="width:100%;height:40px;background:#ffffff;text-align: center;line-height: 40px;position:relative;z-index:10;">
-			<span
+			<span class="hui"
 				style="color:black;font-weight: bold;float:left;line-height: 40px;font-size:20px;margin-left:3%;">
 				< </span> 
 				<img

@@ -210,7 +210,7 @@ height:auto;
 <script type="text/javascript">
 
 	$(function() {
-     $(".btn").click(function() {
+        $(".btn").click(function() {
 			window.location.href = "smart/merchant/parking?sal=1";
 			$(".btn").css("box-shadow","5px 5px 10px #8E8F8F");
 		});
@@ -273,7 +273,7 @@ height:auto;
 		$.post(_uri, null, function(data) {
 			data = parseAjaxResult(data);
 			for (var i = 0; i < data.length; i++) {
-				if ( data[i] == "NOTPAY" ) { //未支付
+				/* if ( data[i] == "NOTPAY" ) { //未支付
 					var order = document.getElementById('img_order');
 					order.onclick = function() {
 						var Order = document.getElementById('test1');
@@ -283,16 +283,9 @@ height:auto;
 						window.location.href = "vice/merchant/information";
 						 },500);
 					};
-				}
-				if ( data[i]=="PARKING" ) {//停车
-					var navigation = document.getElementById('img_navigation');
-					navigation.onclick = function() {
-						var Navigation = document.getElementById('test1');
-						Navigation.src = 'lib/images/daohangs.png';
-						setTimeout(function(){
-						window.location.href = "vice/merchant/navigation";
-						 },500);
-					};
+				} */
+				if ( data[i]=="PARKING" ) {//已停车
+					navigation();
 					//进入停车界面
 					var parking = document.getElementById('img_parking');
 					parking.onclick = function() {
@@ -302,54 +295,16 @@ height:auto;
 						window.location.href = "vice/merchant/parkings";
 						 },500);
 					};
-					//进入续费界面
-					var renew = document.getElementById('img_Renewal');
-					renew.onclick = function() {
-						var Renew = document.getElementById('test1');
-						Renew.src = 'lib/images/xufeis.png';
-						setTimeout(function(){
-						window.location.href = "pubnum/product/index/merchant/renewall";
-							 },500);
-					};
-					var order = document.getElementById('img_order');
-					order.onclick = function() {
-						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/xiangqings.png';
-						setTimeout(function(){
-						window.location.href = "vice/merchant/information";
-							 },500);
-					};
-
+					renew();
+					orderInfo();
 				}
 
 				//进入导航界面
 				if ( data[i] == "PAYSUCCESS" ) { //已支付
-					var navigation = document.getElementById('img_navigation');
-					navigation.onclick = function() {
-						var Navigation = document.getElementById('test1');
-						Navigation.src = 'lib/images/daohangs.png';
-						setTimeout(function(){
-						window.location.href = "vice/merchant/navigation";
-						 },500);
-
-					};
+					navigation();
 					//进入续费界面
-					var renew = document.getElementById('img_Renewal');
-					renew.onclick = function() {
-						var Renew = document.getElementById('test1');
-						Renew.src = 'lib/images/xufeis.png';
-						setTimeout(function(){
-						window.location.href = "pubnum/product/index/merchant/renewall";
-						 },500);
-					};
-					var order = document.getElementById('img_order');
-					order.onclick = function() {
-						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/xiangqings.png';
-						setTimeout(function(){
-						window.location.href = "vice/merchant/information";
-						},500);
-					};
+					renew();
+					orderInfo();
 				}
 				;
 
@@ -357,41 +312,20 @@ height:auto;
 
 				//进入订单界面
 				if ( data[i] == "PAST") { //过期
-					var order = document.getElementById('img_order');
-					order.onclick = function() {
-						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/xiangqings.png';
-						setTimeout(function(){
-						window.location.href = "vice/merchant/information";
-						},500);
-					}
+					orderInfo();
 				};
 				
 				//进入订单界面
 				if ( data[i] == "REFUNDING") { //申请退款
-					var order = document.getElementById('img_order');
-					order.onclick = function() {
-						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/xiangqings.png';
-						setTimeout(function(){
-						window.location.href = "vice/merchant/information";
-						},500);
-					}
+					orderInfo();
 				};
 				//进入订单界面
 				if ( data[i] == "REFUNDED") { //退款完成
-					var order = document.getElementById('img_order');
-					order.onclick = function() {
-						var Order = document.getElementById('test1');
-						Order.src = 'lib/images/xiangqings.png';
-						setTimeout(function(){
-						window.location.href = "vice/merchant/information";
-						},500);
-					}
+					orderInfo();
 				};
-				
-				
-				
+				if(data[i] == null){
+				  $.alert("您没有订单,请点击我要找车位为您的爱车找一个港湾!");
+				}
 			}
 
 			//进入找车位界面
@@ -403,6 +337,42 @@ height:auto;
 				window.location.href = "vice/merchant/scenic";
 				},500);
 			};
+			
+			function orderInfo(){ //点击订单界面效果
+			   var order = document.getElementById('img_order');
+					order.onclick = function() {
+						var Order = document.getElementById('test1');
+						Order.src = 'lib/images/xiangqings.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/information";
+						},500);
+				}
+			}
+			function navigation(){ //点击找车位界面效果
+			   var navigation = document.getElementById('img_navigation');
+					navigation.onclick = function() {
+						var Navigation = document.getElementById('test1');
+						Navigation.src = 'lib/images/daohangs.png';
+						setTimeout(function(){
+						window.location.href = "vice/merchant/navigation";
+						 },500);
+					};
+			}
+			function renew(){ //点击进入续费界面效果
+				var renew = document.getElementById('img_Renewal');
+				renew.onclick = function() {
+					var Renew = document.getElementById('test1');
+					Renew.src = 'lib/images/xufeis.png';
+					setTimeout(function(){
+					window.location.href = "pubnum/product/index/merchant/renewall";
+						 },500);
+				};
+			}
+			
+
+
+
+
 
 		});
 

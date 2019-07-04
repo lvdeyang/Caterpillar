@@ -224,7 +224,7 @@ $(function() {
 	  
 	
 		
- getRecomment();
+ 		getRecomment();
 	  function getCom(){
 	     var _uricoms = window.BASEPATH + 'pubnum/getComs';
 		
@@ -435,6 +435,9 @@ $(function() {
    function preferably(){
    		location.href=window.BASEPATH + 'business/gotopreferably?merchantId=${merchantId}';
    }
+   function accommodation(){
+   		location.href=window.BASEPATH + 'business/gotoaccommodation?merchantId=${merchantId}';
+   }
 </script>
 
 
@@ -469,12 +472,12 @@ $(function() {
 	    <div class="header_in" style="clear:both">
 	     <ul style="">
 	     <li><img src="lib/images/goupiaos.png"/></li>
-   	     <li><img src="lib/images/zhusus.png"/></li>
+   	     <li onclick="accommodation()"><img src="lib/images/zhusus.png"/></li>
          <li><img src="lib/images/tingchess.png"/></li>
          <li><img onclick="cate()" src="lib/images/meishis.png"/></li>
          <li><img src="lib/images/fenxiaos.png"/></li>
          <li><span>购票</span></li>
-   	     <li><span>住宿</span></li>
+   	     <li onclick="accommodation()"><span>住宿</span></li>
          <li><span>停车</span></li>
          <li onclick="cate()"><span>美食</span></li>
          <li><span>分销</span></li>

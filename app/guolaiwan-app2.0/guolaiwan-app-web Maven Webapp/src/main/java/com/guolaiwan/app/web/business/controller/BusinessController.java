@@ -364,11 +364,9 @@ public class BusinessController extends WebBaseControll {
 		mv = new ModelAndView("mobile/business/Grouping");
 		GroupBuyPO groupBuyPO = conn_groupbuy.findByProductId(productId);
 		ProductPO product = conn_product.get(productId);
-		GroupTeamPO team = groupteam.findByUserId(userId);
 		mv.addObject("groupBuyPO", groupBuyPO);
 		mv.addObject("product", product);
 		mv.addObject("userId", userId);
-		mv.addObject("team", team);
 		return mv;
 	}
 
@@ -479,11 +477,85 @@ public class BusinessController extends WebBaseControll {
 	public List<ProductVO> getAllPreferably(HttpServletRequest request) throws Exception {
 		int page=Integer.parseInt(request.getParameter("page"));
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		System.out.println(page);
 		List<ProductPO> allproduct = conn_product.findByMerchant(merchantId, page, 6);
-		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
-		System.out.println(listvo.size());
-		return listvo;
+		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
+		System.out.println(alllist.size()+"--------");
+		return alllist;
+		
 	}
-
+	
+	
+	// 酒店住宿页面
+	@ResponseBody
+	@RequestMapping(value = "/gotoaccommodation")
+	public ModelAndView goToAccommodation(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		System.out.println(merchantId);
+		mv = new ModelAndView("mobile/business/accommodation");
+		mv.addObject("merchantId", merchantId);
+		return mv; 
+	}
+	
+	// 搜索住宿的店家
+	@ResponseBody
+	@RequestMapping(value = "/gotohotel")
+	public ModelAndView goToHotel(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		String name=new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");
+		System.out.println(merchantId+"----"+name);
+		mv = new ModelAndView("mobile/business/hotel");
+		mv.addObject("merchantId", merchantId);
+		mv.addObject("name", name);
+		return mv; 
+	}
+	
+	//按照商品类型分页加载所有的商品 
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/search")
+	public List<MerchantVO> search(HttpServletRequest request) throws Exception {
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		String name=request.getParameter("name");
+		String type=request.getParameter("type");
+		System.out.println(merchantId+"----"+name);
+		List<MerchantPO> allMerchant = Mer_chant.getAllMerchant(name);
+		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
+		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
+		for (MerchantPO Merchant : allMerchant) {
+			for (MerchantChildrenPO mChildren : merchantChildren) {
+				System.out.println(Merchant.getModularCode()+"--"+Merchant.getId()+"--"+mChildren.getChildrenId());
+				if(Merchant.getId()==mChildren.getChildrenId()&&Merchant.getModularCode().equals(type)){
+					merchantlist.add(Merchant);
+				}
+			}
+		}
+		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
+		System.out.println(merlist.size());
+		return merlist;
+	}
+	
+	//获得相应的商家
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getmerchant")
+	public List<MerchantVO> getMerchant(HttpServletRequest request) throws Exception {
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		String code=request.getParameter("code");
+		List<MerchantPO> allmerchant=new ArrayList<MerchantPO>();
+		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
+		MerchantPO merchantPO = Mer_chant.get(merchantId);
+		if(merchantPO.getModularCode()==code){
+			allmerchant.add(merchantPO);
+		}
+		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
+			if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularCode().equals(code)){
+				allmerchant.add(Mer_chant.get(merchantChildrenPO.getChildrenId()));
+			}
+		}
+		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(allmerchant, MerchantVO.class);
+		return merlist;
+		
+	}
 }

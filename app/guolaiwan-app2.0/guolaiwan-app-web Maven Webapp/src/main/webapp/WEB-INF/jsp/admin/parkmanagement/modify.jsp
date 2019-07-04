@@ -71,21 +71,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 车位位置 </label>
 				<div class="layui-input-block">
-					<select name="position" id="position" required>
-						<option value="">请选择</option>
-						<option <c:if test='${po.position == 1}'>selected="selected"</c:if>value="1">室内</option>
-						<option <c:if test='${po.position == 0}'>selected="selected"</c:if>value="0">室外</option>
-					</select>
+					<input type="text" name="position"  value="${po.position}"  autocomplete="off" lay-verify="title" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 充电柱 </label>
 				<div class="layui-input-block">
-					<select name="chargingColumn" id="chargingColumn" required>
-						<option value="">请选择</option>
-		                <option <c:if test='${po.chargingColumn == 1}'>selected="selected"</c:if> value="1">有</option>
-						<option <c:if test='${po.chargingColumn == 0}'>selected="selected"</c:if> value="0">无</option>
-					</select>
+					<input type="text" name="chargingColumn"  value="${po.chargingColumn}"  autocomplete="off" lay-verify="title" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -212,10 +204,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         function update(data,message) {
         	if(data.field.commonParking==""){
         		layer.msg("请输入总共停放车位！",{icon:5});
-				return false;
-        	}
-        	if(data.field.cost==""){
-        		layer.msg("请输入停车费用！",{icon:5});
 				return false;
         	}
         	if(data.field.fineMultiple==""){

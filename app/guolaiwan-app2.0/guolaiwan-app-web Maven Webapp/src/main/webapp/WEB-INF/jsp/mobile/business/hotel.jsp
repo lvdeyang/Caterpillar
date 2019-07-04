@@ -5,12 +5,10 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	String weburl = WXContants.Website;
+	String weburl=WXContants.Website;
 %>
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
-<html>
-
 <head>
 <!-- 声明文档使用的字符编码 -->
 <meta charset='utf-8'>
@@ -28,7 +26,6 @@
 <meta name="viewport"
 	content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
 <!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
-
 <!-- iOS 设备 begin -->
 <meta name="apple-mobile-web-app-title" content="标题">
 <!-- 添加到主屏后的标题（iOS 6 新增） -->
@@ -66,13 +63,9 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<meta name=”viewport” content=”width=device-width, initial-scale=1″ />
-
-
-
+<title>住宿</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
-<title>为你优选子页</title>
 <style type="text/css">
 a {
 	cursor: pointer !important;
@@ -86,7 +79,7 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#DFDFDF !important; 
+	background:#E1E1E1 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	
@@ -115,7 +108,7 @@ html, body {
 }
 
 .header-content {
-	height: 100%;
+	height:auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -125,45 +118,58 @@ html, body {
 	text-align: center;
 	z-index: 0;
 }
-  .gotop {
-	    position: fixed;
-	    right: 20px;
-	    bottom: 50px;
-	    display: block;
-	    width: 50px;
-	    height: 50px;
-	    opacity: 0.8;
-	    z-index:111111;
-	}
-.header-in{
- background: linear-gradient(to right, rgba(254,210,119,1), rgba(236,112,33,1)); 
-  
+
+  .swiper-container {
+    width: 100%;
+    padding:0;
+    margin:0;
+    height:200px;
+  } 
+
+  .swiper-container img {
+    display: block;
+    width: 100%;
+  }
+    
+.weui-navbar{
+ display: none !important;
 }
+  .inp::-webkit-input-placeholder{
+        text-align: center;
+}  
+
+ .youxuan-in p{
+  margin-left:3%;
+ }
+.gotop {
+   position: fixed;
+   right: 20px;
+   bottom: 50px;
+   display: block;
+   width: 50px;
+   height: 50px;
+   opacity: 0.8;
+   z-index:111111;
+	}
+
 </style>
 
 </head>
 
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
-<script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
+<script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
+ <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
+<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 
-<script type="text/javascript">
-  var page=1;
+<script>
+	var page=1;
   $(function(){
-    $(window).scroll(function(){
-        var aa = $(window).scrollTop(); //当前滚动条滚动的距离
-        var bb = $(window).height();//浏览器当前窗口可视区域高度
-        var cc = $(document).height(); //浏览器当前窗口文档的高度 
-      
-        if(cc <= aa+bb){
-            getAllProduct();
-        }
-    })
-  })
- /*返回顶部  */
-  $(function(){
-  getAllProduct();
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -177,49 +183,61 @@ html, body {
 		$('html,body').animate({'scrollTop':0},500);
         return false;
 	});
+	
+	getMerchant();
 }); 
-  
-  function getAllProduct(){
-			var url="<%=basePath%>business/getallpreferably";
-	            $.post(url,{"page":page,"merchantId":${merchantId}},function(data){
+
+ 		function getMerchant(){
+			var url="<%=basePath%>business/search";
+	            $.post(url,{"merchantId":${merchantId},"name":"${name}","type":"0002"},function(data){
 	            	var html=[];
-					for(var i=0; i<data.length; i++){
-						 var pingfen=Math.floor(Math.random()*(50-45+1)+45);
-						 html.push('<a onclick="getorderinfo('+data[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
-				         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
-						 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
-						 html.push('<div class="zhifu-in">');
-						 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].productName+'</p>'); 
-						 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-						 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+data[i].productPrice+'</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen/10+'分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
-						 html.push('</div></div></div></a>');
-						}
-			    	$('.tuijian').append(html.join(''));
+	            	if(data.length==0){
+	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
+	            	}else{
+						for(var i=0; i<data.length; i++){
+				 			 var pingfen=Math.floor(Math.random()*(50-45+1)+45);
+							 html.push('<a onclick="getorderinfo('+data[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
+					         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
+							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].shopHeading+'"/>');
+							 html.push('<div class="zhifu-in">');
+							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].shopName+'</p>'); 
+							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
+							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen/10+'分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
+							 html.push('</div></div></div></a>');
+							}
+					}
+			    	$('.huodong').append(html.join(''));
 	            	page++;
 	            })
-	}
-	
-function getorderinfo(id){
-	    location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
-	}
-  
+			}
+    
 </script>
 
 
+
+
 <body>
-   <!-- 主页 -->
+			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
-				class="icon-reorder icon-large"></span></a>
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
 		
-		<div class="tuijian"></div>
+	  <select style="width:100%;margin:1px auto;font-weight: bold;padding:0 5%;height:30px;border:none;outline:none;appearance:none; -moz-appearance:none;  -webkit-appearance:none;">
+	    <option>智能排序ⅴ</option>
+	    <option>低价优先ⅴ</option>
+	    <option>高价优先ⅴ</option>
+	  </select>
+    
+	 
+	 <div class="huodong"></div>
    
+   </div>    	
    <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
 </body>
 
-</html>
+
