@@ -53,15 +53,11 @@ public class ParkManagementController extends BaseController {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		List<AttractionsParkingPO> listpo = new ArrayList<AttractionsParkingPO>();
 		if (getLoginInfo() != null) {
-			Long attractionsId = getLoginInfo().getComId();
-			String parkingName = request.getParameter("parkingName");
-			strMap.put("attractionsId", attractionsId);
-			strMap.put("parkingName", parkingName);
-			listpo = attractionsDao.findByPageC(strMap, page, limit);
+			listpo = attractionsDao.findByPageC( page, limit);
 		} else {
 			listpo = attractionsDao.getByAttractionsId(getMerchantInfo().getComId());
 		}
-		int allcount = attractionsDao.CountByPageC(strMap);
+		int allcount = attractionsDao.CountByPageC();
 		List<AttractionsParkingVO> listvo = AttractionsParkingVO.getConverter(AttractionsParkingVO.class)
 				.convert(listpo, AttractionsParkingVO.class);
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
@@ -136,8 +132,9 @@ public class ParkManagementController extends BaseController {
 	@RequestMapping(value = "/updatev", method = RequestMethod.GET)
 	public ModelAndView updateView(HttpServletRequest request) throws Exception {
 		String uuid = request.getParameter("uuid");
+		System.out.println(uuid);
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		AttractionsParkingPO po = attractionsDao.get(uuid);
+		AttractionsParkingPO po = attractionsDao.getBusinessHours(Long.parseLong(uuid)).get(0);
 		strMap.put("po", po);
 		ModelAndView mv = new ModelAndView("admin/parkmanagement/modify");
 		mv.addAllObjects(strMap);
