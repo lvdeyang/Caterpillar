@@ -233,6 +233,8 @@ $(document).on('click','.piaowu',function(){
 			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>

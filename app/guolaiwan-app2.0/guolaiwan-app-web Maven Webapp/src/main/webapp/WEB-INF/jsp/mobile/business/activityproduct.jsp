@@ -357,7 +357,6 @@ margin:3px 5%;
 		var endDate=new Date("${end}").getTime();
 		var newtime=new Date().getTime();
 		var intDiff =parseInt((endDate-newtime)/1000);
-		alert(intDiff)
 	   /*倒计时  */
 	  window.setInterval(function () {
 	    var day = 0,
