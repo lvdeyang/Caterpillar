@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>住宿</title>
+<title>店铺详情</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -79,13 +79,14 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#E1E1E1 !important; 
+	background:#E0E0E0 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	
 	text-decoration: none !important;
 }
 
+ 
 * {
 	box-sizing: border-box;
 	list-style: none;
@@ -108,7 +109,7 @@ html, body {
 }
 
 .header-content {
-	height:auto;
+	height: auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -137,36 +138,16 @@ html, body {
   .inp::-webkit-input-placeholder{
         text-align: center;
 }  
-
- .youxuan-in p{
-  margin-left:3%;
- }
-.gotop {
-   position: fixed;
-   right: 20px;
-   bottom: 50px;
-   display: block;
-   width: 50px;
-   height: 50px;
-   opacity: 0.8;
-   z-index:111111;
-	}
-.fenlei img{
- width:50px;
- height:50px;
- margin:0 15%;
+.xiangqing ul li{
+   height:30px;
+   line-height: 30px;
+   font-weight:bold;
 }
-.fenlei p span{
-
- margin:0 15%;
+.xiangqing ul li p{
+ margin:0;
 }
-.yuding input{
- border:none;
-  outline:none;
-  border-bottom:1px solid #ACACAC;
-  padding: 0 30px;
-  font-size:15px;
-  font-weight:bold;
+.fangxing p{
+ margin:0;
 }
 </style>
 
@@ -178,28 +159,22 @@ html, body {
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
- <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<script>
+
+</script>
 <script type="text/javascript">
-	var page=1;
 	$(function() {
-		 window.BASEPATH = '<%=basePath%>';
-	  		var parseAjaxResult = function(data){
-			if(data.status !== 200){
-				$.toptip('data.message', 'error');
-				return -1;
-			}else{
-				return data.data;		
-			}
-			}
-	
-	   getRecomment();
-	   getAllMerchant();
+	getRecomment();
+	getProduct();
+	var pingfen=Math.floor(Math.random()*(50-46+1)+46);
+    $('.pingfen').html(pingfen/10+"分") ; 
 	});
-	
-	
+
+
 	function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
 		
@@ -230,72 +205,26 @@ html, body {
 			    });
 	  }
 	  
-	  function getAllMerchant(){
-			var url="<%=basePath%>business/getmerchant";
-	            $.post(url,{"merchantId":${merchantId},"code":"0002"},function(data){
-	            	var html=[];
-	            	if(data.length==0){
-	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
-	            	}else{
-						for(var i=0; i<data.length; i++){
-					  		 var pingfen=Math.floor(Math.random()*(50-45+1)+45);
-							 html.push('<a onclick="accommodation('+data[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
-					         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
-							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].shopHeading+'"/>');
-							 html.push('<div class="zhifu-in">');
-							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].shopName+'</p>'); 
-							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen/10+'分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
-							 html.push('</div></div></div></a>');
-							}
-					}
-			    	$('.huodong').append(html.join(''));
-	            	page++;
-	            })
-	}
-	
-	function accommodation(id){
-   		location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+id;
-   }
+	function getProduct(){
+	    var _uricoms = window.BASEPATH + '/business/getproduct';	
+	     $.get(_uricoms, {"merchantId":${merchantId}}, function(data){
+	         var html=[];
+	         for(var i=0;i<data.length;i++){
+				     	html.push('<div style="width:90%;height:auto;background:#BCBCBC;margin:10px auto;border-radius:10px;">');
+				        html.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">'+data[i].productName+'</span>');
+				        html.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+data[i].productPrice+'</span></p>');
+				    	html.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销100+</span>');
+				    	html.push('<span onclick="buyproduct(this.id)" id="'+data[i].id+'" style="float:right;margin-right:5px;color:#fff;font-size:18px;font-weight:bold;background:#EB6E1E;height:30px;line-height:30px;border-radius:10px;padding:0px 10px;">预订</span></p>');
+					    html.push('</div>');
+		     		}
+			 $('.productlist').append(html.join(''));
+		     	})
+		 }
+		 
+	function buyproduct(id){
+		location.href=window.BASEPATH + 'business/buyproduct?productId='+id;
+	} 
 </script>
-<script>
-layui.use('laydate', function(){
-	  var laydate = layui.laydate;
-	  
-	   //日期范围
-  laydate.render({
-    elem: '#test6'
-    ,range: true
-  });
-	});
- /*返回顶部  */
-  $(function(){
-
-	$(window).scroll(function(){
-		if($(window).scrollTop()>100){
-			$(".gotop").fadeIn(400);	
-		}
-		else{
-			$(".gotop").fadeOut(400);
-		}
-	});
-	$(".gotop").click(function(event){
-        event.preventDefault();
-		$('html,body').animate({'scrollTop':0},500);
-        return false;
-	});
-}); 
-
-
-	function search(){
-		var name=$('.hotelname').val();
-   		location.href=window.BASEPATH + 'business/gotohotel?merchantId=${merchantId}&name='+name;
-   }
-
-    
-</script>
-
-
 
 
 <body>
@@ -314,30 +243,60 @@ layui.use('laydate', function(){
 			</div>
 		</div>
 	</div>
-	
-	
-       <div class="yuding" style="width:94%;height:auto;margin:0 auto;text-align: center;border-radius:10px;background:#fff;position: relative;">
-           <p style="width:100%;margin:0;height:45px;line-height:45px;background:#EB6E1E;color:#fff;text-align: center;font-size:16px;border-top-left-radius: 10px;border-top-right-radius: 10px;">酒店预订</p>  
-           <input type="text" style="cursor: pointer;width:100%;height:50px;"> 
-           <img style="width:25px;height:30px;position: absolute;right:34px;top:46px;" alt="" src="lib/images/dingweis.png">
-           <p style="position: absolute;right:23px;top:70px;font-size:12px;">当前位置</p>
-           <input type="text" style="width:100%;height:50px;padding:0 0 0 28%;" class="layui-input" id="test6" placeholder=" - ">
-           <p style="position: absolute;left:9%;top:110px;font-size:14px;">入住时间</p>
-           <input class="hotelname" type="text" placeholder="关键字/酒店名" style="cursor: pointer;width:100%;height:50px;"> 
-           <button onclick="search()" style="height:30px;width:50%;margin:30px auto;color:#fff;background:#EB6E1E;border:none;outline:none;border-radius:10px;">查询</button>
-       </div>
-       
-       
-       
-       
-       
-    <div class="huodong"  style="width:100%;height:auto;margin:0 auto;position: relative;overflow: hidden;">
-	       <p style="color:#858585;text-align: center;height:40px;line-height: 50px;margin:0;font-size:15px;font-weight:bold">为您推荐</p>
-		
-   
-   </div>    	
-   <!-- 置顶 -->
-    <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
+
+	  <div class="xiangqing" style="width:94%;height:auto;background:#fff;margin:10px auto;border-radius:10px;overflow: hidden;position: relative;top:-60px;z-index:111;">
+	   <ul style="margin:0 0 20px 6%;">
+	    <li><p>${merchant.shopName}</p></li>
+	    <li><p><span class="pingfen" style="color:#EB6E1E;font-size:16px;"></span><span style="font-size:12px;margin-left:10px;">超棒</span></p></li>
+	    <li><p>距离您<span>1000</span>千米</p></li>
+	    <li><p>联系电话：<span>${merchant.shopTel}</span></p></li>
+	   </ul> 
+	  </div>
+	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-60px;padding:0 0 30px 0;">
+	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">房型选择</p>
+	    <div class="productlist">
+	    </div>
+	     
+	    
+
+	  </div> 
+	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-50px;padding:0 0 30px 0;">
+	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">订房必读</p>
+	     
+	     <p style="display: inline-block;height:50px;line-height: 50px;font-size:12px;margin-left:9%;">
+	     <img style="width:25px;height:25px;" alt="" src="lib/images/shizhong.png">
+	     <span >离店时间：12：00以前</span>
+	     </p>
+	     <p style="font-size:12px;margin-left:10%;">预订电话：${merchant.shopTel}</p>
+	   
+	  </div>
+	   
+	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-40px;padding:0 0 30px 0;">
+	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">酒店点评</p>
+	    <p style="height:50px;width:90%;margin:0 auto;line-height: 50px;border-bottom:1px solid #BCBCBC;"><span class="pingfen" style="font-size:16px;font-weight:bold;color:#EB6E1E;height:50px;"></span><span style="padding:0 10px;color:#E0E0E0;">|</span><span style="color:black;background:#F3EA29;border-radius:12px;padding:0 5px;">服务周到</span><span style="color:black;background:#F3EA29;border-radius:12px;padding:0 5px;">性价比高</span></p>
+	     <div style="height:auto;">
+	      <p style="font-size:14px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;">
+	      <img style="width:35px;height:35px;border-radius:50%;" src="lib/images/logo.png">
+	      <span>想念</span><span style="padding:0 10px;color:#E0E0E0;">|</span><span style="color:#fff;background:#FAB526;border-radius:12px;padding:0 5px;">老用户</span>
+	      </p>
+          <p style="padding:0 8%;">离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间</p>
+	     </div>
+	      <div style="height:auto;">
+	      <p style="font-size:14px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;">
+	      <img style="width:35px;height:35px;border-radius:50%;" src="lib/images/logo.png">
+	      <span>想念</span><span style="padding:0 10px;color:#E0E0E0;">|</span><span style="color:#fff;background:#FAB526;border-radius:12px;padding:0 5px;">老用户</span>
+	      </p>
+          <p style="padding:0 8%;">离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间</p>
+	     </div>
+	      
+	  </div>
+
+
+
 </body>
+ 
 
 
+
+
+</html>

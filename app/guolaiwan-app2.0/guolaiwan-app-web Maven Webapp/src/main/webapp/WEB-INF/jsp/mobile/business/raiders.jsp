@@ -63,9 +63,10 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>住宿</title>
+<title>攻略</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
+
 <style type="text/css">
 a {
 	cursor: pointer !important;
@@ -108,7 +109,7 @@ html, body {
 }
 
 .header-content {
-	height:auto;
+	height: auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -136,11 +137,7 @@ html, body {
 }
   .inp::-webkit-input-placeholder{
         text-align: center;
-}  
-
- .youxuan-in p{
-  margin-left:3%;
- }
+} 
 .gotop {
    position: fixed;
    right: 20px;
@@ -151,6 +148,17 @@ html, body {
    opacity: 0.8;
    z-index:111111;
 	}
+.gonglue ul{
+ float:right;
+ height:50px;
+ line-height: 50px;
+
+} 
+.gonglue ul li{
+ float:left;
+ margin:0 5px;
+
+}
 
 </style>
 
@@ -166,10 +174,10 @@ html, body {
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-
-<script>
-	var page=1;
+<script type="text/javascript">
+  /*返回顶部  */
   $(function(){
+  getVideoPics();
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -183,65 +191,67 @@ html, body {
 		$('html,body').animate({'scrollTop':0},500);
         return false;
 	});
+	});
 	
-	getMerchant();
-}); 
-
- 		function getMerchant(){
-			var url="<%=basePath%>business/search";
-	            $.post(url,{"merchantId":${merchantId},"name":"${name}","type":"0002"},function(data){
-	            	var html=[];
-	            	if(data.length==0){
-	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
-	            	}else{
-						for(var i=0; i<data.length; i++){
-				 			 var pingfen=Math.floor(Math.random()*(50-45+1)+45);
-							 html.push('<a onclick="accommodation('+data[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
-					         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
-							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].shopHeading+'"/>');
-							 html.push('<div class="zhifu-in">');
-							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].shopName+'</p>'); 
-							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen/10+'分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
-							 html.push('</div></div></div></a>');
-							}
-					}
-			    	$('.huodong').append(html.join(''));
-	            	page++;
-	            })
-			}
-			
-	function accommodation(id){
-   		location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+id;
-    }
-    
+	// 南山攻略需要的数据
+  function getVideoPics(){       
+	var url = window.BASEPATH + 'business/getVideoPics?merchantId=${merchantId}';
+	$.get(url, null, function(data){
+	    var html=[];
+	   	for(var i=0;i<data.length;i++){
+	   		  var time=parseInt(((new Date().getTime())-(new Date(data[i].updatetime).getTime()))/(1000*60*60*24));
+	   	      html.push('<div class="main" style="width:100%;height:auto;background:#fff;padding-top:10px;border-radius:10px;margin:5px 0;">');
+		      html.push('<div class="gonglue" style="width:96%;height:auto;margin:0 auto;overflow: hidden;">');
+		      html.push('<img style="width:100%;height:200px" src="'+data[i].textimg+'">');
+		      html.push('<p style="font-size:18px;font-weight:bold;margin:10px auto; ">"'+data[i].textname+'"</p>');
+		      html.push('<p style="font-size:16px;margin:10px 0;overflow : hidden;text-overflow: ellipsis;white-space:nowrap;width:250px;">'+data[i].frist+'</p>');
+		      html.push('<ul>');
+	          html.push('<li><p>'+time+'天前</p></li>');
+	          html.push('<li><p><img style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>111</span>)</p></li>');
+	          html.push('<li><p><img style="width:20px;height:20px;" src="lib/images/dianzanss.png"/>(<span>111</span>)</p></li>');
+	          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>');
+		      html.push('</ul>');
+		      html.push('</div>');
+		   	  html.push('</div>');
+		   }		
+	     $('.gl').append(html.join(''));
+	    })
+	} 
 </script>
 
-
-
-
 <body>
-			<!-- 主页 -->
+	<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
-		</div>
-		
-	  <select style="width:100%;margin:1px auto;font-weight: bold;padding:0 5%;height:30px;border:none;outline:none;appearance:none; -moz-appearance:none;  -webkit-appearance:none;">
-	    <option>智能排序ⅴ</option>
-	    <option>低价优先ⅴ</option>
-	    <option>高价优先ⅴ</option>
-	  </select>
-    
-	 
-	 <div class="huodong"></div>
-   
-   </div>    	
-   <!-- 置顶 -->
+		</div>	
+	   
+	   <!-- <div class="main" style="width:100%;height:auto;background:#fff;padding-top:10px;border-radius:10px;margin:5px 0;">
+	     <div class="gonglue" style="width:96%;height:auto;margin:0 auto;overflow: hidden;">
+	       <img style="width:100%;height:200px" src="lib/images/1.jpg">
+	       <p style="font-size:18px;font-weight:bold;margin:10px auto; ">南山长乐谷</p>
+	       <p style="font-size:16px;margin:10px 0;overflow : hidden;text-overflow: ellipsis;white-space:nowrap;width:250px;">南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷</p>
+	       <ul>
+	        <li><p>1天前</p></li>
+	        <li><p><img style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>111</span>)</p></li>
+	        <li><p><img style="width:20px;height:20px;" src="lib/images/dianzanss.png"/>(<span>111</span>)</p></li>
+	        <li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>
+	       </ul>
+	     </div>
+	   </div> -->
+	   <div class="gl"></div>
+	    
+
+	    <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
 </body>
 
 
+
+
+
+
+</html>

@@ -438,6 +438,9 @@ $(function() {
    function accommodation(){
    		location.href=window.BASEPATH + 'business/gotoaccommodation?merchantId=${merchantId}';
    }
+   function raiders(){
+   		location.href=window.BASEPATH + 'business/gotoraiders?merchantId=${merchantId}';
+   }
 </script>
 
 
@@ -484,12 +487,12 @@ $(function() {
          <li onclick="activity()"><img src="lib/images/huodongs.png"/></li>
    	     <li onclick="group()"><img src="lib/images/pintuans.png"/></li>
          <li><img src="lib/images/caizhais.png"/></li>
-         <li><img src="lib/images/gongluess.png"/></li>
+         <li onclick="raiders()"><img src="lib/images/gongluess.png"/></li>
          <li onclick="wallet()"><img src="lib/images/qianbaos.png"/></li>
          <li onclick="activity()"><span>活动</span></li>
    	     <li onclick="group()"><span>拼团</span></li>
          <li onclick="pick()"><span>采摘</span></li>
-         <li><span>攻略</span></li>
+         <li onclick="raiders()"><span>攻略</span></li>
          <li onclick="wallet()"><span>钱包</span></li>
 	     </ul>
 	    </div> 
@@ -518,7 +521,7 @@ $(function() {
 	  
 	     <!-- 攻略  -->
 	  	<div  style="width:96%;height:230px;text-align:center;margin:0 auto;background:#fff;position: relative;top:48px;overflow: hidden;" id="gl">
-            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/gongluess.png"/>攻略  </span> <span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>  
+            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/gongluess.png"/>攻略  </span> <span onclick="raiders()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>  
          </div>
         
          <!-- 常见问题  -->
