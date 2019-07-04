@@ -2764,7 +2764,7 @@ public class PubNumController extends WebBaseControll {
 
 	// 人脸验单成功侯修改状态
 	@ResponseBody
-	@RequestMapping(value = "/succeed", method = RequestMethod.POST)
+	@RequestMapping(value = "/succeed", method = RequestMethod.GET)
 	public Map<String, String> succeed(String oderId) {
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		try {
