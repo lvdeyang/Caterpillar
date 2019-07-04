@@ -300,7 +300,7 @@ public class PubNumController extends WebBaseControll {
 		case "PRODUCT":
 			mv = new ModelAndView("mobile/pubnum/product");
 			// 轮播图商品购买跳转 张羽 新增参数到页面 商品购买数量限制 5/2
-			long productLimitNum=conn_product.get(code).getProductLimitNum();
+			long productLimitNum = conn_product.get(code).getProductLimitNum();
 			mv.addObject("productLimitNum", productLimitNum);
 			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(code).getProductMerchantID());
@@ -338,7 +338,7 @@ public class PubNumController extends WebBaseControll {
 		if (activityproId != null && activityproId != "" && activityproId.length() != 0 && !activityproId.equals("0")) {
 			mv = new ModelAndView("mobile/pubnum/activityproduct");
 			mv.addObject("actId", activityproId);
-			long productLimitNum=conn_product.get(id).getProductLimitNum();
+			long productLimitNum = conn_product.get(id).getProductLimitNum();
 			mv.addObject("productLimitNum", productLimitNum);
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
@@ -346,7 +346,7 @@ public class PubNumController extends WebBaseControll {
 			mv.addObject("userHeadimg", userHeadimg);
 		} else {
 			mv = new ModelAndView("mobile/pubnum/product");
-			long productLimitNum=conn_product.get(id).getProductLimitNum();
+			long productLimitNum = conn_product.get(id).getProductLimitNum();
 			mv.addObject("productLimitNum", productLimitNum);
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
@@ -1490,7 +1490,7 @@ public class PubNumController extends WebBaseControll {
 		String userHeadimg = conn_user.get(userId).getUserHeadimg();
 		mv = new ModelAndView("mobile/pubnum/activityproduct");
 		ActivityRelPO activityPro = conn_activityRel.getActivityRelByProductId(id);
-		long productLimitNum=conn_product.get(id).getProductLimitNum();
+		long productLimitNum = conn_product.get(id).getProductLimitNum();
 		mv.addObject("productLimitNum", productLimitNum);
 		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 		mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
@@ -2178,7 +2178,7 @@ public class PubNumController extends WebBaseControll {
 		if (userMoney >= productPrice) {
 			user.setWallet(userMoney - productPrice);
 			order.setOrderState(OrderStateType.PAYSUCCESS);
-			//生成验单码,和二维码图片
+			// 生成验单码,和二维码图片
 			String ydNO = ydNoCode(orderId);
 			order.setYdNO(ydNO);
 			order.setIswallet(true);
@@ -2736,10 +2736,49 @@ public class PubNumController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/updatemessage", method = RequestMethod.POST)
 	public Map<String, String> updatemessage(String oderId) {
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		try {
+			MessagePO messagepo = messagedao.getByOderId(oderId);
+			messagepo.setState("1");
+			messagedao.saveOrUpdate(messagepo);
+			hashMap.put("msg", "0");
+			return hashMap;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			hashMap.put("msg", "1");
+			return hashMap;
+		}
 
-		MessagePO messagepo = messagedao.getByOderId(oderId);
-		messagepo.setState("1");
-		messagedao.saveOrUpdate(messagepo);
-		return null;
+	}
+
+	// 跳转快递物流详情页面的方法
+	@RequestMapping(value = "/admin/indexces")
+	public ModelAndView indexces(long merchant) throws Exception {
+		ModelAndView mv = null;
+		System.out.println("--------------------------------------------" + merchant);
+		mv = new ModelAndView("mobile/pubadmin/indexces");
+		mv.addObject("merchant", merchant);
+		return mv;
+	}
+
+	// 人脸验单成功侯修改状态
+	@ResponseBody
+	@RequestMapping(value = "/succeed", method = RequestMethod.POST)
+	public Map<String, String> succeed(String oderId) {
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		try {
+			MessagePO messagepo = messagedao.getByOderId(oderId);
+			messagepo.setState("2");
+			messagedao.saveOrUpdate(messagepo);
+			hashMap.put("msg", "0");
+			return hashMap;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			hashMap.put("msg", "1");
+			return hashMap;
+		}
+
 	}
 }

@@ -535,22 +535,20 @@ html, body {
 
 input[type="datetime-local"]:before{
     content: attr(placeholder);
-    color:red;
+   
 }
-::-webkit-input-placeholder {
-    color:red;
-}
+
 .left::-webkit-input-placeholder {
     color:#B38F80;
 }
 .names::-webkit-input-placeholder {
-    color:#18b4ed;
+
      font-size:14px;
      text-align: center;
      margin:0 auto;
 }
 .idnums::-webkit-input-placeholder {
-    color:#18b4ed;
+
      font-size:14px;
      text-align: center;
 }
@@ -598,6 +596,18 @@ input[type="datetime-local"]:before{
 	.saying img{width:100%;}  
     
     
+.liebiao li input{
+    width: 100%;
+    height: 60px;
+    margin: 1px auto;
+    text-align:center;
+    margin-left: 2%;
+    border-radius:6px;
+    border:none;
+    background:#fff;
+    outline: none;
+    border:1px solid  rgb(230, 230, 230);
+}
 
 
 </style>
@@ -1239,36 +1249,29 @@ input[type="datetime-local"]:before{
 		   var count=$('#proCount').val();
 		   var html=[];
 		   for(var i=0;i<count;i++){
-		        html.push('<h1 style="font-size:16px;background:#18b4ed;height:50px;line-height:50px;text-align:center;width:100%;color:#fff" class="demos-title">信息采集</h1>');   /* <span>'+(i+1)+'</span> */
-		        html.push('<div style="text-align:center;width:100%;" class="weui-cell">');
-			    html.push('	 	<div class="weui-cell__hd">');
-			   /*  html.push('			<label class="weui-label">姓名</label>'); */
-				html.push('	</div>');
-				html.push('	<div class="weui-cell__bd">');
-				html.push('		<input placeholder="点击上传真实姓名" style="text-align:center;font-weight: bold;border-radius:6px;font-size:14px;outline: none;border:1px solid #E0DABA;width:70%;height:40px;line-height:40px;" class="names" id="name-'+i+'" class="weui-input" type="text"');
-				html.push('			placeholder="">');
-				html.push('	</div>');
-				html.push('</div>');
-		        
-		        
-		        html.push('<div style="text-align:center;width:100%;" class="weui-cell">');
-			    html.push('	 	<div class="weui-cell__hd">');
-			 /*    html.push('			<label class="weui-label">身份证</label>'); */
-				html.push('	</div>');
-				html.push('	<div class="weui-cell__bd">');
-				html.push('		<input placeholder="点击上传真实身份证信息" style="font-weight: bold;text-align:center;border-radius:6px;font-size:16px;outline: none;border:1px solid #E0DABA;width:70%;height:40px;line-height:40px;" class="idnums" id="orderIdNum-'+i+'" class="weui-input" type="text"');
-				html.push('			placeholder="">');
-				html.push('	</div>');
-				html.push('</div>');
-		        html.push('<div style="text-align:center;width:100%;" class="weui-cell">');
-			    /* html.push('	<div style="position:absolute;color:#fff;left:50%;margin-left:-52.5px;top:75.5px" class="weui-cell__hd">');
-			 	html.push('		<label style="z-index:-2" class="weui-label">上传照片</label>');
-				html.push('	</div>'); */
-				html.push('	<div class="weui-cell__bd">');
-				html.push('<image style="width:60%;height:250px;border-radius:6px;z-index:1111;opacity: 0.7 ;" class="uploadImages" id="uploadImage-'+i+'" src="<%=basePath%>/lib/fishimages/asdasd.jpg"></image>');
-				html.push('	</div>');
-				html.push('</div>');
-			    html.push('</div>');		   
+			    html.push('<div class="layui-inline" style="width:96%;height:auto;position: relative;"> ');
+			    html.push('<ul class="liebiao" style="color:black;">');
+			    html.push('<li>');
+			    html.push('<input type="text" placeholder="请填写真实姓名"   style="cursor: pointer;" class="names" id="name-'+i+'"  class="layui-input" id="test1">');
+			    html.push('<p style="position: absolute;top:42px;left:10%;">填写姓名</p>');
+			    html.push('</li>');
+			    html.push('<li>');
+			    html.push('<input placeholder="请输入身份证号码" class="idnums" id="orderIdNum-'+i+'"  minlength="18" maxlength="18"class="weui-input" type="text"/>');
+			    html.push('<p style="position: absolute;top:122px;left:10%;">填写身份证</p>');
+			    html.push('<img id="face" style="width:25px;height:25px;position: absolute;right:5%;top:120px;" src="lib/images/zhaoxiang.png"');
+			    html.push('</li>');
+			    html.push('</ul>');
+			    html.push('</div>');
+			    html.push('<div style="background:#fff;height:300px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;">');
+			    html.push('<p style="margin-left:8%;height:50px;line-height: 50px;">人脸拍摄</p>');
+			    html.push('<img style="width:180px;height:180px;position: absolute;left:50%;margin:10px 0 0 -90px;opacity: 0.6" alt="" class="uploadImages" id="uploadImage-'+i+'"  src="<%=basePath%>lib/images/renlian2s.png">');
+			    html.push('<p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-70px;color:#818181">请正对镜头，面部清晰</p>');
+			    html.push('</div>');
+			    html.push('<div style="position: relative;width:100%;height:80px;text-align: center;margin-top:50px;">');
+			    html.push('<button  id="cancelPhoto" style="font-size:18px;margin:0px 10px;width:40%;height:35px;color:#fff;font-weight:bold;background:#EC6D1E;border:none;outline:none;border-radius:10px;">返回</button>');
+			    html.push('<button  id="confirmPhoto" style="font-size:18px;margin:0px 10px;width:40%;height:35px;color:#fff;font-weight:bold;background:#EC6D1E;border:none;outline:none;border-radius:10px;">保存</button>  ');
+			    html.push('</div>');
+			    		   
 		   }
 		   $('#cameraContent').append(html.join(''));
 		}
@@ -1276,14 +1279,12 @@ input[type="datetime-local"]:before{
 		
 		
 		//点击输入框识别图片
-		$(document).on('click','.idnums',function(){
+		$(document).on('click','#face',function(){
+		alert(1111)
 	       discern();
 	     /*  discern(); */
 	    });
-	    //点击输入框识别图片
-		$(document).on('click','.names',function(){
-	        discern();	    
-	    });
+	 
 	    
 	    function  discern() {
 	           //人脸采集部分
@@ -1384,7 +1385,6 @@ input[type="datetime-local"]:before{
                 }
             });
         }
-		
 
 		    function addmessage(oderId) {
 		            var _uri = window.BASEPATH + 'pubnum/addmessage';
@@ -1537,8 +1537,20 @@ input[type="datetime-local"]:before{
                 localId: localid, // 图片的localID
                 success: function (res) {
                     var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
-                    base=localData;
-                    $('.uploadImages').attr('src','data:image/png;base64,'+localData);
+                    var str=new String();
+                    var arr=new Array();
+                    str=localData ;
+                    var sear=new RegExp(',');
+                      if(sear.test(str)) {
+                        arr=str.split(',');//注split可以用字符或字符串分割
+						$('.uploadImages').attr('src','data:image/png;base64,'+arr[1]);
+						base=arr[1];
+
+                       }else{
+                            $('.uploadImages').attr('src','data:image/png;base64,'+localData);
+                            base=localData;
+                       }                 
+                  
                     photos[id]=localData;
                 }
             });
@@ -1560,7 +1572,6 @@ input[type="datetime-local"]:before{
 		    $.closePopup();
 		});
 		$(document).on('click','#confirmPhoto',function(){
-		    
 		    if(buyOrbasketFlg==1){
 		       joinBasket();
 		    }else{
@@ -1572,15 +1583,25 @@ input[type="datetime-local"]:before{
 		
 		function getIdNums(){
 		    var idnums=$('.idnums');
-		    var ret=[];
+		    var ret=[];		  
 		    for(var i=0;i<idnums.length;i++){
 		       var idnumobj={};
-		      
 		       if($(idnums[i]).val()==''){
 		            $.toast("身份证号不能为空", "forbidden");
 		            return false;
 		       }
 		      var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+			
+			 if(reg.test($(idnums[i]).val()) === false) 
+
+			  { 
+
+			    $.toast("身份证输入不合法", "forbidden");
+
+			    return false; 
+
+			  } 
+			
 			
 		       idnumobj.idNum=$(idnums[i]).val();
 		       var ids=$(idnums[i]).attr('id').split('-');
@@ -1589,6 +1610,8 @@ input[type="datetime-local"]:before{
 		            $.toast("姓名不能为空", "forbidden");
 		            return false;
 		       }
+		       var path =  $('#uploadImages').attr('src');
+
 		       
 		       
 		       idnumobj.photo=encodeURIComponent(photos['uploadImage-'+i]?photos['uploadImage-'+i]:'');
@@ -2242,12 +2265,13 @@ input[type="datetime-local"]:before{
                           <div id="cameraContent"></div>
 							  
 						  <div>
-                          <a id="cancelPhoto"
+                        <!--   <a id="cancelPhoto"
 							style="width:47%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 							href="javascript:;" class="weui-btn weui-btn_primary"> 取消</a>
                           <a id="confirmPhoto"
 							style="width:47%;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a></div>
+							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a> -->
+							</div>
                     </div>
 				</div>
 
