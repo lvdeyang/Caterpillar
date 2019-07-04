@@ -21,4 +21,14 @@ public class MessageDAO extends AbstractBaseDao<MessagePO> {
 			return null;
 		return Messagepos.get(0);
 	}
+
+	public List<MessagePO> getmerchantid(String merchantid) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("merchantid", Condition.eq, merchantid);
+		hql.andBy("state", Condition.eq, "1");
+		List<MessagePO> Messagepos = findByHql(hql);
+		if (Messagepos == null || Messagepos.size() == 0)
+			return null;
+		return Messagepos;
+	}
 }
