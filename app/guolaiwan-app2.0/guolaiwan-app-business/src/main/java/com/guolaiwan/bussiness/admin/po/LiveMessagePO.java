@@ -15,6 +15,13 @@ public class LiveMessagePO extends AbstractBasePO {
 	private String message;
 	private long userId;
 	private String userName;
+	private long merchantId;
+	public long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(long merchantId) {
+		this.merchantId = merchantId;
+	}
 	// 是否发送
 	private boolean flag;
 	
