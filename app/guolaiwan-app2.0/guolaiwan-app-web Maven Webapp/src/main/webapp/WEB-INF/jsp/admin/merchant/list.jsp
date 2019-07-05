@@ -99,7 +99,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                               <i class="layui-icon">&#xe640;</i>
                 </a>
                 {{#  } }}    
-</script> 
+</script>
+<script type="text/html" id="zsgcTpl"> 
+  {{#   }}
+    <a title="" href="javascript:;" onclick="merchant_childent('商家列表','skip.do','{{d.id}}','','510')" 
+                              class='layui-btn layui-btn-xs'>
+                                                       添加
+                </a>
+  
+   {{#  }}
+</script>
+</script>
 	</div>
 	<script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
 	<script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
@@ -164,6 +174,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                   } 
                 }) 
               });
+              
+              //添加子商户信息
+               function  merchant_childent(title,url,id,w,h){
+                     x_admin_show(title,url+"?id="+id,w,h);
+               }
 	         
 	         function merchant_add(title,url,w,h,id){	             
                 x_admin_show(title,url,w,h);
@@ -228,7 +243,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         table.render({                  /*3.引入table*/
          elem:'#merchantList'
          ,method:'post'
-         ,url:'list.do'
+         ,url:'list.do'         
          ,page:true
          ,limits: [10,30,50,100]
          ,limit: 10
@@ -272,8 +287,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 				  	
     </script>
-       <script type="text/html" id="zsgcTpl">
-         <a class='layui-btn layui-btn-xs' href="javascript:merchant_add('添加信息','<%= path%>/admin/merchant/skip.do?merchantId={{d.id}}&shopName={{d.shopName}}','900','600')">添加</a>       
-</script>     
+          
 </body>
 </html>
