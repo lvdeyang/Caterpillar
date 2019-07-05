@@ -991,42 +991,40 @@ public class NEWDistributorController {
 	@RequestMapping(value = "/admin/login", method = RequestMethod.POST)
 	public String distributorLogin(HttpServletRequest request) throws Exception {
 	    	//返回页面的状态值
-	    	String state = null;
+	    	String state = "0";
 	    	//创建 seession 获取 用户信息
 	    	HttpSession  session =  request.getSession();
 			//获取用户的手机账号
 			String phone = request.getParameter("phone");		
 			//获取 用户的 密码
-			String password = request.getParameter("password");
-			if(phone != null){
-			//根据手机号 获取 分销商 信息
-		    List<DistributorPo> distributorPos = conn_distributor.findByField("phone", phone);
-		    if(distributorPos != null){ 
+			String password = request.getParameter("password");		
+			//根据手机号 获取 分销商 信息		  
+		    if(conn_distributor.findByField("phone", phone).size()>0){ 
+		    	  List<DistributorPo> distributorPoss = conn_distributor.findByField("phone", phone);
 			//判断分销商属于什么状态
-		   if( distributorPos.get(0).getStatus().equals(DistributorApplyStatus.PASSED)){
-			if (password != null && password.equals(distributorPos.get(0).getPassword())) {
+		   if( distributorPoss.get(0).getStatus().equals(DistributorApplyStatus.PASSED)){
+			if (password != null && password.equals(distributorPoss.get(0).getPassword())) {
 				//登录成功  获的分销商 id 
-				   long distributorId =  distributorPos.get(0).getId();				   				 
+				   long distributorId =  distributorPoss.get(0).getId();				   				 
 				   // 根据 分销商id 查询出中间表 用户id
+				   if(conn_distributorUser.getDistrUserByIds(distributorId).size()>0){
 				   List<DistributorUser> distributorUsers= conn_distributorUser.getDistrUserByIds(distributorId);
-			        long userid=  distributorPos.get(0).getUserId();
+			        long userid=  distributorPoss.get(0).getUserId();
 						for(DistributorUser distributorUser :distributorUsers){						
 							 if(userid == distributorUser.getUserId()) 
 							 { session.setAttribute("userId", distributorUser.getUserId());
 							   state= "success";
-							 }else{
-								  DistributorUser str = new DistributorUser();
-								  str.setDistributorId(distributorPos.get(0).getId());
-								  str.setUserId(distributorPos.get(0).getUserId());
-								   conn_distributorUser.save(distributorUser);
-								   session.setAttribute("userId", distributorPos.get(0).getUserId());
-								   state = "success";	
-								 }     					
 							 }
+						}}else{
+							  DistributorUser str = new DistributorUser();
+							  str.setDistributorId(distributorPoss.get(0).getId());
+							  str.setUserId(distributorPoss.get(0).getUserId());
+							   conn_distributorUser.save(str);
+							   session.setAttribute("userId", distributorPoss.get(0).getUserId());
+							   state = "success";	}
 						}else{state ="1";}
 						}else{state = "2";}		 						 					      	 
-						}else{state ="0";}
-						}else{state = "0";}
+						}else{state ="0";}						
 				           return state;                	   				
 	              }
 
@@ -1056,7 +1054,7 @@ public class NEWDistributorController {
 		String str = session.getAttribute("userId").toString();		
 		stre.put("userId", str);
 		stre.put("msg", "0");
-		session.setAttribute("userId", "0");
+		session.setAttribute("userId", "-1");
 		return new ModelAndView("mobile/guolaiwan/distribute-personal", stre);
 	}
 
