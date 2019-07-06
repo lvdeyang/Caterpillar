@@ -23,7 +23,7 @@ import pub.caterpillar.commons.context.SpringContext;
 import pub.caterpillar.weixin.constants.WXContants;
 
 public class SessionFilter implements Filter {
-    private boolean istest=true;
+    private boolean istest=false;
 	
 	public FilterConfig config;
 
