@@ -423,9 +423,6 @@ $(function() {
    function group(){
    		location.href=window.BASEPATH + 'business/group?merchantId=${merchantId}';
    }  
-   function pick(){
-   		location.href=window.BASEPATH + 'business/pick?merchantId=${merchantId}';
-   }
    function wallet(){
    		location.href=window.BASEPATH + 'pubnum/wallet';
    }
@@ -441,6 +438,10 @@ $(function() {
    function raiders(){
    		location.href=window.BASEPATH + 'business/gotoraiders?merchantId=${merchantId}';
    }
+   function picking(){
+   		location.href=window.BASEPATH + 'business/gotopickinglist?merchantId=${merchantId}';
+   }
+   
 </script>
 
 
@@ -486,12 +487,12 @@ $(function() {
          <li><span>分销</span></li>
          <li onclick="activity()"><img src="lib/images/huodongs.png"/></li>
    	     <li onclick="group()"><img src="lib/images/pintuans.png"/></li>
-         <li><img src="lib/images/caizhais.png"/></li>
+         <li onclick="picking()"><img src="lib/images/caizhais.png"/></li>
          <li onclick="raiders()"><img src="lib/images/gongluess.png"/></li>
          <li onclick="wallet()"><img src="lib/images/qianbaos.png"/></li>
          <li onclick="activity()"><span>活动</span></li>
    	     <li onclick="group()"><span>拼团</span></li>
-         <li onclick="pick()"><span>采摘</span></li>
+         <li onclick="picking()"><span>采摘</span></li>
          <li onclick="raiders()"><span>攻略</span></li>
          <li onclick="wallet()"><span>钱包</span></li>
 	     </ul>
