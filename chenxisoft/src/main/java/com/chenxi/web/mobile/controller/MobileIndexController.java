@@ -28,7 +28,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 @Controller
 @RequestMapping("/login")
 public class MobileIndexController {
-	boolean istest=true;
+	boolean istest=false;
 	@Autowired
 	CacheDao conn_cache;
 	
@@ -46,10 +46,10 @@ public class MobileIndexController {
 				conn_cache.save(cachePo);
 			}
 
-			String redirect = "http://www.yueba.net.cn/chexisoft/login/mobile/index2";
+			String redirect = "http://www.yueba.net.cn/chenxisoft/login/mobile/index2";
 			redirect = URLEncoder.encode(redirect);
 			StringBufferWrapper weixinLogin = new StringBufferWrapper()
-					.append("https://open.weixin.qq.com/connect/oauth2/authorize?appid=").append("")
+					.append("https://open.weixin.qq.com/connect/oauth2/authorize?appid=").append(WXContants.AppId)
 					.append("&redirect_uri=").append(redirect)
 					.append("&response_type=code&scope=snsapi_userinfo&state=" + gState + "#wechat_redirect");
 			mv = new ModelAndView("redirect:" + weixinLogin.toString());
@@ -84,8 +84,8 @@ public class MobileIndexController {
 		// 获取授权access_token
 		if (!istest) {
 			JSONObject params = new JSONObject();
-			params.put("appid", "");
-			params.put("secret", "");
+			params.put("appid", WXContants.AppId);
+			params.put("secret", WXContants.AppSecret);
 			params.put("code", code);
 			params.put("grant_type", "authorization_code");
 			String result = HttpClient.get("https://api.weixin.qq.com/sns/oauth2/access_token", params);
