@@ -91,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                     
 				         html.push('<li class="worker" id="wor-'+data[i].id+'">');
 						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url(/chenxisoft/'+data[i].photo+')"></span></div>');
+						 html.push('        <span style="background-image:url(/'+data[i].photo+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
 						 html.push('		<p style="font-size:13px;">'+data[i].realName+'&nbsp;&nbsp;'+data[i].age+'岁<span style="color:red;margin-left:5px;">(带过'+data[i].orderCount+'个孩子)</span></p>');
 						 html.push('<div style="height:5px;">&nbsp;</div>');
