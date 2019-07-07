@@ -51,10 +51,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<ul class="ui-list ui-list-function ui-border-tb" style="margin-top:45px;">
 	    <li>
 	        <div class="ui-avatar">
-	            <span style="background-image:url(http://placeholder.qiniudn.com/100x100)"></span>
+	            <span style="background-image:url(${user.headPic})"></span>
 	        </div>
 	        <div class="ui-list-info ui-border-t">
-	            <h4 class="ui-nowrap">黄靖宇</h4>
+	            <h4 class="ui-nowrap">${user.nickName}</h4>
 	            <p>积分:0</p>
 	        </div>
 	    </li>

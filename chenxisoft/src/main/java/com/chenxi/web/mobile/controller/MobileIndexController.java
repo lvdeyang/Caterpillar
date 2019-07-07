@@ -28,7 +28,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 @Controller
 @RequestMapping("/login")
 public class MobileIndexController {
-	boolean istest=false;
+	boolean istest=true;
 	@Autowired
 	CacheDao conn_cache;
 	
