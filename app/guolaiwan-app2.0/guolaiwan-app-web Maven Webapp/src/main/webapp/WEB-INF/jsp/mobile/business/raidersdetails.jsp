@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>攻略</title>
+<title>攻略详情</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 
@@ -148,18 +148,17 @@ html, body {
    opacity: 0.8;
    z-index:111111;
 	}
-.gonglue ul{
- float:right;
- height:50px;
- line-height: 50px;
 
-} 
-.gonglue ul li{
- float:left;
- margin:0 5px;
 
+</style>
+<style type="text/css">
+html, body {
+	height: 100%;
 }
-
+#div1 img{
+    width:100%;
+    height:100%;
+}
 </style>
 
 </head>
@@ -177,7 +176,6 @@ html, body {
 <script type="text/javascript">
   /*返回顶部  */
   $(function(){
-  getVideoPics();
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -192,35 +190,37 @@ html, body {
         return false;
 	});
 	});
-	
-	// 南山攻略需要的数据
-  function getVideoPics(){       
-	var url = window.BASEPATH + 'business/getVideoPics?merchantId=${merchantId}';
-	$.get(url, null, function(data){
-	    var html=[];
-	   	for(var i=0;i<data.length;i++){
-	   		  var time=parseInt(((new Date().getTime())-(new Date(data[i].updatetime).getTime()))/(1000*60*60*24));
-	   	      html.push('<a href="javascript:void(0);" onclick="gotoraidersdetails('+data[i].id+')"><div class="main" style="width:100%;height:auto;background:#fff;padding-top:10px;border-radius:10px;margin:5px 0;">');
-		      html.push('<div class="gonglue" style="width:96%;height:auto;margin:0 auto;overflow: hidden;">');
-		      html.push('<img style="width:100%;height:200px" src="'+data[i].textimg+'">');
-		      html.push('<p style="font-size:18px;font-weight:bold;margin:10px auto; ">"'+data[i].textname+'"</p>');
-		      html.push('<p style="font-size:16px;margin:10px 0;overflow : hidden;text-overflow: ellipsis;white-space:nowrap;width:250px;">'+data[i].frist+'</p>');
-		      html.push('<ul>');
-	          html.push('<li><p>'+time+'天前</p></li>');
-	          html.push('<li><p><img style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>111</span>)</p></li>');
-	          html.push('<li><p><img style="width:20px;height:20px;" src="lib/images/dianzanss.png"/>(<span>111</span>)</p></li>');
-	          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>');
-		      html.push('</ul>');
-		      html.push('</div>');
-		   	  html.push('</div></a>');
-		   }		
-	     $('.gl').append(html.join(''));
-	    })
-	} 
-	
-	function gotoraidersdetails(id){
-        location.href=window.BASEPATH + 'business/gotoraidersdetails?id='+id;
-   }
+	$(function() {
+		var htm = [];  
+		var _uri = window.BASEPATH + 'phoneApp/videoPicInfo?vpId=${id}&UserId=0';
+		$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				var json = JSON.parse(data.videoPic.content); //转换json
+                var text= json.title; //获取标题
+				var reg = new RegExp("\n","g");//g,表示全部替换。
+				text=text.replace(reg,"	<br>");//替换
+	            var newdiv = document.getElementById("p1");//添加
+                newdiv.innerHTML = text ;
+                var html = [];//添加头像 用户名
+                html.push('<img class="pic"style="width:50px;height:50px;border-radius: 50%;position: absolute; top: 50%;left:8%;transform: translate(-50%, -50%);" src="'+data.videoPic.user.userHeadimg+'"/ >');
+				html.push('<span class="pid" style="position: absolute; top: 50%;left: 24%;transform: translate(-50%, -50%);color:#586F83;font-size:16px;"> '+data.videoPic.user.userNickname+'</span>')   
+                html.push('<p style="width:100%;padding:0 7%;font-size:12px;position: absolute; top: 65%;left:10%;font-size:14px;color:#586F83;"><span>'+data.videoPic.user.updateTime+'</span><span style="margin-left:5%;">浏览：1111</span></p>');  
+                $('.main_on').append(html.join(''));    
+                  
+                var htm = [];
+                var newdiv =json.content;
+                for(var i =0;i<newdiv.length;i++){
+  				   for(var j in newdiv[i]){
+  				     var   cont =   newdiv[i][j]
+  				     var reg = new RegExp("\n","g");//g,表示全部替换。
+					 cont = cont.toString().replace(reg,"<br>");
+					 var fill =  "img" == j ? "<img  src="+cont+" />" : "type" != j ? cont :'<br/>'; //添加文本图片
+                     htm.push(fill);
+   				   }
+			    }
+                $('#div1').append(htm.join(''));    
+		}); 	
+	});
 </script>
 
 <body>
@@ -232,24 +232,23 @@ html, body {
 				<div class="header-content">商户</div>
 			</div>
 		</div>	
-	   
-	   <!-- <div class="main" style="width:100%;height:auto;background:#fff;padding-top:10px;border-radius:10px;margin:5px 0;">
-	     <div class="gonglue" style="width:96%;height:auto;margin:0 auto;overflow: hidden;">
-	       <img style="width:100%;height:200px" src="lib/images/1.jpg">
-	       <p style="font-size:18px;font-weight:bold;margin:10px auto; ">南山长乐谷</p>
-	       <p style="font-size:16px;margin:10px 0;overflow : hidden;text-overflow: ellipsis;white-space:nowrap;width:250px;">南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷</p>
-	       <ul>
-	        <li><p>1天前</p></li>
-	        <li><p><img style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>111</span>)</p></li>
-	        <li><p><img style="width:20px;height:20px;" src="lib/images/dianzanss.png"/>(<span>111</span>)</p></li>
-	        <li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>
-	       </ul>
-	     </div>
-	   </div> -->
-	   <div class="gl"></div>
-	    
+ 
+        <div class="nav" style="width:100%;height:100%;">
 
-	    <!-- 置顶 -->
+		<div class="main"
+			style="width:90%;height:100%;/* background-color: #ffffff; */margin:3% auto;">
+			<p class="pid_a" id="p1" style="font-weight: bold;font-size:16px;"></p>
+			<div class="main_in" style="height:100%;width:100%;margin:0 auto">
+				<div class="main_on" style="height:10%;position: relative;width:100%;">
+				</div>
+				<div id="div1" style=""></div>
+			
+			</div>
+			
+		</div>
+		
+	</div>
+	  <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
 </body>
 

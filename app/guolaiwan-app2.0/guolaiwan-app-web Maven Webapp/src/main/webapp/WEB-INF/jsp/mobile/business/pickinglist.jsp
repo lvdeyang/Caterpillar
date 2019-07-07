@@ -63,10 +63,9 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>攻略</title>
+<title>采摘商家列表</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
-
 <style type="text/css">
 a {
 	cursor: pointer !important;
@@ -80,7 +79,7 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#E1E1E1 !important; 
+	background:#E0E0E0 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	
@@ -137,7 +136,8 @@ html, body {
 }
   .inp::-webkit-input-placeholder{
         text-align: center;
-} 
+}  
+
 .gotop {
    position: fixed;
    right: 20px;
@@ -148,17 +148,7 @@ html, body {
    opacity: 0.8;
    z-index:111111;
 	}
-.gonglue ul{
- float:right;
- height:50px;
- line-height: 50px;
 
-} 
-.gonglue ul li{
- float:left;
- margin:0 5px;
-
-}
 
 </style>
 
@@ -170,14 +160,58 @@ html, body {
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
- <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
-<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+
 <script type="text/javascript">
-  /*返回顶部  */
+	$(function() {
+	   
+		   getRecomment();
+	});
+	
+	function getRecomment(){
+	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
+		
+		$.get(_uriMerchantInfo, null, function(data){
+			data = parseAjaxResult(data);
+			merchantName = data.shopName + '-过来玩';
+			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
+			merchantUrl = window.location.href;
+			if(data === -1) return;
+			if(data){
+			    var html=[];
+			    var pics=data.shopMpic.split(',');
+				for(var i=0; i<pics.length; i++){
+					var str = pics[i].split('.');
+					if(str[3]!="mp4"&&str[3]!="MP4"){ 
+					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+					}else{
+					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}
+				}
+			    $('.header-content').html(data.shopName);
+				$('.swiper-wrapper').append(html.join(''));
+				$(".swiper-container").swiper({
+			        loop: true,
+			        autoplay: 3000
+			    });
+			    }
+			    });
+	  }
+</script>
+<script>
+$(function(){
+    $(window).scroll(function(){
+        var aa = $(window).scrollTop(); //当前滚动条滚动的距离
+        var bb = $(window).height();//浏览器当前窗口可视区域高度
+        var cc = $(document).height(); //浏览器当前窗口文档的高度 
+      
+        if(cc <= aa+bb){
+            $(".huodong").append($(".huodongs").clone()); 
+        }
+    })
+  })
+ /*返回顶部  */
   $(function(){
-  getVideoPics();
+  getAllMerchant();
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -191,68 +225,72 @@ html, body {
 		$('html,body').animate({'scrollTop':0},500);
         return false;
 	});
-	});
-	
-	// 南山攻略需要的数据
-  function getVideoPics(){       
-	var url = window.BASEPATH + 'business/getVideoPics?merchantId=${merchantId}';
-	$.get(url, null, function(data){
-	    var html=[];
-	   	for(var i=0;i<data.length;i++){
-	   		  var time=parseInt(((new Date().getTime())-(new Date(data[i].updatetime).getTime()))/(1000*60*60*24));
-	   	      html.push('<a href="javascript:void(0);" onclick="gotoraidersdetails('+data[i].id+')"><div class="main" style="width:100%;height:auto;background:#fff;padding-top:10px;border-radius:10px;margin:5px 0;">');
-		      html.push('<div class="gonglue" style="width:96%;height:auto;margin:0 auto;overflow: hidden;">');
-		      html.push('<img style="width:100%;height:200px" src="'+data[i].textimg+'">');
-		      html.push('<p style="font-size:18px;font-weight:bold;margin:10px auto; ">"'+data[i].textname+'"</p>');
-		      html.push('<p style="font-size:16px;margin:10px 0;overflow : hidden;text-overflow: ellipsis;white-space:nowrap;width:250px;">'+data[i].frist+'</p>');
-		      html.push('<ul>');
-	          html.push('<li><p>'+time+'天前</p></li>');
-	          html.push('<li><p><img style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>111</span>)</p></li>');
-	          html.push('<li><p><img style="width:20px;height:20px;" src="lib/images/dianzanss.png"/>(<span>111</span>)</p></li>');
-	          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>');
-		      html.push('</ul>');
-		      html.push('</div>');
-		   	  html.push('</div></a>');
-		   }		
-	     $('.gl').append(html.join(''));
-	    })
-	} 
-	
-	function gotoraidersdetails(id){
-        location.href=window.BASEPATH + 'business/gotoraidersdetails?id='+id;
+}); 
+
+
+	function getAllMerchant(){
+			var url="<%=basePath%>business/getmerchant1";
+           $.post(url,{"merchantId":${merchantId},"code":"采摘"},function(data){
+           	var html=[];
+           	if(data.length==0){
+           		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
+           	}else{
+				for(var i=0; i<data.length; i++){
+					var pics=data[i].shopMpic.split(',');
+			  		 var pingfen=Math.floor(Math.random()*(50-45+1)+45);
+					   html.push('<a href="javascript:void(0);" onclick="gotocomdlist('+data[i].id+')"><div class="main" style="width:95%;height:auto;border-radius:10px;padding:10px 1%;background:#fff; margin:10px auto;overflow: hidden;">');
+					   html.push('<img style="width:48%;height:160px;float:left;border-radius:8px;" src="http://www.guolaiwan.net/file'+data[i].shopHeading+'"/>');
+					   html.push('<div style="width:48%;height:160px;float: right;">');
+					   html.push('<img style="width:100%;height:80px;border-radius:8px;" src="http://www.guolaiwan.net/file'+pics[0]+'"/>');
+					   html.push('<img style="width:100%;height:80px;border-radius:8px;" src="http://www.guolaiwan.net/file'+pics[1]+'"/>');
+				       html.push('</div>');
+				       html.push('<p style="height:20px;line-height: 20px;clear: both;">'+data[i].shopName+'</p>');
+				       html.push('<p style="height:20px;line-height: 20px;clear: both;"><span>现摘现吃，健康营养</span><span style="float:right;font-size:12px;"><span style="color:#EA6E1E;">'+pingfen/10+'分</span>好评率99%</span></p>');
+					   html.push('</div>');
+					   html.push('</div></a>');
+					}
+			}
+	    	$('.huodong').append(html.join(''));
+           })
+	}
+
+  function gotocomdlist(id){
+        location.href=window.BASEPATH + 'business/gotocomdlist?merchantId='+id;
    }
+    
 </script>
 
+
+
+
 <body>
-	<!-- 主页 -->
+			<!-- 主页 -->
 		<div class="header">
+		<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
+				<div class="header-content">商户</div>
+			</div>
 			<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
-		</div>	
-	   
-	   <!-- <div class="main" style="width:100%;height:auto;background:#fff;padding-top:10px;border-radius:10px;margin:5px 0;">
-	     <div class="gonglue" style="width:96%;height:auto;margin:0 auto;overflow: hidden;">
-	       <img style="width:100%;height:200px" src="lib/images/1.jpg">
-	       <p style="font-size:18px;font-weight:bold;margin:10px auto; ">南山长乐谷</p>
-	       <p style="font-size:16px;margin:10px 0;overflow : hidden;text-overflow: ellipsis;white-space:nowrap;width:250px;">南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷南山长乐谷</p>
-	       <ul>
-	        <li><p>1天前</p></li>
-	        <li><p><img style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>111</span>)</p></li>
-	        <li><p><img style="width:20px;height:20px;" src="lib/images/dianzanss.png"/>(<span>111</span>)</p></li>
-	        <li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>
-	       </ul>
-	     </div>
-	   </div> -->
-	   <div class="gl"></div>
-	    
-
-	    <!-- 置顶 -->
+		</div>
+		<div class="content" id="content" >
+			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
+			  </div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 采摘商户列表-->
+   	<div class="huodong">
+   	</div>
+   <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
 </body>
-
 
 
 

@@ -149,6 +149,7 @@ public class BusinessController extends WebBaseControll {
 			List<UserInfoPO> usInfoPO = userDao.getUserByUid(nsVideoPicPO.getUserId());
 			hashMap.put("userimg", usInfoPO.get(0).getUserHeadimg());
 			hashMap.put("username", usInfoPO.get(0).getUserNickname());
+			hashMap.put("id", nsVideoPicPO.getId());
 			hashMap.put("textname", nsVideoPicPO.getName());
 			hashMap.put("textimg", nsVideoPicPO.getHeadPic());
 			hashMap.put("updatetime", nsVideoPicPO.getUpdateTime());
@@ -162,7 +163,6 @@ public class BusinessController extends WebBaseControll {
 					break;
 				}
 			}
-			System.out.println(hashMap.get("frist"));
 			list.add(hashMap);
 		}
 		return list;
@@ -294,27 +294,6 @@ public class BusinessController extends WebBaseControll {
 		return list;
 	}
 
-	// 南山采摘页面
-	@ResponseBody
-	@RequestMapping(value = "/getpark", method = RequestMethod.POST)
-	public List<Object> getPark(long merchantId) throws Exception {
-		List<Object> list = new ArrayList<Object>();
-		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
-		List<MerchantChildrenPO> merchant = merchant_Children.findByField("merchantId", merchantId);
-		for (MerchantChildrenPO merchantChildrenPO : merchant) {
-			List<MerchantPO> Merchant = Mer_chant.getMerchantById(merchantChildrenPO.getChildrenId());
-			for (MerchantPO merchantPO : Merchant) {
-				if (Merchant != null && "006".equals(merchantPO.getModularClassId())) {
-					MerchantVO merch = new MerchantVO();
-					merch.setId(merchantPO.getId());
-					merch.setShopName(merchantPO.getShopName());
-					merch.setShopPic(sysConfig.getWebUrl() + merchantPO.getShopPic());
-					list.add(merch);
-				}
-			}
-		}
-		return list;
-	}
 
 	// 跳转美食页面
 	@ResponseBody
@@ -409,16 +388,6 @@ public class BusinessController extends WebBaseControll {
 		return teams;
 	}
 
-	// 跳转采摘页面
-	@ResponseBody
-	@RequestMapping(value = "/pick", method = RequestMethod.GET)
-	public ModelAndView pick(HttpServletRequest request, long Merchantid) throws Exception {
-		ModelAndView mv = null;
-		mv = new ModelAndView("mobile/business/picking");
-		mv.addObject("merchantid", Merchantid);
-		return mv;
-	}
-
 	// 封装南山美食页面需要的数据
 	@Autowired
 	private MerchantChildrenDao merchantChildrenDao;
@@ -494,7 +463,6 @@ public class BusinessController extends WebBaseControll {
 		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
 		System.out.println(alllist.size()+"--------");
 		return alllist;
-		
 	}
 	
 	
@@ -549,7 +517,7 @@ public class BusinessController extends WebBaseControll {
 		return merlist;
 	}
 	
-	//获得相应的商家
+	//按照modularcode获得相应的商家
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/getmerchant")
@@ -569,7 +537,30 @@ public class BusinessController extends WebBaseControll {
 		}
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(allmerchant, MerchantVO.class);
 		return merlist;
-		
+	}
+	
+	//按照modularclass获得相应的商家
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getmerchant1")
+	public List<MerchantVO> getMerchant1(HttpServletRequest request) throws Exception {
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		String code=request.getParameter("code");
+		List<MerchantPO> allmerchant=new ArrayList<MerchantPO>();
+		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
+		MerchantPO merchantPO = Mer_chant.get(merchantId);
+		if(merchantPO.getModularClass()==code){
+			allmerchant.add(merchantPO);
+		}
+		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
+			System.out.println(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularClass());
+			if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularClass().equals(code)){
+				allmerchant.add(Mer_chant.get(merchantChildrenPO.getChildrenId()));
+			}
+		}
+		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(allmerchant, MerchantVO.class);
+		System.out.println(merlist.size());
+		return merlist;
 	}
 	
 	// 搜索住宿的店家
@@ -616,6 +607,45 @@ public class BusinessController extends WebBaseControll {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		mv = new ModelAndView("mobile/business/raiders");
 		mv.addObject("merchantId", merchantId);
+		return mv; 
+	}
+	
+	//攻略详情页面
+	@ResponseBody
+	@RequestMapping(value = "/gotoraidersdetails")
+	public ModelAndView goToRaidersdetails(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long id=Long.parseLong(request.getParameter("id"));
+		mv = new ModelAndView("mobile/business/raidersdetails");
+		mv.addObject("id", id);
+		return mv; 
+	}
+	
+	//套餐购买页面
+	@ResponseBody
+	@RequestMapping(value = "/gotopickinglist")
+	public ModelAndView goToPickingList(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		System.out.println("666666666");
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		System.out.println(merchantId);
+		mv = new ModelAndView("mobile/business/pickinglist");
+		mv.addObject("merchantId", merchantId);
+		return mv; 
+	}
+	
+	//套餐购买页面
+	@ResponseBody
+	@RequestMapping(value = "/gotocomdlist")
+	public ModelAndView goToComdList(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		System.out.println("666666666");
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		MerchantPO merchant = Mer_chant.get(merchantId);
+		System.out.println(merchantId);
+		mv = new ModelAndView("mobile/business/comdlist");
+		mv.addObject("merchantId", merchantId);
+		mv.addObject("merchant", merchant);
 		return mv; 
 	}
 	
