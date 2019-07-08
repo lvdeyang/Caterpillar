@@ -230,8 +230,9 @@ html, body {
 <script>
 $(function(){
 	
-	var pingfen=Math.floor(Math.random()*(50-46+1)+46);
-	$('.pingfen').html(pingfen/10+"分");
+	var pingfen=(${pingfen}+46)/10;
+	if(pingfen>5)pingfen=5;
+	$('.pingfen').html(pingfen+"分");
     $(window).scroll(function(){
         var aa = $(window).scrollTop(); //当前滚动条滚动的距离
         var bb = $(window).height();//浏览器当前窗口可视区域高度

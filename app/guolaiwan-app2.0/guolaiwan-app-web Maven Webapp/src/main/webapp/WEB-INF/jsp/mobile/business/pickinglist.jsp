@@ -232,20 +232,21 @@ $(function(){
 			var url="<%=basePath%>business/getmerchant1";
            $.post(url,{"merchantId":${merchantId},"code":"采摘"},function(data){
            	var html=[];
-           	if(data.length==0){
+           	if(data.merlist.length==0){
            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
            	}else{
-				for(var i=0; i<data.length; i++){
-					var pics=data[i].shopMpic.split(',');
-			  		 var pingfen=Math.floor(Math.random()*(50-45+1)+45);
-					   html.push('<a href="javascript:void(0);" onclick="gotocomdlist('+data[i].id+')"><div class="main" style="width:95%;height:auto;border-radius:10px;padding:10px 1%;background:#fff; margin:10px auto;overflow: hidden;">');
-					   html.push('<img style="width:48%;height:160px;float:left;border-radius:8px;" src="http://www.guolaiwan.net/file'+data[i].shopHeading+'"/>');
+				for(var i=0; i<data.merlist.length; i++){
+					var pics=data.merlist[i].shopMpic.split(',');
+			  		 var pingfen=(data.pingfens[i]+46)/10;
+				  		 if(pingfen>5)pingfen=5;
+					   html.push('<a href="javascript:void(0);" onclick="gotocomdlist('+data.merlist[i].id+')"><div class="main" style="width:95%;height:auto;border-radius:10px;padding:10px 1%;background:#fff; margin:10px auto;overflow: hidden;">');
+					   html.push('<img style="width:48%;height:160px;float:left;border-radius:8px;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');
 					   html.push('<div style="width:48%;height:160px;float: right;">');
 					   html.push('<img style="width:100%;height:80px;border-radius:8px;" src="http://www.guolaiwan.net/file'+pics[0]+'"/>');
 					   html.push('<img style="width:100%;height:80px;border-radius:8px;" src="http://www.guolaiwan.net/file'+pics[1]+'"/>');
 				       html.push('</div>');
-				       html.push('<p style="height:20px;line-height: 20px;clear: both;">'+data[i].shopName+'</p>');
-				       html.push('<p style="height:20px;line-height: 20px;clear: both;"><span>现摘现吃，健康营养</span><span style="float:right;font-size:12px;"><span style="color:#EA6E1E;">'+pingfen/10+'分</span>好评率99%</span></p>');
+				       html.push('<p style="height:20px;line-height: 20px;clear: both;">'+data.merlist[i].shopName+'</p>');
+				       html.push('<p style="height:20px;line-height: 20px;clear: both;"><span>现摘现吃，健康营养</span><span style="float:right;font-size:12px;"><span style="color:#EA6E1E;">'+pingfen+'分</span>好评率99%</span></p>');
 					   html.push('</div>');
 					   html.push('</div></a>');
 					}
