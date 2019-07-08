@@ -211,6 +211,7 @@ public class BusinessController extends WebBaseControll {
 
 			hashMap.put("url", productlist.get(arr[i]).getProductShowPic());
 			hashMap.put("id", productlist.get(arr[i]).getId());
+			hashMap.put("pingfen", orderInfoDao.GetCountbyPage(id)/100);
 			// 根据id统计多少人来个
 			List<OrderInfoPO> newgetAllOrder = orderInfoDao.newgetAllOrder(productlist.get(arr[i]).getId());
 
@@ -448,6 +449,7 @@ public class BusinessController extends WebBaseControll {
 		System.out.println(merchantId);
 		mv = new ModelAndView("mobile/business/preferably");
 		mv.addObject("merchantId", merchantId);
+		mv.addObject("pingfen", orderInfoDao.GetCountbyPage(merchantId)/100);
 		return mv; 
 	}
 	
