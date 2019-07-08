@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <label class="layui-form-label">身份证照片</label>
 	    <div class="layui-input-block">
 	      <c:if test="${!empty worker.idCardPhoto}">
-	           <image src="/chenxisoft/${worker.idCardPhoto}" style="width:300px;height:200px;"/>
+	           <image src="/${worker.idCardPhoto}" style="width:300px;height:200px;"/>
 	      </c:if>
 	      
 	    </div>
@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <label class="layui-form-label">健康证明</label>
 	    <div class="layui-input-block">
 	      <c:if test="${!empty worker.healthPhoto}">
-	           <image src="/chenxisoft/${worker.healthPhoto}" style="width:300px;height:200px;"/>
+	           <image src="/${worker.healthPhoto}" style="width:300px;height:200px;"/>
 	      </c:if>
 	   
 	    </div>
@@ -39,7 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <label class="layui-form-label">专业照片</label>
 	    <div class="layui-input-block">
 	      <c:if test="${!empty worker.healthPhoto}">
-	          <image src="/chenxisoft/${worker.expertPhoto}" style="width:300px;height:200px;"/>
+	          <image src="/${worker.expertPhoto}" style="width:300px;height:200px;"/>
 	      </c:if>
 	      
 	    </div>

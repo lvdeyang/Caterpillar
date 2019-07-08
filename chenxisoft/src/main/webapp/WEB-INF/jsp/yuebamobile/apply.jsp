@@ -78,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                    基本信息
 	        </div>
 	        <div id="status" style="font-size:12px;color:red;width:100%;text-align:center;display:none;">审核中</div>
-	        <form action="">
+
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                                        姓名*
@@ -154,7 +154,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            <input type="hidden" id="certificate-input" name="expertPhoto"/>
 		        </div>
 		        
-		    </form>
+		 
 	        
 	        <div class="ui-btn-wrap">
 	            <button id="doApply" class="ui-btn-lg ui-btn-primary" style="background:#FFC0CB">
@@ -162,6 +162,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            </button>
 	            
 	        </div>
+	        
+	        <div id="loading" class="ui-loading-block show" style="display:none">
+			    <div class="ui-loading-cnt">
+			        <i class="ui-loading-bright"></i>
+			        <p>正在上传，请不要关闭页面......</p>
+			    </div>
+			</div>
+	        
+	        
 	</div>
 	
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
@@ -189,12 +198,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		     function  getPhoto() {
 	    
 			    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	            var _uri = window.BASEPATH + 'login/wx/prev?url='+reqUrl;
+	            var _uri = window.BASEPATH + 'worker/wx/prev?url='+reqUrl;
 				$.get(_uri, null, function(data){
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					if(data){
-					    
+					
 						share=data;
 						wx.config({
 				            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -253,15 +262,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                success: function (res) {
 	                    var localData = res.localData;
 	                    var sear=new RegExp(',');
-                        if(sear.test(str)) {
+                        if(sear.test(localData )) {
                           arr=str.split(',');//注split可以用字符或字符串分割
                           localData=arr[1];
-                        }else{
-                          localData=localData; 
                         }
-                       
-					    $('#'+photoId+'-pic').attr('src','data:image/png;base64,'+localData);
-	                    $('#'+photoId+'-pic').show();
+                                
+		    $('#'+photoId+'-pic').attr('src','data:image/png;base64,'+localData);
+                                    $('#'+photoId+'-pic').show();
 	                    $('#'+photoId+'-input').val(localData);
 
 	                }
@@ -270,6 +277,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
 	        }
 	        $(document).on('click','#doApply',function(){
+	            $('#loading').show();
 	            var params={};
 	            params.realName=$('#name').val();
 	            params.idCard=$('#idStr').val();
@@ -282,8 +290,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            params.age=$('#age').val();
                 var _uri = window.BASEPATH + 'worker/mobile/apply.do';
 		        $.post(_uri, params, function(data){
-			        location.href=location.href;
-				});       
+			        location.href=window.BASEPATH + 'worker/mobile/apply';
+			        $('#loading').hide();
+				}); 
+				     
 	        });
 	          
 	     });

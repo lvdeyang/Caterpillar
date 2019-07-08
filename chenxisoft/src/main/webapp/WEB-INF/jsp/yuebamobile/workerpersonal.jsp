@@ -53,10 +53,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<ul class="ui-list ui-list-function ui-border-tb" style="margin-top:50px;">
 		    <li>
 		        <div class="ui-avatar">
-		            <span style="background-image:url(http://placeholder.qiniudn.com/100x100)"></span>
+		            <span style="background-image:url(/${worker.photo})"></span>
 		        </div>
 		        <div class="ui-list-info ui-border-t">
-		            <h4 class="ui-nowrap">黄靖宇</h4>
+		            <h4 class="ui-nowrap">${worker.realName}</h4>
 		            <p>历史佣金:0</p>
 		        </div>
 		    </li>
@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<c:if test="${worker.status eq 'REFUSE'}">
 	   <div style="text-align:center;font-size:12px;color:red;margin-top:45px;">审核不通过:${worker.checkMsg}</div>
 	   <div class="ui-btn-wrap">
-           <button id="reapply" class="ui-btn-lg ui-btn-primary">
+           <button id="reapply" class="ui-btn-lg ui-btn-primary"  style="background:#FFC0CB">
                                     重新申请
            </button>   
 	   </div>

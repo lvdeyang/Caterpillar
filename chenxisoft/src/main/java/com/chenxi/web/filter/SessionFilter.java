@@ -43,7 +43,7 @@ public class SessionFilter implements Filter {
 		if (hrequest.getHeader("user-agent") != null) {
 			userAgent = hrequest.getHeader("user-agent").toLowerCase();
 		}
-		if(!hrequest.getRequestURI().contains("/login/index")&&!hrequest.getRequestURI().contains("/login/login.do")&&
+		if(userAgent.indexOf("windows")==-1&&!hrequest.getRequestURI().contains("/login/index")&&!hrequest.getRequestURI().contains("/login/login.do")&&
 				!hrequest.getRequestURI().contains("spider")&&!"admin".equals(session.getAttribute("type"))&&session.getAttribute("userId")==null){
 			if (userAgent.indexOf("micromessenger") > -1&&!istest) {
 				if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")) {

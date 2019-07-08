@@ -41,7 +41,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        <li></li>
 	    </ul>
     </div>
-	<div class="demo-item">
+	<div class="demo-item" >
 		<div class="demo-block">
 			<ul id="articleList" class="ui-list ui-border-tb ">
 				
@@ -50,7 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		
 	</div>
-	<div class="ui-loading-wrap" id="loading" style="display:none">
+	<div class="ui-loading-wrap" id="loading" style="display:none;padding-bottom:50px;">
             <p>加载中</p>
             <i class="ui-loading"></i>
     </div>

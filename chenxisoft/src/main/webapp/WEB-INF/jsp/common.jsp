@@ -47,7 +47,7 @@
     	$(document).on('click','.bottomMenu',function(){
     	
     	 
-    	   location.href=$(this).attr('data');
+    	   location.href=$(this).attr('data')+'?timestamp='+((new Date()).getTime()+Math.random());
     	
     	});
     	

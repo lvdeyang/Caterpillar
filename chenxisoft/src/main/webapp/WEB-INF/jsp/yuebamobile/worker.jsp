@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      border:1px solid #CCC;
    }
    #imageContent{
-     width:90%;margin-left:3px;
+     width:95%;margin-left:3px;
    }
    #imageContent img{
      width:100px;
@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          
        
     </header>
-	<image src="/chenxisoft${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
+	<image src="/${worker.photo}" style="width:100%;height:350px;margin-top:45px;">
 	<div class="ui-form ui-border-t">
 	        <div class="ftitle">
 	                                    基本信息
@@ -128,13 +128,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	        <div id="imageContent">
 	            <c:if test="${!empty worker.idCardPhoto}">
-	                <image src="/chenxisoft${worker.idCardPhoto}" style="margin-left:12px;">
+	                <image src="/${worker.idCardPhoto}" style="margin-left:12px;">
 	            </c:if>
 	            <c:if test="${!empty worker.healthPhoto}">
-	                <image src="/chenxisoft${worker.healthPhoto}" style="margin-left:12px;">
+	                <image src="/${worker.healthPhoto}" style="margin-left:12px;">
 	            </c:if>
 	            <c:if test="${!empty worker.expertPhoto}">
-	                <image src="/chenxisoft${worker.expertPhoto}" style="margin-left:12px;">
+	                <image src="/${worker.expertPhoto}" style="margin-left:12px;">
 	            </c:if>
 	        </div>
 	        <div class="ftitle" style="float:left">

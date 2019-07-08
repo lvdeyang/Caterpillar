@@ -1,6 +1,9 @@
 package com.chenxi.web.yueba.mobile.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +33,7 @@ import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
 import com.chenxi.web.po.ProductPo;
 import com.chenxi.web.util.Img2Base64Util;
+import com.chenxi.web.weixin.JsTicketUtil;
 import com.chenxi.web.yueba.admin.dao.ComboDao;
 import com.chenxi.web.yueba.admin.dao.CommentDao;
 import com.chenxi.web.yueba.admin.dao.DaysTypeDao;
@@ -48,6 +52,7 @@ import net.sf.ehcache.search.parser.MValue;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
+import pub.caterpillar.weixin.constants.WXContants;
 
 @Controller
 @RequestMapping("/worker")
@@ -72,7 +77,7 @@ public class MWorkerContoller extends BaseController {
 	public ModelAndView index(HttpServletRequest request,long workerId) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		WorkerPo workerPo=conn_worker.get(workerId);
-		workerPo.setOrderCount(conn_order.countCompleteByWorker(workerPo.getId()));
+		workerPo.setOrderCount(workerPo.getBaseOrderCount()+conn_order.countCompleteByWorker(workerPo.getId()));
 		strMap.put("worker", workerPo);
 		
 		StringBuffer sb=new StringBuffer();
@@ -185,29 +190,89 @@ public class MWorkerContoller extends BaseController {
 		HttpSession session = request.getSession();
 		Object openid=session.getAttribute("openid");
 		workerPo.setOpenId(openid+"");
-		String shortPhotoPath="file"+File.separator+UUID.randomUUID()+".jpg";
-		String photoPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoPath;
-		Img2Base64Util.generateImage(photo,photoPath);
-		workerPo.setPhoto(photoPath);
 		
-		String shortIdPhotoPath="file"+File.separator+UUID.randomUUID()+".jpg";
-		String photoIdPath=SystemConfig.IMAGE_PATH+File.separator+shortIdPhotoPath;
-		Img2Base64Util.generateImage(idCardPhoto,photoIdPath);
-		workerPo.setIdCardPhoto(photoIdPath);
 		
-		String shortPhotoHealthPath="file"+File.separator+UUID.randomUUID()+".jpg";
-		String photoHealthPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoHealthPath;
-		Img2Base64Util.generateImage(healthPhoto,photoHealthPath);
-		workerPo.setPhoto(photoHealthPath);
+		File file=new File(SystemConfig.IMAGE_PATH+File.separator+"file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd"));
+		if(!file.exists()){//如果文件夹不存在
+			file.mkdir();//创建文件夹
+		}
+
 		
-		String shortPhotoExPath="file"+File.separator+UUID.randomUUID()+".jpg";
-		String photoExPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoExPath;
-		Img2Base64Util.generateImage(expertPhoto,photoExPath);
-		workerPo.setPhoto(photoExPath);
+		
+		if(photo!=null&&!photo.isEmpty()){
+			String shortPhotoPath="file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd")+File.separator+UUID.randomUUID()+".jpg";
+			String photoPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoPath;
+			Img2Base64Util.generateImage(photo,photoPath);
+			System.out.println(shortPhotoPath);
+			workerPo.setPhoto(shortPhotoPath);
+		}
+		if(idCardPhoto!=null&&!idCardPhoto.isEmpty()){
+			String shortIdPhotoPath="file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd")+File.separator+UUID.randomUUID()+".jpg";
+			String photoIdPath=SystemConfig.IMAGE_PATH+File.separator+shortIdPhotoPath;
+			Img2Base64Util.generateImage(idCardPhoto,photoIdPath);
+			workerPo.setIdCardPhoto(shortIdPhotoPath);
+		}
+		
+		if(healthPhoto!=null&&!healthPhoto.isEmpty()){
+			String shortPhotoHealthPath="file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd")+File.separator+UUID.randomUUID()+".jpg";
+			String photoHealthPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoHealthPath;
+			Img2Base64Util.generateImage(healthPhoto,photoHealthPath);
+			workerPo.setHealthPhoto(shortPhotoHealthPath);
+		}
+		
+		if(expertPhoto!=null&&!expertPhoto.isEmpty()){
+			String shortPhotoExPath="file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd")+File.separator+UUID.randomUUID()+".jpg";
+			String photoExPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoExPath;
+			Img2Base64Util.generateImage(expertPhoto,photoExPath);
+			workerPo.setExpertPhoto(shortPhotoExPath);
+		}
 		
 		conn_worker.save(workerPo);
 		
 		return "success";
+	}
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/wx/prev")
+	public Object preScan(HttpServletRequest request, String url) {
+		url = url.replace("FISH", "&");
+		System.out.println(url);
+		Map ret = new HashMap();
+		String jsapi_ticket = JsTicketUtil.getJsapiTicket();
+		String nonce_str = JsTicketUtil.create_nonce_str();
+		String timestamp = JsTicketUtil.create_timestamp();
+		String string1;
+		String signature = "";
+		int length = url.indexOf("#");
+		String uri = url;
+		if (length > 0) {
+			uri = url.substring(0, length);// 当前网页的URL，不包含#及其后面部分
+		}
+		// 注意这里参数名必须全部小写，且必须有序
+		string1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonce_str + "&timestamp=" + timestamp + "&url=" + url;
+		System.out.println(string1);
+		try {
+			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+			crypt.reset();
+			crypt.update(string1.getBytes("UTF-8"));
+			signature = JsTicketUtil.byteToHex(crypt.digest());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println(signature);
+		System.out.println(WXContants.AppId);
+		ret.put("appId", WXContants.AppId);
+		ret.put("url", uri);
+		ret.put("jsapi_ticket", jsapi_ticket);
+		ret.put("nonceStr", nonce_str);
+		ret.put("timestamp", timestamp);
+		ret.put("signature", signature);
+
+		return ret;
 	}
 
 }
