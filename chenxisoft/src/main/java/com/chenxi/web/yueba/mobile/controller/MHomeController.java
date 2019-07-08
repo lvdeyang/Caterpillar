@@ -38,9 +38,9 @@ public class MHomeController {
 	@JsonBody
 	@RequestMapping(value = "/getworkers", method = RequestMethod.GET)
 	public Object getworkers(HttpServletRequest request,int currPage,int pageCount) throws Exception {
-		List<WorkerPo> workerPos=conn_worker.findAll(currPage, pageCount);
+		List<WorkerPo> workerPos=conn_worker.findPassWorkersAndPage(currPage, pageCount);
 		for (WorkerPo workerPo : workerPos) {
-			workerPo.setOrderCount(conn_order.countByField("workerId",workerPo.getId()));
+			workerPo.setOrderCount(workerPo.getBaseOrderCount()+conn_order.countByField("workerId",workerPo.getId()));
 		}
 		return workerPos;
 	}

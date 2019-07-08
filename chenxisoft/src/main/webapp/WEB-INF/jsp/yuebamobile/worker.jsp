@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          
        
     </header>
-	<image src="/${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
+	<image src="/${worker.photo}" style="width:100%;height:350px;margin-top:45px;">
 	<div class="ui-form ui-border-t">
 	        <div class="ftitle">
 	                                    基本信息

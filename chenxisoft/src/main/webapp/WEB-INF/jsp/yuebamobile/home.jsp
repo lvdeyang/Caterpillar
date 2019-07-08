@@ -31,7 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          
     </header>
 	
-	<div class="demo-item" style="margin-top:45px;">
+	<div class="demo-item" style="margin-top:45px;padding-bottom:50px;">
 		<div class="demo-block">
 			<ul id="workerList" class="ui-list ui-border-tb ">
 				
