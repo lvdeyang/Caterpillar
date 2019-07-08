@@ -77,7 +77,7 @@ public class MWorkerContoller extends BaseController {
 	public ModelAndView index(HttpServletRequest request,long workerId) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		WorkerPo workerPo=conn_worker.get(workerId);
-		workerPo.setOrderCount(conn_order.countCompleteByWorker(workerPo.getId()));
+		workerPo.setOrderCount(workerPo.getBaseOrderCount()+conn_order.countCompleteByWorker(workerPo.getId()));
 		strMap.put("worker", workerPo);
 		
 		StringBuffer sb=new StringBuffer();
@@ -190,28 +190,38 @@ public class MWorkerContoller extends BaseController {
 		HttpSession session = request.getSession();
 		Object openid=session.getAttribute("openid");
 		workerPo.setOpenId(openid+"");
-		if(photo!=null){
-			String shortPhotoPath="file"+File.separator+UUID.randomUUID()+".jpg";
+		
+		
+		File file=new File(SystemConfig.IMAGE_PATH+File.separator+"file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd"));
+		if(!file.exists()){//如果文件夹不存在
+			file.mkdir();//创建文件夹
+		}
+
+		
+		
+		if(photo!=null&&!photo.isEmpty()){
+			String shortPhotoPath="file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd")+File.separator+UUID.randomUUID()+".jpg";
 			String photoPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoPath;
 			Img2Base64Util.generateImage(photo,photoPath);
+			System.out.println(shortPhotoPath);
 			workerPo.setPhoto(shortPhotoPath);
 		}
-		if(idCardPhoto!=null){
-			String shortIdPhotoPath="file"+File.separator+UUID.randomUUID()+".jpg";
+		if(idCardPhoto!=null&&!idCardPhoto.isEmpty()){
+			String shortIdPhotoPath="file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd")+File.separator+UUID.randomUUID()+".jpg";
 			String photoIdPath=SystemConfig.IMAGE_PATH+File.separator+shortIdPhotoPath;
 			Img2Base64Util.generateImage(idCardPhoto,photoIdPath);
 			workerPo.setIdCardPhoto(shortIdPhotoPath);
 		}
 		
-		if(healthPhoto!=null){
-			String shortPhotoHealthPath="file"+File.separator+UUID.randomUUID()+".jpg";
+		if(healthPhoto!=null&&!healthPhoto.isEmpty()){
+			String shortPhotoHealthPath="file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd")+File.separator+UUID.randomUUID()+".jpg";
 			String photoHealthPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoHealthPath;
 			Img2Base64Util.generateImage(healthPhoto,photoHealthPath);
 			workerPo.setHealthPhoto(shortPhotoHealthPath);
 		}
 		
-		if(expertPhoto!=null){
-			String shortPhotoExPath="file"+File.separator+UUID.randomUUID()+".jpg";
+		if(expertPhoto!=null&&!expertPhoto.isEmpty()){
+			String shortPhotoExPath="file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd")+File.separator+UUID.randomUUID()+".jpg";
 			String photoExPath=SystemConfig.IMAGE_PATH+File.separator+shortPhotoExPath;
 			Img2Base64Util.generateImage(expertPhoto,photoExPath);
 			workerPo.setExpertPhoto(shortPhotoExPath);

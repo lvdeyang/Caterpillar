@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<c:if test="${worker.status eq 'REFUSE'}">
 	   <div style="text-align:center;font-size:12px;color:red;margin-top:45px;">审核不通过:${worker.checkMsg}</div>
 	   <div class="ui-btn-wrap">
-           <button id="reapply" class="ui-btn-lg ui-btn-primary">
+           <button id="reapply" class="ui-btn-lg ui-btn-primary"  style="background:#FFC0CB">
                                     重新申请
            </button>   
 	   </div>

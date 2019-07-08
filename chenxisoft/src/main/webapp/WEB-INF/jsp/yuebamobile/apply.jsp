@@ -162,6 +162,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            </button>
 	            
 	        </div>
+	        
+	        <div id="loading" class="ui-loading-block show" style="display:none">
+			    <div class="ui-loading-cnt">
+			        <i class="ui-loading-bright"></i>
+			        <p>正在上传，请不要关闭页面......</p>
+			    </div>
+			</div>
+	        
+	        
 	</div>
 	
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
@@ -268,6 +277,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
 	        }
 	        $(document).on('click','#doApply',function(){
+	            $('#loading').show();
 	            var params={};
 	            params.realName=$('#name').val();
 	            params.idCard=$('#idStr').val();
@@ -280,7 +290,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            params.age=$('#age').val();
                 var _uri = window.BASEPATH + 'worker/mobile/apply.do';
 		        $.post(_uri, params, function(data){
-			        location.href=location.href;
+			        location.href=window.BASEPATH + 'worker/mobile/apply';
+			        $('#loading').hide();
 				}); 
 				     
 	        });

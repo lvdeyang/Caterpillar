@@ -31,6 +31,7 @@ public class WorkerPo extends AbstractBasePO{
 	private String lon;
 	private int ration;//百分比
 	private int orderCount;
+	private int baseOrderCount;
 	private String level;
 	private String moreMsg;
 	
@@ -157,6 +158,12 @@ public class WorkerPo extends AbstractBasePO{
 	}
 	public void setMoreMsg(String moreMsg) {
 		this.moreMsg = moreMsg;
+	}
+	public int getBaseOrderCount() {
+		return baseOrderCount;
+	}
+	public void setBaseOrderCount(int baseOrderCount) {
+		this.baseOrderCount = baseOrderCount;
 	}
 	
 	
