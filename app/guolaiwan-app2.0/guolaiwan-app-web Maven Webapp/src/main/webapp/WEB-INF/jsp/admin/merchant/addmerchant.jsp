@@ -178,8 +178,7 @@
         table.render({                  /*3.引入table*/
          elem:'#merchantList'
          ,method:'post'
-         ,url:'lists.do'
-         ,date:{"merchantId":${merchantId}}
+         ,url:'list.do'
          ,page:true
          ,limits: [10,30,50,100]
          ,limit: 10
@@ -208,7 +207,7 @@
       
       var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	
-		function sel(id,shopName) {
+      function sel(id,shopName) {
 		
 		$.ajax({
                     type:"post",
@@ -217,10 +216,9 @@
                           "merchantId":${merchantId}                        
                     },
                     success:function(msg){
-                    if(msg == "success"){
-                    window.parent.location.reload();
-                    
+                    if(msg == "success"){                                   
                     layer.msg("添加成功！");
+                    window.parent.location.reload();
                     }
                    if(msg == "false"){
                     
@@ -229,7 +227,7 @@
                   
                     }
                   }) 	
-		}     
+		}  
             </script>
 </body>
 </html>

@@ -170,8 +170,9 @@ html, body {
 	$(function() {
 	getRecomment();
 	getProduct();
-	var pingfen=Math.floor(Math.random()*(50-46+1)+46);
-    $('.pingfen').html(pingfen/10+"分") ; 
+	var pingfen=${pingfen}+46/10;
+	if(pingfen>5)pingfen=5;
+    $('.pingfen').html(pingfen+"分") ; 
 	});
 
 
