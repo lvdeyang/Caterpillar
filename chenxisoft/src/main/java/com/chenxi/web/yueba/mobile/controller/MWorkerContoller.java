@@ -103,11 +103,11 @@ public class MWorkerContoller extends BaseController {
         
         strMap.put("comments",conn_comment.findByworkerId(workerId, 1, 3));
         
-        strMap.put("childCount", conn_order.countByField("workerId", workerId));
+        strMap.put("childCount", workerPo.getBaseOrderCount()+conn_order.countByField("workerId", workerId));
         OrderPo currentOrder=conn_order.findMaxWorderOrder(workerId);
         String minDate=DateUtil.format(new Date(),"yyyy-MM-dd");
         if(currentOrder!=null){
-        	minDate=DateUtil.format(DateUtil.addHour(currentOrder.getFromDate(),currentOrder.getDays()+1),"yyyy-MM-dd");
+        	minDate=DateUtil.format(DateUtil.addDay(currentOrder.getFromDate(),currentOrder.getDays()+1),"yyyy-MM-dd");
         }
         
 		strMap.put("minDate", minDate);
