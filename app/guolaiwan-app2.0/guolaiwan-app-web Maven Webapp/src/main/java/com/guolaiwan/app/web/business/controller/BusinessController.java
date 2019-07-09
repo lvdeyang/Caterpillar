@@ -433,14 +433,22 @@ public class BusinessController extends WebBaseControll {
 	@RequestMapping(value = "/getallproduct")
 	public List<ProductVO> getAllProduct(HttpServletRequest request) throws Exception {
 		int page=Integer.parseInt(request.getParameter("page"));
+		String type=request.getParameter("type");
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		System.out.println(page);
-		List<ProductPO> allproduct = conn_product.findByProductClassCode("0016", page, 6);
+		List<ProductVO> list =new ArrayList<ProductVO>();
+		List<ProductPO> allproduct = conn_product.findByProductClassCode(type, page, 6);
 		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
-		System.out.println(listvo.size());
-		return listvo;
+		for (ProductVO productVO : listvo) {
+			if(productVO.getProductMerchantID()==merchantId){
+				list.add(productVO);
+			}
+		}
+		System.out.println(list.size());
+		return list;
 	}
 	
-	// 支付完成页面
+	// 去为你优选
 	@ResponseBody
 	@RequestMapping(value = "/gotopreferably")
 	public ModelAndView goToPreferably(HttpServletRequest request) throws Exception {
@@ -656,7 +664,6 @@ public class BusinessController extends WebBaseControll {
 	@RequestMapping(value = "/gotocomdlist")
 	public ModelAndView goToComdList(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
-		System.out.println("666666666");
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		MerchantPO merchant = Mer_chant.get(merchantId);
 		System.out.println(merchantId);
@@ -664,7 +671,7 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("merchant", merchant);
 		mv.addObject("pingfen", orderInfoDao.GetCountbyPage(merchantId)/100);
-		return mv; 
+		return mv;
 	}
 	
 	

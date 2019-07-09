@@ -47,15 +47,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 停车场图片 </label>
+				<div class="layui-upload-list">
+					<img class="layui-upload-img" src="<%=basePath %>${po.parkingImg}"
+						name="posta" id="demo" value="" style="width:280px;"> <input
+						type="hidden" id="shopPicImg" name="shopPicImg" lay-verify="title"
+						autocomplete="off" class="layui-input" >
+				</div>
 				<div class="layui-input-inline">
 					<div class="layui-upload">
-						<button type="button" class="layui-btn" id="test"> 上传图片 </button>
-						<div class="layui-upload-list">
-							<img class="layui-upload-img" src="<%=basePath %>${po.parkingImg}" id="demo" style="width:280px;">
-						</div>
-					</div>   
+						<a
+							href="javascript:openMap('上传图片','<%=request.getContextPath()%>/admin/picture/sellist?sel=shopPicImg&img=demo','600','400')"
+							class="layui-btn layui-btn-xs"
+							style=" height:30px; width:90px;margin-left:5px;margin-right:5px">更换图片</a>
+
+					</div>
 				</div>
 			</div>
+
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 总停放位 </label>
 				<div class="layui-input-block">
@@ -128,6 +136,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=request.getContextPath()%>/layui/js/x-layui.js" charset="utf-8"> </script>
 
 	<script>
+	 //打开分类
+            function openMap (title,url,w,h) {
+                x_admin_show(title,url,w,h); 
+            }
 		layui.use(['form','layer','laydate','upload'], function(){
 			$ = layui.jquery;
 			var form = layui.form

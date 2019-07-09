@@ -25,6 +25,7 @@ import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
 import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.thoughtworks.xstream.mapper.Mapper.Null;
 
 import pub.caterpillar.mvc.controller.BaseController;
 
@@ -38,7 +39,6 @@ public class ParkManagementController extends BaseController {
 	private ParkingPositionDao parkingPositionDao; // 车位表
 	@Autowired
 	private SysConfigDAO conn_sysConfig;
-
 	// 停车场列表页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView getList(HttpServletRequest request) {
@@ -60,6 +60,9 @@ public class ParkManagementController extends BaseController {
 		int allcount = attractionsDao.CountByPageC();
 		List<AttractionsParkingVO> listvo = AttractionsParkingVO.getConverter(AttractionsParkingVO.class)
 				.convert(listpo, AttractionsParkingVO.class);
+		for (AttractionsParkingVO attractionsParkingVO : listvo) {
+			attractionsParkingVO.setParkingImg( conn_sysConfig.getSysConfig().getWebUrl() +attractionsParkingVO.getParkingImg());
+		}
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("data", listvo);
@@ -91,22 +94,8 @@ public class ParkManagementController extends BaseController {
 		}
 		String folderName = "/id_" + fileUserId; // 文件名
 		String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/parkingPic" + folderName;
-		// 文件名
-		String fileName = file.getOriginalFilename();
-		String newName = d.getTime() + fileName.substring(fileName.lastIndexOf(".")); // 时间戳+后缀名
-		File folder = new File(path);
-		if (folder.exists() == false) { // 如果路径不存在
-			if (folder.getParentFile().exists() == false) {
-				map.put("code", "1");
-				map.put("message", "文件路径错误！");
-				return map;
-			}
-			folder.mkdir();
-		}
-		// 上传
-		File newFile = new File(path + "/" + newName);
-		file.transferTo(newFile);
-		po.setParkingImg("/parkingPic" + folderName + "/" + newName);
+		String img = request.getParameter("parkingshopImg");
+		po.setParkingImg(img);
 		po.setAttractionsId(fileUserId);
 		attractionsDao.save(po);
 		map.put("code", "0");
@@ -132,7 +121,6 @@ public class ParkManagementController extends BaseController {
 	@RequestMapping(value = "/updatev", method = RequestMethod.GET)
 	public ModelAndView updateView(HttpServletRequest request) throws Exception {
 		String uuid = request.getParameter("uuid");
-		System.out.println(uuid);
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		AttractionsParkingPO po = attractionsDao.getBusinessHours(Long.parseLong(uuid)).get(0);
 		strMap.put("po", po);
@@ -149,6 +137,7 @@ public class ParkManagementController extends BaseController {
 		String uuid = request.getParameter("uuid");
 		Long id = Long.parseLong(request.getParameter("id"));
 		String imgTemp = request.getParameter("imgTemp");
+		String img = request.getParameter("shopPicImg");
 		po.setUuid(uuid);
 		po.setId(id);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -158,8 +147,8 @@ public class ParkManagementController extends BaseController {
 		} else {
 			fileUserId = getMerchantInfo().getComId();
 		}
-		if (file.getSize() > 0) { // 修改图片
-			Date d = new Date();
+		if (img != null) { // 修改图片
+		/*	Date d = new Date();
 			String folderName = "/id_" + fileUserId; // 文件名
 			String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/parkimgPic" + folderName;
 			// 文件名
@@ -187,7 +176,8 @@ public class ParkManagementController extends BaseController {
 						f.delete();
 					}
 				}
-			}
+			}*/
+			po.setParkingImg(img);
 		} else { // 未修改赋原值
 			po.setParkingImg(imgTemp);
 		}
@@ -203,9 +193,8 @@ public class ParkManagementController extends BaseController {
 	@RequestMapping(value = "/del.do", method = RequestMethod.POST)
 	public String del(HttpServletRequest request) throws Exception {
 		String uuid = request.getParameter("uuid");
-		AttractionsParkingPO po = attractionsDao.get(uuid);
+		AttractionsParkingPO po = attractionsDao.getBusinessHours(Long.parseLong(uuid)).get(0);
 		Long id = po.getId();
-		String parkingImg = po.getParkingImg();
 		List<ParkingPositionPO> list = parkingPositionDao.getByPositionId(id);
 		LinkedList<Long> ids = new LinkedList<Long>();
 		if (list != null && list.size() > 0) {
@@ -215,17 +204,6 @@ public class ParkManagementController extends BaseController {
 		}
 		parkingPositionDao.deleteAllByIds(ids);
 		attractionsDao.delete(po);
-		if (parkingImg != null && !"".equals(parkingImg)) {
-			String[] s = parkingImg.split("/");
-			String path = conn_sysConfig.getSysConfig().getFolderUrl() + "/" + s[s.length - 2];
-			File folder = new File(path);
-			File[] filesInFolder = folder.listFiles();
-			for (File f : filesInFolder) {
-				if (s[s.length - 1].equals(f.getName())) {
-					f.delete();
-				}
-			}
-		}
 		return "success";
 	}
 
@@ -235,7 +213,7 @@ public class ParkManagementController extends BaseController {
 	public ModelAndView parkList(HttpServletRequest request) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		String uuid = request.getParameter("parking");
-		AttractionsParkingPO po = attractionsDao.get(uuid);
+		AttractionsParkingPO po = attractionsDao.getBusinessHours(Long.parseLong(uuid)).get(0);
 		strMap.put("po", po);
 		ModelAndView mv = new ModelAndView("admin/parkmanagement/parklist");
 		mv.addAllObjects(strMap);

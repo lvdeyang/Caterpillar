@@ -441,7 +441,7 @@ $(function() {
    		location.href=window.BASEPATH + 'business/gotoraiders?merchantId=${merchantId}';
    }
    function picking(){
-   		location.href=window.BASEPATH + 'business/gotopickinglist?merchantId=${merchantId}';
+   		location.href=window.BASEPATH + 'business/gotorecommend?merchantId=${merchantId}';
    }
    
 </script>
