@@ -40,11 +40,15 @@
 			</div>
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 停车场图片 </label>
-				<!-- <div class="layui-input-inline" style="width: 100px">
-					<img alt="" src="" id="parkingImg" style=" height:100px;width:100px "> 
-					<input type="hidden" name="parkingImgPic" id="parkingImgPic" autocomplete="off" class="layui-input">
-				</div> -->
+				<div class="layui-input-inline" style="width: 100px">
+				    <img alt="" src="" id="parkingshopPic" style=" height:100px;width:100px ">
+					<input type="hidden" id="parkingshopImg" name="parkingshopImg" 
+						lay-verify="title" autocomplete="off"   class="layui-input">
+				</div>
 				<div class="layui-input-inline">
+					<a href="javascript:openMap('上传图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=parkingshopImg&img=parkingshopPic','600','400')" class="layui-btn layui-btn-xs" style="width:90px;margin-left:5px;margin-right:5px" >更换图片</a>
+				</div>
+				<!-- <div class="layui-input-inline">
 					<div class="layui-upload">
 						<button type="button" class="layui-btn" id="test"> 上传图片 </button>
 						<div class="layui-upload-list">
@@ -54,7 +58,7 @@
 						</div>
 						
 					</div>   
-				</div>
+				</div> -->
 			</div>
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 总停放位 </label>
@@ -151,6 +155,11 @@
 	<script src="<%=request.getContextPath()%>/layui/js/x-layui.js" charset="utf-8"> </script>
 
 	<script>
+	
+	       //打开分类
+            function openMap (title,url,w,h) {
+                x_admin_show(title,url,w,h); 
+            }
 		layui.use(['form','layer','laydate','upload'], function(){
 			$ = layui.jquery;
 			var form = layui.form
@@ -249,11 +258,6 @@
 				var chargingColumn =data.field.chargingColumn
 				data.field.chargingColumn = parseInt(chargingColumn);
 			}	
-			var ffff = data.field.file;
-			if(!ffff){
-				layer.msg("请上传停车场图片！",{icon:5});
-				return false;
-			}
         	var formData = new FormData($("#myForm")[0]);  
 			$.ajax({
 				type:"post",
