@@ -193,8 +193,6 @@ public class MerchantController extends BaseController {
 		String shopAuditstates = request.getParameter("shopAuditstates");
 		String signPic = request.getParameter("signPic");
 		String shopyd = request.getParameter("shopyd");
-		String olchat=request.getParameter("olchatId");
-		
 		MerchantPO merchant = new MerchantPO();
 		MerchantPO check = conn_merchant.getByField("shopLoginName", shopLoginName);
 		if (check != null) {
@@ -264,9 +262,7 @@ public class MerchantController extends BaseController {
 		merchant.setComName(getLoginInfo().getComName());
 		merchant.setCityCode(getLoginInfo().getCityCode());
 		merchant.setCityName(getLoginInfo().getCityName());
-		if(olchat!=""){
-			merchant.setChatUserId(Long.parseLong(olchat));
-		}
+
 		user.setMerchant(merchant);
 		merchant.setUser(user);
 
@@ -830,53 +826,75 @@ public class MerchantController extends BaseController {
 		ExportExcelSeedBack ex = new ExportExcelSeedBack(title, headers, dataList);// 没有标题
 		ex.export(out);
 	}
-	@Autowired	 
-	private MerchantChildrenDao conn_merch;
+	
 	/**
 	 *  跳轉添加子商戶頁面
 	 * 
-	 * */	
+	 * */
+	@ResponseBody
 	@RequestMapping(value = "/skip.do" )
-	public ModelAndView merchantSkip(HttpServletRequest request) throws UnsupportedEncodingException {
+	public ModelAndView merchantSkip(HttpServletRequest request)  {
 		ModelAndView  mView = new ModelAndView("admin/merchant/addmerchant");
-		String id =request.getParameter("merchantId");		
-		String str =request.getParameter("shopName");
-		String inputer   = new String( str.getBytes("ISO-8859-1") , "utf8"); 		
+		String merchantName = request.getParameter("name");
+		String id =request.getParameter("id");						
 		mView.addObject("merchantId", id);
-		mView.addObject("shopName", inputer);
-		
+		mView.addObject("merchantName", merchantName);
 		return mView;
 	}
+	
+	/**
+	 * 
+	 * 商户子信息
+	 * 
+	 * */
+	// 子信息异步读取列表分页
+		@ResponseBody
+		@RequestMapping(value = "/lists.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+		public Map<String, Object> getLists(int page, int limit, HttpServletRequest request) throws Exception {
+		    String 	merchantId = request.getParameter("merchantId");
+			List<MerchantPO> listp = conn_merchant.findAll(page, limit);	
+			List<MerchantPO> listpo = new ArrayList<MerchantPO>();
+			for(MerchantPO merchantPO : listp){
+				if(String.valueOf(merchantPO.getId()).equals(merchantId)){
+					continue;	
+				}
+				else{
+					listpo.add(merchantPO);
+				}
+			}
+			List<MerchantVO> listvo = MerchantVO.getConverter(MerchantVO.class).convert(listpo, MerchantVO.class);
+			int allcount = conn_merchant.countAll();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("data", listvo);
+			map.put("code", "0");
+			map.put("msg", "");
+			map.put("count", allcount);
+			return map;
+		}
+		
+		@Autowired	 
+		private MerchantChildrenDao conn_merch;
 	/**
 	 *  添加商戶與子商戶信息
 	 * 
 	 * */
-	@RequestMapping(value = "/subordinate.do", method=RequestMethod.GET)
-	public ModelAndView addSubordinate(HttpServletRequest request) throws UnsupportedEncodingException{
-	ModelAndView mv = new ModelAndView("admin/merchant/addmerchant");
-	//前台数据获取
-	String childrenId=request.getParameter("childrenId").trim();
-	String str1=request.getParameter("childrenName");
-	String childrenName = new String( str1.getBytes("ISO-8859-1") , "utf8").trim(); 
-	String merchantId =	request.getParameter("merchantId").trim();
-	String str2 =request.getParameter("shopName");
-	String merchantName = new String( str2.getBytes("ISO-8859-1") , "utf8").trim();
-	
-	try {
-		//数据封装保存
-		MerchantChildrenPO merChil = new MerchantChildrenPO();
-		merChil.setChildrenId(Long.parseLong(childrenId));
-		merChil.setMerchantId(Long.parseLong(merchantId));
-		merChil.setMerchantName(merchantName);
-		merChil.setChildrenName(childrenName);
-		conn_merch.save(merChil);
-	} catch (Exception e) {
-	  System.err.println("错误 sql");
-	}
-	
-	//二次封装
-	mv.addObject("merchantId",merchantId);
-	mv.addObject("shopName",merchantName);	
-	return mv;
-	}
+	@ResponseBody
+	@RequestMapping(value = "/subordinate.do",method=RequestMethod.POST)
+	public String addSubordinate(HttpServletRequest request) {		
+	try{	
+		String childrenId = request.getParameter("childrenId");
+		String merchantId =	request.getParameter("merchantId");
+		List<MerchantPO> childrenName = conn_merchant.findByField("id", Long.parseLong(childrenId));
+		List<MerchantPO> merchantName = conn_merchant.findByField("id", Long.parseLong(merchantId));
+		MerchantChildrenPO merch = new MerchantChildrenPO();
+		merch.setMerchantId(Long.parseLong(merchantId));
+		merch.setChildrenId(Long.parseLong(childrenId));
+		merch.setMerchantName(merchantName.get(0).getShopName());
+		merch.setChildrenName(childrenName.get(0).getShopName());
+		conn_merch.save(merch);
+		return "success";
+	}catch(Exception e){
+		return "false";
+	}	
+}
 }

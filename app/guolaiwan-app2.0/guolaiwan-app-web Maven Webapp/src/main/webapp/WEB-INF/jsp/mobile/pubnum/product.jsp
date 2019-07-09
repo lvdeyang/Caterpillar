@@ -596,7 +596,7 @@ input[type="datetime-local"]:before{
 	.saying img{width:100%;}  
     
     
-.liebiao li input{
+.layui-inline input{
     width: 100%;
     height: 60px;
     margin: 1px auto;
@@ -1250,20 +1250,14 @@ input[type="datetime-local"]:before{
 		   var html=[];
 		   for(var i=0;i<count;i++){
 			    html.push('<div class="layui-inline" style="width:96%;height:auto;position: relative;"> ');
-			    html.push('<ul class="liebiao" style="color:black;">');
-			    html.push('<li>');
 			    html.push('<input type="text" placeholder="请填写真实姓名"   style="cursor: pointer;" class="names" id="name-'+i+'"  class="layui-input" id="test1">');
-			    html.push('<p style="position: absolute;top:42px;left:10%;">填写姓名</p>');
-			    html.push('</li>');
-			    html.push('<li>');
-			    html.push('<input placeholder="请输入身份证号码" class="idnums" id="orderIdNum-'+i+'"  minlength="18" maxlength="18"class="weui-input" type="text"/>');
-			    html.push('<p style="position: absolute;top:122px;left:10%;">填写身份证</p>');
-			    html.push('<img id="face" style="width:25px;height:25px;position: absolute;right:5%;top:120px;" src="lib/images/zhaoxiang.png"');
-			    html.push('</li>');
-			    html.push('</ul>');
+			    html.push('<p style="position: absolute;top:22px;left:8%;">填写姓名</p>');
+			    html.push('<input style="padding-left:15%;" placeholder="输入身份证，可点击按钮快捷输入"  class="idnums" id="orderIdNum-'+i+'"  minlength="18" maxlength="18"class="weui-input" type="text"/>');
+			    html.push('<p style="position: absolute;top:84px;left:8%;">填写身份证</p>');
+			    html.push('<img id="face" style="width:30px;height:30px;position: absolute;right:3%;top:77.5px;" src="lib/images/zhaoxiang.png"');
 			    html.push('</div>');
-			    html.push('<div style="background:#fff;height:300px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;">');
-			    html.push('<p style="margin-left:8%;height:50px;line-height: 50px;">人脸拍摄</p>');
+			    html.push('<div style="background:#fff;height:300px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;left:2%;">');
+			    html.push('<p style="margin-left:6%;height:50px;line-height: 50px;">人脸拍摄</p>');
 			    html.push('<img style="width:180px;height:180px;position: absolute;left:50%;margin:10px 0 0 -90px;opacity: 0.6" alt="" class="uploadImages" id="uploadImage-'+i+'"  src="<%=basePath%>lib/images/renlian2s.png">');
 			    html.push('<p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-70px;color:#818181">请正对镜头，面部清晰</p>');
 			    html.push('</div>');
@@ -1280,9 +1274,7 @@ input[type="datetime-local"]:before{
 		
 		//点击输入框识别图片
 		$(document).on('click','#face',function(){
-		alert(1111)
 	       discern();
-	     /*  discern(); */
 	    });
 	 
 	    
@@ -1375,8 +1367,8 @@ input[type="datetime-local"]:before{
                       
 		$.post(_uri, params, function(data){                                                  
 			           if(data.msg==0){
-						   $(".idnums").val(data.name)
-						   $(".names").val(data.sfz) 	
+						   $(".idnums").val(data.sfz)
+						   $(".names").val(data.name) 	
 						}			   
 					     if(data.msg==1){
 						     alert("识别失败,请继续上传或者手动输入");

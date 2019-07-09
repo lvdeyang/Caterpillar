@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
-	          var pageCount=10;
+	          var pageCount=15;
 	          var currPage=1;
 	       
 	          
@@ -88,7 +88,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                  for(var i=0;i<data.length;i++){
 	                        html.push('<li>');
 						    html.push('    <div class="ui-avatar-s">');
-						    html.push('        <span style="background-image:url(/chenxisoft'+data[i].userPic+')"></span>');
+						    html.push('        <span style="background-image:url('+data[i].userPic+')"></span>');
 						    html.push('    </div>');
 						    html.push('    <div class="ui-list-info ui-border-t">');
 						    html.push('        <h4 class="ui-nowrap" style="font-size:12px;">'+

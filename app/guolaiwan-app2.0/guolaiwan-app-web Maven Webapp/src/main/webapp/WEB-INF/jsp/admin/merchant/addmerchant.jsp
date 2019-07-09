@@ -53,6 +53,14 @@
 <script type="text/html" id="bankuaiTpl">
     {{ d.modularName }}&nbsp{{ d.modularClass }}               
 </script>
+<script type="text/html" id="zsgc"> 
+{{# }} 
+		<a title="选择" href="javascript:;" onclick="sel('{{ d.id }}','{{ d.shopName }}')" 
+                           	style="text-decoration:none">
+                            	<i>选择</i>
+                        	</a>
+{{# }} 
+</script> 
 	</div>
 	<script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
 	<script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
@@ -181,8 +189,8 @@
           ,{field: 'id', title: 'ID',sort: true,width:60} 
           ,{field: 'shopName', title: '商家名称',sort: true}  
           ,{field: 'shopAddress', title: '商户地址',sort: true} 
-          ,{field: 'shopLinkperson', title: '联系人',width:80,sort: true}         
-          ,{title: '操作',templet:'#zsgcTpl'}
+          ,{field: 'shopLinkperson', title: '联系人',width:80,sort: true} 
+          ,{fixed: 'right',width:120,minWidth:100,templet:'#zsgc',unresize:true}
          ]]
          ,done:function(res, curr, count){
          	layer.closeAll("loading");
@@ -198,11 +206,28 @@
 		}
       
       var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-      	              	      
+	
+      function sel(id,shopName) {
+		
+		$.ajax({
+                    type:"post",
+                    url:"subordinate.do",
+                    data:{"childrenId":id,                      
+                          "merchantId":${merchantId}                        
+                    },
+                    success:function(msg){
+                    if(msg == "success"){                                   
+                    layer.msg("添加成功！");
+                    window.parent.location.reload();
+                    }
+                   if(msg == "false"){
+                    
+                    layer.msg("添加失败！");
+                    }
+                  
+                    }
+                  }) 	
+		}  
             </script>
-            <script type="text/html" id="zsgcTpl">
-        <a class='layui-btn layui-btn-danger layui-btn-xs' href='<%=basePath%>admin/merchant/subordinate.do?childrenId={{d.id}}
-         &childrenName={{d.shopName}}&merchantId=${merchantId}&shopName=${shopName}'>选择</a>       
-</script>  
 </body>
 </html>

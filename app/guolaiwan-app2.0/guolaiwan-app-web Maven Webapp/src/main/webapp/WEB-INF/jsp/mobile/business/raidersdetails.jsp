@@ -63,9 +63,10 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>住宿</title>
+<title>攻略详情</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
+
 <style type="text/css">
 a {
 	cursor: pointer !important;
@@ -108,7 +109,7 @@ html, body {
 }
 
 .header-content {
-	height:auto;
+	height: auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -136,11 +137,7 @@ html, body {
 }
   .inp::-webkit-input-placeholder{
         text-align: center;
-}  
-
- .youxuan-in p{
-  margin-left:3%;
- }
+} 
 .gotop {
    position: fixed;
    right: 20px;
@@ -152,6 +149,16 @@ html, body {
    z-index:111111;
 	}
 
+
+</style>
+<style type="text/css">
+html, body {
+	height: 100%;
+}
+#div1 img{
+    width:100%;
+    height:100%;
+}
 </style>
 
 </head>
@@ -166,9 +173,8 @@ html, body {
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-
-<script>
-	var page=1;
+<script type="text/javascript">
+  /*返回顶部  */
   $(function(){
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
@@ -183,66 +189,72 @@ html, body {
 		$('html,body').animate({'scrollTop':0},500);
         return false;
 	});
-	
-	getMerchant();
-}); 
-
- 		function getMerchant(){
-			var url="<%=basePath%>business/search";
-	            $.post(url,{"merchantId":${merchantId},"name":"${name}","type":"0002"},function(data){
-	            	var html=[];
-	            	if(data.merlist.length==0){
-	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
-	            	}else{
-						for(var i=0; i<data.merlist.length; i++){
-				 			 var pingfen=(data.pingfens[i]+46)/10;
-					  		 if(pingfen>5)pingfen=5;
-							 html.push('<a onclick="accommodation('+data.merlist[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
-					         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
-							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');
-							 html.push('<div class="zhifu-in">');
-							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>'); 
-							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+(23+data.pingfens[i])+'人来过</span></p>');
-							 html.push('</div></div></div></a>');
-							}
-					}
-			    	$('.huodong').append(html.join(''));
-	            	page++;
-	            })
-			}
-			
-	function accommodation(id){
-   		location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+id;
-    }
-    
+	});
+	$(function() {
+		var htm = [];  
+		var _uri = window.BASEPATH + 'phoneApp/videoPicInfo?vpId=${id}&UserId=0';
+		$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				var json = JSON.parse(data.videoPic.content); //转换json
+                var text= json.title; //获取标题
+				var reg = new RegExp("\n","g");//g,表示全部替换。
+				text=text.replace(reg,"	<br>");//替换
+	            var newdiv = document.getElementById("p1");//添加
+                newdiv.innerHTML = text ;
+                var html = [];//添加头像 用户名
+                html.push('<img class="pic"style="width:50px;height:50px;border-radius: 50%;position: absolute; top: 50%;left:8%;transform: translate(-50%, -50%);" src="'+data.videoPic.user.userHeadimg+'"/ >');
+				html.push('<span class="pid" style="position: absolute; top: 50%;left: 24%;transform: translate(-50%, -50%);color:#586F83;font-size:16px;"> '+data.videoPic.user.userNickname+'</span>')   
+                html.push('<p style="width:100%;padding:0 7%;font-size:12px;position: absolute; top: 65%;left:10%;font-size:14px;color:#586F83;"><span>'+data.videoPic.user.updateTime+'</span><span style="margin-left:5%;">浏览：1111</span></p>');  
+                $('.main_on').append(html.join(''));    
+                  
+                var htm = [];
+                var newdiv =json.content;
+                for(var i =0;i<newdiv.length;i++){
+  				   for(var j in newdiv[i]){
+  				     var   cont =   newdiv[i][j]
+  				     var reg = new RegExp("\n","g");//g,表示全部替换。
+					 cont = cont.toString().replace(reg,"<br>");
+					 var fill =  "img" == j ? "<img  src="+cont+" />" : "type" != j ? cont :'<br/>'; //添加文本图片
+                     htm.push(fill);
+   				   }
+			    }
+                $('#div1').append(htm.join(''));    
+		}); 	
+	});
 </script>
 
-
-
-
 <body>
-			<!-- 主页 -->
+	<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
+		</div>	
+ 
+        <div class="nav" style="width:100%;height:100%;">
+
+		<div class="main"
+			style="width:90%;height:100%;/* background-color: #ffffff; */margin:3% auto;">
+			<p class="pid_a" id="p1" style="font-weight: bold;font-size:16px;"></p>
+			<div class="main_in" style="height:100%;width:100%;margin:0 auto">
+				<div class="main_on" style="height:10%;position: relative;width:100%;">
+				</div>
+				<div id="div1" style=""></div>
+			
+			</div>
+			
 		</div>
 		
-	  <select style="width:100%;margin:1px auto;font-weight: bold;padding:0 5%;height:30px;border:none;outline:none;appearance:none; -moz-appearance:none;  -webkit-appearance:none;">
-	    <option>智能排序ⅴ</option>
-	    <option>低价优先ⅴ</option>
-	    <option>高价优先ⅴ</option>
-	  </select>
-    
-	 
-	 <div class="huodong"></div>
-   
-   </div>    	
-   <!-- 置顶 -->
+	</div>
+	  <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
 </body>
 
 
+
+
+
+
+</html>

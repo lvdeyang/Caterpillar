@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      border:1px solid #CCC;
    }
    #imageContent{
-     width:90%;margin-left:3px;
+     width:95%;margin-left:3px;
    }
    #imageContent img{
      width:100px;
@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          
        
     </header>
-	<image src="/chenxisoft${worker.photo}" style="width:100%;height:200px;margin-top:45px;">
+	<image src="/${worker.photo}" style="width:100%;height:350px;margin-top:45px;">
 	<div class="ui-form ui-border-t">
 	        <div class="ftitle">
 	                                    基本信息
@@ -128,13 +128,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	        <div id="imageContent">
 	            <c:if test="${!empty worker.idCardPhoto}">
-	                <image src="/chenxisoft${worker.idCardPhoto}" style="margin-left:12px;">
+	                <image src="/${worker.idCardPhoto}" style="margin-left:12px;">
 	            </c:if>
 	            <c:if test="${!empty worker.healthPhoto}">
-	                <image src="/chenxisoft${worker.healthPhoto}" style="margin-left:12px;">
+	                <image src="/${worker.healthPhoto}" style="margin-left:12px;">
 	            </c:if>
 	            <c:if test="${!empty worker.expertPhoto}">
-	                <image src="/chenxisoft${worker.expertPhoto}" style="margin-left:12px;">
+	                <image src="/${worker.expertPhoto}" style="margin-left:12px;">
 	            </c:if>
 	        </div>
 	        <div class="ftitle" style="float:left">
@@ -182,7 +182,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	</div>
 	
-	
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script type="text/javascript" src="lib/laydate/laydate.js" charset="utf-8"></script>
 	<script type="text/javascript">
 	     $(function() {
@@ -257,21 +257,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			            jsApiList : ['checkJsApi', 'onMenuShareTimeline' , 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 		        	});
 			        wx.ready(function() {
-			
-			               
+	
 			            wx.onMenuShareTimeline({
-                            title: '[小青月嫂]${worker.realName}', // 分享标题
+                            title: '[小青月嫂]${worker.realName}_${worker.level}月嫂', // 分享标题
                             link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: window.BASEPATH+'/chenxisoft${worker.photo}', // 分享图标
+                            imgUrl: 'http://www.yueba.net.cn/${worker.photo}', // 分享图标
                             success: function () {
                                	
                             }
 		                });
 			            wx.onMenuShareAppMessage({
-							title : '[小青月嫂]${worker.realName}', // 分享标题
-							desc : '联系电话:0315-6681288/6686299', // 分享描述
+							title : '[小青月嫂]${worker.realName}_${worker.level}月嫂', // 分享标题
+							desc : '联系电话:18617856189', // 分享描述
 							link : location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-							imgUrl : window.BASEPATH+'/chenxisoft${worker.photo}', // 分享图标
+							imgUrl : 'http://www.yueba.net.cn/${worker.photo}', // 分享图标
 							success : function() {}
 						});
 			            

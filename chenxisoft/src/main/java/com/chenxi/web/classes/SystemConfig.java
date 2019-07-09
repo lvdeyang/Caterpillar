@@ -2,5 +2,5 @@ package com.chenxi.web.classes;
 
 public class SystemConfig {
 
-	public final static String IMAGE_PATH="D:\\yueba\\.metadata\\.me_tcat7\\webapps\\chenxisoft";
+	public final static String IMAGE_PATH="/usr/sbin/guolaiwan/tomcat/apache-tomcat-7.0.85-windows-x64/apache-tomcat-7.0.85/webapps/";
 }

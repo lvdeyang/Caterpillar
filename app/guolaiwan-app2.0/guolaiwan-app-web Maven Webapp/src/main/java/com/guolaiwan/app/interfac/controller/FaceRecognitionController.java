@@ -13,10 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.interfac.util.FaceUtil;
+import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MessageDAO;
-import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MessagePO;
-import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 
 @Controller
 @RequestMapping("/face")
@@ -26,7 +26,7 @@ public class FaceRecognitionController {
 	private MessageDAO messagedao;
 
 	@Autowired
-	private OrderInfoDAO conn_order;
+	private MerchantDAO conn_merchant;
 
 	// 保存身份证信息
 	@ResponseBody
@@ -54,15 +54,14 @@ public class FaceRecognitionController {
 				String[] split = number.split("\\.");
 				int a = Integer.parseInt(split[0]);
 				if (a > 80) {
-
+					MerchantPO merchantPO = conn_merchant.get(Long.parseLong(merchantid));
 					HashMap<String, String> hashMap = new HashMap<String, String>();
-					OrderInfoPO orderInfoPO = conn_order
-							.get(Long.parseLong(getmerchantid.get(i).getOderId().toString()));
+
 					hashMap.put("id", getmerchantid.get(i).getId().toString());
 					hashMap.put("msg", "1");
 					hashMap.put("orderId", getmerchantid.get(i).getOderId());
 					hashMap.put("merchantid", merchantid);
-					hashMap.put("userid", orderInfoPO.getUserId() + "");
+					hashMap.put("userid", merchantPO.getUser().getId() + "");
 					return hashMap;
 				}
 			}
