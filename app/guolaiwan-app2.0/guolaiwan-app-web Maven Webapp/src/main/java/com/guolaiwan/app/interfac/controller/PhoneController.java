@@ -1148,6 +1148,12 @@ public class PhoneController extends WebBaseControll {
 		 */
 		// 支付金额
 		order.setPayMoney(payMoney);
+		// 单价
+		order.setProductPrice(orderAllMoney);
+		// 订单的名称
+		order.setProductName("到店支付");
+		// 购买数量
+		order.setProductNum(1);
 		// 订单总金额
 		order.setOrderAllMoney(orderAllMoney);
 		// 订单说明

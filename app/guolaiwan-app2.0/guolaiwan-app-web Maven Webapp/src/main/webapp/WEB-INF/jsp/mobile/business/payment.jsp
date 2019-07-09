@@ -181,7 +181,7 @@ html, body {
 
 	function getAllProduct(){
 			var url="<%=basePath%>business/getallproduct";
-	            $.post(url,{"page":page},function(data){
+	            $.post(url,{"page":page,"type":"${type}"},function(data){
 	            	var html=[];
 					for(var i=0; i<data.length; i++){
 						 html.push('<a onclick="getorderinfo('+data[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
