@@ -74,8 +74,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <h4 class="ui-nowrap" style="font-size:14px;">浏览记录</h4> 
 	        </div>
 	    </li>
-	    <li class="ui-border-t">
-	        <div class="ui-list-info" data="javascript:void(0)" data="about/mobile/index">
+	    <li class="ui-border-t"  data="about/mobile/index">
+	        <div class="ui-list-info" data="javascript:void(0)">
 	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4> 
 	        </div>
 	    </li>
