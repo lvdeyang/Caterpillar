@@ -34,6 +34,7 @@ public class WorkerPo extends AbstractBasePO{
 	private int baseOrderCount;
 	private String level;
 	private String moreMsg;
+	private int sindex;
 	
 
 	public String getUserName() {
@@ -164,6 +165,12 @@ public class WorkerPo extends AbstractBasePO{
 	}
 	public void setBaseOrderCount(int baseOrderCount) {
 		this.baseOrderCount = baseOrderCount;
+	}
+	public int getSindex() {
+		return sindex;
+	}
+	public void setSindex(int sindex) {
+		this.sindex = sindex;
 	}
 	
 	

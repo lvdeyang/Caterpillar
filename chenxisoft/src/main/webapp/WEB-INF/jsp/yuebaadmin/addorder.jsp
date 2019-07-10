@@ -92,7 +92,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
                laydate.render({
-				    elem: '#fromDate'
+				    elem: '#fromDate',
+				    min:'${minDate}',
+			        max:'2029-09-28'
 			   });
                
               //监听提交

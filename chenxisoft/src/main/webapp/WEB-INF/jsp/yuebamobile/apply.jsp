@@ -290,7 +290,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            params.age=$('#age').val();
                 var _uri = window.BASEPATH + 'worker/mobile/apply.do';
 		        $.post(_uri, params, function(data){
-			        location.href=window.BASEPATH + 'worker/mobile/apply';
+			        location.href=window.BASEPATH + 'worker/mobile/apply?t=' + new Date().getTime();
 			        $('#loading').hide();
 				}); 
 				     

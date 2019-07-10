@@ -44,4 +44,13 @@ public class MHomeController {
 		}
 		return workerPos;
 	}
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/getCheckingworkers", method = RequestMethod.GET)
+	public Object getCheckingworkers(HttpServletRequest request) throws Exception {
+		List<WorkerPo> workerPos=conn_worker.findNotPassWorkers();
+		
+		return workerPos;
+	}
+	
 }

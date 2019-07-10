@@ -106,6 +106,7 @@ public class WorkerContoller extends BaseController {
 	public ModelAndView setlevel(HttpServletRequest request,long id) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		strMap.put("levelList", conn_level.findAll());
+		strMap.put("worker", conn_worker.get(id));
 		strMap.put("id", id);
 		ModelAndView mv = new ModelAndView("yuebaadmin/setlevel", strMap);
 		return mv;
@@ -116,8 +117,12 @@ public class WorkerContoller extends BaseController {
 	public String setleveldo(HttpServletRequest request) throws Exception {
 		String level = request.getParameter("level");
 		String id=request.getParameter("id");
+		String baseOrderCount=request.getParameter("baseOrderCount");
+		String index=request.getParameter("index");
 		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
 		workerPo.setLevel(level);
+		workerPo.setSindex(Integer.parseInt(index));
+		workerPo.setBaseOrderCount(Integer.parseInt(baseOrderCount));
 		conn_worker.update(workerPo);
        
 		return "success";

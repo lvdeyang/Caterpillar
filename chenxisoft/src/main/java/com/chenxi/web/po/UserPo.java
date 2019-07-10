@@ -13,6 +13,7 @@ public class UserPo extends AbstractBasePO {
 	private String openId;
 	private String phone;
 	private String address;
+	private int adminFlg;//0,非管理员,1管理员
 	public String getNickName() {
 		return nickName;
 	}
@@ -42,6 +43,12 @@ public class UserPo extends AbstractBasePO {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public int getAdminFlg() {
+		return adminFlg;
+	}
+	public void setAdminFlg(int adminFlg) {
+		this.adminFlg = adminFlg;
 	}
 	
 }

@@ -40,10 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		
 	</div>
-	<div class="ui-loading-wrap" id="loading" style="display:none">
-            <p>加载中</p>
-            <i class="ui-loading"></i>
-    </div>
+	
 	
 
 	<script type="text/javascript">
@@ -58,27 +55,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
-	          var pageCount=10;
-	          var currPage=1;
+	       
 	       
 	          
-	          function getPage(isinit){
-	              var _uriWorker = window.BASEPATH + 'home/getworkers?currPage='+currPage+'&pageCount='+pageCount;
-		
+	          function getPage(){
+	              var _uriWorker = window.BASEPATH + 'home/getCheckingworkers';
 				  $.get(_uriWorker, null, function(data){
-				       currPage+=1;
 				       data = parseAjaxResult(data);
-				       if(!isinit&&data.length!=0){
-				          $('#loading').fadeIn().show();
-				       }
-				       if(isinit){
-				          initList(data);
-				       }else{
-				          setTimeout(function(){
-				             initList(data);
-			                 $('#loading').fadeOut().hide();
-			              },2000);
-				       }
+				       initList(data);
 				  });
 	          
 	          }
@@ -95,7 +79,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						 html.push('	<div class="ui-list-info ui-border-t">');
 						 html.push('		<p style="font-size:13px;">'+data[i].realName+'&nbsp;&nbsp;'+data[i].age+'岁<span style="color:red;margin-left:5px;">(带过'+data[i].orderCount+'个孩子)</span></p>');
 						 html.push('<div style="height:5px;">&nbsp;</div>');
-						 html.push('		<p class="ui-nowrap" style="font-size:13px;">'+data[i].level+'月嫂</p>');
+						 html.push('		<p class="ui-nowrap" style="font-size:13px;">'+data[i].phone+'</p>');
 						 html.push('		<p class="ui-nowrap" style="font-size:13px;">');
 						 var subHtml=[];
 						 if(data[i].idCardPhoto){
@@ -109,7 +93,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						 }
 						 html.push(subHtml.join('&nbsp;&nbsp;&nbsp;&nbsp;'))
                          html.push('</p>');
-                         //html.push('<p style="font-size:13px;">'+data[i].age+'</p>');
 						 html.push('	</div>');
 						 html.push('</li>'); 
 				       }
@@ -119,22 +102,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          }
 	          
 	          
-	          getPage(true);
+	          getPage();
 	          
-	          $(window).scroll(function(){
-			        // scroll at bottom
-			       var innerHeight =  window.innerHeight;
-			       if($(window).scrollTop() === $(document).height() - innerHeight){
-			            // load data
-			            getPage(false);
-			       }
-			  });
+	          
 	          
 	          
 		      
 		      $(document).on('click','.worker',function(){
 		         var ids=this.id.split('-');
-	             location.href=window.BASEPATH +'worker/mobile/index?workerId='+ids[1];
+	             location.href=window.BASEPATH +'worker/mobile/checkin?workerId='+ids[1];
 		      
 		      });
 		      
