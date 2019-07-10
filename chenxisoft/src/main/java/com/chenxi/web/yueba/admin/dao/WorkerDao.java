@@ -18,6 +18,7 @@ public class WorkerDao extends AbstractBaseDao<WorkerPo> {
 	public List<WorkerPo> findPassWorkersAndPage(int pageNum,int pageSize){
 		QueryHql hql=this.newQueryHql();
 		hql.andBy("status",Condition.eq,WorkerStatus.PASSED);
+		hql.orderBy("sindex", false);
 		return this.findByHql(hql, pageNum, pageSize);
 	}
 }
