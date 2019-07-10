@@ -21,4 +21,9 @@ public class WorkerDao extends AbstractBaseDao<WorkerPo> {
 		hql.orderBy("sindex", false);
 		return this.findByHql(hql, pageNum, pageSize);
 	}
+	public List<WorkerPo> findNotPassWorkers(){
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("status",Condition.eq,WorkerStatus.CHECKING);
+		return this.findByHql(hql);
+	}
 }
