@@ -215,17 +215,21 @@ html, body {
            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
            	}else{
 				for(var i=0; i<data.length; i++){
-					    html.push('<div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
+					    html.push('<a onclick="gotopickingpurchase('+data[i].id+')"><div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
 					    html.push('<img style="width:100%;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
 					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;width:90%;white-space: nowrap;overflow:hidden;text-overflow:ellipsis; ">'+data[i].productName+'</p>');
 					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
 					    html.push('<button style="border-radius:10px;font-size:12px;color:#fff;background:#EA6C1B;padding:0px 25px;border:none;outline:none;margin:0 auto;">立即购买</button>');
-					    html.push('</div>');
+					    html.push('</div></a>');
 					}
 			}
 	    	$('.productlist').append(html.join(''));
            })
 	}
+	
+	function gotopickingpurchase(id){
+   		location.href=window.BASEPATH + 'business/gotopickingpurchase?productId='+id;
+   }
 </script>
 <script>
 $(function(){

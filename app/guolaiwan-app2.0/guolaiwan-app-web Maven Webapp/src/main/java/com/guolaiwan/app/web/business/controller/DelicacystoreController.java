@@ -109,17 +109,23 @@ public class DelicacystoreController extends BaseController {
         public Map<String, Object> getGreens(HttpServletRequest request){
         	//创建Map集合
         	Map<String, Object> map = new HashMap<String, Object>();
+        	List<ProductPO> productPO = new ArrayList<ProductPO>();
         	//存储价格数据
         	List<String> priceList = new ArrayList<String>();
         	//获取类型下的对应的菜品
-            String classCode = request.getParameter("codeID");
-        	//对应类型的菜品
-            List<ProductPO> productPO = productDao.findByField("productClassCode",classCode);
+            String classCode = request.getParameter("codeID");            
+            String merchantId =request.getParameter("merchantId");
+            
+            List<ProductPO> productPOs = productDao.findByMerchantId(Long.parseLong(merchantId));
             DecimalFormat df = new DecimalFormat("0.00");
-            for(ProductPO pos : productPO){
-            String strPrice = df.format(Double.parseDouble(pos.getProductPrice()+ "") / 100);
-            priceList.add(strPrice);
+            for(ProductPO poes : productPOs ){
+            	if(classCode.equals(poes.getProductClassCode())){
+            		productPO.add(poes);
+            		 String strPrice = df.format(Double.parseDouble(poes.getProductPrice()+ "") / 100);
+            		 priceList.add(strPrice);
+            	}            	
             }
+                  	
             map.put("productPO", productPO);
             map.put("priceList", priceList); 
         	return map;
@@ -131,18 +137,27 @@ public class DelicacystoreController extends BaseController {
       * */
 	@RequestMapping(value="/hotsell")
 	public Map<String, Object> getHotSell(HttpServletRequest request){
-		 String merchantId=request.getParameter("merchantId");	
+		String merchantId=request.getParameter("merchantId");	
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<String> priceList = new ArrayList<String>();
 		 //根据productMerchantID查询商品信息
-		 List<ProductPO> productPOs = productDao.findByMerchantId(Long.parseLong(merchantId));		 
-		 List<ProductPO> productPO = productDao.findByField("productClassCode",productPOs.get(0).getProductClassCode());
+		 List<ProductPO> productPOs = productDao.findByMerchantId(Long.parseLong(merchantId));		 		
+		 List<ProductPO> productPs = new ArrayList<ProductPO>();
 		 DecimalFormat df = new DecimalFormat("0.00");
-		 for(ProductPO pos : productPO){
-	            String strPrice = df.format(Double.parseDouble(pos.getProductPrice()+ "") / 100);
-	            priceList.add(strPrice);
-	            }
-		 map.put("prd", productPO);
+		     int i = 0;
+										 
+				 for(ProductPO pss :productPOs){
+					 if(i<6){
+					 if("家常菜".equals(pss.getProductClassName())){
+					    productPs.add(pss);
+			            String strPrice = df.format(Double.parseDouble(pss.getProductPrice()+ "") / 100);
+			            priceList.add(strPrice); 
+			            i++;
+					 }
+				 }
+			 }	 
+			 
+		 map.put("prd", productPs);
          map.put("prcList", priceList);       
 		 return map;	 
 	}  

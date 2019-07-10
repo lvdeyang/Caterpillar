@@ -200,7 +200,6 @@ html, body {
 	  }
 </script>
 <script>
-var page=1;
 $(function(){
     $(window).scroll(function(){
         var aa = $(window).scrollTop(); //当前滚动条滚动的距离
@@ -208,7 +207,6 @@ $(function(){
         var cc = $(document).height(); //浏览器当前窗口文档的高度 
       
         if(cc <= aa+bb){
-            getAllProduct();
         }
     })
   })
@@ -232,7 +230,7 @@ $(function(){
 
 	function getAllProduct(){
 			var url="<%=basePath%>business/getallproduct";
-	            $.post(url,{"page":page,"merchantId":${merchantId},"type":"006"},function(data){
+	            $.post(url,{"merchantId":${merchantId},"type":"006"},function(data){
 	            	var html=[];
 	            	if(data.length==0){
 	            			html.push('<p style="text-align: center;bottom:5px;left:50%;color:#858585;">暂无推荐商品</p>');
@@ -247,13 +245,10 @@ $(function(){
 							}
 					}
 			    	$('.main').append(html.join(''));
-	            	page++;
 	            })
 	}
   
-  function picking(){
-   		location.href=window.BASEPATH + 'business/gotopickinglist?merchantId=${merchantId}';
-   }
+  
     
 </script>
 
@@ -264,6 +259,8 @@ $(function(){
 			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
@@ -276,7 +273,7 @@ $(function(){
 	</div>
 	
 	<!-- 采摘-->
-	<p class="tuijian" style="text-align:center;height:50px;line-height: 50px;font-size:16px;font-weight:bold;margin:0;"><img src="lib/images/biao1.png"/>今日推荐 <img onclick="picking()" src="lib/images/biao2.png"/></p>
+	<p class="tuijian" style="text-align:center;height:50px;line-height: 50px;font-size:16px;font-weight:bold;margin:0;"><img src="lib/images/biao1.png"/>今日推荐 <img  src="lib/images/biao2.png"/></p>
 	<div class="caizhai" style="width:95%;border-radius:10px;padding:10px 0; height:auto;background:#fff; margin:0 auto;overflow: hidden;">
 	     <div style="width:31%;height:auto;overflow: hidden;border-radius:10px;float:left;margin:5px 0 0 1.5%;">
 	    <img style="width:100%;border-radius:10px;" src="lib/images/1.jpg"/>
