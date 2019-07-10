@@ -410,12 +410,24 @@ public class BusinessController extends WebBaseControll {
 		}
 		for (int i = 0; i < Merchantlist.size(); i++) {
 			Map<String, Object> hashMap = new HashMap<String, Object>();
+			hashMap.put("merchantId", Merchantlist.get(i).getId());
 			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
 			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
 			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
 			list.add(hashMap);
 		}
 		return list;
+	}
+	
+	//美食商户子页面
+	@ResponseBody
+	@RequestMapping(value = "/gotodelicacystore")
+	public ModelAndView goToDelicacystore(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		mv = new ModelAndView("mobile/business/delicacystore");
+		mv.addObject("merchantId", merchantId);
+		return mv; 
 	}
 	
 	// 支付完成页面
@@ -432,12 +444,11 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getallproduct")
 	public List<ProductVO> getAllProduct(HttpServletRequest request) throws Exception {
-		int page=Integer.parseInt(request.getParameter("page"));
+		int page=1;
 		String type=request.getParameter("type");
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		System.out.println(page);
 		List<ProductVO> list =new ArrayList<ProductVO>();
-		List<ProductPO> allproduct = conn_product.findByProductClassCode(type, page, 6);
+		List<ProductPO> allproduct = conn_product.findByProductClassCode(type, page, 100);
 		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
 		for (ProductVO productVO : listvo) {
 			if(productVO.getProductMerchantID()==merchantId){
@@ -502,7 +513,7 @@ public class BusinessController extends WebBaseControll {
 		return mv; 
 	}
 	
-	//按照商品类型分页加载所有的商品 
+	//按照商品类型所有的商户
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/search")
@@ -528,6 +539,25 @@ public class BusinessController extends WebBaseControll {
 		hashMap.put("pingfens", pingfens);
 		hashMap.put("merlist", merlist);
 		return hashMap;
+	}
+	
+	//按照商品类型所有的商品
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/searchproduct")
+	public List<ProductVO> searchProduct(HttpServletRequest request) throws Exception {
+		String name=request.getParameter("name");
+		String type=request.getParameter("type");
+		System.out.println("----"+name);
+		List<ProductVO> Productlist =new ArrayList<ProductVO>();
+		List<ProductPO> Product = conn_product.productSearch(name, 1, 500);
+		List<ProductVO> Pvo = ProductVO.getConverter(ProductVO.class).convert(Product, ProductVO.class);
+		for (ProductVO productVO : Pvo) {
+			if(productVO.getProductClassCode().equals(type)){
+				Productlist.add(productVO);
+			}
+		}
+		return Productlist;
 	}
 	
 	//按照modularcode获得相应的商家
@@ -675,13 +705,41 @@ public class BusinessController extends WebBaseControll {
 	}
 	
 	
-	// 采摘首页页面
+	// 采摘活动页面
 	@ResponseBody
 	@RequestMapping(value = "/gotorecommend")
 	public ModelAndView goToRecommend(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		mv = new ModelAndView("mobile/business/recommend");
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
+	
+	// 采摘购买详情页面
+	@ResponseBody
+	@RequestMapping(value = "/gotopickingpurchase")
+	public ModelAndView goToPickingPurchase(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long productId=Long.parseLong(request.getParameter("productId"));
+		ProductPO product = conn_product.get(productId);
+		List<ProductPO> productPO=new ArrayList<ProductPO>();
+		productPO.add(product);
+		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(productPO, ProductVO.class);
+		mv = new ModelAndView("mobile/business/pickingpurchase");
+		mv.addObject("product", alllist.get(0));
+		mv.addObject("merchant", Merchantdao.get(product.getMerMId()));
+		return mv;
+	}
+	
+	
+	// 采摘首页页面
+	@ResponseBody
+	@RequestMapping(value = "/gotopicking")
+	public ModelAndView goToPicking(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		mv = new ModelAndView("mobile/business/picking");
 		mv.addObject("merchantId", merchantId);
 		return mv;
 	}

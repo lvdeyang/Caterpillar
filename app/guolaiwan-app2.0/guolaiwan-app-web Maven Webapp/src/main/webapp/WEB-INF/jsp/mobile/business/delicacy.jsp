@@ -198,7 +198,7 @@ function getCate(){
 		$.get(_uriRecomment, null, function(data){
 		    var html=[];
 		    for(var i=0;i<data.length;i++){
-		         html.push('<div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
+		         html.push('<a onclick="gotodelicacystore('+data[i].merchantId+')"><div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
 		         html.push('<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="'+data[i].ShopPic+'"/>');  
 		         html.push('<div class="youxuan-in" style="display: inline-block;">');  
 		         html.push('<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">'+data[i].ShopName+'</p>');
@@ -210,11 +210,15 @@ function getCate(){
 		         html.push('<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>');
 		         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>');
 		         html.push('</div>');
-		         html.push('</div>');  		        
+		         html.push('</div></a>');  		        
 		    }
 		     $('.youxuan').append(html.join(''));
 		});
 }
+
+	function gotodelicacystore(id){
+        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+id;
+   }
 </script>
 <!--  <script>
 $(function(){
