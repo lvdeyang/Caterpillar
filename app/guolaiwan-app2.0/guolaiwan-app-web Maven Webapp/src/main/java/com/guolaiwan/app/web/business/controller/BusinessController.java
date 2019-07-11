@@ -404,7 +404,7 @@ public class BusinessController extends WebBaseControll {
 		List<MerchantPO> Merchantlist = new ArrayList<MerchantPO>();
 		for (int i = 0; i < merchantChildrenList.size(); i++) {
 			MerchantPO po = Merchantdao.getfood(merchantChildrenList.get(i).getChildrenId(), modularName);
-			if (po != null) {
+			if (po != null&&(po.getModularCode().equals("0003")||po.getModularCode().equals("0003"))) {
 				Merchantlist.add(po);
 			}
 		}
@@ -522,11 +522,19 @@ public class BusinessController extends WebBaseControll {
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
 		System.out.println(merchantId+"----"+name);
-		List<MerchantPO> allMerchant = Mer_chant.getAllMerchant(name);
-		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
-		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
-		List<Integer> pingfens=new ArrayList<Integer>();
 		Map<String, Object> hashMap = new HashMap<String, Object>();
+		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
+		List<Integer> pingfens=new ArrayList<Integer>(); 
+		List<MerchantPO> allMerchant = Mer_chant.getAllMerchant(name);
+		for (MerchantPO merchantPO : allMerchant) {
+			System.out.println(merchantPO.getModularCode()+"--"+type+"--"+merchantPO.getShopName());
+			if(merchantPO.getModularCode().equals(type)){
+				merchantlist.add(merchantPO);
+				pingfens.add(orderInfoDao.GetCountbyPage(merchantPO.getId())/100);
+			}
+		}
+		//这是当前商家和子商家的信息
+		/*List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
 		for (MerchantPO Merchant : allMerchant) {
 			for (MerchantChildrenPO mChildren : merchantChildren) {
 				if(Merchant.getId()==mChildren.getChildrenId()&&Merchant.getModularCode().equals(type)){
@@ -534,8 +542,9 @@ public class BusinessController extends WebBaseControll {
 					pingfens.add(orderInfoDao.GetCountbyPage(mChildren.getChildrenId())/100);
 				}
 			}
-		}
+		}*/
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
+		System.out.println(merlist.size());
 		hashMap.put("pingfens", pingfens);
 		hashMap.put("merlist", merlist);
 		return hashMap;
