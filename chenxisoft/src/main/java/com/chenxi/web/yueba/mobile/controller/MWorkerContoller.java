@@ -32,6 +32,7 @@ import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
 import com.chenxi.web.po.ProductPo;
+import com.chenxi.web.po.UserPo;
 import com.chenxi.web.util.Img2Base64Util;
 import com.chenxi.web.weixin.JsTicketUtil;
 import com.chenxi.web.yueba.admin.dao.ComboDao;
@@ -192,9 +193,12 @@ public class MWorkerContoller extends BaseController {
 		
 		HttpSession session = request.getSession();
 		Object openid=session.getAttribute("openid");
-		workerPo.setOpenId(openid+"");
 		
-		
+		List<UserPo> userPos=conn_user.findUserByOpenId(openid+"");
+		if(userPos.get(0).getAdminFlg()==0){
+			workerPo.setOpenId(openid+"");
+		}
+
 		File file=new File(SystemConfig.IMAGE_PATH+File.separator+"file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd"));
 		if(!file.exists()){//如果文件夹不存在
 			file.mkdir();//创建文件夹
