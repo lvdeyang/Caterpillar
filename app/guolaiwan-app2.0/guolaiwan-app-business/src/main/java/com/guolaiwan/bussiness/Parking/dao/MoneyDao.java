@@ -14,6 +14,7 @@ import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
+import pub.caterpillar.orm.hql.CountHql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 @Component
@@ -38,7 +39,31 @@ public class MoneyDao  extends AbstractBaseDao<MoneyPO>{
     }
  
        
-    
+
+	/**
+	 * 景区停车场分页
+	 * 
+	 * @param strMap
+	 * @param page
+	 * @param limit
+	 * @return
+	 */
+	public List<MoneyPO> findByPageC( int pageNum, int pageSize) {
+		QueryHql hql = this.newQueryHql();
+		hql.orderBy("updateTime", true);
+		List<MoneyPO> poList = findByHqlPage(hql, pageNum, pageSize);
+		return poList;
+	}
 	
-	
+	/**
+	 * 分页
+	 * 
+	 * @param strMap
+	 * @return
+	 */
+	public int CountByPageC() {
+		CountHql cHql = newCountHql();
+		int count = countByHql(cHql);
+		return count;
+	}
 }
