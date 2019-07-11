@@ -290,7 +290,7 @@ layui.use('laydate', function(){
 
 	function search(){
 		var name=$('.hotelname').val();
-   		location.href=window.BASEPATH + 'business/gotohotel?merchantId=${merchantId}&name='+name;
+   		location.href=window.BASEPATH + 'business/gotohotel?merchantId=${merchantId}&name='+name+'&type=0002';
    }
 
     

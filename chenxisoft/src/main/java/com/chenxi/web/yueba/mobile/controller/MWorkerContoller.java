@@ -32,22 +32,26 @@ import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
 import com.chenxi.web.po.ProductPo;
+import com.chenxi.web.po.UserPo;
 import com.chenxi.web.util.Img2Base64Util;
 import com.chenxi.web.weixin.JsTicketUtil;
 import com.chenxi.web.yueba.admin.dao.ComboDao;
 import com.chenxi.web.yueba.admin.dao.CommentDao;
 import com.chenxi.web.yueba.admin.dao.DaysTypeDao;
+import com.chenxi.web.yueba.admin.dao.LevelDao;
 import com.chenxi.web.yueba.admin.dao.OrderDao;
 import com.chenxi.web.yueba.admin.dao.RegionDao;
 import com.chenxi.web.yueba.admin.dao.SeeRecordDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
 import com.chenxi.web.yueba.admin.po.ComboPo;
 import com.chenxi.web.yueba.admin.po.DaysTypePo;
+import com.chenxi.web.yueba.admin.po.LevelPo;
 import com.chenxi.web.yueba.admin.po.OrderPo;
 import com.chenxi.web.yueba.admin.po.RegionsPo;
 import com.chenxi.web.yueba.admin.po.SeeRecordPo;
 import com.chenxi.web.yueba.admin.po.WorkerPo;
 
+import javassist.compiler.ast.Stmnt;
 import net.sf.ehcache.search.parser.MValue;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
@@ -103,11 +107,11 @@ public class MWorkerContoller extends BaseController {
         
         strMap.put("comments",conn_comment.findByworkerId(workerId, 1, 3));
         
-        strMap.put("childCount", conn_order.countByField("workerId", workerId));
+        strMap.put("childCount", workerPo.getBaseOrderCount()+conn_order.countByField("workerId", workerId));
         OrderPo currentOrder=conn_order.findMaxWorderOrder(workerId);
         String minDate=DateUtil.format(new Date(),"yyyy-MM-dd");
         if(currentOrder!=null){
-        	minDate=DateUtil.format(DateUtil.addHour(currentOrder.getFromDate(),currentOrder.getDays()+1),"yyyy-MM-dd");
+        	minDate=DateUtil.format(DateUtil.addDay(currentOrder.getFromDate(),currentOrder.getDays()+1),"yyyy-MM-dd");
         }
         
 		strMap.put("minDate", minDate);
@@ -189,9 +193,12 @@ public class MWorkerContoller extends BaseController {
 		
 		HttpSession session = request.getSession();
 		Object openid=session.getAttribute("openid");
-		workerPo.setOpenId(openid+"");
 		
-		
+		List<UserPo> userPos=conn_user.findUserByOpenId(openid+"");
+		if(userPos.get(0).getAdminFlg()==0){
+			workerPo.setOpenId(openid+"");
+		}
+
 		File file=new File(SystemConfig.IMAGE_PATH+File.separator+"file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd"));
 		if(!file.exists()){//如果文件夹不存在
 			file.mkdir();//创建文件夹
@@ -275,4 +282,61 @@ public class MWorkerContoller extends BaseController {
 		return ret;
 	}
 
+	
+	@RequestMapping(value = "/mobile/check", method = RequestMethod.GET)
+	public ModelAndView check(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		ModelAndView mv = new ModelAndView("yuebamobile/check", strMap);
+		return mv;
+	}
+	
+	@Autowired
+	LevelDao conn_level;
+	
+	@RequestMapping(value = "/mobile/checkin", method = RequestMethod.GET)
+	public ModelAndView checkin(HttpServletRequest request,long workerId) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		List<LevelPo> levelList=conn_level.findAll();
+		strMap.put("levelList", levelList);
+		strMap.put("workerId", workerId);
+		ModelAndView mv = new ModelAndView("yuebamobile/checkin", strMap);
+		return mv;
+	}
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/docheck", method = RequestMethod.POST)
+	public Object docheck(HttpServletRequest request) {
+		Map ret = new HashMap();
+		String id=request.getParameter("id");
+		String level=request.getParameter("level");
+		String checkMsg=request.getParameter("checkMsg");
+		String baseOrderCount=request.getParameter("baseOrderCount");
+		String sindex=request.getParameter("sindex");
+		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
+		workerPo.setSindex(Integer.parseInt(sindex));
+		workerPo.setBaseOrderCount(Integer.parseInt(baseOrderCount));
+		workerPo.setLevel(level);
+		workerPo.setCheckMsg(checkMsg);
+		workerPo.setStatus(WorkerStatus.PASSED);
+		conn_worker.update(workerPo);
+		return "success";
+	}
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/notpass", method = RequestMethod.POST)
+	public Object notpass(HttpServletRequest request) {
+		Map ret = new HashMap();
+		String id=request.getParameter("id");
+		
+		String checkMsg=request.getParameter("checkMsg");
+		
+		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
+
+		workerPo.setCheckMsg(checkMsg);
+		workerPo.setStatus(WorkerStatus.REFUSE);
+		conn_worker.update(workerPo);
+		return "success";
+	}
+	
+	
 }

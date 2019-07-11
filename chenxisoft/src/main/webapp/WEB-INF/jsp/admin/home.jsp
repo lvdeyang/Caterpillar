@@ -60,6 +60,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <dl class="layui-nav-child">
             <dd><a href="javascript:;" class="menu" data="label/index">标签管理</a></dd>
           </dl>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;" class="menu" data="user/index">终端用户</a></dd>
+          </dl>
         </li>
         <li class="layui-nav-item layui-nav-itemed">
           <a class="" href="javascript:;">订单中心</a>

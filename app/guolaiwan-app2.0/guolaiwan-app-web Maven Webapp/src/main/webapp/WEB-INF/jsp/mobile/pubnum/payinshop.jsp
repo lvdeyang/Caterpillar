@@ -549,7 +549,18 @@ html, body {
 					data = parseAjaxResult(data);
 					
 					if(data === -1) return;
-					 payPublic(data.id); 
+					 $.modal({
+						  title: "付款方式",
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+								    payByWallet(data.id);
+						    } },
+						    { text: "微信支付", onClick: function(){ 
+								    payPublic(data.id);
+						    } },
+						    { text: "取消", className: "default", onClick: function(){ } },
+						  ]
+						}); 
 				});			  
 			  });	 	
 		}
@@ -588,6 +599,24 @@ html, body {
 		        orderNo = data.orderNo;
 		        callpay(orderId);
 			});
+		}
+		
+		function payByWallet(orderId){
+			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
+			var userId=${userId};
+			$.post(url,{'orderId':orderId,'userId':userId},function(data){
+						data = parseAjaxResult(data);
+				if(data==1){
+						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
+						    if(data.data=="PAYSUCCESS"){				
+						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						    }
+						});
+				}else{
+					$.alert('您的余额不足！');
+				}
+                   
+			})
 		}
 		
 	
