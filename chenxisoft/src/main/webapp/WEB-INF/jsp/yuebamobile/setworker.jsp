@@ -94,8 +94,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         <div class="ui-form-item ui-border-b">
 		            <label>级别
 		            </label>
-		            <div class="ui-select" value="${worker.level}" style="margin-top:10px;margin-left:50px;">
-			            <select id="level" style="font-size:14px;margin-top:5px;">
+		            <div class="ui-select"  style="margin-top:10px;margin-left:50px;">
+			            <select id="level" value="${worker.level}" style="font-size:14px;margin-top:5px;">
 			                 <c:forEach items="${levelList}" var="level">
 				                <option value="${level.name}">${level.name}</option>
 				             </c:forEach>
@@ -140,8 +140,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
-	         
-	
+
+	         $('#level').val('${worker.level}');
 		     
 		     $(document).on('click','#save',function(){
 		         var _urisetdo = window.BASEPATH + 'worker/mobile/doset';
