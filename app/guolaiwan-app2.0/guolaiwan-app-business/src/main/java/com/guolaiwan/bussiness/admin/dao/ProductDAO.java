@@ -451,6 +451,7 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		QueryHql hql = newQueryHql();
 		hql.andBy("productAuditstatus", Condition.eq, ShopAuditStateType.T); // 瀹℃牳閫氳繃
 		hql.andBy("productIsShow", Condition.eq, 1); // 浜у搧灞曠ず
+		hql.andBy("integralGoods", Condition.eq, 0); 
 		hql.andBy("productName", Condition.lk, name);
 		List<ProductPO> products = findByHqlPage(hql, pageNum, pageSize);
 		return products;
@@ -503,6 +504,7 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		CountHql cHql = newCountHql();
 		cHql.andBy("productAuditstatus", Condition.eq, ShopAuditStateType.T); // 瀹℃牳閫氳繃
 		cHql.andBy("productIsShow", Condition.eq, 1); // 浜у搧灞曠ず
+		cHql.andBy("integralGoods", Condition.eq, 0); // 浜у搧灞曠ず
 		cHql.andBy("productName", Condition.lk, name);
 		int count = countByHql(cHql);
 		return count;
