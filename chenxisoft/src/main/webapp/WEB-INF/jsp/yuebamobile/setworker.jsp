@@ -90,19 +90,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        <div class="ftitle">
 	                                    基本信息
 	        </div>
-		     <div class="ui-form-item ui-border-b">
-		            <label>反馈信息
+
+	         <div class="ui-form-item ui-border-b">
+		            <label>级别
 		            </label>
-		            <input style="margin-top:15px;font-size:14px;margin-left:0px;" type="text" id="checkMsg" value="">
+		            <div class="ui-select" value="${worker.level}" style="margin-top:10px;margin-left:50px;">
+			            <select id="level" style="font-size:14px;margin-top:5px;">
+			                 <c:forEach items="${levelList}" var="level">
+				                <option value="${level.name}">${level.name}</option>
+				             </c:forEach>
+			            </select>
+			        </div>
+		     </div>
+		     <div class="ui-form-item ui-border-b">
+		            <label>订单数
+		            </label>
+		            <input style="margin-top:15px;font-size:14px;margin-left:12px;" type="text" id="baseOrderCount" value="${worker.baseOrderCount}">
+		     </div>
+		     <div class="ui-form-item ui-border-b">
+		            <label>排序
+		            </label>
+		            <input   style="margin-top:15px;font-size:14px;margin-left:25px;" type="text" id="sindex" value="${worker.sindex}">
+		     </div>
+		     <div class="ui-form-item ui-border-b">
+		            <label>专业专长
+		            </label>
+		            <input style="margin-top:15px;font-size:14px;margin-left:0px;" type="text" id="moreMsg" value="${worker.moreMsg}">
 		     </div>
             
-	        <div class="ui-btn-wrap" style="margin-left:-5px">
-	            <button class="ui-btn-lg ui-btn-primary" id="agree" style="background:#FFC0CB;width:50%">
-	                                                    同意                 
+	        <div class="ui-btn-wrap" style="">
+	            <button class="ui-btn-lg ui-btn-primary" id="save" style="background:#FFC0CB;">
+	                                                    保存               
 	            </button>
-	            <button class="ui-btn-lg ui-btn-primary" id="refuse" style="background:#FFC0CB;width:50%;margin-left:5px;">
-	                                                    拒绝                            
-	            </button>
+	            
 	        </div>
 
 	</div>
@@ -123,28 +143,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         
 	
 		     
-		     $(document).on('click','#agree',function(){
-		         var _uricheckdo = window.BASEPATH + 'worker/mobile/docheck';
+		     $(document).on('click','#save',function(){
+		         var _urisetdo = window.BASEPATH + 'worker/mobile/doset';
 		         var data={};
 		         data.id=${workerId};
-		        
-		         data.checkMsg=$('#checkMsg').val();
-		         $.post(_uricheckdo, data, function(data){
-				       location.href=window.BASEPATH +'worker/mobile/check';
+		         data.level=$('#level').val();
+		         data.baseOrderCount=$('#baseOrderCount').val();
+		         data.sindex=$('#sindex').val();
+		         data.moreMsg=$('#moreMsg').val();
+		         $.post(_urisetdo, data, function(data){
+				       location.href=window.BASEPATH +'worker/mobile/setindex';
 				  });
 		     
 		     });
-		     $(document).on('click','#refuse',function(){
-		         var _uricheckdo = window.BASEPATH + 'worker/mobile/notpass';
-		         var data={};
-		         data.id=${workerId};
-		        
-		         data.checkMsg=$('#checkMsg').val();
-		         $.post(_uricheckdo, data, function(data){
-				       location.href=window.BASEPATH +'worker/mobile/check';
-				  });
 		     
-		     });
 		     
 	       
 	          

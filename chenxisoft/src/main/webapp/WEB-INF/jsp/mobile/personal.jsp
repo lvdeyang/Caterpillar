@@ -79,9 +79,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4> 
 	        </div>
 	    </li>
-	    <li style="display:none;" class="ui-border-t" data="worker/mobile/add">
+	    <li style="display:none;" id="setWorker" class="ui-border-t" data="worker/mobile/setindex">
 	        <div class="ui-list-info">
-	            <h4 class="ui-nowrap" style="font-size:14px;">添加月嫂</h4> 
+	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂设置</h4> 
 	        </div>
 	    </li>
 	    <li style="display:none;" id="checkWorker" class="ui-border-t" data="worker/mobile/check">
@@ -107,6 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          var adminFlg=${user.adminFlg};
 	          if(adminFlg==1){
 	             $('#checkWorker').show();
+	             $('#setWorker').show();
 	          }
 	          
 	          

@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      height:40px;
      padding-left:10px;
      line-height:40px;
-     color:#FFC0CB;
+     color:#BA6985;
      
    }
    .ftitle a{
@@ -124,6 +124,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="margin-left:20px;">${worker.address}</label>
 	        </div>
 	        <div class="ftitle">
+	                                   专长特点
+	        </div>
+	        <p style="font-size:14px;margin-left:12px;width:90%">
+	             ${worker.moreMsg}
+	        
+	        </p>
+	        <div class="ftitle">
 	                                    证件照片
 	        </div>
 	        <div id="imageContent">
@@ -166,7 +173,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        <c:forEach items="${comments}" var="comment">
 	                <li>
 	                    <div class="ui-avatar-lg">
-	                        <span style="background-image:url(/chenxisoft/${comment.userPhoto})"></span>
+	                        <span style="background-image:url(${comment.userPhoto})"></span>
 	                    </div>
 	                    <div class="ui-list-info ui-border-t">
 	                         ${comment.content}
