@@ -442,12 +442,16 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/gotopayment")
 	public ModelAndView goToPayMent(HttpServletRequest request) throws Exception {
-		String orderId=request.getParameter("orderId");
-		String productClassCode = productDAO.get(orderInfoDao.get(Long.parseLong(orderId)).getProductId()).getProductClassCode();
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/business/payment");
+		String orderId=request.getParameter("orderId");
+		if(orderInfoDao.get(Long.parseLong(orderId)).getProductId()!=0){
+			String productClassCode = productDAO.get(orderInfoDao.get(Long.parseLong(orderId)).getProductId()).getProductClassCode();
+			mv.addObject("type", productClassCode);
+		}else{
+			mv.addObject("type", "");
+		}
 		mv.addObject("orderId", orderId);
-		mv.addObject("type", productClassCode);
 		return mv;
 	}
 	
@@ -840,4 +844,33 @@ public class BusinessController extends WebBaseControll {
 		return comboList;
 	}
 	
+	// 商家的详情页面
+	@ResponseBody
+	@RequestMapping(value = "/gotobusinessdetails")
+	public ModelAndView goToBusinessdetails(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		MerchantPO merchantPO = Mer_chant.get(merchantId);
+		String shopIntroduction = merchantPO.getShopIntroduction();
+		String shopName = merchantPO.getShopName();
+		mv = new ModelAndView("mobile/business/businessdetails");
+		mv.addObject("shopIntroduction", shopIntroduction);
+		mv.addObject("shopName", shopName);
+		return mv;
+	}
+	
+	// 商品的详情页面
+	@ResponseBody
+	@RequestMapping(value = "/gotodetailspage")
+	public ModelAndView goToDetailsPage(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long productId=Long.parseLong(request.getParameter("productId"));
+		ProductPO product = conn_product.get(productId);
+		List<ProductPO> productPO=new ArrayList<ProductPO>();
+		productPO.add(product);
+		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(productPO, ProductVO.class);
+		mv = new ModelAndView("mobile/business/detailspage");
+		mv.addObject("product", alllist.get(0));
+		return mv;
+	}
 }

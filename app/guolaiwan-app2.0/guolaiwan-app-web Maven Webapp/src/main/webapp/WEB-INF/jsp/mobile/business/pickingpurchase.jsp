@@ -198,10 +198,12 @@ html, body {
 	
 	$(document).on('click', '#logistics1', function(){
 		logisticsId=1;
+		$('.contentt-box').show();
 	});
 	
 	$(document).on('click', '#logistics2', function(){
 		logisticsId=2;
+		$('.contentt-box').hide();
 	});
 	
 	<!--选项卡  -->
@@ -243,6 +245,7 @@ html, body {
 	  }
 	  $('.zhi').val(value);
 	  $('.price').html("￥"+(${product.productPrice}*value).toFixed(2));
+	  $('.productprice').html("￥"+(${product.productPrice}*value).toFixed(2));
 	 })
 	    
 	 $(document).on('click','.p2',function(){
@@ -252,6 +255,7 @@ html, body {
 	   }
 	   $('.zhi').val(value);
 	   $('.price').html("￥"+(${product.productPrice}*value).toFixed(2));
+	   $('.productprice').html("￥"+(${product.productPrice}*value).toFixed(2));
 	  })
 	  
 	  function gotologistics(){
@@ -269,38 +273,10 @@ html, body {
 $(function(){
 	getaddress();
 	initCombos();
+	$('.productprice').html("￥${product.productPrice}");
 })
 
-//加入购物车
-function joinBasket(){
-		    var param={};
-			param.productId=${product.id};
-			param.productNum=$('.zhi').val();
-			param.userId=${userId};
-			param.productRestrictNumber=${productRestrictNumber};
-			param.payMoney=1;
-			param.paytype='WEICHAT';
-			param.source="PUBLICADDRESS";
-			param.bookDate=$('#bookDate').val();
-			param.source="PUBLICADDRESS";
-			/* param.logisticsId=$('#logisticsList').val(); */
-            
-			var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${product.id}+'&count='+$('.zhi').val();
-			$.get(chkStockUrl, null, function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-				if(data.stock==0){
-				   $.toast("抱歉，库存不足", "forbidden");
-				   return;
-				}	
-				var _uriPay = window.BASEPATH + 'phoneApp/joinBasket';
-			    $.post(_uriPay, $.toJSON(param), function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					$.toast("已加入购物车");
-				});
-			});
-	}
+
 	
 	//获取地址
 	function getaddress(){
@@ -550,7 +526,7 @@ function joinBasket(){
         <p style="position: absolute;font-size: 16px;font-weight: bold;top:19px;left:5%;">套餐选择</p>
         </div>
         <div style="width:100%;height:60px;position: fixed;bottom:0;background: #fff;">
-        <p onclick="joinBasket()" style="line-height: 60px;color:#EB6E1E;width:50%;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">加入购物车</p>
+        <p  style="line-height: 60px;color:#EB6E1E;width:50%;display: inline-block;text-align: center;font-size:20px;font-weight: bold;"><span class="productprice"></span></p>
         <p onclick="dobuy()" style="line-height: 60px;background:#EB6E1E;width:50%;color:#fff;float:right;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">立即购买</p>
         </div> 
 </body>

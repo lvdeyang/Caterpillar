@@ -366,17 +366,17 @@ html, body {
 		   <p style="position: absolute;bottom:10px;font-size:12px;left:30%"><span id="proPrice">￥10</span><span id="proCount"></span> </p>
 		  </div>
 		  <ul class="dingdan" style="width:100%;padding:0 5% 0 8%;line-height:50px;">
-		   <li><p>订单总额</p><span id="amount">￥0.01</span></li>
-		    <li><p>实际总额</p><span id="payAmount">￥0.01</span></li>
-		     <li><p>订单号</p><span id="orderNo">666</span></li>
-		      <li id="startDate" hidden="hidden"><p>入住日期</p><span id="startspan">2019.07.09</span></li>
-		       <li id="endDate" hidden="hidden"><p>离店日期</p><span id="endspan">2019.07.09</span></li>
-		        <li><p>套餐</p><span id="combo">标准</span></li>
-		         <li><p>快递</p><span id="logistics">过来玩物流</span></li>
-		          <li><p>联系人</p><span id="cuserName">xxx</span></li>
-		           <li><p>手机号</p><span id="cphone">10086</span></li>
-		            <li><p>详细地址</p><span id="caddress">河北省唐山市遵化市</span></li>
-		             <li id="paytime"><p>支付日期</p><span id="orderDate">2019.07.05 12：12：00</span></li>
+		   <li><p>订单总额</p><span id="amount"></span></li>
+		    <li><p>实际总额</p><span id="payAmount"></span></li>
+		     <li><p>订单号</p><span id="orderNo"></span></li>
+		      <li id="startDate" hidden="hidden"><p>入住日期</p><span id="startspan"></span></li>
+		       <li id="endDate" hidden="hidden"><p>离店日期</p><span id="endspan"></span></li>
+		        <li><p>套餐</p><span id="combo"></span></li>
+		         <li><p>快递</p><span id="logistics"></span></li>
+		          <li ><p>联系人</p><span id="cuserName">xxx</span></li>
+		           <li ><p>手机号</p><span id="cphone">xxx</span></li>
+		            <li ><p>详细地址</p><span id="caddress">xxx</span></li>
+		             <li id="paytime"><p>支付日期</p><span id="orderDate"></span></li>
 		  </ul>
 		  <div style="width:100%;height:auto;margin:10px auto;text-align: center;">
 		  <img id="ydImage" style="height:80px;width:80px;" src="lib/images/logo.png"/> 
