@@ -53,6 +53,7 @@
     	
     	function initHeader(){
     	     var html=[];
+    	     html.push('<a href="home/mobile/index"><i style="font-size:14px;width:20px;line-height:50px;float:left"class="icon-home"></i></a>');
     	     html.push('<div style="width:140px;margin:0 auto">');
 	         html.push('<image src="/chenxisoft/lib/images/logo.png" style="width:60px;height:38px;float:left;margin-top:5px;"/>');
 	         html.push('<h1 style="font-size:14px;width:70px;float:left;margin-left:-15px;">小青月嫂</h1></div>');

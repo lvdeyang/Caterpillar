@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">级别选择</label>
 	    <div class="layui-input-block">
-	      <select name="level" lay-filter="level">
+	      <select id="level" name="level" value="" lay-filter="level">
 	        <c:forEach items="${levelList}" var="level">
                 <option value="${level.name}">${level.name}</option>
              </c:forEach>
@@ -28,6 +28,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	      </select>
 	    </div>
 	  </div>
+	  
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">初始订单数</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="baseOrderCount" value="${worker.baseOrderCount}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+	  
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">排序权值</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="index" value="${worker.sindex}" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+	  
       <div class="layui-form-item" style="margin-left:50px;">
            <button class="layui-btn" lay-filter="add" lay-submit>
                                                               保存
@@ -42,6 +57,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   var form = layui.form
               ,layer = layui.layer;
 
+
+              $('#level').val('${worker.level}');
+			  //重新渲染表单,只有执行了这一步，部分表单元素才会自动修饰成功
+			  layui.form.render('select');
+			  
               //监听提交
               form.on('submit(add)', function(data){
               console.log(data.field);

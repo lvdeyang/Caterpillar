@@ -74,12 +74,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <h4 class="ui-nowrap" style="font-size:14px;">浏览记录</h4> 
 	        </div>
 	    </li>
-	    <li class="ui-border-t">
+	    <li class="ui-border-t"  data="about/mobile/index">
 	        <div class="ui-list-info" data="javascript:void(0)">
 	            <h4 class="ui-nowrap" style="font-size:14px;">关于我们</h4> 
 	        </div>
 	    </li>
-	    
+	    <li style="display:none;" id="setWorker" class="ui-border-t" data="worker/mobile/setindex">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂设置</h4> 
+	        </div>
+	    </li>
+	    <li style="display:none;" id="checkWorker" class="ui-border-t" data="worker/mobile/check">
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂审核</h4> 
+	        </div>
+	    </li>
 	</ul>
 
 	<script type="text/javascript">
@@ -94,6 +103,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
+	          
+	          var adminFlg=${user.adminFlg};
+	          if(adminFlg==1){
+	             $('#checkWorker').show();
+	             $('#setWorker').show();
+	          }
+	          
 	          
 	          $(document).on('click','.ui-border-t',function(){
 	              location.href=$(this).attr('data');

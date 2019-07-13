@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.chenxi.web.dao.UserDao;
+import com.chenxi.web.po.UserPo;
 import com.chenxi.web.yueba.admin.dao.CommentDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
 import com.chenxi.web.yueba.admin.po.CommentPo;
@@ -28,6 +30,8 @@ public class MCommentController {
 	CommentDao conn_comment;
 	@Autowired
 	WorkerDao conn_worker;
+	@Autowired
+	UserDao conn_user;
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/mobile/add", method = RequestMethod.POST)
@@ -36,6 +40,11 @@ public class MCommentController {
 		String content=request.getParameter("content");
 		CommentPo commentPo=new CommentPo();
 		commentPo.setContent(content);
+		HttpSession session = request.getSession();
+		Object userId=session.getAttribute("userId");
+		UserPo userPo=conn_user.get(Long.parseLong(userId+""));
+		commentPo.setUserName(userPo.getNickName());
+		commentPo.setUserPhoto(userPo.getHeadPic());
 		commentPo.setWorkerId(Long.parseLong(workerId));
         conn_comment.save(commentPo);
         return "success";

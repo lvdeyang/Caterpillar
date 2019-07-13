@@ -67,6 +67,17 @@ public class OrderContoller {
 	@RequestMapping(value = "/addorder", method = RequestMethod.GET)
 	public ModelAndView addorder(HttpServletRequest request,long workerId) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
+		
+		
+		OrderPo currentOrder=conn_order.findMaxWorderOrder(workerId);
+        String minDate=DateUtil.format(new Date(),"yyyy-MM-dd");
+        if(currentOrder!=null){
+        	minDate=DateUtil.format(DateUtil.addDay(currentOrder.getFromDate(),currentOrder.getDays()+1),"yyyy-MM-dd");
+        }
+        
+		strMap.put("minDate", minDate);
+		
+		
 		strMap.put("workerId", workerId);
 		strMap.put("regionList", conn_region.findAll());
 		strMap.put("daysList", conn_daystype.findAll());

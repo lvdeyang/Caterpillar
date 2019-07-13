@@ -79,7 +79,7 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#fff !important; 
+	background:#E0E0E0 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	
@@ -108,7 +108,7 @@ html, body {
 }
 
 .header-content {
-	height: 100%;
+	height:auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -174,52 +174,61 @@ html, body {
 
 <script type="text/javascript">
 	$(function() {
-	   var _uriRecomment = window.BASEPATH +'business/getPicture';
-         var params={};
-         params.merchantId=198;
-         $.post(_uriRecomment,params, function(data){
-				if(data.length>0){
-				    var html=[];
-					for(var i=0; i<data.length;i++){
-				     html.push('<div style="height:200px;" class="swiper-slide"><img style="height:200px" src="'+data[i]+'" alt=""></div>');	
-					}
-					$('#headerWrapper').append(html.join(''));
-					$("#headerSwiper").swiper({
-				        loop: true,
-				        autoplay: 3000,
-				        autoplayDisableOnInteraction : false
-				      });
-				}
-		 });
-		 
-		 var _uriRecomments = window.BASEPATH +'business/getpark';
-         var paramss={};
-         paramss.merchantId=198;
-	      $.post(_uriRecomments,paramss, function(data){               		   
-				    var html=[];
-					for(var i=0;i<data.length;i++){
-				     html.push('<div class="huodongs" style="width:40%;height:120px;text-align:center;display: inline-block;margin:10px 3%;">');	
-			         html.push('<img style="height:90px;width:100%;" src="'+data[i].shopPic+'"/>');
-			         html.push('<p style="margin:0 auto;">'+data[i].shopName+'</p>');
-			         html.push('</div>');
-			} 
-			$('.huodong').append(html.join(''));
-	 	 }); 
-             
+       getRecomment();
+       getAllProduct();
 	});
+	
+	function getRecomment(){
+	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
+		$.get(_uriMerchantInfo, null, function(data){
+			data = parseAjaxResult(data);
+			merchantName = data.shopName + '-过来玩';
+			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
+			merchantUrl = window.location.href;
+			if(data === -1) return;
+			if(data){
+			    var html=[];
+			    var pics=data.shopMpic.split(',');
+				for(var i=0; i<pics.length; i++){
+					var str = pics[i].split('.');
+					if(str[3]!="mp4"&&str[3]!="MP4"){ 
+					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+					}else{
+					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}
+				}
+			    $('.header-content').html(data.shopName);
+				$('.swiper-wrapper').append(html.join(''));
+				$(".swiper-container").swiper({
+			        loop: true,
+			        autoplay: 3000
+			    });
+			    }
+			    });
+	  }
+	  
+	  function getAllProduct(){
+		var url="<%=basePath%>business/getallproduct";
+            $.post(url,{"merchantId":${merchantId},"type":"006"},function(data){
+            	var html=[];
+            	if(data.length==0){
+            			html.push('<p style="text-align: center;bottom:5px;left:50%;color:#858585;">暂无推荐商品</p>');
+            	}else{
+					for(var i=0; i<data.length; i++){
+						html.push('<a onclick="gotodetailspage('+data[i].id+')"> <div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
+					    html.push('<img style="width:100%;height:120px;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
+					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;">'+data[i].productName+'</p>');
+					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
+					    html.push('<button style="border-radius:10px;font-size:12px;color:#fff;background:#EA6C1B;padding:0px 25px;border:none;outline:none;margin:0 auto;">立即购买</button>');
+					    html.push('</div></a>');
+						}
+				}
+		    	$('.main').append(html.join(''));
+            })
+		}
 </script>
 <script>
-$(function(){
-    $(window).scroll(function(){
-        var aa = $(window).scrollTop(); //当前滚动条滚动的距离
-        var bb = $(window).height();//浏览器当前窗口可视区域高度
-        var cc = $(document).height(); //浏览器当前窗口文档的高度 
-      
-        if(cc <= aa+bb){
-            $(".huodong").append($(".huodongs").clone()); 
-        }
-    })
-  })
+
  /*返回顶部  */
   $(function(){
 	$(window).scroll(function(){
@@ -237,8 +246,39 @@ $(function(){
 	});
 }); 
 
-
+   function gotorecommend(){
+   		location.href=window.BASEPATH + 'business/gotorecommend?merchantId=${merchantId}';
+   }
   
+   function gotopickinglist(){
+   		location.href=window.BASEPATH + 'business/gotopickinglist?merchantId=${merchantId}';
+   }
+   
+   function gotodetailspage(id){
+   		location.href=window.BASEPATH + 'business/gotodetailspage?productId='+id;
+   }
+    
+   function searchproduct(){
+   		var name=$('.search').val();
+   		var url=window.BASEPATH + 'business/searchproduct'
+   		$.post(url,{"name":name,"type":"006"},function(data){
+   				$('.main').empty();
+   				var html=[];
+            	if(data.length==0){
+            			html.push('<p style="text-align: center;bottom:5px;left:50%;color:#858585;">暂无推荐商品</p>');
+            	}else{
+					for(var i=0; i<data.length; i++){
+						html.push('<a onclick="gotodetailspage('+data[i].id+')"> <div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
+					    html.push('<img style="width:100%;height:120px;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
+					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;">'+data[i].productName+'</p>');
+					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
+					    html.push('<button style="border-radius:10px;font-size:12px;color:#fff;background:#EA6C1B;padding:0px 25px;border:none;outline:none;margin:0 auto;">立即购买</button>');
+					    html.push('</div></a>');
+						}
+				}
+		    	$('.main').append(html.join(''));
+   		})
+   } 
     
 </script>
 
@@ -249,9 +289,16 @@ $(function(){
 			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
+		<!-- 搜索  -->
+		  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;">
+		   <input placeholder="搜索" class="search" style="padding:0 15%;width:80%;height:30px;border-radius:18px;outline: none;border:none;background:#E0E0E0;text-align: center; " type="text">
+		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="searchproduct()" src="lib/images/sousuo.png"/>
+		  </div>
 		<div class="content" id="content" >
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
@@ -261,17 +308,14 @@ $(function(){
 	</div>
 	
 	<!-- 采摘-->
-	<div class="fenlei" style="width:100%;height:120px; text-align: center;margin:0 auto;line-height: 100px;">
-	   <img src="lib/images/huodongs.png"/>
-	   <img src="lib/images/caizhais.png"/>
-	  <p style="margin-top:-60px;"><span>采摘活动</span> <span>蔬果采摘</span></p>
+	<div class="fenlei" style="width:100%;height:80px; text-align: center;margin:0 auto;background:#fff;">
+	   <img onclick="gotorecommend()" src="lib/images/caizhaiss.png"/>
+	   <img onclick="gotopickinglist()" src="lib/images/shuguos.png"/>
+	  <p style=""><span style="color:#ED8036;" onclick="gotorecommend()">采摘活动</span> <span style="color:#6CA640;" onclick="gotopickinglist()">蔬果采摘</span></p>
 	</div>
-    <div class="huodong"  style="width:100%;height:auto;margin:0 auto;text-align:center;background:#fff;position: relative;overflow: hidden;">
-	          <!-- <div class="huodongs" style="width:40%;height:120px;text-align:center;display: inline-block;margin:10px 3%; ">
-	          <img style="height:90px;width:100%;" src="lib/images/1.jpg"/>
-	          <p style="margin:0 auto;">水蜜桃采摘</p>
-	          </div> -->
-   </div>    	
+	 <p style="text-align: center;color:#EC7218;font-size:16px;height:35px;line-height:35px;margin:0;font-weight: bold;">——<span style="margin:0 3%;">您可能选择</span>——</p>
+    <div class="main">
+	</div>	
    <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
 </body>

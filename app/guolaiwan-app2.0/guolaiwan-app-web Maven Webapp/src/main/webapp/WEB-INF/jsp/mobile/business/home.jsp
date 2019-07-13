@@ -396,11 +396,13 @@ $(function() {
 		$.get(url, null, function(data){
 			var html=[];
 			for(var i=0;i<data.length;i++){	
+				   var pingfen=(data[i].pingfen+46)/10;
+				   if(pingfen>5)pingfen=5;
 			       html.push("<a onclick='getorderinfo("+data[i].id+")'><div style='position: relative;overflow:hidden;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
 			       html.push("<img style='height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data[i].url+"'/>");
 			       html.push("<div class='youxuan-in' style='display: inline-block;'>");
 			       html.push("<p style='position: absolute;top:-40px;font-size:14px;max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data[i].ProductName+"</p>");
-			       html.push("<p style='position: absolute;top:0px;font-size:12px;color:#C0C0C0;'><span style='color:#EC6D1E;'>5.0分</span>   <span>"+data[i].number+"人来过</span></p>");
+			       html.push("<p style='position: absolute;top:0px;font-size:12px;color:#C0C0C0;'><span style='color:#EC6D1E;'>"+pingfen+"分</span>   <span>"+data[i].number+"人来过</span></p>");
 			       html.push("<p style='position: absolute;top:40px;font-size:12px;color:#C0C0C0;'>739m</p>");
 			       html.push("<p style='color:#EC6D1E;position: absolute;top:-40px;right:0%;font-size:14px;'>$"+data[i].ProductPrice+"起</p>");
 			       html.push("<button style='position: absolute;right:3%;top:120px;line-height:25px;font-size:14px;width:20%;outline: none;border:none;height:25px;border-radius:6px;background:#FF4900;color:#fff;' >立即预订</button>");
@@ -439,7 +441,7 @@ $(function() {
    		location.href=window.BASEPATH + 'business/gotoraiders?merchantId=${merchantId}';
    }
    function picking(){
-   		location.href=window.BASEPATH + 'business/gotopickinglist?merchantId=${merchantId}';
+   		location.href=window.BASEPATH + 'business/gotopicking?merchantId=${merchantId}';
    }
    
 </script>

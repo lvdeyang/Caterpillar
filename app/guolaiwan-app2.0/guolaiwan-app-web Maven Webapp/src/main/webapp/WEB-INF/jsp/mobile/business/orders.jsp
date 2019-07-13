@@ -109,7 +109,7 @@ html, body {
 }
 
 .header-content {
-	height: 100%;
+	height: auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -142,7 +142,7 @@ html, body {
 .liebiao li input{
     width: 100%;
     height: 60px;
-    margin: 10px auto;
+    margin:5px auto;
     text-align: right;
     margin-left: 2%;
     padding: 0 10%;
@@ -154,6 +154,28 @@ html, body {
 }
 .fukuan{
   background: -webkit-linear-gradient(left,rgba(254,187,56,1),rgba(254,104,33,1)); /* Safari 5.1 - 6 */
+}
+.tianjia span{
+border-radius:10px;
+border:1px solid #FCB735;
+padding:3px 20px;
+margin:20px 0 0 10px;
+display: inline-block;
+color:#FCB735;
+}
+.tianjia span:hover{
+background: #FCB735;
+color:#fff;
+}
+.fuceng{
+    position: fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top: 0;
+    background-color:rgba(0,0,0,0.6);
+    z-index: 10000;
+
 }
 </style>
 
@@ -177,7 +199,7 @@ html, body {
 	
 	function affirmorder(){
 	 
-	 var url = window.BASEPATH + 'business/affirmorder?productid='+${productid};
+	 var url = window.BASEPATH + 'business/affirmorder?productid='+${product.id};
 	 $.get(url, null, function(data){
           document.getElementById("zong").innerText = data.ProductPrice;
 	     var html=[];
@@ -259,6 +281,18 @@ html, body {
 				 alert("通过");
 				}
 	});	
+	
+	
+	
+	$(document).on('click', '.gai', function(){ 
+  $(".fuceng").fadeIn();
+   $(".tanchuang").fadeIn();
+});
+  $(document).on('click', '.fuceng', function(){ 
+  $(".fuceng").fadeOut();
+  $(".tanchuang").fadeOut();
+});
+  
 </script>
 <body>
 	<!-- 主页 -->
@@ -290,12 +324,12 @@ html, body {
 		    </li>
 		    <li>
 		    <input type="button">
-		    <p style="position: absolute;top:180px;left:10%;">房间数量</p>
-		    <p class="p1" style="position: absolute;top:180px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
-		    <input type="text" readonly="true"  class="zhi" id="shuliang" value="1"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:182px;font-size:14px;font-weight:bold;text-align: center;">
-		    <p class="p2" style="position: absolute;top:180px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
+		    <p style="position: absolute;top:175px;left:10%;">房间数量</p>
+		    <p class="p1" style="position: absolute;top:175px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
+		    <input type="text" readonly="true"  class="zhi" id="shuliang" value="1"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:178px;font-size:14px;font-weight:bold;text-align: center;">
+		    <p class="p2" style="position: absolute;top:175px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
 		    </li>
-		    <li>
+		   <!--  <li>
 		    <input class="pid"  type="text" placeholder="请输入身份证号码" minlength="18" maxlength="18" style="padding:0 7%" >
 		    <p style="position: absolute;top:260px;left:10%;">身份证号码</p>
 		    </li>
@@ -306,26 +340,53 @@ html, body {
 		    <li>
 		     <input class="phone" type="text" placeholder="请输入正确的手机号码" minlength="11" maxlength="11" style="padding:0 7%" >
 		    <p style="position: absolute;top:420px;left:10%;">联系电话</p>
-		    </li>
-		      <li>
+		    </li>-->
+		    <li>
 		    <input type="button">
-		    <p style="position: absolute;top:500px;left:10%;">优惠卷</p>
-		    <p style="position: absolute;top:500px;right:7%;"><span>0</span>张可用</p>
+		    <p style="position: absolute;top:245px;left:10%;">优惠卷</p>
+		    <p style="position: absolute;top:245px;right:7%;"><span>0</span>张可用</p>
+		    </li> 
+		    <li>
+		    <input type="button">
+		    <p style="position: absolute;top:315px;left:10%;">填写身份信息</p>
+		    <p class="gai" style="position: absolute;top:315px;right:7%;color:#FCB735;">添加/修改▲</p>
+		    <div class="tianjia" style="height:auto;width:85%;background: #fff;margin:-20px auto 0;padding:20px 0;border-radius:10px;">
+		     <span>xxx</span>
+		     
+		    </div>
 		    </li>
+		    
 		    </ul>	 
 	  </div>
 	  
-      <div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:20px;">
+     <!--  <div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:20px;">
           <img style="width:140px;height:171px;position: absolute;left:50%;margin:40px 0 0 -70px;" alt="" src="lib/images/renliansss.png">
           <p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-126px;">请保持正脸，平视屏幕，面部足够清晰。</p>
           <button style="position: absolute;left:50%;top:300px;font-size:18px;margin-left:-100px;width:200px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>
-      </div>   
+      </div> -->  
 	 <div style="background:#fff;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
 	     	<p style="height:100%;float:left;text-align:center;width:55%;line-height: 60px;color:#EC6D1E;font-size:20px;font-weight:bold;display: inline-block;">￥<span id="zong">39.9</span></p>
 	        <p class="fukuan" style="height:100%;float:right;text-align:center;width:45%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">去付款</p>
-	 </div>
+	 </div> 
      <div style="height:90px;width:100%;"> </div> 
-</body>
+     
+     
+     <div class='fuceng' style="display: none;"></div>
+     <div class="tanchuang" style="z-index:11111;width:100%;display: none;height:500px;padding:0 0 50px 0;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0;position: r ">
+	   <p style="width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">添加/修改信息</p>
+	   <button style="width:50%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 0;">添加信息</button>
+	   <div style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;border-bottom:1px solid #A6A6A6;text-align: left;padding:10px 20%;">
+		<input checked type="radio" name="sex" value="1" style="position: absolute;top:30px;left:10%;" />
+			<P>姓名：xxxx</P>	
+			<P>手机号：xxxx</P>	
+			<P>身份证号：130281111111111111</P>	
+			<img style="width:40px;height:40px;position: absolute;top:19px;right:15%;border-radius:50%;" src="lib/images/logo.png">
+			<img style="width:20px;height:20px;position: absolute;top:30px;right:5%;" src="lib/images/xiugai.png">
+		</div>
+	
+	  </div>
+	  
+  </body>
 
 
 

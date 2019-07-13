@@ -924,7 +924,7 @@ html, body {
  }
  function select(code){     
 	 var url = window.BASEPATH + '/product/delicacystore/greens';
-	 var date = {"codeID":code}
+	 var date = {"codeID":code,"merchantId":${merchantId}}
 	 $.post(url,date,function(msg){
 	   var proName = msg.productPO;
 	   var price =msg.priceList;
@@ -1002,6 +1002,8 @@ html, body {
        	<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
@@ -1012,7 +1014,7 @@ html, body {
 		      <img  style="" alt="" src="lib/images/1.jpg">
 		      <img  style="" alt="" src="lib/images/1.jpg">
 		      <img  style="" alt="" src="lib/images/1.jpg"> -->
-		      <button style="position: absolute;bottom:15px;left:15px;background-color:rgba(44,17,6,0.5);border-radius:12px;outline:none;border:none;color:#fff;padding:0 8px;font-size:12px;">共4张</button>
+		      <button style="position: absolute;bottom:15px;left:15px;background-color:rgba(44,17,6,0.5);border-radius:12px;outline:none;border:none;color:#fff;padding:0 8px;font-size:12px;"></button>
 		     </div>
 		     <div class="" style="height:100px;width:100%;border-bottom:1px solid #EFEFEF;position: relative;">
              <p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> 08:00-20:00</span></p>

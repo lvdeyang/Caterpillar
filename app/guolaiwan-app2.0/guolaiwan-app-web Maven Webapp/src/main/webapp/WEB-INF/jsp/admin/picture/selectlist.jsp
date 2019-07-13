@@ -136,6 +136,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		function sel(folde,url)
  		{
  		  parent.$("#${sel}").val("/"+folde+"/"+url);
+ 		  parent.$("input[name='${sel}']").val("/"+folde+"/"+url);
  		  parent.$("#${imgurl}").attr("src",webpath+"/"+folde+"/"+url);
  		  console.log("${sel}");
  		  parent.layer.close(index);

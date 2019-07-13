@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 <head>
 <meta charset="UTF-8">
-<title>停车场管理</title>
+<title>停车场金额管理</title>
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<button class="layui-btn layui-btn-danger" onclick="delAll()">
 				<i class="layui-icon">&#xe640;</i>批量删除
 			</button>
-			<button class="layui-btn" onclick="park_add('添加停车场','addv','900','550')">
+			<button class="layui-btn" onclick="park_add('添加停车场','addMoney','900','550')">
 				<i class="layui-icon">&#xe608;</i>添加停车场
 			</button>
 			<%-- <span class="x-right lheight4">共有 ${allcount} 个停车场</span> --%>
@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	{{#  } }}
 </script>
 <script type="text/html" id="zsgc">  
-	<a title="修改" href="javascript:;" onclick="park_edit('修改','updatev','{{ d.id }}','','510')" class="tdn">
+	<a title="修改" href="javascript:;" onclick="park_edit('修改','updatevMoney','{{ d.id }}','','510')" class="tdn">
 		<i class="layui-icon">&#xe642;</i>
 	</a>
 	<a title="删除" href="javascript:;" onclick="park_del(this,'{{ d.id }}')"  class="tdn">
@@ -128,19 +128,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		/*删除*/
 		function park_del(obj,id){
-			layer.confirm('确认要删除吗？（该停车场下车位信息也将删除）',function(index){
+			layer.confirm('确认要删除吗？',function(index){
 				layer.close(index);
 				layer.load();
 				//发异步删除数据
 				$.ajax({
 					type:"post",
-					url:"del.do",
+					url:"delMoney.do",
 					data:{"uuid":id},
 					success:function(msg){
 						if(msg=="success"){
-							layer.closeAll("loading");
-							$(obj).parents("tr").remove();
-							layer.msg('已删除!',{icon:1,time:1000});
+							window.location.reload();
 						}
 					}
 				}) 
@@ -152,7 +150,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			table.render({                  /*3.引入table*/
 				 elem:'#parkList'
 				 ,method:'post'
-				 ,url:'list.do'
+				 ,url:'money.do'
 				 ,page:true
 				 ,limits: [10,30,50,100]
 				 ,limit: 10
@@ -160,19 +158,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				 ,id:'parkList'
 				 ,cols: [[
 					  {type: 'checkbox'}
-					  ,{field: 'id', title: 'ID',sort: true,width:60} 
-					  ,{field: 'parkingName', title: '停车场名称',width:100,sort: false,templet:'#parkingNameTpl'}  
-					  ,{field: 'parkingImg', title: '图片',width:100,sort: false,templet:'#parkingImgTpl'}
-					  ,{field: 'address', title: '停车场地址',width:150,sort: false}
-					  ,{field: 'phone', title: '电话',width:120,sort: false}
-					  ,{field: 'commonParking', title: '总停放位',width:100,sort: true} 
-					  ,{field: 'usedParking', title: '已用车位',width:100,sort: true} 
-					  ,{field: 'position', title: '车位位置',width:100,sort: false} 
-					  ,{field: 'chargingColumn',title: '充电柱',width:80,templet:'#chargingColumnTpl'} 
-					  ,{field: 'parkingDistrict', title: '停车场经纬度',width:80,sort: false}
-					  ,{field: 'regulations', title: '停车条例',width:100,sort: false}
-					  ,{field: 'fineMultiple', title: '罚款倍数',width:100,sort: false}
-					  ,{field: 'stoppingTime', title: '停车时间',width:100,sort: false}
+					  ,{field: 'id', title: 'id',sort: true,width:60} 
+					  ,{field: 'attractionsId', title: '停车场名称',width:200,sort: false}  
+					  ,{field: 'parkingModel', title: '车位型',width:150,sort: false}
+					  ,{field: 'money', title: '金额',width:120,sort: false}
+					  ,{field: 'area', title: '区域',width:100,sort: true} 
+					  ,{field: 'tier', title: '层域',width:100,sort: true} 
 					  ,{fixed: 'right',title: '操作',width:120,minWidth:100,templet:'#zsgc',unresize:true}
 				 ]]
 				,done:function(res, curr, count){

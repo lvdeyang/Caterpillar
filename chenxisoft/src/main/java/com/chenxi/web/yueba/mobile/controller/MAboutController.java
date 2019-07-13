@@ -18,19 +18,16 @@ import com.chenxi.web.dao.SysViewRecordDao;
 import com.chenxi.web.dao.UserDao;
 import com.chenxi.web.po.SysViewRecordPo;
 import com.chenxi.web.po.UserPo;
-import com.chenxi.web.yueba.admin.dao.OrderDao;
+import com.chenxi.web.yueba.admin.dao.CommentDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
+import com.chenxi.web.yueba.admin.po.CommentPo;
 import com.chenxi.web.yueba.admin.po.WorkerPo;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
 @Controller
-@RequestMapping("/home")
-public class MHomeController {
-	@Autowired
-	WorkerDao conn_worker;
-	@Autowired
-	OrderDao conn_order;
+@RequestMapping("/about")
+public class MAboutController {
 	@Autowired SysViewRecordDao conn_sysview;
 	@Autowired UserDao conn_user;
 	
@@ -40,30 +37,12 @@ public class MHomeController {
 		SysViewRecordPo sysViewRecordPo=new SysViewRecordPo();
 		HttpSession session = request.getSession();
 		UserPo user=conn_user.get(Long.parseLong(session.getAttribute("userId")+""));
-		sysViewRecordPo.setUrl("home");
+		sysViewRecordPo.setUrl("about");
 		sysViewRecordPo.setUserName(user.getNickName());
 		conn_sysview.save(sysViewRecordPo);
-		ModelAndView mv = new ModelAndView("yuebamobile/home", strMap);
+		ModelAndView mv = new ModelAndView("yuebamobile/aboutus", strMap);
 		return mv;
 	}
 	
-	@ResponseBody
-	@JsonBody
-	@RequestMapping(value = "/getworkers", method = RequestMethod.GET)
-	public Object getworkers(HttpServletRequest request,int currPage,int pageCount) throws Exception {
-		List<WorkerPo> workerPos=conn_worker.findPassWorkersAndPage(currPage, pageCount);
-		for (WorkerPo workerPo : workerPos) {
-			workerPo.setOrderCount(workerPo.getBaseOrderCount()+conn_order.countByField("workerId",workerPo.getId()));
-		}
-		return workerPos;
-	}
-	@ResponseBody
-	@JsonBody
-	@RequestMapping(value = "/getCheckingworkers", method = RequestMethod.GET)
-	public Object getCheckingworkers(HttpServletRequest request) throws Exception {
-		List<WorkerPo> workerPos=conn_worker.findNotPassWorkers();
-		
-		return workerPos;
-	}
 	
 }

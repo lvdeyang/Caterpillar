@@ -24,107 +24,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 	<div class="x-body" style="height: 1800px;">
 		<form class="layui-form layui-form-pane" id="myForm" enctype="multipart/form-data">
-			<input type="hidden" name="uuid" value="${po.uuid}">
 			<input type="hidden" name="id" value="${po.id}">
-			<input type="hidden" name="imgTemp" value="${po.parkingImg}">
 			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车场名称 </label>
+				<label for="L_title" class="layui-form-label"> 停车场Id </label>
 				<div class="layui-input-block">
-					<input type="text" name="parkingName" value="${po.parkingName}"  autocomplete="off" lay-verify="title" class="layui-input">
+					<input type="text" name="commonParking" onkeyup="numChk($(this))" value="${po.attractionsId}"  autocomplete="off" lay-verify="title" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车场地址 </label>
+				<label for="L_title" class="layui-form-label"> 车位型 </label>
 				<div class="layui-input-block">
-					<input type="text" name="address" value="${po.address}"  autocomplete="off" lay-verify="title" class="layui-input">
+					<input type="text" name="usedParking"  value="${po.parkingModel}"  autocomplete="off" lay-verify="title" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车场电话 </label>
+				<label for="L_title" class="layui-form-label"> 停车费用  </label>
 				<div class="layui-input-block">
-					<input type="text" name="phone" value="${po.phone}"  autocomplete="off" lay-verify="title" class="layui-input">
+					<input type="text" name="position"  value="${po.money}"  autocomplete="off" lay-verify="title" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车场图片 </label>
-				<div class="layui-upload-list">
-					<img class="layui-upload-img" src="<%=basePath %>${po.parkingImg}"
-						name="posta" id="demo" value="" style="width:280px;"> <input
-						type="hidden" id="shopPicImg" name="shopPicImg" lay-verify="title"
-						autocomplete="off" class="layui-input" >
-				</div>
-				<div class="layui-input-inline">
-					<div class="layui-upload">
-						<a
-							href="javascript:openMap('上传图片','<%=request.getContextPath()%>/admin/picture/sellist?sel=shopPicImg&img=demo','600','400')"
-							class="layui-btn layui-btn-xs"
-							style=" height:30px; width:90px;margin-left:5px;margin-right:5px">更换图片</a>
-
-					</div>
-				</div>
-			</div>
-
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 总停放位 </label>
+				<label for="L_title" class="layui-form-label"> 区域 </label>
 				<div class="layui-input-block">
-					<input type="text" name="commonParking" onkeyup="numChk($(this))" value="${po.commonParking}"  autocomplete="off" lay-verify="title" class="layui-input">
+					<input type="text" name="chargingColumn"  value="${po.area}"  autocomplete="off" lay-verify="title" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 已用车位 </label>
+				<label for="L_title" class="layui-form-label"> 层 数</label>
 				<div class="layui-input-block">
-					<input type="text" name="usedParking" onkeyup="numChkZero($(this))" value="${po.usedParking}"  autocomplete="off" lay-verify="title" class="layui-input">
+					<input type="text" name="parkingLayer" value="${po.tier}"  autocomplete="off" lay-verify="title" class="layui-input">
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 车位位置 </label>
-				<div class="layui-input-block">
-					<input type="text" name="position"  value="${po.position}"  autocomplete="off" lay-verify="title" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 充电柱 </label>
-				<div class="layui-input-block">
-					<input type="text" name="chargingColumn"  value="${po.chargingColumn}"  autocomplete="off" lay-verify="title" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车车层 </label>
-				<div class="layui-input-block">
-					<input type="text" name="parkingLayer" value="${po.parkingLayer}"  autocomplete="off" lay-verify="title" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车区 </label>
-				<div class="layui-input-block">
-					<input type="text" name="parkingDistrict" value="${po.parkingDistrict}"  autocomplete="off" lay-verify="title" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 罚款倍数 </label>
-				<div class="layui-input-block">
-					<input type="text" name="fineMultiple" value="${po.fineMultiple}"  autocomplete="off" lay-verify="title" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车费用 </label>
-				<div class="layui-input-block">
-					<input type="text" name="cost" value="${po.cost}"  autocomplete="off" lay-verify="title" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车时间 </label>
-				<div class="layui-input-block">
-					<input type="text"  id="stoppingTime" name="stoppingTime" value="${po.stoppingTime}" class="layui-input" placeholder="-">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label for="L_title" class="layui-form-label"> 停车条例  </label>
-				<div class="layui-input-block">
-					<textarea name="regulations" autocomplete="off" style="height: 300px;resize:vertical;"  class="layui-input">${po.regulations}</textarea>
-				</div>
-			</div>
-			
 			<input type="hidden" name="shopAuditstates" value="" class="layui-input">
 			<div class="layui-form-item" style="text-align: center;margin-top:20px;">
 				<button class="layui-btn" lay-filter="add1" lay-submit> 修改保存 </button>
@@ -189,14 +119,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    }
         	});
 		});
-		function numChkZero($this){
-			var nubmer = $this.val();
-			var reg = /^[0-9]+[0-9]*]*$/; //判断正整数
-			if(!reg.test(nubmer)){
-				layer.msg("请输入整数数字！", { icon: 5, time: 1000 });
-				$this.val("");
-			}
-		}
 		function numChk($this,flag){
 			var nubmer = $this.val();
 			var re = /^[0-9]+.?[0-9]*$/; //判断字符串是否为数字  
@@ -215,36 +137,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         // 添加   
         function update(data,message) {
         	if(data.field.commonParking==""){
-        		layer.msg("请输入总共停放车位！",{icon:5});
-				return false;
-        	}
-        	if(data.field.fineMultiple==""){
-        		layer.msg("请输入罚款倍数！",{icon:5});
+        		layer.msg("请输入车场ID！",{icon:5});
 				return false;
         	}
         	if(data.field.usedParking==""){
-        		layer.msg("请输入已用多少车位！",{icon:5});
+        		layer.msg("请输入车位车型！",{icon:5});
+				return false;
+        	}
+        	if(data.field.position==""){
+        		layer.msg("请输入费用！",{icon:5});
 				return false;
         	}
           	//不能是""
-			if(data.field.position==""){
-				layer.msg("请选择车位位置！",{icon:5});
-				return false;
-			}else{
-				var position =data.field.position
-				data.field.position = parseInt(position);
-			}	
 			if(data.field.chargingColumn==""){
-				layer.msg("请选择是否有充电柱！",{icon:5});
+				layer.msg("请输入区！",{icon:5});
 				return false;
-			}else{
-				var chargingColumn =data.field.chargingColumn
-				data.field.chargingColumn = parseInt(chargingColumn);
+			}
+			if(data.field.parkingLayer==""){
+				layer.msg("请输入层！",{icon:5});
+				return false;
 			}	
         	var formData = new FormData($("#myForm")[0]);  
 			$.ajax({
 				type:"post",
-				url:"update.do",
+				url:"updateMoney.do",
 				dataType:"json",
                 data:formData,
                 contentType: false,
@@ -280,22 +196,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }
             
             
-	</script>
-	<script>
-		$(function(){
-			var stoppingTime = ${po.stoppingTime};
-			if(stoppingTime){
-				laydate.render({
-				  elem: '#stoppingTime'
-				  ,value: stoppingTime
-				  ,isInitValue: true
-				});
-			}
-			
-			var chargingColumn = ${po.chargingColumn};
-    		$("#chargingColumn option[value='"+chargingColumn+"']").attr("selected","selected"); 
-		})
-		
 	</script>
 </body>
 

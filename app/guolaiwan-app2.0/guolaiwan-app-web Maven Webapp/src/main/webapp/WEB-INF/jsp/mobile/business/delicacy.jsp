@@ -198,7 +198,7 @@ function getCate(){
 		$.get(_uriRecomment, null, function(data){
 		    var html=[];
 		    for(var i=0;i<data.length;i++){
-		         html.push('<div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
+		         html.push('<a onclick="gotodelicacystore('+data[i].merchantId+')"><div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
 		         html.push('<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="'+data[i].ShopPic+'"/>');  
 		         html.push('<div class="youxuan-in" style="display: inline-block;">');  
 		         html.push('<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">'+data[i].ShopName+'</p>');
@@ -210,11 +210,45 @@ function getCate(){
 		         html.push('<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>');
 		         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>');
 		         html.push('</div>');
-		         html.push('</div>');  		        
+		         html.push('</div></a>');  		        
 		    }
 		     $('.youxuan').append(html.join(''));
 		});
 }
+
+
+	function getAllMerchant(){
+			var name=$('.search').val();
+			var url="<%=basePath%>business/search";
+	            $.post(url,{"merchantId":${merchantId},"name":name,"type":"0003"},function(data){
+	            	$('.youxuan').empty();
+	            	var html=[];
+	            	if(data.merlist.length==0){
+	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
+	            	}else{
+						for(var i=0; i<data.merlist.length; i++){
+							 html.push('<a onclick="gotodelicacystore('+data.merlist[i].id+')"><div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
+					         html.push('<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');  
+					         html.push('<div class="youxuan-in" style="display: inline-block;">');  
+					         html.push('<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">'+data.merlist[i].shopName+'</p>');
+					         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data.merlist[i].modularClass+'</span></p>');
+					         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>');
+					         html.push('<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>');
+					         html.push('<p style="color:#757575;position: absolute;top:-40px;right:1%;font-size:14px">人均<span>38</span>元</p>');
+					         html.push('<button style="position: absolute;top:130px;margin-left:10px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">有包间</button>');
+					         html.push('<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>');
+					         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>');
+					         html.push('</div>');
+					         html.push('</div></a>');
+							}
+					}
+			    	$('.youxuan').append(html.join(''));
+	            })
+	}
+
+	function gotodelicacystore(id){
+        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+id;
+   }
 </script>
 <!--  <script>
 $(function(){
@@ -258,6 +292,11 @@ $(function(){
 				<div class="header-content">商户</div>
 			</div>
 		</div>
+		<!-- 搜索  -->
+		  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;">
+		   <input placeholder="搜索" class="search" style="padding:0 15%;width:80%;height:30px;border-radius:18px;outline: none;border:none;background:#E0E0E0;text-align: center; " type="text">
+		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="getAllMerchant()" src="lib/images/sousuo.png"/>
+		  </div>
 		<div class="content" id="content" >
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">

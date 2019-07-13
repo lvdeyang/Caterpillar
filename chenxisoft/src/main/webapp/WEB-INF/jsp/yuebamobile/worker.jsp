@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      height:40px;
      padding-left:10px;
      line-height:40px;
-     color:#FFC0CB;
+     color:#BA6985;
      
    }
    .ftitle a{
@@ -124,6 +124,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <label style="margin-left:20px;">${worker.address}</label>
 	        </div>
 	        <div class="ftitle">
+	                                   专长特点
+	        </div>
+	        <p style="font-size:14px;margin-left:12px;width:90%">
+	             ${worker.moreMsg}
+	        
+	        </p>
+	        <div class="ftitle">
 	                                    证件照片
 	        </div>
 	        <div id="imageContent">
@@ -166,7 +173,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        <c:forEach items="${comments}" var="comment">
 	                <li>
 	                    <div class="ui-avatar-lg">
-	                        <span style="background-image:url(/chenxisoft/${comment.userPhoto})"></span>
+	                        <span style="background-image:url(${comment.userPhoto})"></span>
 	                    </div>
 	                    <div class="ui-list-info ui-border-t">
 	                         ${comment.content}
@@ -182,7 +189,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	</div>
 	
-	
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script type="text/javascript" src="lib/laydate/laydate.js" charset="utf-8"></script>
 	<script type="text/javascript">
 	     $(function() {
@@ -257,21 +264,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			            jsApiList : ['checkJsApi', 'onMenuShareTimeline' , 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 		        	});
 			        wx.ready(function() {
-			
-			               
+	
 			            wx.onMenuShareTimeline({
-                            title: '[小青月嫂]${worker.realName}', // 分享标题
+                            title: '[小青月嫂]${worker.realName}_${worker.level}月嫂', // 分享标题
                             link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: window.BASEPATH+'/chenxisoft${worker.photo}', // 分享图标
+                            imgUrl: 'http://www.yueba.net.cn/${worker.photo}', // 分享图标
                             success: function () {
                                	
                             }
 		                });
 			            wx.onMenuShareAppMessage({
-							title : '[小青月嫂]${worker.realName}', // 分享标题
-							desc : '联系电话:0315-6681288/6686299', // 分享描述
+							title : '[小青月嫂]${worker.realName}_${worker.level}月嫂', // 分享标题
+							desc : '联系电话:18617856189', // 分享描述
 							link : location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-							imgUrl : window.BASEPATH+'/chenxisoft${worker.photo}', // 分享图标
+							imgUrl : 'http://www.yueba.net.cn/${worker.photo}', // 分享图标
 							success : function() {}
 						});
 			            

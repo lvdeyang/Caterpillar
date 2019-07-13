@@ -28,6 +28,7 @@ import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantChildrenDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
@@ -39,12 +40,15 @@ import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
 import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.VideoPicPO;
 import com.guolaiwan.bussiness.coupleback.dao.CoupleBackDao;
 import com.guolaiwan.bussiness.coupleback.po.CoupleBackPO;
+import com.guolaiwan.bussiness.website.dao.AddressDAO;
+import com.guolaiwan.bussiness.website.po.AddressPO;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
@@ -93,6 +97,10 @@ public class BusinessController extends WebBaseControll {
 	private GroupBuyDAO conn_groupbuy;
 	@Autowired
 	private GroupTeamDAO groupteam;
+	@Autowired
+	private AddressDAO addressDao;
+	@Autowired
+	private ProductComboDAO conn_combo;
 
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
@@ -211,6 +219,7 @@ public class BusinessController extends WebBaseControll {
 
 			hashMap.put("url", productlist.get(arr[i]).getProductShowPic());
 			hashMap.put("id", productlist.get(arr[i]).getId());
+			hashMap.put("pingfen", orderInfoDao.GetCountbyPage(id)/100);
 			// 根据id统计多少人来个
 			List<OrderInfoPO> newgetAllOrder = orderInfoDao.newgetAllOrder(productlist.get(arr[i]).getId());
 
@@ -403,12 +412,13 @@ public class BusinessController extends WebBaseControll {
 		List<MerchantPO> Merchantlist = new ArrayList<MerchantPO>();
 		for (int i = 0; i < merchantChildrenList.size(); i++) {
 			MerchantPO po = Merchantdao.getfood(merchantChildrenList.get(i).getChildrenId(), modularName);
-			if (po != null) {
+			if (po != null&&(po.getModularCode().equals("0003")||po.getModularCode().equals("0003"))) {
 				Merchantlist.add(po);
 			}
 		}
 		for (int i = 0; i < Merchantlist.size(); i++) {
 			Map<String, Object> hashMap = new HashMap<String, Object>();
+			hashMap.put("merchantId", Merchantlist.get(i).getId());
 			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
 			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
 			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
@@ -417,29 +427,67 @@ public class BusinessController extends WebBaseControll {
 		return list;
 	}
 	
+	//美食商户子页面
+	@ResponseBody
+	@RequestMapping(value = "/gotodelicacystore")
+	public ModelAndView goToDelicacystore(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		mv = new ModelAndView("mobile/business/delicacystore");
+		mv.addObject("merchantId", merchantId);
+		return mv; 
+	}
+	
 	// 支付完成页面
 	@ResponseBody
 	@RequestMapping(value = "/gotopayment")
 	public ModelAndView goToPayMent(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/business/payment");
+		String orderId=request.getParameter("orderId");
+		if(orderInfoDao.get(Long.parseLong(orderId)).getProductId()!=0){
+			String productClassCode = productDAO.get(orderInfoDao.get(Long.parseLong(orderId)).getProductId()).getProductClassCode();
+			mv.addObject("type", productClassCode);
+		}else{
+			mv.addObject("type", "");
+		}
+		mv.addObject("orderId", orderId);
 		return mv;
 	}
 	
-	//按照商品类型分页加载所有的商品 
+	//按照商品类型商户所有的商品 
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/getallproduct")
 	public List<ProductVO> getAllProduct(HttpServletRequest request) throws Exception {
-		int page=Integer.parseInt(request.getParameter("page"));
-		System.out.println(page);
-		List<ProductPO> allproduct = conn_product.findByProductClassCode("0016", page, 6);
+		int page=1;
+		String type=request.getParameter("type");
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		List<ProductVO> list =new ArrayList<ProductVO>();
+		List<ProductPO> allproduct = conn_product.findByProductClassCode(type, page, 100);
+		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
+		for (ProductVO productVO : listvo) {
+			if(productVO.getProductMerchantID()==merchantId){
+				list.add(productVO);
+			}
+		}
+		System.out.println(list.size());
+		return list;
+	}
+	
+	//按照商品类型所有的商品 
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getproductbytype")
+	public List<ProductVO> getProductByType(HttpServletRequest request) throws Exception {
+		String type=request.getParameter("type");
+		List<ProductPO> allproduct = conn_product.findByProductClassCode(type, 1, 100);
 		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
 		System.out.println(listvo.size());
 		return listvo;
 	}
 	
-	// 支付完成页面
+	// 去为你优选
 	@ResponseBody
 	@RequestMapping(value = "/gotopreferably")
 	public ModelAndView goToPreferably(HttpServletRequest request) throws Exception {
@@ -448,6 +496,7 @@ public class BusinessController extends WebBaseControll {
 		System.out.println(merchantId);
 		mv = new ModelAndView("mobile/business/preferably");
 		mv.addObject("merchantId", merchantId);
+		mv.addObject("pingfen", orderInfoDao.GetCountbyPage(merchantId)/100);
 		return mv; 
 	}
 	
@@ -492,75 +541,117 @@ public class BusinessController extends WebBaseControll {
 		return mv; 
 	}
 	
-	//按照商品类型分页加载所有的商品 
+	//按照商品类型所有的商户
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/search")
-	public List<MerchantVO> search(HttpServletRequest request) throws Exception {
+	public Map<String, Object> search(HttpServletRequest request) throws Exception {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
 		System.out.println(merchantId+"----"+name);
-		List<MerchantPO> allMerchant = Mer_chant.getAllMerchant(name);
-		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
+		Map<String, Object> hashMap = new HashMap<String, Object>();
 		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
-		for (MerchantPO Merchant : allMerchant) {
-			for (MerchantChildrenPO mChildren : merchantChildren) {
-				System.out.println(Merchant.getModularCode()+"--"+Merchant.getId()+"--"+mChildren.getChildrenId());
-				if(Merchant.getId()==mChildren.getChildrenId()&&Merchant.getModularCode().equals(type)){
-					merchantlist.add(Merchant);
-				}
+		List<Integer> pingfens=new ArrayList<Integer>(); 
+		List<MerchantPO> allMerchant = Mer_chant.getAllMerchant(name);
+		for (MerchantPO merchantPO : allMerchant) {
+			System.out.println(merchantPO.getModularCode()+"--"+type+"--"+merchantPO.getShopName());
+			if(merchantPO.getModularCode().equals(type)){
+				merchantlist.add(merchantPO);
+				pingfens.add(orderInfoDao.GetCountbyPage(merchantPO.getId())/100);
 			}
 		}
+		//这是当前商家和子商家的信息
+		/*List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
+		for (MerchantPO Merchant : allMerchant) {
+			for (MerchantChildrenPO mChildren : merchantChildren) {
+				if(Merchant.getId()==mChildren.getChildrenId()&&Merchant.getModularCode().equals(type)){
+					merchantlist.add(Merchant);
+					pingfens.add(orderInfoDao.GetCountbyPage(mChildren.getChildrenId())/100);
+				}
+			}
+		}*/
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
 		System.out.println(merlist.size());
-		return merlist;
+		hashMap.put("pingfens", pingfens);
+		hashMap.put("merlist", merlist);
+		return hashMap;
+	}
+	
+	//按照商品类型所有的商品
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/searchproduct")
+	public List<ProductVO> searchProduct(HttpServletRequest request) throws Exception {
+		String name=request.getParameter("name");
+		String type=request.getParameter("type");
+		System.out.println("----"+name);
+		List<ProductVO> Productlist =new ArrayList<ProductVO>();
+		List<ProductPO> Product = conn_product.productSearch(name, 1, 500);
+		List<ProductVO> Pvo = ProductVO.getConverter(ProductVO.class).convert(Product, ProductVO.class);
+		for (ProductVO productVO : Pvo) {
+			if(productVO.getProductClassCode().equals(type)){
+				Productlist.add(productVO);
+			}
+		}
+		return Productlist;
 	}
 	
 	//按照modularcode获得相应的商家
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/getmerchant")
-	public List<MerchantVO> getMerchant(HttpServletRequest request) throws Exception {
+	public Map<String, Object> getMerchant(HttpServletRequest request) throws Exception {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String code=request.getParameter("code");
 		List<MerchantPO> allmerchant=new ArrayList<MerchantPO>();
+		List<Integer> pingfens=new ArrayList<Integer>();
+		Map<String, Object> hashMap = new HashMap<String, Object>();
 		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
 		MerchantPO merchantPO = Mer_chant.get(merchantId);
 		if(merchantPO.getModularCode()==code){
 			allmerchant.add(merchantPO);
+			pingfens.add(orderInfoDao.GetCountbyPage(merchantId)/100);
 		}
 		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
 			if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularCode().equals(code)){
 				allmerchant.add(Mer_chant.get(merchantChildrenPO.getChildrenId()));
+				pingfens.add(orderInfoDao.GetCountbyPage(merchantChildrenPO.getChildrenId())/100);
 			}
 		}
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(allmerchant, MerchantVO.class);
-		return merlist;
+		hashMap.put("pingfens", pingfens);
+		hashMap.put("merlist", merlist);
+		return hashMap;
 	}
 	
 	//按照modularclass获得相应的商家
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/getmerchant1")
-	public List<MerchantVO> getMerchant1(HttpServletRequest request) throws Exception {
+	public Map<String, Object> getMerchant1(HttpServletRequest request) throws Exception {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String code=request.getParameter("code");
 		List<MerchantPO> allmerchant=new ArrayList<MerchantPO>();
+		List<Integer> pingfens=new ArrayList<Integer>();
+		Map<String, Object> hashMap = new HashMap<String, Object>();
 		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
 		MerchantPO merchantPO = Mer_chant.get(merchantId);
 		if(merchantPO.getModularClass()==code){
 			allmerchant.add(merchantPO);
+			pingfens.add(orderInfoDao.GetCountbyPage(merchantId)/100);
 		}
 		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
 			System.out.println(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularClass());
 			if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularClass().equals(code)){
 				allmerchant.add(Mer_chant.get(merchantChildrenPO.getChildrenId()));
+				pingfens.add(orderInfoDao.GetCountbyPage(merchantChildrenPO.getChildrenId())/100);
 			}
 		}
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(allmerchant, MerchantVO.class);
-		System.out.println(merlist.size());
-		return merlist;
+		hashMap.put("pingfens", pingfens);
+		hashMap.put("merlist", merlist);
+		return hashMap;
 	}
 	
 	// 搜索住宿的店家
@@ -573,6 +664,7 @@ public class BusinessController extends WebBaseControll {
 		mv = new ModelAndView("mobile/business/shopdetails");
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("merchant", merchant);
+		mv.addObject("pingfen", orderInfoDao.GetCountbyPage(merchantId)/100);
 		return mv; 
 	}
 	
@@ -599,7 +691,7 @@ public class BusinessController extends WebBaseControll {
 		return mv; 
 	}
 	
-	//套餐购买页面
+	//攻略列表页面
 	@ResponseBody
 	@RequestMapping(value = "/gotoraiders")
 	public ModelAndView goToRaiders(HttpServletRequest request) throws Exception {
@@ -621,7 +713,7 @@ public class BusinessController extends WebBaseControll {
 		return mv; 
 	}
 	
-	//套餐购买页面
+	//采摘商家列表页面
 	@ResponseBody
 	@RequestMapping(value = "/gotopickinglist")
 	public ModelAndView goToPickingList(HttpServletRequest request) throws Exception {
@@ -634,19 +726,151 @@ public class BusinessController extends WebBaseControll {
 		return mv; 
 	}
 	
-	//套餐购买页面
+	//采摘商品列表页面
 	@ResponseBody
 	@RequestMapping(value = "/gotocomdlist")
 	public ModelAndView goToComdList(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
-		System.out.println("666666666");
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		MerchantPO merchant = Mer_chant.get(merchantId);
 		System.out.println(merchantId);
 		mv = new ModelAndView("mobile/business/comdlist");
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("merchant", merchant);
-		return mv; 
+		mv.addObject("pingfen", orderInfoDao.GetCountbyPage(merchantId)/100);
+		return mv;
 	}
 	
+	
+	// 采摘活动页面
+	@ResponseBody
+	@RequestMapping(value = "/gotorecommend")
+	public ModelAndView goToRecommend(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		mv = new ModelAndView("mobile/business/recommend");
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
+	
+	// 采摘购买详情页面
+	@ResponseBody
+	@RequestMapping(value = "/gotopickingpurchase")
+	public ModelAndView goToPickingPurchase(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long productId=Long.parseLong(request.getParameter("productId"));
+		ProductPO product = conn_product.get(productId);
+		List<ProductPO> productPO=new ArrayList<ProductPO>();
+		productPO.add(product);
+		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(productPO, ProductVO.class);
+		mv = new ModelAndView("mobile/business/pickingpurchase");
+		mv.addObject("product", alllist.get(0));
+		mv.addObject("productRestrictNumber", product.getProductRestrictNumber());
+		return mv;
+	}
+	
+	
+	// 采摘首页页面
+	@ResponseBody
+	@RequestMapping(value = "/gotopicking")
+	public ModelAndView goToPicking(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		mv = new ModelAndView("mobile/business/picking");
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
+	// 选择添加联系地址等信息页面
+	@ResponseBody
+	@RequestMapping(value = "/gotologistics")
+	public ModelAndView goToLogistics(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long productId=Long.parseLong(request.getParameter("productId"));
+		mv = new ModelAndView("mobile/business/logistics");
+		mv.addObject("productId", productId);
+		return mv;
+	}
+	
+	//删除联系地址
+	@ResponseBody
+	@RequestMapping(value = "/deleteaddress")
+	public Object deleteAddress(HttpServletRequest request) throws Exception {
+		long addressId=Long.parseLong(request.getParameter("addressId"));
+		addressDao.delete(addressId);
+		return success();
+	}
+	//添加联系地址
+	@ResponseBody
+	@RequestMapping(value = "/appendaddress")
+	public Object appendAddress(HttpServletRequest request) throws Exception {
+		long userId=Long.parseLong(request.getParameter("userId"));
+		String username=request.getParameter("username");
+		String telephone=request.getParameter("telephone");
+		String consigneeAddress=request.getParameter("consigneeAddress");
+		AddressPO newAddress=new AddressPO();
+		newAddress.setConsigneeAddress(consigneeAddress);
+		newAddress.setConsigneePhone(telephone);
+		newAddress.setUserId(userId);
+		newAddress.setConsigneeName(username);
+		addressDao.save(newAddress);
+		return success();
+	}
+	//添加联系地址
+	@ResponseBody
+	@RequestMapping(value = "/changeaddress")
+	public Object changeAddress(HttpServletRequest request) throws Exception {
+		long userId=Long.parseLong(request.getParameter("userId"));
+		long addressId=Long.parseLong(request.getParameter("addressId"));
+		List<AddressPO> addresss = addressDao.getAddressByUserId(userId);
+		for (AddressPO addressPO : addresss) {
+			if(addressPO.getId()!=addressId){
+				addressPO.setDefaultAddress(0);
+				addressDao.saveOrUpdate(addressPO);
+			}else{
+				addressPO.setDefaultAddress(1);
+				addressDao.saveOrUpdate(addressPO);
+			}
+		}
+		return success();
+	}
+	
+	//添加联系地址
+	@ResponseBody
+	@RequestMapping(value = "/getallcombo")
+	public List<ProductComboPO> getAllCombo(HttpServletRequest request) throws Exception {
+		long productId=Long.parseLong(request.getParameter("productId"));
+		// 获取所有套餐
+		List<ProductComboPO> comboList = conn_combo.findByField("productId", productId);
+		return comboList;
+	}
+	
+	// 商家的详情页面
+	@ResponseBody
+	@RequestMapping(value = "/gotobusinessdetails")
+	public ModelAndView goToBusinessdetails(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		MerchantPO merchantPO = Mer_chant.get(merchantId);
+		String shopIntroduction = merchantPO.getShopIntroduction();
+		String shopName = merchantPO.getShopName();
+		mv = new ModelAndView("mobile/business/businessdetails");
+		mv.addObject("shopIntroduction", shopIntroduction);
+		mv.addObject("shopName", shopName);
+		return mv;
+	}
+	
+	// 商品的详情页面
+	@ResponseBody
+	@RequestMapping(value = "/gotodetailspage")
+	public ModelAndView goToDetailsPage(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long productId=Long.parseLong(request.getParameter("productId"));
+		ProductPO product = conn_product.get(productId);
+		List<ProductPO> productPO=new ArrayList<ProductPO>();
+		productPO.add(product);
+		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(productPO, ProductVO.class);
+		mv = new ModelAndView("mobile/business/detailspage");
+		mv.addObject("product", alllist.get(0));
+		return mv;
+	}
 }

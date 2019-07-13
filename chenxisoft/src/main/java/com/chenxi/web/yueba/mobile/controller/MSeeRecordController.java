@@ -58,7 +58,7 @@ public class MSeeRecordController {
 	public Object getWorkers(HttpServletRequest request,int currPage,int pageCount) throws Exception {
 		HttpSession session = request.getSession();
 		Object userId=session.getAttribute("userId");
-		List<SeeRecordPo> recordPos=conn_seerecord.findByField("userId", Long.parseLong(userId+""), currPage, pageCount);
+		List<SeeRecordPo> recordPos=conn_seerecord.findByUserId(Long.parseLong(userId+""),currPage,pageCount);
 		for (SeeRecordPo seeRecordPo : recordPos) {
 			WorkerPo workerPo=conn_worker.get(seeRecordPo.getWorkerId());
 			seeRecordPo.setWorkerName(workerPo.getRealName());
@@ -74,7 +74,7 @@ public class MSeeRecordController {
 	public Object getUsers(HttpServletRequest request,int currPage,int pageCount) throws Exception {
 		HttpSession session = request.getSession();
 		Object workerId=session.getAttribute("workerId");
-		List<SeeRecordPo> recordPos=conn_seerecord.findByField("workerId", Long.parseLong(workerId+""), currPage, pageCount);
+		List<SeeRecordPo> recordPos=conn_seerecord.findByWorkerId(Long.parseLong(workerId+""),currPage,pageCount);
 		for (SeeRecordPo seeRecordPo : recordPos) {
 			UserPo userPo=conn_user.get(seeRecordPo.getUserId());
 			seeRecordPo.setUserName(userPo.getNickName());

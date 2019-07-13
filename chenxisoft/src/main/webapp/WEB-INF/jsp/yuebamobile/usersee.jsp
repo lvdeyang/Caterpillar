@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
-	          var pageCount=10;
+	          var pageCount=15;
 	          var currPage=1;
 	       
 	          
