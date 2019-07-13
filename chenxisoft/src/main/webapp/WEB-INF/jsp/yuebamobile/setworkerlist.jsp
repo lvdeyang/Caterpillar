@@ -25,16 +25,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
     <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">微官网首页
        </h2><a><i class="ui-icon-personal"></i></a>
-    <header class="ui-header ui-header-positive ui-border-b"  style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
+    <header class="ui-header ui-header-positive ui-border-b" style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
          
-     
+        
     </header>
 	
-	<div class="demo-item" style="margin-top:45px;">
+	<div class="demo-item" style="margin-top:50px;" >
 		<div class="demo-block">
-			<ul id="commentList" class="ui-list ui-border-tb ">
-				
-				
+			<ul id="seeList" class="ui-list ui-list-link ui-list-single ui-border-tb">
+			    
 			</ul>
 		</div>
 		
@@ -57,18 +56,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
-	          var pageCount=10;
+	          var pageCount=15;
 	          var currPage=1;
 	       
 	          
 	          function getPage(isinit){
-	              var _uriComment = window.BASEPATH + 'comment/mobile/list?currPage='+currPage+'&pageCount='+pageCount
-	              +'&workerId=${workerId}';
+	              var _uriWorker = window.BASEPATH + 'worker/mobile/setworkerlist?currPage='+currPage+'&pageCount='+pageCount;
 		
-				  $.get(_uriComment, null, function(data){
+				  $.get(_uriWorker, null, function(data){
 				       currPage+=1;
 				       data = parseAjaxResult(data);
-				       if(data.length!=0&&!isinit){
+				       if(!isinit&&data.length!=0){
 				          $('#loading').fadeIn().show();
 				       }
 				       if(isinit){
@@ -88,19 +86,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	               if(data){
 	                  for(var i=0;i<data.length;i++){
-				         html.push('<li class="comment" id="com-'+data[i].id+'">');
-						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url('+data[i].userPhoto+')"></span></div>');
-						 html.push('	<div class="ui-list-info ui-border-t">');
-						 html.push('		<div style="font-size:13px;">'+data[i].content+'</div>');
-						 html.push('	</div>');
-						 html.push('</li>'); 
-						 
-						
+	                        html.push('<li id="wor-'+data[i].id+'" class="worker">');
+						    html.push('    <div class=" ui-avatar-s">');
+						    html.push('        <span style="background-image:url(/'+data[i].photo+')"></span>');
+						    html.push('    </div>');
+						    html.push('    <div class="ui-list-info ui-border-t">');
+						    html.push('        <h4 class="ui-nowrap" style="font-size:12px">'+
+						                  data[i].realName+'</h4>');
+						    html.push('    </div>');
+						    html.push('</li>');
 				       }
 	               
 	               }
-			       $('#commentList').append(html.join(''));
+			       $('#seeList').append(html.join(''));
 	          }
 	          
 	          
@@ -119,7 +117,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		      
 		      $(document).on('click','.worker',function(){
 		         var ids=this.id.split('-');
-	
+	             location.href=window.BASEPATH +'worker/mobile/setworker?workerId='+ids[1];
 		      
 		      });
 		      
