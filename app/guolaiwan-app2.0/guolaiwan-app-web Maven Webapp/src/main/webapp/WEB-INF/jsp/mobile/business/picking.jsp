@@ -309,9 +309,9 @@ html, body {
 	
 	<!-- 采摘-->
 	<div class="fenlei" style="width:100%;height:80px; text-align: center;margin:0 auto;background:#fff;">
-	   <img onclick="gotorecommend()" src="lib/images/huodongs.png"/>
-	   <img onclick="gotopickinglist()" src="lib/images/caizhais.png"/>
-	  <p style=""><span onclick="gotorecommend()">采摘活动</span> <span onclick="gotopickinglist()">蔬果采摘</span></p>
+	   <img onclick="gotorecommend()" src="lib/images/caizhaiss.png"/>
+	   <img onclick="gotopickinglist()" src="lib/images/shuguos.png"/>
+	  <p style=""><span style="color:#ED8036;" onclick="gotorecommend()">采摘活动</span> <span style="color:#6CA640;" onclick="gotopickinglist()">蔬果采摘</span></p>
 	</div>
 	 <p style="text-align: center;color:#EC7218;font-size:16px;height:35px;line-height:35px;margin:0;font-weight: bold;">——<span style="margin:0 3%;">您可能选择</span>——</p>
     <div class="main">

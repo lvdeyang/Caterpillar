@@ -28,6 +28,7 @@ import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantChildrenDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
@@ -39,12 +40,15 @@ import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
 import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.VideoPicPO;
 import com.guolaiwan.bussiness.coupleback.dao.CoupleBackDao;
 import com.guolaiwan.bussiness.coupleback.po.CoupleBackPO;
+import com.guolaiwan.bussiness.website.dao.AddressDAO;
+import com.guolaiwan.bussiness.website.po.AddressPO;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
@@ -93,6 +97,10 @@ public class BusinessController extends WebBaseControll {
 	private GroupBuyDAO conn_groupbuy;
 	@Autowired
 	private GroupTeamDAO groupteam;
+	@Autowired
+	private AddressDAO addressDao;
+	@Autowired
+	private ProductComboDAO conn_combo;
 
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
@@ -434,12 +442,16 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/gotopayment")
 	public ModelAndView goToPayMent(HttpServletRequest request) throws Exception {
+		String orderId=request.getParameter("orderId");
+		String productClassCode = productDAO.get(orderInfoDao.get(Long.parseLong(orderId)).getProductId()).getProductClassCode();
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/business/payment");
+		mv.addObject("orderId", orderId);
+		mv.addObject("type", productClassCode);
 		return mv;
 	}
 	
-	//按照商品类型分页加载所有的商品 
+	//按照商品类型商户所有的商品 
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/getallproduct")
@@ -457,6 +469,18 @@ public class BusinessController extends WebBaseControll {
 		}
 		System.out.println(list.size());
 		return list;
+	}
+	
+	//按照商品类型所有的商品 
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getproductbytype")
+	public List<ProductVO> getProductByType(HttpServletRequest request) throws Exception {
+		String type=request.getParameter("type");
+		List<ProductPO> allproduct = conn_product.findByProductClassCode(type, 1, 100);
+		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
+		System.out.println(listvo.size());
+		return listvo;
 	}
 	
 	// 去为你优选
@@ -737,7 +761,7 @@ public class BusinessController extends WebBaseControll {
 		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(productPO, ProductVO.class);
 		mv = new ModelAndView("mobile/business/pickingpurchase");
 		mv.addObject("product", alllist.get(0));
-		mv.addObject("merchant", Merchantdao.get(product.getMerMId()));
+		mv.addObject("productRestrictNumber", product.getProductRestrictNumber());
 		return mv;
 	}
 	
@@ -752,4 +776,68 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("merchantId", merchantId);
 		return mv;
 	}
+	// 选择添加联系地址等信息页面
+	@ResponseBody
+	@RequestMapping(value = "/gotologistics")
+	public ModelAndView goToLogistics(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long productId=Long.parseLong(request.getParameter("productId"));
+		mv = new ModelAndView("mobile/business/logistics");
+		mv.addObject("productId", productId);
+		return mv;
+	}
+	
+	//删除联系地址
+	@ResponseBody
+	@RequestMapping(value = "/deleteaddress")
+	public Object deleteAddress(HttpServletRequest request) throws Exception {
+		long addressId=Long.parseLong(request.getParameter("addressId"));
+		addressDao.delete(addressId);
+		return success();
+	}
+	//添加联系地址
+	@ResponseBody
+	@RequestMapping(value = "/appendaddress")
+	public Object appendAddress(HttpServletRequest request) throws Exception {
+		long userId=Long.parseLong(request.getParameter("userId"));
+		String username=request.getParameter("username");
+		String telephone=request.getParameter("telephone");
+		String consigneeAddress=request.getParameter("consigneeAddress");
+		AddressPO newAddress=new AddressPO();
+		newAddress.setConsigneeAddress(consigneeAddress);
+		newAddress.setConsigneePhone(telephone);
+		newAddress.setUserId(userId);
+		newAddress.setConsigneeName(username);
+		addressDao.save(newAddress);
+		return success();
+	}
+	//添加联系地址
+	@ResponseBody
+	@RequestMapping(value = "/changeaddress")
+	public Object changeAddress(HttpServletRequest request) throws Exception {
+		long userId=Long.parseLong(request.getParameter("userId"));
+		long addressId=Long.parseLong(request.getParameter("addressId"));
+		List<AddressPO> addresss = addressDao.getAddressByUserId(userId);
+		for (AddressPO addressPO : addresss) {
+			if(addressPO.getId()!=addressId){
+				addressPO.setDefaultAddress(0);
+				addressDao.saveOrUpdate(addressPO);
+			}else{
+				addressPO.setDefaultAddress(1);
+				addressDao.saveOrUpdate(addressPO);
+			}
+		}
+		return success();
+	}
+	
+	//添加联系地址
+	@ResponseBody
+	@RequestMapping(value = "/getallcombo")
+	public List<ProductComboPO> getAllCombo(HttpServletRequest request) throws Exception {
+		long productId=Long.parseLong(request.getParameter("productId"));
+		// 获取所有套餐
+		List<ProductComboPO> comboList = conn_combo.findByField("productId", productId);
+		return comboList;
+	}
+	
 }
