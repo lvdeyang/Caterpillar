@@ -443,6 +443,9 @@ $(function() {
    function picking(){
    		location.href=window.BASEPATH + 'business/gotopicking?merchantId=${merchantId}';
    }
+   function ticket(){     
+      location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId=${merchantId}';   
+   }
    
 </script>
 
@@ -477,12 +480,12 @@ $(function() {
 	     </div> 
 	    <div class="header_in" style="clear:both">
 	     <ul style="">
-	     <li><img src="lib/images/goupiaos.png"/></li>
+	     <li><img src="lib/images/goupiaos.png" onclick="ticket()"/></li>
    	     <li onclick="accommodation()"><img src="lib/images/zhusus.png"/></li>
          <li><img src="lib/images/tingchess.png"/></li>
          <li><img onclick="cate()" src="lib/images/meishis.png"/></li>
          <li><img src="lib/images/fenxiaos.png"/></li>
-         <li><span>购票</span></li>
+         <li><span onclick="ticket()">购票</span></li>
    	     <li onclick="accommodation()"><span>住宿</span></li>
          <li><span>停车</span></li>
          <li onclick="cate()"><span>美食</span></li>
