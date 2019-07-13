@@ -79,7 +79,7 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background-color: #EEEEEE !important; 
+	background-color: #DFDFDF !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
@@ -107,7 +107,7 @@ html, body {
 }
 
 .header-content {
-	height: 100%;
+	height:auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -149,6 +149,15 @@ html, body {
 	    opacity: 0.8;
 	    z-index:111111;
 	}
+	.jieshao ul li p{
+	 margin:0;
+	 font-weight: bold;
+	}
+
+	.jieshao ul li{
+	 line-height: 40px;
+	 border-bottom:1px solid #DFDFDF;
+	}
 </style>
 
 </head>
@@ -166,8 +175,9 @@ html, body {
 
    
 	$(function() {
-	getallteam(); 
+	 getallteam(); 
 	 getRecomment();
+	 getMerchantInfo();
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -312,17 +322,7 @@ html, body {
 			    });
 	  }
 		
-      
-		
-	  
-		
-		
-	    
-	    
-	  
-	   
 
-	    
 	    var share={};
 	    function initSharewx(){
 	        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
@@ -375,16 +375,16 @@ $(function(){
 				
 		           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
 		        var pageNumber=page;			
-				var date={ "productMerchantID":${productMerchantID},"pageNum":pageNumber}				
-				$.post('<%=basePath%>product/package/list', date, function(data){				   			 									
-					if(data.productPOs !== undefined){
+				var date={ "merchantId":${productMerchantID},"pageNum":pageNumber}				
+				$.post('<%=basePath%>product/package/list', date, function(data){							   			 									
+					if(data.productPOs.length>0){
 					  getLine(data);
 					  $('.weui-loadmores').hide();
 					 $('.weui-loadmore').show();
 					
 					page+=1;
 						}
-						else{
+						else{						
 						$('.weui-loadmore').hide();
 						  $('.weui-loadmores').show();
 				          setTimeout(function(){$('.weui-loadmores').hide()},1000);
@@ -399,62 +399,122 @@ $(function(){
                  var list = data.productPOs;
                  var  str = data.strArryList;                                                                                 
 	       //后面的
-		   for(var j=0;j<list.length;j++){			   	   
+		   for(var j=0;j<list.length;j++){
+		   var pro_pros = list[j].productName.split(","); 			   	   
 		   	       html.push('<div class="weui-panel__bd">');
 				   html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
-		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
-		           html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[j].productShowPic+'"/> ');
+		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');		            
+		           if(pro_pros[1] == "act"){
+		           html.push('<img id="mg-'+list[j].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[j].productShowPic+'" onclick="commodity(this.id,1)"/> ');
 		           html.push('<div class="youxuan-in">');
-		           html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+list[j].productName+'</p>'); 
-		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-                   html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">$'+str[j]+'</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
+		           html.push('<p id="p-'+list[j].id+'" onclick="commodity(this.id,1)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pros[0]+'</p>'); 
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您739m</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
+		           }else{
+		           html.push('<img id="mg-'+list[j].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[j].productShowPic+'" onclick="commodity(this.id,0)"/> ');
+		           html.push('<div class="youxuan-in">');
+		           html.push('<p id="p-'+list[j].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pros[0]+'</p>'); 
+		           
+		           }		         
+                   html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">$'+str[j]+'</span><span style="float:right;margin-top:10px">已售100+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   </p>');
 		   }
 		   html.push('</div></div></div>');
 
-	        $('#content').append(html.join(''));
+	        $('#contents').append(html.join(''));
 	    }
     
  function getallteam(){
-     var _uricoms = window.BASEPATH + '/product/package/list?productMerchantID='+${productMerchantID}+'&pageNum=1';	
+     var _uricoms = window.BASEPATH + '/product/package/list?merchantId='+${productMerchantID}+'&pageNum=1';	
      $.get(_uricoms, null, function(data){  
            var list =  data.productPOs;
            var  str = data.strArryList;
          for(var i=0;i<list.length;i++){
-         		var html=[];
-         		if(data.productPOs.length>0){
+                var pro_pro = list[i].productName.split(",");                               
+         		var html=[];       		
 		           html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
 		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
-		           html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'"/> ');
-		           html.push('<div class="youxuan-in">');
-		           html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+list[i].productName+'</p>'); 
-		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-		           html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">$'+str[i]+'</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
-		           html.push('</div></div></div>');
+		         if(pro_pro[1] == "act"){
+		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,1)"/> ');
+		           html.push('<div class="youxuan-in">');		           	           
+		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,1)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您739m</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
+		           }else{
+		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
+		           html.push('<div class="youxuan-in">');		           	           
+		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           }
-		 		$('#content').append(html.join(''));
+		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">$'+str[i]+'</span><span style="float:right;margin-top:10px">已售100+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   </p>');
+		           html.push('</div></div></div>');
+		          
+		 		$('#contents').append(html.join(''));
 	     	}
 	 });
 }
+
+  function  getMerchantInfo(){
+     var mer_path = window.BASEPATH +'/product/package/merInfo';
+     var mer_da = {"merchantId":${productMerchantID}};
+     $.post(mer_path,mer_da,function(msg){       
+          if(msg === undefined) return;
+          var merpo  =  msg.merpos;
+          var proinfo = msg.prosinfos;             
+          var html = [] ;
+          html.push('<ul>');
+          html.push('<li><p style="font-size:18px;">'+merpo.shopName+'</p></li>');
+          html.push('<li ><p id="_pro_name" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;">');
+         
+          html.push('</p></li>');
+          html.push(' <li><p><span style="font-size:18px;color:#EA6B1F;">4.5分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率100%</span></p></li>');
+          html.push('<li><p>开放时间：8：00-18：00</p></li>');
+          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：'+merpo.shopAddress+'</p></li>');
+          html.push('</ul>');
+          $(".jieshao").append(html.join(''));  
+          for(var i = 0 ;i <proinfo.length;i++){           
+          var htms = [];         
+          
+           htms.push('<span >'+proinfo[i].productName+'</span>,');                         
+          $("#_pro_name").append(htms.join(''));  
+          }             
+     })  
+  }
+   function commodity(id,state){
+   if(state == '0'){
+    var proId = id.split("-");
+    location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId=${productMerchantID}&proId='+proId[1]; 
+    }else{
+    alert("不要选我哎呀啊啊啊啊啊啊啊      ")
+    }    
+   }
 </script>
 <body>
-			<!-- 主页 -->
-		<div class="header">
+		 <!-- 主页 -->
+		    <div class="header">
 			<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
+		
+		
+		
+	
 		<div class="content" id="content" >
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
 		</div>
+		
 	</div>     
-	
-         <!-- 购票  -->
-	           <div id="content" class="content">		        	    
+	     
+	    <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;">
+	        
+	     </div>
+	     
+	  
+	     
+                                           <!--  购票  -->
+	           <div id="contents" >	 	        	    
           <!-- 置顶 -->
 			<div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/hometop.png"></a></div>
         
@@ -464,10 +524,10 @@ $(function(){
 	</div>
 	<div class="weui-loadmores" hidden="hidden" style="position:fixed;bottom: 7%;left:50%;margin-left:-40px;z-index: 10000">
 			  <span class="weui-loadmore__tips">没有内容了</span>
-	</div>		
-     <div style="height:50px;width:100%;"></div>
-
-
+	</div>
+	</div>	
+	
+   
 </body>
 
 

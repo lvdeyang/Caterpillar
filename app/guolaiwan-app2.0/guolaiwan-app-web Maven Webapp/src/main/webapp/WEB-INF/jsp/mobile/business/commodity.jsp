@@ -79,13 +79,14 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#EEEEEE !important; 
+	background:#E0E0E0 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	
 	text-decoration: none !important;
 }
 
+ 
 * {
 	box-sizing: border-box;
 	list-style: none;
@@ -108,7 +109,7 @@ html, body {
 }
 
 .header-content {
-	height: 100%;
+	height: auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -137,16 +138,18 @@ html, body {
   .inp::-webkit-input-placeholder{
         text-align: center;
 }  
+	.jieshao ul li p{
+	 margin:0;
+	 font-weight: bold;
+	}
 
- .youxuan-in p{
-  margin-left:3%;
- }
-.xiangqing img{
-text-align: center;
-margin:3px 5%;
+	.jieshao ul li{
+	 line-height: 40px;
+	 border-bottom:1px solid #DFDFDF;
+	}
+.fangxing p{
+ margin:0;
 }
-
-
 </style>
 
 </head>
@@ -157,78 +160,113 @@ margin:3px 5%;
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
+<link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<script>
 
+</script>
 <script type="text/javascript">
-   $(function() {
-	    getRecomment();
-	    getparticulars();				
-   });
-//轮播图以及下面的图片   	
-function getRecomment(){
-     var _uriRecomment = window.BASEPATH + 'phoneApp/productInfo?productId=${productId}&userId=${userId}';
-     $.get(_uriRecomment, null, function(data){
-	   data = parseAjaxResult(data);
-	 if(data === -1) return;
-	   if(data){
-	       var html=[];
-	       var html1=[];
-	       var pics=data.product.productMorePic.split(',');
-	    for(var i=0; i<pics.length; i++){
-	       html.push('<div style="height:200px;" class="swiper-slide"><img style="height:200px" src="'+pics[i]+'" alt=""/></div>');
-	       if(i<2){	      
-	           html1.push('<img style="height:200px" src="'+pics[i+1]+'"/></div>');
-	       }	   
+  $(function(){
+	  getRecomment();
+	  getallteam();
+	  getComment();
+  
+  
+  })
+
+
+/**/
+		
+	  function getRecomment(){
+	      var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
+		
+		$.get(_uriMerchantInfo, null, function(data){
+			data = parseAjaxResult(data);
+			merchantName = data.shopName + '-过来玩';
+			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
+			merchantUrl = window.location.href;
+			if(data === -1) return;
+			if(data){
+			    var html=[];
+			    var pics=data.shopMpic.split(',');
+				for(var i=0; i<pics.length; i++){
+					var str = pics[i].split('.');
+					if(str[3]!="mp4"&&str[3]!="MP4"){ 
+					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
+					}else{
+					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
+					}
+				}
+			    $('.header-content').html(data.shopName);
+				$('.swiper-wrapper').append(html.join(''));
+				$(".swiper-container").swiper({
+			        loop: true,
+			        autoplay: 3000
+			    });
+			    }
+			    });
 	  }
-	   $('.swiper-wrapper').append(html.join(''));
-	   $('#img1').append(html1.join(''));
-	   $(".swiper-container").swiper({
-	           loop: true,
-	           autoplay: 3000
-	      });
-      }
-  });
-}
-function getparticulars(){
-     var _uricoms = window.BASEPATH + '/business/getparticulars?productId='+${productId};	
-     $.get(_uricoms, null, function(data){
-         var html=[];
-		 html.push("<p style='font-weight:bold;margin:0;font-size:20px;color:black;width:85%;height:80px;line-height: 80px;margin:0 auto;text-align: center;'><span style='float:left;'>"+data.ProductName+"</span><span style='color:#E17421;float:right'>￥"+data.ProductPrice+"起</span></p>");
-		 html.push("<p style='margin:0;font-size:12px;border-bottom:1px solid #EEEEEE;color:#E17421;width:92%;height:60px;line-height: 60px;margin:0 auto;text-align: center;'>");
-		 html.push("<button style='border:none;outline:none;width:33%;height:30px;margin-left:10%;background:#fff;line-height:0px;vertical-align:middle ;float:left;border:1px solid #E17421;border-radius:6px;'>景点介绍</button>");
-		 html.push("<button style='border:none;outline:none;width:33%;height:30px;margin-right:10%;background:#fff;line-height:0px;vertical-align:middle ;float:right;border:1px solid #E17421;border-radius:6px;'>购买须知</button>");
-		 html.push("</p>");
-		 html.push(" <p style='color:#838383;width:88%;margin:0 auto;line-height: 30px;overflow: hidden;'>"+data.ProductName+"。</p>");
-		 $('#xiangqing1').append(html.join(''));
-		 var html1=[];	 
-		 html1.push("<p style='height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #EEEEEE;'><span style='float:left;'><img style='width:30px;height:30px;' src='lib/images/goupiaoss.png'/>票种选择</span> </p>");
-		 html1.push("<p class='piaowu' style='height:70px;line-height:70px;color:black;margin:0;font-size:14px;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE;position: relative;'>");
-		 html1.push("<span style='font-weight:bold;margin-left:5%;'>"+data.ProductName+"</span>");
-		 html1.push("<span style='position: absolute;color:#E17421;font-size: 16px;top:-10px;right:40px;font-weight: bold;'>￥"+data.ProductPrice+"</span>");
-		 html1.push("<span style='position: absolute;font-size: 14px;top:10px;right:40px;color:#838383;'>月销"+data.number+"</span>");
-		 html1.push("<span class='xianshi' style='position: absolute;font-size: 26px;right:15px;color:#838383;font-weight: bold;'>∨</span>"); 
-		 html1.push("<div class='piaowus' style='height:100px;background:#F4F8F9;margin:0;display: none;'>");
-		 html1.push("<p style='height:30px;line-height: 30px;margin:0;'><span style='margin-left:5%;line-height: 30px;'>提前1天预订，出票后即可立即入园</span><span style='float:right;color:#E17421;font-size: 16px;font-weight: bold;margin-right:20px;'>￥"+data.ProductPrice+"</span></p> "); 
-		 html1.push("<button style='border:none;outline:none;width:60px;color:#E17421;height:25px;margin-left:7%;background:#fff;line-height:0px;vertical-align:middle ;float:left;border:1px solid #E17421;border-radius:6px;'>无条件退</button>");  
-		 html1.push("<button style='border:none;outline:none;width:80px;color:#fff;height:25px;margin-left:45%;background:#FF4900;line-height:0px;vertical-align:middle ;float:left;border:1px solid #E17421;border-radius:6px;'>立即预订</button>");  
-		 html1.push("<p style='height:30px;line-height: 30px;margin:0;color:#838383;float:left;width:100%;'><span style='margin-left:5%;line-height: 30px;'>月售笔"+data.number+"</span> | <span style=''>预订须知></span></p>  ");  
-		 html1.push("</div>");
-		 $('.wenti').append(html1.join(''));  
+	  	  
+	 function getallteam(){
+     var _uricoms = window.BASEPATH + 'product/package/commodity/info?merchantId=${merchantId}&proId=${proId}';	
+     $.get(_uricoms, null, function(msg){    
+       //商品信息
+       var merfo =  msg.merinfo;
+       var profo =  msg.proinfo;       
+       var html = [];
+       html.push('<ul>');
+       html.push('<li><p style="font-size:18px;">'+profo[0].productName+'</p></li>');
+       html.push('<li><p><span style="font-size:18px;color:#EA6B1F;">4.5分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率96%</span></p></li>');
+       html.push('<li><p>开放时间：8：00-18：00</p></li>');
+       html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：'+merfo[0].shopAddress+'</p></li>');
+       html.push('<ul>');
+       $(".jieshao").append(html.join(""));
+       //票种选择
+       var prc =  msg.pric;
+       var prname = msg.pr_name;
+       var orNum = msg.orderNumber;
+       var htm = [];
+       htm.push('<div style="width:90%;height:auto;background:#E9EBEA;margin:10px auto;border-radius:10px;">');
+       htm.push('<p style="height:40px;line-height: 40px;">');
+       htm.push('<span style="float:left;margin-left:5px;">'+prname+'</span>');
+       htm.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+prc+'</span>');
+       htm.push('</p>');
+       htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前一天订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
+       htm.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销'+orNum+'+</span>');
+       htm.push('<span style="float:right;margin-right:5px;color:#fff;font-size:14px;font-weight:bold;background:#EB6E1E;line-height:30px;border-radius:10px;padding:0px 20px;">立即预订</span></p>');
+       htm.push('</div>');
+       $(".productlist").append(htm.join(""));
 	 });
 }
+	function getComment(){	
+	var _uri = window.BASEPATH + 'product/package/comment?proId=${proId}';	
+	$.get(_uri,null,function(msg){
+	   var comment = msg.comm;
+	   if(comment.length==0){ 
+	    var htlr = [];
+	    htlr.push('<div><p style="text-align:center;line-height:40px;height:40px;">暂无评论</p></div>');
+	    $(".dianping").append(htlr.join(""));	
+	   }
+	  for(var i =0 ;i< comment.length;i++){
+	  //商品评论 
+	  var htl = [];
+	  htl.push('');
+	  htl.push('<div style="height:auto;">');
+	  htl.push('<p style="font-size:14px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;">');
+	  htl.push('<img style="width:35px;height:35px;border-radius:50%;" src="'+comment[i].userHeadimg+'">');
+	  htl.push('<span>'+comment[i].userName+'</span><span style="padding:0 10px;color:#E0E0E0;">|</span><span style="color:#fff;background:#FAB526;border-radius:12px;padding:0 5px;">老用户</span>');
+	  htl.push('</p>');
+	  htl.push(' <p style="padding:0 8%;">'+comment[i].content+'</p>');
+	  htl.push('</div>');
+	  $(".dianping").append(htl.join(""));	
+	  }
+	})	
+ }
 </script>
-<script>
-$(document).on('click','.piaowu',function(){
-    if($(".xianshi").html()=='∨'){	
-		$(".piaowus").fadeIn();
-		$(".xianshi").html("∧");
-	  }else if($(".xianshi").html()=='∧'){		
-			$(".piaowus").fadeOut();
-			$(".xianshi").html("∨");
-		}
-  })
-     
-     
-</script>
+
+
 <body>
 			<!-- 主页 -->
 		<div class="header">
@@ -244,31 +282,25 @@ $(document).on('click','.piaowu',function(){
 			  </div>
 			</div>
 		</div>
-	</div>	
-	<!-- 商品详情 -->
-    <div class="xiangqing" id="xiangqing1"  style="width:96%;height:230px;margin:0 auto;background:#fff;position: relative;top:12px;    border-top-left-radius: 6px; border-top-right-radius: 6px;overflow: hidden;">
-     </div>
-      <!-- 票种选择  -->
-	<div class="wenti"  style="width:92%;height:auto;margin:0 auto;background:#fff;position: relative;top:24px;overflow: hidden;">
-                     
-     </div> 
-  <button style="background:#fff;margin:36px 4% 12px;text-align:center;color:#838383;width:92%;height:50px;border:none;outline: none;">查看更多票型</button>            
-      <!-- 商品详情 -->
-     <div class=""  style="width:92%;height:50px;text-align: center;margin:0 auto;background:#fff;position: relative;overflow: hidden;">
-         <p style="width:100%;line-height: 50px;font-size:20px;font-weight: bold;"><span style="float:left;padding-left:10%;">商品详情</span><span style="color:#EEEEEE;">|</span><span style="float:right;margin-right:10%;">游客点评</span> </p>
-     </div> 
-     <div class="xiangqing"  style="width:92%;height:auto;margin:0 auto;background:#fff;position: relative;top:5px;overflow: hidden;">
-         <ul style="margin:20px 0 20px 5%;line-height:30px;color:#838383;">
-           <li>【使用时间】：<span>指定游玩日期内1日有效</span></li>
-           <li>【预订规则】：<span>提前预订</span></li>
-           <li>【退改说明】：<span>允许退单</span></li>
-         </ul>
-         <div id="img1">
-	        
-         </div>
-     </div> 
-</body>
+	</div>  
+	        <!-- 介绍 -->
+            <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;border-radius:10px;overflow: hidden;position: relative;top:-60px;z-index:111;"></div> 
+	  <!-- 票的类型 -->
+	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-40px;padding:0 0 30px 0;">
+	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">票种选择</p>
+	    <div class="productlist">	              		      	          
+	    </div>
+	  </div> 
+	 
+	   <!-- 商品评论 -->
+	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-20px;padding:0 0 30px 0;">
+	   <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">用户评价</p>	    
+	  </div>
 
+
+
+</body>
+ 
 
 
 
