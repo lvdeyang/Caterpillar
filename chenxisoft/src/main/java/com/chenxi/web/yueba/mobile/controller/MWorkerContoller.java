@@ -32,6 +32,7 @@ import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
 import com.chenxi.web.po.ProductPo;
+import com.chenxi.web.po.UserPo;
 import com.chenxi.web.util.Img2Base64Util;
 import com.chenxi.web.weixin.JsTicketUtil;
 import com.chenxi.web.yueba.admin.dao.ComboDao;
@@ -169,6 +170,8 @@ public class MWorkerContoller extends BaseController {
 		return mv;
 	}
 	
+	
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/mobile/apply.do", method = RequestMethod.POST)
@@ -192,9 +195,12 @@ public class MWorkerContoller extends BaseController {
 		
 		HttpSession session = request.getSession();
 		Object openid=session.getAttribute("openid");
-		workerPo.setOpenId(openid+"");
 		
-		
+		List<UserPo> userPos=conn_user.findUserByOpenId(openid+"");
+		if(userPos.get(0).getAdminFlg()==0){
+			workerPo.setOpenId(openid+"");
+		}
+
 		File file=new File(SystemConfig.IMAGE_PATH+File.separator+"file"+File.separator+DateUtil.format(new Date(), "yyyyMMdd"));
 		if(!file.exists()){//如果文件夹不存在
 			file.mkdir();//创建文件夹
@@ -304,14 +310,14 @@ public class MWorkerContoller extends BaseController {
 	public Object docheck(HttpServletRequest request) {
 		Map ret = new HashMap();
 		String id=request.getParameter("id");
-		String level=request.getParameter("level");
+		//String level=request.getParameter("level");
 		String checkMsg=request.getParameter("checkMsg");
-		String baseOrderCount=request.getParameter("baseOrderCount");
-		String sindex=request.getParameter("sindex");
+		//String baseOrderCount=request.getParameter("baseOrderCount");
+		//String sindex=request.getParameter("sindex");
 		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
-		workerPo.setSindex(Integer.parseInt(sindex));
-		workerPo.setBaseOrderCount(Integer.parseInt(baseOrderCount));
-		workerPo.setLevel(level);
+		//workerPo.setSindex(Integer.parseInt(sindex));
+		//workerPo.setBaseOrderCount(Integer.parseInt(baseOrderCount));
+		//workerPo.setLevel(level);
 		workerPo.setCheckMsg(checkMsg);
 		workerPo.setStatus(WorkerStatus.PASSED);
 		conn_worker.update(workerPo);
@@ -323,16 +329,59 @@ public class MWorkerContoller extends BaseController {
 	public Object notpass(HttpServletRequest request) {
 		Map ret = new HashMap();
 		String id=request.getParameter("id");
-		
 		String checkMsg=request.getParameter("checkMsg");
-		
 		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
-
 		workerPo.setCheckMsg(checkMsg);
 		workerPo.setStatus(WorkerStatus.REFUSE);
 		conn_worker.update(workerPo);
 		return "success";
 	}
 	
+	@RequestMapping(value = "/mobile/setindex", method = RequestMethod.GET)
+	public ModelAndView setindex(HttpServletRequest request) {
+		
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		ModelAndView mv  = new ModelAndView("yuebamobile/setworkerlist", strMap);
+		return mv;
+	}
 	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/setworkerlist", method = RequestMethod.GET)
+	public Object setworkerlist(HttpServletRequest request,int currPage,int pageCount) throws Exception {
+		List<WorkerPo> workerPos=conn_worker.findPassWorkersAndPage(currPage, pageCount);
+		return workerPos;
+	}
+	
+	@RequestMapping(value = "/mobile/setworker", method = RequestMethod.GET)
+	public ModelAndView setworker(HttpServletRequest request,long workerId) {
+		
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		WorkerPo workerPo=conn_worker.get(workerId);
+		List<LevelPo> levelList=conn_level.findAll();
+		strMap.put("workerId", workerId);
+		strMap.put("worker", workerPo);
+		strMap.put("levelList", levelList);
+		ModelAndView mv  = new ModelAndView("yuebamobile/setworker", strMap);
+		return mv;
+	}
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/doset", method = RequestMethod.POST)
+	public Object doset(HttpServletRequest request) {
+		Map ret = new HashMap();
+		String id=request.getParameter("id");
+		String level=request.getParameter("level");
+		String moreMsg=request.getParameter("moreMsg");
+		String baseOrderCount=request.getParameter("baseOrderCount");
+		String sindex=request.getParameter("sindex");
+		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
+		workerPo.setSindex(Integer.parseInt(sindex));
+		workerPo.setBaseOrderCount(Integer.parseInt(baseOrderCount));
+		workerPo.setLevel(level);
+		workerPo.setMoreMsg(moreMsg);
+		conn_worker.update(workerPo);
+		return "success";
+	}
 }

@@ -17,8 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chenxi.web.dao.CacheDao;
+import com.chenxi.web.dao.SysViewRecordDao;
 import com.chenxi.web.dao.UserDao;
 import com.chenxi.web.po.CachePo;
+import com.chenxi.web.po.SysViewRecordPo;
 import com.chenxi.web.po.UserPo;
 
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -67,6 +69,8 @@ public class MobileIndexController {
 
 	@Autowired
 	private UserDao conn_user;
+	@Autowired
+	private SysViewRecordDao conn_sysview;
 
 	@RequestMapping(value = "/mobile/index2", method = RequestMethod.GET)
 	public ModelAndView index2(String code, String state, HttpServletRequest request) throws Exception {
@@ -128,6 +132,9 @@ public class MobileIndexController {
 			conn_user.save(user);
 		}
 		HttpSession session = request.getSession();
+		
+		
+
 		session.setAttribute("userId", user.getId());
 		session.setAttribute("openid", openid);
 		mv = new ModelAndView("redirect:" + rUrl);

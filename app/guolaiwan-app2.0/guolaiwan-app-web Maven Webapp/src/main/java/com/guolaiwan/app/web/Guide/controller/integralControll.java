@@ -484,7 +484,7 @@ public class integralControll extends WebBaseControll  {
         	accountObj.put("color", "");
         	dataObject.put("keyword3", accountObj);
         	JSONObject timeObj=new JSONObject();
-        	timeObj.put("value",productPO==null?"积分商品总换订单:"+merchantPO.getShopName():productPO.getProductName());
+        	timeObj.put("value",productPO==null?"积分商品兑换订单:"+merchantPO.getShopName():productPO.getProductName());
         	timeObj.put("color", "");
         	dataObject.put("keyword4", timeObj);
         	JSONObject remarkObj=new JSONObject();
@@ -594,7 +594,6 @@ public class integralControll extends WebBaseControll  {
 		}
 		ProductPO Product =   conn_product.getProductByProId(order.getProductId()).get(0);
 	    if ( Product.getSite() != null) {
-	    	System.out.println("222222222222222222222222");
 	    	dataMap.put("site",  Product.getSite());
 		}	
 		dataMap.put("order", _order);

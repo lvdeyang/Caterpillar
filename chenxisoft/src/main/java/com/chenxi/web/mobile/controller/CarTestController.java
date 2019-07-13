@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,20 +23,33 @@ import com.chenxi.web.dao.ClassesDao;
 import com.chenxi.web.dao.OnlineClassesDao;
 import com.chenxi.web.dao.ProductDao;
 import com.chenxi.web.dao.RecommDao;
+import com.chenxi.web.dao.SysViewRecordDao;
+import com.chenxi.web.dao.UserDao;
 import com.chenxi.web.po.ArticlePo;
 import com.chenxi.web.po.ClassesPo;
 import com.chenxi.web.po.OnlineClassesPo;
 import com.chenxi.web.po.ProductPo;
 import com.chenxi.web.po.RecommPo;
+import com.chenxi.web.po.SysViewRecordPo;
+import com.chenxi.web.po.UserPo;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
 @Controller
 @RequestMapping("/cartest")
 public class CarTestController {
+	@Autowired SysViewRecordDao conn_sysview;
+	@Autowired UserDao conn_user;
+	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
+		SysViewRecordPo sysViewRecordPo=new SysViewRecordPo();
+		HttpSession session = request.getSession();
+		UserPo user=conn_user.get(Long.parseLong(session.getAttribute("userId")+""));
+		sysViewRecordPo.setUrl("cartest");
+		sysViewRecordPo.setUserName(user.getNickName());
+		conn_sysview.save(sysViewRecordPo);
 		ModelAndView mv = new ModelAndView("mobile/cartest", strMap);
 		return mv;
 	}
