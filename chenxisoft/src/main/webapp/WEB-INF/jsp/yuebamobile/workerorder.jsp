@@ -102,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                  for(var i=0;i<data.length;i++){
 				         html.push('<li class="order" id="order-'+data[i].id+'">');
 						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url(/chenxisoft/'+data[i].worderPhoto+')"></span></div>');
+						 html.push('        <span style="background-image:url(/'+data[i].worderPhoto+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
 						 html.push('		<div style="font-size:14px;">'+data[i].workName+'</div>');
 						 html.push('		<p class="ui-nowrap" style="font-size:12px;">'+

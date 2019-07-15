@@ -78,7 +78,7 @@ public class MOrderController {
 	public Object getOrders(HttpServletRequest request,int currPage,int pageCount,String orderStatus) throws Exception {
 		List<OrderPo> orderPos=conn_order.findOrderByStatus(OrderStatus.fromString(orderStatus), currPage, pageCount);
 		for (OrderPo orderPo : orderPos) {
-			orderPo.setWorkName("黄靖宇");
+			
 			orderPo.setFromDateStr(DateUtil.format(orderPo.getFromDate(), "yyyy-MM-dd"));
 		}
 		return orderPos;
@@ -177,6 +177,9 @@ public class MOrderController {
 		order.setPrice(0);
 		order.setUserId(0);
 		order.setWorkerId(Long.parseLong(id));
+		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
+		order.setWorderPhoto(workerPo.getPhoto());
+		order.setWorkName(workerPo.getRealName());
 		conn_order.save(order);
 		return "success";
 	}
