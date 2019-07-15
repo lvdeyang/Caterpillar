@@ -63,8 +63,12 @@ public class MOrderController {
 		return mv;
 	}
 	@RequestMapping(value = "/mobile/wlist", method = RequestMethod.GET)
-	public ModelAndView wlist(HttpServletRequest request) {
+	public ModelAndView wlist(HttpServletRequest request,long workerId) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("workerId", workerId);
+		HttpSession session = request.getSession();
+		UserPo user=conn_user.get(Long.parseLong(session.getAttribute("userId")+""));
+		strMap.put("user", user);
 		ModelAndView mv = new ModelAndView("yuebamobile/workerorder", strMap);
 		return mv;
 	}
@@ -85,9 +89,12 @@ public class MOrderController {
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/mobile/wlist.do", method = RequestMethod.GET)
-	public Object getwObjectOrders(HttpServletRequest request,int currPage,int pageCount) throws Exception {
+	public Object getwObjectOrders(HttpServletRequest request,int currPage,int pageCount,long workerId) throws Exception {
 		HttpSession session = request.getSession();
-		List<OrderPo> orderPos=conn_order.findOrderByWorkerPage(Long.parseLong(session.getAttribute("workerId")+""),currPage, pageCount);
+		if(workerId==0){
+			workerId=Long.parseLong(session.getAttribute("workerId")+"");	
+		}
+		List<OrderPo> orderPos=conn_order.findOrderByWorkerPage(workerId,currPage, pageCount);
 		for (OrderPo orderPo : orderPos) {
 			WorkerPo workerPo=conn_worker.get(orderPo.getWorkerId());
 			orderPo.setWorkName(workerPo.getRealName());
@@ -171,6 +178,15 @@ public class MOrderController {
 		order.setUserId(0);
 		order.setWorkerId(Long.parseLong(id));
 		conn_order.save(order);
+		return "success";
+	}
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/del", method = RequestMethod.GET)
+	public Object del(HttpServletRequest request,long orderId) throws Exception {
+		
+		conn_order.delete(orderId);
 		return "success";
 	}
 	

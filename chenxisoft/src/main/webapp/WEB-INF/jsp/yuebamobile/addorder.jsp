@@ -95,7 +95,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		     <div class="ui-form-item ui-border-b">
 		            <label>开始日期
 		            </label>
-		            <input style="margin-top:15px;font-size:14px;margin-left:12px;" type="text" id="fromDate">
+		            <input readonly style="margin-top:15px;font-size:14px;margin-left:12px;" type="text" id="fromDate">
 		     </div>
 
 	        <div class="ui-btn-wrap" style="">

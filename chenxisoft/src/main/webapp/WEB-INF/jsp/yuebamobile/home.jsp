@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     预产期
         </label>
       
-        <input style="margin-top:15px;" type="text" class="layui-input" id="orderDate" placeholder="请选择预约日期" lay-key="1">
+        <input readonly style="margin-top:15px;" type="text" class="layui-input" id="orderDate" placeholder="请选择预约日期" lay-key="1">
     </div>
 	<div class="demo-item" style="padding-bottom:50px;">
 		<div class="demo-block">

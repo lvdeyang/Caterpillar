@@ -135,7 +135,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        </div>
 	        <div class="adminrow" style="display:none;font-size:14px;margin-left:12px;">
 	            <a href="/chenxisoft/order/mobile/addindex?workerId=${worker.id}" id="addOrder">添加订单</a>
-	          
+	            <a href="/chenxisoft/order/mobile/wlist?workerId=${worker.id}" id="addOrder" style="margin-left:5px;">查看她的订单</a>
 	        </div>
 	        <div class="ftitle">
 	                                    证件照片
