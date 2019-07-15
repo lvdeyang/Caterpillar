@@ -41,6 +41,7 @@ public class CoupleBackDao extends AbstractBaseDao<CoupleBackPO> {
 	 */
 	public List<CoupleBackPO> getOrderform(int pageNum, int pageSize) throws ParseException {
 		QueryHql hql = newQueryHql();
+		hql.andBy("merchantId", Condition.eq, 0L);
 		hql.orderBy("date", true);
 		List<CoupleBackPO> orders = findByHqlPage(hql, pageNum, pageSize);
 		return orders;

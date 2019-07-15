@@ -1,5 +1,8 @@
 package com.guolaiwan.app.web.business.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.app.web.coupleback.vo.CoupleBackVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
@@ -101,7 +107,10 @@ public class BusinessController extends WebBaseControll {
 	private AddressDAO addressDao;
 	@Autowired
 	private ProductComboDAO conn_combo;
-
+	@Autowired
+	private CoupleBackDao couple_back;
+	@Autowired
+	private UserInfoDAO conn_user;
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
 	public ModelAndView nsAndView(HttpServletRequest request, long merchantId, String comCode) throws Exception {
@@ -111,7 +120,83 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("comCode", comCode);
 		return mv;
 	}
+   // 南山项目跳转攻略详情
+	@RequestMapping(value = "/merchant/strategy")
+	public ModelAndView Strategy(HttpServletRequest request, long merchantId) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/strategy");
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
+	// 南山项目跳转攻略详情发布
+	@RequestMapping(value = "/merchant/announce")
+	public ModelAndView announce(HttpServletRequest request,long merchantId) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/publish");
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
+	
+	/**
+	 * 南山  攻略详情页
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/selefeedback", method = RequestMethod.GET)
+	public Map<String, Object> seleFeedback(HttpServletRequest request, HttpServletResponse response,String merchantId) throws Exception {
+		List<CoupleBackVo> _merchants = null;
+		if (merchantId != "" && merchantId !=  null ) {
+			List<CoupleBackPO> coup = couple_back.getbymerchantId(Long.parseLong(merchantId));
+			_merchants = CoupleBackVo.getConverter(CoupleBackVo.class).convert(coup,
+					CoupleBackVo.class);
+		}
+		
+		return success(_merchants);
+	}
+	/**
+	 * 根据用户反馈添加数据
+	 * @param request 头像  用户名
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/addfeedback", method = RequestMethod.POST)
+	public Map<String, Object> addFeedback(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		long userId = 	(Long) request.getSession().getAttribute("userId");
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		String content = pageObject.getString("content");
+		Long merchantId = pageObject.getLong("merchantId");
+		UserInfoPO user = conn_user.get(userId); //获取用户头像
+		if (user == null) {
+			return ERROR("未获取到用户！");
+		}
+		Date now = new Date(); 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date = dateFormat.format( now ); 
+		CoupleBackPO coup = new CoupleBackPO();
+		coup.setUserId(userId);
+		coup.setHeadportrait(user.getUserHeadimg());
+		coup.setUsername(user.getUserNickname());
+		coup.setDate(date);
+		coup.setContent(content);
+		coup.setState(0);
+		coup.setMerchantId(merchantId);
+		couple_back.save(coup);
+		return success("");
+	}
 
+	
+	
+	
+	
+	
+	
+	
+	
 	// 封装南山首页需要活动版块的数据
 	@ResponseBody
 	@RequestMapping(value = "/merchant/nsActivity", method = RequestMethod.GET)
@@ -652,6 +737,23 @@ public class BusinessController extends WebBaseControll {
 		hashMap.put("pingfens", pingfens);
 		hashMap.put("merlist", merlist);
 		return hashMap;
+	}
+	
+	private String getRequestJson(HttpServletRequest request) {
+		try {
+			BufferedReader br;
+			br = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream(), "utf-8"));
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+			request.getInputStream().close();
+			br.close();
+			return sb.toString();
+		} catch (IOException e) {
+			return "";
+		}
 	}
 	
 	// 搜索住宿的店家
