@@ -292,7 +292,7 @@ public class ParkManagementController extends BaseController {
 			parking_Money.saveOrUpdate(money);
 			map.put("code", "0");
 			map.put("message", "修改成功");
-		}{
+		}else{
 			map.put("code", "1");
 			map.put("message", "失败");
 		}

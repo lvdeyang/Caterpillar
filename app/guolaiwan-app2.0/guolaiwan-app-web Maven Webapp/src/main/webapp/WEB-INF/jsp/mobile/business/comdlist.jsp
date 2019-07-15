@@ -215,7 +215,7 @@ html, body {
            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
            	}else{
 				for(var i=0; i<data.length; i++){
-					    html.push('<a onclick="gotopickingpurchase('+data[i].id+')"><div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
+					    html.push('<a onclick="gotodetailspage('+data[i].id+')"><div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
 					    html.push('<img style="width:100%;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
 					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;width:90%;white-space: nowrap;overflow:hidden;text-overflow:ellipsis; ">'+data[i].productName+'</p>');
 					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
@@ -227,8 +227,12 @@ html, body {
            })
 	}
 	
-	function gotopickingpurchase(id){
-   		location.href=window.BASEPATH + 'business/gotopickingpurchase?productId='+id;
+   function gotobusinessdetails(){
+   		location.href=window.BASEPATH + 'business/gotobusinessdetails?merchantId=${merchant.id}';
+   }
+   
+   function gotodetailspage(id){
+   		location.href=window.BASEPATH + 'business/gotodetailspage?productId='+id;
    }
 </script>
 <script>
@@ -243,7 +247,6 @@ $(function(){
         var cc = $(document).height(); //浏览器当前窗口文档的高度 
       
         if(cc <= aa+bb){
-            $(".huodong").append($(".huodongs").clone()); 
         }
     })
   })
@@ -276,6 +279,168 @@ $(document).on('click', '#zhifu', function(){
        
 </script>
 
+<script>
+$(function() {
+	  window.BASEPATH = '<%=basePath%>';
+	  var parseAjaxResult = function(data){
+	  
+			if(data.status !== 200){
+				$.toptip('data.message', 'error');
+				return -1;
+			}else{
+				return data.data;		
+			}
+	  };
+		
+      var _uriRecomment = window.BASEPATH + 'phoneApp/getmerchantid?merchantId=${merchantId}';
+		
+		$.get(_uriRecomment, null, function(data){
+			data = parseAjaxResult(data);
+			if(data === -1) return;
+			if(data){
+			    $('.header-content').html(data.shopName);
+			}
+		});		
+		
+		$('.header-content').html(${shopName});		
+		$(document).on('click','#paynow',function(){
+			$(".fuceng").fadeOut();
+   			$(".tanchuang").fadeOut();
+		    if($('#paytext').val()==''){
+			   $.toast("请输入金额", "forbidden");
+			   return false;
+			}
+			dopay(0);
+	  });  
+		
+		function dopay(mailId){
+ 		    var _uriAdd = window.BASEPATH + 'phoneApp/goToPay';
+			var params={};
+			params.userId=${userId};
+			params.merchantId=${merchantId};
+			params.source="PUBLICADDRESS";
+			params.payMoney=$('#paytext').val();
+			params.addressId=mailId;
+			$.confirm("确定支付？", function() {
+				$.post(_uriAdd, $.toJSON(params), function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					 $.modal({
+						  title: "付款方式",
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+								    payByWallet(data.id);
+						    } },
+						    { text: "微信支付", onClick: function(){ 
+								    payPublic(data.id);
+						    } },
+						    { text: "取消", className: "default", onClick: function(){ } },
+						  ]
+						}); 
+				});			  
+			  });	 	
+		}
+		 
+	  
+	  function deleteorder(orderId)
+	  {
+	  	var params={};
+	  	params.orderId = orderId;
+	  	$.post(window.BASEPATH +'phoneApp/deleteorder', $.toJSON(params), function(data){
+	  	});
+	  }	
+	  
+	  
+	  	var prepay_id;
+		var paySign;
+		var appId;
+		var timeStamp;
+		var nonceStr;
+		var packageStr;
+		var signType;
+		var orderNo;	
+		
+			
+		function payPublic(orderId){
+			$.get(window.BASEPATH +"pubnum/prev/pay/"+orderId, null, function(data){
+				prepay_id = data.prepay_id;
+		        paySign = data.paySign;
+		        appId = data.appId;
+		        timeStamp = data.timeStamp;
+		        nonceStr = data.nonceStr;
+		        packageStr = data.packageStr;
+		        signType = data.signType;
+		        orderNo = data.orderNo;
+		        callpay(orderId);
+			});
+		}
+		
+		function payByWallet(orderId){
+			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
+			var userId=${userId};
+			$.post(url,{'orderId':orderId,'userId':userId},function(data){
+						data = parseAjaxResult(data);
+				if(data==1){
+						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
+						    if(data.data=="PAYSUCCESS"){				
+						       location.href=window.BASEPATH + 'business/gotopayment?orderId='+orderId+'&merchantId=${merchant.id}';
+						    }
+						});
+				}else{
+					$.alert('您的余额不足！');
+				}
+			})
+		}
+	
+		function onBridgeReady(orderId){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		                $.confirm("交易成功");
+		                //每五秒刷新订单状态
+						
+		                setInterval(function(){ 
+                                $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
+								    
+								    if(data.data=="TESTED"||data.data=='PAYSUCCESS'){
+								       location.href=window.BASEPATH + 'business/gotopayment?orderId='+orderId+'&merchantId=${merchant.id}';
+								    }
+								});
+                        }, 1000);
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") {
+					 	deleteorder(orderId);
+		                alert("交易取消");  
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
+					 	deleteorder(orderId);
+		                alert(res.err_desc); 
+		            }  
+		        }
+		    );
+		}
+		function callpay(orderId){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady(orderId);
+		    }
+		}
+		})
+</script>
 
 
 
@@ -299,15 +464,15 @@ $(document).on('click', '#zhifu', function(){
 	
 	
 	<div style="width:96%;height:auto;background:#fff;text-align:center;margin:10px auto;padding:0 3% 20px 5%;border-radius:10px;">
-	 <p style="height:40px;line-height: 40px;font-size:12px;margin:0;text-align:left;">
+	 <p style="height:30px;line-height: 30px;font-size:12px;margin:0;text-align:left;">
 	 <span style="font-size:16px;font-weight:bold;">${merchant.shopName}</span>
 	 <span style="float:right;"><span class="pingfen" style="color:#E65903;"></span>超棒</span>
-	 <p style="text-align: left;margin:0;height:40px;line-height: 40px;">联系电话：<span>${merchant.shopTel}</span></p>
-	 
+	 <p style="text-align: left;margin:0;height:25px;line-height:25px;">联系电话：<span>${merchant.shopTel}</span></p>
 	 </p>
 	 <p style="height:30px;line-height: 30px;font-size:12px;margin:0;text-align:left;">
 	 <img style="height:20px;width:20px;" src="lib/images/dingweis.png;"/>
 	 <span>距离您1000km</span>
+	 <span onclick="gotobusinessdetails()" style="color:#E65903;float:right;">商家详情</span>
 	 </p>
 	 <button id="zhifu"  style="color:#fff;background: #E65903;width:85%;height:40px;border:none;outline:none;border-radius:10px; font-size:18px;">到店支付</button>
 	</div>
@@ -320,9 +485,9 @@ $(document).on('click', '#zhifu', function(){
 	
 	</div>
 	  <div class="tanchuang" style="z-index:11111;width:100%;height:auto;display: none;padding:0 0 50px 0;text-align: center;background: #fff;position: fixed;bottom:0;border-radius:10px; ">
-	   <p style="width:96%;margin:0 auto;height:50px;line-height: 50px;font-size: 18px;font-weight: bold;border-bottom:1px solid #D3D3D3;">采摘园</p>
-	    <p style="margin:80px 0 50px 0;text-align: center;font-weight:bold;">支付金额（元）<input style="height:30px;border-radius:8px;padding:0 5px;border:2px solid #EB6E1E;outline: none;"></p>
-	    <button style="height:40px;color:#fff;background:#EB6E1E;width:70%;border:none;outline:none;border-radius:10px;font-size:18px;">立即支付</button>
+	   <p style="width:96%;margin:0 auto;height:50px;line-height: 50px;font-size: 18px;font-weight: bold;border-bottom:1px solid #D3D3D3;">${merchant.shopName}</p>
+	    <p style="margin:80px 0 50px 0;text-align: center;font-weight:bold;">支付金额（元）<input id="paytext" style="height:30px;border-radius:8px;padding:0 5px;border:2px solid #EB6E1E;outline: none;"></p>
+	    <button id="paynow" style="height:40px;color:#fff;background:#EB6E1E;width:70%;border:none;outline:none;border-radius:10px;font-size:18px;">立即支付</button>
 	  </div>
    <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>

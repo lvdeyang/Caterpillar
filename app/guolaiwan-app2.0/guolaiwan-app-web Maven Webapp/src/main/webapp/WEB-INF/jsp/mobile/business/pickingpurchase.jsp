@@ -194,9 +194,19 @@ html, body {
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script type="text/javascript">
-<!--选项卡  -->
-
-
+	var logisticsId=1;
+	
+	$(document).on('click', '#logistics1', function(){
+		logisticsId=1;
+		$('.contentt-box').show();
+	});
+	
+	$(document).on('click', '#logistics2', function(){
+		logisticsId=2;
+		$('.contentt-box').hide();
+	});
+	
+	<!--选项卡  -->
 	$(document).on('click', '.tab-btn li', function(){
 	//为按钮添加样式
 	$(this).addClass("btn-active")
@@ -223,14 +233,250 @@ html, body {
 	  
 	  //执行一个laydate实例
 	  laydate.render({
-	    elem: '#test1' //指定元素
+	    elem: '#bookDate' //指定元素
 	  });
 	});
-	   
+	
+	var MAX = ${product.productLimitNum eq "0"? "99":product.productLimitNum}, MIN = ${productRestrictNumber};
+	$(document).on('click','.p1',function(){
+	  var value=parseInt($('.zhi').val())-1;
+	  if($('.zhi').val()<=MIN){
+	  return false;
+	  }
+	  $('.zhi').val(value);
+	  $('.price').html("￥"+(${product.productPrice}*value).toFixed(2));
+	  $('.productprice').html("￥"+(${product.productPrice}*value).toFixed(2));
+	 })
+	    
+	 $(document).on('click','.p2',function(){
+	   var value=parseInt($('.zhi').val())+1;
+	   if($('.zhi').val()>=MAX){
+	   return false;
+	   }
+	   $('.zhi').val(value);
+	   $('.price').html("￥"+(${product.productPrice}*value).toFixed(2));
+	   $('.productprice').html("￥"+(${product.productPrice}*value).toFixed(2));
+	  })
+	  
+	  function gotologistics(){
+   		location.href=window.BASEPATH + 'business/gotologistics?productId=${product.id}';
+   		}
+   		
+	 function gotopickinglist(){
+		location.href=window.BASEPATH + 'business/gotocomdlist?merchantId=${product.productMerchantID}';
+	 }
 </script>
 
 
+<script>
 
+$(function(){
+	getaddress();
+	initCombos();
+	$('.productprice').html("￥${product.productPrice}");
+})
+
+
+	
+	//获取地址
+	function getaddress(){
+		var _uriAddress = window.BASEPATH + 'phoneApp/address/list?userId=${userId}';
+		$.get(_uriAddress, null, function(data){
+			data = parseAjaxResult(data);
+			if(data === -1) return;
+			    var html=[];
+			if(data && data.length>0){
+				for(var i=0; i<data.length; i++){
+					if(data[i].defaultAddress==1||data.length==1){
+						html.push('<div class="contentt active" style="">');
+						html.push('<div style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative; ">');
+						html.push('<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span style="text-align: left;">收件人：<span>'+data[i].consigneeName+'</span></span>');
+						html.push('<span style="float:right;">联系电话：<span>'+data[i].consigneePhone+'</span></span></p>');
+						html.push('<p style="width:100%;height:auto;padding:0 7% 0 15%;margin:0 auto;">收货地址：<span>'+data[i].consigneeAddress+'</span></p>');
+						html.push('<img style="height:30px;width:30px;position: absolute;top:15px;left:5%;" src="lib/images/zidongdaolan.png">');
+						html.push('<span onclick="gotologistics()" style="position: absolute;right:5%;font-size:16px;font-weight: bold;top:25px;">></span>');
+				        html.push('<input type="text" hidden="hidden" class="addressId" value="'+data[i].id+'">');
+				        html.push('</div>');
+				        }
+				}
+			    		$('.contentt-box').append(html.join(''));
+			}else{
+						html.push(' <p onclick="gotologistics()" style="width:100%;height:30px;line-height:30px;text-align:center;background: #fff;margin:5px 0;font-weight: bold;"><span>请添加地址</span><span style="float:right;margin-right:10px;">></span></p>');
+			    		$('.contentt-box').append(html.join(''));
+			}
+		});
+	}
+	
+	
+	function initCombos(){
+		   var html=[];
+		   var url=window.BASEPATH + 'business/getallcombo';
+		   $.post(url,{"productId":${product.id}},function(data){
+		   
+		   if(data.length==0){
+		   		html.push('<option value="0">标准(￥${product.productPrice})</option>');
+		   }else{
+		        $('#total').html((data[0].comboprice/100).toFixed(2));
+		   }
+		   
+		   for(var i=0;i<data.length;i++){
+		      html.push('<option value="'+data[i].id+'-'+(data[i].comboprice/100).toFixed(2)+'">'+data[i].combo+'(￥'+(data[i].comboprice/100).toFixed(2)+')</option>');
+		   }
+		   $('.comboList').append(html.join(''));
+		   
+		   })
+		}
+
+</script>
+<script>
+		    
+	function dobuy(){
+		    var param={};
+			param.productId=${product.id};
+			param.productNum=$('.zhi').val();
+			param.payMoney=1;
+			param.userId=${userId};
+			param.paytype='WEICHAT';
+			param.source="PUBLICADDRESS";
+			param.addressId=$('.addressId').val();
+			param.bookDate=$('#bookDate').val();
+			param.logisticsId=logisticsId;
+		    param.comboId=$('.comboList').val().split('-')[0];
+			var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+${product.id}+'&count='+$('.zhi').val();
+			$.get(chkStockUrl, null, function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+				if(data.stock==0){
+				   $.toast("抱歉，库存不足", "forbidden");
+				   return;
+				}	
+				var _uriPay = window.BASEPATH + 'phoneApp/order/add';
+				$.post(_uriPay, $.toJSON(param), function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					
+					$.modal({
+						  title: "付款方式",
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+						    	$.confirm("确定支付？", function() {
+								    payByWallet(data.orderId);
+								  }, function() {});
+						    } },
+						    { text: "微信支付", onClick: function(){ 
+							    $.confirm("确定支付？", function() {
+								    payPublic(data.orderId);
+								  }, function() {});
+						    } },
+						    { text: "取消", className: "default", onClick: function(){ } },
+						  ]
+						});
+					
+
+				});
+					
+
+			});
+		
+		}
+		
+		function payByWallet(orderId){
+			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
+			var userId=${userId};
+			$.post(url,{'orderId':orderId,'userId':userId},function(data){
+						data = parseAjaxResult(data);
+				if(data==1){
+						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
+						    if(data.data=="PAYSUCCESS"){				
+						       location.href=window.BASEPATH + 'business/gotopayment?orderId='+orderId+'&merchantId=${product.productMerchantID}';
+						    }
+						});
+				}else{
+					$.alert('您的余额不足！');
+				}
+                   
+			})
+		}
+	
+		var prepay_id;
+		var paySign;
+		var appId;
+		var timeStamp;
+		var nonceStr;
+		var packageStr;
+		var signType;
+		var orderNo;	
+		
+		function payPublic(orderId){
+			$.get(window.BASEPATH +"pubnum/prev/pay/"+orderId, null, function(data){
+				prepay_id = data.prepay_id;
+		        paySign = data.paySign;
+		        appId = data.appId;
+		        timeStamp = data.timeStamp;
+		        nonceStr = data.nonceStr;
+		        packageStr = data.packageStr;
+		        signType = data.signType;
+		        orderNo = data.orderNo;
+		        callpay();
+			});
+		}
+		
+		function onBridgeReady(){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		                $.confirm("交易成功");
+		                //每五秒刷新订单状态
+						
+		                setInterval(function(){ 
+                                $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
+								    
+								    if(data.data=="PAYSUCCESS"){
+								       location.href=window.BASEPATH + 'business/gotopayment?orderId='+orderNo+'&merchantId=${product.productMerchantID}';
+								    }
+								});
+
+                        }, 1000);
+
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
+		                alert("交易取消");  
+	
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
+		                alert(res.err_desc); 
+
+		            }  
+		        }
+		    );
+		}
+		function callpay(){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady();
+		    }
+		}
+		
+		
+			
+		
+	
+
+</script>
 
 
 <body>
@@ -247,19 +493,12 @@ html, body {
 			<div class="tab" style="">
 			  <p style="float:left;font-size:16px;margin:0 0 0 40px;line-height:50px;">收货方式</p>
 					<ul class="tab-btn active" style="padding:0 5%;margin:0;height:50px;line-height: 50px;background: #fff;">
-					<li class="btn-active"><p class="wuliu">过来玩物流</p></li>
-					<li class="ling"><p>到店领取</p></li>				
+					<li id="logistics1" class="btn-active"><p class="wuliu">过来玩物流</p></li>
+					<li id="logistics2" class="ling"><p>到店领取</p></li>				
 			        </ul>	  
 			    <div class="contentt-box" >
 			     <!--过来玩物流  -->
-				<div class="contentt active" style="">
-				<div style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative; ">
-				<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span style="text-align: left;">收件人：<span>想念</span></span>
-				<span style="float:right;">联系电话：<span>100861008610086</span></span></p>
-				<p style="width:100%;height:auto;padding:0 7% 0 15%;margin:0 auto;">收货地址：<span>按时大苏打你打你按时大苏打你按时大苏打你按时大苏打你按时大苏</span></p>
-				<img style="height:30px;width:30px;position: absolute;top:15px;left:5%;" src="lib/images/zidongdaolan.png">
-				<span style="position: absolute;right:5%;font-size:16px;font-weight: bold;top:25px;">></span>
-		        </div>    
+				
 				</div>
 				<!--到店取货  -->
 				<div class="contentt" style="text-align: center;">
@@ -267,29 +506,28 @@ html, body {
 			  </div>			
             </div>
         <div style="height:120px;width:100%;background: #fff;margin:5px 0;overflow: hidden;position: relative;">
-          <img style="width:35%;height:94%;border-radius:10px;margin:0.5% 5% 0.5% 6%;display:inline-block;" src="lib/images/1.jpg;">
+          <img style="width:35%;height:94%;border-radius:10px;margin:0.5% 5% 0.5% 6%;display:inline-block;" src="http://www.guolaiwan.net/file${product.productShowPic}">
           <p style="display: inline-block;margin:0;position: absolute;font-size:16px;top:10px;">${product.productName}</p>
           <p style="display: inline-block;margin:0;position: absolute;font-size:12px;top:40px;">型号：1斤装</p>
-          <p style="display: inline-block;margin:0;position: absolute;font-size:18px;bottom:10px;color:#EB6E1E;">￥${product.productPrice}</p>
-          <button style="color:#fff;background:#EB6E1E;padding:2px 5px;border-radius:12px;border:none;outline:none;position: absolute;right:2%;top:10px; ">进入店铺</button>
+          <p class="price" style="display: inline-block;margin:0;position: absolute;font-size:18px;bottom:10px;color:#EB6E1E;">￥${product.productPrice}</p>
+          <button onclick="gotopickinglist()" style="color:#fff;background:#EB6E1E;padding:2px 5px;border-radius:12px;border:none;outline:none;position: absolute;right:2%;top:10px; ">进入店铺</button>
           <p class="p1" style="margin:0;position: absolute;bottom:10px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
-		  <input type="text" readonly="true"  class="zhi" id="shuliang" value="1"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;bottom:10px;font-size:14px;font-weight:bold;text-align: center;">
+		  <input type="text" readonly="true"  class="zhi" id="shuliang" value="${productRestrictNumber}"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;bottom:10px;font-size:14px;font-weight:bold;text-align: center;">
 		  <p class="p2" style="margin:0;position: absolute;bottom:10px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
         </div>
         <div class="riqi" style="position: relative;display: none; ">
-        <input class="layui-input" id="test1" type="text" placeholder="请您选择采摘日期"   style="border-radius:10px;cursor: pointer;width:100%;height:60px;margin:5px auto;padding:0 10%;text-align: center;" >
+        <input class="layui-input" id="bookDate" type="text" placeholder="请您选择采摘日期"   style="border-radius:10px;cursor: pointer;width:100%;height:60px;margin:5px auto;padding:0 10%;text-align: center;" >
          <p style="position: absolute;font-size: 16px;font-weight: bold;top:19px;left:3%;">预订日期</p>
         </div>
         <div style="position: relative;">
-        <select style="border-radius:10px;cursor: pointer;height:60px;" >
-        <option>标准￥80</option>
-        <option>标准￥100</option>
+        <select class="comboList" style="border-radius:10px;cursor: pointer;height:60px;" >
         </select>
+       
         <p style="position: absolute;font-size: 16px;font-weight: bold;top:19px;left:5%;">套餐选择</p>
         </div>
         <div style="width:100%;height:60px;position: fixed;bottom:0;background: #fff;">
-        <p style="line-height: 60px;color:#EB6E1E;width:50%;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">加入购物车</p>
-        <p style="line-height: 60px;background:#EB6E1E;width:50%;color:#fff;float:right;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">立即购买</p>
+        <p  style="line-height: 60px;color:#EB6E1E;width:50%;display: inline-block;text-align: center;font-size:20px;font-weight: bold;"><span class="productprice"></span></p>
+        <p onclick="dobuy()" style="line-height: 60px;background:#EB6E1E;width:50%;color:#fff;float:right;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">立即购买</p>
         </div> 
 </body>
 

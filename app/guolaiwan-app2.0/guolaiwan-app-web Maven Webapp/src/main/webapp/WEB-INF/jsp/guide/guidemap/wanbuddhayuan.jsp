@@ -613,6 +613,12 @@ input[type="radio"] {
 	
 	setTimeout(function() {
 	 $('.info').hide(0);
+	  var song = [{
+					'src': 'http://www.guolaiwan.net/file/20190309/1552096017707.mp3',
+					'title': '孝经'
+				}
+		];
+		MP3(song,44);
 	 ref = setInterval(function(){// 循环
 		 consoleLog();
 	 },5000);

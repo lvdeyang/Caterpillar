@@ -443,6 +443,12 @@ $(function() {
    function picking(){
    		location.href=window.BASEPATH + 'business/gotopicking?merchantId=${merchantId}';
    }
+   function question(){
+   		location.href=window.BASEPATH + 'business/merchant/strategy?merchantId=${merchantId}';
+   }
+   function ticket(){     
+      location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId=${merchantId}';   
+   }
    
 </script>
 
@@ -477,12 +483,12 @@ $(function() {
 	     </div> 
 	    <div class="header_in" style="clear:both">
 	     <ul style="">
-	     <li><img src="lib/images/goupiaos.png"/></li>
+	     <li><img src="lib/images/goupiaos.png" onclick="ticket()"/></li>
    	     <li onclick="accommodation()"><img src="lib/images/zhusus.png"/></li>
          <li><img src="lib/images/tingchess.png"/></li>
          <li><img onclick="cate()" src="lib/images/meishis.png"/></li>
          <li><img src="lib/images/fenxiaos.png"/></li>
-         <li><span>购票</span></li>
+         <li><span onclick="ticket()">购票</span></li>
    	     <li onclick="accommodation()"><span>住宿</span></li>
          <li><span>停车</span></li>
          <li onclick="cate()"><span>美食</span></li>
@@ -529,7 +535,7 @@ $(function() {
         
          <!-- 常见问题  -->
 	  	<div class="wenti"  style="width:96%;height:260px;margin:0 auto;background:#fff;position: relative;top:60px;overflow: hidden;">
-            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/wentis.png"/>常见问题  </span> <span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
+            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/wentis.png"/>常见问题  </span> <span onclick="question()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
              <ol id="ol">
              </ol>
         </div> 
