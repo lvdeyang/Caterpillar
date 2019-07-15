@@ -108,6 +108,8 @@ public class BusinessController extends WebBaseControll {
 	@Autowired
 	private ProductComboDAO conn_combo;
 	@Autowired
+	private ActivityRelDAO activityDao;
+	@Autowired
 	private CoupleBackDao couple_back;
 	@Autowired
 	private UserInfoDAO conn_user;
@@ -375,16 +377,13 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getPicture", method = RequestMethod.POST)
 	public List<String> getShopMpic(long merchantId) throws Exception {
-		System.out.println(merchantId + " ---------------------------------");
 		List<String> list = new ArrayList<String>();
 		MerchantPO Merchant = Mer_chant.getMerchantById(merchantId).get(0);
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		String[] shop = Merchant.getShopMpic().split(",");
 		for (String string : shop) {
-			System.out.println(sysConfig.getWebUrl() + string);
 			list.add(sysConfig.getWebUrl() + string);
 		}
-		System.out.println(list);
 		return list;
 	}
 
@@ -556,10 +555,36 @@ public class BusinessController extends WebBaseControll {
 				list.add(productVO);
 			}
 		}
-		System.out.println(list.size());
 		return list;
 	}
 	
+	
+	//按照商品类型商户所有的商品 
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getactivityproduct")
+	public List<ProductVO> getActivityProduct(HttpServletRequest request) throws Exception {
+		int page=1;
+		String type=request.getParameter("type");
+		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		List<ActivityRelPO> activityproduct = activityDao.findAll();
+		List<MerchantChildrenPO> cate = merchantChildrenDao.getCate(merchantId);
+		List<ProductVO> list =new ArrayList<ProductVO>();
+		List<ProductPO> allproduct = conn_product.findByProductClassCode(type, page, 100);
+		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
+		for (ProductVO productVO : listvo) {
+			for (MerchantChildrenPO cate1 : cate) {
+					for (ActivityRelPO activity : activityproduct) {
+						if(productVO.getId()==activity.getProductId()&&productVO.getProductMerchantID()==cate1.getId()){
+							list.add(productVO);
+						}
+					}
+				}
+		}
+		return list;
+	}
+		
+		
 	//按照商品类型所有的商品 
 	@JsonBody
 	@ResponseBody
@@ -568,7 +593,6 @@ public class BusinessController extends WebBaseControll {
 		String type=request.getParameter("type");
 		List<ProductPO> allproduct = conn_product.findByProductClassCode(type, 1, 100);
 		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
-		System.out.println(listvo.size());
 		return listvo;
 	}
 	
@@ -578,7 +602,6 @@ public class BusinessController extends WebBaseControll {
 	public ModelAndView goToPreferably(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		System.out.println(merchantId);
 		mv = new ModelAndView("mobile/business/preferably");
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("pingfen", orderInfoDao.GetCountbyPage(merchantId)/100);
@@ -595,7 +618,6 @@ public class BusinessController extends WebBaseControll {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		List<ProductPO> allproduct = conn_product.findByMerchant(merchantId, page, 6);
 		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(allproduct, ProductVO.class);
-		System.out.println(alllist.size()+"--------");
 		return alllist;
 	}
 	
@@ -606,7 +628,6 @@ public class BusinessController extends WebBaseControll {
 	public ModelAndView goToAccommodation(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		System.out.println(merchantId);
 		mv = new ModelAndView("mobile/business/accommodation");
 		mv.addObject("merchantId", merchantId);
 		return mv; 
@@ -619,14 +640,13 @@ public class BusinessController extends WebBaseControll {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String name=new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");
-		System.out.println(merchantId+"----"+name);
 		mv = new ModelAndView("mobile/business/hotel");
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("name", name);
 		return mv; 
 	}
 	
-	//按照商品类型所有的商户
+	//按照商品类型所有的商户 要求搜索全局的商户
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/search")
@@ -634,13 +654,11 @@ public class BusinessController extends WebBaseControll {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
-		System.out.println(merchantId+"----"+name);
 		Map<String, Object> hashMap = new HashMap<String, Object>();
 		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
 		List<Integer> pingfens=new ArrayList<Integer>(); 
 		List<MerchantPO> allMerchant = Mer_chant.getAllMerchant(name);
 		for (MerchantPO merchantPO : allMerchant) {
-			System.out.println(merchantPO.getModularCode()+"--"+type+"--"+merchantPO.getShopName());
 			if(merchantPO.getModularCode().equals(type)){
 				merchantlist.add(merchantPO);
 				pingfens.add(orderInfoDao.GetCountbyPage(merchantPO.getId())/100);
@@ -657,7 +675,6 @@ public class BusinessController extends WebBaseControll {
 			}
 		}*/
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
-		System.out.println(merlist.size());
 		hashMap.put("pingfens", pingfens);
 		hashMap.put("merlist", merlist);
 		return hashMap;
@@ -670,7 +687,6 @@ public class BusinessController extends WebBaseControll {
 	public List<ProductVO> searchProduct(HttpServletRequest request) throws Exception {
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
-		System.out.println("----"+name);
 		List<ProductVO> Productlist =new ArrayList<ProductVO>();
 		List<ProductPO> Product = conn_product.productSearch(name, 1, 500);
 		List<ProductVO> Pvo = ProductVO.getConverter(ProductVO.class).convert(Product, ProductVO.class);
@@ -727,7 +743,6 @@ public class BusinessController extends WebBaseControll {
 			pingfens.add(orderInfoDao.GetCountbyPage(merchantId)/100);
 		}
 		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
-			System.out.println(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularClass());
 			if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularClass().equals(code)){
 				allmerchant.add(Mer_chant.get(merchantChildrenPO.getChildrenId()));
 				pingfens.add(orderInfoDao.GetCountbyPage(merchantChildrenPO.getChildrenId())/100);
@@ -820,9 +835,7 @@ public class BusinessController extends WebBaseControll {
 	@RequestMapping(value = "/gotopickinglist")
 	public ModelAndView goToPickingList(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
-		System.out.println("666666666");
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		System.out.println(merchantId);
 		mv = new ModelAndView("mobile/business/pickinglist");
 		mv.addObject("merchantId", merchantId);
 		return mv; 
@@ -835,7 +848,6 @@ public class BusinessController extends WebBaseControll {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		MerchantPO merchant = Mer_chant.get(merchantId);
-		System.out.println(merchantId);
 		mv = new ModelAndView("mobile/business/comdlist");
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("merchant", merchant);
