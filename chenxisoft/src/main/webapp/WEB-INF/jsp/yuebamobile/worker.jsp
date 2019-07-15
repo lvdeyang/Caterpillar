@@ -130,6 +130,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	             ${worker.moreMsg}
 	        
 	        </p>
+	        <div class="ftitle adminrow" style="display:none;">
+	                                    管理员菜单
+	        </div>
+	        <div class="adminrow" style="display:none;font-size:14px;margin-left:12px;">
+	            <a href="/chenxisoft/order/mobile/addindex?workerId=${worker.id}" id="addOrder">添加订单</a>
+	          
+	        </div>
 	        <div class="ftitle">
 	                                    证件照片
 	        </div>
@@ -246,7 +253,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			 
 			 
 			 
-			
+			var adminFlg=${user.adminFlg};
+			if(adminFlg==1){
+			   $('.adminrow').show();
+			}
             
 			
 			

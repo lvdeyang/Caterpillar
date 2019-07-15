@@ -148,4 +148,30 @@ public class MOrderController {
 		
 	}
 	
+	@RequestMapping(value = "/mobile/addindex", method = RequestMethod.GET)
+	public ModelAndView addindex(HttpServletRequest request,long workerId) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		WorkerPo workerPo=conn_worker.get(workerId);
+		strMap.put("worker", workerPo);
+		ModelAndView mv = new ModelAndView("yuebamobile/addorder", strMap);
+		return mv;
+	}
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/dosave", method = RequestMethod.POST)
+	public Object dosave(HttpServletRequest request) throws Exception {
+		String fromDate=request.getParameter("fromDate");
+		String id=request.getParameter("id");
+		OrderPo order=new OrderPo();
+		order.setDays(26);
+		order.setFromDate(DateUtil.parse(fromDate,"yyyy-MM-dd"));
+		order.setMleft(0);
+		order.setPrice(0);
+		order.setUserId(0);
+		order.setWorkerId(Long.parseLong(id));
+		conn_order.save(order);
+		return "success";
+	}
+	
 }
