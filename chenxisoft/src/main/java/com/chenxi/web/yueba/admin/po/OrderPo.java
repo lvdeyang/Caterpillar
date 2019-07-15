@@ -30,6 +30,7 @@ public class OrderPo extends AbstractBasePO{
 	private OrderStatus orderStatus;
 	private String fromDateStr;
 	private double mleft;
+	private String contactPic;//合同照片
     
 	public Date getFromDate() {
 		return fromDate;
@@ -120,6 +121,12 @@ public class OrderPo extends AbstractBasePO{
 	}
 	public void setMleft(double mleft) {
 		this.mleft = mleft;
+	}
+	public String getContactPic() {
+		return contactPic;
+	}
+	public void setContactPic(String contactPic) {
+		this.contactPic = contactPic;
 	}
 	
 	

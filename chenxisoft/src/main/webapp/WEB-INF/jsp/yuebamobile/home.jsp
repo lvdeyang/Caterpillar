@@ -30,8 +30,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <header class="ui-header ui-header-positive ui-border-b" style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
          
     </header>
-	
-	<div class="demo-item" style="margin-top:45px;padding-bottom:50px;">
+	<div class="ui-form-item ui-border-b" style="margin-top:45px;font-size:14px;background:#FFF">
+        <label style="width:82px;">
+                                    预产期
+        </label>
+      
+        <input style="margin-top:15px;" type="text" class="layui-input" id="orderDate" placeholder="请选择预约日期" lay-key="1">
+    </div>
+	<div class="demo-item" style="padding-bottom:50px;">
 		<div class="demo-block">
 			<ul id="workerList" class="ui-list ui-border-tb ">
 				
@@ -45,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <i class="ui-loading"></i>
     </div>
 	
-
+    <script type="text/javascript" src="lib/laydate/laydate.js" charset="utf-8"></script>
 	<script type="text/javascript">
 	     $(function() {
 	          window.BASEPATH = '<%=basePath%>';
@@ -58,12 +64,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
-	          var pageCount=10;
+			  
+			  laydate.render({
+			    elem: '#orderDate',
+			    theme:'#FFC0CB',
+			    done:function(){
+			       $('.worker').remove();
+			       pageCount=50;
+	               currPage=1;
+			       getPage(true);
+			    }
+			  });
+			  
+			  
+	          var pageCount=50;
 	          var currPage=1;
 	       
 	          
 	          function getPage(isinit){
-	              var _uriWorker = window.BASEPATH + 'home/getworkers?currPage='+currPage+'&pageCount='+pageCount;
+	              var _uriWorker = window.BASEPATH + 'home/getworkers?currPage='+currPage+'&pageCount='
+	              +pageCount+'&orderDate='+$('#orderDate').val();
 		
 				  $.get(_uriWorker, null, function(data){
 				       currPage+=1;
@@ -126,7 +146,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			       var innerHeight =  window.innerHeight;
 			       if($(window).scrollTop() === $(document).height() - innerHeight){
 			            // load data
-			            getPage(false);
+			            if($('#orderDate').val()==''){
+			               getPage(false);
+			            }
+			            
 			       }
 			  });
 	          

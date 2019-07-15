@@ -1,5 +1,7 @@
 package com.chenxi.web.yueba.mobile.controller;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import com.chenxi.web.yueba.admin.dao.OrderDao;
 import com.chenxi.web.yueba.admin.dao.WorkerDao;
 import com.chenxi.web.yueba.admin.po.OrderPo;
 import com.chenxi.web.yueba.admin.po.WorkerPo;
+import com.sun.tools.javadoc.Start;
 
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
@@ -92,4 +95,57 @@ public class MOrderController {
 		}
 		return orderPos;
 	}
+	
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/checkCurentRage", method = RequestMethod.GET)
+	public Object checkCurentRage(HttpServletRequest request,String currentDate,long workerId) throws Exception {
+		if(currentDate==null||currentDate.isEmpty()){
+			currentDate=DateUtil.format(new Date(),"yyyy-MM-dd");
+		}
+		Map<String, Object> ret=new HashMap<String, Object>();
+		List<OrderPo> orderList=conn_order.findOrderByCurrAndWorkerId(currentDate, workerId);
+		Date minDate=new Date();
+		Date maxDate=new Date();
+		boolean isMinchange=false;
+		for (OrderPo orderPo : orderList) {
+			Date endDate=DateUtil.addDay(orderPo.getFromDate(),26);
+			Calendar ca=Calendar.getInstance();
+			ca.setTime(DateUtil.parse(currentDate,"yyyy-MM-dd"));
+			Date firstCurrMonth=DateUtil.getMonthStartAndEndDate(ca)[0];
+			Date lastCurrMonth=DateUtil.getMonthStartAndEndDate(ca)[1];
+			if(!DateUtil.compare(firstCurrMonth,endDate)&&!DateUtil.compare(endDate,lastCurrMonth)){
+				minDate=endDate;
+				isMinchange=true;
+			}
+		}
+		boolean isMaxchange=false;
+		for (OrderPo orderPo : orderList) {
+			if(!DateUtil.compare(minDate, orderPo.getFromDate())){
+				maxDate=DateUtil.addDay(orderPo.getFromDate(),-26);
+				isMaxchange=true;
+				break;
+			}
+		}
+		
+		
+		String minStr="1910-01-01";
+		String maxStr="2999-01-01";
+		if(isMinchange){
+			minStr=DateUtil.format(minDate,"yyyy-MM-dd");
+		}
+				
+		ret.put("min", minStr);
+		
+		if(isMaxchange){
+			maxStr=DateUtil.format(maxDate,"yyyy-MM-dd");
+		}
+		ret.put("max", maxStr);
+		
+		
+		return ret;
+		
+	}
+	
 }
