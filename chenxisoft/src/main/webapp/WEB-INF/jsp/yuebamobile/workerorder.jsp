@@ -72,10 +72,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  };
 	          var pageCount=10;
 	          var currPage=1;
-	          
+	          var adminFlg=${user.adminFlg};
 	          function getPage(isinit){
 	              var _uriOrder = window.BASEPATH + 'order/mobile/wlist.do?currPage='+currPage+
-	              '&pageCount='+pageCount;
+	              '&pageCount='+pageCount+'&workerId=${workerId}';
 		
 				  $.get(_uriOrder, null, function(data){
 				       currPage+=1;
@@ -102,14 +102,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                  for(var i=0;i<data.length;i++){
 				         html.push('<li class="order" id="order-'+data[i].id+'">');
 						 html.push('    <div class="ui-list-img-square">');
-						 html.push('        <span style="background-image:url(/chenxisoft/'+data[i].worderPhoto+')"></span></div>');
+						 html.push('        <span style="background-image:url(/'+data[i].worderPhoto+')"></span></div>');
 						 html.push('	<div class="ui-list-info ui-border-t">');
 						 html.push('		<div style="font-size:14px;">'+data[i].workName+'</div>');
-						 html.push('		<p class="ui-nowrap" style="font-size:12px;">'+data[i].price+'元/'+
-						           data[i].days+'天/'+data[i].region+'</p>');
+						 html.push('		<p class="ui-nowrap" style="font-size:12px;">'+
+						           data[i].days+'天</p>');
 						 html.push('		<p class="ui-nowrap" style="font-size:12px;">开始日期:'+data[i].fromDateStr+'</p>');
 						 html.push('	</div>');
 						 html.push('</li>'); 
+						 if(adminFlg==1){
+						 	html.push('<p style="width:100%;height:20px;background:#FFF;border-bottom:1px solid #CCC"><a style="float:right;margin-right:15px;font-size:12px" href="javascript:void(0)" class="del" id="del-'+data[i].id+'">删除</a>'+
+						 	'<a style="float:right;margin-right:15px;font-size:12px" href="javascript:void(0)" class="modify" id="modify-'+data[i].id+'">修改用户</a></p>')
+						 
+						 }
+						 
 				       }
 	               
 	               }
@@ -147,6 +153,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		         var ids=this.id.split('-');
 	             location.href=window.BASEPATH + 'order/mobile/winfo?orderId='+ids[1];
 		      });
+		      
+		      $(document).on('click','.del',function(){
+		         var ids=this.id.split('-');
+	             var _uridelOrder = window.BASEPATH + 'order/mobile/del?orderId='+ids[1];
+		
+				  $.get(_uridelOrder, null, function(data){
+
+				       location.href=window.BASEPATH + 'order/mobile/wlist?workerId=${workerId}';
+				  });
+		      });
+		      
+		      $(document).on('click','.modify',function(){
+		         var ids=this.id.split('-');
+	             location.href = window.BASEPATH + 'order/mobile/modify?orderId='+ids[1];
+		
+		      });
+		      
 		      
 		     
 	          

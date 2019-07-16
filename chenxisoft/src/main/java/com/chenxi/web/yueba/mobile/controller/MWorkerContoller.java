@@ -119,6 +119,10 @@ public class MWorkerContoller extends BaseController {
         seeRecordPo.setUpdateTime(new Date());
     	HttpSession session = request.getSession();
     	Object userId=session.getAttribute("userId");
+    	
+    	UserPo userPo=conn_user.get(Long.parseLong(userId+""));
+    	strMap.put("user", userPo);
+    	
         seeRecordPo.setUserId(Long.parseLong(userId+""));
         seeRecordPo.setWorkerId(workerId);
         conn_seerecord.save(seeRecordPo);

@@ -1,5 +1,6 @@
 package com.chenxi.web.yueba.mobile.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,12 +51,22 @@ public class MHomeController {
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/getworkers", method = RequestMethod.GET)
-	public Object getworkers(HttpServletRequest request,int currPage,int pageCount) throws Exception {
+	public Object getworkers(HttpServletRequest request,int currPage,int pageCount,String orderDate) throws Exception {
 		List<WorkerPo> workerPos=conn_worker.findPassWorkersAndPage(currPage, pageCount);
+		List<WorkerPo> retWorkerPos=new ArrayList<WorkerPo>();
 		for (WorkerPo workerPo : workerPos) {
-			workerPo.setOrderCount(workerPo.getBaseOrderCount()+conn_order.countByField("workerId",workerPo.getId()));
+			if(orderDate!=null&&!orderDate.isEmpty()){
+				if(conn_order.findOrderByorderDateAndWorkerId(orderDate,workerPo.getId()).isEmpty()){
+					workerPo.setOrderCount(workerPo.getBaseOrderCount()+conn_order.countByField("workerId",workerPo.getId()));
+					retWorkerPos.add(workerPo);
+				}
+			}else{
+				workerPo.setOrderCount(workerPo.getBaseOrderCount()+conn_order.countByField("workerId",workerPo.getId()));
+				retWorkerPos.add(workerPo);
+			}
+			
 		}
-		return workerPos;
+		return retWorkerPos;
 	}
 	@ResponseBody
 	@JsonBody

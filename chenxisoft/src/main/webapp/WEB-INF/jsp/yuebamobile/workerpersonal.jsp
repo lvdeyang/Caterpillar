@@ -83,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            <h4 class="ui-nowrap" style="font-size:14px;">谁看过我</h4> 
 		        </div>
 		    </li>
-		    <li class="ui-border-t" data="order/mobile/wlist">
+		    <li class="ui-border-t" data="order/mobile/wlist?workerId=0">
 		        <div class="ui-list-info"  >
 		            <h4 class="ui-nowrap" style="font-size:14px;">历史订单</h4> 
 		        </div>

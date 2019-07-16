@@ -130,6 +130,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	             ${worker.moreMsg}
 	        
 	        </p>
+	        <div class="ftitle adminrow" style="display:none;">
+	                                    管理员菜单
+	        </div>
+	        <div class="adminrow" style="display:none;font-size:14px;margin-left:12px;">
+	            <a href="/chenxisoft/order/mobile/addindex?workerId=${worker.id}" id="addOrder">添加订单</a>
+	            <a href="/chenxisoft/order/mobile/wlist?workerId=${worker.id}" id="addOrder" style="margin-left:5px;">查看她的订单</a>
+	        </div>
 	        <div class="ftitle">
 	                                    证件照片
 	        </div>
@@ -150,11 +157,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        <table id="priceTable">
 	           ${priceHtml}
 	        </table>
-	        <div class="ftitle">
+	        <div class="ftitle" style="display:none;">
 	                                    查看档期
 	        </div>
-	        <div style="width:90%;margin-left:15px;height:300px;">
+	        <div style="width:90%;margin-left:15px;height:300px;display:none">
 	            <div id="seeDate"></div>
+	          
 	        </div>
 	        
 	        
@@ -191,6 +199,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script type="text/javascript" src="lib/laydate/laydate.js" charset="utf-8"></script>
+    
+    
 	<script type="text/javascript">
 	     $(function() {
 	          window.BASEPATH = '<%=basePath%>';
@@ -224,15 +234,60 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		     
 		     });
 		     
-	         laydate.render({
+	         /*var date2=laydate.render({
 			   elem: '#seeDate'
 			   ,position: 'static',
 			   zIndex: 1,
-			   min:'${minDate}',
-			   max:'2029-09-28',
-			   theme:'#FFC0CB'
-			 });
-			 $('.layui-laydate-main').css('width','100%');
+			   //min:'${minDate}',
+			   //max:'2019-08-25',
+			   theme:'#FFC0CB',
+			   ready:function(){
+			      $('.layui-laydate-main').css('width','100%');
+				  getCurrentRange('');
+				  
+			   },
+			   change: function(value, date, endDate){
+						    	 //getCurrentRange(value);
+			   }
+			 });*/
+			 
+			 
+			 
+			var adminFlg=${user.adminFlg};
+			if(adminFlg==1){
+			   $('.adminrow').show();
+			}
+            
+			
+			
+			 function getCurrentRange(currentDate){
+			         var _cruri = window.BASEPATH + 'order/mobile/checkCurentRage?currentDate='+currentDate+'&workerId=${worker.id}';
+				     $.get(_cruri, null, function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+						if(data){
+						    var mins=data.min.split('-');
+						    date2.config.min=
+						    {year:parseInt(mins[0]), 
+                            month:parseInt(mins[1])-1,
+                            date:parseInt(mins[2])};
+                            
+                            var maxs=data.max.split('-');
+                            date2.config.max=
+						    {year:parseInt(maxs[0]), 
+                            month:parseInt(maxs[1])-1,
+                            date:parseInt(maxs[2])}
+  
+						}
+						
+					 });
+			      
+			      
+			      
+			 
+			 }
+			 
+			 
 			 
 			 
 			 
