@@ -193,4 +193,27 @@ public class MOrderController {
 		return "success";
 	}
 	
+	
+	@RequestMapping(value = "/mobile/modify", method = RequestMethod.GET)
+	public ModelAndView modify(HttpServletRequest request,long orderId) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		OrderPo orderPo=conn_order.get(orderId);
+		strMap.put("order", orderPo);
+		ModelAndView mv = new ModelAndView("yuebamobile/modifyorder", strMap);
+		return mv;
+	}
+	
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/domodify", method = RequestMethod.POST)
+	public Object domodify(HttpServletRequest request) throws Exception {
+		String userPhone=request.getParameter("userPhone");
+		String id=request.getParameter("id");
+		OrderPo order=conn_order.get(Long.parseLong(id));
+		order.setUserPhone(userPhone);
+		conn_order.update(order);
+		return "success";
+	}
+	
 }
