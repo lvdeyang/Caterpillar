@@ -27,6 +27,7 @@ public class OnlineClassesDao extends AbstractBaseDao<OnlineClassesPo> {
     public List<OnlineClassesPo> findOnlineBymodular(Moudular moudular,int pageNum,int pageSize){
     	QueryHql hql=this.newQueryHql();
     	hql.andBy("contentMouduler",Condition.eq,moudular);
+    	hql.orderBy("updateTime", true);
     	return findByHql(hql, pageNum, pageSize);
     }
 }
