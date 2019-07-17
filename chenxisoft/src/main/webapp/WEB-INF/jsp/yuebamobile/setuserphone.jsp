@@ -79,7 +79,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 
 <body>
-    <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">详情
+    <h2 class="title ui-border-b" style="height:30px;padding:10px;line-height:30px;display:none">设置用户手机
        </h2><a><i class="ui-icon-personal"></i></a>
     <header class="ui-header ui-header-positive ui-border-b" style="background:#FFC0CB;color:black;border-bottom:1px solid #CCC">
          
@@ -93,9 +93,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	        
 		     <div class="ui-form-item ui-border-b">
-		            <label>用户手机
+		            <label>请输入手机号
 		            </label>
-		            <input style="margin-top:15px;font-size:14px;margin-left:0px;" type="text" id="userPhone" value="${order.userPhone}">
+		            <input style="margin-top:15px;font-size:14px;margin-left:0px;" type="text" id="userPhone"  placeholder="请输入">
 		     </div>
             
 	        <div class="ui-btn-wrap" style="">
@@ -124,12 +124,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         $('#level').val('${worker.level}');
 		     
 		     $(document).on('click','#save',function(){
-		         var _urimodifydo = window.BASEPATH + 'order/mobile/domodify';
+		         var _urimodifydo = window.BASEPATH + 'user/mobile/domodify';
 		         var data={};
-		         data.id=${order.id};
+		         data.id=${userId};
 		         data.userPhone=$('#userPhone').val();
 		         $.post(_urimodifydo, data, function(data){
-				       location.href=window.BASEPATH +'order/mobile/wlist?workerId=${order.workerId}';
+				       location.href=window.BASEPATH +'assign/mobile/ulist?orderId=0';
 				  });
 		     
 		     });

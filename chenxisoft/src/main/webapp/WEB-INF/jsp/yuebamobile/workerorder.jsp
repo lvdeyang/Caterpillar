@@ -112,7 +112,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						 html.push('</li>'); 
 						 if(adminFlg==1){
 						 	html.push('<p style="width:100%;height:20px;background:#FFF;border-bottom:1px solid #CCC"><a style="float:right;margin-right:15px;font-size:12px" href="javascript:void(0)" class="del" id="del-'+data[i].id+'">删除</a>'+
-						 	'<a style="float:right;margin-right:15px;font-size:12px" href="javascript:void(0)" class="modify" id="modify-'+data[i].id+'">修改用户</a></p>')
+						 	'<a style="float:right;margin-right:15px;font-size:12px" href="javascript:void(0)" class="modify" id="modify-'+data[i].id+'">修改用户</a>'+
+						 	'<a style="float:right;margin-right:15px;font-size:12px" href="javascript:void(0)" class="assign" id="assign-'+data[i].id+'">签到记录</a></p>')
 						 
 						 }
 						 
@@ -167,6 +168,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		      $(document).on('click','.modify',function(){
 		         var ids=this.id.split('-');
 	             location.href = window.BASEPATH + 'order/mobile/modify?orderId='+ids[1];
+		
+		      });
+		      
+		      $(document).on('click','.assign',function(){
+		         var ids=this.id.split('-');
+	             location.href = window.BASEPATH + 'assign/mobile/ulist?orderId='+ids[1];
 		
 		      });
 		      

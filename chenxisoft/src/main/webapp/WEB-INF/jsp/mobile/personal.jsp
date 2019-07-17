@@ -26,7 +26,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      height:40px;
      padding-left:10px;
      line-height:40px;
-     color:#FFC0CB;
+     color:#BA6985;
      
    }
    .ftitle a{
@@ -67,6 +67,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <li class="ui-border-t" data="worker/mobile/apply">
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂中心</h4> 
+	        </div>
+	    </li>
+	    <li class="ui-border-t"  data="assign/mobile/ulist?orderId=0">
+	        <div class="ui-list-info" data="javascript:void(0)">
+	            <h4 class="ui-nowrap" style="font-size:14px;">宝宝记录</h4> 
 	        </div>
 	    </li>
 	    <li class="ui-border-t" data="seerecord/mobile/seeworkers">
