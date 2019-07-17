@@ -193,6 +193,25 @@
 						</textarea>
 				</div>
 			</div>
+			<div class="layui-inline">
+                    <div class = "layui-inline">
+    				<label class="layui-form-label">特色：</label>
+    				<div class="layui-input-block">
+    				    <input type="checkbox" name="productCommissionCode" value="有儿童乐园" title="有儿童乐园"  lay-filter="filter" >
+    				    <input type="checkbox" name="productCommissionCode" value="交通遍历" title="交通遍历"   lay-filter="filter" >
+      					<input type="checkbox" name="productCommissionCode" value="有包间" title="有包间"     lay-filter="filter" >
+      					<input type="checkbox" name="productCommissionCode" value="免费WIFI" title="免费WIFI"  lay-filter="filter">
+    				</div>
+    			</div>
+    			</div>
+                 <div class="layui-inline">
+                    <div class = "layui-inline">
+    				<label class="layui-form-label">营业时间：</label>
+    				   <div class="layui-input-inline">
+    				    <input type="text"   name="shopHours"  class="layui-input"  required lay-verify="required"id="test10" placeholder="开始 到 结束">
+                    </div>
+    			</div>
+    			</div>
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 坐标 </label>
 				<div class="layui-input-inline" style="width: 100px;">
@@ -331,14 +350,19 @@
     
            
             
-            layui.use(['form','layer'], function(){
-                $ = layui.jquery;
-              var form = layui.form
+            layui.use(['form','layer','laydate'], function(){
+            var laydate = layui.laydate;
+			//日期时间范围
+			laydate.render({
+				elem : '#test10',
+				type : 'time',
+				range : true
+			});
+			var form = layui.form
               ,layer = layui.layer;
-
-
-              //监听提交
-              form.on('submit(add1)', function(data){
+	
+			//监听提交
+			form.on('submit(add1)', function(data){
           	
               data.field.shopAuditstates = "D";
               var message = "提交待审核成功！";  
@@ -354,7 +378,7 @@
                return false;
               });
               
-              
+            
             
             });
             
@@ -416,7 +440,11 @@
              	return false;
              }	
               console.log(data.field);
-            
+         arr = [];
+          $("input[name='productCommissionCode']:checked").each(function(k,v){
+             arr.push($(this).val());
+         })
+          data.field.productCommissionCode +="-"+ arr; 
                  $.ajax({
                 	  type:"post",
            			  url:"add.do",
