@@ -2,6 +2,7 @@ package com.chenxi.web.yueba.admin.po;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 
@@ -16,22 +17,24 @@ public class AssignPo extends AbstractBasePO {
 	
 	private String qidai;
 	private String tunbu;
-	private String dabancishu;
+	private String dabiancishu;
 	private String xiaobiancishu;
 	
-	private int rufanghuli;
-	private int muyucashen;
-	private int chanhoucao;
+	private int rufanghuli=0;
+	private int muyucashen=0;
+	private int chanhoucao=0;
 	
-	private int yingerxizao;
-	private int yingertiwen;
-	private int yingerfuchu;
-	private int qidaichuli;
-	private int bianhouxitun;
-	private int xiaodunaiju;
-	private int xiezhuweiyang;
+	private int yingerxizao=0;
+	private int yingertiwen=0;
+	private int yingerfuchu=0;
+	private int qidaichuli=0;
+	private int bianhouxitun=0;
+	private int xiaodunaiju=0;
+	private int xiezhuweiyang=0;
 	
 	private int userConfirm;
+	
+	private String updateTimeStr;
 	public String getRufang() {
 		return rufang;
 	}
@@ -62,11 +65,11 @@ public class AssignPo extends AbstractBasePO {
 	public void setTunbu(String tunbu) {
 		this.tunbu = tunbu;
 	}
-	public String getDabancishu() {
-		return dabancishu;
+	public String getDabiancishu() {
+		return dabiancishu;
 	}
-	public void setDabancishu(String dabancishu) {
-		this.dabancishu = dabancishu;
+	public void setDabiancishu(String dabiancishu) {
+		this.dabiancishu = dabiancishu;
 	}
 	public String getXiaobiancishu() {
 		return xiaobiancishu;
@@ -145,6 +148,13 @@ public class AssignPo extends AbstractBasePO {
 	}
 	public void setUserConfirm(int userConfirm) {
 		this.userConfirm = userConfirm;
+	}
+	@Transient
+	public String getUpdateTimeStr() {
+		return updateTimeStr;
+	}
+	public void setUpdateTimeStr(String updateTimeStr) {
+		this.updateTimeStr = updateTimeStr;
 	}
 	
 	

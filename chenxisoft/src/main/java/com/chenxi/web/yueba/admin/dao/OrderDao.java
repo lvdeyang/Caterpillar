@@ -46,6 +46,7 @@ public class OrderDao extends AbstractBaseDao<OrderPo> {
 	public List<OrderPo> findOrderByStatus(OrderStatus status,int pageNum,int pageSize){
 		QueryHql hql=this.newQueryHql();
 		hql.andBy("orderStatus",Condition.eq,status);
+		hql.orderBy("fromDate", true);
 		return this.findByHql(hql, pageNum, pageSize);
 	}
 	
@@ -74,6 +75,20 @@ public class OrderDao extends AbstractBaseDao<OrderPo> {
 		hql.andBy("fromDate",Condition.ge,DateUtil.getMonthStartAndEndDate(ca1)[0]);
 		hql.andBy("fromDate",Condition.le,DateUtil.getMonthStartAndEndDate(ca2)[1]);
 		hql.orderBy("fromDate", false);
+		return this.findByHql(hql);
+	}
+	
+	public List<OrderPo> findOrderByWorkerAndToday(long workerId){
+		QueryHql hql=this.newQueryHql();
+		Date startDate=DateUtil.addDay(new Date(),-26);
+		hql.andBy("fromDate",Condition.ge,startDate);
+		return this.findByHql(hql);
+	}
+	
+	public List<OrderPo> findOrderByUser(String phone){
+		QueryHql hql=this.newQueryHql();
+	
+		hql.andBy("userPhone",Condition.eq,phone);
 		return this.findByHql(hql);
 	}
 	
