@@ -3,8 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()+ path + "/";
 	String weburl=WXContants.Website;
 %>
 <!DOCTYPE HTML>
@@ -24,8 +23,12 @@
 <meta name="robots" content="index,follow" />
 <!-- 为移动设备添加 viewport -->
 <meta name="viewport"
-	content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
-<!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
+	content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-
+
+scalable=no">
+<!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页
+
+面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
 <!-- iOS 设备 begin -->
 <meta name="apple-mobile-web-app-title" content="标题">
 <!-- 添加到主屏后的标题（iOS 6 新增） -->
@@ -33,7 +36,9 @@
 <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
 
 <meta name="apple-itunes-app"
-	content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+	content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-
+
+argument=myURL">
 <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <!-- 设置苹果工具栏颜色 -->
@@ -78,11 +83,10 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
-	background:#E0E0E0 !important; 
+	min-height: auto;
+	background: #E0E0E0 !important;
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
 }
 
@@ -119,39 +123,40 @@ html, body {
 	z-index: 0;
 }
 
-  .swiper-container {
-    width: 100%;
-    padding:0;
-    margin:0;
-    height:200px;
-  } 
-
-  .swiper-container img {
-    display: block;
-    width: 100%;
-  }
-    
-.weui-navbar{
- display: none !important;
+.swiper-container {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	height: 200px;
 }
-  .inp::-webkit-input-placeholder{
-        text-align: center;
-}  
+
+.swiper-container img {
+	display: block;
+	width: 100%;
+}
+
+.weui-navbar {
+	display: none !important;
+}
+
+.inp::-webkit-input-placeholder {
+	text-align: center;
+}
 
 .gotop {
-   position: fixed;
-   right: 20px;
-   bottom: 50px;
-   display: block;
-   width: 50px;
-   height: 50px;
-   opacity: 0.8;
-   z-index:111111;
-	}
+	position: fixed;
+	right: 20px;
+	bottom: 50px;
+	display: block;
+	width: 50px;
+	height: 50px;
+	opacity: 0.8;
+	z-index: 111111;
+}
 
-.tuijian img{
-  width:25%;
-  height:30px;
+.tuijian img {
+	width: 25%;
+	height: 30px;
 }
 </style>
 
@@ -159,14 +164,21 @@ html, body {
 
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
-<script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
+<script type="text/javascript" src="lib/bootstrap.js"
+	charset="utf-
+
+8"></script>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css" />
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script type="text/javascript"
+	src="https://cdn.bootcss.com/jquery-
+
+cookie/1.4.1/jquery.cookie.js"></script>
 
 <script type="text/javascript">
 	$(function() {
 	   getRecomment();
+	   getActivityProduct();
 	   getAllProduct();
 	});
 	
@@ -236,6 +248,26 @@ $(function(){
 	            			html.push('<p style="text-align: center;bottom:5px;left:50%;color:#858585;">暂无推荐商品</p>');
 	            	}else{
 						for(var i=0; i<data.length; i++){
+							html.push('<a onclick="gotodetailspage('+data[i].id+')"> <div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
+						    html.push('<img style="width:100%;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
+						    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;">'+data[i].productName+'</p>');
+						    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
+						    html.push('<button style="border-radius:10px;font-size:12px;color:#fff;background:#EA6C1B;padding:0px 25px;border:none;outline:none;margin:0 auto;">立即购买</button>');
+						    html.push('</div> </a>');
+							}
+					}
+			    	$('.main').append(html.join(''));
+	            })
+	}
+  
+  function getActivityProduct(){
+			var url="<%=basePath%>business/getactivityproduct";
+	            $.post(url,{"merchantId":${merchantId},"type":"006"},function(data){
+	            	var html=[];
+	            	if(data.length==0){
+	            			html.push('<p style="text-align: center;bottom:5px;left:50%;color:#858585;">暂无活动商品</p>');
+	            	}else{
+						for(var i=0; i<data.length; i++){
 							html.push('<div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
 						    html.push('<img style="width:100%;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
 						    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;">'+data[i].productName+'</p>');
@@ -244,62 +276,53 @@ $(function(){
 						    html.push('</div>');
 							}
 					}
-			    	$('.main').append(html.join(''));
+			    	$('.caizhai').append(html.join(''));
 	            })
 	}
-  
-  
     
+    function gotodetailspage(id){
+   		location.href=window.BASEPATH + 'business/gotodetailspage?productId='+id;
+   }
 </script>
 
 
 
 
 <body>
-			<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
+	<!-- 主页 -->
+	<div class="header">
+		<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
+				class="icon-reorder icon-large"></span></a>
+			<div class="header-content">商户</div>
 		</div>
-		<div class="content" id="content" >
-			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
-			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
-			  </div>
+	</div>
+	<div class="content" id="content">
+		<div class="swiper-container" id="headerSwiper" data-
+			space-between='10' data-pagination='.swiper-pagination'
+			data-autoplay="1000">
+			<div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			</div>
 		</div>
 	</div>
-	
+	</div>
+
 	<!-- 采摘-->
-	<p class="tuijian" style="text-align:center;height:50px;line-height: 50px;font-size:16px;font-weight:bold;margin:0;"><img src="lib/images/biao1.png"/>今日推荐 <img  src="lib/images/biao2.png"/></p>
-	<div class="caizhai" style="width:95%;border-radius:10px;padding:10px 0; height:auto;background:#fff; margin:0 auto;overflow: hidden;">
-	     <div style="width:31%;height:auto;overflow: hidden;border-radius:10px;float:left;margin:5px 0 0 1.5%;">
-	    <img style="width:100%;border-radius:10px;" src="lib/images/1.jpg"/>
-	    <p style="margin:0 ;height:30px;line-height: 30px;">草莓采摘</p>
-	    <p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;">￥<span>100</span><button style="border-radius:10px;font-size:12px;color:#fff;float:right;background:#EA6C1B;height:20px;padding:0px 5px;border:none;outline:none;margin:0 ;">立即购买</button></p>
-	   </div>
-	     <div style="width:31%;height:auto;overflow: hidden;border-radius:10px;float:left;margin:5px 0 0 1.5%;">
-	    <img style="width:100%;border-radius:10px;" src="lib/images/1.jpg"/>
-	    <p style="margin:0 ;height:30px;line-height: 30px;">草莓采摘</p>
-	    <p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;">￥<span>100</span><button style="border-radius:10px;font-size:12px;color:#fff;float:right;background:#EA6C1B;height:20px;padding:0px 5px;border:none;outline:none;margin:0 ;">立即购买</button></p>
-	   </div> 
-	        <div style="width:31%;height:auto;overflow: hidden;border-radius:10px;float:left;margin:5px 0 0 1.5%;">
-	    <img style="width:100%;border-radius:10px;" src="lib/images/1.jpg"/>
-	    <p style="margin:0 ;height:30px;line-height: 30px;">草莓采摘</p>
-	    <p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;">￥<span>100</span><button style="border-radius:10px;font-size:12px;color:#fff;float:right;background:#EA6C1B;height:20px;padding:0px 5px;border:none;outline:none;margin:0 ;">立即购买</button></p>
-	   </div>
-	        <div style="width:31%;height:auto;overflow: hidden;border-radius:10px;float:left;margin:5px 0 0 1.5%;">
-	    <img style="width:100%;border-radius:10px;" src="lib/images/1.jpg"/>
-	    <p style="margin:0 ;height:30px;line-height: 30px;">草莓采摘</p>
-	    <p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;">￥<span>100</span><button style="border-radius:10px;font-size:12px;color:#fff;float:right;background:#EA6C1B;height:20px;padding:0px 5px;border:none;outline:none;margin:0 ;">立即购买</button></p>
-	   </div> 
+	<p class="tuijian" style="text-align:center;height:50px;line-height: 50px;font-size:16px;font-weight:bold;margin:0;">
+		<img src="lib/images/biao1.png" />今日推荐 <img src="lib/images/biao2.png" />
+	</p>
+	<div class="caizhai"
+		style="width:95%;border-radius:10px;padding:10px 0; height:auto;background:#fff; margin:0 auto;overflow: hidden;">
+
 	</div>
-   	<div class="main" style="width:95%;border-radius:10px;padding:10px 0;height:auto;background:#fff; margin:2px auto;overflow: hidden;">
+	<div class="main"
+		style="width:95%;border-radius:10px;padding:10px 0;height:auto;background:#fff; margin:2px auto;overflow: hidden;">
 	</div>
-   <!-- 置顶 -->
-    <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
+	<!-- 置顶 -->
+	<div>
+		<a href="javascript:;" class="gotop" style="display:none;"><img
+			style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a>
+	</div>
 </body>
 
 

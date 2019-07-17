@@ -103,7 +103,7 @@ public class MobileIndexController {
 			params.put("lang", "zh_CN");
 			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
 			JSONObject userInfo = JSON.parseObject(result);
-			nickname =userInfo.getString("nickname");
+			nickname =com.chenxi.web.util.EmojiFilter.filterEmoji(userInfo.getString("nickname"));
 			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
 		} else {
 			openid = "opVUYv6B2eIPzpj4yCJBonei5yMg";
