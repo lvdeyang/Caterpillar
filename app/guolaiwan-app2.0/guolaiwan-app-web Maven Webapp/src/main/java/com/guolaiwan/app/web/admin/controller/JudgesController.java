@@ -1,16 +1,10 @@
 package com.guolaiwan.app.web.admin.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +17,19 @@ import org.springframework.web.servlet.ModelAndView;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.JudgesDao;
+import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.VoteImposeDao;
+import com.guolaiwan.bussiness.admin.dao.VoteModularDAO;
+import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
 import com.guolaiwan.bussiness.admin.po.JudgesPo;
+import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.VoteImposePo;
+import com.guolaiwan.bussiness.admin.po.VoteModularPO;
+import com.guolaiwan.bussiness.admin.po.VoteProductPO;
 
 @RestController
 @RequestMapping("/judges")
@@ -44,6 +46,21 @@ public class JudgesController {
 
 	@Autowired
 	private VoteImposeDao voteImposeDao;
+
+	@Autowired
+	private VoteProductDAO voteProductDao;
+
+	@Autowired
+	private VoteProductDAO voteProductDaO;
+
+	@Autowired
+	private VoteModularDAO voteModularDaO;
+
+	@Autowired
+	private ProductDAO productDao;
+
+	@Autowired
+	private OrderInfoDAO orderInfoDAO;
 
 	// 添加数据页面
 	@RequestMapping(value = "/getjudges", method = RequestMethod.GET)
@@ -131,44 +148,46 @@ public class JudgesController {
 
 	// 定时方法，tomcat启动开始定时没天0点清除数据库
 	// Bean被容器初始化之后，会调用@PostConstruct的注解方法
-	@PostConstruct
-	public void VoteTiming() {
-		// TODO Auto-generated method stub
-		// 一天的毫秒数
-		long daySpan = 60 * 1000;
-
-		// 规定的每天时间15:33:30运行
-		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd '15:52:00'");
-		// 首次运行时间
-		Date startTime = null;
-		try {
-			startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sdf.format(new Date()));
-
-			// 如果今天的已经过了 首次运行时间就改为明天
-			if (System.currentTimeMillis() > startTime.getTime())
-				startTime = new Date(startTime.getTime() + daySpan);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timer t = new Timer();
-
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				// 要执行的代码
-				List<VoteImposePo> findAll = voteImposeDao.findAll();
-				for (VoteImposePo voteImposePo : findAll) {
-					voteImposePo.setPoll(0);
-					voteImposePo.setBuy(0);
-					voteImposeDao.update(voteImposePo);
-				}
-			}
-		};
-
-		// 以每24小时执行一次
-		t.scheduleAtFixedRate(task, startTime, daySpan);
-	}
+	// @PostConstruct
+	// public void VoteTiming() {
+	// // TODO Auto-generated method stub
+	// // 一天的毫秒数
+	// long daySpan = 24 * 60 * 60 * 1000;
+	//
+	// // 规定的每天时间15:33:30运行
+	// final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd
+	// '15:52:00'");
+	// // 首次运行时间
+	// Date startTime = null;
+	// try {
+	// startTime = new SimpleDateFormat("yyyy-MM-dd
+	// HH:mm:ss").parse(sdf.format(new Date()));
+	//
+	// // 如果今天的已经过了 首次运行时间就改为明天
+	// if (System.currentTimeMillis() > startTime.getTime())
+	// startTime = new Date(startTime.getTime() + daySpan);
+	// } catch (ParseException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// Timer t = new Timer();
+	//
+	// TimerTask task = new TimerTask() {
+	// @Override
+	// public void run() {
+	// // 要执行的代码
+	// List<VoteImposePo> findAll = voteImposeDao.findAll();
+	// for (VoteImposePo voteImposePo : findAll) {
+	// voteImposePo.setPoll(0);
+	// voteImposePo.setBuy(0);
+	// voteImposeDao.update(voteImposePo);
+	// }
+	// }
+	// };
+	//
+	// // 以每24小时执行一次
+	// t.scheduleAtFixedRate(task, startTime, daySpan);
+	// }
 
 	// 限制票数的方法 返回值为0的时候次数已达到5次，为1的时候可以投票，为2的时候服务器出现异常
 	@RequestMapping(value = "/votepoll", method = RequestMethod.GET)
@@ -193,7 +212,7 @@ public class JudgesController {
 				voteImposePo.setPoll(voteImposePo.getPoll() + 1);
 				voteImposeDao.update(voteImposePo);
 			}
-			hashMap.put("msg", "1");
+			hashMap.put("msg", " ");
 			return hashMap;
 		} catch (Exception e) {
 			Map<String, String> hashMap = new HashMap<String, String>();
@@ -203,10 +222,10 @@ public class JudgesController {
 		}
 	}
 
-	// 限制购买的方法 返回值为0的时候次数已达到5次，为1的时候可以投票，为2的时候服务器出现异常
+	// 限制购买的方法
+	// 返回值为0的时候次数已达到5次，为1的时候可以投票，为2的时候服务器出现异常--------------------有点问题后面再改
 	@RequestMapping(value = "/buypoll", method = RequestMethod.GET)
 	public Map<String, String> buyPoll(String userId, String productId) {
-
 		try {
 			Map<String, String> hashMap = new HashMap<String, String>();
 			VoteImposePo voteImposePo = voteImposeDao.getVoteImposePo(userId, productId);
@@ -217,14 +236,17 @@ public class JudgesController {
 				voteImposePo1.setProductId(productId);
 				voteImposeDao.save(voteImposePo1);
 			}
-			if (voteImposePo != null && voteImposePo.getPoll() == 3) {
+			if (voteImposePo != null && voteImposePo.getBuy() == 3) {
 				hashMap.put("msg", "0");
 				return hashMap;
 			}
 
-			if (voteImposePo != null && voteImposePo.getPoll() != 3) {
+			if (voteImposePo != null && voteImposePo.getBuy() != 3) {
 				voteImposePo.setBuy(voteImposePo.getBuy() + 1);
 				voteImposeDao.update(voteImposePo);
+				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
+				voteProduct.setPeoplevotenum(voteProduct.getPeoplevotenum() + 1);
+				voteProductDao.update(voteProduct);
 			}
 			hashMap.put("msg", "1");
 			return hashMap;
@@ -236,4 +258,41 @@ public class JudgesController {
 		}
 	}
 
+	// 跳转投票页面
+	@ResponseBody
+	@RequestMapping(value = "/votepage")
+	public ModelAndView VotePage(HttpServletRequest request) {
+		ModelAndView mView = new ModelAndView("mobile/vote/foodContest");
+		return mView;
+	}
+
+	// 获取美食大赛的选项标签卡
+	@RequestMapping(value = "/getvotemodular", method = RequestMethod.POST)
+	public List<VoteModularPO> getvotemodular() {
+		List<VoteModularPO> findAll = voteModularDaO.findAll();
+		return findAll;
+	}
+
+	@RequestMapping(value = "/getvotemodular", method = RequestMethod.GET)
+	public List<Map<String, String>> getvoteproduct(String id) {
+		VoteModularPO voteModularPO = voteModularDaO.get(Long.parseLong(id));
+		List<VoteProductPO> getvoteproduct = voteProductDaO.getvoteproduct(voteModularPO.getId());
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		for (VoteProductPO voteProductPO : getvoteproduct) {
+			HashMap<String, String> hashMap = new HashMap<String, String>();
+			ProductPO productPO = productDao.get(voteProductPO.getProductId());
+			List<OrderInfoPO> newgetAllOrder = orderInfoDAO.newgetAllOrder(productPO.getId());
+			hashMap.put("productname", voteProductPO.getProductName());
+			if (newgetAllOrder == null) {
+				hashMap.put("OutOfPrint", "0");
+			} else {
+				hashMap.put("OutOfPrint", newgetAllOrder.size() + "");
+			}
+			hashMap.put("ticketnumber", voteProductPO.getPeoplevotenum() + "");
+			hashMap.put("hotel", productPO.getProductMerchantName());
+			hashMap.put("image", productPO.getProductShowPic());
+			list.add(hashMap);
+		}
+		return list;
+	}
 }

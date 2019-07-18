@@ -121,7 +121,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    layer.msg("操作成功！");
 	                     window.parent.location.reload();
 	                    }
-	                    }
+	                 }
 	            }) 	
 		}  
                
