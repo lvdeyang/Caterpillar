@@ -147,6 +147,25 @@ html, body {
 .fukuan {
 	background: #FF3D00;
 }
+.fuceng{
+    position: fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top: 0;
+    background-color:rgba(0,0,0,0.6);
+    z-index: 10000;
+
+}
+.tanchuang input{
+width:96%;
+padding:0 0 0 30%;
+height:50px;
+border:none;
+outline:none;
+border-bottom:1px solid #D3D3D3;
+
+}
 </style>
 
 </head>
@@ -267,6 +286,21 @@ html, body {
 			$("#startteam").popup();
 		})
 		
+		$(document).on('click', '.dizhi', function(){ 
+		  $(".fuceng").fadeIn();
+		   $(".tanchuang").fadeIn();
+		});
+		
+	  	$(document).on('click', '.fuceng', function(){ 
+		  $(".fuceng").fadeOut();
+		  $(".tanchuang").fadeOut();
+		});
+		
+		$(document).on('click', '.quxiao', function(){ 
+		  $(".fuceng").fadeOut();
+		  $(".tanchuang").fadeOut();
+		});
+		
 	});
 
 
@@ -332,7 +366,7 @@ function timer(times,intDiff) {
 	 			var newtime=new Date().getTime();
 	 			var intDiff =parseInt((grouptime-(newtime-begintime))/1000);
          		var html=[];
-         		if(data[i].productid==${product.id}&&data[i].iscaptain==1&&intDiff>0){
+         		if(data[i].productid==${product.id}&&data[i].iscaptain==1&&intDiff>0&&data[i].teamnum<${groupBuyPO.groupnum}){
 		           html.push('<div style="height:100px;weight:100%;text-align:center;border-bottom:1px solid #A6A6A6;vertical-align:middle;position: relative;">');
 		           html.push(' <img style="width:60px;height:60px;border-radius:50%;float:left;margin:20px 0 20px 8%;display: inline-block;" src="'+data[i].userheadimg+'"/>');
 		           html.push(' <span style="margin-left:10px;font-weight:bold;line-height: 100px;float:left;white-space: nowrap;text-overflow:ellipsis;overflow: hidden;width:70px;">'+data[i].usernickname+'</span>');
@@ -350,33 +384,66 @@ function timer(times,intDiff) {
 
 	function getAllAddr(){
         var _uriAddress = window.BASEPATH + 'phoneApp/address/list?userId=${userId}';
-		
 		$.get(_uriAddress, null, function(data){
 			data = parseAjaxResult(data);
 			if(data === -1) return;
-			if(data && data.length>0){
 			    var html=[];
+			if(data && data.length>0){
 				for(var i=0; i<data.length; i++){
 				     var chkattr='';
-				     if(i==0){
+				     if(data[i].defaultAddress==1){
 				         chkattr='checked="checked"';
 				     }
-					 html.push('<div class="weui-media-box weui-media-box_text mailAddress" id="mailadd-'+data[i].id+'">');
-					 html.push('<input style="float:left;height:27px;width:20px"  type="radio" name="radio1" class="" id="radio-'+data[i].id+'" '+chkattr+'>');
-			         html.push('<h4 style="width:80%;margin-left:35px;" class="weui-media-box__title">'+data[i].consigneeName+'（'+data[i].consigneePhone+'）</h4>');
-			         if(data[i].province!=null&&data[i].city!=null&&data[i].district!=null)html.push('<p class="weui-media-box__desc">'+data[i].province+data[i].city+data[i].district+data[i].consigneeAddress+'</p>');
-			         html.push('</div>');
-				}
+			        html.push('<div style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;  ">');
+					html.push('<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span style="text-align: left;"><span>'+data[i].consigneeName+'</span></span><span style="float:right;margin-right:8%;"><span>'+data[i].consigneePhone+'</span></span></p>');
+					html.push('<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span>'+data[i].consigneeAddress+'</span></p>');
+					html.push('<input onchange="addresschange(this.id)" id="'+data[i].id+'" '+chkattr+' type="radio" name="address" value="'+data[i].id+'" style="position: absolute;top:20px;left:5%;" />');
+					html.push('<span onclick="deleteaddress(this.id)" id="'+data[i].id+'" style="position: absolute;right:5%;font-size:16px;font-weight: bold;top:25px;"><i class="weui-icon-cancel"></i></span>');
+					html.push('</div>  ');
+					}
+				$('#addressList').children().remove();
+			    $('#addressList').append(html.join(''));
+			}else{
+					html.push('<p style="color:#4C4C4C;text-align:center;font-weight:bold;">暂无默认地址</p>');
 				$('#addressList').children().remove();
 			    $('#addressList').append(html.join(''));
 			}
 		});
      }
+     
+     function deleteaddress(id){
+     	var url=window.BASEPATH + 'business/deleteaddress';
+     	$.post(url,{"addressId":id},function(data){
+     		$.alert("删除地址成功");
+     		getAllAddr();
+     	})
+     }
 
+	function addresschange(id){
+     var url=window.BASEPATH + 'business/changeaddress';
+     	$.post(url,{"addressId":id,"userId":${userId}},function(data){
+     		$.toast("更改地址成功", "text");
+     	})
+     }
+     
+     function appendaddress(){
+     	var userId=${userId};
+     	var username=$('.username').val();
+     	var telephone=$('.telephone').val();
+     	var consigneeAddress=$('.consigneeAddress').val();
+     	var url=window.BASEPATH + 'business/appendaddress';
+     	$.post(url,{"userId":userId,"username":username,"telephone":telephone,"consigneeAddress":consigneeAddress},function(data){
+     		$.alert("添加成功");
+     		$(".fuceng").fadeOut();
+  			$(".tanchuang").fadeOut();
+     		getAllAddr();
+     	})
+     }
 
 		function dobuy(){
 		    var productId=${product.id};
 		    var userId=${userId};
+		    var logisticsId=$("input[name='address']:checked").val();
             $.closePopup();
 			var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+productId+'&count=1';
 			$.get(chkStockUrl, null, function(data){
@@ -387,7 +454,7 @@ function timer(times,intDiff) {
 				   return;
 				}	
 				var _uriPay = window.BASEPATH + 'phoneApp/grouporder/add';
-				$.post(_uriPay,{"productId":productId,"userId":userId}, function(data){
+				$.post(_uriPay,{"productId":productId,"userId":userId,"logisticsId":logisticsId}, function(data){
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					$.modal({
@@ -420,8 +487,8 @@ function timer(times,intDiff) {
 				if(data==1){
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
 						    if(data.data=="PAYSUCCESS"){
-						    $.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":1},function(){
-						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						    $.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderId,"userId":${userId},"type":1},function(){
+						       location.reload();
 		                		})
 						    }
 						});
@@ -465,7 +532,8 @@ function timer(times,intDiff) {
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
 								    if(data.data=="PAYSUCCESS"){
 		                				$.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":1},function(){
-								      		 location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+								      		 /* location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo; */
+								      		 location.reload();
 		                				})
 								    }
 								});
@@ -503,7 +571,10 @@ function timer(times,intDiff) {
  function gotoproduct(id){
 	    location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
 }
- 
+
+function gotoprocess(){
+	    location.href=window.BASEPATH + 'business/gotoprocess';
+}
 </script>
 
 
@@ -548,7 +619,7 @@ function timer(times,intDiff) {
 				style="float:right;margin-right:2%;">③满员发货</span>
 		</p>
 		<p style="width:100%;position: absolute;top:10px;">
-			<span style="margin-left:10%;">拼购玩法</span><span
+			<span style="margin-left:10%;">拼购玩法</span><span onclick="gotoprocess()"
 				style="float:right;margin-right:2%;">详细规则❯</span>
 		</p>
 		<p
@@ -573,10 +644,7 @@ function timer(times,intDiff) {
 	<div id="startteam" class="weui-popup__container">
 		<div class="weui-popup__overlay"></div>
 		<div class="weui-popup__modal">
-				<div class="weui-cells__title" style="color:red;font-weight:bold">点击地址选择或添加新联系人</div>
-				<a id="addAddress"
-					style="width:96%;font-size:14px;margin-left:2%;background-color:#F56938;height:30px;line-height:30px;margin-top:0"
-					href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a>
+				<p class="dizhi" style="height:50px;margin:5px 0;line-height: 50px;padding:0 5%;background: #fff;font-size:18px;font-weight: bold;"><span>添加新地址</span><span style="float:right;">></span></p>
 				<div class="weui-panel__bd" id="addressList"
 					style="padding-bottom:40px;"></div>
 
@@ -598,31 +666,21 @@ function timer(times,intDiff) {
 	</div>
 
 
-	<div id="address" class="weui-popup__container">
-		<div class="weui-popup__overlay"></div>
-		<div class="weui-popup__modal">
-		
-		<div class="weui-cells weui-cells_form">
-		  <div class="weui-cell weui-cell_vcode">
-		    <div class="weui-cell__hd">
-		      <label class="weui-label">手机号</label>
-		    </div>
-		    <div class="weui-cell__bd">
-		      <input class="weui-input" type="tel" placeholder="请输入手机号">
-		    </div>
-		  </div>
-		</div>
-		     
-			<div style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
-				<p style="background:#F56938;height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;"class="close">
-					<span style="font-size:14px;margin-left:5%;">取消填写</span>
-				</p>
-				<p class="save" style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
-					<span style="font-size:14px;margin-left:5%;">保存地址</span>
-				</p>
-			</div>
-			</div>
-		</div>
+	<div class='fuceng' style="display: none;"></div>
+	   <div class="tanchuang" style="z-index:11111;width:100%;display:none;height:auto;padding:0 0 50px 0;text-align: center;background: #fff;position: fixed;bottom:0;position: r ">
+	   <p style="width:96%;margin:0 auto;height:50px;line-height: 50px;font-size: 18px;font-weight: bold;border-bottom:1px solid #D3D3D3;">编辑收货地址</p>
+	   <input type="text" class="username" placeholder="请您输入收货人姓名" style="">
+	   <p style="position: absolute;top:65px;left:5%;font-weight: bold;">收货人姓名</p>
+	   <input type="text" class="telephone" placeholder="请您输入收货人手机号" style="">
+	   <p style="position: absolute;top:115px;left:5%;font-weight: bold;">手机号</p>
+	   <input type="text" class="consigneeAddress" placeholder="请您输入详细地址" style="">
+	   <p style="position: absolute;top:165px;left:5%;font-weight: bold;">详细地址</p>
+	   <!-- 空白 -->
+	   <p style="height:50px;"></p>
+	   <div style="width:100%;height:60px;position: fixed;bottom:0;background: #fff;">
+        <p class="quxiao" style="line-height: 60px;color:#EB6E1E;width:50%;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">取消</p>
+        <p onclick="appendaddress()" style="line-height: 60px;background:#EB6E1E;width:50%;color:#fff;float:right;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">保存</p>
+        </div>
 	
 	<div style="height:60px;width:100%;"></div>
 	
