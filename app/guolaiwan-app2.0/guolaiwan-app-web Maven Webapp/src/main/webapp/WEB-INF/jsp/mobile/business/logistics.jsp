@@ -196,7 +196,7 @@ $(document).on('click', '.quxiao', function(){
 			if(data && data.length>0){
 				for(var i=0; i<data.length; i++){
 				     var chkattr='';
-				     if(i==0){
+				     if(data[i].defaultAddress==1){
 				         chkattr='checked="checked"';
 				     }
 			        html.push('<div style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;  ">');
