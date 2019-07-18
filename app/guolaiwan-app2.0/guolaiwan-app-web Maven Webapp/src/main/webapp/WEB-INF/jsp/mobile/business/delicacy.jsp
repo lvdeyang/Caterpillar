@@ -239,8 +239,7 @@ function getCate(){
 					         html.push('<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>');
 					         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>38</span>元</p>');
 					         var feature = data.merlist[i].feature;
-					         alert(feature);
-					         if(feature !=null && feature!=""){
+					         if(feature !=null && feature!=""){ //商家特色
 					            var split  =   feature.split(',');
 					            html.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');
 						        for(var j=0;j<split.length&&j<2 ;j++){
