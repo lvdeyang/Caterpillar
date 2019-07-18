@@ -82,7 +82,7 @@
    margin-left:5%;  
    margin-top : 4%;
    width : 43%;
-   height: 200px;
+   height: 160px;
   }
 </style>
 </head>
@@ -105,8 +105,8 @@ var commodityId; //商品id
 	     	var html = [];
 		    for(var i=0; i<produ.length; i++){
 		       html.push('<div class="body1" onclick="clickHandler('+produ[i].productPrice+','+produ[i].id+')">');
-			   html.push('<img style="width:100%;height:70%;" src="'+produ[i].productShowPic+'">');
-			   html.push(' <p style="margin-top: 1%; margin-left: 6%">'+produ[i].productName+'</p>');
+			   html.push('<img style="width:100%;height:100px;" src="'+produ[i].productShowPic+'">');
+			   html.push(' <p style="margin-top: 1%; margin-left: 8%">'+produ[i].productName+'</p>');
 			   html.push('<p style="margin-top: 1%; margin-left: 8%"> <span>'+produ[i].productPrice+'</span> 积分</p>'); 
 			   html.push('</div>'); 
 		    }
