@@ -55,22 +55,18 @@ public class ParkOrderController extends BaseController{
 		int count = 0;
 		switch (type) { 
 		case 0://全部
-			System.out.println("10000000000");
 			orderinfopo = Order. getOrder("",page,limit);
 			count = Order.getCount("");
 			break;
 		case 1://未支付
-			System.out.println("11111111");
 			orderinfopo = Order. getOrder("NOTPAY",page,limit);
 			count = Order.getCount("NOTPAY");
 			break;
 		case 2://已支付
-			System.out.println("222222222222222");
 			orderinfopo = Order. getOrder("PAYSUCCESS",page,limit);
 			count = Order.getCount("PAYSUCCESS");
 			break;
 		case 3://正在停车
-			System.out.println("33333333333333333");
 			orderinfopo = Order. getOrder("PARKING",page,limit);
 			count = Order.getCount("PARKING");
 			break;
