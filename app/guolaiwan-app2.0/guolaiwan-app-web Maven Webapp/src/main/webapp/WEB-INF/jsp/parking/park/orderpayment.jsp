@@ -393,11 +393,16 @@ html, body {
 				$.toast("离场时间不能小于进场时间", "forbidden");
 				return false;
 			}
-			/* if (sDate < new Date) {
+			 if (sDate < new Date) {
 				$.toast("请输入正确的入场时间", "forbidden");
 				return false;
-			} */
-
+			} 
+	/* 		 if (sDate < new Date) {
+					alert(sDate)
+						$.toast("请输入正确的入场时间", "forbidden");
+						$("#startDate").val("")
+						return false;
+					}  */
 			if (startdiv != "none") {
 				if ($("#startDate").val() == '') {
 					$.toast("请选择入场日期", "forbidden");
@@ -406,7 +411,7 @@ html, body {
 					$.toast("请选择离场日期", "forbidden");
 					return false;
 				}
-
+                
 			}
 			//预计停车小时
 			var demoP = document.getElementById("spa");
@@ -521,12 +526,7 @@ html, body {
 			$("#endDate").val("")
 			return false;
 		}
-		/* if (sDate < new Date) {
-		alert(sDate)
-			$.toast("请输入正确的入场时间", "forbidden");
-			$("#startDate").val("")
-			return false;
-		} */
+		
 		if (startdiv != "none") {
 			if ($("#startDate").val() == '') {
 				$.toast("请选择入场日期", "forbidden");
