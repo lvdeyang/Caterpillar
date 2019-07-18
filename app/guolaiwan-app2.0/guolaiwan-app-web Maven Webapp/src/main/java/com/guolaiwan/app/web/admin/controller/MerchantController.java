@@ -155,7 +155,6 @@ public class MerchantController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
 	public String add(HttpServletRequest request) throws Exception {
-
 		String shopName = request.getParameter("shopName");
 		String shopLoginName = request.getParameter("shopLoginName");
 		String shopLoginPwd = request.getParameter("shopLoginPwd");
@@ -190,6 +189,11 @@ public class MerchantController extends BaseController {
 		String modularClassId2 = request.getParameter("modularClassId2");
 		
 		
+		String multiple = request.getParameter("productCommissionCode");
+		String[] spltString = multiple.split("-");
+		
+		String date = request.getParameter("shopHours");
+		
 		String shopAuditstates = request.getParameter("shopAuditstates");
 		String signPic = request.getParameter("signPic");
 		String shopyd = request.getParameter("shopyd");
@@ -217,7 +221,8 @@ public class MerchantController extends BaseController {
 		user.setUpdateTime(new Date());
 		user.setSource(0);
         
-		
+		merchant.setDate(date);
+		merchant.setFeature(spltString[1]);
 		merchant.setDistributionId(Integer.parseInt(distributionId));
 		merchant.setShopName(shopName);
 		merchant.setShopLoginName(shopLoginName);

@@ -804,7 +804,6 @@ public class SceneryListController  extends WebBaseControll{
 		OrderInfor.setOrderStatus("REFUNDING");
 		Order.saveOrUpdate(OrderInfor);
 		dataMap.put("id", OrderInfor.getId());
-		System.out.println(dataMap);
 		return success(dataMap);
 	}
 

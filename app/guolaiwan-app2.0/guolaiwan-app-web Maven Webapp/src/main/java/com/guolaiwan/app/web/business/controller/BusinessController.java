@@ -506,6 +506,8 @@ public class BusinessController extends WebBaseControll {
 			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
 			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
 			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
+			hashMap.put("Date",  Merchantlist.get(i).getDate());
+			hashMap.put("Feature",  Merchantlist.get(i).getFeature());
 			list.add(hashMap);
 		}
 		return list;

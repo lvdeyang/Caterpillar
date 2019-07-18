@@ -171,13 +171,16 @@ public class WxPayReportController extends WebBaseControll {
 								order.setYdDate(new Date());
 							}
 						}else{
-							long userIntegral = order.getPayMoney()/100;
-							if ( userIntegral >= 1){  
-							List<UserInfoPO>  UserInfoPO  =  conn_user.getUserByUid(order.getUserId());
-							long Integral =  UserInfoPO.get(0).getUserIntegral();
-							UserInfoPO.get(0).setUserIntegral(Integral+userIntegral);
-							}
 							order.setOrderState(OrderStateType.PAYSUCCESS); 
+						}
+						long userIntegral = order.getPayMoney()/100; //购买后增加积分
+						if ( userIntegral >= 1){  
+							List<UserInfoPO>  UserInfoPO  =  conn_user.getUserByUid(order.getUserId()); //
+							if (UserInfoPO  != null) {
+								long Integral =  UserInfoPO.get(0).getUserIntegral();
+								UserInfoPO.get(0).setUserIntegral(Integral+userIntegral);
+								conn_user.saveOrUpdateAll(UserInfoPO);
+							}
 						}
 						conn_orderInfo.saveOrUpdate(order);
 						sendMessage(order);

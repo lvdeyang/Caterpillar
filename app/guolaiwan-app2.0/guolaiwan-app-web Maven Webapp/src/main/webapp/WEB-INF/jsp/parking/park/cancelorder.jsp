@@ -247,11 +247,8 @@ $("#btn2").bind("click", function () {
 		parm.ref= text;
 		parm.uid=${param.uid};
 		$.post(_uriYd, $.toJSON(parm), function(data) {
-		data = parseAjaxResult(data);
-		alert(data.id);
-		  payPublic(data.id);  
+		 window.location.href="quit/merchant/smartparking";
 		});
-            //要回调的方法  
          
         });  
     });
