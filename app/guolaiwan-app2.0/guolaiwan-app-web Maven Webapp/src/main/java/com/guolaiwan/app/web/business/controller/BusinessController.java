@@ -535,7 +535,7 @@ public class BusinessController extends WebBaseControll {
 			String productClassCode = productDAO.get(orderInfoDao.get(Long.parseLong(orderId)).getProductId()).getProductClassCode();
 			mv.addObject("type", productClassCode);
 		}else{
-			mv.addObject("type", "");
+			mv.addObject("type", "006");
 		}
 		mv.addObject("orderId", orderId);
 		return mv;

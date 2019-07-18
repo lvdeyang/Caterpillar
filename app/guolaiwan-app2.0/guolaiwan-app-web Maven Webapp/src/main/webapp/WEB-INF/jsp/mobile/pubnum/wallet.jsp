@@ -497,6 +497,9 @@ html, body {
 .weui-prompt-input .weui-input{
 cursor:pointer !important;
 }
+.mingxi p span{
+
+}
 </style>
 
 </head>
@@ -505,7 +508,7 @@ cursor:pointer !important;
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 
 <script type="text/javascript">
-
+	var page=1;
 	$(function() {
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
@@ -517,8 +520,8 @@ cursor:pointer !important;
 			}
 	  };
 		
-		getMoney()
-	
+		getMoney();
+	getreckoning();
 	
 	});
 	
@@ -689,9 +692,51 @@ cursor:pointer !important;
 		    }
 		} 
 		
-		
+	$(document).on('click','.order',function(){
+			 if($(".order").html()=="钱包详情"){
+				 $(".zong").hide();
+		  	     $(".mingxi").show();
+		  	     $(".order").html("关闭详情");
+			 }else if($(".order").html()=="关闭详情"){
+				 $(".zong").show();
+		  	     $(".mingxi").hide();
+		  	     $(".order").html("钱包详情");
+			 }
+  });
+	    	
+	  function getreckoning(){
+	  	var	url=window.BASEPATH + 'admin/userinfo/walletlist.do';
+	  	$.post(url,{"userId":${userId},"page":page,"limit":15},function(data){
+	  		 var html=[];
+	  		for(var i=0;i<data.data.length;i++){
+			          html.push('<p style="height:50px;line-height: 50px;">');
+			          html.push('<span style="float:left;">'+data.data[i].updateTime+'</span>');
+			          if(data.data[i].money>0){
+			          	html.push('<span style="margin-left:-53px;">充值</span>');
+			          }else{
+			          	html.push('<span style="margin-left:-53px;">提现</span>');
+			          }
+			          html.push('<span style="float:right;">'+data.data[i].money/100+'元</span></p>');
+				  }
+			$('.mingxi').append(html.join(''));
+			page++;
+	  	})
+	  }
+	    	
 </script>
-
+<script>
+$(function(){
+    $(window).scroll(function(){
+        var aa = $(window).scrollTop(); //当前滚动条滚动的距离
+        var bb = $(window).height();//浏览器当前窗口可视区域高度
+        var cc = $(document).height(); //浏览器当前窗口文档的高度 
+      
+        if(cc <= aa+bb){
+            getreckoning();
+        }
+    })
+  })
+</script>
 
 
 <body>
@@ -703,6 +748,13 @@ cursor:pointer !important;
 			<div class="header-content">个人</div>
 		</div>
 	</div>
+	<p class="order" style="padding:0 5%;height:40px;line-height: 40px;float:right;">钱包详情</p>
+	 <div class="mingxi" style="width:100%;height:auto;overflow: hidden;text-align: center;padding:0 5%;display: none;">
+	    <p style="height:50px;line-height: 50px;border-bottom:1px solid black;"><span style="float:left;">时间</span><span style="margin-left:80px;">充值/提现</span><span style="float:right;">金额</span></p> 
+	 </div>
+	
+	
+<div class="zong">
 	<div id="page" style="text-align:center;margin-top:30%;">
 		
 		<img class="jinbi" alt="" src="lib/images/jinbi.png">
@@ -713,6 +765,7 @@ cursor:pointer !important;
 		
 		
 	</div>
+</div>	
 </body>
 
 
