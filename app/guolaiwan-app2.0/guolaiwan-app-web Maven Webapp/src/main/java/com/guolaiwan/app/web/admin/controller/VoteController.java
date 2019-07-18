@@ -23,6 +23,7 @@ import com.guolaiwan.bussiness.admin.dao.VoteModularDAO;
 import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.VoteModularPO;
 import com.guolaiwan.bussiness.admin.po.VoteProductPO;
@@ -222,6 +223,30 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/delAll.do", method = RequestMethod.POST)
 	public String delAll(long acId) {
 		voteproductDAO.deleteByMoId(acId);
+		return "success";
+	}
+	
+	// 添加数据页面
+	@ResponseBody
+	@RequestMapping(value = "/gotovoteproductdetails")
+	public ModelAndView voteProductDetails(HttpServletRequest request) {
+		long productId=Long.parseLong(request.getParameter("productId"));
+		ModelAndView mv = new ModelAndView("mobile/vote/voteproductdetails");
+		mv.addObject("product", conn_product.get(productId));
+		return mv;
+	}
+	
+	// 选择图片 张羽 5/8 新增
+	@ResponseBody
+	@RequestMapping(value = "/votemodularpic", method = RequestMethod.POST)
+	public String voteModularPic(HttpServletRequest request) {
+		String pic = request.getParameter("pic");
+		long picId = Long.parseLong(request.getParameter("picId"));
+		long id = Long.parseLong(request.getParameter("id"));
+		VoteModularPO voteModular = votemodularDAO.get(id);
+		voteModular.setPicId(picId);
+		voteModular.setSlidepic(pic);
+		votemodularDAO.saveOrUpdate(voteModular);
 		return "success";
 	}
 }

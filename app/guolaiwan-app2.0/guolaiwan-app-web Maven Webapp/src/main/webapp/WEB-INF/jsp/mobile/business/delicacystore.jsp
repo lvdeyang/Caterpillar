@@ -504,16 +504,15 @@ html, body {
     }
     
 .zhifu{
-  background: -webkit-linear-gradient(left,rgba(254,176,1,1),rgba(255,73,0,1)); /* Safari 5.1 - 6 */
-  color:#fff;
-  margin:10px 0;
-  font-size:20px;
-  font-weight:bold;
-  height:48px;
-  width:80%;
-  border:none;
-  outline:none;
-  border-radius:12px;
+  background: -webkit-linear-gradient(left,rgba(254,176,1,1),rgba(255,73,0,1)) !important;/* Safari 5.1 - 6 */
+  color:#fff !important;
+  margin:10px 0 !important;
+  font-size:20px !important;
+  font-weight:bold !important;
+  height:48px !important;
+ padding:5px 25%;
+  border-radius:12px !important;
+  line-height:80px;
 }
 /*定义选项卡内容*/
 	.contentt{
@@ -614,8 +613,7 @@ html, body {
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript">
 	$(function() {
-	getallteam(); 
-	 refreshMsg();
+   	 image(); //顶部图片 营业时间 特色
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -796,6 +794,73 @@ html, body {
 	.addClass("active").siblings().removeClass("active")
 			})						  							
 	});
+	
+	
+	function image(){ 
+	     var url = window.BASEPATH + 'product/delicacystore/info.do?merchantId='+${merchantId};
+	  	 $.get(url,null,function(msg){
+		  	 var ht=[];
+		  	 ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">'+msg.merch.shopName+'</p>'); //顶部商户名称
+		     $("#merInfo1").append(ht.join(''));
+		  	 var mpi = msg.mpic;
+		  	 var shopNam = msg.shopName;
+		  	 var htm = [];
+		  	 htm.push('<p style="margin:10px 0 0 2%;font-size:16px;font-weight:bold;">'+shopNam+'</p>');
+		  	 $('._name').append(htm.join(''));
+		  	 var html=[]; //首页图片
+		  	 for(var i=0;i<mpi.length;i++){
+		      html.push('<img  style="" alt="" src="http://www.guolaiwan.net/file'+mpi[i]+'">');
+		     }
+	         $('.meishi').append(html.join(''));
+	    
+		    var array = [];  //商户特色 营业时间
+		    array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> '+msg.merch.date+'</span></p>');
+		    var feature = msg.merch.feature;
+		    if(feature !=null && feature!=""){ //商家特色
+		      var split  =   feature.split(',');
+		      html.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');
+		      for(var j=0;j<split.length ;j++){
+		        array.push('<button style="margin-left:2%;border-radius:6px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">'+split[j]+'</button>');		       	        
+		      }
+		      html.push('</div>');
+		      $('#feature').append(array.join(''));
+		    }	       	         
+   	 });
+	}
+	
+	 function select(code){     
+	 var url = window.BASEPATH + '/product/delicacystore/greens';
+	 var date = {"codeID":code,"merchantId":${merchantId}}
+	 $.post(url,date,function(msg){
+	   var proName = msg.productPO;
+	   var price =msg.priceList;
+	   var html=[];
+	   html.push('<div class="right-con con-active">');   
+	   html.push('<ul>');  
+	   for(var i=0;i<proName.length;i++){ 	               		 
+         		html.push('<li>');           
+		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+proName[i].productShowPic+' width="55" height="55" /></div>');
+		        html.push('<div class="menu-txt">');
+		        html.push('<font>'+proName[i].productName+'</font>');
+		        html.push('<p class="list1">月销<span>120</span></p>');
+		        html.push('<p class="list2">');
+		        html.push('<b>￥'+price[i]+'</b>');
+		        html.push('<div class="btn"> ');
+		        html.push(' <button class="minus"  id ="minus'+proName[i].uuid+'"  onclick="minus(this.id)" >  <strong></strong>   </button>');
+		        html.push(' <i >0</i> ');
+		        html.push('<button class="add" id ="add'+proName[i].uuid+'" onclick="add(this.id)">  <strong></strong>  </button> ');
+		        html.push('<i class="price">'+price[i]+'</i>');
+		        html.push(' </div> ');
+		        html.push('</p>');
+		        html.push('</div> ');
+		        html.push('</li>');		               
+	     	}	     	
+	      html.push('</ul>');   
+	      html.push('</div>');
+          $('.con').append(html.join(''));
+          showDiv();	    
+	 }) 
+	}
 </script>
 <script type="text/javascript">
 
@@ -848,28 +913,12 @@ html, body {
 		}  
 	};
 	 
-  	function getallteam(){
-   	 var url = window.BASEPATH + 'product/delicacystore/info.do?merchantId='+${merchantId};
-   	 $.get(url,null,function(msg){
-   	  var ht=[];
-   	  ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">'+msg.merch.shopName+'</p>');
-     $("#merInfo1").append(ht.join(''));
-   	 var mpi = msg.mpic;
-   	 var shopNam = msg.shopName;
-   	 var htm = [];
-   	 htm.push('<p style="margin:10px 0 0 2%;font-size:16px;font-weight:bold;">'+shopNam+'</p>');
-   	 $('._name').append(htm.join(''));
-   	   for(var i=0;i<mpi.length;i++){
-         		var html=[];         		             		        
-		        html.push('<img  style="" alt="" src="http://www.guolaiwan.net/file'+mpi[i]+'">');		       	         
-		 		$('.meishi').append(html.join(''));
-	     	}
-
-   	 });
+   	function getallteam(){
+   	
    	 
    	  var url = window.BASEPATH + '/product/delicacystore/hotsell?merchantId='+${merchantId};
         $.get(url,null,function(msg){
-          two();      
+          	two();      
         var pNam = msg.prd;
 	    var pic =msg.prcList;
         var html=[];
@@ -953,7 +1002,7 @@ html, body {
 	      html.push('</div>');
           $('.con').append(html.join(''));
           showDiv();	    
-	 })
+	 }) 
 	}
 	function showDiv(){
 	$(".con>div").hide();
@@ -1016,14 +1065,12 @@ html, body {
 		      <img  style="" alt="" src="lib/images/1.jpg"> -->
 		      <button style="position: absolute;bottom:15px;left:15px;background-color:rgba(44,17,6,0.5);border-radius:12px;outline:none;border:none;color:#fff;padding:0 8px;font-size:12px;"></button>
 		     </div>
-		     <div class="" style="height:100px;width:100%;border-bottom:1px solid #EFEFEF;position: relative;">
-             <p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> 08:00-20:00</span></p>
-             <button style="position: absolute;bottom:20px;left:7%;border-radius:6px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">有包间</button>
-	         <button style="position: absolute;bottom:20px;left:20%;border-radius:6px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>
+		     <div id="feature" class="" style="height:100px;width:100%;border-bottom:1px solid #EFEFEF;position: relative;">
+            
              </div>
              
             <div style="width:100%;height:80px;text-align: center;border-bottom:10px solid #F4F4F4;">
-             <button class="zhifu" style="" onclick="payMany()">到店支付</button>
+             <a href="pubnum/product/index/payinshop/${merchantId}" class="zhifu">到店支付</a>
             </div>
 
              <!-- 选项卡 -->

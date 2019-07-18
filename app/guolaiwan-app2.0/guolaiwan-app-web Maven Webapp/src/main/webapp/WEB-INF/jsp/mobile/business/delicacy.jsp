@@ -1,5 +1,5 @@
 <%@page import="pub.caterpillar.weixin.constants.WXContants"%>
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*"  pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String path = request.getContextPath();
@@ -171,18 +171,14 @@ $(function(){
  
 //轮播图以及下面的图片   	
 function getRecomment(){
-    var _uriRecomment = window.BASEPATH + 'phoneApp/getRecommendByModu?modularCode=${modularCode}';
+    var _uriRecomment = window.BASEPATH + 'cate/getRecommendByModu?merchantId=${merchantId}';
 		$.get(_uriRecomment, null, function(data){
-			data = parseAjaxResult(data);
-			columnName = data[0].modularName + '-过来玩';
-			columnPic = 'http://<%=weburl%>/lib/images/logo.jpg';
-			columnUrl = window.location.href;
 			if(data === -1) return;
 			if(data && data.length>0){
 			    var html=[];
 				for(var i=0; i<data.length; i++){
-				    html.push('<div style="height:200px;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].id+'" style="height:200px;" src="'+data[i].shopPic+'" alt="">');
-					html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].shopName+'</div></div>');
+				    html.push('<div style="height:200px;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].id+'" style="height:200px;" src="http://www.guolaiwan.net/file'+data[i].shopPic+'" alt="">');
+					html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#0D0D0D">'+data[i].shopName+'</div></div>');
 				}
 				$('.swiper-wrapper').append(html.join(''));
 				$(".swiper-container").swiper({
@@ -194,7 +190,7 @@ function getRecomment(){
 } 
 
 function getCate(){
-     var _uriRecomment = window.BASEPATH + 'business/getCate?merchantId=${merchantId}';
+      var _uriRecomment = window.BASEPATH + 'business/getCate?merchantId=${merchantId}';
 		$.get(_uriRecomment, null, function(data){
 		    var html=[];
 		    for(var i=0;i<data.length;i++){
@@ -203,11 +199,18 @@ function getCate(){
 		         html.push('<div class="youxuan-in" style="display: inline-block;">');  
 		         html.push('<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">'+data[i].ShopName+'</p>');
 		         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data[i].ModularClass+'</span></p>');
-		         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>');
-		         html.push('<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>');
-		         html.push('<p style="color:#757575;position: absolute;top:-40px;right:1%;font-size:14px">人均<span>38</span>元</p>');
-		         html.push('<button style="position: absolute;top:130px;margin-left:10px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">有包间</button>');
-		         html.push('<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>');
+		         if(data[i].Date != null)html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">'+data[i].Date+'</p>'); 
+		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>38</span>元</p>'); 
+		         var feature = data[i].Feature;
+		         if(feature !=null && feature!=""){
+		            var split  =   feature.split(',');
+		            html.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');
+			        for(var j=0;j<split.length&&j<2 ;j++){
+			            
+			            html.push('<button style="padding:0 3px;margin:0 5px;line-height:25px;font-size:12px;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">'+split[j]+'</button>');
+			        }
+			        html.push('</div>');
+		         }
 		         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>');
 		         html.push('</div>');
 		         html.push('</div></a>');  		        
@@ -219,7 +222,7 @@ function getCate(){
 
 	function getAllMerchant(){
 			var name=$('.search').val();
-			var url="<%=basePath%>business/search";
+			var url="<%=basePath%>cate/search";
 	            $.post(url,{"merchantId":${merchantId},"name":name,"type":"0003"},function(data){
 	            	$('.youxuan').empty();
 	            	var html=[];
@@ -234,12 +237,20 @@ function getCate(){
 					         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data.merlist[i].modularClass+'</span></p>');
 					         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>');
 					         html.push('<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>');
-					         html.push('<p style="color:#757575;position: absolute;top:-40px;right:1%;font-size:14px">人均<span>38</span>元</p>');
-					         html.push('<button style="position: absolute;top:130px;margin-left:10px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">有包间</button>');
-					         html.push('<button style="position: absolute;top:130px;margin-left:60px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">免费WIFI</button>');
+					         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>38</span>元</p>');
+					         var feature = data.merlist[i].feature;
+					         if(feature !=null && feature!=""){ //商家特色
+					            var split  =   feature.split(',');
+					            html.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');
+						        for(var j=0;j<split.length&&j<2 ;j++){
+						            html.push('<button style="padding:0 3px;margin:0 5px;line-height:25px;font-size:12px;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">'+split[j]+'</button>');
+						        }
+						        html.push('</div>');
+					         }
 					         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>');
 					         html.push('</div>');
 					         html.push('</div></a>');
+							
 							}
 					}
 			    	$('.youxuan').append(html.join(''));

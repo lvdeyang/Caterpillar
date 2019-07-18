@@ -416,7 +416,16 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getgroupproduct", method = RequestMethod.GET)
 	public List<ProductVO> getgroupproduct(Long merchantId) throws Exception {
+		
+		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
 		List<ProductPO> productlist = productDAO.getactivity(merchantId);
+		for (MerchantChildrenPO Children : merchantChildren) {
+			List<ProductPO> getactivity = productDAO.getactivity(Children.getChildrenId());
+			for (ProductPO productPO : getactivity) {
+				productlist.add(productPO);
+			}
+		}
+		
 		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(productlist, ProductVO.class);
 		List<GroupBuyPO> findAll = groupbuyDao.findAll();
 		for (ProductVO productVO : listvo) {
@@ -506,6 +515,8 @@ public class BusinessController extends WebBaseControll {
 			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
 			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
 			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
+			hashMap.put("Date",  Merchantlist.get(i).getDate());
+			hashMap.put("Feature",  Merchantlist.get(i).getFeature());
 			list.add(hashMap);
 		}
 		return list;
@@ -533,7 +544,7 @@ public class BusinessController extends WebBaseControll {
 			String productClassCode = productDAO.get(orderInfoDao.get(Long.parseLong(orderId)).getProductId()).getProductClassCode();
 			mv.addObject("type", productClassCode);
 		}else{
-			mv.addObject("type", "");
+			mv.addObject("type", "006");
 		}
 		mv.addObject("orderId", orderId);
 		return mv;
@@ -986,5 +997,14 @@ public class BusinessController extends WebBaseControll {
 		mv = new ModelAndView("mobile/business/detailspage");
 		mv.addObject("product", alllist.get(0));
 		return mv;
+	}
+	
+	//攻略列表页面
+	@ResponseBody
+	@RequestMapping(value = "/gotoprocess")
+	public ModelAndView goToProcess(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/process");
+		return mv; 
 	}
 }

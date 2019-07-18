@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      height:40px;
      padding-left:10px;
      line-height:40px;
-     color:#7CAE23;
+     color:#BA6985;
      
    }
    .ftitle a{

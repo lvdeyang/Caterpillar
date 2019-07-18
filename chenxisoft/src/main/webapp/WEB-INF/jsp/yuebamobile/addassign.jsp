@@ -34,7 +34,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      height:40px;
      padding-left:10px;
      line-height:40px;
-     color:#FFC0CB;
+     color:#BA6985;
      
    }
    .ftitle a{
@@ -86,21 +86,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            <label>
 		                乳房情况                       
 		            </label>
-		            <input id="rufang" type="text" placeholder="请输入"/>
+		            <input id="rufang" value="${assign.rufang}" type="text" placeholder="请输入"/>
 		            
 		        </div>
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                恶露情况
 		            </label>
-		            <input id="elu" type="text" placeholder="请输入">
+		            <input id="elu" value="${assign.elu}" type="text" placeholder="请输入">
 		            
 		        </div>
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                褥汗情况
 		            </label>
-		            <input id="ruhan" type="text" placeholder="请输入">
+		            <input id="ruhan" value="${assign.ruhan}" type="text" placeholder="请输入">
 		            
 		        </div>
 		    <div class="ftitle">
@@ -111,28 +111,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            <label>
 		                脐带情况                       
 		            </label>
-		            <input id="qidai" type="text" placeholder="请输入"/>
+		            <input id="qidai" value="${assign.qidai}" type="text" placeholder="请输入"/>
 		            
 		        </div>
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                臀部情况
 		            </label>
-		            <input id="tunbu" type="text" placeholder="请输入">
+		            <input id="tunbu" value="${assign.tunbu}" type="text" placeholder="请输入">
 		            
 		        </div>
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                大便次数
 		            </label>
-		            <input id="dabiancishu" type="text"  placeholder="请输入">
+		            <input id="dabiancishu" value="${assign.dabiancishu}" type="text"  placeholder="请输入">
 		            
 		        </div>
 		        <div class="ui-form-item ui-border-b">
 		            <label>
 		                小便次数
 		            </label>
-		            <input id="xiaobiancishu" type="text" placeholder="请输入">
+		            <input id="xiaobiancishu" value="${assign.xiaobiancishu}" type="text" placeholder="请输入">
 		            
 		        </div>
 		       
@@ -145,7 +145,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              乳房护理
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="rufanghuli" type="checkbox">
 		          </label>
 		     </div>
 		     <div class="ui-form-item ui-form-item-switch ui-border-b">
@@ -153,7 +153,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              产后操
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="chanhoucao" type="checkbox">
 		          </label>
 		     </div>
 		     <div class="ui-form-item ui-form-item-switch ui-border-b">
@@ -161,7 +161,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              沐浴擦身
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="muyucashen" type="checkbox">
 		          </label>
 		     </div>
 		     
@@ -174,7 +174,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              婴儿洗澡
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="yingerxizao" type="checkbox">
 		          </label>
 		     </div>
 		     <div class="ui-form-item ui-form-item-switch ui-border-b">
@@ -182,7 +182,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              婴儿体温
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="yingertiwen" type="checkbox">
 		          </label>
 		     </div>
 		     <div class="ui-form-item ui-form-item-switch ui-border-b">
@@ -190,7 +190,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              婴儿抚触
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="yingerfuchu" type="checkbox">
 		          </label>
 		     </div>
 		     
@@ -199,7 +199,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              便后洗臀
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="bianhouxitun" type="checkbox">
 		          </label>
 		     </div>
 		     
@@ -208,26 +208,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              消毒奶具
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="xiaodunaiju" type="checkbox">
 		          </label>
 		     </div>
 		     
 		     
-		     <div class="ui-form-item ui-form-item-switch ui-border-b">
-		          <p>
-		              消毒奶具
-		          </p>
-		          <label class="ui-switch">
-		              <input type="checkbox">
-		          </label>
-		     </div>
+		  
 		     
 		     <div class="ui-form-item ui-form-item-switch ui-border-b">
 		          <p>
 		              脐带处理
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="qidaichuli" type="checkbox">
 		          </label>
 		     </div>
 		     
@@ -236,13 +229,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		              协助喂养
 		          </p>
 		          <label class="ui-switch">
-		              <input type="checkbox">
+		              <input id="xiezhuweiyang" type="checkbox">
 		          </label>
 		     </div>
 		 
 		 
 	        
-	        <div class="ui-btn-wrap">
+	        <div class="ui-btn-wrap" id="saveBtn" style="display:none;">
 	            <button id="dosave" class="ui-btn-lg ui-btn-primary" style="background:#FFC0CB">
 	                                    保存
 	            </button>
@@ -273,110 +266,118 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return data.data;		
 					}
 			  };
-	         var share={};
-	         var photoId='';
-	         $(document).on('click','.addPhoto',function(){
-	            var ids=this.id.split('-');
-	            photoId=ids[0];
-	            getPhoto();
-	         });
-	         
-		     function  getPhoto() {
-	    
-			    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	            var _uri = window.BASEPATH + 'worker/wx/prev?url='+reqUrl;
-				$.get(_uri, null, function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					if(data){
-					
-						share=data;
-						wx.config({
-				            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-				            //debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-				            appId : share.appId, // 必填，公众号的唯一标识
-				            timestamp : share.timestamp, // 必填，生成签名的时间戳
-				            nonceStr : share.nonceStr, // 必填，生成签名的随机串
-				            signature : share.signature,// 必填，签名，见附录1
-				            jsApiList : ['chooseImage',
-			                        'previewImage',
-			                        'uploadImage',
-			                        'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-		       	        });
-	                }
-	            });                        
-	             wx.ready(function () {
-	                wx.checkJsApi({
-	                    jsApiList: [
-	                        'chooseImage',
-	                        'previewImage',
-	                        'uploadImage',
-	                        'downloadImage'
-	                    ],
-	                    success: function (res) {
-	                      
-	                        if (res.checkResult.getLocation == false) {
-	                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
-	                            return;
-	                        }else{
-	                            choosePicone(this.id);
-	                        }
-	                    }
-	                });
-	            });
-	            wx.error(function(res){
-	                wx.closeWindow();
-	            });
-			}
-		    function choosePicone(id) {
-	            wx.chooseImage({
-	                count: 1, // 默认9
-	                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-	                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-	                success: function (res) {
-	                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-	                    getLocalDataone(localIds[0]);
-	                }
-	            });
+	        //页面初始化的一系列工作
+	        var canmodify=${canmodify};
+	        if(canmodify==1){
+	           $('#saveBtn').show();
 	        }
+	        
+	        var assignId=${assignId};
+	        
+	        var rufanghuli=${assign.rufanghuli};
+			var muyucashen=${assign.muyucashen};
+			var chanhoucao=${assign.chanhoucao};
 			
-	        function getLocalDataone(localid) {
-	
-				//获取本地图片资源
-	            wx.getLocalImgData({
-	                localId: localid, // 图片的localID
-	                success: function (res) {
-	                    var localData = res.localData;
-	                    var sear=new RegExp(',');
-                        if(sear.test(localData )) {
-                          arr=str.split(',');//注split可以用字符或字符串分割
-                          localData=arr[1];
-                        }
-                                
-		    $('#'+photoId+'-pic').attr('src','data:image/png;base64,'+localData);
-                                    $('#'+photoId+'-pic').show();
-	                    $('#'+photoId+'-input').val(localData);
+			var yingerxizao=${assign.yingerxizao};
+			var yingertiwen=${assign.yingertiwen};
+			var yingerfuchu=${assign.yingerfuchu};
+			var qidaichuli=${assign.qidaichuli};
+			var bianhouxitun=${assign.bianhouxitun};
+			var xiaodunaiju=${assign.xiaodunaiju};
+			var xiezhuweiyang=${assign.xiezhuweiyang};
+	        
+	        $("#rufanghuli").prop("checked",(rufanghuli==1?true:false));
+	        $("#muyucashen").prop("checked",(muyucashen==1?true:false));
+	        $("#chanhoucao").prop("checked",(chanhoucao==1?true:false));
+	        $("#yingerxizao").prop("checked",(yingerxizao==1?true:false));
+	        $("#yingertiwen").prop("checked",(yingertiwen==1?true:false));
+	        $("#yingerfuchu").prop("checked",(yingerfuchu==1?true:false));
+	        $("#qidaichuli").prop("checked",(qidaichuli==1?true:false));
+	        $("#bianhouxitun").prop("checked",(bianhouxitun==1?true:false));
+	        $("#xiaodunaiju").prop("checked",(xiaodunaiju==1?true:false));
+	        $("#xiezhuweiyang").prop("checked",(xiezhuweiyang==1?true:false));
 
-	                }
-	                
-	            });
-	 
-	        }
-	        $(document).on('click','#doApply',function(){
+	        
+	       
+	        $(document).on('click','#dosave',function(){
 	            $('#loading').show();
 	            var params={};
-	            params.realName=$('#name').val();
-	            params.idCard=$('#idStr').val();
-	            params.phone=$('#phone').val();
-	            params.address=$('#address').val();
-	            params.photo=$('#photo-input').val();
-	            params.idCardPhoto=$('#idcard-input').val();
-	            params.healthPhoto=$('#health-input').val();
-	            params.expertPhoto=$('#certificate-input').val();
-	            params.age=$('#age').val();
-                var _uri = window.BASEPATH + 'worker/mobile/apply.do';
+
+	            params.orderId=${orderId};
+	            params.assignId=${assignId};
+				params.rufang=$('#rufang').val();
+				params.elu=$('#elu').val();
+				params.ruhan=$('#ruhan').val();
+				
+				params.qidai=$('#qidai').val();
+				params.tunbu=$('#tunbu').val();
+				params.dabiancishu=$('#dabiancishu').val();
+				params.xiaobiancishu=$('#xiaobiancishu').val();
+				
+				if($("#rufanghuli").prop("checked") == true){
+				   params.rufanghuli=1;
+				}else{
+				   params.rufanghuli=0;
+				}
+				
+				if($("#muyucashen").prop("checked") == true){
+				   params.muyucashen=1;
+				}else{
+				   params.muyucashen=0;
+				}
+				
+				if($("#chanhoucao").prop("checked") == true){
+				   params.chanhoucao=1;
+				}else{
+				   params.chanhoucao=0;
+				}
+				
+				if($("#yingerxizao").prop("checked") == true){
+				   params.yingerxizao=1;
+				}else{
+				   params.yingerxizao=0;
+				}
+				
+				if($("#yingertiwen").prop("checked") == true){
+				   params.yingertiwen=1;
+				}else{
+				   params.yingertiwen=0;
+				}
+				
+				if($("#yingerfuchu").prop("checked") == true){
+				   params.yingerfuchu=1;
+				}else{
+				   params.yingerfuchu=0;
+				}
+				
+				if($("#qidaichuli").prop("checked") == true){
+				   params.qidaichuli=1;
+				}else{
+				   params.qidaichuli=0;
+				}
+				
+                if($("#bianhouxitun").prop("checked") == true){
+				   params.bianhouxitun=1;
+				}else{
+				   params.bianhouxitun=0;
+				}
+			
+			
+			    if($("#xiaodunaiju").prop("checked") == true){
+				   params.xiaodunaiju=1;
+				}else{
+				   params.xiaodunaiju=0;
+				}
+				
+                if($("#xiezhuweiyang").prop("checked") == true){
+				   params.xiezhuweiyang=1;
+				}else{
+				   params.xiezhuweiyang=0;
+				}
+
+                var _uri = window.BASEPATH + 'assign/mobile/dosave';
 		        $.post(_uri, params, function(data){
-			        location.href=window.BASEPATH + 'worker/mobile/apply?t=' + new Date().getTime();
+			        location.href=window.BASEPATH + 'assign/mobile/wlist?orderId=${orderId}&t=' + new Date().getTime();
 			        $('#loading').hide();
 				}); 
 				     

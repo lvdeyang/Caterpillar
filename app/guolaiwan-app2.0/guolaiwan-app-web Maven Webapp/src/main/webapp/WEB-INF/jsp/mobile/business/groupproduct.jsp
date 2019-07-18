@@ -417,7 +417,6 @@ $(function(){
         var cc = $(document).height(); //浏览器当前窗口文档的高度 
       
         if(cc <= aa+bb){
-            $(".youxuan").append($(".goupiao").clone()); 
         }
     })
   })

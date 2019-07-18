@@ -196,14 +196,14 @@ $(document).on('click', '.quxiao', function(){
 			if(data && data.length>0){
 				for(var i=0; i<data.length; i++){
 				     var chkattr='';
-				     if(i==0){
+				     if(data[i].defaultAddress==1){
 				         chkattr='checked="checked"';
 				     }
 			        html.push('<div style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;  ">');
 					html.push('<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span style="text-align: left;"><span>'+data[i].consigneeName+'</span></span><span style="float:right;margin-right:8%;"><span>'+data[i].consigneePhone+'</span></span></p>');
 					html.push('<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span>'+data[i].consigneeAddress+'</span></p>');
 					html.push('<input onchange="addresschange(this.id)" id="'+data[i].id+'" '+chkattr+' type="radio" name="address" value="'+data[i].id+'" style="position: absolute;top:20px;left:5%;" />');
-					html.push('<span style="position: absolute;right:5%;font-size:16px;font-weight: bold;top:25px;">></span>');
+					/* html.push('<span style="position: absolute;right:5%;font-size:16px;font-weight: bold;top:25px;">></span>'); */
 					html.push('</div>  ');
 					}
 				$('.addressList').children().remove();
@@ -237,7 +237,6 @@ $(document).on('click', '.quxiao', function(){
      	var username=$('.username').val();
      	var telephone=$('.telephone').val();
      	var consigneeAddress=$('.consigneeAddress').val();
-     	alert(userId+"-"+username+"-"+telephone+"-"+consigneeAddress)
      	var url=window.BASEPATH + 'business/appendaddress';
      	$.post(url,{"userId":userId,"username":username,"telephone":telephone,"consigneeAddress":consigneeAddress},function(data){
      		$.alert("添加成功");

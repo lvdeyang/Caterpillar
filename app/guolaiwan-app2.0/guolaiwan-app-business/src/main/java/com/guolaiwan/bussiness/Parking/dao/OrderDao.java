@@ -10,11 +10,13 @@ import com.guolaiwan.bussiness.Parking.po.AttractionsParkingPO;
 import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
+import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
+import pub.caterpillar.orm.hql.CountHql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 @Component
@@ -36,6 +38,39 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
         	  return findByHql(hql);
            
 	}
+       /**
+        * 通过用户id 查询 所有   订单信息
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public List<OrderPO>  getOrder(String state ,int pageNum, int pageSize) throws ParseException{
+    	   QueryHql hql = newQueryHql();
+    	   if (state != null && state !="") {
+    		  hql.andBy("orderStatus", Condition.eq, state);
+		   }
+    	    List<OrderPO> orders = findByHqlPage(hql, pageNum, pageSize);
+    	   return orders;
+       }
+
+       /**
+        * 通过用户id 查询 所有   订单信息数量
+        * @param userId 用户id
+        * @param  
+        * @param 
+        * @return
+        * @throws ParseException
+        */
+       public int  getCount(String state) throws ParseException{
+    	   CountHql cHql = this.newCountHql();
+    	   if (state != null && state !="") {
+    		   cHql.andBy("orderStatus", Condition.eq, state);
+		   }
+   		   int count = countByHql(cHql);
+   		   return count;
+       }
        /**
         * 通过用户id 车牌 查询  订单信息
         * @param userId 用户id

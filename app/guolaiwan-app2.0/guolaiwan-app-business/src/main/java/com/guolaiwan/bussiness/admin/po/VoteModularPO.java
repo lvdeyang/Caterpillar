@@ -17,9 +17,29 @@ public class VoteModularPO extends AbstractBasePO{
 	private String modularName;
 	//标签描述
 	private String modularDescribe;
-	
+	//添加时间
 	private String addTime;
+	//图片的id
+	private long picId;
+	//图片的路径
+	private String slidepic;
 
+	
+	public long getPicId() {
+		return picId;
+	}
+
+	public void setPicId(long picId) {
+		this.picId = picId;
+	}
+
+	public String getSlidepic() {
+		return slidepic;
+	}
+
+	public void setSlidepic(String slidepic) {
+		this.slidepic = slidepic;
+	}
 
 	public String getAddTime() {
 		return addTime;

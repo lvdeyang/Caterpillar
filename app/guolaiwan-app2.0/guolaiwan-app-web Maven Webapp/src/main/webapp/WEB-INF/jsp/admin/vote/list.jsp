@@ -93,6 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						,{field:"modularName",title:"标签名称",edit:"text",width:160}
    						,{field:"addTime",title:"添加时间",width:160}
    						,{field:"modularDescribe",title:"标签描述",edit:"text",width:1000}
+   						,{title: '标签缩略图',templet:"#picTpl",width:100} 
    						,{title:"操作",templet:"#zsgc"}
    						]]
    					,done:function(res, curr, count){
@@ -128,11 +129,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 	}
 		
+		
+		function show_pic(id){
+		idn = "#"+id;
+        $(idn).css('width','600px').css('height','400px');
+        layer.open({
+  			type: 1,
+  			title: false,
+  			closeBtn: 0,
+  			area:'600',
+  			
+  			skin: 'layui-layer-nobg', //没有背景色
+  			shadeClose: true,
+  			content: $(idn),
+  			end: function(){
+  				$(idn).css("height","35px");
+				$(idn).css("width","35px");
+  				}
+			})
+		
+    	}
+    
+    function open_win(title,url,w,h){
+				x_admin_show(title,url,w,h)
+	}
             </script>
           
-          <script type="text/html" id="zsgc">
+<script type="text/html" id="zsgc">
+<a class='layui-btn layui-btn-xs' href="javascript:open_win('选择图片','<%=path%>/admin/picture/addlist?sImg=caImg{{d.id}}&sId={{ d.id }}&source=vote','800','600')">选择图片</a>
 			<a class="layui-btn layui-btn-xs" href="productList?modularId={{ d.id }}&content={{ d.content }}">商品列表</a>
 			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
-		  </script>
+</script>
+<script type="text/html" id="picTpl">
+ <a href="javascript:show_pic('caImg{{d.id}}')"><img id="caImg{{d.id}}"  src= "http://www.guolaiwan.net/file/{{ d.slidepic}}" alt="" style="width:35px;height:35px"></a>
+</script>
     </body>
 </html>
