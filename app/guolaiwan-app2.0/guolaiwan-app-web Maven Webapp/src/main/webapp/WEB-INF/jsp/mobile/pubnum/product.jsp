@@ -621,6 +621,7 @@ input[type="datetime-local"]:before{
 <!-- <script src="../../../../layui/lib/alert/css/alertstyle.css"></script> -->
 <script src="../../../../layui/lib/alert/js/jquery-1.7.1.min.js"></script>
 <script src="../../../../layui/lib/alert/js/ui.js"></script>
+<script type="text/javascript" src="lib/laydate/laydate.js" charset="utf-8"></script>
 <link href="../../../../layui/lib/alert/css/alertstyle.css"
 	rel="stylesheet" />
 <script type="text/javascript">
@@ -743,9 +744,75 @@ input[type="datetime-local"]:before{
 				}
 			   
 	  			
-			    $("#bookDate").datetimePicker();
-	            $("#startDate").datetimePicker();
-	            $("#endDate").datetimePicker();
+			    //$("#bookDate").datetimePicker();
+	            //$("#startDate").datetimePicker();
+	            //$("#endDate").datetimePicker();
+	            
+	            laydate.skin('molv');//切换皮肤，请查看skins下面皮肤库
+
+				 $('#bookDate').on('click',function(){
+
+				    laydate({
+
+					    elem: '#bookDate',
+
+					    istime: true, 
+
+					    format: 'YYYY-MM-DD hh:mm',
+
+					    festival: true, //显示节日
+
+					    choose: function(datas){ //选择日期完毕的回调
+
+			
+
+					    }
+
+					});
+				});	
+					
+					$('#startDate').on('click',function(){
+
+				    laydate({
+
+					    elem: '#startDate',
+
+					    istime: true, 
+
+					    format: 'YYYY-MM-DD hh:mm',
+
+					    festival: true, //显示节日
+
+					    choose: function(datas){ //选择日期完毕的回调
+
+					       
+
+					    }
+
+					});
+				});
+					$('#endDate').on('click',function(){
+
+				    laydate({
+
+					    elem: '#endDate',
+
+					    istime: true, 
+
+					    format: 'YYYY-MM-DD hh:mm',
+
+					    festival: true, //显示节日
+
+					    choose: function(datas){ //选择日期完毕的回调
+
+	
+
+					    }
+
+					});
+	            });
+	            
+	            
 			    if(iscollect==1){
 			    
 			       $('#fav').html('取消收藏');
@@ -2059,7 +2126,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">预定日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			       <input id="bookDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			       <input id="bookDate" readonly  class="weui-input mydate" type="text" placeholder="请选择"> 
 			    </div>
 			    <div class="weui-cell__bd"></div>
 			  </div>
@@ -2069,7 +2136,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">入住日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="startDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			    	<input id="startDate" readonly  class="weui-input mydate" type="text" placeholder="请选择"> 
 			      
 			    </div>
 			    <div class="weui-cell__bd"></div>
@@ -2080,7 +2147,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">离店日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="endDate" class="weui-input mydate" type="text" placeholder="请选择"> 
+			    	<input id="endDate" readonly  class="weui-input mydate" type="text" placeholder="请选择"> 
 			    	<input id="payMoney" class="weui-input mydate" type="text" value="1" hidden="hidden">
 			    </div>
 			    <div class="weui-cell__bd"></div>
