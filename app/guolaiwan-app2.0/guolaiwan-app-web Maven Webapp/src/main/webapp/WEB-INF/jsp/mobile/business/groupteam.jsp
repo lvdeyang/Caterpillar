@@ -341,8 +341,9 @@ function dobuy(){
 				if(data==1){
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
 						    if(data.data=="PAYSUCCESS"){
-						    $.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":2},function(){
-						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						    $.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderId,"userId":${userId},"teamId":${team.id},"type":2},function(){
+						       /* location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId; */
+						       location.reload();
 		                		})
 						    }
 						});
@@ -385,8 +386,9 @@ function dobuy(){
 		                setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
 								    if(data.data=="PAYSUCCESS"){
-				                		$.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"type":2},function(){
-									       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+				                		$.post(window.BASEPATH+"phoneApp/groupteam",{"orderId":orderNo,"userId":${userId},"teamId":${team.id},"type":2},function(){
+									       /* location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo; */
+									       location.reload();
 				                		})
 								    }
 								});
@@ -472,7 +474,7 @@ function dobuy(){
             
           </div>
           <div style="margin:0 auto;text-align: center;width:100%;position: fixed;bottom:10px;">
-          <button onclick="dobuy()" style="width:90%;height:40px;color:#fff;background:#FF4900;border:none;outline:none;border-radius:12px;">确定</button>
+          <button onclick="dobuy()" style="width:90%;height:40px;color:#fff;background:#FF4900;border:none;outline:none;border-radius:12px;">参与此团</button>
           </div>
           <div style="height:40px;width:100%;"></div>
 </body>
