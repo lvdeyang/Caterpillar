@@ -814,17 +814,19 @@ html, body {
 	         $('.meishi').append(html.join(''));
 	    
 		    var array = [];  //商户特色 营业时间
-		    array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> '+msg.merch.date+'</span></p>');
 		    var feature = msg.merch.feature;
-		    if(feature !=null && feature!=""){ //商家特色
+		    if(feature !=null && feature!="" && msg.merch.date != null){ //商家特色
 		      var split  =   feature.split(',');
-		      html.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');
+		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> '+msg.merch.date+'</span></p>');
+		      array.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');
 		      for(var j=0;j<split.length ;j++){
 		        array.push('<button style="margin-left:2%;border-radius:6px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">'+split[j]+'</button>');		       	        
 		      }
-		      html.push('</div>');
-		      $('#feature').append(array.join(''));
-		    }	       	         
+		      array.push('</div>');
+		    }else{
+		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> </p>');
+		    }	     
+		    $('#feature').append(array.join(''));	         
    	 });
 	}
 	

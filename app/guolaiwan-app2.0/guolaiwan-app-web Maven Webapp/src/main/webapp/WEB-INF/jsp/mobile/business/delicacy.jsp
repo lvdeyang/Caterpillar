@@ -197,7 +197,7 @@ function getCate(){
 		         html.push('<a onclick="gotodelicacystore('+data[i].merchantId+')"><div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
 		         html.push('<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="'+data[i].ShopPic+'"/>');  
 		         html.push('<div class="youxuan-in" style="display: inline-block;">');  
-		         html.push('<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">'+data[i].ShopName+'</p>');
+		         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].ShopName+'</p>');
 		         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data[i].ModularClass+'</span></p>');
 		         if(data[i].Date != null)html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">'+data[i].Date+'</p>'); 
 		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>38</span>元</p>'); 
@@ -233,7 +233,7 @@ function getCate(){
 							 html.push('<a onclick="gotodelicacystore('+data.merlist[i].id+')"><div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
 					         html.push('<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');  
 					         html.push('<div class="youxuan-in" style="display: inline-block;">');  
-					         html.push('<p style="position: absolute;top:-40px;font-size:18px;font-weight: bold;">'+data.merlist[i].shopName+'</p>');
+					         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>');
 					         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data.merlist[i].modularClass+'</span></p>');
 					         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>');
 					         html.push('<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>');

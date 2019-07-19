@@ -100,6 +100,7 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 
 		hql.andBy("productMerchantID", Condition.eq, productMerchantID);
 		hql.andBy("productAuditstatus", Condition.eq, ShopAuditStateType.T);
+		hql.andBy("integralGoods", Condition.eq, 0);
 
 		List<ProductPO> products = findByHqlPage(hql, pageNum, pageSize);
 		if (products == null || products.size() <= 0)
