@@ -276,7 +276,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="layui-form-item">
 				<label class="layui-form-label">板块名称</label>
 				<div class="layui-input-inline">
-					<input type="text" name="modularName1" value="${list.modularName2}"
+					<input type="text" name="modularName2" value="${list.modularName2}"
 						lay-verify="title" autocomplete="off" class="layui-input" readonly="readonly">
 						<input type="hidden"  name="modularCode2" value="${list.modularCode2}"
 						 autocomplete="off" class="layui-input" >
