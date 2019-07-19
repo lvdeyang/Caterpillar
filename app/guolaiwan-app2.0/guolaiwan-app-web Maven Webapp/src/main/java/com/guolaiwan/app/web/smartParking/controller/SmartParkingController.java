@@ -3,7 +3,9 @@ package com.guolaiwan.app.web.smartParking.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,11 +95,28 @@ public class SmartParkingController  extends WebBaseControll{
 			vehicle  =  vehiclePO.getNumber();
 		}
 		List<String> listHasCup=new ArrayList<String>();
-		 List<OrderPO> userByid = or_der.getOrder(userId,vehicle);
+		List<OrderPO> userByid = or_der.getOrder(userId,vehicle);
+		int boole =0;
 		for (OrderPO orderPO : userByid) {
-			listHasCup.add(orderPO.getOrderStatus());
+			if ("PAYSUCCESS".equals(orderPO.getOrderStatus())) {
+				  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				   String time = df.format(new Date());
+				   Date d1 = df.parse(time);
+				   Date d2 = df.parse(orderPO.getDueTime());
+				   long diff = d2.getTime() - d1.getTime();//这样得到的差值是微秒级别
+				   Long date = diff/1000;
+				   if (date<0) {
+					boole = 1;
+					orderPO.setOrderStatus("PAST");
+					or_der.save(orderPO);
+				   }
+			}
+			if (boole == 0) {
+				listHasCup.add(orderPO.getOrderStatus()); 
+			}else{
+				boole = 0;
+			}
 		}
-		
 		return success(listHasCup);
 	}
 

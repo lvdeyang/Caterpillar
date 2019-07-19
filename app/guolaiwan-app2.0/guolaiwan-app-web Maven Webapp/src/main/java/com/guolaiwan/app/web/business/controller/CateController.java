@@ -75,7 +75,6 @@ public class CateController extends BaseController {
 	@RequestMapping(value = "/getRecommendByModu", method = RequestMethod.GET)
 	public List<MerchantVO> getRecommendByMou(HttpServletRequest request, HttpServletResponse response,
 			String merchantId) throws Exception {
-		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(Long.parseLong(merchantId));
 		 List<MerchantVO> list = new ArrayList<MerchantVO>();
 		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
@@ -102,7 +101,6 @@ public class CateController extends BaseController {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
-		System.out.println(merchantId+"----"+name);
 		Map<String, Object> hashMap = new HashMap<String, Object>();
 		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
 		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
@@ -118,10 +116,6 @@ public class CateController extends BaseController {
 		  }	
 		}
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
-		for (MerchantVO merchantVO : merlist) {
-			 System.out.println(merchantVO.getFeature() +" -------------");
-		}
-		System.out.println(merlist.size());
 		hashMap.put("merlist", merlist);
 		return hashMap;
 	}
