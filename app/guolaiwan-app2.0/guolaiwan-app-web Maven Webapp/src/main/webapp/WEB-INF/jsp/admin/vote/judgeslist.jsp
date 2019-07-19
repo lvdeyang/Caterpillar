@@ -85,12 +85,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         {type:"checkbox"}
                         ,{field:"id",title:"Id",sort:true}
                         ,{field:"userPhone",title:"手机号"}
-                        ,{field:"userIntegral",title:"积分"}
-                        ,{field:"userHeadimg",title:"头像"}
                         ,{field:"userNickname",title:"昵称"}                       
-                        ,{field:"wallet",title:"钱包余额（单位：分）",sort:true}
-                        ,{field:"updateTime",title:"创建时间"}
-                         ,{fixed: 'right',width:120,minWidth:100,templet:'#zsgc',unresize:true}
+                        ,{fixed: 'right',width:120,minWidth:100,templet:'#zsgc',unresize:true}
                     ]]
                     ,done:function(res, curr, count){
                     }

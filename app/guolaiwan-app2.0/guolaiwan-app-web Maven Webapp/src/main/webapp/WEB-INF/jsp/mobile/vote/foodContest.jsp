@@ -248,10 +248,10 @@ margin:0 5px;
 <script>
 var base;
 
-$(document).on('click', '.vote', function(){ 
+/* $(document).on('click', '.vote', function(){ 
   $(".fuceng").fadeIn();
   $(".tanchuang").fadeIn();
-});
+}); */
   $(document).on('click', '.return', function(){ 
   $(".fuceng").fadeOut();
   $(".tanchuang").fadeOut();
@@ -316,12 +316,13 @@ function getvotemodular(){
       var html=[];
       for(var i=0;i<data.length;i++){
           if(i==0){
-              html.push('<li  onclick="getvoteproduct('+data[0].id+')"><img src="lib/images/xingxing.png"><p id="b'+data[0].id+'">'+data[0].modularName+'</p></li>')
+              html.push('<li  onclick="getvoteproduct('+data[0].id+')"><img src="http://www.guolaiwan.net/file'+data[0].slidepic+'"><p id="b'+data[0].id+'">'+data[0].modularName+'</p></li>');
           }else{
-              html.push('<li  onclick="getvoteproduct('+data[i].id+')"><img src="lib/images/xingxing.png"><p id="b'+data[i].id+'">'+data[i].modularName+'</p></li>')
+              html.push('<li  onclick="getvoteproduct('+data[i].id+')"><img src="http://www.guolaiwan.net/file'+data[i].slidepic+'"><p id="b'+data[i].id+'">'+data[i].modularName+'</p></li>');
           }          
       }
          $('#menu').append(html.join(''));
+         $("#b"+data[0].id).css("color","#FFF03A");
    });
 }
 
@@ -353,20 +354,37 @@ $("#b"+base).css("color","#fff");
             html.push('<P style="height:20px;line-height: 20px;font-size:12px;width:100%;color:#fff;background:#000000;opacity:0.6;position: absolute;bottom:0;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:60%;display: inline-block;">'+data[i].productname+'</span><span style="float:right;">已售<span>'+data[i].OutOfPrint+'</span>+</span></P>');
             html.push('</div>');
             html.push('<div class="xia" style="width:100%;height:40%;position: relative;background: #FFF03B;padding:0 3% 10px;color:#FF1A48;text-align: center;font-weight:bold;">');
-            html.push('<p style="height:25px;line-height: 25px;text-align: left;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;">'+data[i].hotel+'</p>');
+            html.push('<P style="height:20px;line-height: 20px;font-size:12px;width:100%;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:50%;display: inline-block;float:right;">'+data[i].productname+'</span><span style="float:left;">总票：<span>'+data[i].OutOfPrint+'</span>票</span></P>');
             html.push('<p style="height:25px;line-height: 25px;text-align: left;"><span><img style="width:12px;height:12px;" src="lib/images/toupiao.png">'+data[i].ticketnumber+'票</span><span class="dianping" style="float:right;"><img style="width:12px;height:12px;" src="lib/images/dianzanss.png">评委点评</span></p>');
-            html.push('<button class="vote">投票</button>');
-            html.push('<button>购买</button>');
+            html.push('<button onclick="votepoll('+data[i].productId+')"  class="vote">投票</button>');
+            html.push('<button onclick="gotovoteproductdetails('+data[i].productId+')">购买</button>');
             html.push('</div>');
             html.push('</div>');
             html.push('<div class="di" style="margin:5px 0 0 3%;width:100%;height:200px;background:#fff;border-radius:12px;position: absolute;overflow: hidden;border: 2px solid black;">');
             html.push('</div>');
             html.push('</div>');         
+            
       }
        $('.contentt-box').children().remove();
        $('.contentt-box').append(html.join(''));    
     });
 } 
+	
+	function votepoll(id){
+		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id;
+		$.get(url,null,function(data){
+			if(data.msg=="1"){
+				$(".fuceng").fadeIn();
+	  			$(".tanchuang").fadeIn();
+			}else if(data.msg=="0"){
+				$.toast('5票/商品/人', 'text');
+			}
+		})
+	}
+
+	function gotovoteproductdetails(id){
+   		location.href=window.BASEPATH + 'admin/vote/gotovoteproductdetails?productId='+id;
+    }
 
 </script>
 

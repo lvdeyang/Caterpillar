@@ -227,12 +227,16 @@ public class VoteController extends BaseController {
 	}
 	
 	// 添加数据页面
+	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/gotovoteproductdetails")
 	public ModelAndView voteProductDetails(HttpServletRequest request) {
 		long productId=Long.parseLong(request.getParameter("productId"));
+		System.out.println(productId);
+		ProductPO productPO = conn_product.get(productId);
 		ModelAndView mv = new ModelAndView("mobile/vote/voteproductdetails");
-		mv.addObject("product", conn_product.get(productId));
+		mv.addObject("product", productPO);
+		System.out.println(productPO+"-------"+productPO.getProductIntroduce());
 		return mv;
 	}
 	

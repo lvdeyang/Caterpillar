@@ -212,6 +212,7 @@ $(document).on('click','#paynow',function(){
 	  
 	  
 	  function dopay(mailId){
+	  	
  		    var _uriAdd = window.BASEPATH + 'phoneApp/goToPay';
 			var params={};
 			params.userId=${userId};
