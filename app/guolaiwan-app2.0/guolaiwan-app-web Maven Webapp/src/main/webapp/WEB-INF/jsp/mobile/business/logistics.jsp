@@ -238,6 +238,15 @@ $(document).on('click', '.quxiao', function(){
      	var telephone=$('.telephone').val();
      	var consigneeAddress=$('.consigneeAddress').val();
      	var url=window.BASEPATH + 'business/appendaddress';
+     	 var re = /^[1][3,4,5,7,8][0-9]{9}$/;
+	       if($(".username").val()==""||$(".consigneeAddress").val()==""){  
+				  alert("请完善信息");
+				  return false;
+				}
+			if ($(".telephone").val().search(re)) {
+				       alert("请输入正确手机号");
+					return false;
+				}
      	$.post(url,{"userId":userId,"username":username,"telephone":telephone,"consigneeAddress":consigneeAddress},function(data){
      		$.alert("添加成功");
      		$(".fuceng").fadeOut();
@@ -249,6 +258,9 @@ $(document).on('click', '.quxiao', function(){
      function gotopickingpurchase(){
    		location.href=window.BASEPATH + 'business/gotopickingpurchase?productId=${productId}';
    }
+   
+   
+
 </script>
 
 
@@ -279,12 +291,12 @@ $(document).on('click', '.quxiao', function(){
 	<div class='fuceng' style="display: none;"></div>
 	   <div class="tanchuang" style="z-index:11111;width:100%;display:none;height:auto;padding:0 0 50px 0;text-align: center;background: #fff;position: fixed;bottom:0;position: r ">
 	   <p style="width:96%;margin:0 auto;height:50px;line-height: 50px;font-size: 18px;font-weight: bold;border-bottom:1px solid #D3D3D3;">编辑收货地址</p>
-	   <input type="text" class="username" placeholder="请您输入收货人姓名" style="">
+	   <input  type="text" class="username" placeholder="请您输入收货人姓名" style="">
 	   <p style="position: absolute;top:65px;left:5%;font-weight: bold;">收货人姓名</p>
 	   <input type="text" class="telephone" placeholder="请您输入收货人手机号" style="">
 	   <p style="position: absolute;top:115px;left:5%;font-weight: bold;">手机号</p>
 	   <input type="text" class="consigneeAddress" placeholder="请您输入详细地址" style="">
-	   <p style="position: absolute;top:165px;left:5%;font-weight: bold;">详细地址</p>
+	   <p  style="position: absolute;top:165px;left:5%;font-weight: bold;">详细地址</p>
 	   <!-- 空白 -->
 	   <p style="height:50px;"></p>
 	   <div style="width:100%;height:60px;position: fixed;bottom:0;background: #fff;">

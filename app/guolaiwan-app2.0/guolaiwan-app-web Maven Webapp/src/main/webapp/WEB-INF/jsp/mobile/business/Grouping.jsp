@@ -425,15 +425,26 @@ function timer(times,intDiff) {
      		$.toast("更改地址成功", "text");
      	})
      }
-     
+
      function appendaddress(){
      	var userId=${userId};
      	var username=$('.username').val();
      	var telephone=$('.telephone').val();
      	var consigneeAddress=$('.consigneeAddress').val();
      	var url=window.BASEPATH + 'business/appendaddress';
+	      var re = /^[1][3,4,5,7,8][0-9]{9}$/;
+	       if($(".username").val()==""||$(".consigneeAddress").val()==""){  
+				  alert("请完善信息");
+				  return false;
+				}
+			if ($(".telephone").val().search(re)) {
+				       alert("请输入正确手机号");
+					return false;
+				}
+				
+			
      	$.post(url,{"userId":userId,"username":username,"telephone":telephone,"consigneeAddress":consigneeAddress},function(data){
-     		$.alert("添加成功");
+     	    $.alert("添加成功");
      		$(".fuceng").fadeOut();
   			$(".tanchuang").fadeOut();
      		getAllAddr();
@@ -575,6 +586,10 @@ function timer(times,intDiff) {
 function gotoprocess(){
 	    location.href=window.BASEPATH + 'business/gotoprocess';
 }
+
+
+ 
+
 </script>
 
 
@@ -648,9 +663,8 @@ function gotoprocess(){
 				<div class="weui-panel__bd" id="addressList"
 					style="padding-bottom:40px;"></div>
 
-				<div style="width:100%;height:40px;">
-					<div
-						style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
+				
+					<div style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
 						<p
 							style="background:#F56938;height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;"
 							class="cancel">
@@ -661,13 +675,13 @@ function gotoprocess(){
 							<span style="font-size:14px;margin-left:5%;">开团支付</span>
 						</p>
 				</div>
-			</div>
-		</div>
+
+		  </div>
 	</div>
 
 
 	<div class='fuceng' style="display: none;"></div>
-	   <div class="tanchuang" style="z-index:11111;width:100%;display:none;height:auto;padding:0 0 50px 0;text-align: center;background: #fff;position: fixed;bottom:0;position: r ">
+	   <div class="tanchuang" style="z-index:11111;width:100%;display:none;height:auto;padding:0 0 50px 0;text-align: center;background: #fff;position: fixed;bottom:0; ">
 	   <p style="width:96%;margin:0 auto;height:50px;line-height: 50px;font-size: 18px;font-weight: bold;border-bottom:1px solid #D3D3D3;">编辑收货地址</p>
 	   <input type="text" class="username" placeholder="请您输入收货人姓名" style="">
 	   <p style="position: absolute;top:65px;left:5%;font-weight: bold;">收货人姓名</p>
