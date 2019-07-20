@@ -447,11 +447,11 @@ function getgroupproduct(){
 		         	html.push('<div class="goupiao" style="position: relative;background:#fff;width:100%;height:180px;line-height:180px;border:none;border-left:none;border-right:none;margin:0 0 10px 0;">');
 			        html.push('	<img style="height:130px;width:45%;vertical-align: middle;margin-left:2%;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
 			        html.push('	<div class="youxuan-in" style="display: inline-block;">');
-			        html.push('  	<p style="position: absolute;top:-50px;font-weight:bold;font-size:14px;color:black;">'+data[i].productName+'</p>');
+			        html.push('  	<p style="position: absolute;top:-50px;font-weight:bold;font-size:14px;color:black;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:75%;">'+data[i].productName+'</p>');
 			        html.push('  	<p style="position: absolute;top:30px;font-size:14px;color:#EC6D1E;"><span style="">拼团价：</span>   <span>￥'+data[i].groupprice+'</span></p>');
 			        html.push('  	<p style="position: absolute;top:50px;font-size:12px;color:black;"><span style="">原商品价：</span>   <span style="text-decoration:line-through;">￥'+data[i].productPrice+'</span></p>');
-			        html.push(' 	<p style="color:black;position: absolute;top:0px;right:5%;font-size:14px">'+data[i].groupnum+'人团</p>');
-			        html.push(' 	<button id="'+data[i].id+'" style="position: absolute;right:3%;top:113px;line-height:35px;font-size:14px;width:15%;outline: none;border:none;height:35px;border-radius:6px;background:#FF4900;color:#fff;" onclick="grouping(this.id)">去开团</button>');
+			        html.push(' 	<p style="color:black;position: absolute;top:0px;font-size:14px">'+data[i].groupnum+'人团</p>');
+			        html.push(' 	<button id="'+data[i].id+'" style="position: absolute;right:10%;top:70px;line-height:35px;font-size:14px;width:15%;outline: none;border:none;height:35px;border-radius:6px;background:#FF4900;color:#fff;" onclick="grouping(this.id)">去开团</button>');
 			        html.push('</div>');
 			     	html.push('</div>');
 	     		}

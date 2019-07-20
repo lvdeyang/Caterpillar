@@ -507,10 +507,10 @@ $(function(){
             </div>
         <div style="height:120px;width:100%;background: #fff;margin:5px 0;overflow: hidden;position: relative;">
           <img style="width:35%;height:94%;border-radius:10px;margin:0.5% 5% 0.5% 6%;display:inline-block;" src="http://www.guolaiwan.net/file${product.productShowPic}">
-          <p style="display: inline-block;margin:0;position: absolute;font-size:16px;top:10px;">${product.productName}</p>
+          <p style="display: inline-block;margin:0;position: absolute;font-size:16px;top:10px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:50%;">${product.productName}</p>
           <p style="display: inline-block;margin:0;position: absolute;font-size:12px;top:40px;">型号：1斤装</p>
           <p class="price" style="display: inline-block;margin:0;position: absolute;font-size:18px;bottom:10px;color:#EB6E1E;">￥${product.productPrice}</p>
-          <button onclick="gotopickinglist()" style="color:#fff;background:#EB6E1E;padding:2px 5px;border-radius:12px;border:none;outline:none;position: absolute;right:2%;top:10px; ">进入店铺</button>
+          <button onclick="gotopickinglist()" style="color:#fff;background:#EB6E1E;padding:2px 5px;border-radius:12px;border:none;outline:none;position: absolute;right:2%;top:40px; ">进入店铺</button>
           <p class="p1" style="margin:0;position: absolute;bottom:10px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
 		  <input type="text" readonly="true"  class="zhi" id="shuliang" value="${productRestrictNumber}"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;bottom:10px;font-size:14px;font-weight:bold;text-align: center;">
 		  <p class="p2" style="margin:0;position: absolute;bottom:10px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
@@ -519,8 +519,8 @@ $(function(){
         <input class="layui-input" id="bookDate" type="text" placeholder="请您选择采摘日期"   style="border-radius:10px;cursor: pointer;width:100%;height:60px;margin:5px auto;padding:0 10%;text-align: center;" >
          <p style="position: absolute;font-size: 16px;font-weight: bold;top:19px;left:3%;">预订日期</p>
         </div>
-        <div style="position: relative;">
-        <select class="comboList" style="border-radius:10px;cursor: pointer;height:60px;" >
+        <div style="position: relative;background: #fff;">
+        <select class="comboList" style="border-radius:10px;cursor: pointer;height:60px;background: #fff;" >
         </select>
        
         <p style="position: absolute;font-size: 16px;font-weight: bold;top:19px;left:5%;">套餐选择</p>

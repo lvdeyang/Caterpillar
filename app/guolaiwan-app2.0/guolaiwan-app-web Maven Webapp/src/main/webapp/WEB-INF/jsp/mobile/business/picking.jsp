@@ -217,8 +217,10 @@ html, body {
 					for(var i=0; i<data.length; i++){
 						html.push('<a onclick="gotodetailspage('+data[i].id+')"> <div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
 					    html.push('<img style="width:100%;height:120px;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
-					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;">'+data[i].productName+'</p>');
-					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
+					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;">'+data[i].productName+'</p>');
+					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-
+
+through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
 					    html.push('<button style="border-radius:10px;font-size:12px;color:#fff;background:#EA6C1B;padding:0px 25px;border:none;outline:none;margin:0 auto;">立即购买</button>');
 					    html.push('</div></a>');
 						}
@@ -270,8 +272,10 @@ html, body {
 					for(var i=0; i<data.length; i++){
 						html.push('<a onclick="gotodetailspage('+data[i].id+')"> <div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
 					    html.push('<img style="width:100%;height:120px;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
-					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;">'+data[i].productName+'</p>');
-					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
+					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;">'+data[i].productName+'</p>');
+					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-
+
+through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
 					    html.push('<button style="border-radius:10px;font-size:12px;color:#fff;background:#EA6C1B;padding:0px 25px;border:none;outline:none;margin:0 auto;">立即购买</button>');
 					    html.push('</div></a>');
 						}
