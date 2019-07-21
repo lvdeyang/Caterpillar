@@ -614,6 +614,8 @@ html, body {
 <script type="text/javascript">
 	$(function() {
    	 image(); //顶部图片 营业时间 特色
+   	 two();
+   	 
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -636,12 +638,6 @@ html, body {
             getRecomment();
 			initSharewx();
 	  }
-	 
-	  
-	  
-		
-	 
-	
 	  var loca={};
 	  function getloca(){
 	      
@@ -655,9 +651,7 @@ html, body {
 					loca=data;
 					
 				}
-				
 		  });
-	  
 	  }
 	  
 	  
@@ -687,8 +681,6 @@ html, body {
 					    comCode='0001';
 					}
 				}
-				
-				
 				getCom();
                 getRecomment();
 				initSharewx();
@@ -710,13 +702,10 @@ html, body {
 					    if(data[i].comCode==comCode){
 					        $('#selCom').html(data[i].comName);
 					    }
-					    	
 					    html.push('<li><a data="'+data[i].comCode+'" href="javascript:void(0)" class="comSel">'+data[i].comName+'</a></li>');
-					    
 					}
 					$('#com').append(html.join(''));
 				}
-				
 		  });
 	  
 	  }
@@ -773,9 +762,7 @@ html, body {
 						share=data;
 						
 					}
-					
 			});
-	    
 	    }
 	    
 	  
@@ -818,7 +805,7 @@ html, body {
 		    if(feature !=null && feature!="" && msg.merch.date != null){ //商家特色
 		      var split  =   feature.split(',');
 		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> '+msg.merch.date+'</span></p>');
-		      array.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');
+		      array.push('<div style="position: absolute;top:55px;width:100%;height:auto;">');
 		      for(var j=0;j<split.length ;j++){
 		        array.push('<button style="margin-left:2%;border-radius:6px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">'+split[j]+'</button>');		       	        
 		      }
@@ -830,15 +817,83 @@ html, body {
    	 });
 	}
 	
-	 function select(code){     
-	 var url = window.BASEPATH + '/product/delicacystore/greens';
+	
+	
+	 /* ***********************************************************************************************8 */
+   	/* function getallteam(){
+   	  var url = window.BASEPATH + '/product/delicacystore/hotsell?merchantId='+${merchantId};
+        $.get(url,null,function(msg){
+          	two();      
+        var pNam = msg.prd;
+	    var pic =msg.prcList;
+        var html=[];
+	   	html.push('<div class="right-con con-active">');   
+	   	html.push('<ul>');  		   	
+         for(var i=0;i<pNam.length;i++){              
+         		html.push('<li>');           
+		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+pNam[i].productShowPic+' width="55" height="55" /></div>');
+		        html.push('<div class="menu-txt">');
+		        html.push('<font>'+pNam[i].productName+'</font>');
+		        html.push('<p class="list1">月销<span>120</span></p>');
+		        html.push('<p class="list2">');
+		        html.push('<b>￥'+pic[i]+'</b>');
+		        html.push('<div class="btn"> ');
+		        html.push(' <button class="minus"  id ="minuss'+pNam[i].uuid+'"  onclick="minus(this.id)" >  <strong></strong>   </button>');
+		        html.push(' <i >0</i> ');
+		        html.push('<button class="add" id ="adds'+pNam[i].uuid+'" onclick="add(this.id)">  <strong></strong>  </button> ');
+		        html.push('<i class="price">'+pic[i]+'</i>');
+		        html.push(' </div> ');
+		        html.push('</p>');
+		        html.push('</div> ');
+		        html.push('</li>');	        
+	     	}
+	        html.push('</ul>');   
+		    html.push('</div>');
+	     	$('.con').append(html.join(''));  
+       })   	  	            
+}  */
+	
+	
+	
+	var storage =[];//存储菜品分类
+	var  list =null; //保存数据
+	function two(){ //左边列表
+	     storage =[];
+	     var _uricoms = window.BASEPATH + '/cate/order/list?merchantId='+${merchantId};	
+	     $.get(_uricoms, null, function(data){  
+	      /*  data = parseAjaxResult(data); */
+	      /*  htm.push(' <li class="active" id="first"  onclick="hotsell(this.id)">热销<span class="num-price"></span></li>');
+	           $('#meau').append(htm.join(''));   */
+	       list = data.name;
+	       var html=[];        
+	       for(var i=0;i<data.name.length;i++){ //左边列表名称
+	            if(storage.length <= 0 ){
+	                storage.push(data.name[i].productClassName);
+	                html.push('<li id="'+data.name[i].productClassCode+'" onclick="sel(this.id)">'+data.name[i].productClassName+'</li>');
+	            } else{
+	              for(var j=0; j<storage.length;j++){
+	                if(storage[j] != data.name[i].productClassName ){
+	                   storage.push(data.name[i].productClassName);
+	                   html.push('<li id="'+data.name[i].productClassCode+'" onclick="sel(this.id)">'+data.name[i].productClassName+'</li>');
+	                }
+	              }
+	            }
+			 		/* select(code[i]); */
+		   }
+		   $('#meau').append(html.join(''));	  
+		   select();//显示菜品   	
+		 });
+   }
+ function select(){      // 加载codeid 加载菜品
+     $('.con').empty()
+	 /* var url = window.BASEPATH + '/product/delicacystore/greens';
 	 var date = {"codeID":code,"merchantId":${merchantId}}
 	 $.post(url,date,function(msg){
 	   var proName = msg.productPO;
 	   var price =msg.priceList;
-	   var html=[];
-	   html.push('<div class="right-con con-active">');   
-	   html.push('<ul>');  
+	    var html=[];
+	   	html.push('<div class="right-con con-active">');   
+	   	html.push('<ul>');  
 	   for(var i=0;i<proName.length;i++){ 	               		 
          		html.push('<li>');           
 		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+proName[i].productShowPic+' width="55" height="55" /></div>');
@@ -861,8 +916,47 @@ html, body {
 	      html.push('</div>');
           $('.con').append(html.join(''));
           showDiv();	    
-	 }) 
+	 })  */
+	 for(var j = 0; j<storage.length; j++){
+		 var html=[];
+		 html.push('<div class="right-con con-active">');   
+		 html.push('<ul>'); 
+		 for(var i = 0; i<list.length; i++){
+		    if(list[i].productClassName == storage[j]){
+	            html.push('<li>');           
+		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+list[i].productShowPic+' width="55" height="55" /></div>');
+		        html.push('<div class="menu-txt">');
+		        html.push('<font>'+list[i].productName+'</font>');
+		        html.push('<p class="list1">月销<span>120</span></p>');
+		        html.push('<p class="list2">');
+		        html.push('<b>￥'+list[i].productPrice+'</b>');
+		        html.push('<div class="btn"> ');
+		        html.push(' <button class="minus"  id ="minus'+list[i].uuid+'"  onclick="minus(this.id)" >  <strong></strong>   </button>');
+		        html.push(' <i >0</i> ');
+		        html.push('<button class="add" id ="add'+list[i].uuid+'" onclick="add(this.id)">  <strong></strong>  </button> ');
+		        html.push('<i class="price">'+list[i].productPrice+'</i>');
+		        html.push(' </div> ');
+		        html.push('</p>');
+		        html.push('</div> ');
+		        html.push('</li>');		 
+		    }
+		}
+		html.push('</ul>');   	
+		html.push('</div>');
+	    $('.con').append(html.join(''));
+	    $(".con>div").hide();  //隐藏别的菜品 只显示初始
+		$(".con>div:eq(0)").show();
+  	  }
 	}
+	
+ function  sel(code){ //切换菜品类型
+    $("#"+code).addClass("active").siblings().removeClass("active");
+	var n = $(".left-menu li").index("#"+code);
+	$(".left-menu li").index("#"+code);
+	$(".con>div").hide();
+	$(".con>div:eq("+n+")").show();  
+ }
+	
 </script>
 <script type="text/javascript">
 
@@ -914,103 +1008,8 @@ html, body {
 		   $(".right").find("a").addClass("disable");  
 		}  
 	};
-	 
-   	function getallteam(){
-   	
-   	 
-   	  var url = window.BASEPATH + '/product/delicacystore/hotsell?merchantId='+${merchantId};
-        $.get(url,null,function(msg){
-          	two();      
-        var pNam = msg.prd;
-	    var pic =msg.prcList;
-        var html=[];
-	   	html.push('<div class="right-con con-active">');   
-	   	html.push('<ul>');  		   	
-         for(var i=0;i<pNam.length;i++){              
-         		html.push('<li>');           
-		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+pNam[i].productShowPic+' width="55" height="55" /></div>');
-		        html.push('<div class="menu-txt">');
-		        html.push('<font>'+pNam[i].productName+'</font>');
-		        html.push('<p class="list1">月销<span>120</span></p>');
-		        html.push('<p class="list2">');
-		        html.push('<b>￥'+pic[i]+'</b>');
-		        html.push('<div class="btn"> ');
-		        html.push(' <button class="minus"  id ="minuss'+pNam[i].uuid+'"  onclick="minus(this.id)" >  <strong></strong>   </button>');
-		        html.push(' <i >0</i> ');
-		        html.push('<button class="add" id ="adds'+pNam[i].uuid+'" onclick="add(this.id)">  <strong></strong>  </button> ');
-		        html.push('<i class="price">'+pic[i]+'</i>');
-		        html.push(' </div> ');
-		        html.push('</p>');
-		        html.push('</div> ');
-		        html.push('</li>');	        
-	     	}
-	        html.push('</ul>');   
-		    html.push('</div>');
-	     	$('.con').append(html.join(''));  
-       })   	  	            
-} 
-   function two(){
-     var _uricoms = window.BASEPATH + '/product/delicacystore/order/list?merchantId='+${merchantId};	
-     $.get(_uricoms, null, function(data){  
-             var name =  data.className;
-             var code =  data.classCode;
-            if(name === undefined){return;}
-            var htm=[];            
-            htm.push(' <li class="active" id="first"  onclick="hotsell(this.id)">热销<span class="num-price"></span></li>');
-            $('#meau').append(htm.join(''));  
-         for(var i=0;i<name.length;i++){
-         		var html=[];         		             
-		        html.push('<li id="'+code[i]+'" onclick="sel(this.id)">'+name[i]+'</li>');		         
-		 		$('#meau').append(html.join(''));
-		 		select(code[i]);
-	     	}	     	
-	 });
-   }
- function  sel(code){
-        $("#"+code).addClass("active").siblings().removeClass("active");
-		var n = $(".left-menu li").index("#"+code);
-		$(".left-menu li").index("#"+code);
-		$(".con>div").hide();
-		$(".con>div:eq("+n+")").show(); 
- }
- function select(code){     
-	 var url = window.BASEPATH + '/product/delicacystore/greens';
-	 var date = {"codeID":code,"merchantId":${merchantId}}
-	 $.post(url,date,function(msg){
-	   var proName = msg.productPO;
-	   var price =msg.priceList;
-	    var html=[];
-	   	html.push('<div class="right-con con-active">');   
-	   	html.push('<ul>');  
-	   for(var i=0;i<proName.length;i++){ 	               		 
-         		html.push('<li>');           
-		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+proName[i].productShowPic+' width="55" height="55" /></div>');
-		        html.push('<div class="menu-txt">');
-		        html.push('<font>'+proName[i].productName+'</font>');
-		        html.push('<p class="list1">月销<span>120</span></p>');
-		        html.push('<p class="list2">');
-		        html.push('<b>￥'+price[i]+'</b>');
-		        html.push('<div class="btn"> ');
-		        html.push(' <button class="minus"  id ="minus'+proName[i].uuid+'"  onclick="minus(this.id)" >  <strong></strong>   </button>');
-		        html.push(' <i >0</i> ');
-		        html.push('<button class="add" id ="add'+proName[i].uuid+'" onclick="add(this.id)">  <strong></strong>  </button> ');
-		        html.push('<i class="price">'+price[i]+'</i>');
-		        html.push(' </div> ');
-		        html.push('</p>');
-		        html.push('</div> ');
-		        html.push('</li>');		               
-	     	}	     	
-	      html.push('</ul>');   
-	      html.push('</div>');
-          $('.con').append(html.join(''));
-          showDiv();	    
-	 }) 
-	}
-	function showDiv(){
-	$(".con>div").hide();
-	$(".con>div:eq(0)").show();
-	}	
-	function  hotsell(codes){
+	
+/* 	function  hotsell(codes){
 	    $("#"+codes).addClass("active").siblings().removeClass("active");	    	   
 		var n = $(".left-menu li").index("#"+codes);
 		$(".left-menu li").index("#"+codes);
@@ -1038,10 +1037,9 @@ html, body {
 				  }
 				  $('#messageContent').children().remove();
 				  $('#messageContent').append(html.join(''));
-				  
 				}
 			});	  
-	  }	
+	  }	 */
 	  
 	  function payMany(){	   
 	     var url = window.BASEPATH + 'pubnum/product/index/payinshop/'+${merchantId};	

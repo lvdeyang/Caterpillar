@@ -13,14 +13,17 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Entity
 @Table(name="t_sys_tableStatus")
 public class TableStatusPO extends AbstractBasePO {
-
+	/*
+	 * 桌子中间表
+	 */
 	private static final long serialVersionUID = 5013010096704514202L;
 
-	private long tableId;
-	private long bill;
-	private String date;
-	private BookType type;
-	private TableStatus tableStatus;
+	private long tableId; //桌号Id
+	private long merchantId;   //商户id
+	private String date; //时间
+	private BookType type;  
+	private String  userId; //用户id
+	private TableStatus tableStatus; //没用
 	
 	public long getTableId() {
 		return tableId;
@@ -36,14 +39,18 @@ public class TableStatusPO extends AbstractBasePO {
 	public void setTableStatus(TableStatus tableStatus) {
 		this.tableStatus = tableStatus;
 	}
-	
-	public long getBill() {
-		return bill;
+	public String getUserId() {
+		return userId;
 	}
-	public void setBill(long bill) {
-		this.bill = bill;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	
+	public long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(long merchantId) {
+		this.merchantId = merchantId;
+	}
 	public String getDate() {
 		return date;
 	}

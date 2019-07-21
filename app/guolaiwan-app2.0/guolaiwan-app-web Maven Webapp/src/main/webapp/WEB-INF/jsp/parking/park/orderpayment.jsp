@@ -397,12 +397,12 @@ html, body {
 				$.toast("请输入正确的入场时间", "forbidden");
 				return false;
 			} 
-	/* 		 if (sDate < new Date) {
+	  	 if (sDate < new Date) {
 					alert(sDate)
 						$.toast("请输入正确的入场时间", "forbidden");
 						$("#startDate").val("")
 						return false;
-					}  */
+					}  
 			if (startdiv != "none") {
 				if ($("#startDate").val() == '') {
 					$.toast("请选择入场日期", "forbidden");

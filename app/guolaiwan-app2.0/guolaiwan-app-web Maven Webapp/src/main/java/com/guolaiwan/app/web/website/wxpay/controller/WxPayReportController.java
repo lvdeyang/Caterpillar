@@ -726,52 +726,59 @@ public class WxPayReportController extends WebBaseControll {
     	//商户推送消息
     	//UserInfoPO userInfoPO=merchantPO.getUser();
     	List<MerchantUser> merchantUsers=conn_merchantUser.findByField("merchantId", merchantPO.getId());
-    	for (MerchantUser merchantUser : merchantUsers) {
-    		UserInfoPO userInfoPO=conn_user.get(merchantUser.getUserId());
-    		if(userInfoPO==null){
-    			continue;
+    	try {
+    		for (MerchantUser merchantUser : merchantUsers) {
+        		UserInfoPO userInfoPO=conn_user.get(merchantUser.getUserId());
+        		if(userInfoPO==null){
+        			continue;
+        		}
+        		JSONObject obj=new JSONObject();
+        		obj.put("touser",userInfoPO.getUserOpenID() );
+            	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+            	obj.put("url", "");
+            	JSONObject microProObj=new JSONObject();
+            	microProObj.put("appid", "");
+            	microProObj.put("pagepath", "");
+            	obj.put("miniprogram", microProObj);
+            	JSONObject dataObject=new JSONObject();
+            	JSONObject firstObj=new JSONObject();
+            	firstObj.put("value", "新的过来玩订单");
+            	firstObj.put("color", "");
+            	dataObject.put("first", firstObj);
+            	
+            	
+            	JSONObject nameObj=new JSONObject();
+            	nameObj.put("value", buyUser.getUserNickname());
+            	nameObj.put("color", "");
+            	dataObject.put("keyword1", nameObj);
+            	
+            	JSONObject accountTypeObj=new JSONObject();
+            	accountTypeObj.put("value", orderInfoPO.getOrderNO());
+            	accountTypeObj.put("color", "");
+            	dataObject.put("keyword2", accountTypeObj);
+            	
+            	
+            	JSONObject accountObj=new JSONObject();
+            	accountObj.put("value", df.format(amount));
+            	accountObj.put("color", "");
+            	dataObject.put("keyword3", accountObj);
+            	JSONObject timeObj=new JSONObject();
+            	timeObj.put("value", productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName());
+            	timeObj.put("color", "");
+            	dataObject.put("keyword4", timeObj);
+            	JSONObject remarkObj=new JSONObject();
+            	remarkObj.put("value", "请做好接待工作");
+            	remarkObj.put("color", "");
+            	dataObject.put("remark", remarkObj);
+            	obj.put("data", dataObject);
+            	SendMsgUtil.sendTemplate(obj.toJSONString());
     		}
-    		JSONObject obj=new JSONObject();
-    		obj.put("touser",userInfoPO.getUserOpenID() );
-        	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
-        	obj.put("url", "");
-        	JSONObject microProObj=new JSONObject();
-        	microProObj.put("appid", "");
-        	microProObj.put("pagepath", "");
-        	obj.put("miniprogram", microProObj);
-        	JSONObject dataObject=new JSONObject();
-        	JSONObject firstObj=new JSONObject();
-        	firstObj.put("value", "新的过来玩订单");
-        	firstObj.put("color", "");
-        	dataObject.put("first", firstObj);
-        	
-        	
-        	JSONObject nameObj=new JSONObject();
-        	nameObj.put("value", buyUser.getUserNickname());
-        	nameObj.put("color", "");
-        	dataObject.put("keyword1", nameObj);
-        	
-        	JSONObject accountTypeObj=new JSONObject();
-        	accountTypeObj.put("value", orderInfoPO.getOrderNO());
-        	accountTypeObj.put("color", "");
-        	dataObject.put("keyword2", accountTypeObj);
-        	
-        	
-        	JSONObject accountObj=new JSONObject();
-        	accountObj.put("value", df.format(amount));
-        	accountObj.put("color", "");
-        	dataObject.put("keyword3", accountObj);
-        	JSONObject timeObj=new JSONObject();
-        	timeObj.put("value", productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName());
-        	timeObj.put("color", "");
-        	dataObject.put("keyword4", timeObj);
-        	JSONObject remarkObj=new JSONObject();
-        	remarkObj.put("value", "请做好接待工作");
-        	remarkObj.put("color", "");
-        	dataObject.put("remark", remarkObj);
-        	obj.put("data", dataObject);
-        	SendMsgUtil.sendTemplate(obj.toJSONString());
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			
 		}
+    	
     	
     	
     	JSONObject obj=new JSONObject();

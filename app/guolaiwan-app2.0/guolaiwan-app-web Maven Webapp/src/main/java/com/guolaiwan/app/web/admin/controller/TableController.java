@@ -87,7 +87,6 @@ public class TableController extends BaseController {
 				
 				if (tableStatusPO != null) {
 					tableVo.setTableId(tablePO.getId());
-					tableVo.setBill(tableStatusPO.getBill());
 					tableVo.setSize(tablePO.getSize());
 					tableVo.setTableNo(tablePO.getTableNo());
 					tableVo.setTableStatus(tableStatusPO.getTableStatus().toString());
