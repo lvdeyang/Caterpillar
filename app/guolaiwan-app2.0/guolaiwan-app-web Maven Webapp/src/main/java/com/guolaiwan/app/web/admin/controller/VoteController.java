@@ -20,12 +20,14 @@ import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.VoteModularDAO;
+import com.guolaiwan.bussiness.admin.dao.VoteOptionsDao;
 import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.VoteModularPO;
+import com.guolaiwan.bussiness.admin.po.VoteOptionsPo;
 import com.guolaiwan.bussiness.admin.po.VoteProductPO;
 
 import pub.caterpillar.mvc.controller.BaseController;
@@ -41,6 +43,8 @@ public class VoteController extends BaseController {
 	private VoteProductDAO voteproductDAO;
 	@Autowired
 	private ProductDAO conn_product;
+	@Autowired
+	private VoteOptionsDao voteoptionsDAO;
 	
 	// 显示列表页面
 	@RequestMapping(value = "/list")
@@ -54,7 +58,6 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST)
 	public Map<String, Object> AddView(int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		long comId = getLoginInfo().getComId();
 		int count = votemodularDAO.countAll();
 		List<VoteModularPO>  votemodulars= votemodularDAO.findAll();
 		strMap.put("code", "0");
@@ -93,7 +96,6 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/del.do", method = RequestMethod.POST)
 	public String del(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
-		// 删除所有推荐的关联表
 		votemodularDAO.delete(id);
 		return "success";
 	}
@@ -152,6 +154,8 @@ public class VoteController extends BaseController {
 		}
 		List<VoteProductPO> voteproducts = voteproductDAO.findByAcId(moId, pName, pidl, page, limit);
 		int count = voteproductDAO.countByMoId(moId,pName);
+		System.out.println(moId);
+		System.out.println(count);
 		strMap.put("data", voteproducts);
 		strMap.put("code", "0");
 		strMap.put("msg", "");
@@ -169,6 +173,7 @@ public class VoteController extends BaseController {
 		return mv;
 	}
 	
+	//查询所有的商品
 	@ResponseBody
 	@RequestMapping(value = "/proList.do", method = RequestMethod.POST)
 	public Map<String, Object> proList(int page, int limit, HttpServletRequest request) throws Exception {
@@ -197,6 +202,7 @@ public class VoteController extends BaseController {
 		return strMap;
 	}
 	
+	//模块添加商品
 	@ResponseBody
 	@RequestMapping(value = "/bdPro.do", method = RequestMethod.POST)
 	public String bdProDo(long pId, long acId, String pName) {
@@ -212,6 +218,7 @@ public class VoteController extends BaseController {
 		return "success";
 	}
 	
+	//删除数据
 	@ResponseBody
 	@RequestMapping(value = "/delRel.do", method = RequestMethod.POST)
 	public String bdProDo(long relId) {
@@ -221,8 +228,8 @@ public class VoteController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = "/delAll.do", method = RequestMethod.POST)
-	public String delAll(long acId) {
-		voteproductDAO.deleteByMoId(acId);
+	public String delAll(long moId) {
+		voteproductDAO.deleteByMoId(moId);
 		return "success";
 	}
 	
@@ -240,7 +247,7 @@ public class VoteController extends BaseController {
 		return mv;
 	}
 	
-	// 选择图片 张羽 5/8 新增
+	// 选择模块图片
 	@ResponseBody
 	@RequestMapping(value = "/votemodularpic", method = RequestMethod.POST)
 	public String voteModularPic(HttpServletRequest request) {
@@ -252,5 +259,118 @@ public class VoteController extends BaseController {
 		voteModular.setSlidepic(pic);
 		votemodularDAO.saveOrUpdate(voteModular);
 		return "success";
+	}
+	
+	// 弹出添加产品页面
+	@RequestMapping(value = "/options", method = RequestMethod.GET)
+	public ModelAndView goToVoteOption(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("admin/vote/voteoptions");
+		return mv;
+	}
+	
+	// 添加或者修改
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/addoption", method = RequestMethod.POST)
+	public String addOption(HttpServletRequest request) {
+		String judgesvote = request.getParameter("judgesvote");
+		String ordervote = request.getParameter("ordervote");
+		String pepolevote = request.getParameter("pepolevote");
+		System.out.println(judgesvote+"--"+ordervote+"--"+pepolevote+"--");
+		return "success";
+	}
+	
+	// 选择logo图片
+	@ResponseBody
+	@RequestMapping(value = "/voteoptionpic", method = RequestMethod.POST)
+	public String voteOptionPic(HttpServletRequest request) {
+		String pic = request.getParameter("pic");
+		long picId = Long.parseLong(request.getParameter("picId"));
+		long id = Long.parseLong(request.getParameter("id"));
+		VoteOptionsPo voteOptionsPo = voteoptionsDAO.get(id);
+		voteOptionsPo.setPicId(picId);
+		voteOptionsPo.setSlidepic(pic);
+		voteoptionsDAO.saveOrUpdate(voteOptionsPo);
+		return "success";
+	}
+	
+	//查询所有投票活动
+	@ResponseBody
+	@RequestMapping(value = "/alloptions", method = RequestMethod.POST)
+	public Map<String, Object> allOptions(int page, int limit) throws Exception {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		int count = voteoptionsDAO.countAll();
+		List<VoteOptionsPo>  voteOptionsPo= voteoptionsDAO.findAll();
+		strMap.put("code", "0");
+		strMap.put("msg", "");
+		strMap.put("count", count);
+		strMap.put("data", voteOptionsPo);
+		return strMap;
+	}
+	
+	// 添加投票参数页面
+	@RequestMapping(value = "/addoptions")
+	public ModelAndView addOptions(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("admin/vote/addoptions");
+		return mv;
+	}
+	
+	// 添加投票参数数据
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/insertoptions", method = RequestMethod.POST)
+	public String insertOptions(HttpServletRequest request) throws Exception {
+		String votename = request.getParameter("votename");
+		String judgesvote = request.getParameter("judgesvote");
+		String ordervote = request.getParameter("ordervote");
+		String pepolevote = request.getParameter("pepolevote");
+		
+		VoteOptionsPo options=new VoteOptionsPo();
+		options.setVotename(votename);
+		options.setJudgesvote(Integer.parseInt(judgesvote));
+		options.setOrdervote(Integer.parseInt(ordervote));
+		options.setPepolevote(Integer.parseInt(pepolevote));
+		voteoptionsDAO.save(options);
+		return "success";
+	}
+	
+	// 删除数据
+	@ResponseBody
+	@RequestMapping(value = "/deloption", method = RequestMethod.POST)
+	public String delOption(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		voteoptionsDAO.delete(id);
+		return "success";
+	}
+	
+	// 编辑数据
+	@ResponseBody
+	@RequestMapping(value = "/editoption", method = RequestMethod.POST)
+	public String editOption(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		VoteOptionsPo voteOptions = voteoptionsDAO.get(id);
+		String field = request.getParameter("field");
+		if (field.equals("votename")) {
+			String votename = request.getParameter("value");
+			voteOptions.setVotename(votename);
+			voteoptionsDAO.save(voteOptions);
+			return "success";
+		}else if(field.equals("judgesvote")){
+			String judgesvote = request.getParameter("value");
+			voteOptions.setJudgesvote(Integer.parseInt(judgesvote));
+			voteoptionsDAO.save(voteOptions);
+			return "success";
+		}else if(field.equals("ordervote")){
+			String ordervote = request.getParameter("value");
+			voteOptions.setOrdervote(Integer.parseInt(ordervote));
+			voteoptionsDAO.save(voteOptions);
+			return "success";
+		}else if(field.equals("pepolevote")){
+			String pepolevote = request.getParameter("value");
+			voteOptions.setPepolevote(Integer.parseInt(pepolevote));
+			voteoptionsDAO.save(voteOptions);
+			return "success";
+		}
+		return "error";
 	}
 }

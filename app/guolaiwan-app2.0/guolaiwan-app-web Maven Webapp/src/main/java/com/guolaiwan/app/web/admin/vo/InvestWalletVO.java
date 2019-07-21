@@ -12,8 +12,18 @@ public class InvestWalletVO extends AbstractBaseVO<InvestWalletVO,InvestWalletPO
 	private String username;
 	
 	private long money;
+	
+	private String productname;
 
 	
+	public String getProductname() {
+		return productname;
+	}
+
+	public void setProductname(String productname) {
+		this.productname = productname;
+	}
+
 	public long getUserid() {
 		return userid;
 	}
@@ -45,6 +55,7 @@ public class InvestWalletVO extends AbstractBaseVO<InvestWalletVO,InvestWalletPO
 		this.setUsername(entity.getUsername());
 		this.setMoney(entity.getMoney());
 		this.setUpdateTime(entity.getUpdateTime());
+		this.setProductname(entity.getProductname());
 		return this;
 	}
 	

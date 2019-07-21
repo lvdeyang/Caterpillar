@@ -17,7 +17,7 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 
 	public int countByMoId(long modularId, String pName) {
 		CountHql cHql = this.newCountHql();
-		cHql.andBy("id", Condition.eq, modularId);
+		cHql.andBy("modularcode", Condition.eq, modularId);
 		cHql.andBy("productName", Condition.lk, pName);
 		int count = this.countByHql(cHql);
 		return count;

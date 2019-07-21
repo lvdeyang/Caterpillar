@@ -2095,6 +2095,7 @@ public class PubNumController extends WebBaseControll {
 			order.setUsername(user.getUserNickname());
 			order.setUserid(id);
 			order.setMoney(money);
+			order.setProductname("充值");
 			conn_investwallet.save(order);
 			return success(order);
 		} else {
@@ -2105,6 +2106,7 @@ public class PubNumController extends WebBaseControll {
 				order.setUsername(user.getUserNickname());
 				order.setUserid(id);
 				order.setMoney(money);
+				order.setProductname("提现");
 				conn_investwallet.save(order);
 				return success(order);
 			} else {
@@ -2184,6 +2186,12 @@ public class PubNumController extends WebBaseControll {
 			order.setIswallet(true);
 			conn_order.saveOrUpdate(order);
 			conn_user.saveOrUpdate(user);
+			InvestWalletPO o =new InvestWalletPO();
+			o.setMoney(order.getPayMoney());
+			o.setUserid(user.getId());
+			o.setUsername(user.getUserNickname());
+			o.setProductname(order.getProductName());
+			conn_investwallet.save(o);
 			// 推送购买商品成功信息给用户 商家 李姐
 			sendPayMessage(order);
 		} else {

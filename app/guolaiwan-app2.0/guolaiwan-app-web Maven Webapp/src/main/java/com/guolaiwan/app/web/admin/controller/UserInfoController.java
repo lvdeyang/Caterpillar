@@ -89,16 +89,28 @@ public class UserInfoController extends BaseController{
 	@ResponseBody
 	@RequestMapping(value="/walletlist.do", method= RequestMethod.POST,produces = "application/json; charset=utf-8")
 	public Map<String, Object> GetWalletList(HttpServletRequest request,int page,int limit) throws Exception {
-		String userid = request.getParameter("userid");
+		String userId = request.getParameter("userId");
 		String username = request.getParameter("username");
-		List<InvestWalletPO> wallet=conn_investWallet.GetListbyPage(page, limit,userid,username);
+		List<InvestWalletPO> wallet=conn_investWallet.GetListbyPage(page, limit,userId,username);
 		List<InvestWalletVO> walletvo = InvestWalletVO.getConverter(InvestWalletVO.class).convert(wallet, InvestWalletVO.class);
-		int count = conn_investWallet.countByUserId(userid);
+		int count = conn_investWallet.countByUserId(userId);
 		Map<String, Object> map= new HashMap<String, Object>();
 		map.put("data", walletvo);
 		map.put("code", "0");
 		map.put("msg", "");
 		map.put("count", count);
+		return map;
+	}
+	
+	//异步读取充值列表分页 张羽
+	@ResponseBody
+	@RequestMapping(value="/getwalletlist", method= RequestMethod.POST,produces = "application/json; charset=utf-8")
+	public Map<String, Object> WalletList(HttpServletRequest request,int page,int limit) throws Exception {
+		long userId = Long.parseLong(request.getParameter("userId"));
+		List<InvestWalletPO> wallet=conn_investWallet.GetListbyPage(page, limit,userId);
+		List<InvestWalletVO> walletvo = InvestWalletVO.getConverter(InvestWalletVO.class).convert(wallet, InvestWalletVO.class);
+		Map<String, Object> map= new HashMap<String, Object>();
+		map.put("data", walletvo);
 		return map;
 	}
 }

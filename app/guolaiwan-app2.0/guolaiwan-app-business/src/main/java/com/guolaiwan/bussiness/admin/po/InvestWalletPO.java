@@ -17,7 +17,17 @@ public class InvestWalletPO extends AbstractBasePO{
 	
 	private long money;
 
+	private String productname;
 	
+	
+	public String getProductname() {
+		return productname;
+	}
+
+	public void setProductname(String productname) {
+		this.productname = productname;
+	}
+
 	public long getUserid() {
 		return userid;
 	}

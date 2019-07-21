@@ -705,17 +705,13 @@ cursor:pointer !important;
   });
 	    	
 	  function getreckoning(){
-	  	var	url=window.BASEPATH + 'admin/userinfo/walletlist.do';
+	  	var	url=window.BASEPATH + 'admin/userinfo/getwalletlist';
 	  	$.post(url,{"userId":${userId},"page":page,"limit":15},function(data){
 	  		 var html=[];
 	  		for(var i=0;i<data.data.length;i++){
 			          html.push('<p style="height:50px;line-height: 50px;">');
-			          html.push('<span style="float:left;">'+data.data[i].updateTime+'</span>');
-			          if(data.data[i].money>0){
-			          	html.push('<span style="margin-left:-53px;">充值</span>');
-			          }else{
-			          	html.push('<span style="margin-left:-53px;">提现</span>');
-			          }
+			          html.push('<span style="float:left;font-size:12px">'+data.data[i].updateTime+'</span>');
+			          html.push('<span style="margin-left:-53px;font-size:12px">'+data.data[i].productname+'</span>');
 			          html.push('<span style="float:right;">'+data.data[i].money/100+'元</span></p>');
 				  }
 			$('.mingxi').append(html.join(''));
@@ -750,7 +746,7 @@ $(function(){
 	</div>
 	<p class="order" style="padding:0 5%;height:40px;line-height: 40px;float:right;">钱包详情</p>
 	 <div class="mingxi" style="width:100%;height:auto;overflow: hidden;text-align: center;padding:0 5%;display: none;">
-	    <p style="height:50px;line-height: 50px;border-bottom:1px solid black;"><span style="float:left;">时间</span><span style="margin-left:80px;">充值/提现</span><span style="float:right;">金额</span></p> 
+	    <p style="height:50px;line-height: 50px;border-bottom:1px solid black;"><span style="float:left;">时间</span><span style="margin-left:30px;">商品</span><span style="float:right;">金额</span></p> 
 	 </div>
 	
 	

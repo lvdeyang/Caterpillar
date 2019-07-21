@@ -196,21 +196,12 @@ public class JudgesController {
 		try {
 			Map<String, String> hashMap = new HashMap<String, String>();
 			VoteImposePo voteImposePo = voteImposeDao.getVoteImposePo(userId, productId);
-			VoteProductPO voteProduct = voteProductDaO.getVoteProduct(Long.parseLong(productId));
-			JudgesPo judges = judgesdao.getJudgesUserId(userId);
 			if (voteImposePo == null) {
 				VoteImposePo voteImposePo1 = new VoteImposePo();
 				voteImposePo1.setUserId(userId);
 				voteImposePo1.setPoll(1);
 				voteImposePo1.setProductId(productId);
 				voteImposeDao.save(voteImposePo1);
-				if(judges!=null){
-					voteProduct.setJudgesvotenum(voteProduct.getJudgesvotenum()+1);
-					voteProductDaO.saveOrUpdate(voteProduct);
-				}else{
-					voteProduct.setPeoplevotenum(voteProduct.getPeoplevotenum()+1);
-					voteProductDaO.saveOrUpdate(voteProduct);
-				}
 			}
 			if (voteImposePo != null && voteImposePo.getPoll() == 5) {
 				hashMap.put("msg", "0");
@@ -220,15 +211,8 @@ public class JudgesController {
 			if (voteImposePo != null && voteImposePo.getPoll() != 5) {
 				voteImposePo.setPoll(voteImposePo.getPoll() + 1);
 				voteImposeDao.update(voteImposePo);
-				if(judges!=null){
-					voteProduct.setJudgesvotenum(voteProduct.getJudgesvotenum()+1);
-					voteProductDaO.saveOrUpdate(voteProduct);
-				}else{
-					voteProduct.setPeoplevotenum(voteProduct.getPeoplevotenum()+1);
-					voteProductDaO.saveOrUpdate(voteProduct);
-				}
 			}
-			hashMap.put("msg", "1");
+			hashMap.put("msg", " ");
 			return hashMap;
 		} catch (Exception e) {
 			Map<String, String> hashMap = new HashMap<String, String>();
@@ -305,7 +289,6 @@ public class JudgesController {
 				hashMap.put("OutOfPrint", newgetAllOrder.size() + "");
 			}
 			hashMap.put("ticketnumber", voteProductPO.getPeoplevotenum() + "");
-			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("hotel", productPO.getProductMerchantName());
 			hashMap.put("image", productPO.getProductShowPic());
 			list.add(hashMap);

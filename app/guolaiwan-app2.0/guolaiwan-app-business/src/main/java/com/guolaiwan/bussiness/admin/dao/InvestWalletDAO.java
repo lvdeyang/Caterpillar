@@ -51,6 +51,16 @@ public class InvestWalletDAO extends AbstractBaseDao<InvestWalletPO>{
 		return userinfos;
 	}
 	
+	public List<InvestWalletPO> GetListbyPage(int pageNum, int pageSize, Long userid) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("userid", Condition.eq, userid);
+		hql.orderBy("updateTime", true);
+		List<InvestWalletPO> userinfos = findByHqlPage(hql, pageNum, pageSize);
+		if (userinfos == null || userinfos.size() <= 0)
+			return null;
+		return userinfos;
+	}
+	
 	// 统计总数
 	public int countByUserId(String userid) {
 		CountHql cHql = this.newCountHql();
