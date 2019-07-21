@@ -12,15 +12,17 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Entity
 @Table(name="t_sys_table")
 public class TablePO extends AbstractBasePO {
-
+	/*
+	 * 订桌表
+	 */
 	private static final long serialVersionUID = -7285694156749845123L;
 
-	private long merchantId;
-	private long tableNo;
-	private long size;
-	private String name;
+	private long merchantId; //商家id
+	private long tableNo;  //  
+	private long size; //  房间人数
+	private String name; // 名称
 	
-	private long bookprice;
+	private long bookprice; //定桌钱数
 	
 	public long getMerchantId() {
 		return merchantId;

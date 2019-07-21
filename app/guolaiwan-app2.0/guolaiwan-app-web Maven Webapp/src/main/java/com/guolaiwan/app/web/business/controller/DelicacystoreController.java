@@ -46,33 +46,6 @@ public class DelicacystoreController extends BaseController {
 		@Autowired
 		private MerchantDAO merchantDao;
 		
-		 //菜单
-		 @RequestMapping(value="/order/list")
-		 public Map<String,List<String>> orderList(HttpServletRequest request){
-			String merchantId = request.getParameter("merchantId");	 
-			 //根据productMerchantID查询商品信息
-			 List<ProductPO> productPOs = productDao.findByMerchantId(Long.parseLong(merchantId)); 
-			 //对商品进行类型的存储
-			 Map<String,List<String>> map = new HashMap<String,List<String>>();
-			 //遍历商品信息
-			 for(ProductPO po :productPOs){
-				//获取类型数值
-			    String classCode = po.getProductClassCode();
-			    //获取类型名称
-			    String className = po.getProductClassName(); 
-			    map.put("classCode", new ArrayList<String>());
-			    //判断类型是否重复添加 
-			     if(!(map.get("classCode").contains(classCode))){
-			    	 map.put("classCode", new ArrayList<String>());
-			    	 map.get("classCode").add(classCode);
-			    	 map.put("className", new ArrayList<String>());
-			    	 map.get("className").add(className);
-			     }else{ continue; }	     
-			 }
-			     return map ;	  
-			  
-		  }
- 
 		  /**
 		   * 商家详情
 		 * @throws Exception 

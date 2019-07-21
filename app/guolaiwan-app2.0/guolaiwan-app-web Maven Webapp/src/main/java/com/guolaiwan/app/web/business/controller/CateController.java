@@ -64,6 +64,8 @@ public class CateController extends BaseController {
 	private MerchantDAO Mer_chant;
 	@Autowired
 	private OrderInfoDAO orderInfoDao;
+	@Autowired
+	 private ProductDAO productDao;
 	/**
 	 * 二级页面 轮播图（模块）
 	 * 美食轮播图
@@ -108,9 +110,7 @@ public class CateController extends BaseController {
 			List<MerchantPO> allMerchant = Mer_chant.getMerchantById(merchantChildrenPO.getChildrenId());
 			for (MerchantPO merchantPO : allMerchant) {
 				Boolean status  =   merchantPO.getShopName().contains(name);
-				System.out.println(status+" :merchantPO  :"  +merchantPO.getShopName());
 			if (status  && merchantPO.getModularCode().equals(type)) {
-				System.out.println(merchantPO.getModularCode());
 				merchantlist.add(merchantPO);
 			}
 		  }	
@@ -118,6 +118,25 @@ public class CateController extends BaseController {
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
 		hashMap.put("merlist", merlist);
 		return hashMap;
+	}
+	
+	
+	//菜单名称
+	@ResponseBody
+	@RequestMapping(value="/order/list")
+	public Map<String, Object> orderList(HttpServletRequest request) throws Exception{
+		String merchantId = request.getParameter("merchantId");	 
+		//根据productMerchantID查询商品信息
+		List<ProductPO> productPOs = productDao.findByMerchantId(Long.parseLong(merchantId)); 
+		//对商品进行类型的存储
+		Map<String, Object> hashMap = new HashMap<String, Object>();
+		//遍历商品信息
+		List<ProductVO> merlist	=null;
+		for(ProductPO po :productPOs){
+			merlist	 = ProductVO.getConverter(ProductVO.class).convert(productPOs, ProductVO.class);
+		}
+		hashMap.put("name", merlist);
+		return hashMap ;	  
 	}
 	
 	
