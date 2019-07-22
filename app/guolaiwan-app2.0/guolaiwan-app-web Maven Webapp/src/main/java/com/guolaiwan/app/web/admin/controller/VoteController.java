@@ -21,13 +21,17 @@ import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.VoteModularDAO;
 import com.guolaiwan.bussiness.admin.dao.VoteOptionsDao;
+import com.guolaiwan.bussiness.admin.dao.VotePicsDao;
 import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
+import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
+import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.VoteModularPO;
 import com.guolaiwan.bussiness.admin.po.VoteOptionsPo;
+import com.guolaiwan.bussiness.admin.po.VotePicsPo;
 import com.guolaiwan.bussiness.admin.po.VoteProductPO;
 
 import pub.caterpillar.mvc.controller.BaseController;
@@ -45,21 +49,27 @@ public class VoteController extends BaseController {
 	private ProductDAO conn_product;
 	@Autowired
 	private VoteOptionsDao voteoptionsDAO;
+	@Autowired
+	private VotePicsDao votepicDAO;
 	
 	// 显示列表页面
+	@ResponseBody
 	@RequestMapping(value = "/list")
 	public ModelAndView activityList(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
 		ModelAndView mv = new ModelAndView("admin/vote/list");
+		mv.addObject("optionId", optionId);
 		return mv;
 	}
 
 	//查询所有标签
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST)
-	public Map<String, Object> AddView(int page, int limit) throws Exception {
+	public Map<String, Object> AddView(HttpServletRequest request,int page, int limit) throws Exception {
+		String optionId=request.getParameter("optionId");
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		int count = votemodularDAO.countAll();
-		List<VoteModularPO>  votemodulars= votemodularDAO.findAll();
+		int count = votemodularDAO.getCountByOptionId(Long.parseLong(optionId));
+		List<VoteModularPO>  votemodulars= votemodularDAO.getByOptionId(Long.parseLong(optionId));
 		strMap.put("code", "0");
 		strMap.put("msg", "");
 		strMap.put("count", count);
@@ -68,9 +78,12 @@ public class VoteController extends BaseController {
 	}
 	
 	// 添加数据页面
+	@ResponseBody
 	@RequestMapping(value = "/addv")
 	public ModelAndView addv(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
 		ModelAndView mv = new ModelAndView("admin/vote/add");
+		mv.addObject("optionId", optionId);
 		return mv;
 	}
 	
@@ -79,11 +92,13 @@ public class VoteController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
 	public String add(HttpServletRequest request) throws Exception {
+		String optionId = request.getParameter("optionId");
 		String modularName = request.getParameter("modularName");
 		String modularDescribe = request.getParameter("modularDescribe");
 		VoteModularPO vote=new VoteModularPO();
 		vote.setModularName(modularName);
 		vote.setModularDescribe(modularDescribe);
+		vote.setOptionId(Long.parseLong(optionId));
 		SimpleDateFormat bf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String format = bf.format(new Date());
 		vote.setAddTime(format);
@@ -373,4 +388,95 @@ public class VoteController extends BaseController {
 		}
 		return "error";
 	}
+	
+	// 修改数据
+	@ResponseBody
+	@RequestMapping(value = "/optionstatus", method = RequestMethod.POST)
+	public String optionStatus(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		String value = request.getParameter("value");
+		System.out.println(value+"--------");
+		VoteOptionsPo voteOptions = voteoptionsDAO.get(id);
+		voteOptions.setVotestatustype(value);
+		voteoptionsDAO.saveOrUpdate(voteOptions);
+		return "success";
+	}
+	
+	// 投票轮播图页面
+	@RequestMapping(value = "/gotovotepics")
+	public ModelAndView goToVotePics(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
+		ModelAndView mv = new ModelAndView("admin/vote/votepics");
+		mv.addObject("optionId", optionId);
+		return mv;
+	}
+	
+	// 编辑轮播图数据
+	@ResponseBody
+	@RequestMapping(value = "/editpic", method = RequestMethod.POST)
+	public String editPic(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		VotePicsPo votePics = votepicDAO.get(id);
+		String field = request.getParameter("field");
+		if (field.equals("ranking")) {
+			String ranking = request.getParameter("value");
+			votePics.setRanking(Integer.parseInt(ranking));
+			votepicDAO.save(votePics);
+			return "success";
+		}
+		return "error";
+	}
+	
+	
+	
+	//查询所有轮播图
+	@ResponseBody
+	@RequestMapping(value = "/picslist", method = RequestMethod.POST)
+	public Map<String, Object> picsList(HttpServletRequest request,int page, int limit) throws Exception {
+		long optionId = Long.parseLong(request.getParameter("optionId"));
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		int count = votepicDAO.getCountByOptionId(optionId);
+		List<VotePicsPo> VotePics = votepicDAO.getByOptionId(optionId);
+		strMap.put("code", "0");
+		strMap.put("msg", "");
+		strMap.put("count", count);
+		strMap.put("data", VotePics);
+		return strMap;
+	}
+	
+	// 添加新的轮播图
+	@ResponseBody
+	@RequestMapping(value = "/apendpic", method = RequestMethod.POST)
+	public String apendPic(HttpServletRequest request) throws Exception {
+		long optionId=Long.parseLong(request.getParameter("optionId"));
+		System.out.println(optionId+"------");
+		VotePicsPo pic=new VotePicsPo();
+		pic.setOptionId(optionId);
+		votepicDAO.save(pic);
+		return "success";
+	}
+	
+	// 删除数据
+	@ResponseBody
+	@RequestMapping(value = "/delpic", method = RequestMethod.POST)
+	public String delpic(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		votepicDAO.delete(id);
+		return "success";
+	}
+	
+	// 选择logo图片
+	@ResponseBody
+	@RequestMapping(value = "/votepics", method = RequestMethod.POST)
+	public String votePics(HttpServletRequest request) {
+		String pic = request.getParameter("pic");
+		long picId = Long.parseLong(request.getParameter("picId"));
+		long id = Long.parseLong(request.getParameter("id"));
+		VotePicsPo votePicsPo = votepicDAO.get(id);
+		votePicsPo.setPicId(picId);
+		votePicsPo.setSlidepic(pic);
+		votepicDAO.saveOrUpdate(votePicsPo);
+		return "success";
+	}
+	
 }

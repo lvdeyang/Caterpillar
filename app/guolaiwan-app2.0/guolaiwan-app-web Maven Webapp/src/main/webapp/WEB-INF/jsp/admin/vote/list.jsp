@@ -30,9 +30,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               <a><cite>投票标签列表</cite></a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+        	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;margin-left:0" href="javascript:history.go(-1)" title="返回"><i class="layui-icon" style="line-height:38px">&#xe65c;</i></a>
         </div>
         <div class="x-body">
-            <xblock><button class="layui-btn" onclick="open_win('添加标签','addv','600','500')"><i class="layui-icon">&#xe608;</i>添加标签</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
+            <xblock><button class="layui-btn" onclick="open_win('添加标签','addv?optionId=${optionId}','600','500')"><i class="layui-icon">&#xe608;</i>添加标签</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
          	<table id="voteList" lay-filter="voteList"></table>
         </div>
         <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
@@ -84,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         	table.render({
             		elem:"#voteList"
             		,method:'post'
-   					,url:'list.do'
+   					,url:'list.do?optionId=${optionId}'
    					,page:true
    					,limits: [10, 20, 30]
             		,limit: 10

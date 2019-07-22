@@ -63,34 +63,41 @@ public class JudgesController {
 	private OrderInfoDAO orderInfoDAO;
 
 	// 添加数据页面
+	@ResponseBody
 	@RequestMapping(value = "/getjudges", method = RequestMethod.GET)
 	public ModelAndView getjudges(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
 		ModelAndView mv = new ModelAndView("admin/vote/judgeslist");
+		mv.addObject("optionId", optionId);
 		return mv;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	public Map<String, Object> GetList() throws Exception {
-
+	public Map<String, Object> GetList(HttpServletRequest request) throws Exception {
+		String optionId=request.getParameter("optionId");
 		List<UserInfoPO> list = new ArrayList<UserInfoPO>();
-		List<JudgesPo> findAll = judgesdao.findAll();
+		List<JudgesPo> findAll = judgesdao.getByOptionId(Long.parseLong(optionId));
 		for (JudgesPo judgesPo : findAll) {
 			UserInfoPO _userinfo = conn_UserInfo.get(Long.parseLong(judgesPo.getUserId()));
 			list.add(_userinfo);
 		}
 		List<UserInfoVO> _userinfo = UserInfoVO.getConverter(UserInfoVO.class).convert(list, UserInfoVO.class);
+		int count = _userinfo.size();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("data", _userinfo);
 		map.put("code", "0");
 		map.put("msg", "");
+		map.put("count", count);
 		return map;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/skip.do")
 	public ModelAndView merchantSkip(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
 		ModelAndView mView = new ModelAndView("admin/vote/addjudges");
+		mView.addObject("optionId", optionId);
 		return mView;
 	}
 
@@ -117,12 +124,14 @@ public class JudgesController {
 	public String addSubordinate(HttpServletRequest request) {
 		try {
 			String id = request.getParameter("id");
+			String optionId=request.getParameter("optionId");
 			JudgesPo judgesUserId = judgesdao.getJudgesUserId(id);
 			if (judgesUserId != null) {
 				return "msg";
 			} else {
 				JudgesPo judgesPo = new JudgesPo();
 				judgesPo.setUserId(id);
+				judgesPo.setOptionId(Long.parseLong(optionId));
 				judgesdao.save(judgesPo);
 			}
 			return "true";
@@ -267,9 +276,12 @@ public class JudgesController {
 	}
 
 	// 获取美食大赛的选项标签卡
+	@ResponseBody
 	@RequestMapping(value = "/getvotemodular", method = RequestMethod.POST)
-	public List<VoteModularPO> getvotemodular() {
-		List<VoteModularPO> findAll = voteModularDaO.findAll();
+	public List<VoteModularPO> getvotemodular(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
+		System.out.println();
+		List<VoteModularPO> findAll = voteModularDaO.getByOptionId(Long.parseLong(optionId));
 		return findAll;
 	}
 

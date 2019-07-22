@@ -35,16 +35,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <span class="layui-breadcrumb">
               <a><cite>首页</cite></a>
               <a><cite>投票中心</cite></a>
-              <a><cite>投票标签列表</cite></a>
+              <a><cite>投票活动列表</cite></a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+            
         </div>
         <div class="x-body">
             <xblock><button class="layui-btn" onclick="open_win('添加标签','addoptions','600','500')"><i class="layui-icon">&#xe608;</i>添加标签</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
-         	<table id="voteList" lay-filter="voteList"></table>
+         	<table id="voteList" lay-filter="voteList" v></table>
         </div>
         <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
         <script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
+        <script>
+        	function chengestatus(id){
+        		var value;
+        		var url="<%=path%>/admin/vote/optionstatus"
+        		if($("#"+id).prop('checked')){
+        			value=STOP;
+        		}else{
+        			value=START;
+        		}
+        	$.post(url,{"optionId":id,"optionstatus":value},function(msg){
+        		if(msg=="success")alert("改完了");
+        	})
+        	}
+        
+        </script>
         <script>
         
         
@@ -86,7 +102,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               			}
               		})
               })
+              
             });
+	         
+	         
+	         
 	         
 	         function getvoteList(){
 	         	table.render({
@@ -98,13 +118,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             		,limit: 10
    					,cols: [[
    						{type:"checkbox"}
-   						,{field:"votename",title:"投票名称",edit:"text",width:280}
-   						,{field:"judgesvote",title:"评委票权重（%）",edit:"text",width:280}
-   						,{field:"ordervote",title:"销量等同票数（票）",edit:"text",width:280}
-   						,{field:"pepolevote",title:"群众票等同票数（票）",edit:"text",width:280}
-   						,{field: 'liveStatusType',title: '开启/结束',align:  'center',sort: true,width:150,templet:'#startandstop'}
-   						,{title: '标签缩略图',templet:"#picTpl",width:100} 
-   						,{title:"操作",templet:"#zsgc",width:200}
+   						,{field:"votename",title:"投票名称",edit:"text",align:'center',width:230}
+   						,{field:"judgesvote",title:"评委票权重（%）",edit:"text",align:'center',width:230}
+   						,{field:"ordervote",title:"销量等同票数（票）",edit:"text",align:'center',width:230}
+   						,{field:"pepolevote",title:"群众票等同票数（票）",edit:"text",align:'center',width:230}
+   						,{field: 'votestatustype',title: '开启/结束',align:'center',width:150,templet:'#startandstop'}
+   						,{title: 'logo缩略图',templet:"#picTpl",align:'center',width:100} 
+   						,{title:"操作",templet:"#zsgc",width:400}
    						]]
    					,done:function(res, curr, count){
    						$("#allcount").text(count);
@@ -166,11 +186,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </script>
           
 <script type="text/html" id="zsgc">
-<a class='layui-btn layui-btn-xs' href="javascript:open_win('选择logo','<%=path%>/admin/picture/addlist?sImg=caImg{{d.id}}&sId={{ d.id }}&source=option','800','600')">选择图片</a>
-			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
+<a class='layui-btn layui-btn-xs' href="javascript:open_win('选择logo','<%=path%>/admin/picture/addlist?sImg=caImg{{d.id}}&sId={{ d.id }}&source=option','800','600')">选择logo</a>
+<a class="layui-btn layui-btn-xs" href="list?optionId={{d.id}}">标签列表</a>	
+<a class="layui-btn layui-btn-xs" href="<%=path%>/judges/getjudges?optionId={{d.id}}">评委列表</a>
+<a class="layui-btn layui-btn-xs" href="gotovotepics?optionId={{d.id}}">轮播图管理</a>			
+<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
 </script>
 <script type="text/html" id="startandstop">
-	<input type="checkbox" name="voteStatusType" id='{{d.id}}' value='{{ d.voteStatusType }}'  lay-skin="switch" lay-text="开启|结束" lay-filter="enable1" {{ d.liveStatusType == 'STOP'||d.liveStatusType == 'FORBID' ? '' : 'checked' }} >
+ <input type="checkbox" name="votestatustype" id='{{d.id}}' value='{{ d.votestatustype }}'  onchange="chengestatus(this.id)" lay-skin="switch" lay-text="开启|结束"  {{ d.votestatustype == 'STOP' ? '' : 'checked' }} >
 </script>
 <script type="text/html" id="picTpl">
  <a href="javascript:show_pic('caImg{{d.id}}')"><img id="caImg{{d.id}}"  src= "http://www.guolaiwan.net/file/{{ d.slidepic}}" alt="" style="width:35px;height:35px"></a>

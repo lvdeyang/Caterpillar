@@ -105,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$.ajax({
 	                    type:"post",
 	                    url:"addjudges.do",
-	                    data:{"id":id                                             
+	                    data:{"id":id,"optionId":${optionId}                                             
 	                    },
 	                    success:function(msg){
 	                    if(msg == "msg"){                                   

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.guolaiwan.bussiness.admin.po.JudgesPo;
+import com.guolaiwan.bussiness.admin.po.VoteModularPO;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
@@ -22,5 +23,12 @@ public class JudgesDao extends AbstractBaseDao<JudgesPo> {
 		} else {
 			return product.get(0);
 		}
+	}
+	
+	public List<JudgesPo> getByOptionId(Long optionId){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("optionId", Condition.eq, optionId);
+		List<JudgesPo> list = findByHql(hql);
+		return list;
 	}
 }

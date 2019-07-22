@@ -26,6 +26,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               <a><cite>用户列表</cite></a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+        	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;margin-left:0" href="javascript:history.go(-1)" title="返回"><i class="layui-icon" style="line-height:38px">&#xe65c;</i></a>
         </div>
         <div class="x-body">
             
@@ -77,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               table.render({
                     elem:"#userList"
                     ,method:"post"
-                    ,url:"list.do"
+                    ,url:"list.do?optionId=${optionId}"
                     ,page:true
                     ,limits: [10, 20, 30]
                     ,limit: 10
@@ -106,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
                function  merchant_childent(){
 	                 var title="title"
-	                 var url="skip.do"
+	                 var url="skip.do?optionId=${optionId}"
 	                 var w=""
 	                 var h="610"
 	                 x_admin_show(title,url,w,h);

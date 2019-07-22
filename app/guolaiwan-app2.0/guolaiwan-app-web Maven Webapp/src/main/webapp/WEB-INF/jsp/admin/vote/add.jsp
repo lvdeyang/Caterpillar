@@ -23,6 +23,15 @@
         <div class="x-body">
         <div  >
             <form class="layui-form layui-form-pane">
+            	<div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                            投票大赛Id
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="L_title" name="optionId" required lay-verify="required"
+                        autocomplete="off" class="layui-input" value="${optionId}" readonly="readonly">
+                    </div>
+                </div>
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                                             标签名称
@@ -82,7 +91,7 @@
         							var index = parent.layer.getFrameIndex(window.name);
         							//关闭当前frame
         							parent.layer.close(index);
-        							parent.getactivityList();
+        							parent.getvoteList();
         						});
         					}else{
         						layer.msg("系统错误！",{icon:2,time:3000});

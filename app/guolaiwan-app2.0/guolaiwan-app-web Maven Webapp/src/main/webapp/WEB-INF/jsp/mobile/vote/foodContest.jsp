@@ -310,7 +310,7 @@ $(function(){
 //获取选项卡标签
 function getvotemodular(){
  var _uriRecomment = window.BASEPATH + 'judges/getvotemodular';
-   $.post(_uriRecomment,null,function(data){
+   $.post(_uriRecomment,{"optionId":1},function(data){
    
      getvoteproduct(data[0].id)
       var html=[];

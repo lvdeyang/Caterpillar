@@ -23,8 +23,18 @@ public class VoteModularPO extends AbstractBasePO{
 	private long picId;
 	//图片的路径
 	private String slidepic;
+	//投票活动的id
+	private long optionId;
 
 	
+	public long getOptionId() {
+		return optionId;
+	}
+
+	public void setOptionId(long optionId) {
+		this.optionId = optionId;
+	}
+
 	public long getPicId() {
 		return picId;
 	}
