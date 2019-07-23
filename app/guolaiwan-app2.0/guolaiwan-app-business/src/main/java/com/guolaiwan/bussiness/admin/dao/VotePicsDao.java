@@ -11,6 +11,7 @@ import com.guolaiwan.bussiness.admin.po.VotePicsPo;
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
 import pub.caterpillar.orm.hql.CountHql;
+import pub.caterpillar.orm.hql.DeleteHql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 @Repository("com.guolaiwan.bussiness.admin.dao.VotePicsDao")
@@ -32,5 +33,11 @@ public class VotePicsDao extends AbstractBaseDao<VotePicsPo> {
 		hql.andBy("optionId", Condition.eq, optionId);
 		int count = countByHql(hql);
 		return count;
+	}
+	
+	public void deleteByOptionId(long optionId) {
+		DeleteHql dHql = this.newDeleteHql();
+		dHql.andBy("optionId", Condition.eq, optionId);
+		this.deleteByHql(dHql);
 	}
 }

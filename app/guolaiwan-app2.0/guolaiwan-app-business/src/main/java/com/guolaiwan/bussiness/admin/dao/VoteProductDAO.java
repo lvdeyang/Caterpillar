@@ -69,5 +69,16 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 			return findByHql;
 		}
 	}
+	
+	public List<VoteProductPO> getvoteproduct(String name) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("productName", Condition.lk, name);
+		List<VoteProductPO> findByHql = findByHql(hql);
+		if (findByHql.size() == 0) {
+			return null;
+		} else {
+			return findByHql;
+		}
+	}
 
 }

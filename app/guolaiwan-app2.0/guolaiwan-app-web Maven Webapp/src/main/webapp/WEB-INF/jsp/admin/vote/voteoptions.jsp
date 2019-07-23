@@ -41,39 +41,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
         </div>
         <div class="x-body">
-            <xblock><button class="layui-btn" onclick="open_win('添加标签','addoptions','600','500')"><i class="layui-icon">&#xe608;</i>添加标签</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
+            <xblock><button class="layui-btn" onclick="open_win('添加新投票','addoptions','600','500')"><i class="layui-icon">&#xe608;</i>添加新投票</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
          	<table id="voteList" lay-filter="voteList" v></table>
         </div>
         <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
         <script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
         <script>
-        	function chengestatus(id){
-        		var value;
-        		var url="<%=path%>/admin/vote/optionstatus"
-        		if($("#"+id).prop('checked')){
-        			value=STOP;
-        		}else{
-        			value=START;
-        		}
-        	$.post(url,{"optionId":id,"optionstatus":value},function(msg){
-        		if(msg=="success")alert("改完了");
-        	})
-        	}
-        
-        </script>
-        <script>
         
         
            
-            layui.use(['element','laypage','layer','laytpl','table'], function(){
-                $ = layui.jquery;//jquery
-              lement = layui.element;//面包导航
-              layer = layui.layer;//弹出层
-              laypage = layui.laypage;//分页
-              laytpl = layui.laytpl;
-              table = layui.table;//模板引擎
-              //以上模块根据需要引入
-              
+        layui.use(['element','layer','laytpl','upload','laydate','form','table'], function(){
+	    	$ = layui.jquery;//jquery
+	        lement = layui.element;//面包导航
+	        layer = layui.layer;//弹出层
+	        laytpl = layui.laytpl;//模板引擎
+	        form = layui.form;//分页
+	        upload = layui.upload;
+	        laydate = layui.laydate;
+	        table = layui.table; //需要引入
+             
               getvoteList();
               
               
@@ -102,6 +88,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               			}
               		})
               })
+              
+              
+               form.on('switch(enable)', function(obj){
+                layer.load();
+                var str;
+                var bl = obj.elem.checked;
+                var val;
+                if(bl){
+                    str = "开启";
+                    val = 'START';
+                }else{
+                    str = "停播";
+                    val = 'STOP';
+                }
+                console.log(str)
+                $.ajax({
+                    type:'post',
+                    url:'optionstatus',
+                    data:{'id':this.id,'value':val},
+                    success:function(msg){
+                        layer.closeAll("loading"); 
+                        if(msg=='success'){
+                           getLiveList();
+                        }else{
+                           layer.msg("系统错误！",{icon:5,time:1000}); 
+                        }
+                    }
+                })
+                layer.tips(this.value+' : '+str,obj.othis);
+              });
               
             });
 	         
@@ -193,7 +209,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
 </script>
 <script type="text/html" id="startandstop">
- <input type="checkbox" name="votestatustype" id='{{d.id}}' value='{{ d.votestatustype }}'  onchange="chengestatus(this.id)" lay-skin="switch" lay-text="开启|结束"  {{ d.votestatustype == 'STOP' ? '' : 'checked' }} >
+ <input type="checkbox" name="votestatustype" id='{{d.id}}' value='{{ d.votestatustype }}'   lay-skin="switch" lay-text="开启|结束" lay-filter="enable" {{ d.votestatustype == 'STOP' ? '' : 'checked' }} >
 </script>
 <script type="text/html" id="picTpl">
  <a href="javascript:show_pic('caImg{{d.id}}')"><img id="caImg{{d.id}}"  src= "http://www.guolaiwan.net/file/{{ d.slidepic}}" alt="" style="width:35px;height:35px"></a>

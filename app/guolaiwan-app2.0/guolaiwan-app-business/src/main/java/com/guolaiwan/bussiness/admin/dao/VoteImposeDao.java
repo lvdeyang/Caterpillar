@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.admin.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import com.guolaiwan.bussiness.admin.po.VoteImposePo;
 
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
+import pub.caterpillar.orm.hql.CountHql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 @Component
@@ -22,4 +24,50 @@ public class VoteImposeDao extends AbstractBaseDao<VoteImposePo> {
 		return VoteImposePos.get(0);
 	}
 
+	
+	/**
+	 * 按照Uid Pid 查每天的投票数
+	 * @param userId
+	 * @param productId
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public int countByUidPid(String userId, String productId,Date startTime,Date endTime) {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("userId", Condition.eq, userId);
+		cHql.andBy("productId", Condition.eq, productId);
+		cHql.andBy("updateTime", Condition.gt, startTime);
+		cHql.andBy("updateTime", Condition.lt, endTime);
+		cHql.andBy("poll", Condition.eq, 1);
+		int count = this.countByHql(cHql);
+		return count;
+	}
+	
+	
+	/**
+	 * 统计每个商品的投票数
+	 * @param productId
+	 * @return
+	 */
+	public int countByPid(String productId) {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("productId", Condition.eq, productId);
+		cHql.andBy("poll", Condition.eq, 1);
+		int count = this.countByHql(cHql);
+		return count;
+	}
+	
+	/**
+	 * 统计每个商品的购买数
+	 * @param productId
+	 * @return
+	 */
+	public int buyCountByPid(String productId) {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("productId", Condition.eq, productId);
+		cHql.andBy("buy", Condition.eq, 1);
+		int count = this.countByHql(cHql);
+		return count;
+	}
 }
