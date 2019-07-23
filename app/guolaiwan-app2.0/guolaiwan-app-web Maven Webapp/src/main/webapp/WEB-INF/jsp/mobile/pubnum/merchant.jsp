@@ -582,7 +582,7 @@ html, body {
 		var merchantName;
 		var merchantPic;
 		var merchantUrl;
-		
+		var modularCode;
        var qq="";
        var iscollect=0;
 		//获取所有一级推荐
@@ -593,6 +593,10 @@ html, body {
 			merchantName = data.shopName + '-过来玩';
 			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
 			merchantUrl = window.location.href;
+			modularCode =  data.modularCode;
+		   if(modularCode == "0001" || modularCode == "0002"){ //跳进新版
+     	    	  $("#newpage").show();
+		   }
 			if(data === -1) return;
 			if(data){
 			    var html=[];
@@ -639,6 +643,8 @@ html, body {
 			initShare();
 			
 		});
+		
+		
 		
 		//shopQQ
 		$(document).on('click','#contact',function(){
@@ -799,9 +805,16 @@ html, body {
 			   });
 			   window.location.href=  window.BASEPATH +"guide/visitors/app"
         });
-		
-		
-	
+        
+        /*显示隐藏切换  */
+	 $(document).on('click',' #newpage',function(){
+	   if(modularCode == "0001"){
+	    window.location.href="business/merchant/nsAndView?merchantId="+'${merchantId}' +"&comCode=0001";
+	   }
+	   if(modularCode == "0002"){
+	    window.location.href="business/gotoshopdetails?merchantId="+'${merchantId}';
+	   }
+	 });
 	});
 </script>
 <script type="text/javascript">
@@ -1015,9 +1028,10 @@ html, body {
 							style="width:90%;margin-top:25px;margin-left:11px;font-size:14px;">
 							<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线咨询</a>
 							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
-							
 						</div>
-						<div id="payinshop"></div>
+						<div id="payinshop">
+						   <a id="newpage"  style="display:none; dwidth:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">进入新版页面</a>
+						</div>
 						<div
 							style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">商家详情</div>
 						<div style="font-size:12px;padding:12px;float:left;width:100%;overflow-x:scroll" id="merchantContent"></div>
