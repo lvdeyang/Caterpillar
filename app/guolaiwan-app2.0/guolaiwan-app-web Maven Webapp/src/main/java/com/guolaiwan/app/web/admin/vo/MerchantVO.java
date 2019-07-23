@@ -91,30 +91,32 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 	//客服
 	private long chatUserId;
 	
-    private String date; //时间
+	//商户开放开始时间
+    private String beginTimeDate;	
 	
-	private String feature; //特色
+	//商户开放结束时间
+    private String endTimeDate;
 	
 	
-	
-	public String getDate() {
-		return date;
+	public String getBeginTimeDate() {
+		return beginTimeDate;
 	}
 
-	public MerchantVO setDate(String date) {
-		this.date = date;
-		return this;
+
+	public void setBeginTimeDate(String beginTimeDate) {
+		this.beginTimeDate = beginTimeDate;
 	}
 
-	public String getFeature() {
-		return feature;
+
+	public String getEndTimeDate() {
+		return endTimeDate;
 	}
 
-	public MerchantVO setFeature(String feature) {
-		this.feature = feature;
-		return this;
-	}
 
+	public void setEndTimeDate(String endTimeDate) {
+		this.endTimeDate = endTimeDate;
+	}
+	
 	public long getChatUserId() {
 		return chatUserId;
 	}
@@ -517,8 +519,6 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 		.setUserName(entity.getUserName())
 		.setIsGuide(entity.getIsGuide())
 		.setSignPic(entity.getSignPic())
-		.setDate(entity.getDate())
-		.setFeature(entity.getFeature())
 		.setChatUserId(entity.getChatUserId());
 		return this;
 	}

@@ -72,8 +72,47 @@
 					<a href="javascript:openMap('上传图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=shopQualifications&img=shopQualificationsPic','600','400')" class="layui-btn layui-btn-xs" style="width:90px;margin-left:5px;margin-right:5px" >更换图片</a>
 					<button class="layui-btn layui-btn-xs" type="button" style="width:90px;margin-left:5px;margin-right:5px" onclick="delpic('#shopQualificationsPic','#shopQualifications')">删除图片</button>										
 				</div>				
-			</div>
-			<div class="layui-form-item">
+			</div>			
+                  <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+				  <legend>商户开放时间</legend>
+				  </fieldset>				
+				<div class="layui-form">
+				  <div class="layui-form-item">				 
+				<div class="layui-inline">
+				      <label class="layui-form-label">请选择日期</label>
+				      <div class="layui-input-inline">
+				        <input type="text" class="layui-input" name="beginAge" id="test1" placeholder="yyyy-MM-dd">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				       <label class="layui-form-label">请选择时间</label>
+				      <div class="layui-input-inline">
+				        <input type="text" class="layui-input" name="beginTime" id="test2" placeholder="HH:mm:ss">
+				      </div>
+				    </div>
+				 </div>
+				 </div>
+				 
+				 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+				  <legend>商户结束时间</legend>
+				</fieldset>
+				<div class="layui-form">
+				  <div class="layui-form-item">				 
+				<div class="layui-inline">
+				      <label class="layui-form-label">请选择日期</label>
+				      <div class="layui-input-inline">
+				        <input type="text" class="layui-input" name="endAge" id="test3" placeholder="yyyy-MM-dd">
+				      </div>
+				    </div>
+				    <div class="layui-inline">
+				       <label class="layui-form-label">请选择时间</label>
+				      <div class="layui-input-inline">
+				        <input type="text" class="layui-input" name="endTime" id="test4" placeholder="HH:mm:ss">
+				      </div>
+				    </div>
+				 </div>
+				 </div>
+				 <div class="layui-form-item">
 					<div class="layui-inline">
 						<label class="layui-form-label">客服人员</label>
 						<div class="layui-input-inline">
@@ -193,25 +232,6 @@
 						</textarea>
 				</div>
 			</div>
-			<div class="layui-inline">
-                    <div class = "layui-inline">
-    				<label class="layui-form-label">特色：</label>
-    				<div class="layui-input-block">
-    				    <input type="checkbox" name="productCommissionCode" value="有儿童乐园" title="有儿童乐园"  lay-filter="filter" >
-    				    <input type="checkbox" name="productCommissionCode" value="交通遍历" title="交通遍历"   lay-filter="filter" >
-      					<input type="checkbox" name="productCommissionCode" value="有包间" title="有包间"     lay-filter="filter" >
-      					<input type="checkbox" name="productCommissionCode" value="免费WIFI" title="免费WIFI"  lay-filter="filter">
-    				</div>
-    			</div>
-    			</div>
-                 <div class="layui-inline">
-                    <div class = "layui-inline">
-    				<label class="layui-form-label">营业时间：</label>
-    				   <div class="layui-input-inline">
-    				    <input type="text"   name="shopHours"  class="layui-input"  required lay-verify="required"id="test10" placeholder="开始 到 结束">
-                    </div>
-    			</div>
-    			</div>
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 坐标 </label>
 				<div class="layui-input-inline" style="width: 100px;">
@@ -351,18 +371,28 @@
            
             
             layui.use(['form','layer','laydate'], function(){
-            var laydate = layui.laydate;
-			//日期时间范围
-			laydate.render({
-				elem : '#test10',
-				type : 'time',
-				range : true
-			});
-			var form = layui.form
+                $ = layui.jquery;
+              var form = layui.form
               ,layer = layui.layer;
-	
-			//监听提交
-			form.on('submit(add1)', function(data){
+              var laydate = layui.laydate;
+   laydate.render({
+				    elem: '#test1'				  
+				  });
+				  laydate.render({
+				    elem: '#test2'
+				    ,type: 'time'				    
+				  });
+				   laydate.render({
+				    elem: '#test3'
+				  });
+				  laydate.render({
+				    elem: '#test4'
+				    ,type: 'time'				    
+				  });
+
+
+              //监听提交
+              form.on('submit(add1)', function(data){
           	
               data.field.shopAuditstates = "D";
               var message = "提交待审核成功！";  
@@ -378,7 +408,7 @@
                return false;
               });
               
-            
+              
             
             });
             
@@ -440,11 +470,7 @@
              	return false;
              }	
               console.log(data.field);
-         arr = [];
-          $("input[name='productCommissionCode']:checked").each(function(k,v){
-             arr.push($(this).val());
-         })
-          data.field.productCommissionCode +="-"+ arr; 
+            
                  $.ajax({
                 	  type:"post",
            			  url:"add.do",

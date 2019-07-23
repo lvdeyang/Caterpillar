@@ -155,6 +155,7 @@ public class MerchantController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
 	public String add(HttpServletRequest request) throws Exception {
+
 		String shopName = request.getParameter("shopName");
 		String shopLoginName = request.getParameter("shopLoginName");
 		String shopLoginPwd = request.getParameter("shopLoginPwd");
@@ -189,14 +190,20 @@ public class MerchantController extends BaseController {
 		String modularClassId2 = request.getParameter("modularClassId2");
 		
 		
-		String multiple = request.getParameter("productCommissionCode");
-		String[] spltString = multiple.split("-");
-		
-		String date = request.getParameter("shopHours");
-		
 		String shopAuditstates = request.getParameter("shopAuditstates");
 		String signPic = request.getParameter("signPic");
 		String shopyd = request.getParameter("shopyd");
+		
+		String beginAge = request.getParameter("beginAge");
+		String beginTime = request.getParameter("beginTime");
+		String endAge = request.getParameter("endAge");
+		String endTime = request.getParameter("endTime");
+		
+		String beginTimeDate = beginAge.concat(" ").concat(beginTime);
+		String endTimeDate = endAge.concat(" ").concat(endTime);
+		
+
+		
 		MerchantPO merchant = new MerchantPO();
 		MerchantPO check = conn_merchant.getByField("shopLoginName", shopLoginName);
 		if (check != null) {
@@ -221,8 +228,7 @@ public class MerchantController extends BaseController {
 		user.setUpdateTime(new Date());
 		user.setSource(0);
         
-		merchant.setDate(date);
-		merchant.setFeature(spltString[1]);
+		
 		merchant.setDistributionId(Integer.parseInt(distributionId));
 		merchant.setShopName(shopName);
 		merchant.setShopLoginName(shopLoginName);
@@ -267,7 +273,8 @@ public class MerchantController extends BaseController {
 		merchant.setComName(getLoginInfo().getComName());
 		merchant.setCityCode(getLoginInfo().getCityCode());
 		merchant.setCityName(getLoginInfo().getCityName());
-
+		merchant.setBeginTimeDate(beginTimeDate);
+		merchant.setEndTimeDate(endTimeDate);
 		user.setMerchant(merchant);
 		merchant.setUser(user);
 
