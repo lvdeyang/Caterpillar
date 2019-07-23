@@ -18,11 +18,11 @@ public class TablePO extends AbstractBasePO {
 	private static final long serialVersionUID = -7285694156749845123L;
 
 	private long merchantId; //商家id
-	private long tableNo;  //  
+	private long tableNo;  //  桌号
 	private long size; //  房间人数
 	private String name; // 名称
-	
 	private long bookprice; //定桌钱数
+	
 	
 	public long getMerchantId() {
 		return merchantId;

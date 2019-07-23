@@ -449,7 +449,9 @@ $(function() {
    function ticket(){     
       location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId=${merchantId}';   
    }
-   
+   $(document).on('click',' #guide',function(){
+	  window.location.href="guide/visitors/app?userId="+${userId}; 
+   });
 </script>
 
 
@@ -508,7 +510,7 @@ $(function() {
 	  </div>
 	  
 	   <!-- 导览  -->
-	  <div  style="width:96%;height:230px;margin:0 auto;text-align: center;background:#fff;top:24px;position: relative;overflow: hidden;">
+	  <div id="guide" style="width:96%;height:230px;margin:0 auto;text-align: center;background:#fff;top:24px;position: relative;overflow: hidden;">
 	    <p style="font-size:14px;height:35px;line-height:35px;font-weight: bold;color:black;margin:0;">
 	    <span style="margin-left:5%;float:left;">景区导览</span>
 	    <span style="margin-right:8%;float:right;color:#C0C0C0;font-size:18px">&gt;</span>

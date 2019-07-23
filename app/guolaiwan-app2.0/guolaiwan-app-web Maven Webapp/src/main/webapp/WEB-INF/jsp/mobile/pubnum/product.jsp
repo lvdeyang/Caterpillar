@@ -653,12 +653,14 @@ input[type="datetime-local"]:before{
 	  };
 		
 		
-	  var productName;
+	   var productName;
 	  var productPic;
 	  var productUrl;
+	  var modularCode;
 	  var phone='';
       var iscollect=0;
       var qq="";
+      var merchantId;
       var productModular=0;
       var photos={};
       var ifFace=0;
@@ -671,7 +673,12 @@ input[type="datetime-local"]:before{
 			productName = data.product.productName + '-过来玩';
 			productPic = data.product.productShowPic;
 			productUrl = window.location.href;
+			merchantId = data.product.productMerchantID;
+			modularCode = data.merchant.modularCode;
 			product =  data.product.productModularCode;
+			if(modularCode == "0001" || modularCode == "0002"){ //跳进新版
+     	    	  $("#newpage").show();
+		   }
 			if(data === -1) return;
 			if(data){
 			    var html=[];
@@ -824,7 +831,14 @@ input[type="datetime-local"]:before{
 			initShare();
 			
 		});
-		
+		$(document).on('click','#newpage',function(){ //进入新页面
+		      if(modularCode == "0001"){
+		      location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+merchantId+'&proId='+${id}+'&choice=1'	;
+		      } 
+		      if(modularCode == "0002"){
+		      location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+merchantId;
+		      }
+		 });
 		
 		function dateFtt(fmt,date)   
 		{ //author: meizz   
@@ -2202,6 +2216,7 @@ input[type="datetime-local"]:before{
 					style="width:90%;margin-top:20px;margin-left:11px;font-size:14px;">
 					
 					<a id="socket" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线咨询</a>
+					<a id="newpage" style="display: none;" href="javascript:void(0);"  class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进入新版页面</a>
 					<a id="guide" href="javascript:void(0);" style="display: none;" class=" icon-user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;导览</a>
 					
 					<a> <img id="olprompt" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
