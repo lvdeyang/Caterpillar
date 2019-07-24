@@ -600,15 +600,15 @@ html, body {
 		        callpay(orderId);
 			});
 		}
-		
+		 //order.setOrderState(OrderStateType.TESTED);
 		function payByWallet(orderId){
 			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
 			var userId=${userId};
-			$.post(url,{'orderId':orderId,'userId':userId},function(data){
+			$.post(url,{'orderId':orderId,'userId':userId,"payment":1},function(data){
 						data = parseAjaxResult(data);
 				if(data==1){
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
-						    if(data.data=="PAYSUCCESS"){				
+						    if(data.data=="PAYSUCCESS" || data.data=="TESTED"){	
 						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
 						    }
 						});

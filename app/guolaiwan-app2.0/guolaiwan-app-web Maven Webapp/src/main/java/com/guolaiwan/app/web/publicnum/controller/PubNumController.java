@@ -2172,6 +2172,7 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/wallet/walletbuy")
 	public Object walletbuy(HttpServletRequest request) throws Exception {
 		String orderId = request.getParameter("orderId");
+		String payment = request.getParameter("payment"); //判断是否是到店支付
 		long id = Long.parseLong(request.getParameter("userId"));
 		UserInfoPO user = conn_user.get(id);
 		OrderInfoPO order = conn_order.get(Long.parseLong(orderId));
@@ -2179,7 +2180,11 @@ public class PubNumController extends WebBaseControll {
 		long userMoney = user.getWallet();
 		if (userMoney >= productPrice) {
 			user.setWallet(userMoney - productPrice);
-			order.setOrderState(OrderStateType.PAYSUCCESS);
+			if(payment != null){
+				order.setOrderState(OrderStateType.TESTED);	
+			}else{
+				order.setOrderState(OrderStateType.PAYSUCCESS);	
+			}
 			// 生成验单码,和二维码图片
 			String ydNO = ydNoCode(orderId);
 			order.setYdNO(ydNO);
