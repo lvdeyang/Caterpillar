@@ -1030,7 +1030,7 @@ html, body {
 							<a> <img id="olprompt1" style="width:20px;height:20px;vertical-align: middle;margin-top:-2px;display: none;" src="lib/images/hongdian.gif"><!--这个标志是信息提醒 --></a>
 						</div>
 						<div id="payinshop">
-						   <a id="newpage"  style="display:none; dwidth:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">进入新版页面</a>
+						   <a id="newpage"  style="display:none; dwidth:96%;margin-top:15px;background-color:#18b4ed; height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">进入新版页面</a>
 						</div>
 						<div
 							style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">商家详情</div>
