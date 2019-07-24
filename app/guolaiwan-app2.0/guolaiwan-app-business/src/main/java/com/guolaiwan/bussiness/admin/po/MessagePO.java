@@ -14,6 +14,36 @@ public class MessagePO extends AbstractBasePO {
 	private String oderId;// 订单id
 	private String merchantid;// 商户id
 	private String state;// 支付状态 0代表未支付，1代表已支付，2代表以验单
+	//商品id
+	private Long proId;
+	//用户id
+	private Long userId;
+	//电话
+	private String phone;
+
+	public Long getProId() {
+		return proId;
+	}
+
+	public void setProId(Long proId) {
+		this.proId = proId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public String getOderId() {
 		return oderId;

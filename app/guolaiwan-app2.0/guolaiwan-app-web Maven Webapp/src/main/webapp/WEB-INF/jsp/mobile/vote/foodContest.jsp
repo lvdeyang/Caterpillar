@@ -79,14 +79,12 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-
+    background:#fff;
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
 }
 .zong{
-	background:url("lib/images/meishibeijing.png") no-repeat;
-	background-size:cover;
     overflow: hidden;
 }
  
@@ -143,21 +141,19 @@ html, body {
         text-align: center;
 }  
 .xia button{
-background:#FF1A48;
-color:#FFF03B;
+background:#C3181E;
+color:#fff;
 font-weight: bpld;
-padding:0 8px;
+padding:0 15px;
 border:none;
 outline:none;
 border-radius:6px;
 box-shadow:0 3px #D50931;
 font-size:12px;
 font-weight:bold;
-margin:0 6%;
+margin:5px 5%;
 }
-.di{
 
-}
 .di::before{
   content:"";
   position:absolute;
@@ -217,8 +213,8 @@ margin:0 5px;
 				line-height: 20px;
 				font-size: 14px;
 				text-align: center;
-				margin:0 0 20px 3%;
-				color:#fff;
+				margin:0 0 20px 2.5%;
+				color:black;
 				
 			}
 			.tab-btn li img{
@@ -248,31 +244,6 @@ margin:0 5px;
 <script>
 var base;
 
-/* $(document).on('click', '.vote', function(){ 
-  $(".fuceng").fadeIn();
-  $(".tanchuang").fadeIn();
-}); */
-  $(document).on('click', '.return', function(){ 
-  $(".fuceng").fadeOut();
-  $(".tanchuang").fadeOut();
-});
-  $(document).on('click', '.guize-in', function(){ 
-  $(".fuceng").fadeOut();
-  $(".guize").fadeOut();
-});
-$(document).on('click', '.btns', function(){ 
-  $(".fuceng").fadeIn();
-  $(".guize").fadeIn();
-});
- $(document).on('click', '.dianping', function(){ 
-   $(".fuceng").fadeIn();
-  $(".lists").fadeIn();
-});
- $(document).on('click', '.fuceng', function(){ 
-  $(".fuceng").fadeOut();
-  $(".lists").fadeOut();
-});
-
 $(function() {
 	<!--选项卡  -->
 	$(".tab-btn li").click(function(){
@@ -292,6 +263,8 @@ $(function() {
 	});
   /*返回顶部  */
 $(function(){
+	getRecomment();
+	
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -307,10 +280,26 @@ $(function(){
 	});
 });
 
+
+function getRecomment(){
+	      var _uriMerchantInfo = window.BASEPATH+'admin/vote/allpics?optionId=${optionId}';
+		$.get(_uriMerchantInfo, null, function(data){
+			    	var html=[];
+				for(var i=0; i<data.length; i++){
+					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="http://www.guolaiwan.net/file'+data[i].slidepic+'" alt=""></div>');
+				}
+				$('.swiper-wrapper').append(html.join(''));
+				$(".swiper-container").swiper({
+			        loop: true,
+			        autoplay: 3000
+			    });
+		    });
+}
+
 //获取选项卡标签
 function getvotemodular(){
  var _uriRecomment = window.BASEPATH + 'judges/getvotemodular';
-   $.post(_uriRecomment,{"optionId":1},function(data){
+   $.post(_uriRecomment,{"optionId":${optionId}},function(data){
    
      getvoteproduct(data[0].id)
       var html=[];
@@ -322,70 +311,98 @@ function getvotemodular(){
           }          
       }
          $('#menu').append(html.join(''));
-         $("#b"+data[0].id).css("color","#FFF03A");
+         $("#b"+data[0].id).css("color","#F92828");
+         base=data[0].id;
    });
 }
 
 //获取对应的商品
 function getvoteproduct(id){
-$("#b"+base).css("color","#fff");
+$("#b"+base).css("color","black");
  base=id;
- $("#b"+id).css("color","#FFF03A");
-    var _uriRecomment = window.BASEPATH + 'judges/getvotemodular?id='+id;
+ $("#b"+id).css("color","#F92828");
+    var _uriRecomment = window.BASEPATH + 'judges/getvoteproduct?id='+id+'&userId=${userId}';
     $.get(_uriRecomment,null,function(data){
-      var html=[];
-      for(var i=0;i<data.length;i++){
-            html.push('<div style="width:47%;margin:10px 1%;height:auto;float:left;position: relative;">');
-            if(i==0){
-              html.push('<img style="width:30px;height:30px;position: absolute;z-index:111;top:-15px;left:-15px;transform:rotate(-45deg);" src="lib/images/king.png">');
-            }
-            html.push('<div style="z-index:11;width:100%;height:200px;background:#fff;border-radius:12px;float:left;position: relative;overflow: hidden;border: 2px solid black;">');
-            html.push('<div style="width:100%;height:60%;position: relative;">');
-            if(i==0){
-              html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+1+'</span>');
-            }
-            if(i==1){
-              html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+2+'</span>');
-            }
-            if(i==2){
-              html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+3+'</span>');
-            }
-            html.push('<img style="width:100%;height:100%;" src="http://www.guolaiwan.net/file'+data[i].image+'">');
-            html.push('<P style="height:20px;line-height: 20px;font-size:12px;width:100%;color:#fff;background:#000000;opacity:0.6;position: absolute;bottom:0;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:60%;display: inline-block;">'+data[i].productname+'</span><span style="float:right;">已售<span>'+data[i].OutOfPrint+'</span>+</span></P>');
-            html.push('</div>');
-            html.push('<div class="xia" style="width:100%;height:40%;position: relative;background: #FFF03B;padding:0 3% 10px;color:#FF1A48;text-align: center;font-weight:bold;">');
-            html.push('<P style="height:20px;line-height: 20px;font-size:12px;width:100%;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:50%;display: inline-block;float:right;">'+data[i].productname+'</span><span style="float:left;">总票：<span>'+data[i].OutOfPrint+'</span>票</span></P>');
-            html.push('<p style="height:25px;line-height: 25px;text-align: left;"><span><img style="width:12px;height:12px;" src="lib/images/toupiao.png">'+data[i].ticketnumber+'票</span><span class="dianping" style="float:right;"><img style="width:12px;height:12px;" src="lib/images/dianzanss.png">评委点评</span></p>');
-            html.push('<button onclick="votepoll('+data[i].productId+')"  class="vote">投票</button>');
-            html.push('<button onclick="gotovoteproductdetails('+data[i].productId+')">购买</button>');
-            html.push('</div>');
-            html.push('</div>');
-            html.push('<div class="di" style="margin:5px 0 0 3%;width:100%;height:200px;background:#fff;border-radius:12px;position: absolute;overflow: hidden;border: 2px solid black;">');
-            html.push('</div>');
-            html.push('</div>');         
-            
-      }
-       $('.contentt-box').children().remove();
-       $('.contentt-box').append(html.join(''));    
+      list(data);   
     });
 } 
+//搜索商品
+ function search(){
+    	if($('.search').val()==""){
+    		$.toast('请输入关键字', 'text');
+    		return;
+    	}
+    	var name=$('.search').val();
+    	var url = window.BASEPATH + 'judges/getproductbyname';
+    	$.post(url,{"userId":${userId},"name":name},function(data){
+    				$("#b"+base).css("color","black");
+    				list(data);
+    	})
+    }
 	
 	function votepoll(id){
 		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id;
 		$.get(url,null,function(data){
+			var count=parseInt(data.count)+1;
+			var pollnum=parseInt(data.pollnum)-1;
+			var votes=parseInt($('#votes'+id).html())+1;
 			if(data.msg=="1"){
-				$(".fuceng").fadeIn();
-	  			$(".tanchuang").fadeIn();
+			$(".tanchuang"+id).show(300).delay(1000).hide(300); 
+			$('#polled'+id).html(count);
+			$('#pollnum'+id).html(pollnum);
+			$('#votes'+id).html(votes);
 			}else if(data.msg=="0"){
-				$.toast('5票/商品/人', 'text');
+				$.toast('5票/商品/人/天', 'text');
 			}
 		})
 	}
-
-	function gotovoteproductdetails(id){
-   		location.href=window.BASEPATH + 'admin/vote/gotovoteproductdetails?productId='+id;
+	
+	function gotobuy(id){
+   		location.href=window.BASEPATH + 'pubnum/product/index?id='+id;
     }
-
+	//展开数据
+	function list(data){
+		var html=[];
+		if(data.length==0){
+			html.push('<p style="height:100px;line-height:70px;text-align:center;width:100%;color:#DADADA;">没有搜索到相关的商品</p>');
+			 $('.contentt-box').children().remove();
+   			 $('.contentt-box').append(html.join(''));
+		}
+     for(var i=0;i<data.length;i++){
+           html.push('<div style="width:47%;margin:10px 1%;height:auto;float:left;position: relative;">');
+           if(i==0){
+             html.push('<img style="width:30px;height:30px;position: absolute;z-index:111;top:-15px;left:-15px;transform:rotate(-45deg);" src="lib/images/king.png">');
+           }
+           html.push('<div style="z-index:11;width:100%;height:auto;background:#fff;border-radius:12px;float:left;position: relative;overflow: hidden;border: 2px solid #F92828;">');
+           html.push('<div style="width:100%;height:60%;position: relative;">');
+           if(i==0){
+             html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+1+'</span>');
+           }
+           if(i==1){
+             html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+2+'</span>');
+           }
+           if(i==2){
+             html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+3+'</span>');
+           }
+           html.push('<img style="width:100%;height:100%;" src="http://www.guolaiwan.net/file'+data[i].image+'">');
+           html.push('</div>');
+           html.push('<div class="xia" style="width:100%;height:auto;position: relative;padding:0 3% 3px;color:black;text-align: center;font-weight:bold;">');
+           html.push('<P style="height:20px;line-height: 20px;width:100%;color:black;text-align:left;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:95%;display: inline-block;">'+data[i].productname+'</span></P>');
+           html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:right;">已售：<span>'+data[i].OutOfPrint+'</span>+</span><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].productvotes+'</span></span></P>');
+           html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span>'+data[i].productvotes+'</span></p>');
+           html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>8.9</span><span class="dianping" style="float:right;background:#C3181E;color:#fff;font-size:12px;">查看评分</span></p>');
+           html.push('<button id="'+data[i].productId+'" onclick="votepoll(this.id)"  class="vote">投票</button>');
+           html.push('<button onclick="gotobuy('+data[i].productId+')">购买</button>');
+           html.push('</div>');
+           html.push('</div>');
+           html.push('<div class="tanchuang'+data[i].productId+'" style="text-indent:2em;display: none;z-index:111111;width:90%;height:auto;font-weight:bold;background:#fff;bottom:5px;left:5%;border:2px solid #C3181E;border-radius:12px;padding:20px 10%;position: absolute;">');
+	    html.push('<P>您已经成功投票<span id="polled'+data[i].productId+'"></span>次，还有<span id="pollnum'+data[i].productId+'"></span>次投票机会。</p>');
+	    html.push('</div>');
+           html.push('</div>');         
+     }
+      $('.contentt-box').children().remove();
+      $('.contentt-box').append(html.join(''));
+	}
 </script>
 
 
@@ -398,93 +415,44 @@ $("#b"+base).css("color","#fff");
 				<div class="header-content">商户</div>
 			</div>
 		</div> -->
-		    <div class="content" id="content" >
+		    <div class="content" id="content"  style="position: relative;">
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
+			 <img style="width:40%;position: absolute;z-index:111111111111;top:10px;left:10%;" src="${logo}">
+			<!--  <img style="width:10%;position: absolute;z-index:111111111111;top:10px;left:55%;" src="lib/images/logoss.png"> -->
 		    </div>
-		  
-		   
-		
-		   
-		   
-		<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 10%;">
 		    
-		       	 <!-- 选项卡 -->
-		     
-		  <div class="tab">
-				<ul class="tab-btn active" id="menu">
-					
-				</ul>
-					
-		<div class="contentt-box" >
-				<div class="contentt active" style="text-align: center;">
-				     <!-- 循环  -->
-
-				</div>
-				
-		<div class="contentt" style="text-align: center;">
-				   <!-- 循环  -->
-		
-		</div>
-				
-				
-		</div>
-		 
-		     
-		     
-		     
-			</div>
-		</div>
-	</div>
-		    
-		    
-		   
-	
+		 <div style="width:85%;height:150px;border:1px solid #C3181E;border-radius:12px;margin:10px auto;">
+		    <P style="height:50px;line-height: 50px;color:#C3181E;font-weight: bold;font-size:26px;text-align: center;">评分规则</P>
+		  </div>
+		     <!-- 搜索  -->
+		  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;margin:20px 0;">
+		   <input placeholder="搜索" class="search" style="padding:0 15%;width:70%;height:30px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;background:#fff;text-align: center; " type="text">
+		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="search()" src="lib/images/sousuo.png"/>
 		  </div>
 		 
+		   
+			<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 5%;">
+			  	<div class="tab">
+					<ul class="tab-btn active" id="menu">
+					</ul>
+					<div class="contentt-box" >
+							<div class="contentt active" style="text-align: center;">
+							</div>
+							<div class="contentt" style="text-align: center;">
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+ </div>
+		 
 	 
 		 
 		 
-		 
-		 
-		<!-- 规则 --> 
-		<button class="btns" style="color:#fff;background: #F25566;width:45px;border-radius:18px;position: absolute;top:15px;right:2%;border:none;outline:none;z-index:111;">规则</button>
-		<div class="guize" style="z-index:11111;width:90%;height:300px;padding:0 3% 20px 3%;overflow-x: hidden;text-align: center;background: #8DD0FB;position: fixed;top:10%;border-radius: 10px;margin:0 5% -150px;">
-	     <p class="guize-in" style="float: right;background: #fff;border-radius:50%;width:20px;height:20px;font-weight: bold;margin-top:10px;">x</p>
-	      <p style="margin-top:40px;color:#F44F60;font-weight: bold;font-size:20px;">投票规则/说明</p>
-	      <ul style="color:#fff;line-height: 20px;font-size: 12px;text-align: left;">	       
-	       <li>一:投票时间：2019年7月20日起至10月20日止</li>
-	       <li>二:投票说明：2019年7月20日起至10月20日止</li>
-	       <li>三:投票规则：2019年7月20日起至10月20日止</li>
-	      </ul>
-	    </div>  
-		 
-	 <div class='fuceng' style=""></div>
-	 <!-- 投票 -->
-     <div class="tanchuang" style="display: none;z-index:11111;width:80%;height:300px;padding:0 2% 50px 2%;overflow-x: hidden;text-align: center;background: #8DD0FB;position: fixed;bottom:50%;border-radius: 20px;margin:0 10% -150px;">
-	    <img style="width:150px;margin-top:30px;" src="lib/images/true.png">
-	    <p style="color:#fff;height:40px;line-height: 40px;font-size:18px;font-weight: bold;letter-spacing:3px;  ">投票成功</p>
-	    <p style="color:#fff;height:40px;line-height: 40px;">投票剩余<span>2</span>次</p>
-	    <button class="return" style="border-radius:8px;color:#fff;background: #FED44C;font-size:18px;font-weight: bold;letter-spacing:3px;width:60%;height:35px;border:none;outline:none;position: absolute;bottom:20px;left:50%;margin-left:-30%;">返回</button>
-	  </div> 
-		  
-		 <!--评委列表 -->
-     <div class="lists" style="display: none;z-index:11111;width:80%;height:300px;padding:0 0 30px ;overflow-x: hidden;text-align: center;background:#fff;position: fixed;bottom:50%;border-radius: 10px;margin:0 10% -150px;">
-	     <p style="height:70px;line-height: 70px;background: #8DD0FB;"><img src="lib/images/xingxing.png"><img src="lib/images/xingxing.png"><img src="lib/images/xingxing.png"></p>
-	     <p style="height:30px;line-height: 30px;background: #8DD0FB;color:#fff;font-size:18px;font-weight:bold;">评分列表</p>
-	     
-	     <p style="color:#FD775C;font-size:20px;font-weight:bold;height:40px;line-height: 40px;"><span style="margin:0 8%">姓名</span><span style="margin:0 8%">分数</span></p>
-	     <ul>
-	      <li> <p style="color:#FD775C;font-size:16px;font-weight:bold;height:30px;line-height:30px;"><span style="margin:0 8%">姓名</span><span style="margin:0 8%">分数</span></p></li>
-	      <li> <p style="color:#FD775C;font-size:16px;font-weight:bold;height:30px;line-height:30px;"><span style="margin:0 8%">姓名</span><span style="margin:0 8%">分数</span></p></li>
-	      <li> <p style="color:#FD775C;font-size:16px;font-weight:bold;height:30px;line-height:30px;"><span style="margin:0 8%">姓名</span><span style="margin:0 8%">分数</span></p></li>
-	      <li> <p style="color:#FD775C;font-size:16px;font-weight:bold;height:30px;line-height:30px;"><span style="margin:0 8%">平均</span><span style="margin:0 8%">分数</span></p></li>
-	     </ul>
-	 </div>  
-	 
-	 
+
 	 
 	    <!-- 置顶 -->
 		<div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>

@@ -381,6 +381,7 @@ $(function(){
 					  getLine(data);
 					  $('.weui-loadmores').hide();
 					 $('.weui-loadmore').show();
+					 setTimeout(function(){$('.weui-loadmore').hide()},1000);
 					
 					page+=1;
 						}
@@ -399,35 +400,7 @@ $(function(){
                  var list = data.productPOs;
                  var  str = data.strArryList;                                                                                 
 	       //后面的
-		   for(var j=0;j<list.length;j++){
-		   var pro_pros = list[j].productName.split(","); 			   	   
-		   	       html.push('<div class="weui-panel__bd">');
-				   html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
-		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');		            
-		           if(pro_pros[1] == "act"){
-		           html.push('<img id="mg-'+list[j].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[j].productShowPic+'" onclick="commodity(this.id,1)"/> ');
-		           html.push('<div class="youxuan-in">');
-		           html.push('<p id="p-'+list[j].id+'" onclick="commodity(this.id,1)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pros[0]+'</p>'); 
-		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您739m</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
-		           }else{
-		           html.push('<img id="mg-'+list[j].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[j].productShowPic+'" onclick="commodity(this.id,0)"/> ');
-		           html.push('<div class="youxuan-in">');
-		           html.push('<p id="p-'+list[j].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pros[0]+'</p>'); 
-		           
-		           }		         
-                   html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">$'+str[j]+'</span><span style="float:right;margin-top:10px">已售100+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   </p>');
-		   }
-		   html.push('</div></div></div>');
-
-	        $('#contents').append(html.join(''));
-	    }
-    
- function getallteam(){
-     var _uricoms = window.BASEPATH + '/product/package/list?merchantId='+${productMerchantID}+'&pageNum=1';	
-     $.get(_uricoms, null, function(data){  
-           var list =  data.productPOs;
-           var  str = data.strArryList;
-         for(var i=0;i<list.length;i++){
+		         for(var i=0;i<list.length;i++){
                 var pro_pro = list[i].productName.split(",");                               
          		var html=[];       		
 		           html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
@@ -442,7 +415,35 @@ $(function(){
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           }
-		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">$'+str[i]+'</span><span style="float:right;margin-top:10px">已售100+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   </p>');
+		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售100+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   </p>');
+		           html.push('</div></div></div>');
+		          
+		 		$('#contents').append(html.join(''));
+	     	}
+		       
+	    }
+    
+ function getallteam(){
+     var _uricoms = window.BASEPATH + '/product/package/list?merchantId='+${productMerchantID}+'&pageNum=1';	
+     $.get(_uricoms, null, function(data){  
+           var list =  data.productPOs;
+           var  str = data.strArryList;          
+         for(var i=0;i<list.length;i++){
+                var pro_pro = list[i].productName.split(",");                             
+         		var html=[];       		
+		           html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
+		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
+		         if(pro_pro[1] == "act"){
+		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,1)"/> ');
+		           html.push('<div class="youxuan-in">');		           	           
+		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,1)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您739m</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
+		           }else{
+		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
+		           html.push('<div class="youxuan-in">');		           	           
+		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
+		           }
+		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售100+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   </p>');
 		           html.push('</div></div></div>');
 		          
 		 		$('#contents').append(html.join(''));
@@ -454,17 +455,18 @@ $(function(){
      var mer_path = window.BASEPATH +'/product/package/merInfo';
      var mer_da = {"merchantId":${productMerchantID}};
      $.post(mer_path,mer_da,function(msg){       
-          if(msg === undefined) return;
+          if(msg === undefined) return;          
           var merpo  =  msg.merpos;
-          var proinfo = msg.prosinfos;             
+          var proinfo = msg.prosinfos;  
+          
+                   
           var html = [] ;
           html.push('<ul>');
           html.push('<li><p style="font-size:18px;">'+merpo.shopName+'</p></li>');
-          html.push('<li ><p id="_pro_name" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;">');
-         
+          html.push('<li ><p id="_pro_name" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;">');        
           html.push('</p></li>');
-          html.push(' <li><p><span style="font-size:18px;color:#EA6B1F;">4.5分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率100%</span></p></li>');
-          html.push('<li><p>开放时间：8：00-18：00</p></li>');
+          html.push(' <li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
+          html.push('<li><p>开放时间：'+msg.beginTime+'-'+msg.endTime+'</p></li>');
           html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：'+merpo.shopAddress+'</p></li>');
           html.push('</ul>');
           $(".jieshao").append(html.join(''));  
@@ -477,11 +479,11 @@ $(function(){
      })  
   }
    function commodity(id,state){
-   if(state == '0'){
-    var proId = id.split("-");
-    location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId=${productMerchantID}&proId='+proId[1]; 
+   var proId = id.split("-");
+   if(state == '0'){   
+    location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+${productMerchantID}+'&proId='+proId[1]+'&choice=0'; 
     }else{
-    alert("不要选我哎呀啊啊啊啊啊啊啊      ")
+    location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+${productMerchantID}+'&proId='+proId[1]+'&choice=1';
     }    
    }
 </script>
@@ -513,8 +515,8 @@ $(function(){
 	     
 	  
 	     
-                                           <!--  购票  -->
-	           <div id="contents" >	 	        	    
+               <!--  购票  -->
+	           <div id="contents" ></div>	 	        	    
           <!-- 置顶 -->
 			<div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/hometop.png"></a></div>
         

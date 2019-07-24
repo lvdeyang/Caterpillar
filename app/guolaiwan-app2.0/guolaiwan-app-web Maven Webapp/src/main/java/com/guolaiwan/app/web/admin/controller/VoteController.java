@@ -111,6 +111,7 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/del.do", method = RequestMethod.POST)
 	public String del(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
+		voteproductDAO.deleteByMoId(id);
 		votemodularDAO.delete(id);
 		return "success";
 	}
@@ -354,6 +355,12 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/deloption", method = RequestMethod.POST)
 	public String delOption(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
+		List<VoteModularPO> modulars = votemodularDAO.getByOptionId(id);
+		for (VoteModularPO voteModularPO : modulars) {
+			voteproductDAO.deleteByMoId(voteModularPO.getId());
+			votemodularDAO.delete(voteModularPO);
+		}
+		votepicDAO.deleteByOptionId(id);
 		voteoptionsDAO.delete(id);
 		return "success";
 	}
@@ -477,6 +484,15 @@ public class VoteController extends BaseController {
 		votePicsPo.setSlidepic(pic);
 		votepicDAO.saveOrUpdate(votePicsPo);
 		return "success";
+	}
+	
+	//查询所有轮播图
+	@ResponseBody
+	@RequestMapping(value = "/allpics")
+	public List<VotePicsPo> picsByOptionList(HttpServletRequest request) throws Exception {
+		long optionId = Long.parseLong(request.getParameter("optionId"));
+		List<VotePicsPo> VotePics = votepicDAO.getByOptionId(optionId);
+		return VotePics;
 	}
 	
 }

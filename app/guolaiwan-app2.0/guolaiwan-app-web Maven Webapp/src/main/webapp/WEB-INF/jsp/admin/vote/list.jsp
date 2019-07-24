@@ -91,10 +91,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             		,limit: 10
    					,cols: [[
    						{type:"checkbox"}
-   						,{field:"modularName",title:"标签名称",edit:"text",width:160}
-   						,{field:"addTime",title:"添加时间",width:160}
+   						,{field:"modularName",title:"标签名称",edit:"text",align:'center',width:160}
+   						,{field:"addTime",title:"添加时间",align:'center',width:160}
    						,{field:"modularDescribe",title:"标签描述",edit:"text",width:1000}
-   						,{title: '标签缩略图',templet:"#picTpl",width:100} 
+   						,{title: '标签缩略图',templet:"#picTpl",align:'center',width:100} 
    						,{title:"操作",templet:"#zsgc"}
    						]]
    					,done:function(res, curr, count){

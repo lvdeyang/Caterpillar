@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>购票商品详情</title>
+<title>活动购票商品详情</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -150,6 +150,17 @@ html, body {
 .fangxing p{
  margin:0;
 }
+
+.fuceng{
+    position: fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top: 0;
+    background-color:rgba(0,0,0,0.6);
+    z-index: 10000;
+
+}
 </style>
 
 </head>
@@ -168,14 +179,14 @@ html, body {
 
 </script>
 <script type="text/javascript">
-    $(function(){
+ $(function(){
 	  getRecomment();
 	  getallteam(); 
 	  getComment();
   })
 
 
-	 function getRecomment(){
+  function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
 		
 		$.get(_uriMerchantInfo, null, function(data){
@@ -204,9 +215,10 @@ html, body {
 			    }
 			    });
 	  }
-	 //全局获取商品内容 
-	 function getallteam(){
-     var _uricoms = window.BASEPATH + 'product/package/commodity/info?merchantId=${merchantId}&proId=${proId}&choice=0';	
+	  
+	  
+     function getallteam(){
+     var _uricoms = window.BASEPATH + 'product/package/commodity/info?merchantId=${merchantId}&proId=${proId}&choice=1';	
      $.get(_uricoms, null, function(msg){    
        //商品信息
        var merchantMessage =  msg.merinfo;
@@ -262,12 +274,23 @@ html, body {
 	  }
 	})	
  }  
-  //立即预定
+  
+    //立即预定
     function reserve(id){
-       location.href=window.BASEPATH + 'product/package/payment/jump?merchantId=${merchantId}&proId=${proId}&choice=0&comboId='+id;        
+      location.href=window.BASEPATH + 'product/package/payment/jump?merchantId=${merchantId}&proId=${proId}&choice=1&comboId='+id;       
     }
-	  
 	
+	
+	
+	$(document).on('click', '.ling', function(){ 
+    $(".fuceng").fadeIn();
+    $(".tanchuang").fadeIn();
+    });
+    $(document).on('click', '.fuceng', function(){ 
+    $(".fuceng").fadeOut();
+    $(".tanchuang").fadeOut();
+    });
+   
 </script>
 
 
@@ -287,21 +310,53 @@ html, body {
 			</div>
 		</div>
 	</div>
-           <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;border-radius:10px;overflow: hidden;position: relative;top:-60px;z-index:111;">        
-	     </div>
+	       <!-- 商品信息 -->
+           <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;border-radius:10px;overflow: hidden;position: relative;top:-60px;z-index:111;">	       
+	       </div>
 	  
+	  
+	  <!-- 活动 -->
+	  <div style="height:50px;width:100%;background: #fff;border-radius: 12px;position: relative;top:-50px;padding:0 5%;">
+	    <p style="height:50px;line-height: 50px;color:#EC6D1E;font-weight: bold;">
+	    <span>优惠促销</span>
+	    <span style="color:#fff;background:#EC6D1E;border-radius:8px;font-size:12px;padding:5px 10px; ">本单享受立减10元</span>
+	    <span style="color:#fff;background:#EC6D1E;border-radius:8px;font-size:12px;padding:5px 10px; ">满100减20</span>
+	    <span class="ling" style="float:right;">领取></span>
+	    </p>
+	  </div>	  
+	      
+
+	  <!-- 票种选择 -->
 	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-40px;padding:0 0 30px 0;">
 	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">票种选择</p>
-	    <div class="productlist">	              		          
-	    </div>	     	  
+	    <div class="productlist"></div>
+	     
+	    
+
 	  </div> 
 	 
-	   <!-- 点评 -->
+	   <!-- 用户评价 -->
 	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-20px;padding:0 0 30px 0;">
-	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">用户评价</p>	  	      
+	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">用户评价</p>	      
+	   </div>
+
+<div class='fuceng' style="display: none;"></div>
+     <div class="tanchuang" style="z-index:11111;width:100%;height:320px;padding:0 2% 50px 2%;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0;border-top-left-radius: 10px;border-top-right-radius: 10px;display: none;">
+	   <p style="width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 18px;border-bottom:1px solid #D3D3D3;color:black;font-weight: bold;">优惠促销</p>
+	    
+	     <div style="width:90%;height:90px;border:1px solid #FF6D00;margin:10px auto;border-radius:12px;overflow:hidden;">
+	        <div style="width:40%;height:100%;float:left;background: -webkit-linear-gradient(left,rgba(255,109,0,1),rgba(254,161,1,1));color:#fff;font-weight: bold;font-size:18px;">
+	         <p style="width:100%;height:45px;line-height: 45px;">￥10</p>
+	         <p style="width:100%;height:40px;line-height: 40px;">满<span>50</span>可用</p>
+	        </div>
+	        <div style="width:60%;height:100%;font-size:12px;float:right;text-align: left;padding:0 5%;position: relative;">
+	         <p style="width:100%;height:45px;line-height: 45px;">部分酒店可用</p>
+	         <p style="width:100%;height:40px;line-height: 40px;">仅限今天使用</p>
+	         <span style="color:#fff;background:#EC6D1E;padding:0 10px;position: absolute;top:36px;right:5%; border-radius:18px;">立即领取</span>
+	        </div>
+	     </div>
+	
 	  </div>
-
-
 
 </body>
  
