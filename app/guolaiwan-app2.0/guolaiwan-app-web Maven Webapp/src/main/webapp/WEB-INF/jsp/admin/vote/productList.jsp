@@ -170,6 +170,7 @@ function getProductList(){
     ,{field: 'productName', title: '商品名称',sort: true} 
     ,{field: 'peoplevotenum', title: '群众投票',sort: true} 
     ,{field: 'judgesvotenum', title: '评委投票',sort: true} 
+    ,{field: 'ordernum', title: '销售量',sort: true} 
     ,{fixed: 'right',title: '操作',width:200,toolbar:'#zsgc',unresize:true} 
     ]]
     ,id:'activityRel'
@@ -179,7 +180,6 @@ function getProductList(){
     
   });
 }
-
 
 function selectPName(obj){
 	var type = $(obj).data('type');

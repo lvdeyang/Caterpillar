@@ -341,16 +341,16 @@ $("#b"+base).css("color","black");
     }
 	
 	function votepoll(id){
-		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id;
+		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id+'&optionId=${optionId}';
 		$.get(url,null,function(data){
 			var count=parseInt(data.count)+1;
 			var pollnum=parseInt(data.pollnum)-1;
 			var votes=parseInt($('#votes'+id).html())+1;
 			if(data.msg=="1"){
-			$(".tanchuang"+id).show(300).delay(1000).hide(300); 
-			$('#polled'+id).html(count);
-			$('#pollnum'+id).html(pollnum);
-			$('#votes'+id).html(votes);
+				$(".tanchuang"+id).show(300).delay(1000).hide(300); 
+				$('#polled'+id).html(count);
+				$('#pollnum'+id).html(pollnum);
+				$('#votes'+id).html(votes);
 			}else if(data.msg=="0"){
 				$.toast('5票/商品/人/天', 'text');
 			}
@@ -358,7 +358,17 @@ $("#b"+base).css("color","black");
 	}
 	
 	function gotobuy(id){
-   		location.href=window.BASEPATH + 'pubnum/product/index?id='+id;
+		var url=window.BASEPATH + 'judges/buypoll';
+		
+		$.post(url,{"usreId":${userId},"productId":id,"optionId":${optionId}},function(data){
+			if(data.msg=="1"){
+	   			location.href=window.BASEPATH + 'pubnum/product/index?id='+id+'&vote=YES';
+			}else if(data.msg=="0"){
+				$.toast('3次/商品/人', 'text');
+			}else if(data.msg=="2"){
+				$.toast('哎呀，出了点小问题！', 'text');
+			}
+		})
     }
 	//展开数据
 	function list(data){

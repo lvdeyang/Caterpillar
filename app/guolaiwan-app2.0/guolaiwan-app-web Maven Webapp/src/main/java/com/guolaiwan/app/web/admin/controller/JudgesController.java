@@ -167,9 +167,10 @@ public class JudgesController {
 
 	// 限制票数的方法 返回值为0的时候次数已达到5次，为1的时候可以投票，为2的时候服务器出现异常
 	@RequestMapping(value = "/votepoll", method = RequestMethod.GET)
-	public Map<String, String> VotePoll(String userId, String productId) {
+	public Map<String, String> VotePoll(String userId, String productId,String optionId) {
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		try {
 			Map<String, String> hashMap = new HashMap<String, String>();
 			//当天的记录数量
@@ -182,28 +183,36 @@ public class JudgesController {
 				voteImposePo1.setPoll(1);
 				voteImposePo1.setProductId(productId);
 				voteImposeDao.save(voteImposePo1);
+				//将票数封装到后台展示的po中
+				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
+				voteProduct.setPeoplevotenum(count+1);
+				voteProductDao.saveOrUpdate(voteProduct);
 				hashMap.put("msg", "1");
 				hashMap.put("count", count+"");
-				hashMap.put("pollnum", (5-count)+"");
+				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
 				return hashMap;
 			}
 			//当有记录但是已经满足当天投票总量时
-			if (count != 0 && count == 5) {
+			if (count != 0 && count == voteOption.getPollnum()) {
 				hashMap.put("msg", "0");
 				hashMap.put("count", count+"");
-				hashMap.put("pollnum", (5-count)+"");
+				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
 				return hashMap;
 			}
 			//当有记录但是没有满足当天投票总量时
-			if (count != 0 && count != 5) {
+			if (count != 0 && count != voteOption.getPollnum()) {
 				VoteImposePo voteImposePo1 = new VoteImposePo();
 				voteImposePo1.setUserId(userId);
 				voteImposePo1.setPoll(1);
 				voteImposePo1.setProductId(productId);
 				voteImposeDao.save(voteImposePo1);
+				//将票数封装到后台展示的po中
+				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
+				voteProduct.setPeoplevotenum(count+1);
+				voteProductDao.saveOrUpdate(voteProduct);
 				hashMap.put("msg", "1");
 				hashMap.put("count", count+"");
-				hashMap.put("pollnum", (5-count)+"");
+				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
 				return hashMap;
 			}
 			hashMap.put("msg", " ");
@@ -245,31 +254,25 @@ public class JudgesController {
 
 	// 限制购买的方法
 	// 返回值为0的时候次数已达到5次，为1的时候可以投票，为2的时候服务器出现异常--------------------有点问题后面再改
-	@RequestMapping(value = "/buypoll", method = RequestMethod.GET)
-	public Map<String, String> buyPoll(String userId, String productId) {
+	@RequestMapping(value = "/buypoll")
+	public Map<String, String> buyPoll(String userId, String productId,String optionId) {
 		try {
 			Map<String, String> hashMap = new HashMap<String, String>();
-			VoteImposePo voteImposePo = voteImposeDao.getVoteImposePo(userId, productId);
-			//还没有记录的情况新建一条购买量
-			if (voteImposePo == null) {
-				VoteImposePo voteImposePo1 = new VoteImposePo();
-				voteImposePo1.setUserId(userId);
-				voteImposePo1.setBuy(1);
-				voteImposePo1.setProductId(productId);
-				voteImposeDao.save(voteImposePo1);
-			}
-			if (voteImposePo != null && voteImposePo.getBuy() == 3) {
+			VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
+			int count = voteImposeDao.buyCountByUidPid(userId, productId);
+			long ordernum=count+1;
+			if (count != 0 && count == voteOption.getOrdernum()) {
 				hashMap.put("msg", "0");
 				return hashMap;
 			}
-			if (voteImposePo != null && voteImposePo.getBuy() != 3) {
-				voteImposePo.setBuy(voteImposePo.getBuy() + 1);
-				voteImposeDao.update(voteImposePo);
-				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
-				voteProduct.setPeoplevotenum(voteProduct.getPeoplevotenum() + 1);
-				voteProductDao.update(voteProduct);
+			if(count >=0 && count <= voteOption.getOrdernum()){
+				VoteProductPO voteProductPO = voteProductDao.getVoteProduct(Long.parseLong(productId));
+				voteProductPO.setOrdernum(ordernum);
+				voteProductDao.saveOrUpdate(voteProductPO);
+				hashMap.put("msg", "1");
+				return hashMap;
 			}
-			hashMap.put("msg", "1");
+			hashMap.put("msg", " ");
 			return hashMap;
 		} catch (Exception e) {
 			Map<String, String> hashMap = new HashMap<String, String>();
@@ -283,10 +286,13 @@ public class JudgesController {
 	@ResponseBody
 	@RequestMapping(value = "/votepage")
 	public ModelAndView VotePage(HttpServletRequest request) {
+		
+		//这里上线应该修改成获取的optionId 再用
+		
 		/*String optionId=request.getParameter("optionId");*/
-		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong("5"));
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong("1"));
 		ModelAndView mView = new ModelAndView("mobile/vote/foodContest");
-		mView.addObject("optionId", "5");
+		mView.addObject("optionId", voteOption.getId());
 		//此活动的logo
 		mView.addObject("logo", "http://www.guolaiwan.net/file"+voteOption.getSlidepic().toString());
 		return mView;
