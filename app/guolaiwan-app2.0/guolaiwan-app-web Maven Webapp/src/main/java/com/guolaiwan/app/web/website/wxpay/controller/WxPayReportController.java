@@ -1006,13 +1006,24 @@ public class WxPayReportController extends WebBaseControll {
 			if(resultcode.equals("SUCCESS")){
 				int i=0;
 				//获取订单号
-				String tradeNum=respData.get("out_trade_no");
-				String refundNum=respData.get("out_refund_no");
-				if(refundNum!=null&&refundNum.indexOf("refund")!=-1){					
+				    String tradeNum=respData.get("out_trade_no");
+				    String refundNum=respData.get("out_refund_no");
 					if(tradeNum != null){
-					List<OrderPO> oderPO =conn_order.findByField("orderNo", tradeNum.toString().trim()); 	
-					oderPO.get(0).setOrderStatus("REFUNDED");
-					conn_order.update(oderPO.get(0));
+					OrderPO oderPO =conn_order.findByField("orderNo", tradeNum.toString().trim()).get(0); 	
+					//退款后修改车位状态
+					int	parkingNumber = oderPO.getParkingNumber();
+					String	parkingLayer = 	oderPO.getParkingLayer();
+					String	district = 	oderPO.getParkingDistrict();
+				    long   attactionsId  =  oderPO.getAttractionsId();
+					CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
+					long id = userName.getId();
+				    ParkingPositionPO getTruck  =  Parking_Position.getNumber(id,parkingNumber);
+				    getTruck.setUseCondition(0);
+					Parking_Position.saveOrUpdate(getTruck);
+					
+					
+					oderPO.setOrderStatus("REFUNDED");
+					conn_order.update(oderPO);
 					}
 					stringBuffer.append("<xml><return_code><![CDATA[");
 					stringBuffer.append("SUCCESS");
@@ -1022,7 +1033,6 @@ public class WxPayReportController extends WebBaseControll {
 					stringBuffer.append("]]></return_msg>");
 					System.out.println("微信支付退款成功!订单号："+tradeNum);
 					return stringBuffer.toString();
-				}				
 			}else{
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("FAIL");

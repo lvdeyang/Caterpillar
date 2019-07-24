@@ -532,6 +532,7 @@ public class SceneryListController  extends WebBaseControll{
 			odp.setAttractionsId(uid);
 			odp.setParkingCost(0);
 			odp.setPlatenumber(vehicle);
+			odp.setOrderStatus("NOTPAY");
 			Order.save(odp);
 			dataMap.put("uid", odp.getId());
 		return success(dataMap);
