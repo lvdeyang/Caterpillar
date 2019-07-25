@@ -521,7 +521,7 @@ color:#fff;
 			   $.toast("请输入身份证号", "forbidden");
 			   return false;
 			} 
-			 var re = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+			 var re = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X|x)$/;
                       
 		    if(re.test($('#_idcard').val())==false){
 		       $.toast("身份证号码有误，请重填", "forbidden");  
@@ -576,8 +576,8 @@ color:#fff;
              $(".tianjia").append(htm.join(''));
 	  	     
 	  	     var html = [];          
-             html.push('<div  style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;border-bottom:1px solid #A6A6A6;text-align: left;padding:10px 20%;">');
-             html.push('<input checked type="radio" name="sex" value="1" style="position: absolute;top:30px;left:10%;" />');
+             html.push('<div  style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;border-bottom:1px solid #A6A6A6;text-align: left;padding:10px 10%;">');
+             html.push('<input checked type="radio" name="sex" value="1" style="position: absolute;top:30px;left:5%;" />');
              html.push('<P>姓名：'+mesage[i].name+'</P>');
              html.push('<P>手机号：'+mesage[i].phone+'</P>');
              html.push('<P>身份证号：'+mesage[i].number+'</P>');
