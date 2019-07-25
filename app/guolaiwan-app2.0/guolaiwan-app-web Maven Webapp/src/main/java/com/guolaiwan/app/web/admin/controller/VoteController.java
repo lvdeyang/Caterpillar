@@ -178,8 +178,6 @@ public class VoteController extends BaseController {
 		}
 		List<VoteProductPO> voteproducts = voteproductDAO.findByAcId(moId, pName, pidl, page, limit);
 		int count = voteproductDAO.countByMoId(moId,pName);
-		System.out.println(moId);
-		System.out.println(count);
 		strMap.put("data", voteproducts);
 		strMap.put("code", "0");
 		strMap.put("msg", "");
@@ -263,11 +261,9 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/gotovoteproductdetails")
 	public ModelAndView voteProductDetails(HttpServletRequest request) {
 		long productId=Long.parseLong(request.getParameter("productId"));
-		System.out.println(productId);
 		ProductPO productPO = conn_product.get(productId);
 		ModelAndView mv = new ModelAndView("mobile/vote/voteproductdetails");
 		mv.addObject("product", productPO);
-		System.out.println(productPO+"-------"+productPO.getProductIntroduce());
 		return mv;
 	}
 	
@@ -416,7 +412,6 @@ public class VoteController extends BaseController {
 	public String optionStatus(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
 		String value = request.getParameter("value");
-		System.out.println(value+"--------");
 		VoteOptionsPo voteOptions = voteoptionsDAO.get(id);
 		voteOptions.setVotestatustype(value);
 		voteoptionsDAO.saveOrUpdate(voteOptions);
@@ -498,7 +493,6 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/apendpic", method = RequestMethod.POST)
 	public String apendPic(HttpServletRequest request) throws Exception {
 		long optionId=Long.parseLong(request.getParameter("optionId"));
-		System.out.println(optionId+"------");
 		VotePicsPo pic=new VotePicsPo();
 		pic.setOptionId(optionId);
 		votepicDAO.save(pic);
@@ -555,4 +549,13 @@ public class VoteController extends BaseController {
 		return null;
 	}
 	
+	// 投票轮播图页面
+	@RequestMapping(value = "/gotovotepc")
+	public ModelAndView goToVotePc(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
+		ModelAndView mv = new ModelAndView("mobile/vote/delicacyPc");
+		mv.addObject("optionId", optionId);
+		return mv;
+	}
+
 }
