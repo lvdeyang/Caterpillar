@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>产品详情</title>
+<title>评分列表</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -79,7 +79,7 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#E0E0E0 !important; 
+	background:#fff !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	
@@ -138,15 +138,22 @@ html, body {
   .inp::-webkit-input-placeholder{
         text-align: center;
 }  
-.fuceng{
-    position: fixed;
-    width:100%;
-    height:100%;
-    left:0;
-    top: 0;
-    background-color:rgba(0,0,0,0.6);
-    z-index: 10000;
-
+.lists tr th{
+ width:20%;
+ background: #C3191F;
+ color:#fff;
+ height:40px;
+ text-align: center;
+ font-size:16px;
+}
+.lists tr td{
+ width:20%;
+ background: #fff;
+ color:black;
+ height:40px;
+ text-align: center;
+ font-weight: bold;
+ font-size:16px;
 }
 </style>
 
@@ -164,7 +171,7 @@ html, body {
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
 $(function(){
-getRecomment();
+	getRecomment();
 })
 
 
@@ -190,154 +197,8 @@ function getRecomment() {
 		});
 }
 
-$(document).on('click', '#zhifu', function(){ 
-  $(".fuceng").fadeIn();
-   $(".tanchuang").fadeIn();
-});
 
-$(document).on('click', '.fuceng', function(){ 
-  $(".fuceng").fadeOut();
-  $(".tanchuang").fadeOut();
-});
-
-$(document).on('click','#paynow',function(){
-			$(".fuceng").fadeOut();
-   			$(".tanchuang").fadeOut();
-		    if($('#paytext').val()==''){
-			   $.toast("请输入金额", "forbidden");
-			   return false;
-			}
-			dopay(0);
-	  }); 
 	  
-	  
-	  function dopay(mailId){
-	  	
- 		    var _uriAdd = window.BASEPATH + 'phoneApp/goToPay';
-			var params={};
-			params.userId=${userId};
-			params.merchantId=${product.productMerchantID};
-			params.source="PUBLICADDRESS";
-			params.payMoney=1;
-			params.addressId=mailId;
-			$.confirm("确定支付？", function() {
-				$.post(_uriAdd, $.toJSON(params), function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					 $.modal({
-						  title: "付款方式",
-						  buttons: [
-						    { text: "余额支付", onClick: function(){ 
-								    payByWallet(data.id);
-						    } },
-						    { text: "微信支付", onClick: function(){ 
-								    payPublic(data.id);
-						    } },
-						    { text: "取消", className: "default", onClick: function(){ } },
-						  ]
-						}); 
-				});			  
-			  });	 	
-		}
-		 
-	  
-	  function deleteorder(orderId)
-	  {
-	  	var params={};
-	  	params.orderId = orderId;
-	  	$.post(window.BASEPATH +'phoneApp/deleteorder', $.toJSON(params), function(data){
-	  	});
-	  }	
-	  
-	  
-	  	var prepay_id;
-		var paySign;
-		var appId;
-		var timeStamp;
-		var nonceStr;
-		var packageStr;
-		var signType;
-		var orderNo;	
-		
-			
-		function payPublic(orderId){
-			$.get(window.BASEPATH +"pubnum/prev/pay/"+orderId, null, function(data){
-				prepay_id = data.prepay_id;
-		        paySign = data.paySign;
-		        appId = data.appId;
-		        timeStamp = data.timeStamp;
-		        nonceStr = data.nonceStr;
-		        packageStr = data.packageStr;
-		        signType = data.signType;
-		        orderNo = data.orderNo;
-		        callpay(orderId);
-			});
-		}
-		
-		function payByWallet(orderId){
-			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
-			var userId=${userId};
-			$.post(url,{'orderId':orderId,'userId':userId},function(data){
-						data = parseAjaxResult(data);
-				if(data==1){
-						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
-						    if(data.data=="PAYSUCCESS"){				
-						       location.href=window.BASEPATH + 'business/gotopayment?orderId='+orderId+'&merchantId=${merchant.id}';
-						    }
-						});
-				}else{
-					$.alert('您的余额不足！');
-				}
-			})
-		}
-	
-		function onBridgeReady(orderId){
-		    WeixinJSBridge.invoke(
-		        'getBrandWCPayRequest', {
-		           "appId"     : appId,     //公众号名称，由商户传入
-		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
-		           "nonceStr"  : nonceStr , //随机串
-		           "package"   : packageStr,
-		           "signType"  : signType,  //微信签名方式：
-		           "paySign"   : paySign    //微信签名
-		        },
-		        function(res){
-		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		                $.confirm("交易成功");
-		                //每五秒刷新订单状态
-						
-		                setInterval(function(){ 
-                                $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
-								    
-								    if(data.data=="TESTED"||data.data=='PAYSUCCESS'){
-								       location.href=window.BASEPATH + 'business/gotopayment?orderId='+orderId+'&merchantId=${merchant.id}';
-								    }
-								});
-                        }, 1000);
-		            }
-		            if (res.err_msg == "get_brand_wcpay_request:cancel") {
-					 	deleteorder(orderId);
-		                alert("交易取消");  
-		            }  
-		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
-					 	deleteorder(orderId);
-		                alert(res.err_desc); 
-		            }  
-		        }
-		    );
-		}
-		function callpay(orderId){
-		    if (typeof WeixinJSBridge == "undefined"){
-		        if( document.addEventListener ){
-		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-		        }else if (document.attachEvent){
-		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-		        }
-		    }else{
-		        onBridgeReady(orderId);
-		    }
-		}
 </script>
 <body>
 			<!-- 主页 -->
@@ -349,31 +210,41 @@ $(document).on('click','#paynow',function(){
 			</div>
 		</div>
 		   
-		 <div class="content" id="content" >
+		 <div class="content" id="content" style="position: relative;" >
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-	</div>  
-		       
-		  <div style="width:100%;height:auto;">
-		    <div style="width:90%;height:auto;background: #fff;margin: auto;padding:0 5% 20px;border-radius:10px;color:#6E7272;">
-		       <p style="height:40px;line-height: 40px;font-size:16px;font-weight: bold;">菜品介绍</p>
-		       ${product.productIntroduce}
-		    </div>
-		  </div>  
-		  
-		<div class='fuceng' style="display: none;">
+			<p style="height:30px;line-height: 30px;width:100%;color:#fff;font-weight:bold;padding:0 10%;position: absolute;bottom:0;z-index:111111111111;background: rgba(129,91,84,0.6);">${product.productName}</p>
+	   </div>   
+	<div style="width:100%;text-align: center;">
+		 <button style="background:#C3191F;box-shadow:0 2px #BAB9BA;border-radius:8px;color:#fff;margin:25px auto;font-weight: bold;padding:5px 15px;font-size: 18px;border:none;outline:none;">${product.productName}评分列表</button>        
+	</div>	
 	
-		</div>
-	  <div class="tanchuang" style="z-index:11111;width:100%;height:auto;display: none;padding:0 0 50px 0;text-align: center;background: #fff;position: fixed;bottom:0;border-radius:10px; ">
-	   <p style="width:96%;margin:0 auto;height:50px;line-height: 50px;font-size: 18px;font-weight: bold;border-bottom:1px solid #D3D3D3;">${product.productName}</p>
-	    <p style="margin:80px 0 50px 0;text-align: center;font-weight:bold;">支付金额（元）<input id="paytext" style="height:30px;border-radius:8px;padding:0 5px;border:2px solid #F25566;outline: none;"></p>
-	    <button id="paynow" style="height:40px;color:#fff;background:#F25566;width:70%;border:none;outline:none;border-radius:10px;font-size:18px;">立即支付</button>
-	  </div>
-		
-		 <button id="zhifu" style="color:#fff;background: #F25566;font-weight: bold;font-size:18px;width:70%;border-radius:18px;border:none;outline:none;position: fixed;bottom:30px;left:15%;">到点支付</button>
-         <p style="height:35px;"></p>
+	<div class="lists" style="text-align: center;margin:0 auto;width:100%;">
+	 <table border="1"  style="text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; ">
+	  <tr>
+	    <th>日期</th>
+	    <th>评委姓名</th>
+	    <th>分数</th>
+	  </tr>
+	  <tr>
+	    <td>8月15日</td>
+	    <td>张xx</td>
+	    <td>9</td>
+	  </tr>
+	   <tr>
+	    <td>8月15日</td>
+	    <td>张xx</td>
+	    <td>9</td>
+	  </tr>
+	   <tr>
+	    <td>平均分</td>
+	    <td colspan="2">9</td>
+	  </tr>
+	</table>
+	  
+	 </div>    
 </body>
  
 

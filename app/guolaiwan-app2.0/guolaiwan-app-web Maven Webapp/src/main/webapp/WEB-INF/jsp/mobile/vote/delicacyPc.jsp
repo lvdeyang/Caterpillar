@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>美食大赛</title>
+<title>美食大赛pc</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -185,11 +185,11 @@ margin:0 5px;
 
 .gotop {
     position: fixed;
-    right: 20px;
+    right:2%;
     bottom: 50px;
     display: block;
-    width: 50px;
-    height: 50px;
+    width: 6em;
+    height:6em;
     opacity: 0.8;
     z-index:111111;
 			}
@@ -207,19 +207,18 @@ margin:0 5px;
 			.tab-btn li{
 				list-style: none;
 				float: left;
-				width: 17%;
-				height: 30px;
+				width: 14%;
+				height:auto;
 				font-weight: bold;
-				line-height: 20px;
-				font-size: 14px;
+				line-height: 2em;
+				font-size: 3em;
 				text-align: center;
 				margin:0 0 20px 2.5%;
 				color:black;
 				
 			}
 			.tab-btn li img{
-			height:25px;
-			width:25px;
+			 width:100%;
 			}
 			.btn-active{
 				/* background: orange; */
@@ -227,6 +226,35 @@ margin:0 5px;
 				color:#FFEF39 !important;
 				
 			}
+.nav{
+   height:350px;
+   width:100%;
+   background-image: url('lib/images/dasaibeijing.jpg');
+  background-size:100% 100%;
+  position: relative;
+}
+.logo-in{
+    color: #C3181E;
+    font-weight: bold;
+    font-size:7.5em;
+    font-family: "Just Another Hand",cursive;
+    text-transform: uppercase;
+}
+
+.paiming{
+     -webkit-clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+     -moz-clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+     clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+     transition: 1s clip-path;
+     border:0.2em solid #CDAD5D;
+     height:5em;
+     width:5em;
+     background: #060606;
+     line-height: 4em;
+     color:#fff;
+     font-weight:bold;
+
+}
 </style>
 
 </head>
@@ -263,8 +291,6 @@ $(function() {
 	});
   /*返回顶部  */
 $(function(){
-	getRecomment();
-	
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -279,22 +305,6 @@ $(function(){
         return false;
 	});
 });
-
-
-function getRecomment(){
-	      var _uriMerchantInfo = window.BASEPATH+'admin/vote/allpics?optionId=${optionId}';
-		$.get(_uriMerchantInfo, null, function(data){
-			    	var html=[];
-				for(var i=0; i<data.length; i++){
-					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="http://www.guolaiwan.net/file'+data[i].slidepic+'" alt=""></div>');
-				}
-				$('.swiper-wrapper').append(html.join(''));
-				$(".swiper-container").swiper({
-			        loop: true,
-			        autoplay: 3000
-			    });
-		    });
-}
 
 //获取选项卡标签
 function getvotemodular(){
@@ -312,7 +322,6 @@ function getvotemodular(){
       }
          $('#menu').append(html.join(''));
          $("#b"+data[0].id).css("color","#F92828");
-         base=data[0].id;
    });
 }
 
@@ -321,157 +330,146 @@ function getvoteproduct(id){
 $("#b"+base).css("color","black");
  base=id;
  $("#b"+id).css("color","#F92828");
-    var _uriRecomment = window.BASEPATH + 'judges/getvoteproduct?id='+id+'&userId=${userId}';
+    var _uriRecomment = window.BASEPATH + 'judges/getvoteproductpc?id='+id;
     $.get(_uriRecomment,null,function(data){
-      list(data);   
+      var html=[],html1=[];
+      for(var i=0;i<data.length;i++){
+            <!-- 1 -->
+        if(i==0){
+			html.push('<div style="width:30%;height:30em;position: relative;display: inline-block;">');   
+			html.push('<img style="width:17em;border-radius:50%;height:17em;z-index:10;position: absolute;left:50%;margin-left:-8.5em;" src="'+data[i].productpic+'">');   
+			html.push('<div class="paiming" style="position: absolute;top:14em;left:50%;z-index:11;text-align: center;margin-left:-2.5em;">');   
+			html.push('<p style="font-size:2.5em;">1</p>');   
+			html.push('</div>');   
+			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:7.6em;margin-left:-13em;" src="lib/images/guanjun.png">');   
+			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
+			html.push('<p style="border-radius:12px;color:#fff;background: #F2C148;padding:0.2em 0.5em;font-size:2em;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">10000票</p>');   
+			html.push('</div>');   
+			html.push('</div>');   
+		}
+	   	<!-- 2 -->
+	   	if(i==1){
+			html.push('<div style="width:30%;height:30em;position: relative;display: inline-block;float:left;left:5%;top:4em;">');   
+			html.push('<img style="width:16em;border-radius:50%;height:16em;z-index:10;position: absolute;left:50%;margin-left:-8em;" src="'+data[i].productpic+'">');   
+			html.push('<div class="paiming" style="position: absolute;top:13em;left:50%;z-index:11;text-align: center;margin-left:-2.5em;">');   
+			html.push('<p style="font-size:2.5em;">2</p>');   
+			html.push('</div>');   
+			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/yajun.png">');   
+			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
+			html.push('<p style="border-radius:12px;color:#fff;background:#BDC9C9;padding:0.2em 0.5em;font-size:2em;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">10000票</p>');   
+			html.push('</div>');   
+			html.push('</div>');   
+		}
+		<!-- 3 -->
+		if(i==2){
+			html.push('<div style="width:30%;height:30em;position: relative;display: inline-block;float:right;right:5%;top:4em;">');   
+			html.push('<img style="width:16em;border-radius:50%;height:16em;z-index:10;position: absolute;left:50%;margin-left:-8em;" src="'+data[i].productpic+'">');   
+			html.push('<div class="paiming" style="position: absolute;top:13em;left:50%;z-index:11;text-align: center;margin-left:-2.5em;">');   
+			html.push('<p style="font-size:2.5em;">3</p>');   
+			html.push('</div>');   
+			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/jijun.png">');   
+			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
+			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.2em 0.5em;font-size:2em;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">10000票</p>');   
+			html.push('</div>');   
+			html.push('</div>');   
+		    html.push('<div style="height:5em;"></div>');   
+        }  
+        if(i>2&&i%2==1){
+        	html1.push('<div style="width:70%;background: #B4B6B5;height:8em;margin: 1em auto;border-radius:1em;padding:0 2%;">');
+		    html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;display: flex;float:left;">');
+	        html1.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">');
+			html1.push('<p style="font-size:2.5em;">'+(i+1)+'</p>');
+			html1.push('</div>');
+		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i].productpic+'">');
+		   	html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i].productname+'</p>');
+		  	html1.push('<p style="color:#fff;display: inline-block;font-size:2em;margin:0 2%;">1000票</p>');
+	      	html1.push('</div>');
+	      	if(i+1==data.length)continue;
+	     	html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;display: flex;float:left;">');
+         	html1.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">');
+			html1.push('<p style="font-size:2.5em;">'+(i+2)+'</p>');
+		 	html1.push('</div>');
+		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i+1].productpic+'">');
+	  		html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i+1].productname+'</p>');
+		  	html1.push('<p style="color:#fff;display: inline-block;font-size:2em;margin:0 2%;">1000票</p>');
+	     	html1.push('</div>');
+			html1.push('</div>');
+        }
+         
+      }
+       $('.main').children().remove();
+       $('.main').append(html.join('')); 
+       $('.other').children().remove();
+       $('.other').append(html1.join(''));   
     });
 } 
-//搜索商品
- function search(){
-    	if($('.search').val()==""){
-    		$.toast('请输入关键字', 'text');
-    		return;
-    	}
-    	var name=$('.search').val();
-    	var url = window.BASEPATH + 'judges/getproductbyname';
-    	$.post(url,{"userId":${userId},"name":name},function(data){
-    				$("#b"+base).css("color","black");
-    				list(data);
-    	})
-    }
 	
 	function votepoll(id){
-		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id+'&optionId=${optionId}';
+		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id;
 		$.get(url,null,function(data){
-			var count=parseInt(data.count)+1;
-			var pollnum=parseInt(data.pollnum)-1;
-			var votes=parseInt($('#votes'+id).html())+1;
 			if(data.msg=="1"){
-				$(".tanchuang"+id).show(300).delay(1000).hide(300); 
-				$('#polled'+id).html(count);
-				$('#pollnum'+id).html(pollnum);
-				$('#votes'+id).html(votes);
+			$(".tanchuang").show(300).delay(3000).hide(300); 
 			}else if(data.msg=="0"){
-				$.toast('5票/商品/人/天', 'text');
+				$.toast('5票/商品/人', 'text');
 			}
 		})
 	}
-	
-	function gotobuy(id){
-		var url=window.BASEPATH + 'judges/buypoll';
-		
-		$.post(url,{"usreId":${userId},"productId":id,"optionId":${optionId}},function(data){
-			if(data.msg=="1"){
-	   			location.href=window.BASEPATH + 'pubnum/product/index?id='+id+'&vote=YES';
-			}else if(data.msg=="0"){
-				$.toast('3次/商品/人', 'text');
-			}else if(data.msg=="2"){
-				$.toast('哎呀，出了点小问题！', 'text');
-			}
-		})
+
+	function gotovoteproductdetails(id){
+   		location.href=window.BASEPATH + 'admin/vote/gotovoteproductdetails?productId='+id;
     }
-    
-    function productdetails(id){
-    	location.href=window.BASEPATH + 'admin/vote/gotovoteproductdetails?productId='+id;
-    }
-    
-	//展开数据
-	function list(data){
-		var html=[];
-		if(data.length==0){
-			html.push('<p style="height:100px;line-height:70px;text-align:center;width:100%;color:#DADADA;">没有搜索到相关的商品</p>');
-			 $('.contentt-box').children().remove();
-   			 $('.contentt-box').append(html.join(''));
-		}
-     for(var i=0;i<data.length;i++){
-           html.push('<div style="width:47%;margin:10px 1%;height:auto;float:left;position: relative;">');
-           if(i==0){
-             html.push('<img style="width:30px;height:30px;position: absolute;z-index:111;top:-15px;left:-15px;transform:rotate(-45deg);" src="lib/images/king.png">');
-           }
-           html.push('<div style="z-index:11;width:100%;height:auto;background:#fff;border-radius:12px;float:left;position: relative;overflow: hidden;border: 2px solid #F92828;">');
-           html.push('<div style="width:100%;height:60%;position: relative;">');
-           if(i==0){
-             html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+1+'</span>');
-           }
-           if(i==1){
-             html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+2+'</span>');
-           }
-           if(i==2){
-             html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+3+'</span>');
-           }
-           html.push('<img style="width:100%;height:100%;" src="http://www.guolaiwan.net/file'+data[i].image+'">');
-           html.push('</div>');
-           html.push('<div class="xia" style="width:100%;height:auto;position: relative;padding:0 3% 3px;color:black;text-align: center;font-weight:bold;">');
-           html.push('<P style="height:20px;line-height: 20px;width:100%;color:black;text-align:left;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:95%;display: inline-block;">'+data[i].productname+'</span></P>');
-           html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:right;">已售：<span>'+data[i].OutOfPrint+'</span>+</span><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].productvotes+'</span></span></P>');
-           html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span>'+data[i].productvotes+'</span></p>');
-           html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>8.9</span><span id="'+data[i].productId+'" onclick="productdetails(this.id)" style="float:right;background:#C3181E;color:#fff;font-size:12px;">查看评分</span></p>');
-           html.push('<button id="'+data[i].productId+'" onclick="votepoll(this.id)"  class="vote">投票</button>');
-           html.push('<button onclick="gotobuy('+data[i].productId+')">购买</button>');
-           html.push('</div>');
-           html.push('</div>');
-           html.push('<div class="tanchuang'+data[i].productId+'" style="text-indent:2em;display: none;z-index:111111;width:90%;height:auto;font-weight:bold;background:#fff;bottom:5px;left:5%;border:2px solid #C3181E;border-radius:12px;padding:20px 10%;position: absolute;">');
-	    html.push('<P>您已经成功投票<span id="polled'+data[i].productId+'"></span>次，还有<span id="pollnum'+data[i].productId+'"></span>次投票机会。</p>');
-	    html.push('</div>');
-           html.push('</div>');         
-     }
-      $('.contentt-box').children().remove();
-      $('.contentt-box').append(html.join(''));
-	}
+
 </script>
 
 
 <body>
-			<!-- 主页 -->
-		<!-- <div class="header">
-			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div> -->
-		    <div class="content" id="content"  style="position: relative;">
-			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
-			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
-			  </div>
-			</div>
-			 <img style="width:40%;position: absolute;z-index:111111111111;top:10px;left:10%;" src="${logo}">
-			<!--  <img style="width:10%;position: absolute;z-index:111111111111;top:10px;left:55%;" src="lib/images/logoss.png"> -->
-		    </div>
-		    
-		 <div style="width:85%;height:150px;border:1px solid #C3181E;border-radius:12px;margin:10px auto;">
-		    <P style="height:50px;line-height: 50px;color:#C3181E;font-weight: bold;font-size:26px;text-align: center;">评分规则</P>
-		    ${voterule}
-		  </div>
-		     <!-- 搜索  -->
-		  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;margin:20px 0;">
-		   <input placeholder="搜索" class="search" style="padding:0 15%;width:70%;height:30px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;background:#fff;text-align: center; " type="text">
-		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="search()" src="lib/images/sousuo.png"/>
-		  </div>
-		 
+       <div class="nav">
+        <img style="width:15%;position:absolute;left:3%;top:20px; " src="lib/images/zhengfu.png">
+        <p style="height:2.5em;line-height: 2.5em;width:100%;font-size:4em;text-align: center;color:#C3181E;">2019中国·遵化</p>
+         <p class="logo-in" style="vertical-align: inherit;text-align: center;">美食节大赛评选活动</p>
+         <p style="text-transform:uppercase;text-align: center;font-size:2.5em;color:#C3181E;">food festival competition selection activities</p>
+       </div>
 		   
-			<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 5%;">
-			  	<div class="tab">
+		<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 5%;">  
+			  <!-- 选项卡 -->    
+			  <div class="tab" >
 					<ul class="tab-btn active" id="menu">
+						
 					</ul>
-					<div class="contentt-box" >
+				
+					<div class="contentt-box" style="" >
 							<div class="contentt active" style="text-align: center;">
+							
 							</div>
+							
 							<div class="contentt" style="text-align: center;">
+			
 							</div>
-					</div>
-				</div>
-			</div>
-		</div>
- </div>
-		 
+				  		
+			        </div> 
+	  
+	          </div>
+	   </div>
+
+		  <div class="main" style="width:100%;height:auto;text-align: center;margin:0 auto;">	
+			</div>	
+					   
+			<!-- 4--无限父级  -->
+		 <div class="other" style="width:100%;overflow:hidden;font-weight:bold;">     	
+	      </div>
+						
+						
+	        </div>			
 	 
 		 
 		 
 
-	 
-	    <!-- 置顶 -->
-		<div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
+	    
+	     <!-- 置顶 -->
+      <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
 </body>
  
 
