@@ -25,9 +25,33 @@ public class VoteOptionsPo extends AbstractBasePO {
 	private int pepolevote;
 	//投票状态
 	private String votestatustype;
+	//投票数量限制
+	private int pollnum;
+	//购买限制
+	private int ordernum;
+	//投票的规则
+	private String voterule;
 	
 	
 	
+	public String getVoterule() {
+		return voterule;
+	}
+	public void setVoterule(String voterule) {
+		this.voterule = voterule;
+	}
+	public int getPollnum() {
+		return pollnum;
+	}
+	public void setPollnum(int pollnum) {
+		this.pollnum = pollnum;
+	}
+	public int getOrdernum() {
+		return ordernum;
+	}
+	public void setOrdernum(int ordernum) {
+		this.ordernum = ordernum;
+	}
 	public String getVotestatustype() {
 		return votestatustype;
 	}

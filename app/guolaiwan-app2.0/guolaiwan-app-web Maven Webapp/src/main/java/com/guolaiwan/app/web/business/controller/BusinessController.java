@@ -314,7 +314,7 @@ public class BusinessController extends WebBaseControll {
 					df.format(Double.parseDouble(productlist.get(arr[i]).getProductPrice() + "") / 100));
 			hashMap.put("productOldPrice",
 					df.format(Double.parseDouble(productlist.get(arr[i]).getProductOldPrice() + "") / 100));
-
+			hashMap.put("productModularCode", productlist.get(arr[i]).getProductModularCode());
 			hashMap.put("url", productlist.get(arr[i]).getProductShowPic());
 			hashMap.put("id", productlist.get(arr[i]).getId());
 			hashMap.put("pingfen", orderInfoDao.GetCountbyPage(id)/100);

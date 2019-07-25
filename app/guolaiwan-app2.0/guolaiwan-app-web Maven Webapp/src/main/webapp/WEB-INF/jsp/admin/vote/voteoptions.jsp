@@ -134,10 +134,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             		,limit: 10
    					,cols: [[
    						{type:"checkbox"}
-   						,{field:"votename",title:"投票名称",edit:"text",align:'center',width:230}
-   						,{field:"judgesvote",title:"评委票权重（%）",edit:"text",align:'center',width:230}
-   						,{field:"ordervote",title:"销量等同票数（票）",edit:"text",align:'center',width:230}
-   						,{field:"pepolevote",title:"群众票等同票数（票）",edit:"text",align:'center',width:230}
+   						,{field:"votename",title:"投票名称",edit:"text",align:'center',width:150}
+   						,{field:"judgesvote",title:"评委票权重（%）",edit:"text",align:'center',width:150}
+   						,{field:"ordervote",title:"销量等同票数（票）",edit:"text",align:'center',width:170}
+   						,{field:"pepolevote",title:"群众票等同票数（票）",edit:"text",align:'center',width:170}
+   						,{field:"pollnum",title:"票/商品/天/人",edit:"text",align:'center',width:150}
+   						,{field:"ordernum",title:"单/商品/人/活动",edit:"text",align:'center',width:150}
    						,{field: 'votestatustype',title: '开启/结束',align:'center',width:150,templet:'#startandstop'}
    						,{title: 'logo缩略图',templet:"#picTpl",align:'center',width:100} 
    						,{title:"操作",templet:"#zsgc",width:400}
@@ -205,7 +207,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <a class='layui-btn layui-btn-xs' href="javascript:open_win('选择logo','<%=path%>/admin/picture/addlist?sImg=caImg{{d.id}}&sId={{ d.id }}&source=option','800','600')">选择logo</a>
 <a class="layui-btn layui-btn-xs" href="list?optionId={{d.id}}">标签列表</a>	
 <a class="layui-btn layui-btn-xs" href="<%=path%>/judges/getjudges?optionId={{d.id}}">评委列表</a>
-<a class="layui-btn layui-btn-xs" href="gotovotepics?optionId={{d.id}}">轮播图管理</a>			
+<a class="layui-btn layui-btn-xs" href="gotovotepics?optionId={{d.id}}">轮播图管理</a>	
+<a class="layui-btn layui-btn-xs" onclick="open_win('添加规则','gotovoterule?optionId={{d.id}}','900','600')" >活动规则</a>				
 <a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
 </script>
 <script type="text/html" id="startandstop">

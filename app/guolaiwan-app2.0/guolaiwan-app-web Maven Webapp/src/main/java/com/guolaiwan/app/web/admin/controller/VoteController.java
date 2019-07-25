@@ -18,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
+import com.guolaiwan.bussiness.admin.dao.VoteImposeDao;
 import com.guolaiwan.bussiness.admin.dao.VoteModularDAO;
 import com.guolaiwan.bussiness.admin.dao.VoteOptionsDao;
 import com.guolaiwan.bussiness.admin.dao.VotePicsDao;
@@ -28,7 +30,9 @@ import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
+import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
+import com.guolaiwan.bussiness.admin.po.VoteImposePo;
 import com.guolaiwan.bussiness.admin.po.VoteModularPO;
 import com.guolaiwan.bussiness.admin.po.VoteOptionsPo;
 import com.guolaiwan.bussiness.admin.po.VotePicsPo;
@@ -51,6 +55,10 @@ public class VoteController extends BaseController {
 	private VoteOptionsDao voteoptionsDAO;
 	@Autowired
 	private VotePicsDao votepicDAO;
+	@Autowired
+	private OrderInfoDAO orderinfoDAO;
+	@Autowired
+	private VoteImposeDao voteimposeDAO;
 	
 	// 显示列表页面
 	@ResponseBody
@@ -284,17 +292,6 @@ public class VoteController extends BaseController {
 		return mv;
 	}
 	
-	// 添加或者修改
-	@JsonBody
-	@ResponseBody
-	@RequestMapping(value = "/addoption", method = RequestMethod.POST)
-	public String addOption(HttpServletRequest request) {
-		String judgesvote = request.getParameter("judgesvote");
-		String ordervote = request.getParameter("ordervote");
-		String pepolevote = request.getParameter("pepolevote");
-		System.out.println(judgesvote+"--"+ordervote+"--"+pepolevote+"--");
-		return "success";
-	}
 	
 	// 选择logo图片
 	@ResponseBody
@@ -340,12 +337,17 @@ public class VoteController extends BaseController {
 		String judgesvote = request.getParameter("judgesvote");
 		String ordervote = request.getParameter("ordervote");
 		String pepolevote = request.getParameter("pepolevote");
+		String pollnum = request.getParameter("pollnum");
+		String ordernum = request.getParameter("ordernum");
 		
 		VoteOptionsPo options=new VoteOptionsPo();
 		options.setVotename(votename);
 		options.setJudgesvote(Integer.parseInt(judgesvote));
 		options.setOrdervote(Integer.parseInt(ordervote));
 		options.setPepolevote(Integer.parseInt(pepolevote));
+		options.setOrdernum(Integer.parseInt(ordernum));
+		options.setPollnum(Integer.parseInt(pollnum));
+		options.setVotestatustype("STOP");
 		voteoptionsDAO.save(options);
 		return "success";
 	}
@@ -393,6 +395,18 @@ public class VoteController extends BaseController {
 			voteoptionsDAO.save(voteOptions);
 			return "success";
 		}
+		else if(field.equals("pollnum")){
+			String pollnum = request.getParameter("value");
+			voteOptions.setPollnum(Integer.parseInt(pollnum));
+			voteoptionsDAO.save(voteOptions);
+			return "success";
+		}
+		else if(field.equals("ordernum")){
+			String ordernum = request.getParameter("value");
+			voteOptions.setOrdernum(Integer.parseInt(ordernum));
+			voteoptionsDAO.save(voteOptions);
+			return "success";
+		}
 		return "error";
 	}
 	
@@ -406,6 +420,34 @@ public class VoteController extends BaseController {
 		VoteOptionsPo voteOptions = voteoptionsDAO.get(id);
 		voteOptions.setVotestatustype(value);
 		voteoptionsDAO.saveOrUpdate(voteOptions);
+		return "success";
+	}
+	
+	// 投票规则页面
+	@RequestMapping(value = "/gotovoterule")
+	public ModelAndView goToVoteRule(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
+		VoteOptionsPo voteOption = voteoptionsDAO.get(Long.parseLong(optionId));
+		String voterule = voteOption.getVoterule();
+		ModelAndView mv = new ModelAndView("admin/vote/addvoterule");
+		if(voterule!=null&&voterule!=""){
+			mv.addObject("voterule", voterule);
+		}
+		mv.addObject("optionId", optionId);
+		return mv;
+	}
+	
+	//添加投票规则
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/addvoterule", method = RequestMethod.POST)
+	public String addVoteRule(HttpServletRequest request) throws Exception {
+		String optionId = request.getParameter("optionId");
+		String voterule = request.getParameter("voterule");
+		VoteOptionsPo voteOptions = voteoptionsDAO.get(Long.parseLong(optionId));
+		voteOptions.setVoterule(voterule);
+		voteoptionsDAO.saveOrUpdate(voteOptions);
+		
 		return "success";
 	}
 	
@@ -493,6 +535,24 @@ public class VoteController extends BaseController {
 		long optionId = Long.parseLong(request.getParameter("optionId"));
 		List<VotePicsPo> VotePics = votepicDAO.getByOptionId(optionId);
 		return VotePics;
+	}
+	
+	// 记录投票商品销量
+	@ResponseBody
+	@RequestMapping(value = "/addvoteorder")
+	public String addVoteOrder(HttpServletRequest request) {
+		String userId=request.getParameter("userId");
+		String orderId=request.getParameter("orderId");
+		//获取购买成功的订单
+		OrderInfoPO orderInfo = orderinfoDAO.get(Long.parseLong(orderId));
+		//新建条记录 储存销量
+		VoteImposePo vote=new VoteImposePo();
+		vote.setBuy(1);
+		vote.setUserId(userId);
+		vote.setProductId(orderInfo.getProductId()+"");
+		vote.setOrderId(orderId);
+		voteimposeDAO.save(vote);
+		return null;
 	}
 	
 }

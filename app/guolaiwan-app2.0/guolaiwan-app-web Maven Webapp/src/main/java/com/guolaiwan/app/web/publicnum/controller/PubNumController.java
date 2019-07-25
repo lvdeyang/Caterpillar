@@ -331,7 +331,7 @@ public class PubNumController extends WebBaseControll {
 	}
 
 	@RequestMapping(value = "/product/index")
-	public ModelAndView productIndex(HttpServletRequest request, long id, String activityproId) throws Exception {
+	public ModelAndView productIndex(HttpServletRequest request, long id, String activityproId,String vote) throws Exception {
 		ModelAndView mv = null;
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		String userHeadimg = conn_user.get(userId).getUserHeadimg();
@@ -347,6 +347,9 @@ public class PubNumController extends WebBaseControll {
 		} else {
 			mv = new ModelAndView("mobile/pubnum/product");
 			long productLimitNum = conn_product.get(id).getProductLimitNum();
+			if(vote!=null&&vote!=""&&vote.equals("YES")){
+				mv.addObject("isvote", vote);
+			}
 			mv.addObject("productLimitNum", productLimitNum);
 			mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
@@ -2189,6 +2192,7 @@ public class PubNumController extends WebBaseControll {
 			String ydNO = ydNoCode(orderId);
 			order.setYdNO(ydNO);
 			order.setIswallet(true);
+			order.setOrderState(OrderStateType.TESTED);
 			conn_order.saveOrUpdate(order);
 			conn_user.saveOrUpdate(user);
 			InvestWalletPO o =new InvestWalletPO();

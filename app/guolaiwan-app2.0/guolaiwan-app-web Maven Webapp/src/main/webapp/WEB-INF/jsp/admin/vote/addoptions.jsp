@@ -66,6 +66,24 @@
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                           票/商品/天/人
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="L_rule" name="pollnum" required lay-verify="required"
+                        autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                           单/商品/人/活动
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="L_rule" name="ordernum" required lay-verify="required"
+                        autocomplete="off" class="layui-input">
+                    </div>
+                </div>
 				<div id="view"></div> 
 				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 200px;bottom: 0">
                     <button class="layui-btn" lay-filter="add" lay-submit>

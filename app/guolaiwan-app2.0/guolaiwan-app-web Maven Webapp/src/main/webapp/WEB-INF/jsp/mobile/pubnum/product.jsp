@@ -1770,6 +1770,7 @@ input[type="datetime-local"]:before{
 		function payByWallet(orderId){
 			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
 			var userId=${userId};
+			var isvote="${isvote}";
 			$.post(url,{'orderId':orderId,'userId':userId},function(data){
 						data = parseAjaxResult(data);
 				if(data==1){
@@ -1777,7 +1778,10 @@ input[type="datetime-local"]:before{
 						    if(data.data=="PAYSUCCESS"){				
 						       	if(ifFace==1){
 					                updatemessage(orderId);
-					            }						      
+					            }	
+					            if(isvote=="YES"){
+					           		 addvoteorder(orderId);	
+					            }
 						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
 						    }
 						});
@@ -1785,6 +1789,12 @@ input[type="datetime-local"]:before{
 					$.alert('您的余额不足！');
 				}
                    
+			})
+		}
+		
+		function addvoteorder(orderId){
+			var url=window.BASEPATH +"admin/vote/addvoteorder";
+			$.post(url,{"userId":${userId},"orderId":orderId},function(){
 			})
 		}
 		

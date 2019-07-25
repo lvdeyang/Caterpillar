@@ -8,10 +8,26 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 @Entity
 @Table(name = "t_sys_voteimposePo")
 public class VoteImposePo extends AbstractBasePO {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1495476799126985454L;
+	
 	private String UserId;// 用户id
 	private String ProductId;// 对应的商品id
 	private Integer poll;// 投票数
 	private Integer buy;// 购买数
+	private String orderId;//订单号
+
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
 
 	public String getUserId() {
 		return UserId;

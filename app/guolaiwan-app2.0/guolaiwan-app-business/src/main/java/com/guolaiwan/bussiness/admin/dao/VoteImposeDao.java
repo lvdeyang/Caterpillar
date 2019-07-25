@@ -44,6 +44,23 @@ public class VoteImposeDao extends AbstractBaseDao<VoteImposePo> {
 		return count;
 	}
 	
+	/**
+	 * 按照Uid Pid 查购买数
+	 * @param userId
+	 * @param productId
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public int buyCountByUidPid(String userId, String productId) {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("userId", Condition.eq, userId);
+		cHql.andBy("productId", Condition.eq, productId);
+		cHql.andBy("buy", Condition.eq, 1);
+		int count = this.countByHql(cHql);
+		return count;
+	}
+	
 	
 	/**
 	 * 统计每个商品的投票数
