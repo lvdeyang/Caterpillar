@@ -360,6 +360,25 @@ $(function() {
 	    location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
 	}
 	
+	function getorderinfos(id,ModularCode){
+	  //景点
+	  if( ModularCode== "0001" ){
+	    location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+${merchantId}+'&proId='+id+'&choice=0';
+	   }
+	   //住宿
+	   if(ModularCode == "0002"){
+	   location.href=window.BASEPATH +'business/buyproduct?productId='+id;
+	   }
+	   //采摘
+	   if(ModularCode == "2123"){
+	   location.href=window.BASEPATH +'business/gotopickingpurchase?productId='+id;
+	   } 
+	   //美食
+	   if(ModularCode == "0003"){
+	   location.href=window.BASEPATH +'business/cate?modularCode='+ModularCode+'&merchantId='+${merchantId};
+	   } 
+	}
+	
 	// 南山攻略需要的数据
 	  function getVideoPics(){       
 		var url = window.BASEPATH + 'business/getVideoPics?merchantId='+${merchantId};
@@ -401,7 +420,7 @@ $(function() {
 			for(var i=0;i<data.length;i++){	
 				   var pingfen=(data[i].pingfen+46)/10;
 				   if(pingfen>5)pingfen=5;
-			       html.push("<a onclick='getorderinfo("+data[i].id+")'><div style='position: relative;overflow:hidden;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
+			       html.push("<a onclick='getorderinfos("+data[i].id+","+data[i].productModularCode+")'><div style='position: relative;overflow:hidden;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
 			       html.push("<img style='height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data[i].url+"'/>");
 			       html.push("<div class='youxuan-in' style='display: inline-block;'>");
 			       html.push("<p style='position: absolute;top:-40px;font-size:14px;max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data[i].ProductName+"</p>");
