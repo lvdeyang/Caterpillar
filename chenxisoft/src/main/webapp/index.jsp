@@ -19,6 +19,6 @@ $(function () {
 <title>loading</title>
 </head>
 <body>
-<jsp:forward page="/index"></jsp:forward>
+<jsp:forward page="/pc/home/index"></jsp:forward>
 </body>
 </html>
