@@ -175,7 +175,6 @@ public class JudgesController {
 			Map<String, String> hashMap = new HashMap<String, String>();
 			//当天的记录数量
 			int count = voteImposeDao.countByUidPid(userId, productId,startTime,endTime);
-			System.out.println(count+"-"+userId+"-"+productId);
 			//当天的记录数量为0时
 			if (count == 0) {
 				VoteImposePo voteImposePo1 = new VoteImposePo();
@@ -293,6 +292,7 @@ public class JudgesController {
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong("1"));
 		ModelAndView mView = new ModelAndView("mobile/vote/foodContest");
 		mView.addObject("optionId", voteOption.getId());
+		mView.addObject("voterule", voteOption.getVoterule());
 		//此活动的logo
 		mView.addObject("logo", "http://www.guolaiwan.net/file"+voteOption.getSlidepic().toString());
 		return mView;
@@ -344,6 +344,28 @@ public class JudgesController {
 	}
 	
 	
+	
+	//获得投票的商品
+	@RequestMapping(value = "/getvoteproductpc", method = RequestMethod.GET)
+	public List<Map<String, String>> getvoteproductpc(String id) {
+		//按照模块id获取投票的商品
+		List<VoteProductPO> getvoteproduct = voteProductDaO.getvoteproduct(Long.parseLong(id));
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(getvoteproduct==null){
+			return list;
+		}
+		for (VoteProductPO voteProductPO : getvoteproduct) {
+			HashMap<String, String> hashMap = new HashMap<String, String>();
+			//通过id查到product
+			ProductPO productPO = productDao.get(voteProductPO.getProductId());
+			hashMap.put("productpic", "http://www.guolaiwan.net/file"+productPO.getProductShowPic());
+			hashMap.put("productname", productPO.getProductName());
+			list.add(hashMap);
+		}
+		return list;
+	}
+	
+	
 	//获得投票搜索的商品
 	@JsonBody
 	@ResponseBody
@@ -351,7 +373,6 @@ public class JudgesController {
 	public List<Map<String, String>> getproductbyname(HttpServletRequest request) {
 		String userId=request.getParameter("userId");
 		String name=request.getParameter("name");
-		System.out.println(userId+"-"+name);
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		//按照模块id获取投票的商品

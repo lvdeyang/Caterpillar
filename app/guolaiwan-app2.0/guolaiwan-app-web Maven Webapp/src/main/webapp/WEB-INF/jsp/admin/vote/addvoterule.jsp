@@ -71,7 +71,6 @@
    
    			//监听提交
               form.on('submit(add2)', function(data){
-              alert(data)
               	var message = "增加成功"
               	add(data,message);
               	return false;

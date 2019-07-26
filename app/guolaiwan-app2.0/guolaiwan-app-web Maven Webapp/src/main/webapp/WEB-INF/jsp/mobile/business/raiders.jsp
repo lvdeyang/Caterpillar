@@ -159,7 +159,18 @@ html, body {
  margin:0 5px;
 
 }
-
+.dianzan:hover{
+@keyframes anim{  
+	 0%{ 
+	 transform:scale(1); 
+	} 
+	 50%{ 
+	 transform:scale(1.5); 
+	}   
+	100%{ 
+	 transform:scale(1); 
+	}   
+}
 </style>
 
 </head>
@@ -205,11 +216,16 @@ html, body {
 		      html.push('<img style="width:100%;height:200px" src="'+data[i].textimg+'">');
 		      html.push('<p style="font-size:18px;font-weight:bold;margin:10px auto; ">"'+data[i].textname+'"</p>');
 		      html.push('<p style="font-size:16px;margin:10px 0;overflow : hidden;text-overflow: ellipsis;white-space:nowrap;width:250px;">'+data[i].frist+'</p>');
+		      html.push('</a>');
 		      html.push('<ul>');
 	          html.push('<li><p>'+time+'天前</p></li>');
-	          html.push('<li><p><img style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>111</span>)</p></li>');
-	          html.push('<li><p><img style="width:20px;height:20px;" src="lib/images/dianzanss.png"/>(<span>111</span>)</p></li>');
-	          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>');
+	         /*  html.push('<li><p><img  style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>'+data[i].pcomment+'</span>)</p></li>'); */
+	         if(data[i].picture == 1 ){
+	         html.push('<li><p onclick="xiaoxisChlick('+data[i].id+')"><img class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/dianzanss.png"/>(<span>'+data[i].videoPic+'</span>)</p></li>');
+	         }else{
+	         html.push('<li><p onclick="xiaoxisChlick('+data[i].id+')"><img class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/huixin.png"/>(<span>'+data[i].videoPic+'</span>)</p></li>');
+	         }
+	         /*  html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>'); */
 		      html.push('</ul>');
 		      html.push('</div>');
 		   	  html.push('</div></a>');
@@ -220,6 +236,19 @@ html, body {
 	
 	function gotoraidersdetails(id){
         location.href=window.BASEPATH + 'business/gotoraidersdetails?id='+id;
+   }
+	function xiaoxisChlick(id){ //增加点赞
+	  var userId="<%=session.getAttribute("userId")%>"; 
+      var url = window.BASEPATH + 'newPhoneController/vpPraise.do';
+      var params = {};
+	  params.vpId = id;
+	  params.userId = userId;
+      $.post(url, $.toJSON(params), function(data){
+	      data = parseAjaxResult(data);
+	      alert(data.msg);
+	      $('.gl').empty();
+	      getVideoPics();
+	 });  
    }
 </script>
 

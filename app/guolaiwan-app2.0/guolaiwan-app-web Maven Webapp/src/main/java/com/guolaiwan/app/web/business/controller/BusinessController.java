@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.bytedeco.javacpp.RealSense.intrinsics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,7 @@ import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.VPCommentDAO;
 import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
 import com.guolaiwan.bussiness.admin.dao.VideoPicDAO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
@@ -50,6 +53,7 @@ import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.admin.po.VPRelPO;
 import com.guolaiwan.bussiness.admin.po.VideoPicPO;
 import com.guolaiwan.bussiness.coupleback.dao.CoupleBackDao;
 import com.guolaiwan.bussiness.coupleback.po.CoupleBackPO;
@@ -94,7 +98,8 @@ public class BusinessController extends WebBaseControll {
 
 	@Autowired
 	private ProductDAO productDAO;
-
+	@Autowired
+	private VPCommentDAO conn_vPComment;
 	@Autowired
 	private OrderInfoDAO orderInfoDao;
 	@Autowired
@@ -113,6 +118,8 @@ public class BusinessController extends WebBaseControll {
 	private CoupleBackDao couple_back;
 	@Autowired
 	private UserInfoDAO conn_user;
+	@Autowired
+	private VideoPicDAO conn_videoPic;
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
 	public ModelAndView nsAndView(HttpServletRequest request, long merchantId, String comCode) throws Exception {
@@ -235,13 +242,26 @@ public class BusinessController extends WebBaseControll {
 	// 南山攻略需要的数据
 	@ResponseBody
 	@RequestMapping(value = "/getVideoPics", method = RequestMethod.GET)
-	public List<Map<String, Object>> getVideoPics(long merchantId) throws Exception {
-
+	public List<Map<String, Object>> getVideoPics(long merchantId,HttpServletRequest request) throws Exception {
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		System.out.println(userId +" ---------------------------");
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<VideoPicPO> _videoPics = videopicDao.getbymerchantId(merchantId);
 		for (VideoPicPO nsVideoPicPO : _videoPics) {
 			Map<String, Object> hashMap = new HashMap<String, Object>();
 			List<UserInfoPO> usInfoPO = userDao.getUserByUid(nsVideoPicPO.getUserId());
+			int  pcomment  = conn_vPComment.countByField("videoPic",nsVideoPicPO);       //评论数
+		    int   Praise  =	conn_vPRel.countPraise(nsVideoPicPO);
+		   // 点赞数
+		 	VPRelPO countPraise = conn_vPRel.getPraiseByVU(nsVideoPicPO,userId);
+		 	if(countPraise != null){ //判断图片颜色
+		 		hashMap.put("picture",1);
+		 	}
+		 	else{
+		 		hashMap.put("picture",0 );
+		 	}
+			hashMap.put("videoPic",Praise );
+			hashMap.put("pcomment", pcomment);
 			hashMap.put("userimg", usInfoPO.get(0).getUserHeadimg());
 			hashMap.put("username", usInfoPO.get(0).getUserNickname());
 			hashMap.put("id", nsVideoPicPO.getId());
@@ -515,6 +535,7 @@ public class BusinessController extends WebBaseControll {
 			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
 			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
 			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
+			hashMap.put("feature", Merchantlist.get(i).getFeature());
 			list.add(hashMap);
 		}
 		return list;

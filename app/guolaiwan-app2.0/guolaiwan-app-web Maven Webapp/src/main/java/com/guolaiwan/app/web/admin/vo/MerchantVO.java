@@ -97,7 +97,35 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 	//商户开放结束时间
     private String endTimeDate;
 	
-	
+    //商户特色
+    private String feature;
+    
+    //商户营业
+    private String businessDate;
+    
+    
+	public String getFeature() {
+		return feature;
+	}
+
+
+	public MerchantVO setFeature(String feature) {
+		this.feature = feature;
+		return this;
+	}
+
+
+	public String getBusinessDate() {
+		return businessDate;
+	}
+
+
+	public MerchantVO setBusinessDate(String businessDate) {
+		this.businessDate = businessDate;
+		return this;
+	}
+
+
 	public String getBeginTimeDate() {
 		return beginTimeDate;
 	}
@@ -505,6 +533,8 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 		.setModularName1(entity.getModularName1())
 		.setModularCode1(entity.getModularCode1())
 		.setModularClass1(entity.getModularClass1())
+		.setFeature(entity.getFeature())
+		.setBusinessDate(entity.getBusinessDate())
 		.setModularClassId1(entity.getModularClassId1())
 		.setModularName2(entity.getModularName2())
 		.setModularCode2(entity.getModularCode2())

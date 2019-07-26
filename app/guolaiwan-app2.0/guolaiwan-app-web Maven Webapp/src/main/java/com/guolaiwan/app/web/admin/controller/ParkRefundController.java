@@ -19,8 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.app.web.admin.vo.BundleOrderVo;
 import com.guolaiwan.app.web.smartParking.vo.OrderVo;
+import com.guolaiwan.bussiness.Parking.dao.CarPositionDao;
 import com.guolaiwan.bussiness.Parking.dao.OrderDao;
+import com.guolaiwan.bussiness.Parking.dao.ParkingPositionDao;
+import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
+import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
@@ -43,7 +47,11 @@ public class ParkRefundController extends BaseController {
 	
 	@Autowired
 	private UserInfoDAO conn_user;
+	@Autowired
+	private CarPositionDao  Car_Position;
 	
+	@Autowired
+	private ParkingPositionDao  Parking_Position;
 	
     /**
      *  jsp跳转
@@ -114,8 +122,22 @@ public class ParkRefundController extends BaseController {
 		public Object refund(HttpServletRequest request, HttpServletResponse response, String orderId,String id) throws Exception {
 			//判断订单是否存在		
 			//if(conn_order.get(Long.parseLong(orderId)).isIswallet()==false){
-			       List<OrderPO> lisp =   conn_order.findByField("id", Long.parseLong(id));
-			        String orderNo =  lisp.get(0).getOrderNo();
+			        OrderPO lisp =   conn_order.findByField("id", Long.parseLong(id)).get(0);
+			        if (lisp != null) {
+			        	//退款后修改车位状态
+						int	parkingNumber = lisp.getParkingNumber();
+						String	parkingLayer = 	lisp.getParkingLayer();
+						String	district = 	lisp.getParkingDistrict();
+					    long   attactionsId  =  lisp.getAttractionsId();
+						CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
+						long Carid = userName.getId();
+					    ParkingPositionPO getTruck  =  Parking_Position.getNumber(Carid,parkingNumber);
+					    getTruck.setUseCondition(0);
+						Parking_Position.saveOrUpdate(getTruck);
+						lisp.setOrderStatus("REFUNDED");
+						conn_order.saveOrUpdate(lisp);
+					}
+			        String orderNo =  lisp.getOrderNo();
 					long amount = 0;
 					Map<String, Object> result = new HashMap<String, Object>();				
 					
