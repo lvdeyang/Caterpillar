@@ -211,6 +211,7 @@ html, body {
        //商品信息
        var merchantMessage =  msg.merinfo;
        var prouctMessage =  msg.proinfo;
+       var ticketOrderNumber = msg.ticketOrderNumber;
        var html = [];
        html.push('<ul>');
        html.push('<li><p style="font-size:18px;">'+prouctMessage[0].productName+'</p></li>');
@@ -219,7 +220,21 @@ html, body {
        html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：'+merchantMessage[0].shopAddress+'</p></li>');
        html.push('<ul>');
        $(".jieshao").append(html.join(""));
+       
        //票种选择
+       var htm = [];
+       htm.push('<div style="width:90%;height:auto;background:#E9EBEA;margin:10px auto;border-radius:10px;">');
+       htm.push('<p style="height:40px;line-height: 40px;">');
+       htm.push('<span style="float:left;margin-left:5px;">'+prouctMessage[0].productName+'</span>');
+       htm.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+prouctMessage[0].productPrice+'</span>');
+       htm.push('</p>');
+       htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前一天订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
+       htm.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销'+ticketOrderNumber+'+</span>');
+       htm.push('<span onclick="reserve('+prouctMessage[0].id+',0)" style="float:right;margin-right:5px;color:#fff;font-size:14px;font-weight:bold;background:#EB6E1E;line-height:30px;border-radius:10px;padding:0px 20px;">立即预订</span></p>');
+       htm.push('</div>');
+        $(".productlist").append(htm.join(""));
+              
+       //套餐票展示
        var prc =  msg.priceList;       
        var  ticket_type= msg.pComboPOs;
        var orNum = msg.oderNumList;
@@ -232,7 +247,7 @@ html, body {
        htm.push('</p>');
        htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前一天订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
        htm.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销'+orNum[i]+'+</span>');
-       htm.push('<span onclick="reserve('+ticket_type[i].id+')" style="float:right;margin-right:5px;color:#fff;font-size:14px;font-weight:bold;background:#EB6E1E;line-height:30px;border-radius:10px;padding:0px 20px;">立即预订</span></p>');
+       htm.push('<span onclick="reserve('+ticket_type[i].id+',1)" style="float:right;margin-right:5px;color:#fff;font-size:14px;font-weight:bold;background:#EB6E1E;line-height:30px;border-radius:10px;padding:0px 20px;">立即预订</span></p>');
        htm.push('</div>');
         $(".productlist").append(htm.join(""));
        }      
@@ -263,8 +278,15 @@ html, body {
 	})	
  }  
   //立即预定
-    function reserve(id){
-       location.href=window.BASEPATH + 'product/package/payment/jump?merchantId=${merchantId}&proId=${proId}&choice=0&comboId='+id;        
+    function reserve(id,isCombo){    
+    //套餐票
+    if(isCombo==1){
+     location.href=window.BASEPATH + 'product/package/payment/jump?merchantId=${merchantId}&proId=${proId}&choice=0&comboId='+id+'&isCombo='+isCombo;
+    }
+    //原票
+    else{    
+     location.href=window.BASEPATH + 'product/package/payment/jump?merchantId=${merchantId}&proId='+id+'&choice=0&isCombo='+isCombo; 
+    }          
     }
 	  
 	

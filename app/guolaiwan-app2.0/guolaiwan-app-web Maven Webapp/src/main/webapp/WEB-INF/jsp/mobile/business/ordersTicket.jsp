@@ -210,11 +210,10 @@ color:#fff;
 	  
 	  //执行一个laydate实例
 	  laydate.render({
-	    elem: '#test2' //指定元素
+	    elem: '#useDate' //指定元素
 	  });
 	   $(function() {
-	    getUserInfo();	   
-	   	   	   
+	    getUserInfo();	   	   	   	   
 	    getordersInfo();
 	     window.BASEPATH = '<%=basePath%>';
 	     var parseAjaxResult = function(data){
@@ -226,11 +225,14 @@ color:#fff;
 			}
 			
 	  };	 
-	    });
-	 	  	 	  	 
+	    }); 	 	  	 
      var pice = ""; 
 	 function  getordersInfo(){
-	 var order_path = window.BASEPATH + 'product/package/orders/info?comboId=${comboId}';
+	 if(${isCombo} == 1){	 
+	 var order_path = window.BASEPATH + 'product/package/orders/info?comboId=${comboId}&isCombo=${isCombo}';
+	 }else{
+	  var order_path = window.BASEPATH + 'product/package/orders/info?proId=${proId}&choice=${choice}&isCombo=${isCombo}';
+	 }	 
 	 $.get(order_path,null,function(msg){
 	   var prc = msg.ticketPrice;		     
 	  $("#zong").text(prc);
@@ -264,11 +266,9 @@ color:#fff;
 		 num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
 	})
 			$(document).on('click', '.gai', function(){ 
-		    $(".fuceng").fadeIn();
 		    $(".tanchuang").fadeIn();
 		  });
 		    $(document).on('click', '.guan', function(){ 
-		    $(".fuceng").fadeOut();
 		    $(".tanchuang").fadeOut();
 		}); 		
 	}); 
@@ -278,45 +278,115 @@ color:#fff;
 	  $(".zhuye").fadeOut();
 	  $(".tanchuang").fadeOut();
 	}	
+	
+	//-------------------------------------------------------------------------
+	    var prepay_id;
+
+		var paySign;
+
+		var appId;
+
+		var timeStamp;
+
+		var nonceStr;
+
+		var packageStr;
+
+		var signType;
+
+		var orderNo;
+	   			  	   	  	
 	//购买条件判断	
+	var nobuy = "";
 	var choice = ${choice}; 
 	var userId = ${userId};
 	$(document).on('click','#nowbuy',function(){
+	
+         //日期判断
+	      if($("#useDate").val()==''){
+		     $.toast("预定时间不能为空", "forbidden");
+		      return false;
+		    }
+		  var url =  window.BASEPATH + 'product/package/productDate';
+		  var date = {"id":${proId},"choice":${choice},"buyDate":$("#useDate").val()}
+		  $.post(url,date,function(msg){
+		  if(msg.result == 1){		
+		     nobuy="1";
+		    return true;
+		  }else{		  
+		     $.toast("该票日期已到", "forbidden");
+		      nobuy="0";
+		     return false;
+		    
+		  }		   
+		  }) 	
+	
+      var url = window.BASEPATH + 'product/package/commonticket?proId=${proId}&choice=${choice}&ticketnumber='+$('.zhi').val();	 
+	  $.get(url,null,function(msg){
+	  var sign = msg.state;
 	 //普通票判断
-	  if(choice == 0){	     
-	     var url = window.BASEPATH + 'product/package/common/info?proId=${proId}&ticket=${ticket}&ticketnumber='+$('.zhi').val();
-	     $.get(url,null,function(msg){
-	     var sign = msg.state;
-	     if(sign == "0"){ 
+	  if(choice == 0){		        	    	     
+	     if(sign == 0){ 
 	         $.toast("票以售空", "forbidden");
 			 return false;
 	     }
-	     if(sign == "1"){ 
+	     if(sign == 1){ 
 	        $.toast("票量不足,剩余"+msg.Stock, "forbidden");	        
 			 return false;
 	     }
-	     if(sign == "2"){ 
+	     if(sign == 2){ 
 	       $.toast("超出限购,限购为:"+msg.limitNum, "forbidden");
 			 return false;
 	     }
-	     if(sign == "3"){ 
-	        dobuy();
+	     if(sign == 3){	
+	      if(nobuy ==  "1" ){
+	       dobuy();
+	      }   	     	       	        	     	     	        	       
+	       }	     
 	     }
-	     
-	     })	  
-	  }else{
-	  
-	  }	   	
+	   //活动票判断  	  
+	   else{
+	     if(sign == 0){
+	      $.toast("票以售空", "forbidden");
+			 return false;
+	     }
+		if(sign == 1){
+		  $.toast("每日限购1张", "forbidden");
+			 return false;
+		}	
+		if(sign == 2){
+		    $.toast("票量不足,剩余"+msg.Stock, "forbidden");	        
+			 return false;
+		}
+		if(sign == 3){
+			$.toast("超出限购,限购为:"+msg.limitNum, "forbidden");
+			 return false;		
+		}
+		if(sign == 4){
+		  if(nobuy ==  "1" ){
+	       dobuy();
+	      } 	     
+		}	          
+	  }
+	  })	   	
 	}) 
+	
+				 
 	 function dobuy(){
 		    var param={};
-			param.productId=${proId};
+			param.id=${proId};
 			param.productNum=$('.zhi').val();        
 			param.userId=${userId};
 			param.paytype='WEICHAT';
 			param.source='PUBLICADDRESS';
-			//param.activityId=${actId};
-			param.source="PUBLICADDRESS";
+			param.isCombo = ${isCombo};	
+			param.choice=${choice};
+			param.bookDate=$("#useDate").val();
+			if(${isCombo} == 1){	
+			param.ComboId = ${comboId};
+			}
+			
+			//param.activityId=${actId};			
 			//param.bookDate=$('#bookDate').val();
       
 	        var _uriPay = window.BASEPATH + '/product/package/order/add';
@@ -352,7 +422,20 @@ color:#fff;
 		        callpay();
 			});
 		}   		
-		function onBridgeReady(){
+					
+		function callpay(){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady();
+		    }
+		} 
+			function onBridgeReady(){
 		    WeixinJSBridge.invoke(
 		        'getBrandWCPayRequest', {
 		           "appId"     : appId,     //公众号名称，由商户传入
@@ -362,6 +445,7 @@ color:#fff;
 		           "signType"  : signType,  //微信签名方式：
 		           "paySign"   : paySign    //微信签名
 		        },
+		        
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		                $.confirm("交易成功");
@@ -382,19 +466,8 @@ color:#fff;
 		            }  
 		        }
 		    );
-		}				
-		function callpay(){
-		    if (typeof WeixinJSBridge == "undefined"){
-		        if( document.addEventListener ){
-		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-		        }else if (document.attachEvent){
-		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-		        }
-		    }else{
-		        onBridgeReady();
-		    }
-		}  		 		
+		} 
+				
   	//----------------------------------------------------------------------
      	var base="";
         $(document).on('click','#photo',function(){
@@ -502,7 +575,7 @@ color:#fff;
         }
         
       //----------------------------------------------------------------------  
-      
+      //区分 保存 还是更新 
       var state ="";   
       function  save(){
         if($('#_phone').val()==''){
@@ -533,9 +606,9 @@ color:#fff;
 			  return false;
              }   */	    
                 $(".tianjias").fadeOut();
+                $(".tanchuang").fadeOut();
 			    $(".zhuye").fadeIn();
-			    $(".tanchuang").fadeOut();    
-            
+			                 
               var url = window.BASEPATH + 'product/package/add/info';
               if(state == ""){           
               var date = {"name":$("#_name").val(),
@@ -568,8 +641,7 @@ color:#fff;
 	  	  $.get(url_,null,function(msg){
 	  	  var mesage = msg.message;	  	  
 	  	  if(mesage.length==0){return;}
-	  	  
-	  	   
+	   
 	  	  for(var i = 0; i<mesage.length;i++){
 	  	     var htm = [];					
              htm.push('<p>姓名：'+mesage[i].name+'</p>');            
@@ -604,10 +676,9 @@ color:#fff;
 	  	}) 
    }           		
    function shutdown(){
-   $(".tianjias").fadeOut();
+    $(".tianjias").fadeOut();
     $(".zhuye").fadeIn();
-    $(".tanchuang").fadeIn();
-   
+    $(".tanchuang").fadeIn();  
    }      					
 </script>
 <body>
@@ -631,7 +702,7 @@ color:#fff;
       <div class="layui-inline" style="width:96%;height:auto;position: relative;"> <!-- 注意：这一层元素并不是必须的 -->
   			<ul class="liebiao" style="color:black;">
 		    <li>
-  			<input type="text" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="test2">
+  			<input type="text" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="useDate">
 	        <p style="position: absolute;top:30px;left:10%;">游玩日期</p>
 	        <p style="position: absolute;top:30px;right:5%;">❯</p>
 		    </li>
