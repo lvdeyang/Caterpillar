@@ -201,7 +201,7 @@ function getCate(){
 		         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data[i].ModularClass+'</span></p>');
 		         if(data[i].Date != null)html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">'+data[i].Date+'</p>'); 
 		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>38</span>元</p>'); 
-		         var feature = data[i].Feature;
+		         var feature = data[i].feature;
 		         if(feature !=null && feature!=""){
 		            var split  =   feature.split(',');
 		            html.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');
