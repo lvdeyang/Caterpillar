@@ -29,9 +29,13 @@ import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.publicnum.vo.RoomVo;
 import com.guolaiwan.app.web.smartParking.vo.OrderVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
+import com.guolaiwan.bussiness.Parking.dao.CarPositionDao;
 import com.guolaiwan.bussiness.Parking.dao.OrderDao;
+import com.guolaiwan.bussiness.Parking.dao.ParkingPositionDao;
 import com.guolaiwan.bussiness.Parking.dao.VehicleDao;
+import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
+import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
@@ -48,7 +52,11 @@ public class SmartParkingController  extends WebBaseControll{
 	private  VehicleDao par_king;
 	@Autowired
 	private  OrderDao or_der;
-
+	@Autowired
+	private CarPositionDao  Car_Position;
+	
+	@Autowired
+	private ParkingPositionDao  Parking_Position;
 
 
 	/*****************************************************************************************************/
@@ -97,7 +105,7 @@ public class SmartParkingController  extends WebBaseControll{
 		List<String> listHasCup=new ArrayList<String>();
 		List<OrderPO> userByid = or_der.getOrder(userId,vehicle);
 		int boole =0;
-		for (OrderPO orderPO : userByid) {
+		for (OrderPO orderPO : userByid) {//判断用户所有订单 如果有到时间还未进入停车场的修改状态 PAST过期 
 			if ("PAYSUCCESS".equals(orderPO.getOrderStatus())) {
 				  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				   String time = df.format(new Date());
@@ -106,6 +114,17 @@ public class SmartParkingController  extends WebBaseControll{
 				   long diff = d2.getTime() - d1.getTime();//这样得到的差值是微秒级别
 				   Long date = diff/1000;
 				   if (date<0) {
+					   
+				    int	parkingNumber = orderPO.getParkingNumber();
+					String	parkingLayer = 	orderPO.getParkingLayer();
+					String	district = 	orderPO.getParkingDistrict();
+				    long   attactionsId  =  orderPO.getAttractionsId();
+					CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
+					long Carid = userName.getId();
+				    ParkingPositionPO getTruck  =  Parking_Position.getNumber(Carid,parkingNumber);
+				    getTruck.setUseCondition(0);
+					Parking_Position.saveOrUpdate(getTruck);   
+					
 					boole = 1;
 					orderPO.setOrderStatus("PAST");
 					or_der.save(orderPO);

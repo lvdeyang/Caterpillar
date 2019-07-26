@@ -220,7 +220,11 @@ html, body {
 		      html.push('<ul>');
 	          html.push('<li><p>'+time+'天前</p></li>');
 	         /*  html.push('<li><p><img  style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>'+data[i].pcomment+'</span>)</p></li>'); */
-	          html.push('<li><p onclick="xiaoxisChlick('+data[i].id+')"><img class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/dianzanss.png"/>(<span>'+data[i].videoPic+'</span>)</p></li>');
+	         if(data[i].picture == 1 ){
+	         html.push('<li><p onclick="xiaoxisChlick('+data[i].id+')"><img class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/dianzanss.png"/>(<span>'+data[i].videoPic+'</span>)</p></li>');
+	         }else{
+	         html.push('<li><p onclick="xiaoxisChlick('+data[i].id+')"><img class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/huixin.png"/>(<span>'+data[i].videoPic+'</span>)</p></li>');
+	         }
 	         /*  html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>'); */
 		      html.push('</ul>');
 		      html.push('</div>');
