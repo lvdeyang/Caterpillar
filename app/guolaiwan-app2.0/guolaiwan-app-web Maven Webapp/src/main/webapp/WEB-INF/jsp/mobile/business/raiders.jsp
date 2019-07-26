@@ -242,8 +242,9 @@ html, body {
       $.post(url, $.toJSON(params), function(data){
 	      data = parseAjaxResult(data);
 	      alert(data.msg);
-	      window.location.reload();
-	 }); 
+	      $('.gl').empty();
+	      getVideoPics();
+	 });  
    }
 </script>
 

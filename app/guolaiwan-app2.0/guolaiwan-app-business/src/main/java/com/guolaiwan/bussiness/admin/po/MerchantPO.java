@@ -164,11 +164,33 @@ public class MerchantPO extends AbstractBasePO {
 	
 	//商户开放结束时间
     private String endTimeDate;
+    
+    //商户特色
+    private String feature;
+    
+    //商户营业
+    private String businessDate;
 	
 	//客服在自己的商户最后一次进入时间 用来判断商户在不在 能不能咨询 不在就推送公众号提醒
 	private Date lastexercisetime;
 	
 	
+	public String getFeature() {
+		return feature;
+	}
+
+	public void setFeature(String feature) {
+		this.feature = feature;
+	}
+
+	public String getBusinessDate() {
+		return businessDate;
+	}
+
+	public void setBusinessDate(String businessDate) {
+		this.businessDate = businessDate;
+	}
+
 	public long getChatUserId() {
 		return chatUserId;
 	}
