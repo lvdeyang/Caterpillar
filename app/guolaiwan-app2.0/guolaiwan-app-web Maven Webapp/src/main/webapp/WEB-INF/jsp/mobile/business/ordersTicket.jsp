@@ -139,7 +139,7 @@ html, body {
         text-align: center;
 }  
 
-.liebiao li input{
+.listbox li input{
     width: 100%;
     height: 60px;
     margin:5px auto;
@@ -155,7 +155,7 @@ html, body {
 .fukuan{
   background: -webkit-linear-gradient(left,rgba(254,187,56,1),rgba(254,104,33,1)); /* Safari 5.1 - 6 */
 }
-.tianjia span{
+.homepage_add span{
 border-radius:10px;
 border:1px solid #FCB735;
 padding:3px 20px;
@@ -163,7 +163,7 @@ margin:20px 0 0 10px;
 display: inline-block;
 color:#FCB735;
 }
-.tianjia span:hover{
+.homepage_add span:hover{
 background: #FCB735;
 color:#fff;
 }
@@ -177,7 +177,7 @@ color:#fff;
     z-index: 10000;
 
 }
-.liebiaos li input{
+.listbox-2 li input{
     width: 100%;
     height: 60px;
     margin:5px auto;
@@ -265,21 +265,21 @@ color:#fff;
 		 var num3 = document.getElementById("zong");
 		 num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
 	})
-			$(document).on('click', '.gai', function(){ 
-		    $(".tanchuang").fadeIn();
+			$(document).on('click', '.change', function(){ 															
+		    $(".window-1").fadeIn();
 		  });
-		    $(document).on('click', '.guan', function(){ 
-		    $(".tanchuang").fadeOut();
+		    $(document).on('click', '.close-window-1', function(){ 
+		    $(".window-1").fadeOut();
 		}); 		
 	}); 
 	//添加信息
 	function addInfo(){
-	  $(".tianjias").fadeIn();
-	  $(".zhuye").fadeOut();
-	  $(".tanchuang").fadeOut();
-	}	
-	
+	  $(".window-2").fadeIn();
+	  $(".homepage").fadeOut();
+	  $(".window-1").fadeOut();
+	}			
 	//-------------------------------------------------------------------------
+		
 	    var prepay_id;
 
 		var paySign;
@@ -300,27 +300,40 @@ color:#fff;
 	var nobuy = "";
 	var choice = ${choice}; 
 	var userId = ${userId};
+	var clientNumber = []; //所选的用户ID
 	$(document).on('click','#nowbuy',function(){
 	
          //日期判断
-	      if($("#useDate").val()==''){
+    	 if($("#useDate").val()==''){
 		     $.toast("预定时间不能为空", "forbidden");
 		      return false;
 		    }
-		  var url =  window.BASEPATH + 'product/package/productDate';
-		  var date = {"id":${proId},"choice":${choice},"buyDate":$("#useDate").val()}
-		  $.post(url,date,function(msg){
-		  if(msg.result == 1){		
-		     nobuy="1";
-		    return true;
-		  }else{		  
-		     $.toast("该票日期已到", "forbidden");
-		      nobuy="0";
-		     return false;
+		//票的数量与所选人数是否一样    
+          if($('.zhi').val() != clientNumber.length){
+             $.toast("订票数量与所选用户信息不匹配", "forbidden");
+		      return false;         
+          }    
 		    
-		  }		   
-		  }) 	
-	
+		    var buyDate = new Date($("#useDate").val().replace(/-/g,"/"))
+		    var nowDate = new Date();
+		    
+		    if(buyDate>nowDate){
+ 				 var url =  window.BASEPATH + 'product/package/productDate';
+				  var date = {"id":${proId},"choice":${choice},"buyDate":$("#useDate").val()}
+				  $.post(url,date,function(msg){
+				  if(msg.result == 1){		
+				     nobuy="1";
+				    return true;
+				  }else{		  
+				     $.toast("该票日期已到", "forbidden");
+				      nobuy="0";
+				     return false;		    
+		        }		   
+		  }) 			
+            }else{
+             $.toast("预订日期应大于当前日期", "forbidden");
+            }
+                 	         	
       var url = window.BASEPATH + 'product/package/commonticket?proId=${proId}&choice=${choice}&ticketnumber='+$('.zhi').val();	 
 	  $.get(url,null,function(msg){
 	  var sign = msg.state;
@@ -385,10 +398,7 @@ color:#fff;
 			if(${isCombo} == 1){	
 			param.ComboId = ${comboId};
 			}
-			
-			//param.activityId=${actId};			
-			//param.bookDate=$('#bookDate').val();
-      
+		   		   	                   
 	        var _uriPay = window.BASEPATH + '/product/package/order/add';
 				$.post(_uriPay, $.toJSON(param), function(data){
 					data = parseAjaxResult(data);
@@ -397,10 +407,21 @@ color:#fff;
 					//refreshActivity();
 					$.modal({
 						  title: "付款方式",
-						  buttons: [						    
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+
+						    	$.confirm("确定支付？", function() {
+
+								    payByWallet(data.orderId);
+								    addMessageOrderId(data.orderId);
+
+								  }, function() {});
+
+						    } },						    
 						    { text: "微信支付", onClick: function(){ 
 							    $.confirm("确定支付？", function() {
 								    payPublic(data.orderId);
+								    addMessageOrderId(data.orderId);
 								  }, function() {});
 						    } },
 						    { text: "取消", className: "default", onClick: function(){ } },
@@ -408,6 +429,37 @@ color:#fff;
 						});
 				});	 	 	 
 	 }	
+	 
+	 /* 钱包购买方法 */
+		function payByWallet(orderId){
+			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
+			var userId=${userId};
+			$.post(url,{'orderId':orderId,'userId':userId},function(data){
+						data = parseAjaxResult(data);
+				if(data==1){
+						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
+						    if(data.data=="PAYSUCCESS"){						    	
+					           updatemessage(orderId);					            
+						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						    }
+						});
+				}else{
+					$.alert('您的余额不足！');
+				}
+			})
+		}
+		
+		//支付成功后修改身份采集表里的状态 
+		function updatemessage(orderId){
+		    var _uri = window.BASEPATH + 'pubnum/updatemessage';
+		          var params = {};		        
+		          params.oderId=orderId;		 
+			$.post(_uri, params, function(data){					   
+					if(data.msg==1){
+						alert("保存失败");
+					}			        
+				});       	    
+		}
 	 
 	 function payPublic(orderId){
 			$.get(window.BASEPATH +"pubnum/prev/pay/"+orderId, null, function(data){
@@ -467,7 +519,14 @@ color:#fff;
 		        }
 		    );
 		} 
-				
+		
+	 //添加下单客户 orderID 
+	  function addMessageOrderId(orderId){
+	    if(clientNumber.length > 0){
+		    var addMessage_url = window.BASEPATH+'product/package/addMessage?orderId='+orderId;
+		     $.get(addMessage_url,)		    
+		    }				  	  
+	  }			
   	//----------------------------------------------------------------------
      	var base="";
         $(document).on('click','#photo',function(){
@@ -601,13 +660,13 @@ color:#fff;
 		       return false;  		    
 		    }	
 		    
-		     /* if(base==""){
+		     /*  if(base==""){
               $.toast("照片获取失败", "forbidden");
 			  return false;
-             }   */	    
-                $(".tianjias").fadeOut();
-                $(".tanchuang").fadeOut();
-			    $(".zhuye").fadeIn();
+             }   	   */  
+                $(".window-2").fadeOut();
+                $(".window-1").fadeOut();
+			    $(".homepage").fadeIn();
 			                 
               var url = window.BASEPATH + 'product/package/add/info';
               if(state == ""){           
@@ -629,34 +688,32 @@ color:#fff;
               }            
 	          $.post(url, date,function(msg){ 
 	          	if(msg == 'success') {
-	          	    $(".tianjia").children().remove();
-	          	    $(".tanchuang").children().remove();
+	          	    $(".homepage_add").children().remove();
+	          	    $("#window-1-message").children().remove();
 	           		getUserInfo();
 	           	}
 	         })                                                                                                       
      }	
-	    	    	    
+	     //保存用户信息
+	      var clientInfo = " "; 	    
 	  	 function  getUserInfo(){
 	  	  var url_ = window.BASEPATH + 'product/package/user/list';
 	  	  $.get(url_,null,function(msg){
-	  	  var mesage = msg.message;	  	  
+	  	  var mesage = msg.message;
+	  	  clientInfo = msg.message; 	  
 	  	  if(mesage.length==0){return;}
 	   
-	  	  for(var i = 0; i<mesage.length;i++){
-	  	     var htm = [];					
-             htm.push('<p>姓名：'+mesage[i].name+'</p>');            
-             $(".tianjia").append(htm.join(''));
-	  	     
-	  	     var html = [];          
+	  	  for(var i = 0; i<mesage.length;i++){	  	    	  	     
+	  	     var html = [];  	  	             
              html.push('<div  style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;border-bottom:1px solid #A6A6A6;text-align: left;padding:10px 10%;">');
-             html.push('<input checked type="radio" name="sex" value="1" style="position: absolute;top:30px;left:5%;" />');
+             html.push('<input id="input-'+i+'"  onclick="clientMessage(this.id)"  type="checkbox" name="sex" value="1" style="position: absolute;top:30px;left:5%;" />');
              html.push('<P>姓名：'+mesage[i].name+'</P>');
              html.push('<P>手机号：'+mesage[i].phone+'</P>');
              html.push('<P>身份证号：'+mesage[i].number+'</P>');
              html.push('<img style="width:40px;height:40px;position: absolute;top:19px;right:15%;border-radius:50%;" src="lib/images/logo.png">');
              html.push('<img id="'+mesage[i].id+'" onclick="update(this.id)"  style="width:20px;height:20px;position: absolute;top:30px;right:5%;" src="lib/images/xiugai.png">');
 			 html.push('</div>');
-             $(".tanchuang").append(html.join(''));
+             $("#window-1-message").append(html.join(''));
 			 
 	  	  }
 	  	  	})  	 	  	 
@@ -670,16 +727,36 @@ color:#fff;
 	  	  $("#_name").val(mesage.name),
           $("#_phone").val(mesage.phone),
           $("#_idcard").val(mesage.number),
-          $(".zhuye").fadeOut();
-          $(".tanchuang").fadeOut();
-          $(".tianjias").fadeIn();  	
+          $(".homepage").fadeOut();
+          $(".window-1").fadeOut();
+          $(".window-2").fadeIn();  	
 	  	}) 
    }           		
    function shutdown(){
-    $(".tianjias").fadeOut();
-    $(".zhuye").fadeIn();
-    $(".tanchuang").fadeIn();  
-   }      					
+    $(".window-2").fadeOut();
+    $(".homepage").fadeIn();
+    $(".window-1").fadeIn();  
+   }    
+   
+  function clientMessage(id){
+    var i = id.split("-");
+   if(clientInfo != " "){
+			//多选框要用prop 来获取判断
+            if($("#"+id).prop("checked")){
+            //添加勾选的信息	
+             clientNumber[i[1]] = clientInfo[i[1]].id;	
+			 var htm = [];					
+             htm.push('<p id="homepage-'+i[1]+'">姓名：'+clientInfo[i[1]].name+'</p>');            
+             $(".homepage_add").append(htm.join(''));         
+            } 
+            //取消勾选删除
+            if(!($("#"+id).prop("checked"))){
+               $("#homepage-"+i[1]).remove(); 
+                
+               clientNumber.splice(i[1],1);      
+            }                           
+     }         
+  }         					
 </script>
 <body>
 	<!-- 主页 -->
@@ -691,7 +768,7 @@ color:#fff;
 			</div>
 		</div>	
 		
-<div class="zhuye" style="z-index:11111111;">		
+<div class="homepage" style="z-index:11111111;">		
 	 <!-- 订单信息  -->
 	  	<div id="order"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">
 	     	
@@ -700,7 +777,7 @@ color:#fff;
 	  
 	  
       <div class="layui-inline" style="width:96%;height:auto;position: relative;"> <!-- 注意：这一层元素并不是必须的 -->
-  			<ul class="liebiao" style="color:black;">
+  			<ul class="listbox" style="color:black;">
 		    <li>
   			<input type="text" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="useDate">
 	        <p style="position: absolute;top:30px;left:10%;">游玩日期</p>
@@ -721,15 +798,15 @@ color:#fff;
 		    <li>
 		    <input type="button">
 		    <p style="position: absolute;top:245px;left:10%;">填写身份信息 </p>
-		    <p class="gai" style="position: absolute;top:245px;right:7%;color:#FCB735;">添加/修改▲</p>
-		    <div class="tianjia" style="height:auto;width:85%;background: #fff;margin:-20px auto 0;padding:20px 0;border-radius:10px;">		   						     
+		    <p class="change" style="position: absolute;top:245px;right:7%;color:#FCB735;">添加/修改▲</p>
+		    <div class="homepage_add" style="height:auto;width:85%;background: #fff;margin:-20px auto 0;padding:20px 0;border-radius:10px;">		   						     
 		    </div> 		   
 		    </li>
 		    
 		    </ul>	 
 	  </div>
 	 <!-- 付款  -->
-	 <div id="goumai"  style="background:#fff;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
+	 <div   style="background:#fff;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
 	     	<p style="height:100%;float:left;text-align:center;width:55%;line-height: 60px;color:#EC6D1E;font-size:20px;font-weight:bold;display: inline-block;">￥<span id="zong"></span></p>	        
 	        <p id="nowbuy" style="height:100%;float:right;text-align:center;width:45%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;background:#EC6D1E; ">立即购买</p>
 	 </div> 
@@ -738,16 +815,17 @@ color:#fff;
      </div> 
      
      
-     <div  class="tanchuang" style="z-index:11111;width:100%;display: none;height:500px;padding:0 0 50px 0;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0;position: r ">
-	   <p style="width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">添加/修改信息<span class="guan" style="float:right;color:#fff;margin-right:5%;font-weight:bold;">关闭</span></p>
+     <div  class="window-1" style="z-index:11111;width:100%;display: none;height:500px;padding:0 0 50px 0;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0; ">
+	   <p style="text-align:center;width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">添加/修改信息<span class="close-window-1" style="float:right;color:#fff;margin-right:5%;font-weight:bold;">关闭</span></p>
 	   <button onclick="addInfo()" style="width:50%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 0;">添加信息</button>	 
+	  <div id="window-1-message"></div>
 	  </div>
 	  
 	  
 	  
 	<!-- 添加信息 -->  
-		<div class="tianjias" style="z-index:111111;display: none;">
-		<ul class="liebiaos" style="color:black;">
+		<div class="window-2" style="z-index:111111;display: none;">
+		<ul class="listbox-2" style="color:black;">
 		    <li>
 		    <input  id="_name" type="text" placeholder="请输入您的姓名" minlength="4" maxlength="4" style="" >
 		    <p    style="position: absolute;top:65px;left:10%;">住客姓名</p>

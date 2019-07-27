@@ -129,12 +129,22 @@ public class ProductPackageController extends BaseController {
 		int pageSize =5 ; 
 		Map<String, Object> mapp = new HashMap<String, Object>();
 		mapp.put("productMerchantID", Long.parseLong(merhcantId));
+		//过滤 不符合日期的商品
+		long nowDate = new Date().getTime();
+		//遍历筛选
+		List<ProductPO> productPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);
+		for(int i= 0 ;i<productPOs.size();i++){
+		   long producntBeginTime  = productPOs.get(i).getProductBeginDate().getTime();
+		   long producntEndTime  =  productPOs.get(i).getProductEnddate().getTime();
+		   if(nowDate<producntBeginTime && nowDate>producntEndTime){
+			   productPOs.remove(i);
+		   }			
+		}
 		//分页获取所有商品
 	    List<ProductVO> pro_vo = new ProductVO().getConverter(ProductVO.class).
-		convert( productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize), ProductVO.class);
-	   //判断活动是否过期  
-	    boolean is_overtime;
-	    long nowDate = new Date().getTime();	    	    
+		convert(productPOs, ProductVO.class);
+	   //判断活动是否过期 状态 
+	    boolean is_overtime;	   	    	    
 	    //获取活动商品id
 	     Map<Long, ActivityRelPO> activ_id = new HashMap<Long, ActivityRelPO>();
 	     List<ActivityRelPO> activ_po = conn_acre.findAll();
@@ -158,7 +168,7 @@ public class ProductPackageController extends BaseController {
 			pro_pric.add(def.format(Double.parseDouble(activ_id.get(pro.getId()).getPrice()+"")/100));
 			pro_list.add(pro);
 			}else{
-			//普通票	
+			//普通票					
 			if(pro.getProductStock()>0){	
 			pro.setProductName(	pro.getProductName()+",comm");	
 			pro_pric.add(pro.getProductPrice());
@@ -829,8 +839,6 @@ public class ProductPackageController extends BaseController {
 		}
 	}
 
-
-	// 微信支付方法
 		public Map<String, String> weichatPay(long PayMoney, String tradeNum) {
 			Map<String, String> reqData = new HashMap<String, String>();
 			Map<String, String> resData = null;
