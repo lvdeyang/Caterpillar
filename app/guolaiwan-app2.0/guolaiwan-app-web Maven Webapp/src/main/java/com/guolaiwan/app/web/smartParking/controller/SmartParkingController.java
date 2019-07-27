@@ -107,6 +107,7 @@ public class SmartParkingController  extends WebBaseControll{
 		int boole =0;
 		for (OrderPO orderPO : userByid) {//判断用户所有订单 如果有到时间还未进入停车场的修改状态 PAST过期 
 			if ("PAYSUCCESS".equals(orderPO.getOrderStatus())) {
+			  if(orderPO.getDueTime() != null){
 				  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				   String time = df.format(new Date());
 				   Date d1 = df.parse(time);
@@ -129,6 +130,7 @@ public class SmartParkingController  extends WebBaseControll{
 					orderPO.setOrderStatus("PAST");
 					or_der.save(orderPO);
 				   }
+				 }  
 			}
 			if (boole == 0) {
 				listHasCup.add(orderPO.getOrderStatus()); 

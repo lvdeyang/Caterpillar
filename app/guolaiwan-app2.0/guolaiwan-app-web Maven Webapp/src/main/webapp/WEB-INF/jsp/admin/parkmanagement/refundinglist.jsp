@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+`<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               <a><cite>首页</cite></a>
               <a><cite>订单信息</cite></a>
             </span>
-            <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+            <a class="layui-btn layui-btn-small"  id="a1" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
          
         <div class="x-body">
@@ -92,7 +92,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                  var _urirefund = 'wxpay/refund?orderId='+orderId+'&id='+id;
 		          $.get(_urirefund, null, function(data){
 					//changeOrderStatus(obj,'REFUNDED',id);
-					
+					var el=document.getElementById('a1');
+                    el.click();//触发打开事件
 				 });
              }
              

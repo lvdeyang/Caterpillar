@@ -123,20 +123,6 @@ public class ParkRefundController extends BaseController {
 			//判断订单是否存在		
 			//if(conn_order.get(Long.parseLong(orderId)).isIswallet()==false){
 			        OrderPO lisp =   conn_order.findByField("id", Long.parseLong(id)).get(0);
-			        if (lisp != null) {
-			        	//退款后修改车位状态
-						int	parkingNumber = lisp.getParkingNumber();
-						String	parkingLayer = 	lisp.getParkingLayer();
-						String	district = 	lisp.getParkingDistrict();
-					    long   attactionsId  =  lisp.getAttractionsId();
-						CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
-						long Carid = userName.getId();
-					    ParkingPositionPO getTruck  =  Parking_Position.getNumber(Carid,parkingNumber);
-					    getTruck.setUseCondition(0);
-						Parking_Position.saveOrUpdate(getTruck);
-						lisp.setOrderStatus("REFUNDED");
-						conn_order.saveOrUpdate(lisp);
-					}
 			        String orderNo =  lisp.getOrderNo();
 					long amount = 0;
 					Map<String, Object> result = new HashMap<String, Object>();				
@@ -170,8 +156,21 @@ public class ParkRefundController extends BaseController {
 						reqData.put("total_fee", amount + "");
 						reqData.put("refund_fee", amount + "");
 			
-						Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据											
-			
+						Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据	
+						 if (lisp != null) {
+					        	//退款后修改车位状态
+								int	parkingNumber = lisp.getParkingNumber();
+								String	parkingLayer = 	lisp.getParkingLayer();
+								String	district = 	lisp.getParkingDistrict();
+							    long   attactionsId  =  lisp.getAttractionsId();
+								CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
+								long Carid = userName.getId();
+							    ParkingPositionPO getTruck  =  Parking_Position.getNumber(Carid,parkingNumber);
+							    getTruck.setUseCondition(0);
+								Parking_Position.saveOrUpdate(getTruck);
+								lisp.setOrderStatus("REFUNDED");
+								conn_order.saveOrUpdate(lisp);
+					    }
 					} catch (Exception e) {
 						// TODO: handle exception
 						System.out.println(e.getMessage());

@@ -762,6 +762,7 @@ public class SceneryListController  extends WebBaseControll{
 		relaIds.add("REFUNDED");
 		OrderPO OrderInfor = Order.getOrderform(userId,uid,relaIds,vehicle);
 			dataMap.put("parkingName",OrderInfor.getParkingName());
+			dataMap.put("orderStatus",OrderInfor.getOrderStatus());
 			dataMap.put("parkingLayer",OrderInfor.getParkingLayer());
 			dataMap.put("parkingDistrict",OrderInfor.getParkingDistrict());
 			dataMap.put("parkingNumber",OrderInfor.getParkingNumber());
