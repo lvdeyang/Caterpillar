@@ -217,13 +217,13 @@ html, body {
 		      html.push('<p style="font-size:18px;font-weight:bold;margin:10px auto; ">"'+data[i].textname+'"</p>');
 		      html.push('<p style="font-size:16px;margin:10px 0;overflow : hidden;text-overflow: ellipsis;white-space:nowrap;width:250px;">'+data[i].frist+'</p>');
 		      html.push('</a>');
-		      html.push('<ul>');
+		      html.push('<ul class="pic">');
 	          html.push('<li><p>'+time+'天前</p></li>');
 	         /*  html.push('<li><p><img  style="width:20px;height:20px;" src="lib/images/xiaoxis.png"/>(<span>'+data[i].pcomment+'</span>)</p></li>'); */
 	         if(data[i].picture == 1 ){
-	         html.push('<li><p onclick="xiaoxisChlick('+data[i].id+')"><img class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/dianzanss.png"/>(<span>'+data[i].videoPic+'</span>)</p></li>');
+	         html.push('<li><p onclick="xiaoxisChlick('+data[i].id+','+data[i].picture+','+i+')"><img  id="surpport-'+data[i].id+'" class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/dianzanss.png"/>(<span id="count-'+data[i].id+'">'+data[i].videoPic+'</span>)</p></li>');
 	         }else{
-	         html.push('<li><p onclick="xiaoxisChlick('+data[i].id+')"><img class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/huixin.png"/>(<span>'+data[i].videoPic+'</span>)</p></li>');
+	         html.push('<li><p onclick="xiaoxisChlick('+data[i].id+','+data[i].picture+','+i+')"><img  id="surpport-'+data[i].id+'" class="dianzan" style="width:20px;height:20px;z-index:11111;animation:anim 2s linear 0.5s; " src="lib/images/huixin.png"/>(<span id="count-'+data[i].id+'">'+data[i].videoPic+'</span>)</p></li>');
 	         }
 	         /*  html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/zhuanfas.png"/>(<span>111</span>)</p></li>'); */
 		      html.push('</ul>');
@@ -234,10 +234,12 @@ html, body {
 	    })
 	} 
 	
+
+
 	function gotoraidersdetails(id){
         location.href=window.BASEPATH + 'business/gotoraidersdetails?id='+id;
    }
-	function xiaoxisChlick(id){ //增加点赞
+	function xiaoxisChlick(id,picture,i){ //增加点赞
 	  var userId="<%=session.getAttribute("userId")%>"; 
       var url = window.BASEPATH + 'newPhoneController/vpPraise.do';
       var params = {};
@@ -245,9 +247,24 @@ html, body {
 	  params.userId = userId;
       $.post(url, $.toJSON(params), function(data){
 	      data = parseAjaxResult(data);
-	      alert(data.msg);
-	      $('.gl').empty();
-	      getVideoPics();
+	      $.toast(data.msg, "success");
+	      if($('#surpport-'+id).attr('src').indexOf("dianzanss")!=-1){
+	          $('#surpport-'+id).attr('src',"lib/images/huixin.png");
+	          $('#count-'+id).html(parseInt($('#count-'+id).html())-1);
+	      }else{
+	          $('#surpport-'+id).attr('src',"lib/images/dianzanss.png");
+	          $('#count-'+id).html(parseInt($('#count-'+id).html())+1);
+	      }
+	    /*if(document.getElementById("img"+i).src.indexOf("dianzanss")&& document.getElementById("img"+i).src.indexOf("dianzanss")!=-1){//判断img图片颜色 进行切换 数量加减
+		    document.getElementById("img"+i).src = 'lib/images/huixin.png';
+		    var net = $("#img"+i).next().text();
+		     $("#img"+i).next().text(net-1);
+		   }else{
+		    document.getElementById("img"+i).src = 'lib/images/dianzanss.png';
+		    var net = $("#img"+i).next().text();
+		    var int = parseInt(net);
+		    $("#img"+i).next().text(int+1);
+	    }*/   
 	 });  
    }
 </script>
