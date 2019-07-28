@@ -7550,6 +7550,7 @@ public class PhoneController extends WebBaseControll {
 				team.setUsernickname(user.getUserNickname());
 				team.setOrderId(orderId);
 				team.setTeamnum(1);
+				team.setOpentime(new Date());
 				conn_groupteam.save(team);
 			break;
 		case 2:
