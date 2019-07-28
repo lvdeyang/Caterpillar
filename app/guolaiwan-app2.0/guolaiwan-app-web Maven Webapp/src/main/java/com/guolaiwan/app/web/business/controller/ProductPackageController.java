@@ -512,7 +512,7 @@ public class ProductPackageController extends BaseController {
 				}
 				//上传
 				File newFile=new File(path+"/"+newName);
-				String config = conn_sysConfig.getSysConfig().getWebUrl()+folderName+"/"+newName;
+				String config = conn_sysConfig.getSysConfig().getFolderUrl()+folderName+"/"+newName;
 				
 				return config;
 			}
