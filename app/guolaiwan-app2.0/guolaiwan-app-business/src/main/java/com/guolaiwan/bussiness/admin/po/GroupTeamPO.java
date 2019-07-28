@@ -1,6 +1,8 @@
 package com.guolaiwan.bussiness.admin.po;
 
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import pub.caterpillar.orm.po.AbstractBasePO;
@@ -14,6 +16,8 @@ public class GroupTeamPO extends AbstractBasePO {
 	private long userid;
 	//用户昵称
 	private String usernickname;
+	//开团时间
+	private Date opentime;
 	//用户头像
 	private String userheadimg;
 	//是否是队长
@@ -34,6 +38,12 @@ public class GroupTeamPO extends AbstractBasePO {
 	private long belongtoteam;
 	
 	
+	public Date getOpentime() {
+		return opentime;
+	}
+	public void setOpentime(Date opentime) {
+		this.opentime = opentime;
+	}
 	public long getBelongtoteam() {
 		return belongtoteam;
 	}

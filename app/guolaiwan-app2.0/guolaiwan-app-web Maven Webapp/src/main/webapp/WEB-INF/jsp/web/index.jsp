@@ -1,5 +1,6 @@
 <%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 
 <%
@@ -477,17 +478,19 @@ $(function(){
     <!-- 限时抢购 End -->
 
     <!-- 卖场推荐 begin -->
-    
-
     <div class="drop_down" id="drop_down" style="width: 64px; height:343px; overflow: visible; top: 70px; position: fixed; left: 0px; display: none;
 						border:1px solid #DCDCDC;z-index:960;left: 50%;top: 50%;margin: -320px 0px 0px -665px">
 			<div class="drop_down1" style="width:64px;height:42px;text-align:center;color:#228B22;line-height:45px;">过来玩</div>
 				<ul>
 					<c:forEach items="${modulars}" var="m">
+					    <c:if test="${m.merchants!= null && fn:length(m.merchants) != 0}">
 						<a href="#${m.uuid}"><li class="handler">${m.modularName}</li></a>
+						</c:if>
 					</c:forEach>
 					<c:forEach items="${activitys}" var="a">
-						<a href="#${a.uuid}"><li class="handler">${a.name}</li></a>
+					  <c:if test="${a.products!= null && fn:length(a.products) != 0}">
+						<a href="#${a.uuid}"><li class="handler" style=" overflow: hidden;">${a.name}</li></a>
+					  </c:if>	
 					</c:forEach>
 				</ul>
 		</div>
@@ -521,8 +524,10 @@ $(function(){
     </div>
 	<div id="blTop"></div>
 	<c:forEach items="${modulars}" var="m">
+	<c:if test="${m.merchants!= null && fn:length(m.merchants) != 0}">
 	<c:choose>
 	<c:when test="${m.modularCode=='01112'}">
+	
 	<div class="time-lists  clearfix">
         <div class="time-list time-list-w fl" id="${m.uuid}">
             <div class="time-title time-clear-f">
@@ -552,6 +557,7 @@ $(function(){
             </div>
         </div>
     </div>
+    
 	</c:when>
 	<c:otherwise>
 	<div class="time-lists  clearfix">
@@ -584,8 +590,10 @@ $(function(){
     </div>
 	</c:otherwise>
 	</c:choose>
+	</c:if>
     </c:forEach>
    <c:forEach items="${activitys}" var="activity">
+   <c:if test="${activity.products!= null && fn:length(activity.products) != 0}">
 	<div class="time-lists  clearfix">
         <div class="time-list time-list-w fl" id="${activity.uuid}">
             <div class="time-title time-clear-f">
@@ -612,6 +620,7 @@ $(function(){
             </div>
         </div>
     </div>
+    </c:if>
     </c:forEach> 
      <!--  <div id="sse">
          <a href="javascript:WebSocketTest()">运行 WebSocket</a>

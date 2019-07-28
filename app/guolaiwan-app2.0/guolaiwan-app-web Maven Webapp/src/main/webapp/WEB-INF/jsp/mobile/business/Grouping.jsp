@@ -361,7 +361,7 @@ function timer(times,intDiff) {
          for(var i=0;i<data.length;i++){
          		var teamnum=groupnum-data[i].teamnum;
   				var times='times'+data[i].id;
-	 			var begintime=data[i].updateTime;
+	 			var begintime=data[i].opentime;
 	 			var grouptime=data[i].grouptime*60*60*1000-1000;
 	 			var newtime=new Date().getTime();
 	 			var intDiff =parseInt((grouptime-(newtime-begintime))/1000);
@@ -376,7 +376,6 @@ function timer(times,intDiff) {
 		           html.push('	</div>');
 		           }
 		 		$('.allteam').append(html.join(''));
-		 			
 		 			timer(times,intDiff);
 	     	}
 	 });
