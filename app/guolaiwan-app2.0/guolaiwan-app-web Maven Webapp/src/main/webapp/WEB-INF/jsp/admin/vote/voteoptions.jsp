@@ -142,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						,{field:"ordernum",title:"单/商品/人/活动",edit:"text",align:'center',width:150}
    						,{field: 'votestatustype',title: '开启/结束',align:'center',width:150,templet:'#startandstop'}
    						,{title: 'logo缩略图',templet:"#picTpl",align:'center',width:100} 
-   						,{title:"操作",templet:"#zsgc",width:400}
+   						,{title:"操作",templet:"#zsgc",width:428}
    						]]
    					,done:function(res, curr, count){
    						$("#allcount").text(count);
