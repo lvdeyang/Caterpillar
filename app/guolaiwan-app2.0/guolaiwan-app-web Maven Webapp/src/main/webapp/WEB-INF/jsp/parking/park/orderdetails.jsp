@@ -83,6 +83,7 @@ html, body {
 <script>
    $(function() {
    var vehicle = null;
+   var state = null; //订单状态
     	var _uriYd = window.BASEPATH + '/smart/usere';
 		$.post(_uriYd, null, function(data) {
 			data = parseAjaxResult(data);
@@ -107,6 +108,7 @@ html, body {
 		parame.vehicle = vehicle; 
 		 $.post(_ur, $.toJSON(parame), function(data) {
 			data = parseAjaxResult(data);
+			state = data.orderStatus;
 		   	var htm = [];
 				htm.push('<span">'+data.parkingName+'</span>');
 				$('#marg').append(htm.join(''));  
@@ -151,8 +153,11 @@ html, body {
     
     
 	   $(".btn").bind("click", function () {   
-		   
-	     window.location.href="vice/merchant/cance?uid="+${param.uid}; 
+		  if(state!= null &&state == 'PAYSUCCESS' ){
+		      window.location.href="vice/merchant/cance?uid="+${param.uid}; 
+		  }else{
+		      $.toast("您的订单已不能退款哦!", "cancel");
+		  }
 		});  
    });  
   </script>
@@ -192,7 +197,7 @@ html, body {
 			订单编号：<span id="span">123456789632</span>
 		</p>
 		<p style="color:#777777;text-align:center;font-size:10px;">扫描二维码即可进入停车场</p>
-		<button class="btn"
+		<button class="btn" id="refund"
 			style="width:100%;height:35px;background-color:#D5D5D5;color:red;border:none;outline:none;">取消订单</button>
 	</div>
 	<div class="footer" style="padding-top:10%;">

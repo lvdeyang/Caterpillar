@@ -47,6 +47,7 @@ import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.UserOnedayBuyDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderType;
@@ -59,7 +60,10 @@ import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 
+import net.sf.ehcache.CacheOperationOutcomes.PutAllOutcome;
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 import pub.caterpillar.weixin.constants.WXContants;
 import pub.caterpillar.weixin.wxpay.GuolaiwanWxPayApp;
@@ -94,6 +98,9 @@ public class ProductPackageController extends BaseController {
     
     @Autowired
 	private ProductComboDAO conn_combo;
+    
+    @Autowired
+	UserOnedayBuyDAO conn_userone;
 	
 	/**
 	 * 跳转方法
@@ -122,14 +129,24 @@ public class ProductPackageController extends BaseController {
 		int pageSize =5 ; 
 		Map<String, Object> mapp = new HashMap<String, Object>();
 		mapp.put("productMerchantID", Long.parseLong(merhcantId));
+		//过滤 不符合日期的商品
+		long nowDate = new Date().getTime();
+		//遍历筛选
+		List<ProductPO> productPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);
+		for(int i= 0 ;i<productPOs.size();i++){
+		   long producntBeginTime  = productPOs.get(i).getProductBeginDate().getTime();
+		   long producntEndTime  =  productPOs.get(i).getProductEnddate().getTime();
+		   if(nowDate<producntBeginTime && nowDate>producntEndTime){
+			   productPOs.remove(i);
+		   }			
+		}
 		//分页获取所有商品
 	    List<ProductVO> pro_vo = new ProductVO().getConverter(ProductVO.class).
-		convert( productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize), ProductVO.class);
-	   //判断活动是否过期  
-	    boolean is_overtime;
-	    long nowDate = new Date().getTime();	    	    
+		convert(productPOs, ProductVO.class);
+	   //判断活动是否过期 状态 
+	    boolean is_overtime;	   	    	    
 	    //获取活动商品id
-	     Map<Long, ActivityRelPO> activ_merchan_id = new HashMap<Long, ActivityRelPO>();
+	     Map<Long, ActivityRelPO> activ_id = new HashMap<Long, ActivityRelPO>();
 	     List<ActivityRelPO> activ_po = conn_acre.findAll();
 	     for(ActivityRelPO po : activ_po){
 	    	 if(nowDate> po.getBeginDate().getTime() && nowDate < po.getEndDate().getTime()){
@@ -137,19 +154,21 @@ public class ProductPackageController extends BaseController {
 	    	 }else{is_overtime = false; continue;}
 	    	if(is_overtime){
 	    		if(po.getProductStock()>0){
-	    			activ_merchan_id.put(po.getProductId(), po);	
+	    			activ_id.put(po.getProductId(), po);	
 	    		}	    			    		
 	    	} 	    		    	  
 	     }	     
 	     DecimalFormat def = new DecimalFormat("0.00");
 	     //判断商品是否为活动商品
-	    Set<Long> pro_id = activ_merchan_id.keySet();    
+	    Set<Long> pro_id = activ_id.keySet();    
 		for(ProductVO pro : pro_vo){
+			//活动票
 			if(pro_id.contains(pro.getId())){
 			pro.setProductName(	pro.getProductName()+",act");			
-			pro_pric.add(def.format(Double.parseDouble(activ_merchan_id.get(pro.getId()).getPrice()+"")/100));
+			pro_pric.add(def.format(Double.parseDouble(activ_id.get(pro.getId()).getPrice()+"")/100));
 			pro_list.add(pro);
 			}else{
+			//普通票					
 			if(pro.getProductStock()>0){	
 			pro.setProductName(	pro.getProductName()+",comm");	
 			pro_pric.add(pro.getProductPrice());
@@ -181,7 +200,7 @@ public class ProductPackageController extends BaseController {
 				.convert(productPOs, ProductVO.class);
 		// 判断商品是否为购票产品
 		for(int i= 0;i<pr_vo.size();i++){			
-			if("园林".equals(pr_vo.get(i).getProductClassName())){
+			if("0001".equals(pr_vo.get(i).getProductModularCode())){
 			 continue;	
 			}else{ pr_vo.remove(i); }				
 		}
@@ -258,19 +277,22 @@ public class ProductPackageController extends BaseController {
       //票种类型
        List<ProductComboPO> pComboPOs = conn_combo.findByField("productId", proId);  
        for(ProductComboPO po : pComboPOs){	     
-    	      //票种的价格
+    	      //套餐票种的价格
     	      String price = def.format(Double.parseDouble(po.getComboprice()+"")/100);
     	      priceList.add(price); 
-    	     //票种的订单数量 
+    	     //套餐票种的订单数量 
     	      String[] fields ={"productId","comboId"};
     	      Long[]  values = {proId,po.getId()};	      
     	      oderNumList.add(conn_orif.countByFields(fields, values));
     	        	   
-       }
+       }  
+       //票的订单数量
+       int  ticketOrderNumber = conn_orif.countByField("productId", proId); 
+       map.put("ticketOrderNumber", ticketOrderNumber);
        //普通票
        if(choice==0){
            List<ProductVO> pr_vo =  new ProductVO().getConverter(ProductVO.class)
-                   .convert(productDao.findByField("id", proId), ProductVO.class);
+                   .convert(productDao.findByField("id", proId), ProductVO.class);           
             //开放时间
              String[] beginDateStr = pr_vo.get(0).getProductBeginDate().split(" ");
              String[] endDateStr  = pr_vo.get(0).getProductEnddate().split(" ");
@@ -281,7 +303,7 @@ public class ProductPackageController extends BaseController {
        //活动票
        if(choice==1){
         List<ActivityRelVO> act_vo = new ActivityRelVO().getConverter(ActivityRelVO.class)
-    	   .convert(conn_acre.findByField("productId", proId), ActivityRelVO.class);    	
+    	   .convert(conn_acre.findByField("productId", proId), ActivityRelVO.class);           
     	 //开放时间
          String beginDateStr =  act_vo.get(0).getBeginTime();
          String endDateStr  = act_vo.get(0).getEndTime();
@@ -345,32 +367,62 @@ public class ProductPackageController extends BaseController {
 	 *  跳转订单页面
 	 * */
 	@RequestMapping(value="/payment/jump")
-	public ModelAndView paymentJump(HttpServletRequest request){
+	public ModelAndView paymentJump(HttpServletRequest request,long isCombo){
 		Map<String, Object> map = new HashMap<String,Object>();
 		String merchantId = request.getParameter("merchantId");
-		String proId = request.getParameter("proId");
+		String proId = request.getParameter("proId");	
 		String choice = request.getParameter("choice");
-		String comboId = request.getParameter("comboId");		
+		//是否为套餐
+		if(isCombo == 1){
+		String comboId = request.getParameter("comboId");
+		map.put("comboId", comboId);
+		}else{
+		//ordersTicket.jsp 支付报错
+		map.put("comboId", -1);
+		}
 		HttpSession session  =  request.getSession();
 		long userId = (long)session.getAttribute("userId");
 		map.put("userId", userId);
 		map.put("merchantId", merchantId);
 		map.put("proId", proId);
 		map.put("choice", choice);
-		map.put("comboId", comboId);
+		map.put("isCombo", isCombo);
+		
 		return new ModelAndView("mobile/business/ordersTicket",map);		
 	}
 	
   /**
    * 查询购票商品价格
+ * @throws Exception 
+ * @throws NumberFormatException 
    * */	
 	@RequestMapping(value="/orders/info",method=RequestMethod.GET)
-	public Map<String, Object> getOrdersInfo(long comboId){
-		Map<String, Object> map = new HashMap<String, Object>();
-		DecimalFormat dlf = new DecimalFormat("0.00");
-		ProductComboPO ComboPOs = conn_combo.get(comboId);
+	public Map<String, Object> getOrdersInfo(HttpServletRequest request ,long isCombo) throws NumberFormatException, Exception{
+		Map<String, Object> map = new HashMap<String, Object>();		
 		//获取票的价格
-		String ticketPrice =  dlf.format(Double.parseDouble(ComboPOs.getComboprice()+"")/100);
+		String ticketPrice =null;
+		if(isCombo == 1){
+		    String comboId = request.getParameter("comboId");
+			DecimalFormat dlf = new DecimalFormat("0.00");
+			ProductComboPO ComboPOs = conn_combo.get(Long.parseLong(comboId));
+			//套餐票的价格
+			 ticketPrice =  dlf.format(Double.parseDouble(ComboPOs.getComboprice()+"")/100);
+		}else{
+		  String choice = request.getParameter("choice");
+		  String proId = request.getParameter("proId");
+		  //普通票价格
+			if("0".equals(choice)){			
+			List<ProductVO> productVO = new ProductVO().getConverter(ProductVO.class)
+					.convert(productDao.findByField("id", Long.parseLong(proId)), ProductVO.class);
+			ticketPrice =  productVO.get(0).getProductPrice();
+			}
+			//活动票价格
+			else{
+			List<ActivityRelVO> activityRelVO =	new ActivityRelVO().getConverter(ActivityRelVO.class)
+				    .convert(conn_acre.findByField("id", Long.parseLong(proId)), ActivityRelVO.class);
+			ticketPrice = activityRelVO.get(0).getPrice();	
+			}						 	
+		}
 		map.put("ticketPrice", ticketPrice);
 		return map;
 	}
@@ -383,27 +435,28 @@ public class ProductPackageController extends BaseController {
 	 * */
 	@RequestMapping(value="/add/info",method=RequestMethod.POST)
 	public String saveTicketInfo(HttpServletRequest request){
-    //保存
+    //判断是保存还是更新
 	String state =	request.getParameter("state");
+	//保存
 	if("0".equals(state)){	
-	String base = request.getParameter("facedate");
-    String name = request.getParameter("name");
-    String phone = request.getParameter("phone");
-    String idcard = request.getParameter("idcard");
-    String merchantId = request.getParameter("merchantId");
-    String proId = request.getParameter("proId");
-    HttpSession session  =  request.getSession();
-    long userId = (long)session.getAttribute("userId");
-    MessagePO mes = new MessagePO();
-    mes.setBase(base);
-    mes.setMerchantid(merchantId);
-    mes.setName(name);
-    mes.setNumber(idcard);
-    mes.setProId(Long.parseLong(proId));
-    mes.setState("0");
-    mes.setUserId(userId);
-    mes.setPhone(phone);
-    conn_message.save(mes);
+		String base = request.getParameter("facedate");
+	    String name = request.getParameter("name");
+	    String phone = request.getParameter("phone");
+	    String idcard = request.getParameter("idcard");
+	    String merchantId = request.getParameter("merchantId");
+	    String proId = request.getParameter("proId");
+	    HttpSession session  =  request.getSession();
+	    long userId = (long)session.getAttribute("userId");
+	    MessagePO mes = new MessagePO();
+	    mes.setBase(base);
+	    mes.setMerchantid(merchantId);
+	    mes.setName(name);
+	    mes.setNumber(idcard);
+	    mes.setProId(Long.parseLong(proId));
+	    mes.setState("0");
+	    mes.setUserId(userId);
+	    mes.setPhone(phone);
+	    conn_message.save(mes);
 	}else{
 		//更新
 		String name = request.getParameter("name");
@@ -414,8 +467,8 @@ public class ProductPackageController extends BaseController {
 	    mes.setName(name);
 	    mes.setBase(base);
 	    mes.setNumber(idcard);
-	    /*mes.setTickPhone(phone);*/
-	    conn_message.save(mes);
+	    mes.setPhone(phone);
+	    conn_message.update(mes);
 	}	
 	return "success"; 
 	}
@@ -424,40 +477,75 @@ public class ProductPackageController extends BaseController {
 	 *  实时查询数据库数量
 	 * 
 	 * */
-	@RequestMapping(value="/common/info")
-    public Map<String, Object> getCommon(long proId,long ticket,long ticketnumber){	
+	@RequestMapping(value="/commonticket")
+    public Map<String, Object> getCommon(long proId,long choice,long ticketnumber){	
 		Map<String, Object> map = new HashMap<String, Object>();
-		String state = "";
 		//普通商品
-		if(ticket == 1){
+		if(choice == 0){
 		ProductPO pro_po = productDao.get(proId);
 		//查询库存
 		if(pro_po.getProductStock()>0){	
 			if(pro_po.getProductStock()<ticketnumber){
-				state="1";//库存比买的数量少 
-				map.put("state", state);	
+				map.put("state", 1);//库存比买的数量少 				
 				map.put("Stock", pro_po.getProductStock());					
 			}else{
 				//判断是否限购
 				if(pro_po.getProductLimitType()==1){
 					if(ticketnumber> pro_po.getProductLimitNum()){
-						state= "2";//买的数量多于限购
-						map.put("state", state);
+						map.put("state", 2);//买的数量多于限购						
 						map.put("limitNum", pro_po.getProductLimitNum());
+					}else{
+						map.put("state", 3);//购买成功
 					}					
 				}else{
-					state = "3";//购买成功
-					map.put("state", state);
+					map.put("state", 3);//购买成功					
 				}			
 			}						
 		 }else{
-			 state = "0"; // 库存为0的状态
-			 map.put("state", state); 
-		   }			
+			 map.put("state", 0); // 库存为0的状态			  
+		   }
+		//活动商品
+		}else{
+			//活动商品是否当天限购
+	      ActivityRelPO activityRelPO = conn_acre.get(proId);
+	      //查询库存
+	      if(activityRelPO.getProductStock()>0){
+	    	//是否一日一个
+	    	  if(1 == activityRelPO.getOnePerDay()){
+	    		  System.out.println("zhuangtaia 1");
+	    		  if(ticketnumber != 1){
+	    			  map.put("state", 1);//超出每日限购
+	    		  }   		  
+	    	  }else{
+	    		  if(ticketnumber>activityRelPO.getProductStock()){	
+	    			  System.out.println("zhuangtaia 2");
+	    				 map.put("state", 2);//购买数量大于库存量
+	    				 map.put("Stock",activityRelPO.getProductStock());
+	    			 }else{	    				 
+	    				//该商品是否限购
+	    			    long productId	= activityRelPO.getProductId();	    			    
+	    			    ProductPO productPO = productDao.get(productId);
+	    			    if(productPO.getProductLimitType()==1){
+	    					if(ticketnumber> productPO.getProductLimitNum()){
+	    						map.put("state", 3);//买的数量多于限购						
+	    						map.put("limitNum", productPO.getProductLimitNum());
+	    					}else{
+	    						
+		    				map.put("state", 4);//购买成功	    						
+	    					}					
+	    				}else{	
+	    					map.put("state", 4);//购买成功
+	    				}		
+	    			 } 	    			 	    		  
+	    	  }	    	  
+	      }else{	
+	    	  System.out.println("zhuangtaia 0");
+	    	 map.put("state", 0); //库存为 0
+	      }	      		
 		}	
 		return map ;
 	}
-	
+	// Json 转 字符串
 	private String getRequestJson(HttpServletRequest request) {
 		try {
 			BufferedReader br;
@@ -475,7 +563,7 @@ public class ProductPackageController extends BaseController {
 		}
 	}
 	/**
-	 * 添加用户信息
+	 * 展示用户信息
 	 * */
 	@RequestMapping(value="/user/list")
 	public Map<String, Object> getMessageInfo(HttpServletRequest request){
@@ -489,7 +577,7 @@ public class ProductPackageController extends BaseController {
 		return map;
 	}
 	/**
-	 * 修改用户信息
+	 * 查询要修改用户信息
 	 * 
 	 * */
 	@RequestMapping(value="/update/message")
@@ -499,6 +587,48 @@ public class ProductPackageController extends BaseController {
 	    map.put("mes", mes_po);
 		return map;
 	}
+	
+	/**
+	 * 商品时间判断
+	 * 
+	 * */
+	
+	@RequestMapping(value="/productDate",method = RequestMethod.POST)
+	public Map<String, Object> getProdictDate(long id ,long choice,String buyDate){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			//判断票的类型
+			//普通票
+			if(choice==0){
+			  ProductPO productPO = productDao.get(id);
+			  long beginTime = productPO.getProductBeginDate().getTime();
+			  long endTime =   productPO.getProductEnddate().getTime();
+			  long  buyTime = sdf.parse(buyDate).getTime();
+			  if(buyTime>beginTime && buyTime<endTime){
+				  map.put("result", 1);//日期符合
+			  }else{
+				  map.put("result", 0);//日期不符合				  
+			  }
+			}
+			//活动票
+			else{
+			    ActivityRelPO aRelPO = conn_acre.get(id);
+			    long beginTime = aRelPO.getBeginDate().getTime();
+			    long endTime = aRelPO.getEndDate().getTime();
+			    long  buyTime = sdf.parse(buyDate).getTime();
+			    if(buyTime>beginTime && buyTime<endTime){
+					  map.put("result", 1);//日期符合					  
+				  }else{
+					  map.put("result", 0);//日期不符合				  
+				  }		
+			}			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}	
+		return map;
+	}
+	
 	
 	/**
 	 * 订单：立即支付
@@ -520,65 +650,75 @@ public class ProductPackageController extends BaseController {
 			param = param.substring(1, param.length() - 1);
 		}
 		JSONObject pageObject = JSON.parseObject(param);
-		String productId = pageObject.getString("productId");
+		String id = pageObject.getString("id");
 		String num = pageObject.getString("productNum");
 		Long userId = Long.parseLong(pageObject.getString("userId"));
-		String paytype = pageObject.getString("paytype");
-		//String activityId = pageObject.getString("activityId");
-				
-		/*
-		 * String productId = request.getParameter("productId"); String num =
-		 * request.getParameter("num"); String paytype =
-		 * request.getParameter("payType"); Long userId =
-		 * Long.parseLong(request.getParameter("userId"));
-		 */
-	
-
+		String paytype = pageObject.getString("paytype");		
+		String isCombo = pageObject.getString("isCombo");
+		String choice = pageObject.getString("choice");
+		
+		OrderInfoPO order = new OrderInfoPO();
+		
+		String  productId = null;
+		//支付的金额
+		Long productprice = null;
+		//获取 productId
+		if("0".equals(choice)){
+			productId = id;
+		}
+		else{
+	       ActivityRelPO aRelPO	= conn_acre.get(Long.parseLong(id));
+	       productId = aRelPO.getProductId()+"";	
+		}				
+		//获取商品信息
 		ProductPO productPO = productDao.get(Long.parseLong(productId));
+		
+		       //套餐票 价格信息
+				if("1".equals(isCombo)){	
+					//订单信息
+					String comboId = pageObject.getString("ComboId");
+					order.setComboId(Long.parseLong(comboId));
+					//查询价格
+					ProductComboPO pComboPO = conn_combo.get(Long.parseLong(comboId));
+					productprice = pComboPO.getComboprice();
+					
+				}else{
+					//普通票价格
+					if("0".equals(choice)){ 
+						productprice = productPO.getProductPrice();
+					}
+					//活动票价格
+					else{
+						 ActivityRelPO activityRelPO = conn_acre.get(Long.parseLong(id));
+						 productprice = activityRelPO.getPrice();
+						 
+						 UserOneDayBuyPO buyPO = new UserOneDayBuyPO();
+							buyPO.setUpdateTime(new Date());
+							buyPO.setUserId(userId);
+							buyPO.setProId(Long.parseLong(id));
+							
+							conn_userone.save(buyPO);
+							order.setActivityId(Long.parseLong(id));																					
+					}			
+				}		
 		if (num == null) {
 			num = "1";
-		}
-		String comboId = productPO.getComId()+"";
-		OrderInfoPO order = new OrderInfoPO();
-		// 4/26添加comId 张羽 4/28 添加退款限制
-		ProductPO productPO2 = productDao.get(Long.parseLong(productId));
-		order.setComId(productPO2.getComId());
-		order.setProductIsRefund(productPO2.getProductIsRefund());
-
-		if (comboId != null) {
-			order.setComboId(Long.parseLong(comboId));
-		}
-
-		/*String orderStartDate = pageObject.getString("startDate");
-		if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
-			orderStartDate = orderStartDate.replace("T", " ");
-			order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.dateTimePattenWithoutSecind));
-		}
-		String endBookDate = pageObject.getString("endDate");
-		if (endBookDate != null && endBookDate != "" && endBookDate.length() != 0) {
-			endBookDate = endBookDate.replace("T", " ");
-			order.setEndBookDate(DateUtil.parse(endBookDate, DateUtil.dateTimePattenWithoutSecind));
-		}*/
-		
-
+		}		
 		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 		Date date = new Date();
-
-		long productprice = productPO.getProductPrice();
-		// 支付金额
+		// 支付金额		
 		long payMoney = Integer.parseInt(num) * productprice;
 		// 订单总金额
 		long orderAllMoney = payMoney;
-		// 获取产品
 
 		// 获取商家
 		MerchantPO merchant = merchantDao.get(productPO.getProductMerchantID());
 		UserInfoPO user = conn_user.get(userId);
-		/*String orderBookDate = pageObject.getString("bookDate");
-		if (orderBookDate != null && orderBookDate != "" && orderBookDate.length() != 0) {
-			orderBookDate = orderBookDate.replace("T", " ");
-			order.setOrderBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
-		}*/
+		
+		String orderStartDate = pageObject.getString("startDate");
+		if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
+			order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.defaultDatePattern));
+		}
 
 		// 会员ID
 		order.setUserId(userId);
@@ -619,45 +759,7 @@ public class ProductPackageController extends BaseController {
 		order.setProductName(productPO.getProductName());
 		// 商品数量
 		order.setProductNum(Long.parseLong(num));
-		if (comboId != null && !comboId.equals("0")) {
-			ProductComboPO comboPO = conn_combo.get(Long.parseLong(comboId));
-			payMoney = Integer.parseInt(num) * (comboPO.getComboprice());
-			orderAllMoney = payMoney;
-			productprice = comboPO.getComboprice();
-		}
-		/*// 获取用户
-		if (activityId != null) {
-
-			UserOneDayBuyPO buyPO = new UserOneDayBuyPO();
-			buyPO.setUpdateTime(new Date());
-			buyPO.setUserId(userId);
-			buyPO.setProId(Long.parseLong(activityId));
-			if (orderBookDate != null && orderBookDate != "" && orderBookDate.length() != 0) {
-				orderBookDate = orderBookDate.replace("T", " ");
-				buyPO.setBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
-			}
-			conn_userone.save(buyPO);
-			order.setActivityId(Long.parseLong(activityId));
-			conn_surpportbuy.delSurpport(userId, Long.parseLong(activityId));
-
-			ActivityRelPO activityRelPO = new ActivityRelPO();
-			activityRelPO = conn_activityRel.get(Long.parseLong(activityId));
-			payMoney = Integer.parseInt(num) * (activityRelPO.getPrice());
-			orderAllMoney = payMoney;
-			productprice = activityRelPO.getPrice();
-		}
-*/
-		/*
-		 * if (order.getOrderBookDate() != null && order.getEndBookDate() !=
-		 * null) { long bet = DateUtil.daysBetween(order.getOrderBookDate(),
-		 * order.getEndBookDate()); payMoney = payMoney * (bet+1); orderAllMoney
-		 * = payMoney; }
-		 */
-/*		// 张羽 修改支付时的价钱按照页面的计算来 4/30
-		long bet = Long.parseLong(pageObject.getString("payMoney"));
-		payMoney = payMoney * bet;
-		orderAllMoney = payMoney;
-		System.out.println(orderAllMoney + "-------------------------");*/
+		
 		// 商品单价
 		order.setProductPrice(productprice);
 		// 所属板块DI
@@ -737,8 +839,6 @@ public class ProductPackageController extends BaseController {
 		}
 	}
 
-
-	// 微信支付方法
 		public Map<String, String> weichatPay(long PayMoney, String tradeNum) {
 			Map<String, String> reqData = new HashMap<String, String>();
 			Map<String, String> resData = null;

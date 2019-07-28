@@ -242,8 +242,9 @@ public class BusinessController extends WebBaseControll {
 	// 南山攻略需要的数据
 	@ResponseBody
 	@RequestMapping(value = "/getVideoPics", method = RequestMethod.GET)
-	public List<Map<String, Object>> getVideoPics(long merchantId) throws Exception {
-
+	public List<Map<String, Object>> getVideoPics(long merchantId,HttpServletRequest request) throws Exception {
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		System.out.println(userId +" ---------------------------");
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<VideoPicPO> _videoPics = videopicDao.getbymerchantId(merchantId);
 		for (VideoPicPO nsVideoPicPO : _videoPics) {
@@ -251,6 +252,14 @@ public class BusinessController extends WebBaseControll {
 			List<UserInfoPO> usInfoPO = userDao.getUserByUid(nsVideoPicPO.getUserId());
 			int  pcomment  = conn_vPComment.countByField("videoPic",nsVideoPicPO);       //评论数
 		    int   Praise  =	conn_vPRel.countPraise(nsVideoPicPO);
+		   // 点赞数
+		 	VPRelPO countPraise = conn_vPRel.getPraiseByVU(nsVideoPicPO,userId);
+		 	if(countPraise != null){ //判断图片颜色
+		 		hashMap.put("picture",1);
+		 	}
+		 	else{
+		 		hashMap.put("picture",0 );
+		 	}
 			hashMap.put("videoPic",Praise );
 			hashMap.put("pcomment", pcomment);
 			hashMap.put("userimg", usInfoPO.get(0).getUserHeadimg());
@@ -526,6 +535,7 @@ public class BusinessController extends WebBaseControll {
 			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
 			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
 			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
+			hashMap.put("feature", Merchantlist.get(i).getFeature());
 			list.add(hashMap);
 		}
 		return list;
