@@ -54,36 +54,57 @@ public class ParkOrderController extends BaseController{
 		List<OrderPO> orderinfopo = new ArrayList<OrderPO>();
 		int count = 0;
 		switch (type) { 
-		case 0://全部
+		/*case 0://全部
 			orderinfopo = Order. getOrder("",page,limit);
 			count = Order.getCount("");
-			break;
-		case 1://未支付
+			break;*/
+		case 0://未支付
 			orderinfopo = Order. getOrder("NOTPAY",page,limit);
+			for (OrderPO orderPO : orderinfopo) {
+			  orderPO.setOrderStatus("未支付  ");
+			}
 			count = Order.getCount("NOTPAY");
 			break;
-		case 2://已支付
+		case 1://已支付
 			orderinfopo = Order. getOrder("PAYSUCCESS",page,limit);
+			for (OrderPO orderPO : orderinfopo) {
+				 orderPO.setOrderStatus("已支付 ");
+			}
 			count = Order.getCount("PAYSUCCESS");
 			break;
-		case 3://正在停车
+		case 2://正在停车
 			orderinfopo = Order. getOrder("PARKING",page,limit);
+			for (OrderPO orderPO : orderinfopo) {
+				  orderPO.setOrderStatus("正在停车");
+			}
 			count = Order.getCount("PARKING");
 			break;
-		case 4://已过期
+		case 3://已过期
 			orderinfopo = Order. getOrder("PAST",page,limit);
+			for (OrderPO orderPO : orderinfopo) {
+				  orderPO.setOrderStatus("到期结束");
+			}
 			count = Order.getCount("PAST");
 			break;
-		case 5://申请退款
+		case 4://申请退款
 			orderinfopo = Order. getOrder("REFUNDING",page,limit);
+			for (OrderPO orderPO : orderinfopo) {
+				  orderPO.setOrderStatus("申请退款  ");
+			}
 			count = Order.getCount("REFUNDING");
 			break;
-		case 6://退款成功
+		case 5://退款成功
 			orderinfopo = Order. getOrder("REFUNDED",page,limit);
+			for (OrderPO orderPO : orderinfopo) {
+				  orderPO.setOrderStatus("退款成功  ");
+			}
 			count = Order.getCount("REFUNDED");
 			break;
-		case 7://退款失败
+		case 6://退款失败
 			orderinfopo = Order. getOrder("REFUNDFAIL",page,limit);
+			for (OrderPO orderPO : orderinfopo) {
+				  orderPO.setOrderStatus("退款失败");
+			}
 			count = Order.getCount("REFUNDFAIL");
 			break;
 		}

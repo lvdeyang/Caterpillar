@@ -24,7 +24,7 @@ public class GuolaiwanWxPay {
     public final static String AppKey = WXContants.AppKey;
     
 	
-	private static GuolaiwanWxPay instance;
+	private static Map<String,GuolaiwanWxPay> instanceMap=new HashMap<String, GuolaiwanWxPay>();
 
 	private WXPay wxPay;
 	private GuolaiwanWxPay(String callBack) throws Exception {
@@ -33,10 +33,10 @@ public class GuolaiwanWxPay {
 	}
 
 	public static synchronized GuolaiwanWxPay getInstance(String callBack) throws Exception {
-		if (instance == null) {
-			instance = new GuolaiwanWxPay(callBack);
+		if (instanceMap.get(callBack) == null) {
+			instanceMap.put(callBack,new GuolaiwanWxPay(callBack));
 		}
-		return instance;
+		return instanceMap.get(callBack);
 	}
 	
 	public Map<String, String> pay(Map<String, String> reqData) throws Exception{
