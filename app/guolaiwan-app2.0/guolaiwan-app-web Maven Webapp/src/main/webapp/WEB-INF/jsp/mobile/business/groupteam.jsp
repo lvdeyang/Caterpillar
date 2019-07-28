@@ -154,6 +154,24 @@ overflow: hidden;
 width:40px;
 height:40px;
 }
+.fuceng{
+    position: fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top: 0;
+    background-color:rgba(0,0,0,0.6);
+    z-index: 10000;
+
+}
+.tanchuang input{
+width:96%;
+padding:0 0 0 30%;
+height:50px;
+border:none;
+outline:none;
+border-bottom:1px solid #D3D3D3;
+}
 </style>
 
 </head>
@@ -264,14 +282,52 @@ height:40px;
 	   
 timer();
 getAllTeamMan();   
-	
+getAllAddr();	
+
+
+		$(document).on('click', '.fukuan', function() {
+			$("#startteam").popup();
+		})
+
+		$(document).on('click', '.cancel', function() {
+			$.closePopup();
+		})
+
+		$(document).on('click', '.pay', function() {
+			$.closePopup();
+		})
+
+		$(document).on('click', '#addAddress', function() {
+			$.closePopup();
+			$("#address").popup();
+		})
+		
+		$(document).on('click', '.close', function() {
+			$.closePopup();
+			$("#startteam").popup();
+		})
+		
+		$(document).on('click', '.dizhi', function(){ 
+		  $(".fuceng").fadeIn();
+		   $(".tanchuang").fadeIn();
+		});
+		
+	  	$(document).on('click', '.fuceng', function(){ 
+		  $(".fuceng").fadeOut();
+		  $(".tanchuang").fadeOut();
+		});
+		
+		$(document).on('click', '.quxiao', function(){ 
+		  $(".fuceng").fadeOut();
+		  $(".tanchuang").fadeOut();
+		});
 
 	
 	});
 </script>
 <script>
 function timer() {
-	var begintime=new Date("${team.updateTime}").getTime();
+	var begintime=new Date("${team.opentime}").getTime();
 	var grouptime=${groupBuyPO.grouptime}*60*60*1000-1000;
 	var newtime=new Date().getTime();
 	var intDiff =parseInt((grouptime-(newtime-begintime))/1000);
@@ -295,9 +351,10 @@ function timer() {
   }, 1000);
 }
 
-function dobuy(){
+	function dobuy(){
 		    var productId=${product.id};
 		    var userId=${userId};
+		    var logisticsId=$("input[name='address']:checked").val();
             $.closePopup();
 			var chkStockUrl=window.BASEPATH + 'pubnum/stock/check?proId='+productId+'&count=1';
 			$.get(chkStockUrl, null, function(data){
@@ -308,7 +365,7 @@ function dobuy(){
 				   return;
 				}	
 				var _uriPay = window.BASEPATH + 'phoneApp/grouporder/add';
-				$.post(_uriPay,{"productId":productId,"userId":userId}, function(data){
+				$.post(_uriPay,{"productId":productId,"userId":userId,"logisticsId":logisticsId}, function(data){
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					$.modal({
@@ -433,6 +490,75 @@ function dobuy(){
 			}
 		});
      }
+     
+     function getAllAddr(){
+        var _uriAddress = window.BASEPATH + 'phoneApp/address/list?userId=${userId}';
+		$.get(_uriAddress, null, function(data){
+			data = parseAjaxResult(data);
+			if(data === -1) return;
+			    var html=[];
+			if(data && data.length>0){
+				for(var i=0; i<data.length; i++){
+				     var chkattr='';
+				     if(data[i].defaultAddress==1){
+				         chkattr='checked="checked"';
+				     }
+			        html.push('<div style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;  ">');
+					html.push('<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span style="text-align: left;"><span>'+data[i].consigneeName+'</span></span><span style="float:right;margin-right:8%;"><span>'+data[i].consigneePhone+'</span></span></p>');
+					html.push('<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span>'+data[i].consigneeAddress+'</span></p>');
+					html.push('<input onchange="addresschange(this.id)" id="'+data[i].id+'" '+chkattr+' type="radio" name="address" value="'+data[i].id+'" style="position: absolute;top:20px;left:5%;" />');
+					html.push('<span onclick="deleteaddress(this.id)" id="'+data[i].id+'" style="position: absolute;right:5%;font-size:16px;font-weight: bold;top:25px;"><i class="weui-icon-cancel"></i></span>');
+					html.push('</div>  ');
+					}
+				$('#addressList').children().remove();
+			    $('#addressList').append(html.join(''));
+			}else{
+					html.push('<p style="color:#4C4C4C;text-align:center;font-weight:bold;">暂无默认地址</p>');
+				$('#addressList').children().remove();
+			    $('#addressList').append(html.join(''));
+			}
+		});
+     }
+     
+     function deleteaddress(id){
+     	var url=window.BASEPATH + 'business/deleteaddress';
+     	$.post(url,{"addressId":id},function(data){
+     		$.alert("删除地址成功");
+     		getAllAddr();
+     	})
+     }
+
+	function addresschange(id){
+     var url=window.BASEPATH + 'business/changeaddress';
+     	$.post(url,{"addressId":id,"userId":${userId}},function(data){
+     		$.toast("更改地址成功", "text");
+     	})
+     }
+
+     function appendaddress(){
+     	var userId=${userId};
+     	var username=$('.username').val();
+     	var telephone=$('.telephone').val();
+     	var consigneeAddress=$('.consigneeAddress').val();
+     	var url=window.BASEPATH + 'business/appendaddress';
+	      var re = /^[1][3,4,5,7,8][0-9]{9}$/;
+	       if($(".username").val()==""||$(".consigneeAddress").val()==""){  
+				  alert("请完善信息");
+				  return false;
+				}
+			if ($(".telephone").val().search(re)) {
+				       alert("请输入正确手机号");
+					return false;
+				}
+				
+			
+     	$.post(url,{"userId":userId,"username":username,"telephone":telephone,"consigneeAddress":consigneeAddress},function(data){
+     	    $.alert("添加成功");
+     		$(".fuceng").fadeOut();
+  			$(".tanchuang").fadeOut();
+     		getAllAddr();
+     	})
+     }
 
 </script>
 
@@ -474,8 +600,52 @@ function dobuy(){
             
           </div>
           <div style="margin:0 auto;text-align: center;width:100%;position: fixed;bottom:10px;">
-          <button onclick="dobuy()" style="width:90%;height:40px;color:#fff;background:#FF4900;border:none;outline:none;border-radius:12px;">参与此团</button>
+          <button class="fukuan" style="width:90%;height:40px;color:#fff;background:#FF4900;border:none;outline:none;border-radius:12px;">参与此团</button>
           </div>
+       
+       
+       <div id="startteam" class="weui-popup__container">
+		<div class="weui-popup__overlay"></div>
+		<div class="weui-popup__modal">
+				<p class="dizhi" style="height:50px;margin:5px 0;line-height: 50px;padding:0 5%;background: #fff;font-size:18px;font-weight: bold;"><span>添加新地址</span><span style="float:right;">></span></p>
+				<div class="weui-panel__bd" id="addressList"
+					style="padding-bottom:40px;"></div>
+
+				
+					<div style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
+						<p
+							style="background:#F56938;height:100%;float:left;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;"
+							class="cancel">
+							<span style="font-size:14px;margin-left:5%;">取消参团</span>
+						</p>
+						<p class="pay" onclick="dobuy()"
+							style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;">
+							<span style="font-size:14px;margin-left:5%;">参团支付</span>
+						</p>
+				</div>
+
+		  </div>
+	</div>
+       
+       
+          
+          
+       <div class='fuceng' style="display: none;"></div>
+	   <div class="tanchuang" style="z-index:11111;width:100%;display:none;height:auto;padding:0 0 50px 0;text-align: center;background: #fff;position: fixed;bottom:0; ">
+	   <p style="width:96%;margin:0 auto;height:50px;line-height: 50px;font-size: 18px;font-weight: bold;border-bottom:1px solid #D3D3D3;">编辑收货地址</p>
+	   <input type="text" class="username" placeholder="请您输入收货人姓名" style="">
+	   <p style="position: absolute;top:65px;left:5%;font-weight: bold;">收货人姓名</p>
+	   <input type="text" class="telephone" placeholder="请您输入收货人手机号" style="">
+	   <p style="position: absolute;top:115px;left:5%;font-weight: bold;">手机号</p>
+	   <input type="text" class="consigneeAddress" placeholder="请您输入详细地址" style="">
+	   <p style="position: absolute;top:165px;left:5%;font-weight: bold;">详细地址</p>
+	   <!-- 空白 -->
+	   <p style="height:50px;"></p>
+	   <div style="width:100%;height:60px;position: fixed;bottom:0;background: #fff;">
+        <p class="quxiao" style="line-height: 60px;color:#EB6E1E;width:50%;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">取消</p>
+        <p onclick="appendaddress()" style="line-height: 60px;background:#EB6E1E;width:50%;color:#fff;float:right;display: inline-block;text-align: center;font-size:16px;font-weight: bold;">保存</p>
+        </div>
+	
           <div style="height:40px;width:100%;"></div>
 </body>
 

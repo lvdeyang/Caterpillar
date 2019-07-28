@@ -177,7 +177,7 @@ html,body{
 		$.post(_uri, null, function(data) {
 			data = parseAjaxResult(data);
           if(data.userHeadimg != null &&  sal != 1){
-          window.location.href="quit/merchant/smartparking";
+          window.location.href="quit/merchant/smartparking?merchantId=${merchantId}";
           }
 		});
 	
@@ -211,7 +211,7 @@ html,body{
 					param.parking = $(".input1").val();
 			      $.post(_uriY, $.toJSON(param), function(data) {
 			      	data = parseAjaxResult(data);
- 			      window.location.href="quit/merchant/smartparking";
+ 			        window.location.href="quit/merchant/smartparking?merchantId=${merchantId}";
  			      	$(".btn").css("box-shadow","5px 5px 10px #8E8F8F");
  			      });
 				});

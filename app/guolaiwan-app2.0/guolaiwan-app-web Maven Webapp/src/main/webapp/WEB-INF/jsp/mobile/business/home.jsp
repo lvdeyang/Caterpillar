@@ -115,7 +115,7 @@ html, body {
 }
 
 .header-content {
-	height: 100%;
+	height:auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -191,7 +191,11 @@ html, body {
   margin-left:3%;
  }
  
- 
+ #phone{
+ position:absolute;
+ right:60px !important;
+
+ }
 </style>
 
 </head>
@@ -222,7 +226,7 @@ $(function() {
 			}
 	  };
 	  
-	
+		
 		
  		getRecomment();
 	  function getCom(){
@@ -434,7 +438,14 @@ $(function() {
 			    $('.youxuan').append(html.join(''));	      			   
 		   });				  	    
 }	
-
+    function index(){
+       location.href=window.BASEPATH + '/pubnum/index';
+   }
+    
+ 	function personal(){
+        location.href=window.BASEPATH + 'pubnum/personal/index?merchantId=${merchantId}';
+   }
+    
    function activity(id){
         location.href=window.BASEPATH + 'business/productdetails?id='+id;
    }
@@ -477,6 +488,8 @@ $(function() {
    $(document).on('click',' #pname',function(){ //导航
 	  window.location.href="guide/visitors/app?userId="+${userId}; 
    });
+   
+   
 </script>
 
 
@@ -487,9 +500,11 @@ $(function() {
 	<!-- 主页 -->
 	<div class="header">
 			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
+		
+	    <img style="width:25px;height:25px;position: absolute;left:2%;top:7.5px;z-index:11;" src="lib/images/homes.png" onclick="index()">
+		<img style="width:30px;height:30px;position: absolute;right:2%;z-index:11;top:5px;" alt="" src="lib/images/personals.png" onclick="personal()">
+			
+				<div class="header-content" >商户</div>
 			</div>
 	</div>
 	<div class="content" id="content" >

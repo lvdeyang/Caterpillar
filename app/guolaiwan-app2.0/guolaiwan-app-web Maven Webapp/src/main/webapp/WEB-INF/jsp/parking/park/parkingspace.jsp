@@ -165,11 +165,63 @@ html {
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=b4020d9668380974bf11cdbf0b3eae4c"></script>
 <script type="text/javascript">
 
 	$(function() {
-	 	var _uri = window.BASEPATH + 'vice/infor';
-		 $.post(_uri, null, function(data) {
+	        var loca = {};
+		    var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				if (data === -1) return;
+				if (data) {
+				    loca = data; 
+					getLoation();
+				}
+			});
+
+		function getLoation() {
+			wx.config({
+				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				//                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId : loca.appId, // 必填，公众号的唯一标识
+				timestamp : loca.timestamp, // 必填，生成签名的时间戳
+				nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+				signature : loca.signature, // 必填，签名，见附录1
+				jsApiList : [ 'checkJsApi', 'getLocation' ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+			wx.ready(function() {
+				wx.getLocation({
+					type : 'gcj02',
+					success : function(res) {
+						var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+						var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+						var speed = res.speed; // 速度，以米/每秒计  
+						var accuracy = res.accuracy; // 位置精度  
+						getCity(latitude, longitude);
+					},
+					cancel : function(e) {
+						//这个地方是用户拒绝获取地理位置  
+						alert("请打开GPS定位,");
+					}
+				});
+				wx.error(function(res) {});
+			});
+		}
+		var latitude=null;
+		var longitude=null;
+		function getCity(latitude, longitude) { //通过经纬度   获取高德位置
+			latitude = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
+			longitude = (parseFloat(longitude)).toFixed(5);
+		}
+
+	        var _uri = window.BASEPATH + 'vice/infor';
+	        var para = {};
+		    para.latitude = latitude;
+		    para.longitude = longitude;
+		    para.merchantId = '${merchantId}';
+		    $.post(_uri, $.toJSON(para), function(data) {
 			data = parseAjaxResult(data);
 			var htm = [];
 			for (var i = 0; i < data.length; i++) {
@@ -188,7 +240,6 @@ html {
 			}
 			$('body').append(htm.join('')); 
 		}); 
-	
 		//隐藏列表框
 		$("body").click(function() {
 			$("#div_items").css('display', 'none');

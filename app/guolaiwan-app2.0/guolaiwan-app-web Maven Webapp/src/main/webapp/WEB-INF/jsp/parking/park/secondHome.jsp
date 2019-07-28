@@ -334,7 +334,7 @@ height:auto;
 				var Parkingspace = document.getElementById('test1');
 				Parkingspace.src = 'lib/images/cheweis.png';
 				setTimeout(function(){
-				window.location.href = "vice/merchant/scenic";
+				window.location.href = "vice/merchant/scenic?merchantId=${merchantId}";
 				},500);
 			};
 			

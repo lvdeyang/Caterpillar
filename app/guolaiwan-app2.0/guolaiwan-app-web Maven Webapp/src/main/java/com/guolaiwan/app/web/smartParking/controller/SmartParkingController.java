@@ -198,9 +198,10 @@ public class SmartParkingController  extends WebBaseControll{
 	/*****************************************************************************************************/
 	//转到jsp文件
 	@RequestMapping(value = "/merchant/smartparking")
-	public ModelAndView merchantIndex(HttpServletRequest request,HttpSession session) throws Exception {
+	public ModelAndView merchantIndex(HttpServletRequest request,HttpSession session,String merchantId) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("parking/park/secondHome"); 
+		if(merchantId != null && merchantId != "")mv.addObject("merchantId",merchantId);
 		return mv;
 	}
 

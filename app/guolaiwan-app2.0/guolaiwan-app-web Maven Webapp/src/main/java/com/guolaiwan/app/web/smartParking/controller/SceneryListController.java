@@ -9,6 +9,8 @@ import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,9 +68,11 @@ import com.guolaiwan.bussiness.Parking.po.MoneyPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
+import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.po.BundleOrder;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
@@ -104,12 +108,16 @@ public class SceneryListController  extends WebBaseControll{
 	
 	@Autowired
 	private MoneyDao Money;
+	
+	@Autowired
+	private MerchantDAO Merchant;
 
 
 	/*****************************************************************************************************/
-
-
-
+	private static double rad(double d) {
+		return d * Math.PI / 180.0;
+	}
+	private static double EARTH_RADIUS = 6378.137;
 
 	/**
 	 * 查询   景区信息 
@@ -127,15 +135,67 @@ public class SceneryListController  extends WebBaseControll{
 			param = param.substring(1, param.length() - 1);
 		}
 		JSONObject pageObject = JSON.parseObject(param);
-		List<AttractionsParkingPO> attractions =	Attra_ctions.getInformation(0, 25);
-		for (int i = 0; i < attractions.size(); i++) {
-			List<CarPositionPO>  Position =	Car_Position.getInformation(attractions.get(i).getId());
-			
+		String latitude = pageObject.getString("latitude"); //用户当前经度
+		String longitude = pageObject.getString("longitude"); //用户当前纬度
+		String merchantId = pageObject.getString("merchantId"); //根据商户排序
+		List<AttractionsParkingPO> attractions =	Attra_ctions.getInformation(0, 100);
+		List<AttractionsVo> _merchants =null;
+		if (merchantId != null && merchantId != "") {
+		  MerchantPO  MerchantPO = Merchant.getMerchantById(Long.parseLong(merchantId)).get(0);
+		  if (MerchantPO != null && MerchantPO!= null ) {
+			String  MerchantLongitude =    MerchantPO.getShopLongitude();//商户经度
+		   	String  MerchantLatitude =  MerchantPO.getShopLatitude(); //商户纬度
+		   	_merchants = AttractionsVo.getConverter(AttractionsVo.class).convert(attractions,
+					AttractionsVo.class);
+		   	for (AttractionsVo attractionsVo : _merchants) {
+		   		String[]   District =  attractionsVo.getParkingDistrict().split(",");
+		   		double  dist  =     getDistance(Double.parseDouble(District[1]),Double.parseDouble(District[0]),Double.parseDouble(MerchantLatitude),Double.parseDouble(MerchantLongitude));
+		   		attractionsVo.setParkingDistrict(dist+"");
+		   	/*   Collections.sort(_merchants);*/
+		   		//自定义排序1
+		   		
+		   	}
+		   	
+		   	Collections.sort(_merchants, new Comparator<AttractionsVo>() {
+				@Override
+				public int compare(AttractionsVo o1, AttractionsVo o2) {
+					// TODO Auto-generated method stub
+					return (int) (Double.parseDouble(o1.getParkingDistrict())-Double.parseDouble(o2.getParkingDistrict()));
+
+				}
+	   		});
+		   	for (AttractionsVo attractionsVo : _merchants) {
+				System.out.println(attractionsVo.getParkingName()+" - " +attractionsVo.getParkingDistrict());
+			}
+		  }
 		}
-		
-		List<AttractionsVo> _merchants = AttractionsVo.getConverter(AttractionsVo.class).convert(attractions,
-				AttractionsVo.class);
 		return success(_merchants);
+	}
+	
+	
+	
+	/**
+	 * 通过经纬度获取距离(单位：米)
+	 * 
+	 * @param lat1
+	 * @param lng1
+	 * @param lat2
+	 * @param lng2
+	 * @return 距离
+      **/
+	public static double getDistance(double lat1, double lng1, double lat2,
+			double lng2) {
+		double radLat1 = rad(lat1);
+		double radLat2 = rad(lat2);
+		double a = radLat1 - radLat2;
+		double b = rad(lng1) - rad(lng2);
+		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+				+ Math.cos(radLat1) * Math.cos(radLat2)
+				* Math.pow(Math.sin(b / 2), 2)));
+		s = s * EARTH_RADIUS;
+		s = Math.round(s * 10000d) / 10000d;
+		s = s * 1000;
+		return s;
 	}
 
 
@@ -1317,10 +1377,11 @@ public class SceneryListController  extends WebBaseControll{
 
 
 	//转到jsp文件
-	@RequestMapping(value = "/merchant/scenic")
-	public ModelAndView ScenicSpot(HttpServletRequest request,HttpSession session) throws Exception {
+	@RequestMapping(value = "/merchant/scenic") //跳转到 选停车场页面
+	public ModelAndView ScenicSpot(HttpServletRequest request,HttpSession session,String merchantId) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("parking/park/parkingspace"); 
+		if(merchantId != null && merchantId != "")mv.addObject("merchantId",merchantId);
 		return mv;
 	}
 	//转到jsp文件
