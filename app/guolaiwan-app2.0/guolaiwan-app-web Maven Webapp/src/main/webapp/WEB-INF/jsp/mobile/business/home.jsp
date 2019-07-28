@@ -192,7 +192,9 @@ html, body {
  }
  
  #phone{
- display: none !important;
+ position:absolute;
+ right:60px !important;
+
  }
 </style>
 
@@ -436,6 +438,10 @@ $(function() {
 			    $('.youxuan').append(html.join(''));	      			   
 		   });				  	    
 }	
+    function index(){
+       location.href=window.BASEPATH + '/pubnum/index';
+   }
+    
  	function personal(){
         location.href=window.BASEPATH + 'pubnum/personal/index?merchantId=${merchantId}';
    }
@@ -483,9 +489,6 @@ $(function() {
 	  window.location.href="guide/visitors/app?userId="+${userId}; 
    });
    
-    $(document).on('click','.link-left',function(){ //返回首页
-	  location.href=window.BASEPATH + '/pubnum/index';
-   });
    
 </script>
 
@@ -497,9 +500,10 @@ $(function() {
 	<!-- 主页 -->
 	<div class="header">
 			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large" onclick="index()"></span></a>
-					<span style="position: absolute;right:5%;z-index:11;" onclick="personal()">个人中心</span>
+		
+	    <img style="width:25px;height:25px;position: absolute;left:2%;top:7.5px;z-index:11;" src="lib/images/homes.png" onclick="index()">
+		<img style="width:30px;height:30px;position: absolute;right:2%;z-index:11;top:5px;" alt="" src="lib/images/personals.png" onclick="personal()">
+			
 				<div class="header-content" >商户</div>
 			</div>
 	</div>

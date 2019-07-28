@@ -83,16 +83,16 @@ html, body {
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
+	
 }
-.zong{
-    overflow: hidden;
-}
+
+
  
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
-	touch-action: none;
+	
 }
 /* 页面样式 */
 .header {
@@ -243,6 +243,8 @@ margin:0 5px;
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
 var base;
+var votenum=${pollnum};
+var buynum=${buynum};
 
 $(function() {
 	<!--选项卡  -->
@@ -352,7 +354,7 @@ $("#b"+base).css("color","black");
 				$('#pollnum'+id).html(pollnum);
 				$('#votes'+id).html(votes);
 			}else if(data.msg=="0"){
-				$.toast('5票/商品/人/天', 'text');
+				$.toast(votenum+'票/商品/人/天', 'text');
 			}
 		})
 	}
@@ -364,7 +366,7 @@ $("#b"+base).css("color","black");
 			if(data.msg=="1"){
 	   			location.href=window.BASEPATH + 'pubnum/product/index?id='+id+'&vote=YES';
 			}else if(data.msg=="0"){
-				$.toast('3次/商品/人', 'text');
+				$.toast(buynum+'次/商品/人', 'text');
 			}else if(data.msg=="2"){
 				$.toast('哎呀，出了点小问题！', 'text');
 			}
@@ -384,7 +386,7 @@ $("#b"+base).css("color","black");
    			 $('.contentt-box').append(html.join(''));
 		}
      for(var i=0;i<data.length;i++){
-           html.push('<div style="width:47%;margin:10px 1%;height:auto;float:left;position: relative;">');
+           html.push('<div style="width:47%;margin:10px 1%;height:auto;float:left;position: relative;min-height:auto;">');
            if(i==0){
              html.push('<img style="width:30px;height:30px;position: absolute;z-index:111;top:-15px;left:-15px;transform:rotate(-45deg);" src="lib/images/king.png">');
            }
@@ -435,11 +437,11 @@ $("#b"+base).css("color","black");
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-			 <img style="width:40%;position: absolute;z-index:111111111111;top:10px;left:10%;" src="${logo}">
+			 <img style="width:40%;position: absolute;z-index:11;top:10px;left:10%;" src="${logo}">
 			<!--  <img style="width:10%;position: absolute;z-index:111111111111;top:10px;left:55%;" src="lib/images/logoss.png"> -->
 		    </div>
 		    
-		 <div style="width:85%;height:150px;border:1px solid #C3181E;border-radius:12px;margin:10px auto;">
+		 <div style="width:85%;height:150px;border:1px solid #C3181E;border-radius:12px;margin:10px auto;padding:0 3%;">
 		    <P style="height:50px;line-height: 50px;color:#C3181E;font-weight: bold;font-size:26px;text-align: center;">评分规则</P>
 		    ${voterule}
 		  </div>
@@ -450,12 +452,12 @@ $("#b"+base).css("color","black");
 		  </div>
 		 
 		   
-			<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 5%;">
-			  	<div class="tab">
-					<ul class="tab-btn active" id="menu">
+			<div class="zong" style="width:100%;height:auto;margin:0 auto;position: relative;padding:0 5%;">
+			  	<div class="tab"  style="">
+					<ul class="tab-btn active" id="menu" style="">
 					</ul>
-					<div class="contentt-box" >
-							<div class="contentt active" style="text-align: center;">
+					<div class="contentt-box" style="">
+							<div class="contentt active" style="text-align: center;width:100%;overflow-y:auto; -webkit-overflow-scrolling: touch">
 							</div>
 							<div class="contentt" style="text-align: center;">
 							</div>
