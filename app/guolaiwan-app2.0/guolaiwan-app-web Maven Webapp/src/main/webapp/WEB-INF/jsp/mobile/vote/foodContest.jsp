@@ -243,6 +243,8 @@ margin:0 5px;
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
 var base;
+var votenum=${pollnum};
+var buynum=${buynum};
 
 $(function() {
 	<!--选项卡  -->
@@ -352,7 +354,7 @@ $("#b"+base).css("color","black");
 				$('#pollnum'+id).html(pollnum);
 				$('#votes'+id).html(votes);
 			}else if(data.msg=="0"){
-				$.toast('5票/商品/人/天', 'text');
+				$.toast(votenum+'票/商品/人/天', 'text');
 			}
 		})
 	}
@@ -364,7 +366,7 @@ $("#b"+base).css("color","black");
 			if(data.msg=="1"){
 	   			location.href=window.BASEPATH + 'pubnum/product/index?id='+id+'&vote=YES';
 			}else if(data.msg=="0"){
-				$.toast('3次/商品/人', 'text');
+				$.toast(buynum+'次/商品/人', 'text');
 			}else if(data.msg=="2"){
 				$.toast('哎呀，出了点小问题！', 'text');
 			}

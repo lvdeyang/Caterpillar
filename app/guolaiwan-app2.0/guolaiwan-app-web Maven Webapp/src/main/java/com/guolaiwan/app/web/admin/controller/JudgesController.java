@@ -293,6 +293,8 @@ public class JudgesController {
 		ModelAndView mView = new ModelAndView("mobile/vote/foodContest");
 		mView.addObject("optionId", voteOption.getId());
 		mView.addObject("voterule", voteOption.getVoterule());
+		mView.addObject("pollnum", voteOption.getPollnum());
+		mView.addObject("buynum", voteOption.getOrdernum());
 		//此活动的logo
 		mView.addObject("logo", "http://www.guolaiwan.net/file"+voteOption.getSlidepic().toString());
 		return mView;

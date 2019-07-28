@@ -2192,7 +2192,6 @@ public class PubNumController extends WebBaseControll {
 			String ydNO = ydNoCode(orderId);
 			order.setYdNO(ydNO);
 			order.setIswallet(true);
-			order.setOrderState(OrderStateType.TESTED);
 			conn_order.saveOrUpdate(order);
 			conn_user.saveOrUpdate(user);
 			InvestWalletPO o =new InvestWalletPO();
