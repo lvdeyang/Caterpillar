@@ -115,7 +115,7 @@ html, body {
 }
 
 .header-content {
-	height: 100%;
+	height:auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -191,7 +191,9 @@ html, body {
   margin-left:3%;
  }
  
- 
+ #phone{
+ display: none !important;
+ }
 </style>
 
 </head>
@@ -222,7 +224,7 @@ $(function() {
 			}
 	  };
 	  
-	
+		
 		
  		getRecomment();
 	  function getCom(){
@@ -434,7 +436,10 @@ $(function() {
 			    $('.youxuan').append(html.join(''));	      			   
 		   });				  	    
 }	
-
+ 	function personal(){
+        location.href=window.BASEPATH + 'pubnum/personal/index?merchantId=${merchantId}';
+   }
+    
    function activity(id){
         location.href=window.BASEPATH + 'business/productdetails?id='+id;
    }
@@ -477,6 +482,11 @@ $(function() {
    $(document).on('click',' #pname',function(){ //导航
 	  window.location.href="guide/visitors/app?userId="+${userId}; 
    });
+   
+    $(document).on('click','.link-left',function(){ //返回首页
+	  location.href=window.BASEPATH + '/pubnum/index';
+   });
+   
 </script>
 
 
@@ -488,8 +498,9 @@ $(function() {
 	<div class="header">
 			<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
+					class="icon-reorder icon-large" onclick="index()"></span></a>
+					<span style="position: absolute;right:5%;z-index:11;" onclick="personal()">个人中心</span>
+				<div class="header-content" >商户</div>
 			</div>
 	</div>
 	<div class="content" id="content" >
