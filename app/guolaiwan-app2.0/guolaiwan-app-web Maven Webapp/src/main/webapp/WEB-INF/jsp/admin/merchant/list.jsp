@@ -101,13 +101,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 {{#  } }}    
 </script>
 <script type="text/html" id="zsgcTpl"> 
-  {{#   }}
-    <a title="" href="javascript:;" onclick="merchant_childent('商家列表','skip.do','{{d.id}}','','510')" 
-                              class='layui-btn layui-btn-xs'>
-                                                       添加
-                </a>
-  
-   {{#  }}
+ {{#  if(d.modularName === '住宿预订'){ }}
+       <a title="" href="javascript:;" onclick="merchant_childent('商家列表','skip.do','{{d.id}}','','510')" 
+               class='layui-btn layui-btn-xs'>  添加 </a>
+
+	   <a class="layui-btn layui-btn-xs" href="<%=path%>/admin/room/roomlist?merchantId={{d.id}}">房间管理</a>
+ {{#  } else { }}
+       <a title="" href="javascript:;" onclick="merchant_childent('商家列表','skip.do','{{d.id}}','','510')" 
+               class='layui-btn layui-btn-xs'>  添加 </a>
+ {{#  } }}  
 </script>
 </script>
 	</div>
@@ -254,8 +256,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           ,{field: 'id', title: 'ID',sort: true,width:60} 
           ,{field: 'shopName', title: '商家名称',sort: true,templet:'#shopNameTpl'}  
           ,{field: 'shopAddress', title: '商户地址',sort: true}
-          ,{field: 'userName', title: '业务人员',sort: true,templet:'#updateUserName'}
-          ,{field: 'chatUserId', title: '客服人员',sort: true,templet:'#updateChatUser'}
+          ,{field: 'userName', title: '业务人员',sort: true,width:100,templet:'#updateUserName'}
+          ,{field: 'chatUserId', title: '客服人员',sort: true,width:100,templet:'#updateChatUser'}
           ,{field: 'shopLinkperson', title: '联系人',width:80,sort: true} 
           ,{field: 'shopTel', title: '联系电话',width:160,sort: true} 
           ,{field: 'shopAuditopinion', title: '审核意见',width:100,sort: true} 
