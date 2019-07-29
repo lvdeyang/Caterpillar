@@ -35,9 +35,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
-
+import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.CommentVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
@@ -69,7 +70,10 @@ import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
-
+import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
+import com.guolaiwan.bussiness.distribute.po.DistributorPo;
+import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
+import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
@@ -115,9 +119,12 @@ public class ProductPackageController extends BaseController {
     
     @Autowired
 	private PictureDAO conn_picture;
+    
+    @Autowired
+    private MessageMiddleClientDao conn_mesMidleClien;
 	
 	/**
-	 * 跳转方法
+	 * 首页跳转购票页
 	 * */
 	@RequestMapping(value="/purchase/jump")
 	public ModelAndView purchaseJump(HttpServletRequest request){
@@ -145,13 +152,13 @@ public class ProductPackageController extends BaseController {
 		mapp.put("productMerchantID", Long.parseLong(merhcantId));
 		//过滤 不符合日期的商品
 		long nowDate = new Date().getTime();
-		//遍历筛选
 		List<ProductPO> productPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);
 		for(int i= 0 ;i<productPOs.size();i++){
 		   long producntBeginTime  = productPOs.get(i).getProductBeginDate().getTime();
 		   long producntEndTime  =  productPOs.get(i).getProductEnddate().getTime();
+		   System.out.println("producntEndTime:"+producntEndTime);
 		   if(nowDate<producntBeginTime || nowDate>producntEndTime){
-			   productPOs.remove(i);
+			   productPOs.remove(i);			   
 		   }			
 		}
 		//分页获取所有商品
@@ -172,24 +179,59 @@ public class ProductPackageController extends BaseController {
 	    		}	    			    		
 	    	} 	    		    	  
 	     }	     
-	     DecimalFormat def = new DecimalFormat("0.00");
-	     //判断商品是否为活动商品
+	     DecimalFormat def = new DecimalFormat("0.00");	
+	     //评分集合
+	     List<String> gradeList = new ArrayList<String>();
+	     //销售量集合
+	     List<Integer> marketList = new ArrayList<Integer>();
+	     //判断商品是否为活动商品	  
+	     boolean isGrade = false;
 	    Set<Long> pro_id = activ_id.keySet();    
 		for(ProductVO pro : pro_vo){
 			//活动票
 			if(pro_id.contains(pro.getId())){
 			pro.setProductName(	pro.getProductName()+",act");			
 			pro_pric.add(def.format(Double.parseDouble(activ_id.get(pro.getId()).getPrice()+"")/100));
-			pro_list.add(pro);
+			pro_list.add(pro);	
+			isGrade =true;
 			}else{
 			//普通票					
 			if(pro.getProductStock()>0){	
 			pro.setProductName(	pro.getProductName()+",comm");	
 			pro_pric.add(pro.getProductPrice());
-			pro_list.add(pro);
-			}
-			}			
-		}    
+			pro_list.add(pro);	
+			isGrade =true;
+			}		
+		}  
+		  if(isGrade){	
+			//评分
+     		double grade1 = 4.6;
+     		double grade2 = 0.0;
+     		//获取该商品的所有订单
+     		 DecimalFormat defs = new DecimalFormat("0.0");
+     	    int count =	conn_orif.countByField("productId",pro.getId());
+     		int gradeSegment = count%3;
+     		switch (gradeSegment) {
+     		case 0:
+     			grade2 = 0.1;
+     			break;
+             case 1:
+             	grade2 = 0.2;
+     			break;
+             case 2:
+             	grade2 = 0.3;
+     	     break;
+     		default:
+     			break;
+     		}    		
+     		String grade = defs.format(grade1 + grade2);
+     		marketList.add(count);
+     		gradeList.add(grade);
+     		map.put("marketList", marketList);
+     		map.put("gradeList", gradeList);
+     		isGrade=false;
+		  }
+	}	
 	      map.put("productPOs",pro_list);
 	      map.put("strArryList",pro_pric);
 	      return map;
@@ -300,7 +342,7 @@ public class ProductPackageController extends BaseController {
     	      oderNumList.add(conn_orif.countByFields(fields, values));
     	        	   
        }  
-       //票的订单数量
+       //票的订单数量      
        int  ticketOrderNumber = conn_orif.countByField("productId", proId); 
        map.put("ticketOrderNumber", ticketOrderNumber);
        //普通票
@@ -450,16 +492,14 @@ public class ProductPackageController extends BaseController {
 	 * */
 	@RequestMapping(value="/add/info",method=RequestMethod.POST)
 	public String saveTicketInfo(HttpServletRequest request) throws Exception{
-    //判断是保存还是更新
+    //更新购票人id
 	String state =	request.getParameter("state");
 	//保存
 	if("0".equals(state)){	
 		String base = request.getParameter("facedate");
 	    String name = request.getParameter("name");
 	    String phone = request.getParameter("phone");
-	    String idcard = request.getParameter("idcard");
-	    String merchantId = request.getParameter("merchantId");
-	    String proId = request.getParameter("proId");
+	    String idcard = request.getParameter("idcard");	
 	    HttpSession session  =  request.getSession();
 	    long userId = (long)session.getAttribute("userId");
 	    MessagePO mes = new MessagePO();
@@ -467,13 +507,11 @@ public class ProductPackageController extends BaseController {
 	    if(pic_url != null){
 	     PictureConvertor.GenerateImg(base, pic_url);
 	 	 mes.setBase(pic_url);
-	    }	   
-	    mes.setMerchantid(merchantId);
-	    mes.setName(name);
-	    mes.setNumber(idcard);
-	    mes.setProId(Long.parseLong(proId));
-	    mes.setState("0");
+	    }	
 	    mes.setUserId(userId);
+	    mes.setName(name);
+	    mes.setNumber(idcard);	
+	    mes.setState("0");
 	    mes.setPhone(phone);
 	    conn_message.save(mes);
 	}else{
@@ -674,7 +712,7 @@ public class ProductPackageController extends BaseController {
 		return map;
 	}
 	
-	//保存Message 下单用户信息
+	//添加对应信息
 	@RequestMapping(value="/addMessage",method=RequestMethod.POST)
 	public String  addMessageOrder(HttpServletRequest request){
 		String param = getRequestJson(request);
@@ -683,9 +721,23 @@ public class ProductPackageController extends BaseController {
 			param = param.substring(1, param.length() - 1);
 		}
 		JSONObject pageObject = JSON.parseObject(param);
-		String oderId = pageObject.getString("oderId");
-		
-		
+		 String oderId = pageObject.getString("oderId");
+		 String  clientLists = pageObject.getString("clientList");
+		 JSONArray clientList =  pageObject.parseArray(clientLists);
+		 String  proId = pageObject.getString("proId");
+		 String  userId =  pageObject.getString("userId");
+		 String merchantId = pageObject.getString("merchantId");
+		 //遍历保存用户信息
+		 for(int i = 0;i<clientList.size();i++){
+			 long clientMessage = clientList.getLong(i);		 			 
+			 MessageMiddleClientPO mesMidClien = new MessageMiddleClientPO();
+			 mesMidClien.setMerchantId(Long.parseLong(merchantId));
+			 mesMidClien.setMessageId(clientMessage);			
+			 mesMidClien.setOrderId(Long.parseLong(oderId));
+			 mesMidClien.setUserId(Long.parseLong(userId));
+			 mesMidClien.setProId(Long.parseLong(proId));
+			 conn_mesMidleClien.save(mesMidClien);
+			 }	
 		return "success";
 	}
 	
