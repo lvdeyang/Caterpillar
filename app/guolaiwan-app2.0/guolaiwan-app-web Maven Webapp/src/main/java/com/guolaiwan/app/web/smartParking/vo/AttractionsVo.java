@@ -40,7 +40,8 @@ public class AttractionsVo  extends AbstractBaseVO<AttractionsVo, AttractionsPar
 	private  int fineMultiple;
 	//停车场时间
 	private String stoppingTime;
-
+	//距离
+    private String distance;
 	//停车场电话
 	private String phone;
 
@@ -60,7 +61,7 @@ public class AttractionsVo  extends AbstractBaseVO<AttractionsVo, AttractionsPar
         .setFineMultiple(entity.getFineMultiple())
 		.setId(entity.getId())
 		.setStoppingTime(entity.getStoppingTime())
-		.setParkingDistrict(entity.getPhone());
+		.setPhone(entity.getPhone());
 		return this;
 	}
 
@@ -69,6 +70,19 @@ public class AttractionsVo  extends AbstractBaseVO<AttractionsVo, AttractionsPar
 
 
 
+
+
+
+
+	public String getDistance() {
+		return distance;
+	}
+
+
+
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
 
 
 

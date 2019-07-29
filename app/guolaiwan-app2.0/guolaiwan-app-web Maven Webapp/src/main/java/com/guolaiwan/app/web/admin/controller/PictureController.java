@@ -55,6 +55,9 @@ public class PictureController extends BaseController{
 	@RequestMapping(value="/upload.do",method= RequestMethod.POST)
 	public Map<String,Object> upload(@RequestParam("images") CommonsMultipartFile file) throws Exception{
 		Map<String, Object> map= new HashMap<String, Object>();
+		System.out.println("file:"+file);
+		System.out.println(file.getFileItem());
+		System.out.println(file.getSize());
 		//创建日期文件夹
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		Date d = new Date();

@@ -2,6 +2,7 @@ package com.guolaiwan.app.web.business.controller;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
@@ -15,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
+import java.util.UUID;
+
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -26,26 +27,32 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
-import com.guolaiwan.app.web.Guide.controller.integralControll;
+
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.CommentVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
+import com.guolaiwan.app.web.admin.vo.PictureVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
-import com.guolaiwan.bussiness.Parking.po.OrderPO;
+
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.PictureDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
+import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.UserOnedayBuyDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
@@ -57,12 +64,13 @@ import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.PicturePO;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 
-import net.sf.ehcache.CacheOperationOutcomes.PutAllOutcome;
+
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 import pub.caterpillar.weixin.constants.WXContants;
@@ -101,6 +109,12 @@ public class ProductPackageController extends BaseController {
     
     @Autowired
 	UserOnedayBuyDAO conn_userone;
+    
+    @Autowired
+	private SysConfigDAO conn_sysConfig;
+    
+    @Autowired
+	private PictureDAO conn_picture;
 	
 	/**
 	 * 跳转方法
@@ -136,7 +150,7 @@ public class ProductPackageController extends BaseController {
 		for(int i= 0 ;i<productPOs.size();i++){
 		   long producntBeginTime  = productPOs.get(i).getProductBeginDate().getTime();
 		   long producntEndTime  =  productPOs.get(i).getProductEnddate().getTime();
-		   if(nowDate<producntBeginTime && nowDate>producntEndTime){
+		   if(nowDate<producntBeginTime || nowDate>producntEndTime){
 			   productPOs.remove(i);
 		   }			
 		}
@@ -431,10 +445,11 @@ public class ProductPackageController extends BaseController {
 	
 	/**
 	 * 购票人信息
+	 * @throws Exception 
 	 * 
 	 * */
 	@RequestMapping(value="/add/info",method=RequestMethod.POST)
-	public String saveTicketInfo(HttpServletRequest request){
+	public String saveTicketInfo(HttpServletRequest request) throws Exception{
     //判断是保存还是更新
 	String state =	request.getParameter("state");
 	//保存
@@ -448,7 +463,11 @@ public class ProductPackageController extends BaseController {
 	    HttpSession session  =  request.getSession();
 	    long userId = (long)session.getAttribute("userId");
 	    MessagePO mes = new MessagePO();
-	    mes.setBase(base);
+	    String pic_url = facePicture();
+	    if(pic_url != null){
+	     PictureConvertor.GenerateImg(base, pic_url);
+	 	 mes.setBase(pic_url);
+	    }	   
 	    mes.setMerchantid(merchantId);
 	    mes.setName(name);
 	    mes.setNumber(idcard);
@@ -463,16 +482,42 @@ public class ProductPackageController extends BaseController {
 	    String phone = request.getParameter("phone");
 	    String idcard = request.getParameter("idcard");
 	    String base = request.getParameter("facedate");	 
-	    MessagePO mes  =  conn_message.get(Long.parseLong(state));
+	    MessagePO mes  =  conn_message.get(Long.parseLong(state));	   
+	    PictureConvertor.GenerateImg(base, mes.getBase());
 	    mes.setName(name);
-	    mes.setBase(base);
 	    mes.setNumber(idcard);
 	    mes.setPhone(phone);
 	    conn_message.update(mes);
 	}	
+	
 	return "success"; 
 	}
 	
+	       //生成图片地址
+			public String facePicture() throws Exception{
+				//创建日期文件夹
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+				Date d = new Date();
+				String folderName = sdf.format(d);  //文件名
+				String path=conn_sysConfig.getSysConfig().getFolderUrl()+folderName;
+				//文件名			  
+				String newName = UUID.randomUUID().toString()+".jpg";
+
+				File folder =new File(path);
+				if(folder.exists() ==false){     //如果路径不存在
+					if(folder.getParentFile().exists()==false){
+						return null;
+					}
+					folder.mkdir();
+				}
+				//上传
+				File newFile=new File(path+"/"+newName);
+				String config = conn_sysConfig.getSysConfig().getFolderUrl()+folderName+"/"+newName;
+				
+				return config;
+			}
+	
+			
 	/**
 	 *  实时查询数据库数量
 	 * 
@@ -629,6 +674,21 @@ public class ProductPackageController extends BaseController {
 		return map;
 	}
 	
+	//保存Message 下单用户信息
+	@RequestMapping(value="/addMessage",method=RequestMethod.POST)
+	public String  addMessageOrder(HttpServletRequest request){
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		String oderId = pageObject.getString("oderId");
+		
+		
+		return "success";
+	}
+	
 	
 	/**
 	 * 订单：立即支付
@@ -658,20 +718,37 @@ public class ProductPackageController extends BaseController {
 		String choice = pageObject.getString("choice");
 		
 		OrderInfoPO order = new OrderInfoPO();
-		
-		String  productId = null;
+			
+		ProductPO productPO =null;
 		//支付的金额
 		Long productprice = null;
 		//获取 productId
 		if("0".equals(choice)){
-			productId = id;
+			//库存进行修改
+			productPO = productDao.get(Long.parseLong(id));
+			//是否限购
+			if(1 == productPO.getProductLimitType()){
+				//限购
+				productPO.setProductLimitNum(productPO.getProductLimitNum()-Long.parseLong(num));
+				productPO.setProductStock(productPO.getProductStock()-Long.parseLong(num));
+			}else{				
+				productPO.setProductStock(productPO.getProductStock()-Long.parseLong(num));				
+			}
+			
+			productDao.update(productPO);
 		}
 		else{
 	       ActivityRelPO aRelPO	= conn_acre.get(Long.parseLong(id));
-	       productId = aRelPO.getProductId()+"";	
+	       productPO = productDao.get(aRelPO.getProductId());
+	       
+	       //活动库存修改
+	       aRelPO.setProductStock(aRelPO.getProductStock()-Long.parseLong(num));
+	       
+	       conn_acre.update(aRelPO);
+	       
 		}				
 		//获取商品信息
-		ProductPO productPO = productDao.get(Long.parseLong(productId));
+		//ProductPO productPO = productDao.get(Long.parseLong(productId));
 		
 		       //套餐票 价格信息
 				if("1".equals(isCombo)){	
@@ -680,8 +757,7 @@ public class ProductPackageController extends BaseController {
 					order.setComboId(Long.parseLong(comboId));
 					//查询价格
 					ProductComboPO pComboPO = conn_combo.get(Long.parseLong(comboId));
-					productprice = pComboPO.getComboprice();
-					
+					productprice = pComboPO.getComboprice();										
 				}else{
 					//普通票价格
 					if("0".equals(choice)){ 
@@ -882,5 +958,6 @@ public class ProductPackageController extends BaseController {
 			System.out.println(resData.toString());
 			return resData;
 			
-		}
+		}	
+					
 }
