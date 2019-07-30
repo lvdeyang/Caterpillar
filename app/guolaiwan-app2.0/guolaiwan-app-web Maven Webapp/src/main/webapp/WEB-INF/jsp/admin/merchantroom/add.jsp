@@ -17,6 +17,12 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
         <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
+        <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="<%=request.getContextPath() %>/layui/UEditor/third-party/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath() %>/layui/UEditor/third-party/template.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%=request.getContextPath() %>/layui/UEditor/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%=request.getContextPath() %>/layui/UEditor/umeditor.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath() %>/layui/UEditor/lang/zh-cn/zh-cn.js"></script>
     </head>
     
     <body>
@@ -70,6 +76,14 @@
 						<input type="radio" name="identity" value="五人间" title="五人间"/>
                     </div>
                 </div>
+                <div class="layui-form-item">
+                    <label for="voterule" class="layui-form-label">
+ 					房间详情
+                    </label>
+                    <div class="layui-input-block">
+                        <textarea name="roomdetails"  placeholder="请输入内容" class="layui-input" id="roomdetails" style="height:300px"></textarea>
+                    </div>
+                </div>
 				<div id="view"></div> 
 				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 200px;bottom: 0">
                     <button class="layui-btn" lay-filter="add" lay-submit>
@@ -88,6 +102,8 @@
         <script src="<%=request.getContextPath() %>/layui/js/x-layui.js" charset="utf-8">
         </script>
         <script>
+        	var um = UM.getEditor('roomdetails');
+        
         	layui.use([ 'form', 'layer','laytpl' ], function() {
         		$ = layui.jquery;
         		var form = layui.form,
@@ -104,7 +120,7 @@
         				data : data.field,
         				success : function(msg) {
         					if(msg=="success"){
-        						layer.msg("添加成功",{icon:2,time:1000});
+        						layer.alert("添加成功",{icon:2,time:1000});
         					}
         					//关闭当前frame
                             parent.window.location.reload();
