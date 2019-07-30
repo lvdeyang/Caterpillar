@@ -274,6 +274,11 @@ color:#fff;
 	}); 
 	//添加信息
 	function addInfo(){
+	
+	   $("#_name").val(""),
+       $("#_phone").val(""),
+       $("#_idcard").val(""),
+	     
 	  $(".window-2").fadeIn();
 	  $(".homepage").fadeOut();
 	  $(".window-1").fadeOut();
@@ -300,16 +305,16 @@ color:#fff;
 	var nobuy = "";
 	var choice = ${choice}; 
 	var userId = ${userId};
+	var number =0;
 	var clientNumber = []; //所选的用户ID
-	$(document).on('click','#nowbuy',function(){
-	
+	$(document).on('click','#nowbuy',function(){	
          //日期判断
     	 if($("#useDate").val()==''){
 		     $.toast("预定时间不能为空", "forbidden");
 		      return false;
 		    }
 		//票的数量与所选人数是否一样    
-          if($('.zhi').val() != clientNumber.length){
+          if($('.zhi').val() != number){
              $.toast("订票数量与所选用户信息不匹配", "forbidden");
 		      return false;         
           }    
@@ -523,8 +528,17 @@ color:#fff;
 	 //添加下单客户 orderID 
 	  function addMessageOrderId(orderId){
 	    if(clientNumber.length > 0){
-		    var addMessage_url = window.BASEPATH+'product/package/addMessage?orderId='+orderId;
-		     $.get(addMessage_url,)		    
+	        var gather = {};
+	        gather.oderId= orderId;
+	        gather.clientList = clientNumber;
+	        gather.proId =${proId};
+	        gather.userId = ${userId};
+	        gather.merchantId =${merchantId};
+		    var addMessage_url = window.BASEPATH+'product/package/addMessage';		    
+		     $.post(addMessage_url,$.toJSON(gather),function(msg){
+		       
+		     
+		     })		    
 		    }				  	  
 	  }			
   	//----------------------------------------------------------------------
@@ -673,8 +687,6 @@ color:#fff;
               var date = {"name":$("#_name").val(),
                           "phone":$("#_phone").val(),
                           "idcard":$("#_idcard").val(),
-                          "merchantId":${merchantId},
-                          "proId":${proId},
                           "facedate":base,
                           "state": 0
                       }
@@ -689,8 +701,12 @@ color:#fff;
 	          $.post(url, date,function(msg){ 
 	          	if(msg == 'success') {
 	          	    $(".homepage_add").children().remove();
-	          	    $("#window-1-message").children().remove();
+	          	    $("#window-1-message").children().remove();          	    
+	          	    clientNumber.splice(0,clientNumber.length);
+	          	    number = 0;
 	           		getUserInfo();
+	           		
+	           		
 	           	}
 	         })                                                                                                       
      }	
@@ -743,7 +759,8 @@ color:#fff;
    if(clientInfo != " "){
 			//多选框要用prop 来获取判断
             if($("#"+id).prop("checked")){
-            //添加勾选的信息	
+            //添加勾选的信息
+             number+=1;	
              clientNumber[i[1]] = clientInfo[i[1]].id;	
 			 var htm = [];					
              htm.push('<p id="homepage-'+i[1]+'">姓名：'+clientInfo[i[1]].name+'</p>');            
@@ -751,9 +768,9 @@ color:#fff;
             } 
             //取消勾选删除
             if(!($("#"+id).prop("checked"))){
-               $("#homepage-"+i[1]).remove(); 
-                
-               clientNumber.splice(i[1],1);      
+               $("#homepage-"+i[1]).remove();               
+               clientNumber.splice(i[1],1);
+     			number-=1;
             }                           
      }         
   }         					
@@ -792,7 +809,7 @@ color:#fff;
 		    </li>
 		    <li>
 		    <input type="button">
-		    <p style="position: absolute;top:175px;left:10%;">优惠卷</p>
+		    <p style="position: absolute;top:175px;left:10%;">优惠券</p>
 		    <p style="position: absolute;top:175px;right:7%;"><span>0</span>张可用</p>
 		    </li> 
 		    <li>
