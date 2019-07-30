@@ -809,7 +809,7 @@ color:#fff;
 		    </li>
 		    <li>
 		    <input type="button">
-		    <p style="position: absolute;top:175px;left:10%;">优惠卷</p>
+		    <p style="position: absolute;top:175px;left:10%;">优惠券</p>
 		    <p style="position: absolute;top:175px;right:7%;"><span>0</span>张可用</p>
 		    </li> 
 		    <li>
