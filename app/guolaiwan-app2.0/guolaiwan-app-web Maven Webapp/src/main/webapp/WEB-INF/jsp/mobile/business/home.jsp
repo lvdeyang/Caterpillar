@@ -476,6 +476,9 @@ $(function() {
    function ticket(){     
       location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId=${merchantId}';   
    }
+   function paking(){     
+      location.href=window.BASEPATH + 'smart/merchant/parking?merchantId=${merchantId}';   
+   }
    $(document).on('click',' #guide',function(){
 	  window.location.href="guide/visitors/app?userId="+${userId}; 
    });
@@ -527,7 +530,7 @@ $(function() {
          <li><img src="lib/images/fenxiaos.png"/></li>
          <li><span onclick="ticket()">购票</span></li>
    	     <li onclick="accommodation()"><span>住宿</span></li>
-         <li><span>停车</span></li>
+         <li><span onclick="paking()">停车</span></li>
          <li onclick="cate()"><span>美食</span></li>
          <li><span>分销</span></li>
          <li onclick="activity()"><img src="lib/images/huodongs.png"/></li>
