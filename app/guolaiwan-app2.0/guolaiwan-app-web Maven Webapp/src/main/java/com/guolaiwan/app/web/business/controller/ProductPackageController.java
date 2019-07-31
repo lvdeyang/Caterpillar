@@ -503,10 +503,11 @@ public class ProductPackageController extends BaseController {
 	    HttpSession session  =  request.getSession();
 	    long userId = (long)session.getAttribute("userId");
 	    MessagePO mes = new MessagePO();
-	    String pic_url = facePicture();
-	    if(pic_url != null){
-	     PictureConvertor.GenerateImg(base, pic_url);
-	 	 mes.setBase(pic_url);
+	    Map<String, String> map = facePicture() ;
+	    if(map.get("folderUrl") != null){
+	     PictureConvertor.GenerateImg(base, map.get("folderUrl"));
+	 	 mes.setBase(map.get("folderUrl"));
+	 	 mes.setFacePicWebUrl(map.get("webUrl"));
 	    }	
 	    mes.setUserId(userId);
 	    mes.setName(name);
@@ -532,7 +533,8 @@ public class ProductPackageController extends BaseController {
 	}
 	
 	       //生成图片地址
-			public String facePicture() throws Exception{
+			public Map<String, String> facePicture() throws Exception{
+				Map<String, String> map = new HashMap<String, String>();
 				//创建日期文件夹
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 				Date d = new Date();
@@ -543,16 +545,18 @@ public class ProductPackageController extends BaseController {
 
 				File folder =new File(path);
 				if(folder.exists() ==false){     //如果路径不存在
-					if(folder.getParentFile().exists()==false){
-						return null;
-					}
 					folder.mkdir();
 				}
 				//上传
 				File newFile=new File(path+"/"+newName);
-				String config = conn_sysConfig.getSysConfig().getFolderUrl()+folderName+"/"+newName;
+				String folderUrl = conn_sysConfig.getSysConfig().getFolderUrl()+folderName+"/"+newName;
 				
-				return config;
+				//webur地址
+				String webUrl = conn_sysConfig.getSysConfig().getWebUrl()+folderName+"/"+newName;
+				
+				map.put("folderUrl",folderUrl);
+				map.put("webUrl", webUrl);
+				return map;
 			}
 	
 			
@@ -1011,5 +1015,27 @@ public class ProductPackageController extends BaseController {
 			return resData;
 			
 		}	
+		
+		// 修改身份证采集表支付状态
+		@ResponseBody
+		@RequestMapping(value = "/updatemessage", method = RequestMethod.POST)
+		public Map<String, String> updatemessage(String oderId) {
+			HashMap<String, String> hashMap = new HashMap<String, String>();
+			try {
+			List<MessageMiddleClientPO> messagepo = conn_mesMidleClien.getByOderId(Long.parseLong(oderId));
+			    for(MessageMiddleClientPO po : messagepo){
+			    	po.setPayState("1");
+			    	conn_mesMidleClien.update(po);
+			    }				
+				hashMap.put("msg", "0");
+				return hashMap;
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				hashMap.put("msg", "1");
+				return hashMap;
+			}
+
+		}
 					
 }
