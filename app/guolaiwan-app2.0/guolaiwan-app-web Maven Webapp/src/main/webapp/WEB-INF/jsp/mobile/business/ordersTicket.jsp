@@ -320,9 +320,10 @@ color:#fff;
           }    
 		    
 		    var buyDate = new Date($("#useDate").val().replace(/-/g,"/"))
-		    var nowDate = new Date();
+		    var time = new Date();
+		    var nowDate = new Date(formatDate(time));
 		    
-		    if(buyDate>nowDate){
+		    if(buyDate>=nowDate){
  				 var url =  window.BASEPATH + 'product/package/productDate';
 				  var date = {"id":${proId},"choice":${choice},"buyDate":$("#useDate").val()}
 				  $.post(url,date,function(msg){
@@ -336,6 +337,7 @@ color:#fff;
 		        }		   
 		  }) 			
             }else{
+             nobuy="0";
              $.toast("预订日期应大于当前日期", "forbidden");
             }
                  	         	
@@ -389,7 +391,16 @@ color:#fff;
 	  })	   	
 	}) 
 	
-				 
+	 //设置时间转换格式
+	  function formatDate(date){
+	   var y = date.getFullYear();//获取年
+	   var m = date.getMonth()+1;//获取月
+	   m = m < 10?'0'+m:m; //判断月是否大于10
+	   var d = date.getDate();//获取日
+	   d=d<10?('0'+d):d;//判断日期是否大于10
+	   return y+'/'+m+'/'+d;//返回时间格式 
+	  }
+	  				 
 	 function dobuy(){
 		    var param={};
 			param.id=${proId};
@@ -404,7 +415,7 @@ color:#fff;
 			param.ComboId = ${comboId};
 			}
 		   		   	                   
-	        var _uriPay = window.BASEPATH + '/product/package/order/add';
+	        var _uriPay = window.BASEPATH + 'product/package/order/add';
 				$.post(_uriPay, $.toJSON(param), function(data){
 					data = parseAjaxResult(data);
 					if(data === -1) return;
@@ -416,17 +427,13 @@ color:#fff;
 						    { text: "余额支付", onClick: function(){ 
 
 						    	$.confirm("确定支付？", function() {
-
-								    payByWallet(data.orderId);
-								    addMessageOrderId(data.orderId);
-
+									addMessageOrderId(data.orderId,0);										
 								  }, function() {});
 
 						    } },						    
 						    { text: "微信支付", onClick: function(){ 
 							    $.confirm("确定支付？", function() {
-								    payPublic(data.orderId);
-								    addMessageOrderId(data.orderId);
+							       addMessageOrderId(data.orderId,1);							      							      						       													    
 								  }, function() {});
 						    } },
 						    { text: "取消", className: "default", onClick: function(){ } },
@@ -434,6 +441,31 @@ color:#fff;
 						});
 				});	 	 	 
 	 }	
+	 
+	    //添加下单客户 orderID 
+	  function addMessageOrderId(orderId,paytipe){
+	    if(clientNumber.length > 0){	   
+	        var gather = {};
+	        gather.oderId= orderId;
+	        gather.clientList = clientNumber;
+	        gather.proId =${proId};
+	        gather.userId = ${userId};
+	        gather.merchantId =${merchantId};
+		    var addMessage_url = window.BASEPATH+'product/package/addMessage';		    
+		     $.post(addMessage_url,$.toJSON(gather),function(msg){
+		       	if(msg == 'success'){
+    	            if(paytipe == '0'){
+    	             payByWallet(orderId);
+    	            }else{
+    	             payPublic(orderId);	
+    	            }
+		       	}else{
+		       	 $.toast("用户信息保存失败", "forbidden");
+		       	}	     
+		     })		    
+		    }				  	  
+	  }		  
+	 
 	 
 	 /* 钱包购买方法 */
 		function payByWallet(orderId){
@@ -451,15 +483,15 @@ color:#fff;
 				}else{
 					$.alert('您的余额不足！');
 				}
-			})
+			})			
 		}
 		
 		//支付成功后修改身份采集表里的状态 
 		function updatemessage(orderId){
-		    var _uri = window.BASEPATH + 'pubnum/updatemessage';
+		    var _uri = window.BASEPATH + 'product/package/updatemessage';
 		          var params = {};		        
 		          params.oderId=orderId;		 
-			$.post(_uri, params, function(data){					   
+			$.post(_uri, params, function(data){			s		   
 					if(data.msg==1){
 						alert("保存失败");
 					}			        
@@ -477,7 +509,7 @@ color:#fff;
 		        signType = data.signType;
 		        orderNo = data.orderNo;
 		        callpay();
-			});
+			});		
 		}   		
 					
 		function callpay(){
@@ -524,23 +556,7 @@ color:#fff;
 		        }
 		    );
 		} 
-		
-	 //添加下单客户 orderID 
-	  function addMessageOrderId(orderId){
-	    if(clientNumber.length > 0){
-	        var gather = {};
-	        gather.oderId= orderId;
-	        gather.clientList = clientNumber;
-	        gather.proId =${proId};
-	        gather.userId = ${userId};
-	        gather.merchantId =${merchantId};
-		    var addMessage_url = window.BASEPATH+'product/package/addMessage';		    
-		     $.post(addMessage_url,$.toJSON(gather),function(msg){
-		       
-		     
-		     })		    
-		    }				  	  
-	  }			
+			 	  		
   	//----------------------------------------------------------------------
      	var base="";
         $(document).on('click','#photo',function(){
@@ -674,10 +690,10 @@ color:#fff;
 		       return false;  		    
 		    }	
 		    
-		     /*  if(base==""){
+		      if(base==""){
               $.toast("照片获取失败", "forbidden");
 			  return false;
-             }   	   */  
+             }   	    
                 $(".window-2").fadeOut();
                 $(".window-1").fadeOut();
 			    $(".homepage").fadeIn();
@@ -845,7 +861,7 @@ color:#fff;
 		<ul class="listbox-2" style="color:black;">
 		    <li>
 		    <input  id="_name" type="text" placeholder="请输入您的姓名" minlength="4" maxlength="4" style="" >
-		    <p    style="position: absolute;top:65px;left:10%;">住客姓名</p>
+		    <p    style="position: absolute;top:65px;left:10%;">用户姓名</p>
 		    </li>
 		    <li>
 		     <input id="_phone" class="phone" type="text" placeholder="请输入正确的手机号码" minlength="11" maxlength="11" style="" >

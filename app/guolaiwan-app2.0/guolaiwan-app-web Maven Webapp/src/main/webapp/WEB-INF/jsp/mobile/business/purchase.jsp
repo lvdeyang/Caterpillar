@@ -414,7 +414,7 @@ $(function(){
 		           }else{
 		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
-		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
+		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           }
 		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+grade[i]+'分</span>   </p>');
 		           html.push('</div></div></div>');
@@ -443,7 +443,7 @@ $(function(){
 		           }else{
 		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
-		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
+		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           }
 		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+grade[i]+'分</span>   </p>');
 		           html.push('</div></div></div>');

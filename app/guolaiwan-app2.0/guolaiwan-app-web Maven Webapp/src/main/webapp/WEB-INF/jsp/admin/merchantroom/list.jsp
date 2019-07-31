@@ -52,7 +52,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	height:auto !important;
 	}
 	.edui-container{
-	
 	width:100% !important;
 	}
 	.layui-input{
@@ -63,7 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 </style>
     </head>
-    <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+      <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="<%=request.getContextPath() %>/layui/UEditor/third-party/jquery.min.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath() %>/layui/UEditor/third-party/template.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="<%=request.getContextPath() %>/layui/UEditor/umeditor.config.js"></script>
@@ -76,20 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	<script>
 	var overall ;
-    var personName = ""; //人名
-	var card = "";	 //身份证
-	var phone= "";	 //联系电话
-	var startingTime= ""; //初始时间
-	var stopTime= "";	 //结束时间
-	var price= "";	 //价钱
-        	layui.use(['element','laypage','layer','laytpl','table'], function(){
-              $ = layui.jquery;//jquery
-              lement = layui.element;//面包导航
-              layer = layui.layer;//弹出层
-              laypage = layui.laypage;//分页
-              laytpl = layui.laytpl;
-              table = layui.table; //模板引擎
-			//以上模块根据需要引入
+	$(function() {
 	        var html = [];
 	        var tier = null;
 	        var floor=null;
@@ -117,26 +103,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				   $('body').append(html.join('')); 
 				}
 			})
-		});
 	
-	
-	
-	
-		function open_win(title, url, w, h) {
-			x_admin_show(title, url, w, h);
-		}
-	
-		$(function() {
+			var um = UM.getEditor('roomdetails');
+		
 			$(document).on('click', '.xuanzhong', function() {
-			        $("#price").val("");
-			        $("#roomdetails").html("");
-			        $("#name").val("");
 				for(var i=0; i<overall.length;i++) {
 				  if(this.id == overall[i].id){
-				   $("#name").val(overall[i].name);
-				   $("#inpu").val(overall[i].id);
-			       $("#price").val(overall[i].price/100);
-			       $("#roomdetails").html(overall[i].roomdetails);
+			       var img="http://www.guolaiwan.net/file"+overall[i].roomimg;
+			       document.getElementById("imgurl5").src=img;
 			       var tier = document.getElementsByName("tier");
 					for (var o = 0; o < tier.length; o++) {
 						    if(overall[i].tier == tier[o].value){
@@ -149,6 +123,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							   $(identity[p]).next().click();
 							}
 					}
+				   $("#name").val(overall[i].name);
+				   $("#inpu").val(overall[i].id);
+			       $("#price").val(overall[i].price/100);
+			       um.setContent(overall[i].roomdetails);
+					
 
 				  }
 				}
@@ -270,15 +249,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
                 <div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 房间详情图 </label>
+					<div class="layui-input-inline">
+						<table>
+							<tr>
+							<td>
+							<img alt="" src="" style=" height:100px;width:100px " id="imgurl5">
+							<input type="hidden" id="img5" name="img5">
+							<a href="javascript:openMap('上传图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=img5&img=imgurl5','600','400')" class="layui-btn layui-btn-xs" style="width:90px;margin-left:5px;margin-right:5px" >更换图片</a>
+							<button class="layui-btn layui-btn-xs" type="button" style="width:90px;margin-left:5px;margin-right:5px" onclick="delpic('#imgurl5','#img5')">删除图片</button>	
+							</td>
+							</tr>
+						</table>
+		        	</div>
+				</div>
+                <div class="layui-form-item">
                     <label for="voterule" class="layui-form-label">
  					房间详情
                     </label>
                     <div class="layui-input-block">
-                        <textarea name="roomdetails"  placeholder="请输入内容" class="layui-input" id="roomdetails" style="height:300px"></textarea>
+                        <textarea name="roomdetails"  placeholder="请输入内容" class="layui-input" id="roomdetails" style="height:300px">
+                        </textarea>
                     </div>
                 </div>
 				<div id="view"></div> 
-				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 200px;bottom: 0">
+				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 400px;bottom: -180px">
                     <span class="layui-btn" lay-filter="add" lay-submit> 保存  </span>
 					<span class="layui-btn" id="putaway">上架</span>
 					<span class="layui-btn" id="below">下架</span>
@@ -289,7 +284,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </form>
 	</div>
 	<script>
-		var um = UM.getEditor('roomdetails');
+		
 		
 		layui.use([ 'form', 'layer','laytpl' ], function() {
         		$ = layui.jquery;
@@ -315,9 +310,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         			return false;
         		});
-        		
-        
         });
+        
+        	//打开分类
+            function openMap (title,url,w,h) {
+                x_admin_show(title,url,w,h); 
+            }
 	</script>
 </body>
 </html>

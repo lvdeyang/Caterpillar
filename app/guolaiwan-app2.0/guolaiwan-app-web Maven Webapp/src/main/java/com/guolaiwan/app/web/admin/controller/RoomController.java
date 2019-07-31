@@ -71,11 +71,12 @@ public class RoomController {
         String identity = request.getParameter("identity");//房间类型
         String merchantId = request.getParameter("merchantId");
         String roomdetails = request.getParameter("roomdetails");
-        
+        String roomimg = request.getParameter("img5");
         AddTheroomPO add = new AddTheroomPO();
         add.setMerchantId(merchantId);
         add.setName(name);
         add.setTier(tier);
+        add.setRoomimg(roomimg);
         add.setPrice(Integer.parseInt(price)*100);
         add.setIdentity(identity);
         add.setState(1);
@@ -117,7 +118,9 @@ public class RoomController {
         String price = request.getParameter("price");
         String identity = request.getParameter("identity");//房间类型
         String roomdetails = request.getParameter("roomdetails");
+        String roomimg = request.getParameter("img5");
         AddTheroomPO add = addtheroomDAO.get(Long.parseLong(roomId));
+        if(roomimg!=""&&roomimg!=null)add.setRoomimg(roomimg);
         if(name!=""&&name!=null) add.setName(name);
         if(tier!=""&&tier!=null) add.setTier(tier);
         if(price!=""&&price!=null) add.setPrice(Integer.parseInt(price)*100);
