@@ -213,7 +213,7 @@ html, body {
 	         for(var i=0;i<data.length;i++){
 	         			if(data[i].productClassCode=="1"||data[i].productClassCode=="0014"){
 				     	html.push('<div style="width:90%;height:auto;background:#BCBCBC;margin:10px auto;border-radius:10px;">');
-				        html.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">'+data[i].productName+'</span>');
+				        html.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:65%;">'+data[i].productName+'</span>');
 				        html.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+data[i].productPrice+'</span></p>');
 				    	html.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销100+</span>');
 				    	html.push('<span onclick="buyproduct(this.id)" id="'+data[i].id+'" style="float:right;margin-right:5px;color:#fff;font-size:18px;font-weight:bold;background:#EB6E1E;height:30px;line-height:30px;border-radius:10px;padding:0px 10px;">预订</span></p>');
