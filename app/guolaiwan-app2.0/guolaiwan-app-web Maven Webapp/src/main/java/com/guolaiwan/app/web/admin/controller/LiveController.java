@@ -209,6 +209,15 @@ public class LiveController extends BaseController {
 		conn_liveMessage.delectById(id);
 		return "success";
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/delComment.do", method = RequestMethod.POST)
+	public String delComment(HttpServletRequest request) throws Exception {
+		long liveId = Long.parseLong(request.getParameter("liveId"));
+		conn_liveMessage.deleteByLive(liveId);
+		return "success";
+	}
 
 	// 添加数据
 	@ResponseBody

@@ -19,11 +19,21 @@ public class AddTheroomPO extends AbstractBasePO {
 	
 	private String tier;  // 层
 	
-	private String  price;	 //价格
+	private int  price;	 //价格
 	
 	private String identity; //规格
 	
+	private String roomdetails;
 	
+	
+
+	public String getRoomdetails() {
+		return roomdetails;
+	}
+
+	public void setRoomdetails(String roomdetails) {
+		this.roomdetails = roomdetails;
+	}
 
 	public String getMerchantId() {
 		return merchantId;
@@ -65,11 +75,11 @@ public class AddTheroomPO extends AbstractBasePO {
 		this.tier = tier;
 	}
 
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 	

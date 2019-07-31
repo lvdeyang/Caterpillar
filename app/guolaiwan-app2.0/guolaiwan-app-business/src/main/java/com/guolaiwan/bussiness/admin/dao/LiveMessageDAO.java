@@ -38,6 +38,13 @@ public class LiveMessageDAO extends AbstractBaseDao<LiveMessagePO> {
 		return findByHqlPage(hql, 1, 200);
 	}
 	
+	
+	public int deleteByLive(long liveId) {
+		DeleteHql hql=this.newDeleteHql();
+		hql.andBy("liveId", Condition.eq, liveId);
+		return this.deleteByHql(hql);
+	}
+	
 	public List<LiveMessagePO> findByMerchant(long MerchantId) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("merchantId", Condition.eq, MerchantId);

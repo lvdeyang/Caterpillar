@@ -168,16 +168,19 @@ html, body {
 	
 	} 
 	select{
-	width:100%;
-    text-align: center;
+	-webkit-appearance: none;
+	width:auto;
+	 text-align: center;
     text-align-last: center;
     border:none;
     outline:none;
+    background: #fff;
+
 }
 	option{
     text-align: center;
     text-align-last: center;
-
+ 
 }
 </style>
 
@@ -314,7 +317,7 @@ $(function(){
 		   $.post(url,{"productId":${product.id}},function(data){
 		   
 		   if(data.length==0){
-		   		html.push('<option value="0">标准(￥${product.productPrice})</option>');
+		   		html.push('<option value="0">标准(￥${product.productPrice}) ▼</option>');
 		   }else{
 		        $('#total').html((data[0].comboprice/100).toFixed(2));
 		   }
@@ -519,8 +522,8 @@ $(function(){
         <input class="layui-input" id="bookDate" type="text" placeholder="请您选择采摘日期"   style="border-radius:10px;cursor: pointer;width:100%;height:60px;margin:5px auto;padding:0 10%;text-align: center;" >
          <p style="position: absolute;font-size: 16px;font-weight: bold;top:19px;left:3%;">预订日期</p>
         </div>
-        <div style="position: relative;background: #fff;">
-        <select class="comboList" style="border-radius:10px;cursor: pointer;height:60px;background: #fff;" >
+        <div style="position: relative;background: #fff;margin: 0 auto;text-align: center;">
+        <select class="comboList" style=" border-radius:10px;cursor: pointer;height:60px;" >
         </select>
        
         <p style="position: absolute;font-size: 16px;font-weight: bold;top:19px;left:5%;">套餐选择</p>

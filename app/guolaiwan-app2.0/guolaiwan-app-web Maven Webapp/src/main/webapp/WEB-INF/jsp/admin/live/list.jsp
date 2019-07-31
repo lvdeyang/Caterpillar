@@ -238,6 +238,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		})
 	}
 	
+	function deleteComment(liveId){
+	
+	   $.ajax({
+				url:'delComment.do',
+				type:'post',
+				data:{'liveId':liveId},
+				success:function(msg){
+					console.log(msg);
+					layer.closeAll('loading');
+					if(msg=='success'){
+						layer.msg("已清除");
+						
+					}	
+				}
+	   })
+	}
+	
+	
 	 /*打开地址窗口*/
             function open_win(title,url,w,h){
 				x_admin_show(title,url,w,h)								
@@ -269,6 +287,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script type="text/html" id="zsgc">
 	<a title="评论管理" href="javascript:;" onclick="stock_show('评论管理','<%=path%>/admin/live/liveDelect','{{d.id}}','','')" class="layui-btn layui-btn-xs">评论管理</a>
+    <a title="全部清除" href="javascript:;" onclick="deleteComment({{d.id}})" class="layui-btn layui-btn-xs">全部清除</a>
 </script>
 <script type="text/html" id="zbtstz">
 	<a title="推送通知编辑" href="javascript:;" onclick="stock_show('推送通知编辑--直播间：{{d.id}}','<%=path%>/admin/live/addWxMessage','{{d.id}}','','5100')" class="layui-btn layui-btn-xs">推送通知编辑</a>

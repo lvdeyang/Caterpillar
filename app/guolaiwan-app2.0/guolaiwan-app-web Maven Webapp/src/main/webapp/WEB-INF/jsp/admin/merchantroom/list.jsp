@@ -45,21 +45,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		text-decoration: none;
 	}
 	
-	.xinxi p {
-		height: 50px;
-		line-height: 50px;
-		font-size: 20px;
+
+	
+	.edui-toolbar .edui-btn-toolbar {
+	width:80% !important;
+	height:auto !important;
+	}
+	.edui-container{
+	
+	width:100% !important;
+	}
+	.layui-input{
+	width:100% !important;
 	}
 	
-	.left, .right ,.putaway,.below,.quit{
-		border: 1px solid #898B92;
-		padding: 10px 10px;
-		margin: 10px;
-	}
+	
+	
 </style>
     </head>
-      <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
-        <script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
+    <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="<%=request.getContextPath() %>/layui/UEditor/third-party/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath() %>/layui/UEditor/third-party/template.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%=request.getContextPath() %>/layui/UEditor/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%=request.getContextPath() %>/layui/UEditor/umeditor.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath() %>/layui/UEditor/lang/zh-cn/zh-cn.js"></script>
+    <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
 	<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 	<script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
@@ -81,6 +92,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			//以上模块根据需要引入
 	        var html = [];
 	        var tier = null;
+	        var floor=null;
 			$.ajax({
 				type : "post",
 				url : "getlist.do",
@@ -89,11 +101,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				msg = msg.po;
 				overall = msg;
 				for(var i=0; i<msg.length;i++) {
-					if(msg[i].tier==1)tier="一层"; if(msg[i].tier==2)tier="二层"; if(msg[i].tier==3)tier="三层"; if(msg[i].tier==4)tier="四层"; 
-					if(msg[i].tier==5)tier="五层"; if(msg[i].tier==6)tier="六层"; if(msg[i].tier==7)tier="七层"; if(msg[i].tier==8)tier="八层";
-			    	html.push('<p style=" background-color:#f2f2f2; font-size:18px;font-weight:bold;height:60px;line-height: 60px;">'+tier+'</p> ');
+					if(tier==null||tier!=msg[i].tier){
+						tier=msg[i].tier;
+						if(msg[i].tier==1)floor="一层"; if(msg[i].tier==2)floor="二层"; if(msg[i].tier==3)floor="三层"; if(msg[i].tier==4)floor="四层"; 
+						if(msg[i].tier==5)floor="五层"; if(msg[i].tier==6)floor="六层"; if(msg[i].tier==7)floor="七层"; if(msg[i].tier==8)floor="八层";
+				    	html.push('<p style=" background-color:#f2f2f2; font-size:18px;font-weight:bold;height:60px;line-height: 60px;">'+floor+'</p> ');
+						}
 					html.push('<div class="xuanzhong" id="'+msg[i].id+'" style="width:auto;height:auto;text-align: center;margin:20px;display: inline-block;overflow: hidden;z-index:111111;">');
-					if(msg[i].state == 0)html.push('<img  style="height:50px;width:50px;" src="../../lib/images/weixuan.png">');
+					if(msg[i].state == 0)html.push('<img  style="height:45px;width:50px;" src="../../lib/images/weixuan.png">');
 					if(msg[i].state == 1)html.push('<img  style="height:50px·;width:50px;" src="../../lib/images/lu.png">');
 					if(msg[i].state == 2)html.push('<img  style="height:50px;width:50px;" src="../../lib/images/xuanzhong.png">');
 					html.push('<p style="font-size:18px;font-weight:bold;height:50px;line-height:50px;">'+msg[i].name+'</p>');
@@ -113,51 +128,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 		$(function() {
 			$(document).on('click', '.xuanzhong', function() {
-			        $("#shenfen").val("");
-			        $("#personName").val("");
-			        $("#phone").val("");
-			        $("#startingTime").val("");
-			        $("#stopTime").val("");
 			        $("#price").val("");
-			        $(".ming").text("");
+			        $("#roomdetails").html("");
+			        $("#name").val("");
 				for(var i=0; i<overall.length;i++) {
 				  if(this.id == overall[i].id){
-				   $(".ming").text(overall[i].name);
+				   $("#name").val(overall[i].name);
 				   $("#inpu").val(overall[i].id);
-				    if( overall[i].personName != null && overall[i].card!=null &&  overall[i].phone!=null  &&overall[i].startingTime!=null && overall[i].stopTime!=null	&& overall[i].price != null){
-					     $("#shenfen").val(overall[i].card);
-					     $("#personName").val(overall[i].personName);
-					     $("#phone").val(overall[i].phone);
-					     $("#startingTime").val(overall[i].startingTime);
-					     $("#stopTime").val(overall[i].stopTime);
-					     $("#price").val(overall[i].price/100);
-				    }
+			       $("#price").val(overall[i].price/100);
+			       $("#roomdetails").html(overall[i].roomdetails);
+			       var tier = document.getElementsByName("tier");
+					for (var o = 0; o < tier.length; o++) {
+						    if(overall[i].tier == tier[o].value){
+							   $(tier[o]).next().click();
+						}
+					}
+				   var identity = document.getElementsByName("identity");
+				   for (var p = 0; p < identity.length; p++) {
+						    if(overall[i].identity == identity[p].value){
+							   $(identity[p]).next().click();
+							}
+					}
+
 				  }
 				}
 				$(".xinxi").fadeIn();
-					layui.use('laydate', function(){
-			  var laydate = layui.laydate;
-			 //时间选择器
-			laydate.render({
-			  elem: '#stopTime'
-			  ,type: 'datetime'
 			});
-				 //时间选择器
-			laydate.render({
-			  elem: '#startingTime'
-			  ,type: 'datetime'
-			});
-			});
-			});
-			$(document).on('click', '.right', function() {
+			$(document).on('click', '#right', function() {
 				$(".xinxi").fadeOut();
 			});
 			
-		
-			
-			
-			
-			$(document).on('click', '.putaway', function() {
+			$(document).on('click', '#putaway', function() {
 			  $.ajax({
 					type : "post",
 					url : "amend.do",
@@ -167,7 +168,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}	
 				}) 
 			});
-			$(document).on('click', '.below', function() {
+			$(document).on('click', '#below', function() {
 			   $.ajax({
 					type : "post",
 					url : "amend.do",
@@ -177,11 +178,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}	
 				}) 
 			});
-			$(document).on('click', '.quit', function() {
+			$(document).on('click', '#quit', function() {
 			   $.ajax({
 					type : "post",
 					url : "amend.do",
 					data : {"state":1,"id":$("#inpu").val()},
+					success : function(data) {
+					$("#sty i").trigger('click');
+					}	
+				}) 
+			});
+			
+			$(document).on('click', '#delete', function() {
+			   $.ajax({
+					type : "post",
+					url : "delete",
+					data : {"id":$("#inpu").val()},
 					success : function(data) {
 					$("#sty i").trigger('click');
 					}	
@@ -201,21 +213,111 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;margin-left:0" href="javascript:history.go(-1)" title="返回"><i class="layui-icon" style="line-height:38px">&#xe65c;</i></a>
         </div>
         <div class="x-body">
-            <xblock><button class="layui-btn" onclick="open_win('添加房间','addv?merchantId=${merchantId}','600','500')"><i class="layui-icon">&#xe608;</i>添加房间</button><span class="x-right" style="line-height:40px"></xblock>
+            <xblock><button class="layui-btn" onclick="open_win('添加房间','addv?merchantId=${merchantId}','1200','800')"><i class="layui-icon">&#xe608;</i>添加房间</button><span class="x-right" style="line-height:40px"></xblock>
          	<table id="activityList" lay-filter="activityList"></table>
         </div>
       
 
 	<!-- 信息登记 -->
-	<div class="xinxi" style="width:50%;height:250px;border:5px solid #393D49;padding:30px 2%;position: fixed;top:50%;left:50%;margin:-180px 0 0 -25%;z-index:11;background:#fff;display: none;overflow: hidden;overflow-y: auto">
+	<div class="xinxi" style="width:70%;height:700px;border:5px solid #393D49;padding:30px 2%;position: fixed;top:50%;left:50%;margin:-350px 0 0 -35%;z-index:11;background:#fff;display: none;overflow: hidden;overflow-y: auto">
 		<!-- 加东西从这加 -->
-		<p style="text-align: center;">
-			房间名称：<span class="ming" value="111"></span>
-			<input style="display:none;" id="inpu" value="">	
-		</p>
-		<p style="text-align: center;margin:10px auto;">
-			<span class="putaway">上架</span><span class="below">下架</span><span class="quit">退房</span><span class="right">关闭窗口</span>
-		</p> 
+		<form class="layui-form layui-form-pane">
+				<input style="display:none;" name="roomId" id="inpu" value="">
+           	 	<div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                                层                                     
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="tier" id="tier" value="1" title="一层"/>
+						<input type="radio" name="tier" id="tier" value="2" title="二层"/>
+						<input type="radio" name="tier" id="tier" value="3" title="三层"/>
+						<input type="radio" name="tier" id="tier" value="4" title="四层"/>
+						<input type="radio" name="tier" id="tier" value="5" title="五层"/>
+						<input type="radio" name="tier" id="tier" value="6" title="六层"/>
+						<input type="radio" name="tier" id="tier" value="7" title="七层"/>
+						<input type="radio" name="tier" id="tier" value="8" title="八层"/>
+                    </div>
+                </div>
+                
+ 				<div class="layui-form-item">
+                    <label for="title" class="layui-form-label">
+                                                            名称
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="name" name="name" required lay-verify="required"
+                        autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+ 				
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                         价钱                                     
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="price" name="price" required lay-verify="required"
+                        autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+ 				<div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                     房间类型                                                                                  
+                    </label>
+                    <div class="layui-input" >
+                        <input type="radio" name="identity" id="identity" value="标准间" title="标准间"/>
+						<input type="radio" name="identity" id="identity" value="豪华间" title="豪华间"/>
+						<input type="radio" name="identity" id="identity" value="三人间" title="三人间"/>
+						<input type="radio" name="identity" id="identity"value="五人间" title="五人间"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="voterule" class="layui-form-label">
+ 					房间详情
+                    </label>
+                    <div class="layui-input-block">
+                        <textarea name="roomdetails"  placeholder="请输入内容" class="layui-input" id="roomdetails" style="height:300px"></textarea>
+                    </div>
+                </div>
+				<div id="view"></div> 
+				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 200px;bottom: 0">
+                    <span class="layui-btn" lay-filter="add" lay-submit> 保存  </span>
+					<span class="layui-btn" id="putaway">上架</span>
+					<span class="layui-btn" id="below">下架</span>
+					<span class="layui-btn" id="quit">退房</span>
+					<span class="layui-btn" id="delete">删除</span>
+					<span class="layui-btn" id="right">关闭窗口</span>
+                </div>
+            </form>
 	</div>
+	<script>
+		var um = UM.getEditor('roomdetails');
+		
+		layui.use([ 'form', 'layer','laytpl' ], function() {
+        		$ = layui.jquery;
+        		var form = layui.form,
+        			layer = layui.layer,
+        			laytpl = layui.laytpl;
+        
+        		//监听提交
+        		form.on('submit(add)', function(data) {
+        			console.log(data.field);
+	        		layer.load();
+        			$.ajax({
+        				type : "post",
+        				url : "updateroom",
+        				data : data.field,
+        				success : function(msg) {
+        					if(msg=="success"){
+        						layer.alert("修改成功",{icon:2,time:1000});
+        					$("#sty i").trigger('click');
+        					}
+        				}
+        			})
+        
+        			return false;
+        		});
+        		
+        
+        });
+	</script>
 </body>
 </html>
