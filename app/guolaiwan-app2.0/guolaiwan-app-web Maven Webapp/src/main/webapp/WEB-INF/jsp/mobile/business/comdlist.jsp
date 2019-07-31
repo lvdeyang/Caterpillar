@@ -230,7 +230,7 @@ html, body {
        var htm = [];
        htm.push('<div style="width:90%;height:auto;background:#E9EBEA;margin:10px auto;border-radius:10px;">');
        htm.push('<p style="height:40px;line-height: 40px;">');
-       htm.push('<span style="float:left;margin-left:5px;">'+prname+'</span>');
+       htm.push('<span style="float:left;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:65%;">'+prname+'</span>');
        htm.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+prc+'</span>');
        htm.push('</p>');
        htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前一天订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
