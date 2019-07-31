@@ -25,7 +25,17 @@ public class AddTheroomPO extends AbstractBasePO {
 	
 	private String roomdetails;
 	
+	private String roomimg;
 	
+	
+
+	public String getRoomimg() {
+		return roomimg;
+	}
+
+	public void setRoomimg(String roomimg) {
+		this.roomimg = roomimg;
+	}
 
 	public String getRoomdetails() {
 		return roomdetails;

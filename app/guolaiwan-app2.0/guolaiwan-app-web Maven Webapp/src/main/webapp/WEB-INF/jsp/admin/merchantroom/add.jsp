@@ -77,11 +77,26 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 房间详情图 </label>
+					<div class="layui-input-inline">
+						<table>
+							<tr>
+							<td>
+							<img alt="" src="" style=" height:100px;width:100px " id="imgurl5">
+							<input type="hidden" id="img5" name="img5" >
+							<a href="javascript:openMap('上传图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=img5&img=imgurl5','600','400')" class="layui-btn layui-btn-xs" style="width:90px;margin-left:5px;margin-right:5px" >更换图片</a>
+							<button class="layui-btn layui-btn-xs" type="button" style="width:90px;margin-left:5px;margin-right:5px" onclick="delpic('#imgurl5','#img5')">删除图片</button>	
+							</td>
+							</tr>
+						</table>
+		        	</div>
+				</div>
+                <div class="layui-form-item">
                     <label for="voterule" class="layui-form-label">
  					房间详情
                     </label>
                     <div class="layui-input-block">
-                        <textarea name="roomdetails"  placeholder="请输入内容" class="layui-input" id="roomdetails" style="height:300px"></textarea>
+                        <textarea name="roomdetails"  placeholder="请输入内容" class="layui-input" id="roomdetails" style="height:200px"></textarea>
                     </div>
                 </div>
 				<div id="view"></div> 
@@ -102,6 +117,10 @@
         <script src="<%=request.getContextPath() %>/layui/js/x-layui.js" charset="utf-8">
         </script>
         <script>
+        	
+        	
+        	
+        
         	var um = UM.getEditor('roomdetails');
         
         	layui.use([ 'form', 'layer','laytpl' ], function() {
@@ -133,6 +152,11 @@
         		
         
         });
+        
+        	//打开分类
+            function openMap (title,url,w,h) {
+                x_admin_show(title,url,w,h); 
+            }
         </script>
        
         
