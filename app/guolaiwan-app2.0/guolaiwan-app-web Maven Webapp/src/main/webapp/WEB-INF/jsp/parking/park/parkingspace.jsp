@@ -232,7 +232,7 @@ html {
 				htm.push('<p style="font-size:0.7rem;margin:0 0 5px;overflow:hidden;">总车位：' + data[i].commonParking + '<span></span>剩余车位：<span>' + data[i].usedParking + '</span></p>');
 				htm.push('<p style="font-size:0.7rem;lor:#BDBDBD; ">' + data[i].position + '  <span> 充电柱: ' + data[i].chargingColumn + '</span></p>');
 				htm.push('<p style="font-size:0.7rem;color:#BDBDBD; "> 地址 ：<span>' + data[i].address + '</span></p>');
-				htm.push('<p style="font-size:0.7rem;color:#BDBDBD; ">距离您 ：<span>2.6km</span><img class="daohang"style="width:18%;margin:3px;" src="lib/images/hang.png" /></p>');
+				if(data[i].distance!=null)htm.push('<p style="font-size:0.7rem;color:#BDBDBD; ">距离您 ：<span>'+ Math.floor(data[i].distance/1000)+'km</span><img class="daohang"style="width:18%;margin:3px;" src="lib/images/hang.png" /></p>');
 				htm.push('<a href="vice/merchant/agreemen?useid='+data[i].id+'"><p id="yu"name="1" style="float:right;overflow:hidden;color:#FB7A32;font-size:0.65rem;">点击预约 ></p></a>');
 				htm.push('</div>');
 				htm.push('</div>');

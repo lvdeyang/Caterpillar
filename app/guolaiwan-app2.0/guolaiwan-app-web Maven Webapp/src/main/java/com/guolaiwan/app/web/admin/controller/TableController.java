@@ -63,7 +63,7 @@ public class TableController extends BaseController {
 		return mv;
 	}
 	
-	// 餐桌列表数据
+	/*// 餐桌列表数据
 	@RequestMapping(value = "/list.do", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> showTables(HttpServletRequest request) throws Exception {
@@ -90,7 +90,7 @@ public class TableController extends BaseController {
 					tableVo.setSize(tablePO.getSize());
 					tableVo.setTableNo(tablePO.getTableNo());
 					tableVo.setTableStatus(tableStatusPO.getTableStatus().toString());
-					tableVo.setName(tablePO.getName());
+					tableVo.setName(tablePO.getTablename());
 					
 					tableVos.add(tableVo);
 				} else {
@@ -108,7 +108,7 @@ public class TableController extends BaseController {
 					tableVo.setTableId(tablePO.getId());
 					tableVo.setTableNo(tablePO.getTableNo());
 					tableVo.setTableStatus(TableStatus.FREE.toString());
-					tableVo.setName(tablePO.getName());
+					tableVo.setName(tablePO.getTablename());
 					
 					tableVos.add(tableVo);
 				}
@@ -117,7 +117,7 @@ public class TableController extends BaseController {
 		
 		map.put("tables", tableVos);
 		return map;
-	}
+	}*/
 	
 	//显示添加餐桌页面
 	@RequestMapping("/addv")
@@ -125,7 +125,7 @@ public class TableController extends BaseController {
 		return "admin/table/add";
 	}
 
-	//添加餐桌
+/*	//添加餐桌
 	@ResponseBody
 	@RequestMapping(value="/add.do",method= RequestMethod.POST)
 	public String add(HttpServletRequest request){
@@ -140,13 +140,13 @@ public class TableController extends BaseController {
 		table.setMerchantId(1L);
 		table.setTableNo(tableNo);
 		table.setSize(size);
-		table.setName(name);
+		table.setTablename(name);
 		table.setBookprice(bookprice);
 		
 		conn_table.save(table);
 		
 		return "success";
-	}
+	}*/
 	
 	//删除餐桌
 	@ResponseBody

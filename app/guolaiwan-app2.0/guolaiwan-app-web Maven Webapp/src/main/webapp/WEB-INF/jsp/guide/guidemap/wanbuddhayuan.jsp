@@ -794,9 +794,9 @@ input[type="radio"] {
 				param.ChildId = d;
 				$.post(_uril, $.toJSON(param), function(data) {
 					getMark();
-			        ref = setInterval(function(){
+			       /*  ref = setInterval(function(){
 		 			   consoleLog();
-					},5000);
+					},5000); */
 		        });
 	  	    }else{
 	  	    var  relevance;
@@ -823,6 +823,7 @@ input[type="radio"] {
 				        }
 				      }
 		  	       }
+		  	        getMark();
 		        });  
 	  	    }
 	  	  }
@@ -832,9 +833,9 @@ input[type="radio"] {
 	      var _uril = window.BASEPATH + 'guide/delectchildId';                   //清楚路线
 		  $.post(_uril, null, function(data) {
 		      getMark();
-		      ref = setInterval(function(){
+		     /*  ref = setInterval(function(){
 		 			   consoleLog();
-			  },5000);
+			  },5000); */
 	      }); 
 	   }
 </script>
@@ -842,7 +843,7 @@ input[type="radio"] {
 <script>
  var latitid;      //当前景点id
  var navigation = 0;      //导游模式
-	function consoleLog(){
+	/* function consoleLog(){
 	    getloca();
 	    var loca = {};
 		function getloca() {
@@ -946,7 +947,7 @@ input[type="radio"] {
 			}
 		 }
 	  } 
-	}
+	} */
 	
 	
 
@@ -1024,6 +1025,7 @@ input[type="radio"] {
 		     }); 
 	    }},
 	      { text: "导游模式", onClick: function(){ 
+	       clearInterval(ref);  //停止循环 定位
 		     for (var i = 0; i < json.length; i++){
 		       if(id ==  json[i].id){
 		           $('#pid').html(json[i].chineseContent);
@@ -1033,9 +1035,8 @@ input[type="radio"] {
 						}
 				   ];
 				  navigation = 1;
-				  latitid = json[i].id
+				  latitid = json[i].id;
 			      MP3(song,latitid); // 播放音乐
-			      clearInterval(ref);  //停止循环 定位
 			      red(latitid);
 		       }
  			} 
@@ -2048,6 +2049,7 @@ var id;
        					_this.audio.currentTime = 0;
 			             _this.audio.pause();
 			             _this.stopAudio();
+			             alert(latitid +" : "+navigation);
        				     setaddChild(latitid,navigation); // 存用户已浏览点
        					$(".audio-play").click(function() {
        					if($buttonControl.hasClass("action-start")){
