@@ -141,10 +141,14 @@ public class SceneryListController  extends WebBaseControll{
 		List<AttractionsParkingPO> attractions =	Attra_ctions.getInformation(0, 100);
 		List<AttractionsVo> _merchants =null;
 		if (merchantId != null && merchantId != "") {
-		  MerchantPO  MerchantPO = Merchant.getMerchantById(Long.parseLong(merchantId)).get(0);
-		  if (MerchantPO != null && MerchantPO!= null ) {
-			String  MerchantLongitude =    MerchantPO.getShopLongitude();//商户经度
-		   	String  MerchantLatitude =  MerchantPO.getShopLatitude(); //商户纬度
+		  List<MerchantPO>  MerchantPO = Merchant.getMerchantById(Long.parseLong(merchantId));
+		  if (MerchantPO != null && MerchantPO.size() >0 ) {
+			  String  MerchantLongitude = null;
+			  String  MerchantLatitude = null;
+			  for (MerchantPO merchant : MerchantPO) {
+				   MerchantLongitude =    merchant.getShopLongitude();//商户经度
+				   MerchantLatitude =  merchant.getShopLatitude(); //商户纬度
+			 }
 		   	_merchants = AttractionsVo.getConverter(AttractionsVo.class).convert(attractions,
 					AttractionsVo.class);
 		   	for (AttractionsVo attractionsVo : _merchants) {
@@ -168,6 +172,9 @@ public class SceneryListController  extends WebBaseControll{
 				System.out.println(attractionsVo.getParkingName()+" - " +attractionsVo.getParkingDistrict());
 			}
 		  }
+		}else {
+			_merchants = AttractionsVo.getConverter(AttractionsVo.class).convert(attractions,
+					AttractionsVo.class);
 		}
 		return success(_merchants);
 	}
