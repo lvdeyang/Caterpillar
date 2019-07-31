@@ -70,13 +70,16 @@ public class RoomController {
         String price = request.getParameter("price");
         String identity = request.getParameter("identity");//房间类型
         String merchantId = request.getParameter("merchantId");
+        String roomdetails = request.getParameter("roomdetails");
+        
         AddTheroomPO add = new AddTheroomPO();
         add.setMerchantId(merchantId);
         add.setName(name);
         add.setTier(tier);
-        add.setPrice(price);
+        add.setPrice(Integer.parseInt(price)*100);
         add.setIdentity(identity);
         add.setState(1);
+        add.setRoomdetails(roomdetails);
         addtheroomDAO.save(add);
 		
 		return "success";
@@ -87,12 +90,43 @@ public class RoomController {
 	public Map<String, Object> SetAmend(HttpServletRequest request) throws Exception{//添加入驻信息
 		String a = request.getParameter("state"); //状态
 		String id = request.getParameter("id");
-		AddTheroomPO addpo =  addtheroomDAO.findByField("id",Long.parseLong(id)).get(0);
+		AddTheroomPO addpo =  addtheroomDAO.get(Long.parseLong(id));
 		addpo.setState(Integer.parseInt(a));
 		addtheroomDAO.saveOrUpdate(addpo);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", "0");
 		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/delete",method = RequestMethod.POST) // 修改上架 退房
+	public Map<String, Object> delete(HttpServletRequest request) throws Exception{//添加入驻信息
+		String id = request.getParameter("id");
+		addtheroomDAO.delete(Long.parseLong(id));
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", "0");
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/updateroom",method = RequestMethod.POST)
+	public String updateroom(HttpServletRequest request) throws Exception{ //添加房间
+		String roomId=request.getParameter("roomId");
+		String name = request.getParameter("name");
+        String tier = request.getParameter("tier");
+        String price = request.getParameter("price");
+        String identity = request.getParameter("identity");//房间类型
+        String roomdetails = request.getParameter("roomdetails");
+        AddTheroomPO add = addtheroomDAO.get(Long.parseLong(roomId));
+        if(name!=""&&name!=null) add.setName(name);
+        if(tier!=""&&tier!=null) add.setTier(tier);
+        if(price!=""&&price!=null) add.setPrice(Integer.parseInt(price)*100);
+        if(identity!=""&&identity!=null) add.setIdentity(identity);
+        if(roomdetails!=""&&roomdetails!=null) add.setRoomdetails(roomdetails);
+        add.setState(1);
+        addtheroomDAO.save(add);
+		
+		return "success";
 	}
 
 }
