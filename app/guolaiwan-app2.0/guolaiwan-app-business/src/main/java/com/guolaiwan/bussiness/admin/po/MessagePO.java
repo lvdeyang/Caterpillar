@@ -11,6 +11,15 @@ public class MessagePO extends AbstractBasePO {
 	private String name;// 姓名
 	private String number;// 身份证号
 	private String base;// 图片base64的编码
+	private String  facePicWebUrl;//人脸图片访问地址
+	public String getFacePicWebUrl() {
+		return facePicWebUrl;
+	}
+
+	public void setFacePicWebUrl(String facePicWebUrl) {
+		this.facePicWebUrl = facePicWebUrl;
+	}
+
 	private String oderId;// 订单id
 	private String merchantid;// 商户id
 	private String state;// 支付状态 0代表未支付，1代表已支付，2代表以验单
