@@ -398,7 +398,8 @@ $(function(){
 	function getLine(data){
 	         var html=[];
                  var list = data.productPOs;
-                 var  str = data.strArryList;                                                                                 
+                 var  str = data.strArryList; 
+                 var grade = data.gradeList;                                                                                
 	       //后面的
 		         for(var i=0;i<list.length;i++){
                 var pro_pro = list[i].productName.split(",");                               
@@ -415,7 +416,7 @@ $(function(){
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           }
-		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售100+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   </p>');
+		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+grade[i]+'分</span>   </p>');
 		           html.push('</div></div></div>');
 		          
 		 		$('#contents').append(html.join(''));
@@ -427,7 +428,8 @@ $(function(){
      var _uricoms = window.BASEPATH + '/product/package/list?merchantId='+${productMerchantID}+'&pageNum=1';	
      $.get(_uricoms, null, function(data){  
            var list =  data.productPOs;
-           var  str = data.strArryList;          
+           var  str = data.strArryList; 
+           var grade = data.gradeList;
          for(var i=0;i<list.length;i++){
                 var pro_pro = list[i].productName.split(",");                             
          		var html=[];       		
@@ -443,7 +445,7 @@ $(function(){
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           }
-		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售100+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">5.0分</span>   </p>');
+		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+grade[i]+'分</span>   </p>');
 		           html.push('</div></div></div>');
 		          
 		 		$('#contents').append(html.join(''));

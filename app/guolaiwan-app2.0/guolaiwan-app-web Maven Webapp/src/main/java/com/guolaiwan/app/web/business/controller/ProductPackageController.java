@@ -2,6 +2,7 @@ package com.guolaiwan.app.web.business.controller;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
@@ -15,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
+import java.util.UUID;
+
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -26,26 +27,33 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.CommentVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
+import com.guolaiwan.app.web.admin.vo.PictureVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
-import com.guolaiwan.bussiness.Parking.po.OrderPO;
+
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.PictureDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
+import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.UserOnedayBuyDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
@@ -57,12 +65,16 @@ import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.PicturePO;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
+import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
+import com.guolaiwan.bussiness.distribute.po.DistributorPo;
+import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
+import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 
-import net.sf.ehcache.CacheOperationOutcomes.PutAllOutcome;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 import pub.caterpillar.weixin.constants.WXContants;
@@ -101,9 +113,18 @@ public class ProductPackageController extends BaseController {
     
     @Autowired
 	UserOnedayBuyDAO conn_userone;
+    
+    @Autowired
+	private SysConfigDAO conn_sysConfig;
+    
+    @Autowired
+	private PictureDAO conn_picture;
+    
+    @Autowired
+    private MessageMiddleClientDao conn_mesMidleClien;
 	
 	/**
-	 * 跳转方法
+	 * 首页跳转购票页
 	 * */
 	@RequestMapping(value="/purchase/jump")
 	public ModelAndView purchaseJump(HttpServletRequest request){
@@ -131,13 +152,13 @@ public class ProductPackageController extends BaseController {
 		mapp.put("productMerchantID", Long.parseLong(merhcantId));
 		//过滤 不符合日期的商品
 		long nowDate = new Date().getTime();
-		//遍历筛选
 		List<ProductPO> productPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);
 		for(int i= 0 ;i<productPOs.size();i++){
 		   long producntBeginTime  = productPOs.get(i).getProductBeginDate().getTime();
 		   long producntEndTime  =  productPOs.get(i).getProductEnddate().getTime();
-		   if(nowDate<producntBeginTime && nowDate>producntEndTime){
-			   productPOs.remove(i);
+		   System.out.println("producntEndTime:"+producntEndTime);
+		   if(nowDate<producntBeginTime || nowDate>producntEndTime){
+			   productPOs.remove(i);			   
 		   }			
 		}
 		//分页获取所有商品
@@ -158,24 +179,59 @@ public class ProductPackageController extends BaseController {
 	    		}	    			    		
 	    	} 	    		    	  
 	     }	     
-	     DecimalFormat def = new DecimalFormat("0.00");
-	     //判断商品是否为活动商品
+	     DecimalFormat def = new DecimalFormat("0.00");	
+	     //评分集合
+	     List<String> gradeList = new ArrayList<String>();
+	     //销售量集合
+	     List<Integer> marketList = new ArrayList<Integer>();
+	     //判断商品是否为活动商品	  
+	     boolean isGrade = false;
 	    Set<Long> pro_id = activ_id.keySet();    
 		for(ProductVO pro : pro_vo){
 			//活动票
 			if(pro_id.contains(pro.getId())){
 			pro.setProductName(	pro.getProductName()+",act");			
 			pro_pric.add(def.format(Double.parseDouble(activ_id.get(pro.getId()).getPrice()+"")/100));
-			pro_list.add(pro);
+			pro_list.add(pro);	
+			isGrade =true;
 			}else{
 			//普通票					
 			if(pro.getProductStock()>0){	
 			pro.setProductName(	pro.getProductName()+",comm");	
 			pro_pric.add(pro.getProductPrice());
-			pro_list.add(pro);
-			}
-			}			
-		}    
+			pro_list.add(pro);	
+			isGrade =true;
+			}		
+		}  
+		  if(isGrade){	
+			//评分
+     		double grade1 = 4.6;
+     		double grade2 = 0.0;
+     		//获取该商品的所有订单
+     		 DecimalFormat defs = new DecimalFormat("0.0");
+     	    int count =	conn_orif.countByField("productId",pro.getId());
+     		int gradeSegment = count%3;
+     		switch (gradeSegment) {
+     		case 0:
+     			grade2 = 0.1;
+     			break;
+             case 1:
+             	grade2 = 0.2;
+     			break;
+             case 2:
+             	grade2 = 0.3;
+     	     break;
+     		default:
+     			break;
+     		}    		
+     		String grade = defs.format(grade1 + grade2);
+     		marketList.add(count);
+     		gradeList.add(grade);
+     		map.put("marketList", marketList);
+     		map.put("gradeList", gradeList);
+     		isGrade=false;
+		  }
+	}	
 	      map.put("productPOs",pro_list);
 	      map.put("strArryList",pro_pric);
 	      return map;
@@ -286,7 +342,7 @@ public class ProductPackageController extends BaseController {
     	      oderNumList.add(conn_orif.countByFields(fields, values));
     	        	   
        }  
-       //票的订单数量
+       //票的订单数量      
        int  ticketOrderNumber = conn_orif.countByField("productId", proId); 
        map.put("ticketOrderNumber", ticketOrderNumber);
        //普通票
@@ -431,30 +487,31 @@ public class ProductPackageController extends BaseController {
 	
 	/**
 	 * 购票人信息
+	 * @throws Exception 
 	 * 
 	 * */
 	@RequestMapping(value="/add/info",method=RequestMethod.POST)
-	public String saveTicketInfo(HttpServletRequest request){
-    //判断是保存还是更新
+	public String saveTicketInfo(HttpServletRequest request) throws Exception{
+    //更新购票人id
 	String state =	request.getParameter("state");
 	//保存
 	if("0".equals(state)){	
 		String base = request.getParameter("facedate");
 	    String name = request.getParameter("name");
 	    String phone = request.getParameter("phone");
-	    String idcard = request.getParameter("idcard");
-	    String merchantId = request.getParameter("merchantId");
-	    String proId = request.getParameter("proId");
+	    String idcard = request.getParameter("idcard");	
 	    HttpSession session  =  request.getSession();
 	    long userId = (long)session.getAttribute("userId");
 	    MessagePO mes = new MessagePO();
-	    mes.setBase(base);
-	    mes.setMerchantid(merchantId);
-	    mes.setName(name);
-	    mes.setNumber(idcard);
-	    mes.setProId(Long.parseLong(proId));
-	    mes.setState("0");
+	    String pic_url = facePicture();
+	    if(pic_url != null){
+	     PictureConvertor.GenerateImg(base, pic_url);
+	 	 mes.setBase(pic_url);
+	    }	
 	    mes.setUserId(userId);
+	    mes.setName(name);
+	    mes.setNumber(idcard);	
+	    mes.setState("0");
 	    mes.setPhone(phone);
 	    conn_message.save(mes);
 	}else{
@@ -463,16 +520,42 @@ public class ProductPackageController extends BaseController {
 	    String phone = request.getParameter("phone");
 	    String idcard = request.getParameter("idcard");
 	    String base = request.getParameter("facedate");	 
-	    MessagePO mes  =  conn_message.get(Long.parseLong(state));
+	    MessagePO mes  =  conn_message.get(Long.parseLong(state));	   
+	    PictureConvertor.GenerateImg(base, mes.getBase());
 	    mes.setName(name);
-	    mes.setBase(base);
 	    mes.setNumber(idcard);
 	    mes.setPhone(phone);
 	    conn_message.update(mes);
 	}	
+	
 	return "success"; 
 	}
 	
+	       //生成图片地址
+			public String facePicture() throws Exception{
+				//创建日期文件夹
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+				Date d = new Date();
+				String folderName = sdf.format(d);  //文件名
+				String path=conn_sysConfig.getSysConfig().getFolderUrl()+folderName;
+				//文件名			  
+				String newName = UUID.randomUUID().toString()+".jpg";
+
+				File folder =new File(path);
+				if(folder.exists() ==false){     //如果路径不存在
+					if(folder.getParentFile().exists()==false){
+						return null;
+					}
+					folder.mkdir();
+				}
+				//上传
+				File newFile=new File(path+"/"+newName);
+				String config = conn_sysConfig.getSysConfig().getFolderUrl()+folderName+"/"+newName;
+				
+				return config;
+			}
+	
+			
 	/**
 	 *  实时查询数据库数量
 	 * 
@@ -629,6 +712,35 @@ public class ProductPackageController extends BaseController {
 		return map;
 	}
 	
+	//添加对应信息
+	@RequestMapping(value="/addMessage",method=RequestMethod.POST)
+	public String  addMessageOrder(HttpServletRequest request){
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		 String oderId = pageObject.getString("oderId");
+		 String  clientLists = pageObject.getString("clientList");
+		 JSONArray clientList =  pageObject.parseArray(clientLists);
+		 String  proId = pageObject.getString("proId");
+		 String  userId =  pageObject.getString("userId");
+		 String merchantId = pageObject.getString("merchantId");
+		 //遍历保存用户信息
+		 for(int i = 0;i<clientList.size();i++){
+			 long clientMessage = clientList.getLong(i);		 			 
+			 MessageMiddleClientPO mesMidClien = new MessageMiddleClientPO();
+			 mesMidClien.setMerchantId(Long.parseLong(merchantId));
+			 mesMidClien.setMessageId(clientMessage);			
+			 mesMidClien.setOrderId(Long.parseLong(oderId));
+			 mesMidClien.setUserId(Long.parseLong(userId));
+			 mesMidClien.setProId(Long.parseLong(proId));
+			 conn_mesMidleClien.save(mesMidClien);
+			 }	
+		return "success";
+	}
+	
 	
 	/**
 	 * 订单：立即支付
@@ -658,20 +770,37 @@ public class ProductPackageController extends BaseController {
 		String choice = pageObject.getString("choice");
 		
 		OrderInfoPO order = new OrderInfoPO();
-		
-		String  productId = null;
+			
+		ProductPO productPO =null;
 		//支付的金额
 		Long productprice = null;
 		//获取 productId
 		if("0".equals(choice)){
-			productId = id;
+			//库存进行修改
+			productPO = productDao.get(Long.parseLong(id));
+			//是否限购
+			if(1 == productPO.getProductLimitType()){
+				//限购
+				productPO.setProductLimitNum(productPO.getProductLimitNum()-Long.parseLong(num));
+				productPO.setProductStock(productPO.getProductStock()-Long.parseLong(num));
+			}else{				
+				productPO.setProductStock(productPO.getProductStock()-Long.parseLong(num));				
+			}
+			
+			productDao.update(productPO);
 		}
 		else{
 	       ActivityRelPO aRelPO	= conn_acre.get(Long.parseLong(id));
-	       productId = aRelPO.getProductId()+"";	
+	       productPO = productDao.get(aRelPO.getProductId());
+	       
+	       //活动库存修改
+	       aRelPO.setProductStock(aRelPO.getProductStock()-Long.parseLong(num));
+	       
+	       conn_acre.update(aRelPO);
+	       
 		}				
 		//获取商品信息
-		ProductPO productPO = productDao.get(Long.parseLong(productId));
+		//ProductPO productPO = productDao.get(Long.parseLong(productId));
 		
 		       //套餐票 价格信息
 				if("1".equals(isCombo)){	
@@ -680,8 +809,7 @@ public class ProductPackageController extends BaseController {
 					order.setComboId(Long.parseLong(comboId));
 					//查询价格
 					ProductComboPO pComboPO = conn_combo.get(Long.parseLong(comboId));
-					productprice = pComboPO.getComboprice();
-					
+					productprice = pComboPO.getComboprice();										
 				}else{
 					//普通票价格
 					if("0".equals(choice)){ 
@@ -882,5 +1010,6 @@ public class ProductPackageController extends BaseController {
 			System.out.println(resData.toString());
 			return resData;
 			
-		}
+		}	
+					
 }

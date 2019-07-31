@@ -426,7 +426,9 @@ public class BusinessController extends WebBaseControll {
 		ModelAndView mv = null;
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		mv = new ModelAndView("mobile/business/groupproduct");
-		mv.addObject("merchantId", merchantId);
+		if(merchantId!=null&&merchantId!=0){
+			mv.addObject("merchantId", merchantId);
+		}
 		mv.addObject("userId", userId);
 		return mv;
 	}
@@ -436,27 +438,42 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getgroupproduct", method = RequestMethod.GET)
 	public List<ProductVO> getgroupproduct(Long merchantId) throws Exception {
-		
-		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
-		List<ProductPO> productlist = productDAO.getactivity(merchantId);
-		for (MerchantChildrenPO Children : merchantChildren) {
-			List<ProductPO> getactivity = productDAO.getactivity(Children.getChildrenId());
-			for (ProductPO productPO : getactivity) {
-				productlist.add(productPO);
-			}
-		}
-		
-		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(productlist, ProductVO.class);
 		List<GroupBuyPO> findAll = groupbuyDao.findAll();
-		for (ProductVO productVO : listvo) {
-			for (GroupBuyPO GroupBuyPO : findAll) {
-				if (productVO.getId() == GroupBuyPO.getProductid()) {
-					productVO.setGroupnum(GroupBuyPO.getGroupnum());
-					productVO.setGroupprice(GroupBuyPO.getGroupprice());
+		
+		if(merchantId!=null&&merchantId!=0){
+			System.out.println("子级的商品");
+			List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
+			List<ProductPO> productlist = productDAO.getactivity(merchantId);
+			for (MerchantChildrenPO Children : merchantChildren) {
+				List<ProductPO> getactivity = productDAO.getactivity(Children.getChildrenId());
+				for (ProductPO productPO : getactivity) {
+					productlist.add(productPO);
 				}
 			}
+			List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(productlist, ProductVO.class);
+			for (ProductVO productVO : listvo) {
+				for (GroupBuyPO GroupBuyPO : findAll) {
+					if (productVO.getId() == GroupBuyPO.getProductid()) {
+						productVO.setGroupnum(GroupBuyPO.getGroupnum());
+						productVO.setGroupprice(GroupBuyPO.getGroupprice());
+					}
+				}
+			}
+			return listvo;
+		}else{
+			System.out.println("全局的商品");
+			List<ProductPO> groupProduct = productDAO.getGroupProduct();
+			List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(groupProduct, ProductVO.class);
+			for (ProductVO productVO : listvo) {
+				for (GroupBuyPO GroupBuyPO : findAll) {
+					if (productVO.getId() == GroupBuyPO.getProductid()) {
+						productVO.setGroupnum(GroupBuyPO.getGroupnum());
+						productVO.setGroupprice(GroupBuyPO.getGroupprice());
+					}
+				}
+			}
+			return listvo;
 		}
-		return listvo;
 	}
 
 	// 获取这个商品的所拼的团

@@ -297,7 +297,7 @@ html, body {
 		    </li>
 		      <li>
 		    <input type="button">
-		    <p style="position: absolute;top:430px;left:10%;">优惠卷</p>
+		    <p style="position: absolute;top:430px;left:10%;">优惠券</p>
 		    <p style="position: absolute;top:430px;right:7%;"><span>0</span>张可用</p>
 		    </li>
 		    </ul>	 

@@ -638,5 +638,18 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		List<ProductPO> products = findByHqlPage(hql, pageNum, pageSize);
 		return products;
 	}
+	
+	
+	/**
+	 * 获取所有拼团的商品
+	 * @return
+	 */
+	public List<ProductPO> getGroupProduct() {
+		QueryHql hql = newQueryHql();
+		hql.andBy("productIsShow", Condition.eq, 1);
+		hql.andBy("isgroup", Condition.eq, 1);
+		List<ProductPO> products = findByHql(hql);
+		return products;
+	}
 
 }
