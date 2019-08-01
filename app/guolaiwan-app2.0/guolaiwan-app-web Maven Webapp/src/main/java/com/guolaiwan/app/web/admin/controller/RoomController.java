@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.guolaiwan.bussiness.admin.dao.AddTheRommDAO;
-import com.guolaiwan.bussiness.admin.po.AddTheroomPO;
+import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
+import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
 
 @Controller
 @RequestMapping("/admin/room")
 public class RoomController {
 
 	@Autowired
-	private AddTheRommDAO addtheroomDAO;
+	private AddTheRoomDAO addtheroomDAO;
 	
 	/**
 	 * 跳转房间管理
@@ -47,7 +47,7 @@ public class RoomController {
 	@RequestMapping(value = "/getlist.do", method = RequestMethod.POST)
 	public Map<String, Object> SeleFinish(HttpServletRequest request) throws Exception {
 		String merchantId=request.getParameter("merchantId");
-		List<AddTheroomPO> roompo =  addtheroomDAO.findByPro(merchantId);
+		List<AddTheRoomPO> roompo =  addtheroomDAO.findByPro(merchantId);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("po", roompo);
 		return map;
@@ -72,7 +72,13 @@ public class RoomController {
         String merchantId = request.getParameter("merchantId");
         String roomdetails = request.getParameter("roomdetails");
         String roomimg = request.getParameter("img5");
-        AddTheroomPO add = new AddTheroomPO();
+        String isreception = request.getParameter("isreception");
+        String iswifi = request.getParameter("iswifi");
+        String iskettle = request.getParameter("iskettle");
+        String istoilet = request.getParameter("istoilet");
+        String istv = request.getParameter("istv");
+        String isfan = request.getParameter("isfan");
+        AddTheRoomPO add = new AddTheRoomPO();
         add.setMerchantId(merchantId);
         add.setName(name);
         add.setTier(tier);
@@ -80,7 +86,13 @@ public class RoomController {
         add.setPrice(Integer.parseInt(price)*100);
         add.setIdentity(identity);
         add.setState(1);
-        add.setRoomdetails(roomdetails);
+        if(roomdetails!=null)add.setRoomdetails(roomdetails);
+        if(isfan!=null)add.setIsfan(Integer.parseInt(isfan));
+        if(iskettle!=null)add.setIskettle(Integer.parseInt(iskettle));
+        if(isreception!=null)add.setIsreception(Integer.parseInt(isreception));
+        if(istoilet!=null)add.setIstoilet(Integer.parseInt(istoilet));
+        if(istv!=null)add.setIstv(Integer.parseInt(istv));
+        if(iswifi!=null)add.setIswifi(Integer.parseInt(iswifi));
         addtheroomDAO.save(add);
 		
 		return "success";
@@ -91,7 +103,7 @@ public class RoomController {
 	public Map<String, Object> SetAmend(HttpServletRequest request) throws Exception{//添加入驻信息
 		String a = request.getParameter("state"); //状态
 		String id = request.getParameter("id");
-		AddTheroomPO addpo =  addtheroomDAO.get(Long.parseLong(id));
+		AddTheRoomPO addpo =  addtheroomDAO.get(Long.parseLong(id));
 		addpo.setState(Integer.parseInt(a));
 		addtheroomDAO.saveOrUpdate(addpo);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -119,13 +131,25 @@ public class RoomController {
         String identity = request.getParameter("identity");//房间类型
         String roomdetails = request.getParameter("roomdetails");
         String roomimg = request.getParameter("img5");
-        AddTheroomPO add = addtheroomDAO.get(Long.parseLong(roomId));
+        String isreception = request.getParameter("isreception");
+        String iswifi = request.getParameter("iswifi");
+        String iskettle = request.getParameter("iskettle");
+        String istoilet = request.getParameter("istoilet");
+        String istv = request.getParameter("istv");
+        String isfan = request.getParameter("isfan");
+        AddTheRoomPO add = addtheroomDAO.get(Long.parseLong(roomId));
         if(roomimg!=""&&roomimg!=null)add.setRoomimg(roomimg);
         if(name!=""&&name!=null) add.setName(name);
         if(tier!=""&&tier!=null) add.setTier(tier);
         if(price!=""&&price!=null) add.setPrice(Integer.parseInt(price)*100);
         if(identity!=""&&identity!=null) add.setIdentity(identity);
         if(roomdetails!=""&&roomdetails!=null) add.setRoomdetails(roomdetails);
+        if(isfan!=null){add.setIsfan(Integer.parseInt(isfan));}else{add.setIsfan(0);} 
+        if(iskettle!=null){add.setIskettle(Integer.parseInt(iskettle));}else{add.setIskettle(0);}
+        if(isreception!=null){add.setIsreception(Integer.parseInt(isreception));}else{add.setIsreception(0);}
+        if(istoilet!=null){add.setIstoilet(Integer.parseInt(istoilet));}else{add.setIstoilet(0);}
+        if(istv!=null){add.setIstv(Integer.parseInt(istv));}else{add.setIstv(0);}
+        if(iswifi!=null){add.setIswifi(Integer.parseInt(iswifi));}else{add.setIswifi(0);}
         add.setState(1);
         addtheroomDAO.save(add);
 		

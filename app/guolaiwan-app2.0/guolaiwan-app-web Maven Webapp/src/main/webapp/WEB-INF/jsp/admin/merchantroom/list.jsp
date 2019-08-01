@@ -111,6 +111,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				  if(this.id == overall[i].id){
 			       var img="http://www.guolaiwan.net/file"+overall[i].roomimg;
 			       document.getElementById("imgurl5").src=img;
+			       um.setContent(overall[i].roomdetails);
+				   $("#name").val(overall[i].name);
+				   $("#inpu").val(overall[i].id);
+			       $("#price").val(overall[i].price/100);
+			       if(overall[i].isreception=="1")$("#isreception").next().click();
+			       if(overall[i].iswifi=="1")$("#iswifi").next().click();
+			       if(overall[i].iskettle=="1")$("#iskettle").next().click();
+			       if(overall[i].istoilet=="1")$("#istoilet").next().click();
+			       if(overall[i].istv=="1")$("#istv").next().click();
+			       if(overall[i].isfan=="1")$("#isfan").next().click();
 			       var tier = document.getElementsByName("tier");
 					for (var o = 0; o < tier.length; o++) {
 						    if(overall[i].tier == tier[o].value){
@@ -123,10 +133,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							   $(identity[p]).next().click();
 							}
 					}
-				   $("#name").val(overall[i].name);
-				   $("#inpu").val(overall[i].id);
-			       $("#price").val(overall[i].price/100);
-			       um.setContent(overall[i].roomdetails);
 					
 
 				  }
@@ -249,6 +255,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                    房间设施                                                                                
+                    </label>
+                    <div class="layui-input" >
+                    	<input type="checkbox" name="isreception" id="isreception" value="1" title="全天前台"/>
+						<input type="checkbox" name="iswifi" id="iswifi" value="1" title="wifi"/>
+						<input type="checkbox" name="iskettle" id="iskettle" value="1" title="热水壶"/>
+						<input type="checkbox" name="istoilet" id="istoilet" value="1" title="卫生间"/>
+						<input type="checkbox" name="istv" id="istv" value="1" title="电视"/>
+						<input type="checkbox" name="isfan" id="isfan" value="1" title="空调"/>
+                
+                    </div>
+                </div>
+                <div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 房间详情图 </label>
 					<div class="layui-input-inline">
 						<table>
@@ -314,6 +334,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         	//打开分类
             function openMap (title,url,w,h) {
+                x_admin_show(title,url,w,h); 
+            }
+            //打开分类
+            function open_win (title,url,w,h) {
                 x_admin_show(title,url,w,h); 
             }
 	</script>

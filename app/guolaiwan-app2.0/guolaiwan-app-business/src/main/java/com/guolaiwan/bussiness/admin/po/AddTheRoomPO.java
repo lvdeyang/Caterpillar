@@ -7,7 +7,7 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 
 @Entity
 @Table(name = "t_sys_addtheroom")
-public class AddTheroomPO extends AbstractBasePO {
+public class AddTheRoomPO extends AbstractBasePO {
 
 	private static final long serialVersionUID = -1441300123135426426L;
 
@@ -23,11 +23,72 @@ public class AddTheroomPO extends AbstractBasePO {
 	
 	private String identity; //规格
 	
-	private String roomdetails;
+	private String roomdetails; //房间详情
 	
-	private String roomimg;
+	private String roomimg; //房间图片
+	
+	private int isreception;  //全天前台
+	
+	private int iswifi;	//wifi
+	
+	private int iskettle; //热水壶
+	
+	private int istoilet;//卫生间
+	
+	private int istv; //电视
+	
+	private int isfan; //空调
 	
 	
+	
+
+	public int getIsreception() {
+		return isreception;
+	}
+
+	public void setIsreception(int isreception) {
+		this.isreception = isreception;
+	}
+
+	public int getIswifi() {
+		return iswifi;
+	}
+
+	public void setIswifi(int iswifi) {
+		this.iswifi = iswifi;
+	}
+
+	public int getIskettle() {
+		return iskettle;
+	}
+
+	public void setIskettle(int iskettle) {
+		this.iskettle = iskettle;
+	}
+
+	public int getIstoilet() {
+		return istoilet;
+	}
+
+	public void setIstoilet(int istoilet) {
+		this.istoilet = istoilet;
+	}
+
+	public int getIstv() {
+		return istv;
+	}
+
+	public void setIstv(int istv) {
+		this.istv = istv;
+	}
+
+	public int getIsfan() {
+		return isfan;
+	}
+
+	public void setIsfan(int isfan) {
+		this.isfan = isfan;
+	}
 
 	public String getRoomimg() {
 		return roomimg;

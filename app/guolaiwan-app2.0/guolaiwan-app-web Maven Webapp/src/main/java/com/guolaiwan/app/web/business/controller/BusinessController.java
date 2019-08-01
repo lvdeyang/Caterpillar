@@ -31,6 +31,7 @@ import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.coupleback.vo.CoupleBackVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
+import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantChildrenDao;
@@ -44,6 +45,7 @@ import com.guolaiwan.bussiness.admin.dao.VPCommentDAO;
 import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
 import com.guolaiwan.bussiness.admin.dao.VideoPicDAO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
 import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
 import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
 import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
@@ -120,6 +122,8 @@ public class BusinessController extends WebBaseControll {
 	private UserInfoDAO conn_user;
 	@Autowired
 	private VideoPicDAO conn_videoPic;
+	@Autowired
+	private AddTheRoomDAO conn_roomdao;
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
 	public ModelAndView nsAndView(HttpServletRequest request, long merchantId, String comCode) throws Exception {
@@ -1043,4 +1047,30 @@ public class BusinessController extends WebBaseControll {
 		mv = new ModelAndView("mobile/business/process");
 		return mv; 
 	}
+	
+	//进入选房页面
+	@ResponseBody
+	@RequestMapping(value = "/gotolect")
+	public ModelAndView goToLect(HttpServletRequest request) throws Exception {
+		/*String merchantId=request.getParameter("merchantId");*/
+//		这里先写死 等有跳转方法的时候 在动态获取
+		
+		
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/lect");
+		mv.addObject("merchantId", "189");
+		return mv; 
+	}
+	
+	//获取所有的房间 按照层数 商家
+	@ResponseBody
+	@RequestMapping(value = "/getallroom")
+	public List<AddTheRoomPO> getAllRoom(HttpServletRequest request) throws Exception {
+		String tier=request.getParameter("tier");
+		String merchantId=request.getParameter("merchantId");
+		String identity=request.getParameter("identity");
+		List<AddTheRoomPO> rooms = conn_roomdao.findByMidTier(merchantId, tier,identity);
+		return rooms;
+	}
+	
 }

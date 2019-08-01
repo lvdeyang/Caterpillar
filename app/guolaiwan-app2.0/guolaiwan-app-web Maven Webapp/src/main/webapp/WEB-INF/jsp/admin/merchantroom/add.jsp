@@ -77,6 +77,20 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                    房间设施                                                                                
+                    </label>
+                    <div class="layui-input" >
+                    	<input type="checkbox" name="isreception" value="1" title="全天前台" checked/>
+						<input type="checkbox" name="iswifi" value="1" title="wifi" checked/>
+						<input type="checkbox" name="iskettle" value="1" title="热水壶" checked/>
+						<input type="checkbox" name="istoilet" value="1" title="卫生间" checked/>
+						<input type="checkbox" name="istv" value="1" title="电视" checked/>
+						<input type="checkbox" name="isfan" value="1" title="空调" checked/>
+                
+                    </div>
+                </div>
+                <div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 房间详情图 </label>
 					<div class="layui-input-inline">
 						<table>
