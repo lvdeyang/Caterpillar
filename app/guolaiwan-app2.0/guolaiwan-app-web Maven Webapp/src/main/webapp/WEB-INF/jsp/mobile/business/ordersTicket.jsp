@@ -355,7 +355,7 @@ color:#fff;
 			 return false;
 	     }
 	     if(sign == 2){ 
-	       $.toast("超出限购,限购为:"+msg.limitNum, "forbidden");
+	       $.toast("最低限购数量为:"+msg.limitNum, "forbidden");
 			 return false;
 	     }
 	     if(sign == 3){	
@@ -379,7 +379,7 @@ color:#fff;
 			 return false;
 		}
 		if(sign == 3){
-			$.toast("超出限购,限购为:"+msg.limitNum, "forbidden");
+			$.toast("最低限购数量为:"+msg.limitNum, "forbidden");
 			 return false;		
 		}
 		if(sign == 4){

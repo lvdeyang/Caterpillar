@@ -60,6 +60,7 @@ import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
+import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
@@ -150,14 +151,15 @@ public class ProductPackageController extends BaseController {
 		int pageSize =5 ; 
 		Map<String, Object> mapp = new HashMap<String, Object>();
 		mapp.put("productMerchantID", Long.parseLong(merhcantId));
-		//过滤 不符合日期的商品
+		//过滤 不符合日期及审核未通过的商品 
 		long nowDate = new Date().getTime();
 		List<ProductPO> productPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);
 		for(int i= 0 ;i<productPOs.size();i++){
 		   long producntBeginTime  = productPOs.get(i).getProductBeginDate().getTime();
 		   long producntEndTime  =  productPOs.get(i).getProductEnddate().getTime();
-		   System.out.println("producntEndTime:"+producntEndTime);
-		   if(nowDate<producntBeginTime || nowDate>producntEndTime){
+		   //获取审核状态
+		   ShopAuditStateType state  =  productPOs.get(i).getProductAuditstatus();
+		   if(nowDate<producntBeginTime || nowDate>producntEndTime || state == ShopAuditStateType.N  ){
 			   productPOs.remove(i);			   
 		   }			
 		}
@@ -579,10 +581,10 @@ public class ProductPackageController extends BaseController {
 				//判断是否限购
 				if(pro_po.getProductLimitType()==1){
 					if(ticketnumber> pro_po.getProductLimitNum()){
-						map.put("state", 2);//买的数量多于限购						
-						map.put("limitNum", pro_po.getProductLimitNum());
-					}else{
 						map.put("state", 3);//购买成功
+					}else{						
+						map.put("state", 2);//买的数量低于限购						
+						map.put("limitNum", pro_po.getProductLimitNum());
 					}					
 				}else{
 					map.put("state", 3);//购买成功					
@@ -614,11 +616,10 @@ public class ProductPackageController extends BaseController {
 	    			    ProductPO productPO = productDao.get(productId);
 	    			    if(productPO.getProductLimitType()==1){
 	    					if(ticketnumber> productPO.getProductLimitNum()){
-	    						map.put("state", 3);//买的数量多于限购						
-	    						map.put("limitNum", productPO.getProductLimitNum());
+	    						map.put("state", 4);//购买成功	    						
 	    					}else{
-	    						
-		    				map.put("state", 4);//购买成功	    						
+	    						map.put("state", 3);//买的数量少于限购						
+	    						map.put("limitNum", productPO.getProductLimitNum());		    					    						
 	    					}					
 	    				}else{	
 	    					map.put("state", 4);//购买成功
