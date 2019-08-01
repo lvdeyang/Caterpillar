@@ -221,7 +221,10 @@
 			parent.$("input[name='modularClassId']").val(ccode);
 			parent.$("input[name='merMName']").val("");
 			parent.$("input[name='merMId']").val("");
-			parent.$("#${mchref}").attr("href", "javascript:openMap('选择分类','" + path + "/admin/merModular/comSel?merchant=" + mcid + "','600','400')");
+			parent.$("input[name='tablelist']").val(mcid);
+			parent.$("input[name='mcname']").val(mcname);
+			parent.$("#${mchref}").attr("href", "javascript:openMap('选择分类','<%=path%>/admin/merModular/comSel?merchant=" + mcid + "','600','400')");
+			parent.list();
 			parent.layer.close();
 		}
       

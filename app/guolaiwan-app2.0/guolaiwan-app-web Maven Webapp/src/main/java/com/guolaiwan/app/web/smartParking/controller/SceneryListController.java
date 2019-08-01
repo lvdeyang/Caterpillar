@@ -140,9 +140,9 @@ public class SceneryListController  extends WebBaseControll{
 		String merchantId = pageObject.getString("merchantId"); //根据商户排序
 		List<AttractionsParkingPO> attractions =	Attra_ctions.getInformation(0, 100);
 		List<AttractionsVo> _merchants =null;
-		if (merchantId != null && merchantId != "") {
+		if (merchantId.length()>0  && merchantId != "") {
 		  List<MerchantPO>  MerchantPO = Merchant.getMerchantById(Long.parseLong(merchantId));
-		  if (MerchantPO != null && MerchantPO.size() >0 ) {
+		  if (MerchantPO != null  && MerchantPO.size() >0 ) {
 			  String  MerchantLongitude = null;
 			  String  MerchantLatitude = null;
 			  for (MerchantPO merchant : MerchantPO) {
@@ -154,7 +154,7 @@ public class SceneryListController  extends WebBaseControll{
 		   	for (AttractionsVo attractionsVo : _merchants) {
 		   		String[]   District =  attractionsVo.getParkingDistrict().split(",");
 		   		double  dist  =     getDistance(Double.parseDouble(District[1]),Double.parseDouble(District[0]),Double.parseDouble(MerchantLatitude),Double.parseDouble(MerchantLongitude));
-		   		attractionsVo.setParkingDistrict(dist+"");
+		   		attractionsVo.setDistance(dist+"");
 		   	/*   Collections.sort(_merchants);*/
 		   		//自定义排序1
 		   		
@@ -164,12 +164,12 @@ public class SceneryListController  extends WebBaseControll{
 				@Override
 				public int compare(AttractionsVo o1, AttractionsVo o2) {
 					// TODO Auto-generated method stub
-					return (int) (Double.parseDouble(o1.getParkingDistrict())-Double.parseDouble(o2.getParkingDistrict()));
+					return (int) (Double.parseDouble(o1.getDistance())-Double.parseDouble(o2.getDistance()));
 
 				}
 	   		});
 		   	for (AttractionsVo attractionsVo : _merchants) {
-				System.out.println(attractionsVo.getParkingName()+" - " +attractionsVo.getParkingDistrict());
+				System.out.println(attractionsVo.getParkingName()+" - " +attractionsVo.getDistance());
 			}
 		  }
 		}else {
