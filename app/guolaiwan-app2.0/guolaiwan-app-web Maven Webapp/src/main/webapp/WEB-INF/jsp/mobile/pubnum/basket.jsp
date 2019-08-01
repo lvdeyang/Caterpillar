@@ -891,22 +891,30 @@ html, body {
 	        var chks=$('.weui-check');
 	        for(var i=0;i<chks.length;i++){
 	          var chkids=chks[i].id.split('-');
-	          if($(chks[i]).prop('checked')==true){
-	             ids.push(chkids[1]);
+	          if($(chks[i]).prop('checked')==true){	        
+	             ids.push(chkids[1]);	            
 	             nums.push($('#s13-'+chkids[1]).val());
 	          }
 	        }
-
+	        
 	        $.get(window.BASEPATH +"pubnum/changeOrderAddress?orderStr="+ids.join('A')+"&addressId="+addressIds[1], null, function(data){
-					$.confirm("确定支付？", function() {
-					    payPublic(ids.join('A'),nums.join('A'));
-					  }, function() {
-					  
-					  });
-				
-			});
-	        
-	        
+					 $.modal({
+						  title: "付款方式",
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+						    	$.confirm("确定支付？", function() {
+								    payByWallet(ids.join('A'),nums.join('A'));
+								  }, function() {});
+						    } },
+						    { text: "微信支付", onClick: function(){						    
+						       $.confirm("确定支付？", function() {
+								    payPublic(ids.join('A'),nums.join('A'));
+								  }, function() {}); 						        			   					  								 								
+						    } },
+						    { text: "取消", className: "default", onClick: function(){ } },
+						  ]
+						})  															    										  							
+				});	
 		});
 	    
 	    
@@ -915,10 +923,22 @@ html, body {
 	       var ids=this.id.split('-');
 	       location.href=window.BASEPATH + 'pubnum/product/index?id='+ids[2]+'&activityproId='+ids[3];
 	    });
-	   
-	
-	
-	
+	    
+	    
+	    //钱包支付
+	    function payByWallet(orderId,numStr){
+			var url=window.BASEPATH +"pubnum/prev/paywalletbasket/"+orderId+"/"+numStr+"/";		
+			$.post(url,null,function(data){
+						data = parseAjaxResult(data);
+				if(data==1){										
+						$.confirm("交易成功");						
+		                location.href=window.BASEPATH +"pubnum/order/list";
+				}else{
+					$.alert('您的余额不足！');
+				}                   
+			})
+		}
+	   	
 	    var prepay_id;
 		var paySign;
 		var appId;
