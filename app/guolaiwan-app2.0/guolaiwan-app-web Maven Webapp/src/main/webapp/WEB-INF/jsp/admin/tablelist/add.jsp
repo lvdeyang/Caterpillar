@@ -73,10 +73,11 @@
                                                       是否是包间                                                                                
                     </label>
                     <div class="layui-input-block" id="radio">
-                           <input type="radio" name="radio" title="是" value="0">
-                           <input type="radio" name="radio" title="否" value="1">
+                           <input type="radio" name="radio" title="否" value="0">
+                           <input type="radio" name="radio" title="是" value="1">
                     </div>
                 </div>
+                <input  name="merchantId" value="${merchantId}" style="display: none;">
 				<div id="view"></div> 
 				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 200px;bottom: 0">
                     <button class="layui-btn" lay-filter="add" lay-submit>
@@ -104,6 +105,7 @@
         		//监听提交
         		form.on('submit(add)', function(data) {
         			console.log(data.field);
+        			alert(${merchantId});
 	        		layer.load();
         			$.ajax({
         				type : "post",
@@ -111,8 +113,10 @@
         				data : data.field,
         				success : function(msg) {
         				//关闭当前frame
-                            parent.window.location.reload();
-                            parent.layer.close(index);
+                           /*  parent.window.location.reload(); */
+                            var index = parent.layer.getFrameIndex(window.name);  
+                            parent.layer.close(index);//关闭当前页
+                            parent.list(); 
         				}
         			})
         

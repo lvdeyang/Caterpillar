@@ -30,6 +30,7 @@ public class TableDAO extends AbstractBaseDao<TablePO>{
 	public List<TablePO> findByMerchantId(long merchantId){
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("merchantId", Condition.eq, merchantId);
+		hql.orderBy("tableNo", false); // 用户评论的时间排序
 		List<TablePO> tables = findByHql(hql);
 		if(tables==null || tables.size()<=0) return null;
 		return tables;

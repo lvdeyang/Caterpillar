@@ -86,24 +86,81 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 x_admin_show(title,url,w,h); 
         }
 		function open_win(title, url, w, h) {
-			if($('#tablelist').val() !=null && $('#tablelist').val() != ""){
-				x_admin_show(title, url, w, h);
+			 if($('#tablelist').val() !=null && $('#tablelist').val() != ""){
+				x_admin_show(title, url +"?merchantId="+$('#tablelist').val(), w, h);
 			}else{
 			   alert("请选择商家");
-			}
+			} 
 		}
-		function list(){
-	         $.ajax({
+		var overall = null;
+		var tier = null;
+		function list(date,type){
+		$('#div1').empty();
+	         $.ajax({  //初始显示列表
 					type : "post",
 					url : "getlist.do",
-					data : {"merchantId":$("#tablelist").val()},
+					data : {"merchantId":$("#tablelist").val(),"TableDate":date,"type":type},
 					success : function(data) {
-					alert("11111");
-					}	
-				}) 
+					data = data.po;
+					overall = data;
+					var html = [];
+					if(data.length>0){
+						for (var i = 0; i < data.length; i++) {
+							if (tier == null || tier != data[i].tier) {
+								tier = data[i].tier;
+								html.push('<p style=" background-color:#f2f2f2; font-size:18px;font-weight:bold;height:80px;line-height: 80px;">' + data[i].tier + '</p> ');
+							}
+							html.push('<div class="xuanzhong" id="' + data[i].id + '" style="width:auto;height:auto;text-align: center;margin:20px;display: inline-block;overflow: hidden;z-index:111111;">');
+							if(data[i].room == 1){
+							if (data[i].tableState == 0) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/homes.png">');
+							if (data[i].tableState == 1) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/lu.png">');
+							if (data[i].tableState == 2) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/xuanzhong.png">');
+							}
+							else{
+							if (data[i].tableState == 0) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/huizuo.png">');
+							if (data[i].tableState == 1) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/luzuo.png">');
+							if (data[i].tableState == 2) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/hongzuo.png">');
+							}
+							html.push('<p style="font-size:18px;font-weight:bold;height:50px;line-height:50px;">' + data[i].tablename + '</p>');
+							html.push('</div>');
+						}
+					}else{
+					  html.push('<p style=" text-align:center; font-size:18px;font-weight:bold;height:50px;line-height:50px;">暂无房间</p>');
+					}
+					$('#div1').append(html.join(''));
+				}
+			}) 
 		}	
 			     
-			
+		$(function() {
+			$(document).on('click', '.xuanzhong', function() {
+			        $("#shenfen").val(""); //手机
+			        $("#personName").val(""); //用户名
+			        $(".mig").text(""); //房间名称
+			        $("#inpu").val(""); //id
+			      /*   $("#midday").val(""); */ //中午晚上
+			      /*   $("#time").val(""); */ //预订时间
+			        $("#price").val(""); //菜品
+				 for(var i=0; i<overall.length;i++) {
+				  if(this.id == overall[i].id){
+				   $(".ming").text(overall[i].tablename);
+				   $("#inpu").val(overall[i].id);
+				     if( /* overall[i].tableMenu != null && */ overall[i].userName!=null &&  overall[i].userPhone!=null  &&overall[i].menuTime!=null && overall[i].type!=null	){
+					     $("#time").val( overall[i].menuTime);
+					     if(overall[i].type == "LUNCH"){
+					       $("#midday").val(0);
+					     }else{
+					       $("#midday").val(1);
+					     }
+					     $("#personName").val(overall[i].userName);
+					     $("#shenfen").val(overall[i].userPhone);
+				    } 
+				  }
+			   } 
+			   $(".xinxi").fadeIn();
+			});
+			});	
+					
 			$(document).on('click', '.putaway', function() {
 			  $.ajax({
 					type : "post",
@@ -135,7 +192,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}) 
 			});
 			
-		/* }); */
+			
+			$(document).on('click', '#btns', function() { //根据对应时间搜索
+			    if($("#test1").val() == null || $("#test1").val() == ""){
+			       alert("请选择时间");
+        			return false;
+			    }
+			    if($("#times").val() == null){
+			      alert("请选择中午晚上");
+        			return false;
+			    }
+			    if($("#tablelist").val() == "" || $("#tablelist").val() == null){
+			       alert("请选择商家");
+        			return false;
+			    }
+			    list($("#test1").val(),$("#times").val());	
+			});
+			
+			
+			
+			
+			
+			$(document).on('click', '.right', function() { //关闭窗口
+				$(".xinxi").fadeOut();
+			});
+			
+			layui.use('laydate', function(){
+			  var laydate = layui.laydate;
+			  
+			  //常规用法
+			  laydate.render({
+			    elem: '#test1'
+			  });
+  			});
+  				layui.use('laydate', function(){
+			  var laydate = layui.laydate;
+			  
+			  //常规用法
+			  laydate.render({
+			    elem: '#time'
+			  });
+			  
+			    		
+			 	});
 	</script>
     <body>
         <div class="x-nav">
@@ -148,8 +247,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
         <div class="x-body">
             <xblock>  <a href="javascript:openMap('选择商家','<%=request.getContextPath() %>/admin/merchant/sellist?mcname=MerchantName&mcuuid=MerchantID&mchref=merclass','600','500')" class="layui-btn " >选择商家</a> 
-             <button class="layui-btn" onclick="open_win('添加房间','addv','{{ d.uuid }}','600','500')"><i class="layui-icon">&#xe608;</i>添加房间</button><span class="x-right" s
-            ght:40px"></xblock>
+             <button class="layui-btn" onclick="open_win('添加房间','addv','600','500')"><i class="layui-icon">&#xe608;</i>添加房间</button><span class="x-right" s
+            ght:40px">
+             <input type="text" style="float:left;width:auto;margin-left:-1500px;" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
+             <select id="times" style="width:auto;height:38px;margin-left:-1300px;">
+              
+              <option>午餐</option>
+              <option>晚餐</option>
+             </select>
+             <button id="btns" style="width:auto;height:38px;padding:0 10px;border:none;outline: none; background-color: #009688;color:#fff;">搜索</button>
+            </xblock>
          	<table id="activityList" lay-filter="activityList" ></table>
         </div>
        <span style="font-size: 18px;margin-left:5%;">商家名称:</span>
@@ -170,7 +277,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        <p style='font-size:18px;font-weight:bold;height:50px;line-height:50px;'>102</p>
      </div> -->
      
- 
+    <div id ="div1">
+    </div>
 
 	<!-- 信息登记 -->
 	<div class="xinxi" style="width:50%;height:430px;border:5px solid #393D49;padding:30px 2%;position: fixed;top:50%;left:50%;margin:-180px 0 0 -25%;z-index:11;background:#fff;display: none;overflow: hidden;overflow-y: auto">
@@ -179,23 +287,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<input style="display:none;" id="inpu" value="">	
 		</p>
 		<p>
-			入住姓名：<input style="height:30px;width:600px;"  id = "personName" >
+			用户姓名：<input style="height:30px;width:600px;"  id = "personName" >
 		</p>
 		<p style="">
-			身份证号：<input id="shenfen" style="height:30px;width:600px;" value="">
+			手机号：<input id="shenfen" style="height:30px;width:600px;" value="">
 		</p>
 		<p style="">
-			房间价格：<input style="height:30px;width:600px;" id = "price" >
+			菜品：<input style="height:30px;width:600px;" id = "price" >
 		</p>
-		<p>
-			联系电话：<input style="height:30px;width:600px;"id = "phone"  >
+		<p style="">
+			预订时间：<input type="text" class="layui-input"  style="height:30px;width:600px;display: inline-block;" id = "time" placeholder="yyyy-MM-dd">
+		</p>
+		<p style="">
+			午晚：<!-- <input style="height:30px;width:600px;" id = "midday" > -->
+			  <select id="midday" style="height:30px;width:600px;">
+              <option value="0">午餐</option>
+              <option value="1">晚餐</option>
+              
+             </select>
+		</p>
+		<!-- <p>
+			订桌时间：<input style="height:30px;width:600px;"id = "phone"  >
 		</p>
 		<p>
 			起始时间：<input style="height:30px;width:300px;"id = "startingTime" >
 		</p>
 		<p style="">
 			结束时间：<input style="height:30px;width:300px;"id = "stopTime" >
-		</p>
+		</p> -->
 		<p style="text-align: center;margin:10px auto;">
 			<span class="left" style=""  id="save">入住</span><span class="putaway">上架</span><span class="below">下架</span><span class="quit">退房</span><span class="right">关闭窗口</span>
 		</p> 

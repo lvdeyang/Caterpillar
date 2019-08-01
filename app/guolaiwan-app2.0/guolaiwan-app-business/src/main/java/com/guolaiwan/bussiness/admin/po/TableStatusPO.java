@@ -24,7 +24,16 @@ public class TableStatusPO extends AbstractBasePO {
 	private BookType type;  
 	private String  userId; //用户id
 	private TableStatus tableStatus; //没用
+	private String tableMenu; //菜品
+  	
 	
+	
+	public String getTableMenu() {
+		return tableMenu;
+	}
+	public void setTableMenu(String tableMenu) {
+		this.tableMenu = tableMenu;
+	}
 	public long getTableId() {
 		return tableId;
 	}
