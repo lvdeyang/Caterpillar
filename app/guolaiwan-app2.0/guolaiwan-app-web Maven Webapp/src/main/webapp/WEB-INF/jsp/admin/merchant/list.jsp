@@ -110,6 +110,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        <a title="" href="javascript:;" onclick="merchant_childent('商家列表','skip.do','{{d.id}}','','510')" 
                class='layui-btn layui-btn-xs'>  添加 </a>
  {{#  } }}  
+
+ {{#  }} 
+ 		
+       <a title="" href="javascript:;" onclick="merchant_sort('排序内容','sort.do','{{d.id}}','','510')" 
+               class='layui-btn layui-btn-xs'>  排序  </a>      
+ {{#  }}
 </script>
 </script>
 	</div>
@@ -186,7 +192,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 x_admin_show(title,url,w,h);
              }
 	         
-	         
+	         //商户排序
+	         function  merchant_sort(title,url,id,w,h){
+                     x_admin_show(title,url+"?id="+id,w,h);
+               }
 			
             //批量删除提交
             function delAll () {

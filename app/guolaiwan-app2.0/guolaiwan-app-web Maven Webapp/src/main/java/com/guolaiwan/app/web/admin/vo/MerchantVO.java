@@ -103,7 +103,20 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
     //商户营业
     private String businessDate;
     
+   //排序索引
+  	private long productSortIndex;
     
+    
+	public long getProductSortIndex() {
+		return productSortIndex;
+	}
+
+
+	public void setProductSortIndex(long productSortIndex) {
+		this.productSortIndex = productSortIndex;
+	}
+
+
 	public String getFeature() {
 		return feature;
 	}

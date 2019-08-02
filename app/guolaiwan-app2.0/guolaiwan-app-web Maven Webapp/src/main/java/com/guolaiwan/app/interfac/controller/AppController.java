@@ -742,7 +742,24 @@ public class AppController extends WebBaseControll {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 
 		// 获取商家列表
-		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSize);
+		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSize);		
+		//判断排序索引是否存在
+		boolean updateState = false; 
+		for(MerchantPO po : merchants){
+		    if(po.getProductSortIndex()==0){
+		    	po.setProductSortIndex(po.getId());	
+		    	conn_merchant.update(po);
+		    	updateState = true;
+		    } 				
+		}
+		//重新排序查询
+		if(updateState){
+			List<MerchantPO> merchantes =  conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSize);
+			List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchantes, MerchantVO.class);
+		}else{			
+			List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants, MerchantVO.class);
+		}
+		
 		List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants, MerchantVO.class);
 		int count = conn_merchant.countMerchantByModularCode(modularCode, mapStr);
 
