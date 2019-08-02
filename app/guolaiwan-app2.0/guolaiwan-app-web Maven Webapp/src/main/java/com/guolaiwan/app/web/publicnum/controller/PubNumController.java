@@ -2208,6 +2208,119 @@ public class PubNumController extends WebBaseControll {
 		}
 		return success(1);
 	}
+	
+	//购物车钱包支付
+	@ResponseBody
+	@RequestMapping(value = "/prev/paywalletbasket/{id}/{nums}")
+	public Object prevPayWalletBasket(@PathVariable String id, @PathVariable String nums, HttpServletRequest request)
+			throws Exception {
+		String orderNo = id + "";
+		String newOrderNo = "";
+		int payMoney = 0;
+		if (id.contains("A")) {
+			BundleOrder order = new BundleOrder();
+			order.setOrderStr(id);
+			conn_bundleOrder.save(order);
+			orderNo = "bundle-" + order.getId();
+			String[] orderNos = id.split("A");
+			String[] numsStrs = nums.split("A");
+
+			// 这里要换订单，十分麻烦
+			for (int i = 0; i < orderNos.length; i++) {
+				OrderInfoPO orderInfoPO = conn_order.get(Long.parseLong(orderNos[i]));
+
+				if (!newOrderNo.equals("")) {
+					newOrderNo += "A";
+				}
+				int numReal = Integer.parseInt(numsStrs[i]);
+				if (numReal != orderInfoPO.getProductNum()) {
+					// 更换订单
+					OrderInfoPO newOrder = (OrderInfoPO) orderInfoPO.clone();
+					newOrder.setId(null);
+					newOrder.setPayMoney((newOrder.getPayMoney() / newOrder.getProductNum()) * numReal);
+					newOrder.setPayMode(PayType.WEICHAT);
+					newOrder.setProductNum(numReal);
+
+					conn_order.save(newOrder);
+					conn_order.delete(orderInfoPO);
+					payMoney += newOrder.getPayMoney();
+					newOrderNo += newOrder.getId() + "";
+				} else {
+					payMoney += orderInfoPO.getPayMoney();
+					newOrderNo += orderInfoPO.getId() + "";
+				}
+
+			}
+		} else {
+			OrderInfoPO orderInfoPO = conn_order.get(Long.parseLong(id));
+			int numReal = Integer.parseInt(nums);
+			if (numReal != orderInfoPO.getProductNum()) {
+				OrderInfoPO newOrder = (OrderInfoPO) orderInfoPO.clone();
+				newOrder.setId(null);
+				newOrder.setPayMoney((newOrder.getPayMoney() / newOrder.getProductNum()) * numReal);
+				newOrder.setPayMode(PayType.WEICHAT);
+				newOrder.setProductNum(numReal);
+				conn_order.save(newOrder);
+				conn_order.delete(orderInfoPO);
+				payMoney += newOrder.getPayMoney();
+				newOrderNo = newOrder.getId() + "";
+			} else {
+				payMoney += orderInfoPO.getPayMoney();
+				newOrderNo = orderInfoPO.getId() + "";
+			}
+
+		}
+
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		UserInfoPO user = conn_user.get(userId);
+		long userMoney = user.getWallet();
+		if (userMoney >= payMoney) {
+			user.setWallet(userMoney - payMoney);
+			if(newOrderNo.contains("A")){
+				String[] newOrderNos = newOrderNo.split("A");
+				for(String str : newOrderNos){
+					OrderInfoPO orderPo = conn_order.get(Long.parseLong(str));	
+					orderPo.setOrderState(OrderStateType.PAYSUCCESS);
+					// 生成验单码,和二维码图片
+					String ydNO = ydNoCode(str);
+					orderPo.setYdNO(ydNO);
+					orderPo.setIswallet(true);
+					conn_order.saveOrUpdate(orderPo);
+					conn_user.saveOrUpdate(user);
+					InvestWalletPO o =new InvestWalletPO();
+					o.setMoney(orderPo.getPayMoney());
+					o.setUserid(user.getId());
+					o.setUsername(user.getUserNickname());
+					o.setProductname(orderPo.getProductName());
+					conn_investwallet.save(o);
+					// 推送购买商品成功信息给用户 商家 李姐
+					sendPayMessage(orderPo);
+				}				
+			}else{
+			 OrderInfoPO orderPo = conn_order.get(Long.parseLong(newOrderNo));
+			 orderPo.setOrderState(OrderStateType.PAYSUCCESS);
+			// 生成验单码,和二维码图片
+				String ydNO = ydNoCode(newOrderNo);
+				orderPo.setYdNO(ydNO);
+				orderPo.setIswallet(true);
+				conn_order.saveOrUpdate(orderPo);
+				conn_user.saveOrUpdate(user);
+				InvestWalletPO o =new InvestWalletPO();
+				o.setMoney(orderPo.getPayMoney());
+				o.setUserid(user.getId());
+				o.setUsername(user.getUserNickname());
+				o.setProductname(orderPo.getProductName());
+				conn_investwallet.save(o);
+				// 推送购买商品成功信息给用户 商家 李姐
+				sendPayMessage(orderPo);
+			}			
+		}else {
+			// 余额不足 不允许购买
+			return success(2);
+		}
+		return success(1);	
+	}	
+	
 
 	@Autowired
 	MerchantUserDao conn_merchantUser;

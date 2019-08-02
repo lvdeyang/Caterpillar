@@ -24,16 +24,22 @@ public class TablePO extends AbstractBasePO {
 	private int room; // 是否是包间
 	private String Tablename; // 名称
 	private long bookprice; //定桌钱数
-	private String tableMenu; //菜品
+/*	private String tableMenu; //菜品
 	private String userName; //用户名称
 	private String userPhone; //手机号
 	private String menuTime; //订桌时间
-	private String type; //午晚
+	private String type; //午晚    */
+	private String  tableState;
 	
 	
 	
 	
-	
+	public String getTableState() {
+		return tableState;
+	}
+	public void setTableState(String tableState) {
+		this.tableState = tableState;
+	}
 	public String getTier() {
 		return tier;
 	}
@@ -45,36 +51,6 @@ public class TablePO extends AbstractBasePO {
 	}
 	public void setRoom(int room) {
 		this.room = room;
-	}
-	public String getMenuTime() {
-		return menuTime;
-	}
-	public void setMenuTime(String menuTime) {
-		this.menuTime = menuTime;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public String getUserPhone() {
-		return userPhone;
-	}
-	public void setUserPhone(String userPhone) {
-		this.userPhone = userPhone;
-	}
-	public String getTableMenu() {
-		return tableMenu;
-	}
-	public void setTableMenu(String tableMenu) {
-		this.tableMenu = tableMenu;
 	}
 	public long getMerchantId() {
 		return merchantId;
