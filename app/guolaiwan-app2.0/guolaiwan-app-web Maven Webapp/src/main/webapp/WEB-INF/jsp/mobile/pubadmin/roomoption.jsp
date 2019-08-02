@@ -153,20 +153,24 @@ margin:0 1%;
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 <script type="text/javascript">
-  var rtier="1",ridentity="";        
+  var rtier="1",ridentity="";
   $(function() {
   	roomlist(rtier,ridentity);
+  	
+	  	$(document).on('click', '.close', function() {
+				$.closePopup();
+		})
 	});
 	
 	
-	
+	//房间列表
 	function roomlist(tier,identity){
 		$('.main').children().remove();
 	 var url=window.BASEPATH + 'business/getallroom'; 
 		$.post(url,{"merchantId":${merchantId},"tier":tier,"identity":identity},function(data){
 				var html= [];
 				for(var i =0;i<data.length;i++){
-					html.push('<div onclick="gotoroomdetails(this.id)" id="'+data[i].id+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');
+					html.push('<div onclick="openoption(this.id)" id="'+data[i].id+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');
 					if(data[i].state=="1"){
 						html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/weixuan.png">');
 					}else{
@@ -181,7 +185,6 @@ margin:0 1%;
 				ridentity=identity;
 		})
 	}
-	
 	//更改层数
 	function changetier(){
 		var tier=$("#tier").val();
@@ -201,9 +204,42 @@ margin:0 1%;
 		roomlist(tier,identity);
 	}
 	
-	function gotoroomdetails(id){
-	    location.href=window.BASEPATH + 'business/gotoroomdetails?roomId='+id;
+	//下弹框
+	function openoption(id){
+	
+		$.actions({
+		  actions: [{
+		    text: "房客信息",
+		    onClick: function() {
+		      $("#option").popup();
+		    }
+		  },{
+		    text: "上架",
+		    onClick: function() {
+		      change("1",id);
+		    }
+		  },{
+		    text: "下架",
+		    onClick: function() {
+		      change("0",id);
+		    }
+		  },{
+		    text: "退房",
+		    onClick: function() {
+		      change("1",id);
+		    }
+		  }]
+		});
+	
 	}
+	//更改状态 并重新刷新列表
+	function change(type,id){
+		var url=window.BASEPATH + 'admin/room/amend.do'; 
+		$.post(url,{"state":type,"id":id},function(){
+				roomlist(rtier,ridentity);
+		})
+	}
+	
 </script>
 
 
@@ -249,6 +285,25 @@ margin:0 1%;
 	       
 	        
 	      </div>
+	      
+	      
+	      <div id="option" class="weui-popup__container">
+				<div class="weui-popup__overlay"></div>
+				<div class="weui-popup__modal">
+				
+				<p style="font-size: 20px;color: green;text-align: center;">这里动态获取房客信息</p>
+				<p class="close">close</p>
+				
+				
+				
+				
+				</div>
+		  </div>
+	      
+	      
+	      
+	      
+	      
 </body>
 
 
