@@ -94,9 +94,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				    	html.push('<p style=" background-color:#f2f2f2; font-size:18px;font-weight:bold;height:60px;line-height: 60px;">'+floor+'</p> ');
 						}
 					html.push('<div class="xuanzhong" id="'+msg[i].id+'" style="width:auto;height:auto;text-align: center;margin:20px;display: inline-block;overflow: hidden;z-index:111111;">');
-					if(msg[i].state == 0)html.push('<img  style="height:45px;width:50px;" src="../../lib/images/weixuan.png">');
-					if(msg[i].state == 1)html.push('<img  style="height:50px·;width:50px;" src="../../lib/images/lu.png">');
-					if(msg[i].state == 2)html.push('<img  style="height:50px;width:50px;" src="../../lib/images/xuanzhong.png">');
+					if(msg[i].state == 0)html.push('<img  style="height:45px;width:50px;" src="../../lib/images/xuanzhong.png">');
+					if(msg[i].state == 1)html.push('<img  style="height:50px·;width:50px;" src="../../lib/images/weixuan.png">');
 					html.push('<p style="font-size:18px;font-weight:bold;height:50px;line-height:50px;">'+msg[i].name+'</p>');
 					html.push('</div>');
 				 }

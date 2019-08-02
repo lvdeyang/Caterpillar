@@ -44,12 +44,19 @@
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                                                     层                                     
-                    </label>
-                    <div class="layui-input-block">
-                        <input type="text" id="L_title" name="title" required lay-verify="required"
+                    </label> 
+                    <select id="title" style="width: 70%;" name="title" size="1" class="sel" required lay-verify="required"
                         autocomplete="off" class="layui-input">
-                    </div>
-                </div>
+						<option value="一层">一层</option>
+						<option value="二层">二层</option>
+						<option value="三层">三层</option>
+						<option value="四层">四层</option>
+						<option value="五层">五层</option>
+						<option value="六层">六层</option>
+						<option value="七层">七层</option>
+						<option value="八层">八层</option>
+				   </select>
+				</div>
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                          人数                                                                                  
@@ -61,7 +68,7 @@
                 </div>
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
-                                         订金                                                                                 
+                                         订金/元                                                                                
                     </label>
                     <div class="layui-input-block">
                         <input type="text" id="bookprice" name="bookprice" required lay-verify="required"
@@ -104,8 +111,15 @@
         
         		//监听提交
         		form.on('submit(add)', function(data) {
-        			console.log(data.field);
-        			alert(${merchantId});
+        			console.log(data.field );
+        			if(data.field.radio == null){
+        			alert("请选择是否是包间");
+        			return false;
+        			}
+        			if(data.field.title == null){
+        			alert("请选择层数");
+        			return false;
+        			}
 	        		layer.load();
         			$.ajax({
         				type : "post",

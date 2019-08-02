@@ -22,7 +22,7 @@ public class TableVo  extends AbstractBaseVO<TableVo, TablePO>{
 	private String menuTime; //订桌时间
 	private String type; //午晚
 	private String  tableState; //桌子状态
-	
+	private long   tableStatusId;
 
 	@Override
 	public TableVo set(TablePO entity) throws Exception {
@@ -41,6 +41,16 @@ public class TableVo  extends AbstractBaseVO<TableVo, TablePO>{
 		.setTableState(entity.getTableState())
 		.setTier(entity.getTier());
 		return this;
+	}
+
+
+	public long getTableStatusId() {
+		return tableStatusId;
+	}
+
+
+	public void setTableStatusId(long tableStatusId) {
+		this.tableStatusId = tableStatusId;
 	}
 
 

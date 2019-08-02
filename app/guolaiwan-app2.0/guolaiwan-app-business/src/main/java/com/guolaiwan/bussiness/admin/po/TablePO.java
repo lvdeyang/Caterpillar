@@ -29,7 +29,7 @@ public class TablePO extends AbstractBasePO {
 	private String userPhone; //手机号
 	private String menuTime; //订桌时间
 	private String type; //午晚    */
-	private String  tableState;
+	private String  tableState;  // 0无法预订  1可预订  2已预订
 	
 	
 	

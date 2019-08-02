@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
 
 @Controller
 @RequestMapping("/admin/room")
@@ -23,6 +25,8 @@ public class RoomController {
 	@Autowired
 	private AddTheRoomDAO addtheroomDAO;
 	
+	@Autowired
+	private MerchantDAO merchantDAO;
 	/**
 	 * 跳转房间管理
 	 * @param request
@@ -61,7 +65,7 @@ public class RoomController {
 		return mv;
 	}	
 	
-	
+	//添加新房间
 	@ResponseBody
 	@RequestMapping(value = "/add.do",method = RequestMethod.POST)
 	public String historysettle(HttpServletRequest request) throws Exception{ //添加房间
@@ -98,6 +102,7 @@ public class RoomController {
 		return "success";
 	}
 	
+	//修改状态
 	@ResponseBody
 	@RequestMapping(value = "/amend.do",method = RequestMethod.POST) // 修改上架 退房
 	public Map<String, Object> SetAmend(HttpServletRequest request) throws Exception{//添加入驻信息
@@ -111,6 +116,7 @@ public class RoomController {
 		return map;
 	}
 	
+	//删除房间
 	@ResponseBody
 	@RequestMapping(value = "/delete",method = RequestMethod.POST) // 修改上架 退房
 	public Map<String, Object> delete(HttpServletRequest request) throws Exception{//添加入驻信息
@@ -121,6 +127,7 @@ public class RoomController {
 		return map;
 	}
 	
+	//修改房间的各种信息
 	@ResponseBody
 	@RequestMapping(value = "/updateroom",method = RequestMethod.POST)
 	public String updateroom(HttpServletRequest request) throws Exception{ //添加房间
@@ -155,5 +162,25 @@ public class RoomController {
 		
 		return "success";
 	}
+	
+	//判断是不是住宿 商户中心有没有房间管理
+	@ResponseBody
+	@RequestMapping(value = "/isroomoption",method = RequestMethod.POST)
+	public String isRoomOption(HttpServletRequest request) throws Exception{ //添加房间
+		String merchantId=request.getParameter("merchantId");
+		MerchantPO merchant = merchantDAO.get(Long.parseLong(merchantId));
+		if(merchant.getModularCode().equals("0002")){
+			return "success";
+		}else{
+			return "error";
+		}
+	}
 
+	//进入房间管理的页面
+	@RequestMapping(value="/gotoroomoption",method= RequestMethod.GET)
+	public ModelAndView goToRoomOption(String merchantId){
+		ModelAndView mv = new ModelAndView("mobile/pubadmin/roomoption");
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
 }

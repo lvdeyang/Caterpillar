@@ -1011,6 +1011,8 @@ html, body {
 
 
 	$(function() {
+	
+		pushroomoption();
 
 	  window.BASEPATH = '<%=basePath%>';
 
@@ -1469,8 +1471,28 @@ html, body {
 		 location.href=window.BASEPATH + 'face/recognition?merchantid='+myName;
 
 	});
+	
+	$(document).on('click','#roomoption',function(){	  
+		 location.href=window.BASEPATH + 'admin/room/gotoroomoption?merchantId=${merchantId}';
+	});
 
-		
+	//判断有没有房间管理
+	function pushroomoption(){
+		var url=window.BASEPATH + 'admin/room/isroomoption';
+		$.post(url,{"merchantId":${merchantId}},function(msg){
+			if(msg=="success"){
+				var html=[];
+				 html.push('<a id="roomoption" class="weui-cell weui-cell_access" href="javascript:void(0); >');
+				 html.push('   <div class="weui-cell__bd">');
+				 html.push('     <p>房间管理</p>');
+				 html.push('   </div>');
+				 html.push('   <div class="weui-cell__ft">');
+				 html.push('   </div>');
+				 html.push(' </a>');
+				 $('#operation').append(html.join(''));
+			}
+		})
+	}
 
 	
 
@@ -1542,7 +1564,7 @@ html, body {
 
 			<div class="weui-cells__title">用户操作</div>
 
-			<div class="weui-cells">
+			<div class="weui-cells" id="operation">
 
 			  <a id="scan" class="weui-cell weui-cell_access" href="javascript:void(0);">
 

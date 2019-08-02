@@ -20,6 +20,7 @@ public class TableStatusDAO extends AbstractBaseDao<TableStatusPO>{
 		hql.andBy("tableId", Condition.eq, tableId);
 		hql.andBy("date", Condition.eq, date);
 		hql.andBy("type", Condition.eq, type);
+		hql.andBy("tableState", Condition.eq, "PAYSUCCESS");
 		List<TableStatusPO> tableStatuList = findByHql(hql);
 		if(tableStatuList==null || tableStatuList.size()<=0) return null;
 		TableStatusPO tableStatusPO = tableStatuList.get(0);
