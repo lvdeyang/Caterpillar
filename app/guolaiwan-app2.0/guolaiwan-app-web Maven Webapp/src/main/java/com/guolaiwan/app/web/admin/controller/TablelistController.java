@@ -86,17 +86,16 @@ public class TablelistController extends BaseController {
         String bookprice = request.getParameter("bookprice");//订金
         double money =  Double.parseDouble(bookprice)*100;
         String radio = request.getParameter("radio");//包间
-        System.out.println("  !!!!!!!!!!!!!!!!!!!!!!!!!!!!" +radio);
         String merchantId = request.getParameter("merchantId");//包间\
         TablePO add = new TablePO();
-        add.setTablename(tablename);
-        add.setTableNo(tableNo);
-        add.setTier(tier);
-        add.setTableState(0+"");
-        add.setMerchantId(Long.parseLong(merchantId));
-        add.setSize(Long.parseLong(type));
-        add.setBookprice((long)money);
-        add.setRoom(Integer.parseInt(radio));
+	        add.setTablename(tablename);
+	        add.setTableNo(tableNo);
+	        add.setTier(tier);
+	        add.setTableState(1+"");
+	        add.setMerchantId(Long.parseLong(merchantId));
+	        add.setSize(Long.parseLong(type));
+	        add.setBookprice((long)money);
+	        add.setRoom(Integer.parseInt(radio));
         Table.saveOrUpdate(add);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", "0");
@@ -121,17 +120,9 @@ public class TablelistController extends BaseController {
 		List<TableVo>   _merchants = TableVo.getConverter(TableVo.class).convert(addpo,
 				TableVo.class);
 		for (TableVo tablePO : _merchants) {
+			 TableStatusPO TableStatus= null;
 			if (TableDate != null&&type !=null && TableDate !="" ) {//传入已选时间
-				TableStatusPO  TableStatus =	Table_Status.findBytidt(tablePO.getId(),TableDate,BookType.fromName(type));//查询中间表
-				if (TableStatus != null  ) {
-					System.out.println("  --------------------");
-					tablePO.setTableState("2");//已预订
-					tablePO.setTableMenu(TableStatus.getTableMenu());
-					tablePO.setUserName("刘 "); ////////////////////////////////////////////////////////////////用户名称
-					tablePO.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
-					tablePO.setMenuTime(TableStatus.getDate()); //时间
-					tablePO.setType(TableStatus.getType().toString()); //中午晚上
-				}
+				  TableStatus =	Table_Status.findBytidt(tablePO.getId(),TableDate,BookType.fromName(type));//查询中间表
 			}else {
 				 SimpleDateFormat def = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
 				 Date date = new Date();
@@ -139,33 +130,121 @@ public class TablelistController extends BaseController {
 			     String str = df.format(date);
 			     int a = Integer.parseInt(str);
 				 if (a > 06 && a <= 13) {  //判断6 点 之前是中午 13点
-					 System.out.println("中午");
 					 type =  "LUNCH";
 				 }else if (a > 13 && a <= 19) { // 13 -19 我晚上
-			         System.out.println("下午");
 			         type =   "DINNER";
 			     }else {   // 都不满足  时间加一天查询第二天中午的桌
 			    	 Calendar c = Calendar.getInstance();
 			    	 c.add(Calendar.DAY_OF_MONTH, 1);
 			    	 type =  "LUNCH";
-			    	 System.out.println("增加一天后日期:"+def.format(c.getTime()));
 				 }
-				 System.out.println(def.format(new Date()).toString()+"  -----------------------------------------------");
-				 TableStatusPO  TableStatus =	Table_Status.findBytidt(tablePO.getId(),def.format(new Date()).toString(),BookType.fromString(type));//查询中间表
-				 if (TableStatus != null  ) {
-						tablePO.setTableState("2");//已预订
-						tablePO.setTableMenu(TableStatus.getTableMenu());
-						tablePO.setMenuTime(TableStatus.getDate()); //时间
-						tablePO.setType(TableStatus.getType().toString()); //中午晚上
-						tablePO.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
-						tablePO.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
-			    }
+				 TableStatus =	Table_Status.findBytidt(tablePO.getId(),def.format(new Date()).toString(),BookType.fromString(type));//查询中间表
 			}
+			if ( TableStatus != null  ) {
+				tablePO.setTableState("2");//已预订
+				tablePO.setTableMenu(TableStatus.getTableMenu());
+				tablePO.setMenuTime(TableStatus.getDate()); //时间
+				tablePO.setType(TableStatus.getType().toString()); //中午晚上
+				tablePO.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
+				tablePO.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
+				tablePO.setTableStatusId(TableStatus.getId());
+	       }
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("po", _merchants);
 		return map;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/amend.do",method = RequestMethod.POST) // 修改上架 退房
+	public Map<String, Object> SetAmend(HttpServletRequest request) throws Exception{//添加入驻信息
+		String state = request.getParameter("state"); //状态
+		String tableStatusid = request.getParameter("tableStatusid");
+		String Tableid = request.getParameter("tableid");
+		if("0".equals(state)){
+			if (tableStatusid != "" && Tableid != null   ) {//有人预订房间 修改中间表为过期
+				List<TableStatusPO>  TableStatus =	Table_Status.findByField("id",Long.parseLong(tableStatusid));//查询中间表
+				for (TableStatusPO tableStatusPO : TableStatus) {
+					tableStatusPO.setTableState("PAST");
+					Table_Status.saveOrUpdate(tableStatusPO);
+				}
+			}
+		}
+		if (  Tableid != null && Tableid != "") {//无人预直接修改房间状态
+			List<TablePO> addpo =  Table.findByField("id",Long.parseLong(Tableid));
+			for (TablePO tablePO : addpo) {
+				tablePO.setTableState(state);
+				Table.saveOrUpdate(tablePO);
+			}
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", "0");
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/addData.do",method = RequestMethod.POST) //预订添加信息
+	public Map<String, Object> addData(HttpServletRequest request) throws Exception{//添加入驻信息
+		String userPhone = request.getParameter("userPhone"); //手机号
+		String merchantId = request.getParameter("merchantId"); //手机号
+		String userName = request.getParameter("userName"); //用户名
+		String tableId = request.getParameter("tableId"); //桌子id
+		String tableMenu = request.getParameter("tableMenu"); //菜品
+		String bookprice = request.getParameter("bookprice");//订金
+        double money =  Double.parseDouble(bookprice)*100;
+		String date = request.getParameter("date"); //预订时间
+		String type = request.getParameter("type"); //午晚
+		System.err.println(userPhone+" , "+ userName +" , "+  tableId +" , "+ tableMenu +" , "+ bookprice+" , "+ date+" , "+ type);
+		TableStatusPO TableStatusPO = new TableStatusPO();
+			TableStatusPO.setUserPhone(userPhone);
+			TableStatusPO.setUserName(userName);
+			TableStatusPO.setTableMenu(tableMenu);
+			TableStatusPO.setTableState("PAYSUCCESS");
+			TableStatusPO.setDate(date);
+			TableStatusPO.setMerchantId(Long.parseLong(merchantId));
+			if("0".equals(type)){
+			   TableStatusPO.setType(BookType.fromString("LUNCH"));
+			}else {
+			   TableStatusPO.setType(BookType.fromString("DINNER"));
+			}
+			TableStatusPO.setTableId(Long.parseLong(tableId));
+		Table_Status.save(TableStatusPO);
+	    if (tableId != null && tableId != "") {
+	    	List<TablePO> addpo =  Table.findByField("id",Long.parseLong(tableId));
+			for (TablePO tablePO : addpo) {
+				tablePO.setBookprice((long)money);
+				Table.saveOrUpdate(tablePO);
+			}
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", "0");
+		return map;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/delete.do",method = RequestMethod.POST) //删除房间按钮
+	public Map<String, Object> delete(HttpServletRequest request) throws Exception{
+		String tableId = request.getParameter("tableid"); //桌子id
+		if( tableId != null){
+			List<TablePO> addpo =  Table.findByField("id",Long.parseLong(tableId));
+			for (TablePO tablePO : addpo) {
+				Table.delete(tablePO);
+			}
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", "0");
+		return map;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

@@ -638,7 +638,7 @@ input[type="radio"] {
 			    size: new AMap.Size(20, 20), 
 				icon : new AMap.Icon({            
 	            image: "lib/images/huang.png",
-	            imageSize: new AMap.Size(16,16)
+	            imageSize: new AMap.Size(20,20)
 	            }),   
 				position : [ Longitude , Latitude ]
 		      });
@@ -656,7 +656,7 @@ input[type="radio"] {
 			  size: new AMap.Size(20, 20), 
 			  icon : new AMap.Icon({            
 	          image: "lib/images/hong.png",
-	          imageSize: new AMap.Size(16,16)
+	          imageSize: new AMap.Size(20,20)
 	          }),   
 			  position : [ Longitude , Latitude ]
 		   });
@@ -677,7 +677,7 @@ input[type="radio"] {
 			    size: new AMap.Size(20, 20), 
 				icon : new AMap.Icon({            
 	            image: "lib/images/zi.png",
-	            imageSize: new AMap.Size(16,16)
+	            imageSize: new AMap.Size(20,20)
 	            }),   
 				position : [ json[i].wxChildLongitude , json[i].wxChildLatitude ]
 			  });
@@ -741,7 +741,7 @@ input[type="radio"] {
 			            size: new AMap.Size(20, 20), 
 					    icon : new AMap.Icon({            
 			            image: "lib/images/huang.png",
-			            imageSize: new AMap.Size(16,16)
+			            imageSize: new AMap.Size(20,20)
 		                }),   
 				       position : [ data[i].wxChildLongitude , data[i].wxChildLatitude ]
 			         });
@@ -759,10 +759,12 @@ input[type="radio"] {
 			   if(cildId　==　0){ // 默认为红色
 				     marker = new AMap.Marker({
 				     size: new AMap.Size(20, 20), 
+				     /* image: "lib/images/hong.png", */
+		             /* imageSize: , */
 					 icon : new AMap.Icon({            
 		             image: "lib/images/hong.png",
-		             imageSize: new AMap.Size(16,16)
-	            	 }),   
+		             imageSize: new AMap.Size(20,20)
+	            	 }),    
 				    position : [ data[i].wxChildLongitude , data[i].wxChildLatitude ]
 			        });
 					marker.proName= data[i].childName;
