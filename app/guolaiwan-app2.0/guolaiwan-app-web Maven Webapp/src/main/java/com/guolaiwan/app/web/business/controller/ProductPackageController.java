@@ -113,7 +113,7 @@ public class ProductPackageController extends BaseController {
 	private ProductComboDAO conn_combo;
     
     @Autowired
-	UserOnedayBuyDAO conn_userone;
+	private UserOnedayBuyDAO conn_userone;
     
     @Autowired
 	private SysConfigDAO conn_sysConfig;
@@ -159,7 +159,8 @@ public class ProductPackageController extends BaseController {
 		   long producntEndTime  =  productPOs.get(i).getProductEnddate().getTime();
 		   //获取审核状态
 		   ShopAuditStateType state  =  productPOs.get(i).getProductAuditstatus();
-		   if(nowDate<producntBeginTime || nowDate>producntEndTime || state == ShopAuditStateType.N  ){
+		   int isShow  =  productPOs.get(i).getProductIsShow();
+		   if(nowDate<producntBeginTime || nowDate>producntEndTime || state != ShopAuditStateType.T || isShow != 1){
 			   productPOs.remove(i);			   
 		   }			
 		}
@@ -1038,5 +1039,4 @@ public class ProductPackageController extends BaseController {
 			}
 
 		}
-					
 }
