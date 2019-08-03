@@ -315,7 +315,7 @@ color:#fff;
 		    }
 		//票的数量与所选人数是否一样    
           if($('.zhi').val() != number){
-             $.toast("订票数量与所选用户信息不匹配", "forbidden");
+             $.toast("请确认票的数量对应用户信息数量", "forbidden");
 		      return false;         
           }    
 		    
@@ -693,10 +693,10 @@ color:#fff;
 		      if(base==""){
               $.toast("照片获取失败", "forbidden");
 			  return false;
-             }   	    
+             }    	     
                 $(".window-2").fadeOut();
                 $(".window-1").fadeOut();
-			    $(".homepage").fadeIn();
+			    $(".homepage").fadeIn();s
 			                 
               var url = window.BASEPATH + 'product/package/add/info';
               if(state == ""){           
@@ -726,7 +726,24 @@ color:#fff;
 	           	}
 	         })                                                                                                       
      }	
-	     //保存用户信息
+       	 
+	//删除用户  	 
+	 function deleteClientMessage(id){
+	     var merssageId = id.split("-");
+	      var url =  window.BASEPATH + 'product/package/deleteClientMessage?merssageId='+merssageId[1]; 
+	     $.get(url,null,function(msg){   
+	        if(msg=="success"){
+	                $(".homepage_add").children().remove();
+	          	    $("#window-1-message").children().remove();          	    
+	          	    clientNumber.splice(0,clientNumber.length);
+	          	     number = 0;
+	           		getUserInfo();
+	               alert("操作成功")
+	        }
+	     })	 	 	    
+	 } 
+       
+	     //查询用户信息
 	      var clientInfo = " "; 	    
 	  	 function  getUserInfo(){
 	  	  var url_ = window.BASEPATH + 'product/package/user/list';
@@ -742,7 +759,7 @@ color:#fff;
              html.push('<P>姓名：'+mesage[i].name+'</P>');
              html.push('<P>手机号：'+mesage[i].phone+'</P>');
              html.push('<P>身份证号：'+mesage[i].number+'</P>');
-             html.push('<img style="width:40px;height:40px;position: absolute;top:19px;right:15%;border-radius:50%;" src="lib/images/logo.png">');
+             html.push('<img id="img1-'+mesage[i].id+'" onclick="deleteClientMessage(this.id)" style="width:28px;height:28px;position: absolute;top:26px;right:15%;border-radius:50%;" src="lib/images/trashs.png">');
              html.push('<img id="'+mesage[i].id+'" onclick="update(this.id)"  style="width:20px;height:20px;position: absolute;top:30px;right:5%;" src="lib/images/xiugai.png">');
 			 html.push('</div>');
              $("#window-1-message").append(html.join(''));
@@ -750,7 +767,9 @@ color:#fff;
 	  	  }
 	  	  	})  	 	  	 
 	  	 }
-	  	 	  	 	
+	
+	  	 	  	 
+	 //更新用户信息 	 	  	 	
  	function update(id){       
 	  	state = id;
 	  	 var url = window.BASEPATH + 'product/package/update/message?id='+id;
@@ -779,7 +798,7 @@ color:#fff;
              number+=1;	
              clientNumber[i[1]] = clientInfo[i[1]].id;	
 			 var htm = [];					
-             htm.push('<p id="homepage-'+i[1]+'">姓名：'+clientInfo[i[1]].name+'</p>');            
+             htm.push('<p style="width:20%;padding:2px 5px;background:#FF9C00;color:#fff;border-radius:12px;margin:2px 5px;display: inline-block;text-align:center;" id="homepage-'+i[1]+'">'+clientInfo[i[1]].name+'</p>');            
              $(".homepage_add").append(htm.join(''));         
             } 
             //取消勾选删除

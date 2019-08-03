@@ -579,17 +579,18 @@ public class ProductPackageController extends BaseController {
 				map.put("state", 1);//库存比买的数量少 				
 				map.put("Stock", pro_po.getProductStock());					
 			}else{
-				//判断是否限购
-				if(pro_po.getProductLimitType()==1){
-					if(ticketnumber> pro_po.getProductLimitNum()){
+				//判断是否存在最低限购数量
+				if(pro_po.getProductRestrictNumber() != 0){
+					if(ticketnumber> pro_po.getProductRestrictNumber()){
 						map.put("state", 3);//购买成功
 					}else{						
-						map.put("state", 2);//买的数量低于限购						
-						map.put("limitNum", pro_po.getProductLimitNum());
+						map.put("state", 2);//买的数量低于最低限购数量						
+						map.put("limitNum", pro_po.getProductRestrictNumber());
 					}					
 				}else{
 					map.put("state", 3);//购买成功					
-				}			
+				}
+				
 			}						
 		 }else{
 			 map.put("state", 0); // 库存为0的状态			  
@@ -602,25 +603,23 @@ public class ProductPackageController extends BaseController {
 	      if(activityRelPO.getProductStock()>0){
 	    	//是否一日一个
 	    	  if(1 == activityRelPO.getOnePerDay()){
-	    		  System.out.println("zhuangtaia 1");
 	    		  if(ticketnumber != 1){
 	    			  map.put("state", 1);//超出每日限购
 	    		  }   		  
 	    	  }else{
 	    		  if(ticketnumber>activityRelPO.getProductStock()){	
-	    			  System.out.println("zhuangtaia 2");
 	    				 map.put("state", 2);//购买数量大于库存量
 	    				 map.put("Stock",activityRelPO.getProductStock());
 	    			 }else{	    				 
 	    				//该商品是否限购
 	    			    long productId	= activityRelPO.getProductId();	    			    
 	    			    ProductPO productPO = productDao.get(productId);
-	    			    if(productPO.getProductLimitType()==1){
-	    					if(ticketnumber> productPO.getProductLimitNum()){
+	    			    if(productPO.getProductRestrictNumber() != 0){
+	    					if(ticketnumber> productPO.getProductRestrictNumber()){
 	    						map.put("state", 4);//购买成功	    						
 	    					}else{
-	    						map.put("state", 3);//买的数量少于限购						
-	    						map.put("limitNum", productPO.getProductLimitNum());		    					    						
+	    						map.put("state", 3);//买的数量少于最低限购数量						
+	    						map.put("limitNum", productPO.getProductRestrictNumber());		    					    						
 	    					}					
 	    				}else{	
 	    					map.put("state", 4);//购买成功
@@ -744,6 +743,17 @@ public class ProductPackageController extends BaseController {
 			 mesMidClien.setProId(Long.parseLong(proId));
 			 conn_mesMidleClien.save(mesMidClien);
 			 }	
+		return "success";
+	}
+	
+	/**
+	 * 删除用户信息 
+	 * */
+	@RequestMapping(value="/deleteClientMessage")
+	public String deleteClientMessage(long merssageId){
+		  
+		conn_message.delete(merssageId);							
+	
 		return "success";
 	}
 	
