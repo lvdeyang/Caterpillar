@@ -18,7 +18,9 @@
         <meta name="format-detection" content="telephone=no">
         <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
     </head>
+    <style>
     
+    </style>
     <body>
         <div class="x-body">
         <div  >
@@ -45,7 +47,8 @@
                     <label for="L_title" class="layui-form-label">
                                                                     层                                     
                     </label> 
-                    <select id="title" style="width: 70%;" name="title" size="1" class="sel" required lay-verify="required"
+                    <div class="layui-input-block">
+                    <select id="title" style="" name="title" size="1" class="sel" required lay-verify="required"
                         autocomplete="off" class="layui-input">
 						<option value="一层">一层</option>
 						<option value="二层">二层</option>
@@ -56,6 +59,7 @@
 						<option value="七层">七层</option>
 						<option value="八层">八层</option>
 				   </select>
+				   </div>
 				</div>
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
