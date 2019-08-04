@@ -7594,4 +7594,23 @@ public class PhoneController extends WebBaseControll {
 	   }		
 		return "success";
 	}
+	
+	/**
+	 * 自动生成商品索引
+	 * 
+	 * */
+	@ResponseBody
+	@RequestMapping(value = "/update/productSort")
+	public String updateproductSort(){
+	   List<ProductPO>  productPOs = conn_product.findByField("productSort", 0L);
+	   if(productPOs.size()>0){
+		 for(ProductPO po : productPOs){
+			 long id = po.getId();
+			 po.setProductSort(id);
+			 conn_product.saveOrUpdate(po);
+		 }  		   
+	   }		
+		return "success";
+	}
+	
 }
