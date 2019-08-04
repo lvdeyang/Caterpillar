@@ -19,7 +19,15 @@ public class VoteImposePo extends AbstractBasePO {
 	private Integer poll;// 投票数
 	private Integer buy;// 购买数
 	private String orderId;//订单号
+	private Integer isjudges;//是不是评委
 
+	public Integer getIsjudges() {
+		return isjudges;
+	}
+
+	public void setIsjudges(Integer isjudges) {
+		this.isjudges = isjudges;
+	}
 
 	public String getOrderId() {
 		return orderId;

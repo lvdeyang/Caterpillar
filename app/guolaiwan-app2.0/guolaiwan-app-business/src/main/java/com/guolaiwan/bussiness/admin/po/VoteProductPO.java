@@ -23,7 +23,16 @@ public class VoteProductPO extends AbstractBasePO{
 	private long judgesvotenum;
 	//订单数量
 	private long ordernum;
+	//总票数
+	private long allvotes;
 	
+	
+	public long getAllvotes() {
+		return allvotes;
+	}
+	public void setAllvotes(long allvotes) {
+		this.allvotes = allvotes;
+	}
 	public String getProductName() {
 		return productName;
 	}
