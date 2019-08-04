@@ -743,12 +743,14 @@ public class PhoneController extends WebBaseControll {
 
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-
+		
 		// 获取商家列表
 		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSizeI);
 		merchants.addAll(conn_merchant.getMerchantByModularCode1(modularCode, mapStr1, page, pageSizeI));
-		merchants.addAll(conn_merchant.getMerchantByModularCode2(modularCode, mapStr2, page, pageSizeI));
+		merchants.addAll(conn_merchant.getMerchantByModularCode2(modularCode, mapStr2, page, pageSizeI));	
+							
 		List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants, MerchantVO.class);
+		    		 
 		int count = conn_merchant.countMerchantByModularCode(modularCode, mapStr);
 
 		DecimalFormat df = new DecimalFormat("0.00");
@@ -7573,5 +7575,23 @@ public class PhoneController extends WebBaseControll {
 			break;
 		}
 		return success();
+	}
+	
+	/**
+	 * 自动生成商户索引
+	 * 
+	 * */
+	@ResponseBody
+	@RequestMapping(value = "/add/proSortIndex")
+	public String updateProSortIndex(){
+	   List<MerchantPO>  merchantPOs =	conn_merchant.findByField("productSortIndex", 0L);
+	   if(merchantPOs.size()>0){
+		 for(MerchantPO po : merchantPOs){
+			 long id = po.getId();
+			 po.setProductSortIndex(id);
+			 conn_merchant.saveOrUpdate(po);
+		 }  		   
+	   }		
+		return "success";
 	}
 }

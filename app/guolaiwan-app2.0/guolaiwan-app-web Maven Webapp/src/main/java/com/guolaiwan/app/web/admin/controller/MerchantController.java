@@ -11,6 +11,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.bytedeco.javacpp.RealSense.intrinsics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -909,4 +910,77 @@ public class MerchantController extends BaseController {
 		return "false";
 	}	
 }
+	/**
+	 * 获取商户排序的相关内容
+	 * 
+	 * */
+	@ResponseBody
+	@RequestMapping(value="sort.do")
+	public ModelAndView getMercSortInfo(HttpServletRequest request){
+		Map<String, Object> map = new HashMap<String,Object>();
+		String merchantId =  request.getParameter("id");
+		MerchantPO  merPo = conn_merchant.get(Long.parseLong(merchantId));
+		List<MerchantPO> merchantPOs = conn_merchant.findModularCode(merPo.getModularCode());
+		 int nowOrder = -1;
+		for(int i = 0;i<merchantPOs.size();i++){
+		  String id = String.valueOf(merchantPOs.get(i).getId());
+			if(id.equals(merchantId)){
+				nowOrder = i+1;	
+			}			
+		}
+		map.put("merchant", merPo);	
+		map.put("nowOrder",nowOrder );
+	    return new ModelAndView("admin/merchant/sortlist",map);
+	}	
+	
+	/**
+	 * 商户排序
+	 * */
+	@ResponseBody
+	@RequestMapping(value="sortChange")
+	public String MercSortChange(HttpServletRequest request){
+		String merchantId =  request.getParameter("id");
+		String state =  request.getParameter("state");
+		String modularCode = request.getParameter("modularCode");		
+		List<MerchantPO> merchantPOs = conn_merchant.findModularCode(modularCode);
+		MerchantPO _merPo  = conn_merchant.get(Long.parseLong(merchantId));
+		long index1  =  _merPo.getProductSortIndex();
+		int  number = -1;
+		for(int i = 0; i< merchantPOs.size();i++){
+		   String id  =  String.valueOf(merchantPOs.get(i).getId());
+		   if(merchantId.equals(id)){
+			   //上移
+				if("0".equals(state)){
+                      if(i != 0){
+                    	  number = i-1;  
+                    	  System.out.println("上移");
+                      } 				   
+                      else{
+                    	return "0";//商户位置已经在第一的返回标识  
+                      }
+				}
+				//下移
+				else if ("1".equals(state)) {
+					if(i  < (merchantPOs.size()-1)){
+						number = i + 1;
+						}
+					else{						
+						return "1";//商户位置已经在最底的返回标识
+					}
+				}
+				//置顶
+				else{
+				   	 number = 0;			   
+				} 
+				   long index2 = merchantPOs.get(number).getProductSortIndex();
+				   merchantPOs.get(number).setProductSortIndex(index1);
+				   _merPo.setProductSortIndex(index2);
+				   conn_merchant.update(merchantPOs.get(number));
+				   conn_merchant.update(_merPo);				
+		   }	
+		   
+		}						
+	           return "success";
+	}	
+	
 }

@@ -23,11 +23,31 @@ public class TableStatusPO extends AbstractBasePO {
 	private String date; //时间
 	private BookType type;  
 	private String  userId; //用户id
-	private TableStatus tableStatus; //没用
 	private String tableMenu; //菜品
-  	
+  	private String	tableState; // //  NOTPAY 未支付        PAYSUCCESS 已预订          PAST已过期     REFUNDING 申请退款             REFUNDED 退款完成     REFUNDFAIL 退款失败
+  	private String userName; //用户名称
+	private String userPhone; // 用户手机号
 	
 	
+	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getUserPhone() {
+		return userPhone;
+	}
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
+	public String getTableState() {
+		return tableState;
+	}
+	public void setTableState(String tableState) {
+		this.tableState = tableState;
+	}
 	public String getTableMenu() {
 		return tableMenu;
 	}
@@ -41,13 +61,6 @@ public class TableStatusPO extends AbstractBasePO {
 		this.tableId = tableId;
 	}
 	
-	@Enumerated(EnumType.STRING)
-	public TableStatus getTableStatus() {
-		return tableStatus;
-	}
-	public void setTableStatus(TableStatus tableStatus) {
-		this.tableStatus = tableStatus;
-	}
 	public String getUserId() {
 		return userId;
 	}

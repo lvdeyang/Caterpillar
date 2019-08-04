@@ -253,10 +253,23 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 		for (Map.Entry<String, Object> entry : Retrievals.entrySet()) {
 			hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 		}
-		hql.orderBy("updateTime", true);
+		hql.orderBy("productSortIndex", true);
 		List<MerchantPO> merchants = findByHqlPage(hql, pageNum, pageSize);
 		return merchants;
 	}
+	
+	public List<MerchantPO> findModularCode(String modularCode) {
+
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.T);
+		hql.andBy("modularCode", Condition.eq, modularCode);
+
+		hql.orderBy("productSortIndex", true);
+		List<MerchantPO> merchants = findByHql(hql);
+		return merchants;
+	}
+	
+	
 
 	public List<MerchantPO> getMerchantByModularCode1(String modularCode, Map<String, Object> Retrievals, int pageNum,
 			int pageSize) {
