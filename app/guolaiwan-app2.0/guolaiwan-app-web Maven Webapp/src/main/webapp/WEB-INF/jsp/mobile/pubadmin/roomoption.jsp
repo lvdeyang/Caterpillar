@@ -151,8 +151,24 @@ margin:0 1%;
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
+<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
+ <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
+<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script type="text/javascript">
+layui.use('laydate', function(){
+	  var laydate = layui.laydate;
+	  
+	  //执行一个laydate实例
+	  laydate.render({
+	    elem: '#useDate' //指定元素uscDate
+	  });
+	    laydate.render({
+	    elem: '#uscDate' //指定元素
+	  });
+	  
+	   });
+
   var rtier="1",ridentity="";
   $(function() {
   	roomlist(rtier,ridentity);
@@ -239,7 +255,7 @@ margin:0 1%;
 				roomlist(rtier,ridentity);
 		})
 	}
-	
+	 
 </script>
 
 
@@ -279,10 +295,13 @@ margin:0 1%;
 		       <option value="五人间">五人间</option>
 	      </select> 
 	      </div>
-	      
+	      <div style="height:50px;line-height:50px;text-align: center;font-size:12px;width:100%;">
+	       <p style="display: inline-block;width:40%"><span>入住时间：</span><input type="text" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="useDate"></p>
+	       <p style="display: inline-block;width:40%"><span>离店时间：</span><input type="text" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="uscDate"></p>
+	      </div>
 	      <!-- 房间选择 -->
 	      <div class="main" style="width:100%;height:auto;padding:0 5%;">
-	       
+	      
 	        
 	      </div>
 	      
@@ -291,10 +310,25 @@ margin:0 1%;
 				<div class="weui-popup__overlay"></div>
 				<div class="weui-popup__modal">
 				
-				<p style="font-size: 20px;color: green;text-align: center;">这里动态获取房客信息</p>
-				<p class="close">close</p>
+				<!-- <p style="font-size: 20px;color: green;text-align: center;">这里动态获取房客信息</p>
+				<p class="close">close</p> -->
 				
-				
+				<div style="height:auto;width:96%;padding:20px 20px;margin:0 auto;background:#fff;overflow: hidden;">
+				   <p class="" style="text-align: center;margin:20px 0;font-weight: bold;"><span>301</span><span>标准间</span>入住信息</p>
+				  
+				   <img style="width:35%;float:left;height:120px;" src="lib/images/1.jpg">
+				   <ul style="float:left;width:60%;margin:0 0 20px 2%;line-height:30px;">
+				    <li style="width:100%;height:40px;">入住人姓名：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
+				    <li style="width:100%;height:40px;">身份证号：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
+				    <li style="width:100%;height:40px;">联系电话：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
+				   </ul>
+				    <img style="width:35%;float:left;height:120px;" src="lib/images/1.jpg">
+				   <ul style="float:left;width:60%;margin:0 0 20px 2%;line-height:30px;">
+				    <li style="width:100%;height:40px;">入住人姓名：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
+				    <li style="width:100%;height:40px;">身份证号：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
+				    <li style="width:100%;height:40px;">联系电话：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
+				   </ul>
+				</div>
 				
 				
 				</div>
