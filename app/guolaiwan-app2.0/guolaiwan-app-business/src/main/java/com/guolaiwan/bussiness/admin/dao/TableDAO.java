@@ -35,5 +35,15 @@ public class TableDAO extends AbstractBaseDao<TablePO>{
 		if(tables==null || tables.size()<=0) return null;
 		return tables;
 	}
+	//通过模块和类获取商品
+	public List<TablePO> findByMerchantId(long merchantId,String tiers){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("merchantId", Condition.eq, merchantId);
+		hql.andBy("tier", Condition.eq, tiers);
+		hql.orderBy("tableNo", false); // 用户评论的时间排序
+		List<TablePO> tables = findByHql(hql);
+		if(tables==null || tables.size()<=0) return null;
+		return tables;
+	}
 	
 }

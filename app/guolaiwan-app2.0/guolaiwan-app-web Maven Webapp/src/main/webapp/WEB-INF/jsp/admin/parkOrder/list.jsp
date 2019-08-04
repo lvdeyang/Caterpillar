@@ -41,6 +41,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	<!-- tab -->
             <div class="layui-tab layui-tab-brief" lay-filter="demo">
   				<ul class="layui-tab-title">
+    				<li>全部<span id="NOTPAYbadge" class="layui-badge"></span></li>
     				<li>未付款<span id="NOTPAYbadge" class="layui-badge"></span></li>
     				<li>已付款<span id="PAYSUCCESSbadge"  class="layui-badge"></span></li>
     				<li>正在停车<span id="DELIVERbadge" hidden="hidden"  class="layui-badge"></span></li>

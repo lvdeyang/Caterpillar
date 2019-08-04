@@ -361,30 +361,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
 
 	<!-- 信息登记 -->
-	<div class="xinxi" style="width:45%;height:600px;border:5px solid #393D49;padding:30px 2%;position: fixed;top:50%;left:50%;margin:-300px 0 0 -25%;z-index:11;background:#fff;display: none;overflow: hidden;overflow-y: auto">
+	<div class="xinxi" style="width:45%;height:600px;border:5px solid #393D49;padding:80px 2%;position: fixed;top:50%;left:50%;margin:-300px 0 0 -25%;z-index:11;background:#fff;display: none;overflow: hidden;overflow-y: auto">
 		<p style="">
 			房间名称：<span class="ming" value="111">1层102</span>
 			<input style="display:none;" id="inpu" value="">	
 			<input style="display:none;" id="tableStatusId" value="">	
 		</p>
 		<p>
-			用户姓名：<input style="height:30px;width:500px;"  id = "personName" >
+			用户姓名：<input style="height:30px;width:60%;"  id = "personName" >
 		</p>
 		<p style="">
-			手机号 &nbsp;&nbsp; ：<input id="shenfen" style="height:30px;width:500px;" value="">
+			手机号 &nbsp;&nbsp; ：<input id="shenfen" style="height:30px;width:60%;" value="">
 		</p>
 		<p style="">
-			订金 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ：<input id="bookprice" style="height:30px;width:500px;" value="">
+			订金 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ：<input id="bookprice" style="height:30px;width:60%;" value="">
 		</p>
 		<p style="">
-			预订菜品：<input style="height:30px;width:500px;" id = "price" >
+			预订菜品：<input style="height:30px;width:60%;" id = "price" >
 		</p>
 		<p style="">
-			预订时间：<input type="text" class="layui-input"  style="height:30px;width:500px;display: inline-block;" id = "time" placeholder="yyyy-MM-dd">
+			预订时间：<input type="text" class="layui-input"  style="height:30px;width:60%;display: inline-block;" id = "time" placeholder="yyyy-MM-dd">
 		</p>
 		<p style="">
 			午晚 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ：<!-- <input style="height:30px;width:600px;" id = "midday" > -->
-			  <select id="midday" style="height:30px;width:500px;">
+			  <select id="midday" style="height:30px;width:60%;">
               <option value="0">午餐</option>
               <option value="1">晚餐</option>
               
