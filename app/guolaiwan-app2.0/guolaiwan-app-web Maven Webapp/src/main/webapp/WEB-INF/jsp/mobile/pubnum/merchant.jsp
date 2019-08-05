@@ -569,6 +569,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	  addProducntSort();
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -816,6 +817,11 @@ html, body {
 	   }
 	 });
 	});
+	//商品排序自动生成
+	function addProducntSort(){
+	    var url = window.BASEPATH + 'phoneApp/update/productSort';
+	    $.get(url,null,function(msg){})		
+	}
 </script>
 <script type="text/javascript">
 	$(function() {

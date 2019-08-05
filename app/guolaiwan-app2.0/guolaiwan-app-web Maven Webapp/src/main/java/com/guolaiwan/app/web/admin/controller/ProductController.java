@@ -1515,5 +1515,78 @@ public class ProductController extends BaseController {
 		return map;
 	}
 	
+	/**
+	 * 获取商品排序的相关内容
+	 * 
+	 * */
+	@ResponseBody
+	@RequestMapping(value="sort.do")
+	public ModelAndView getMercSortInfo(HttpServletRequest request){
+		Map<String, Object> map = new HashMap<String,Object>();
+		String productId =  request.getParameter("productId");
+		ProductPO  _product = conn_product.get(Long.parseLong(productId));
+		  MerchantPO  _merchant = conn_merchant.get(_product.getProductMerchantID());
+		List<ProductPO> productPOs = conn_product.findByMerchantId(_product.getProductMerchantID());
+		 int nowOrder = -1;
+		for(int i = 0;i<productPOs.size();i++){
+		  String id = String.valueOf(productPOs.get(i).getId());
+		  
+			if(id.equals(productId)){
+				nowOrder = i+1;	
+			}			
+		}
+		map.put("product", _product);	
+		map.put("merchant", _merchant);
+		map.put("nowOrder",nowOrder );
+	    return new ModelAndView("admin/product/sortlist",map);
+	}	
 	
+	/**
+	 *  商品排序
+	 * */
+	@ResponseBody
+	@RequestMapping(value="sortChange")
+	public String MercSortChange(HttpServletRequest request){
+		String merchantId =  request.getParameter("merchantId");
+		String productId =  request.getParameter("productId");
+		String state =  request.getParameter("state");
+		ProductPO product = conn_product.get(Long.parseLong(productId));
+		List<ProductPO>  _products = conn_product.findByMerchantId(Long.parseLong(merchantId));				
+		long index1  =  product.getProductSort();
+		int  number = -1;
+		for(int i = 0; i< _products.size();i++){
+		   String id  =  String.valueOf(_products.get(i).getId());
+		   if(productId.equals(id)){
+			   //上移
+				if("0".equals(state)){
+                      if(i != 0){
+                    	  number = i-1;  
+                      } 				   
+                      else{
+                    	return "0";//商户位置已经在第一的返回标识  
+                      }
+				}
+				//下移
+				else if ("1".equals(state)) {
+					if(i  < (_products.size()-1)){
+						number = i + 1;
+						}
+					else{						
+						return "1";//商户位置已经在最底的返回标识
+					}
+				}
+				//置顶
+				else{
+				   	 number = 0;
+				} 
+				   long index2 = _products.get(number).getProductSort();
+				   _products.get(number).setProductSort(index1);
+				   product.setProductSort(index2);
+				   conn_product.update(_products.get(number));
+				   conn_product.update(product);				
+		   }	
+		   
+		}						
+	           return "success";
+	}	
 }

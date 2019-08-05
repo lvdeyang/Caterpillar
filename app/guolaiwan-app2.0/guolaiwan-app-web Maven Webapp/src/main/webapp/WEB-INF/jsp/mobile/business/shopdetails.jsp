@@ -146,8 +146,16 @@ html, body {
 .xiangqing ul li p{
  margin:0;
 }
-.fangxing p{
+.homes p{
  margin:0;
+}
+.facilities li{
+float:left;
+width:18%;
+margin:0 1%;
+text-align: center;
+background: #fff;
+padding:10px 5px;
 }
 </style>
 
@@ -169,7 +177,7 @@ html, body {
 <script type="text/javascript">
 	$(function() {
 	getRecomment();
-	getProduct();
+
 	var pingfen=${pingfen}+46/10;
 	if(pingfen>5)pingfen=5;
     $('.pingfen').html(pingfen+"分") ; 
@@ -205,24 +213,7 @@ html, body {
 			    }
 			    });
 	  }
-	  
-	function getProduct(){
-	    var _uricoms = window.BASEPATH + '/business/getproduct';	
-	     $.get(_uricoms, {"merchantId":${merchantId}}, function(data){
-	         var html=[];
-	         for(var i=0;i<data.length;i++){
-	         			if(data[i].productClassCode=="1"||data[i].productClassCode=="0014"){
-				     	html.push('<div style="width:90%;height:auto;background:#BCBCBC;margin:10px auto;border-radius:10px;">');
-				        html.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:65%;">'+data[i].productName+'</span>');
-				        html.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+data[i].productPrice+'</span></p>');
-				    	html.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销100+</span>');
-				    	html.push('<span onclick="buyproduct(this.id)" id="'+data[i].id+'" style="float:right;margin-right:5px;color:#fff;font-size:18px;font-weight:bold;background:#EB6E1E;height:30px;line-height:30px;border-radius:10px;padding:0px 10px;">预订</span></p>');
-					    html.push('</div>');
-					    }
-		     		}
-			 $('.productlist').append(html.join(''));
-		     	})
-		 }
+
 		 
 	function buyproduct(id){
 		location.href=window.BASEPATH + 'business/buyproduct?productId='+id;
@@ -247,7 +238,7 @@ html, body {
 		</div>
 	</div>
 
-	  <div class="xiangqing" style="width:94%;height:auto;background:#fff;margin:10px auto;border-radius:10px;overflow: hidden;position: relative;top:-60px;z-index:111;">
+	  <div class="xiangqing" style="width:94%;height:auto;background:#fff;margin:10px auto;border-radius:10px;overflow: hidden;position: relative;top:-30px;z-index:111;">
 	   <ul style="margin:0 0 20px 6%;">
 	    <li><p>${merchant.shopName}</p></li>
 	    <li><p><span class="pingfen" style="color:#EB6E1E;font-size:16px;"></span><span style="font-size:12px;margin-left:10px;">超棒</span></p></li>
@@ -255,46 +246,20 @@ html, body {
 	    <li><p>联系电话：<span>${merchant.shopTel}</span></p></li>
 	   </ul> 
 	  </div>
-	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-60px;padding:0 0 30px 0;">
-	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">房型选择</p>
-	    <div class="productlist">
-	    </div>
-	     
-	    
-
+	  <div class="homes" style="width:100%;height:auto;border-radius:10px;margin-top:-20px;">
+	    <ul class="facilities" style="width:100%;padding:0 4%;overflow: hidden;list-style: none;font-size: 12px;font-weight: bold;">
+             <li><img style="width:60%;" src="lib/images/roomType.png"><p>房型选择</p></li>
+             <li><img style="width:60%;" src="lib/images/bookingTable.png"><p>订桌</p></li>
+             <li><img style="width:60%;" src="lib/images/order.png"><p>点餐</p></li>
+             <li><img style="width:60%;" src="lib/images/serve.png"><p>服务</p></li>
+             <li><img style="width:60%;" src="lib/images/parkingSpace.png"><p>停车位</p></li>
+        </ul>
+	
 	  </div> 
-	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-50px;padding:0 0 30px 0;">
-	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">订房必读</p>
-	     
-	     <p style="display: inline-block;height:50px;line-height: 50px;font-size:12px;margin-left:9%;">
-	     <img style="width:25px;height:25px;" alt="" src="lib/images/shizhong.png">
-	     <span >离店时间：12：00以前</span>
-	     </p>
-	     <p style="font-size:12px;margin-left:10%;">预订电话：${merchant.shopTel}</p>
-	   
+	
+	  <div style="width: 90%;margin-left: 5%;margin-top: 5%;background-color: #fff;border-radius:10px;padding: 2% 2% 2% 2%">
+	  	${merchant.shopIntroduction}
 	  </div>
-	   
-	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-40px;padding:0 0 30px 0;">
-	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">酒店点评</p>
-	    <p style="height:50px;width:90%;margin:0 auto;line-height: 50px;border-bottom:1px solid #BCBCBC;"><span class="pingfen" style="font-size:16px;font-weight:bold;color:#EB6E1E;height:50px;"></span><span style="padding:0 10px;color:#E0E0E0;">|</span><span style="color:black;background:#F3EA29;border-radius:12px;padding:0 5px;">服务周到</span><span style="color:black;background:#F3EA29;border-radius:12px;padding:0 5px;">性价比高</span></p>
-	     <div style="height:auto;">
-	      <p style="font-size:14px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;">
-	      <img style="width:35px;height:35px;border-radius:50%;" src="lib/images/logo.png">
-	      <span>想念</span><span style="padding:0 10px;color:#E0E0E0;">|</span><span style="color:#fff;background:#FAB526;border-radius:12px;padding:0 5px;">老用户</span>
-	      </p>
-          <p style="padding:0 8%;">离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间</p>
-	     </div>
-	      <div style="height:auto;">
-	      <p style="font-size:14px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;">
-	      <img style="width:35px;height:35px;border-radius:50%;" src="lib/images/logo.png">
-	      <span>想念</span><span style="padding:0 10px;color:#E0E0E0;">|</span><span style="color:#fff;background:#FAB526;border-radius:12px;padding:0 5px;">老用户</span>
-	      </p>
-          <p style="padding:0 8%;">离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间离店时间</p>
-	     </div>
-	      
-	  </div>
-
-
 
 </body>
  

@@ -171,26 +171,14 @@ public class JudgesController {
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
+		//查找是不是评委
+		JudgesPo judges = judgesdao.getJudgesUserId(userId);
 		try {
 			Map<String, String> hashMap = new HashMap<String, String>();
 			//当天的记录数量
 			int count = voteImposeDao.countByUidPid(userId, productId,startTime,endTime);
-			//当天的记录数量为0时
-			if (count == 0) {
-				VoteImposePo voteImposePo1 = new VoteImposePo();
-				voteImposePo1.setUserId(userId);
-				voteImposePo1.setPoll(1);
-				voteImposePo1.setProductId(productId);
-				voteImposeDao.save(voteImposePo1);
-				//将票数封装到后台展示的po中
-				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
-				voteProduct.setPeoplevotenum(count+1);
-				voteProductDao.saveOrUpdate(voteProduct);
-				hashMap.put("msg", "1");
-				hashMap.put("count", count+"");
-				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
-				return hashMap;
-			}
+			//此商品的评委票数
+			int judgesvotes=voteImposeDao.countByjudges(productId);
 			//当有记录但是已经满足当天投票总量时
 			if (count != 0 && count == voteOption.getPollnum()) {
 				hashMap.put("msg", "0");
@@ -198,17 +186,26 @@ public class JudgesController {
 				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
 				return hashMap;
 			}
-			//当有记录但是没有满足当天投票总量时
-			if (count != 0 && count != voteOption.getPollnum()) {
+			//当天的记录数量为0时 或者当有记录但是没有满足当天投票总量时
+			if (count==0||(count != 0 && count != voteOption.getPollnum())) {
 				VoteImposePo voteImposePo1 = new VoteImposePo();
 				voteImposePo1.setUserId(userId);
 				voteImposePo1.setPoll(1);
+				if(judges!=null){
+					voteImposePo1.setIsjudges(1);
+				}
 				voteImposePo1.setProductId(productId);
 				voteImposeDao.save(voteImposePo1);
 				//将票数封装到后台展示的po中
 				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
-				voteProduct.setPeoplevotenum(count+1);
-				voteProductDao.saveOrUpdate(voteProduct);
+				//如果不是评委
+				if(judges==null){
+					voteProduct.setPeoplevotenum(count+1);
+					voteProductDao.saveOrUpdate(voteProduct);
+				}else{//如果是评委
+					voteProduct.setJudgesvotenum(judgesvotes+1);
+					voteProductDao.saveOrUpdate(voteProduct);
+				}
 				hashMap.put("msg", "1");
 				hashMap.put("count", count+"");
 				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
@@ -312,7 +309,7 @@ public class JudgesController {
 
 	//获得投票的商品
 	@RequestMapping(value = "/getvoteproduct", method = RequestMethod.GET)
-	public List<Map<String, String>> getvoteproduct(String id,String userId) {
+	public List<Map<String, String>> getvoteproduct(String id,String userId,String optionId) {
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		//按照模块id获取投票的商品
@@ -321,23 +318,28 @@ public class JudgesController {
 		if(getvoteproduct==null){
 			return list;
 		}
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		for (VoteProductPO voteProductPO : getvoteproduct) {
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			//通过id查到product
 			ProductPO productPO = productDao.get(voteProductPO.getProductId());
 			//此user今天的投票数量
 			int count = voteImposeDao.countByUidPid(userId, voteProductPO.getProductId()+"",startTime,endTime);
-			//此user今天的投票数量
+			//订单数量
 			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
+			//此商品的评委票数量
+			int judgesvotes=voteImposeDao.countByjudges(voteProductPO.getProductId()+"");
 			//此商品的所有群众投票数
-			int productvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			int allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*judgesvotes);
 			//封装所有的数据
 			hashMap.put("count", count+"");
 			hashMap.put("pollnum", (5-count)+"");
 			hashMap.put("productname", voteProductPO.getProductName());
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
-			hashMap.put("productvotes", productvotes+"");
+			hashMap.put("manvotes", manvotes+"");
+			hashMap.put("productvotes", allcount+"");
 			hashMap.put("hotel", productPO.getProductMerchantName());
 			hashMap.put("image", productPO.getProductShowPic());
 			list.add(hashMap);
@@ -349,19 +351,28 @@ public class JudgesController {
 	
 	//获得投票的商品
 	@RequestMapping(value = "/getvoteproductpc", method = RequestMethod.GET)
-	public List<Map<String, String>> getvoteproductpc(String id) {
+	public List<Map<String, String>> getvoteproductpc(String id,String optionId) {
 		//按照模块id获取投票的商品
 		List<VoteProductPO> getvoteproduct = voteProductDaO.getvoteproduct(Long.parseLong(id));
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		if(getvoteproduct==null){
 			return list;
 		}
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		for (VoteProductPO voteProductPO : getvoteproduct) {
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			//通过id查到product
 			ProductPO productPO = productDao.get(voteProductPO.getProductId());
+			//订单数量
+			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
+			//此商品的评委票数量
+			int judgesvotes=voteImposeDao.countByjudges(voteProductPO.getProductId()+"");
+			//此商品的所有群众投票数
+			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			int allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*judgesvotes);
 			hashMap.put("productpic", "http://www.guolaiwan.net/file"+productPO.getProductShowPic());
 			hashMap.put("productname", productPO.getProductName());
+			hashMap.put("allcount", allcount+"");
 			list.add(hashMap);
 		}
 		return list;

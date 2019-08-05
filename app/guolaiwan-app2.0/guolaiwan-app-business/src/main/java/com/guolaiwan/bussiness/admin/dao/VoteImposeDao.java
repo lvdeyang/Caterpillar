@@ -87,4 +87,18 @@ public class VoteImposeDao extends AbstractBaseDao<VoteImposePo> {
 		int count = this.countByHql(cHql);
 		return count;
 	}
+	
+	/**
+	 * 统计每个商品的评委票数
+	 * @param productId
+	 * @return
+	 */
+	public int countByjudges(String productId) {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("productId", Condition.eq, productId);
+		cHql.andBy("poll", Condition.eq, 1);
+		cHql.andBy("isjudges", Condition.eq, 1);
+		int count = this.countByHql(cHql);
+		return count;
+	}
 }
