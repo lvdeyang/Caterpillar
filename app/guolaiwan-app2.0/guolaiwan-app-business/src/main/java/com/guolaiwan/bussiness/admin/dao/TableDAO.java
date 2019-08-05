@@ -45,5 +45,14 @@ public class TableDAO extends AbstractBaseDao<TablePO>{
 		if(tables==null || tables.size()<=0) return null;
 		return tables;
 	}
+	//通过模块和类获取商品
+	public int ByMerchantId(long merchantId,String tiers,int room){
+		CountHql hql= this.newCountHql();
+		hql.andBy("merchantId", Condition.eq, merchantId);
+		hql.andBy("tier", Condition.eq, tiers);
+		hql.andBy("room", Condition.eq, room);
+		int pCount = this.countByHql(hql);
+		return pCount;
+	}
 	
 }

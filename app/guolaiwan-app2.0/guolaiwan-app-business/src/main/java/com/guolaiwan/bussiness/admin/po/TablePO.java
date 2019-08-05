@@ -29,11 +29,59 @@ public class TablePO extends AbstractBasePO {
 	private String userPhone; //手机号
 	private String menuTime; //订桌时间
 	private String type; //午晚    */
+	private String  detailsImg;  //详情页面图片
 	private String  tableState;  // 0无法预订  1可预订  2已预订
+	private int   sofa; //是否有沙发
+	private int   television; //是否有电视
+	private int   airConditioner; //是否有空调
+	private int   wifi; //是否有无线
+	private int   lavatory; //是否有卫生间
+	private int   karaoke; //是否有歌厅
 	
 	
 	
-	
+	public String getDetailsImg() {
+		return detailsImg;
+	}
+	public void setDetailsImg(String detailsImg) {
+		this.detailsImg = detailsImg;
+	}
+	public int getSofa() {
+		return sofa;
+	}
+	public void setSofa(int sofa) {
+		this.sofa = sofa;
+	}
+	public int getTelevision() {
+		return television;
+	}
+	public void setTelevision(int television) {
+		this.television = television;
+	}
+	public int getAirConditioner() {
+		return airConditioner;
+	}
+	public void setAirConditioner(int airConditioner) {
+		this.airConditioner = airConditioner;
+	}
+	public int getWifi() {
+		return wifi;
+	}
+	public void setWifi(int wifi) {
+		this.wifi = wifi;
+	}
+	public int getLavatory() {
+		return lavatory;
+	}
+	public void setLavatory(int lavatory) {
+		this.lavatory = lavatory;
+	}
+	public int getKaraoke() {
+		return karaoke;
+	}
+	public void setKaraoke(int karaoke) {
+		this.karaoke = karaoke;
+	}
 	public String getTableState() {
 		return tableState;
 	}

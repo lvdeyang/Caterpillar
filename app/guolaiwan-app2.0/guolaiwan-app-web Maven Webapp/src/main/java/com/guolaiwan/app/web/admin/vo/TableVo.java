@@ -23,7 +23,13 @@ public class TableVo  extends AbstractBaseVO<TableVo, TablePO>{
 	private String type; //午晚
 	private String  tableState; //桌子状态
 	private long   tableStatusId;
-
+	private String  detailsImg;  //详情页面图片
+	private int   sofa; //是否有沙发
+	private int   television; //是否有电视
+	private int   airConditioner; //是否有空调
+	private int   wifi; //是否有无线
+	private int   lavatory; //是否有卫生间
+	private int   karaoke; //是否有歌厅
 	@Override
 	public TableVo set(TablePO entity) throws Exception {
 		this.setMerchantId(entity.getMerchantId())
@@ -38,10 +44,124 @@ public class TableVo  extends AbstractBaseVO<TableVo, TablePO>{
 		.setUserPhone(entity.getUserPhone())
 		.setMenuTime(entity.getMenuTime())
 		.setType(entity.getType())*/
+		.setDetailsImg(entity.getDetailsImg())
+		.setSofa(entity.getSofa())
+		.setTelevision(entity.getTelevision())
+		.setAirConditioner(entity.getAirConditioner())
+		.setWifi(entity.getWifi())
+		.setLavatory(entity.getLavatory())
+		.setKaraoke(entity.getKaraoke())
 		.setTableState(entity.getTableState())
 		.setTier(entity.getTier());
 		return this;
 	}
+
+
+    
+
+	public int getSofa() {
+		return sofa;
+	}
+
+
+
+
+	public TableVo setSofa(int sofa) {
+		this.sofa = sofa;
+		return this;
+	}
+
+
+
+
+	public int getTelevision() {
+		return television;
+	}
+
+
+
+
+	public TableVo setTelevision(int television) {
+		this.television = television;
+		return this;
+	}
+
+
+
+
+	public int getAirConditioner() {
+		return airConditioner;
+	}
+
+
+
+
+	public TableVo setAirConditioner(int airConditioner) {
+		this.airConditioner = airConditioner;
+		return this;
+	}
+
+
+
+
+	public int getWifi() {
+		return wifi;
+	}
+
+
+
+
+	public TableVo setWifi(int wifi) {
+		this.wifi = wifi;
+		return this;
+	}
+
+
+
+
+	public int getLavatory() {
+		return lavatory;
+	}
+
+
+
+
+	public TableVo setLavatory(int lavatory) {
+		this.lavatory = lavatory;
+		return this;
+	}
+
+
+
+
+	public int getKaraoke() {
+		return karaoke;
+	}
+
+
+
+
+	public TableVo setKaraoke(int karaoke) {
+		this.karaoke = karaoke;
+		return this;
+	}
+
+
+
+
+	public String getDetailsImg() {
+		return detailsImg;
+	}
+
+
+
+
+	public TableVo setDetailsImg(String detailsImg) {
+		this.detailsImg = detailsImg;
+		return this;
+	}
+
+
 
 
 	public long getTableStatusId() {
@@ -49,8 +169,9 @@ public class TableVo  extends AbstractBaseVO<TableVo, TablePO>{
 	}
 
 
-	public void setTableStatusId(long tableStatusId) {
+	public TableVo setTableStatusId(long tableStatusId) {
 		this.tableStatusId = tableStatusId;
+		return this;
 	}
 
 
