@@ -82,26 +82,33 @@ public class tableControll extends WebBaseControll  {
 			param = param.substring(1, param.length() - 1);
 		}
 		JSONObject pageObject = JSON.parseObject(param);
+		
 		String merchantId = pageObject.getString("merchantId");  
 		Long  merchant  =Long.parseLong(merchantId);
 		String tier = pageObject.getString("tier");   //层数
 		String TableDate = pageObject.getString("tableDate");   //时间
 		String type = pageObject.getString("type");   //午餐晚餐
-		List<TableVo>   _merchants= null;
+		int soleTable = 0; //判断是否 全部都是包间 或 餐桌
+		List<TableVo>   _merchants = null;
 		if(merchantId != null && merchantId != null){
 			List<TablePO> addpo = null;
 			if ( tier != null && tier !="" ) {
 				addpo =  Table.findByMerchantId(merchant,tier);
+			    int   table = Table.ByMerchantId(merchant,tier,Integer.parseInt("0"));
+				int   room = Table.ByMerchantId(merchant,tier,Integer.parseInt("1"));
+				if (table >0 && room <= 0 || table <=0 && room > 0) {
+					soleTable = 1;
+				}
 			}else  {
 				addpo =  Table.findByMerchantId(merchant);
 			}
 			   _merchants = TableVo.getConverter(TableVo.class).convert(addpo,
 					TableVo.class);
-			for (TableVo tablePO : _merchants) {
+			for (TableVo tableVo : _merchants) {
 				System.out.println(" ================================");
 				TableStatusPO TableStatus= null;
 				if ( !"" .equals(TableDate) &&  !"" .equals(type) ) {//传入已选时间
-					TableStatus =	Table_Status.findBytidt(tablePO.getId(),TableDate,BookType.fromName(type));//查询中间表
+					TableStatus =	Table_Status.findBytidt(tableVo.getId(),TableDate,BookType.fromName(type));//查询中间表
 				}else {
 					SimpleDateFormat def = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
 					Date date = new Date();
@@ -117,25 +124,24 @@ public class tableControll extends WebBaseControll  {
 						c.add(Calendar.DAY_OF_MONTH, 1);
 						type =  "LUNCH";
 					}
-					TableStatus =	Table_Status.findBytidt(tablePO.getId(),def.format(new Date()).toString(),BookType.fromString(type));//查询中间表
+					TableStatus =	Table_Status.findBytidt(tableVo.getId(),def.format(new Date()).toString(),BookType.fromString(type));//查询中间表
 				}
 				if ( TableStatus != null  ) {
 					System.out.println(TableStatus.getId()+"   --------1-1-1-1-1-1-1-");
-					tablePO.setTableState("2");//已预订
-					tablePO.setTableMenu(TableStatus.getTableMenu());
-					tablePO.setMenuTime(TableStatus.getDate()); //时间
-					tablePO.setType(TableStatus.getType().toString()); //中午晚上
-					tablePO.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
-					tablePO.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
-					tablePO.setTableStatusId(TableStatus.getId());
+					tableVo.setTableState("2");//已预订
+					tableVo.setTableMenu(TableStatus.getTableMenu());
+					tableVo.setMenuTime(TableStatus.getDate()); //时间
+					tableVo.setType(TableStatus.getType().toString()); //中午晚上
+					tableVo.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
+					tableVo.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
+					tableVo.setTableStatusId(TableStatus.getId());
 				}
 			}
 		}
-		for (TableVo tableVo : _merchants) {
-			System.out.println(tableVo.getId());
-		}
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("merchant", _merchants);
+		map.put("sole", soleTable);
 		return map;
 	}
 	

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -81,14 +82,38 @@ public class TablelistController extends BaseController {
 	public Map<String, Object> historysettle(HttpServletRequest request) throws Exception{ //添加房间
 		String tablename = request.getParameter("name");//名称
         String tableNo = request.getParameter("tableNo");//桌号
+        String feature = request.getParameter("key");//获取特色
         String tier = request.getParameter("title");//层
         String type = request.getParameter("type");//人数
+        String img = request.getParameter("parkingshopImg");//房间详情图片
+        System.out.println(  img +" 1111" );
         String bookprice = request.getParameter("bookprice");//订金
         double money =  Double.parseDouble(bookprice)*100;
         String radio = request.getParameter("radio");//包间
         String merchantId = request.getParameter("merchantId");//包间\
         TablePO add = new TablePO();
 	        add.setTablename(tablename);
+	        if(feature != "" && feature != null){
+	         String split[] = 	feature.split(",");
+	         for (int i = 0; i < split.length; i++) {
+	        	 if ("厕所".equals(split[i])) {
+	        		 add.setLavatory(Integer.parseInt("1"));
+	        	 }else if ("wifi".equals(split[i])) {
+	        		 add.setWifi(Integer.parseInt("1"));	        		 
+	        	 } else if ("唱歌".equals(split[i])) {
+	        		 add.setKaraoke(Integer.parseInt("1"));
+	        	 }else if ("电视".equals(split[i])) {
+	        		 add.setTelevision(Integer.parseInt("1"));
+	        	 }else if ("沙发".equals(split[i])) {
+	        		 add.setSofa(Integer.parseInt("1"));
+	        	 }else if ("空调".equals(split[i])) {
+	        		 add.setAirConditioner(Integer.parseInt("1"));
+	        	 } 
+	          }
+	        }
+	        if (img != null && img != "") {
+				add.setDetailsImg(img);
+			}
 	        add.setTableNo(tableNo);
 	        add.setTier(tier);
 	        add.setTableState(1+"");

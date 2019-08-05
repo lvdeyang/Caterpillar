@@ -240,6 +240,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var bookprice =$("#bookprice").val(); //订金
 		var date = $("#time").val(); 
 		var	type =  $("#midday").val();
+		var img =$("#parkingshopImg").val();
+		alert($(".sap").val());
 		if (userPhone == "") {
 			alert("请输入手机号");
 			return false;
@@ -264,15 +266,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			alert("发生未知错误 没有商户ID");
 			return false;
 		}
-		$.ajax({
+		if ($("#parkingshopImg").val() == "") {
+			alert("请选择图片");
+			return false;
+		}
+		/*  $.ajax({
 			type : "post",
 			url : "addData.do",
-			data : {"merchantId" : $("#tablelist").val(),"type":type,"userPhone":userPhone,"userName":userName,"tableId":tableId,"tableStatusId":tableStatusId,"tableMenu":tableMenu,"bookprice":bookprice,"date":date},
+			data : {"img":img,"merchantId" : $("#tablelist").val(),"type":type,"userPhone":userPhone,"userName":userName,"tableId":tableId,"tableStatusId":tableStatusId,"tableMenu":tableMenu,"bookprice":bookprice,"date":date},
 			success : function(data) {
 			$(".xinxi").fadeOut();
 			list($("#test1").val(), $("#times").val());
 			}	
-		})  
+		}) */ 
 	});
 
 
@@ -328,7 +334,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
         <div class="x-body">
             <xblock>  <a href="javascript:openMap('选择商家','<%=request.getContextPath() %>/admin/merchant/sellist?mcname=MerchantName&mcuuid=MerchantID&mchref=merclass','600','500')" class="layui-btn " >选择商家</a> 
-             <button class="layui-btn" onclick="open_win('添加房间','addv','600','500')"><i class="layui-icon">&#xe608;</i>添加房间</button><span class="x-right" s
+             <button class="layui-btn" onclick="open_win('添加房间','addv','600','600')"><i class="layui-icon">&#xe608;</i>添加房间</button><span class="x-right" s
             ght:40px">
              <input type="text" style="float:left;width:auto;margin-left:-1380px;" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
              <select id="times" style="width:auto;height:38px;margin-left:-1190px;">
@@ -399,7 +405,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<p style="">
 			结束时间：<input style="height:30px;width:300px;"id = "stopTime" >
 		</p> -->
-		<p style="text-align: center;margin:10px auto;">
+		<p style="text-align: center;margin:30px auto 0;">
 			<span class="left" style=""  id="save">预订</span><span class="putaway">上架</span><span class="below">下架</span><span class="delete">删除此房间</span><span class="right">关闭窗口</span>
 		</p> 
 	</div>
