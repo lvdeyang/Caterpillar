@@ -172,6 +172,7 @@ html, body {
 <script>
 $(function(){
 	getRecomment();
+	list();
 })
 
 
@@ -198,6 +199,32 @@ function getRecomment() {
 }
 
 
+	function list(){
+	var url=window.BASEPATH + 'admin/vote/showjudges';
+		$.post(url,{"productId":${product.id}},function(data){
+			var html=[];
+			 html.push('<table border="1"  style="text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; ">'); 
+			 html.push('<tr>'); 
+		     html.push('<th>日期</th>'); 
+		     html.push('<th>评委姓名</th>'); 
+		     html.push('<th>分数</th>'); 
+		  	 html.push('</tr>'); 
+	     	for(var i=0;i<data.all.length;i++){
+		  	 html.push('<tr>'); 
+		     html.push('<td>'+data.all[i].updateTime+'</td>'); 
+		     html.push('<td>'+data.all[i].username+'</td>'); 
+		     html.push('<td>'+data.all[i].score+'</td>'); 
+		     html.push('</tr>'); 
+	     	}
+	     	 html.push('<tr>'); 
+	   		 html.push('<td>平均分</td>'); 
+	  	  	 html.push('<td colspan="2">'+data.score+'</td>'); 
+	         html.push('</tr>'); 
+			 html.push('</table>'); 
+	        $('.lists').children().remove();
+	        $('.lists').append(html.join(''));
+        })
+	}
 	  
 </script>
 <body>
@@ -222,27 +249,6 @@ function getRecomment() {
 	</div>	
 	
 	<div class="lists" style="text-align: center;margin:0 auto;width:100%;">
-	 <table border="1"  style="text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; ">
-	  <tr>
-	    <th>日期</th>
-	    <th>评委姓名</th>
-	    <th>分数</th>
-	  </tr>
-	  <tr>
-	    <td>8月15日</td>
-	    <td>张xx</td>
-	    <td>9</td>
-	  </tr>
-	   <tr>
-	    <td>8月15日</td>
-	    <td>张xx</td>
-	    <td>9</td>
-	  </tr>
-	   <tr>
-	    <td>平均分</td>
-	    <td colspan="2">9</td>
-	  </tr>
-	</table>
 	  
 	 </div>    
 </body>

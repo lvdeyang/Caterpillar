@@ -407,7 +407,7 @@ $("#b"+base).css("color","black");
            html.push('<P style="height:20px;line-height: 20px;width:100%;color:black;text-align:left;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:95%;display: inline-block;">'+data[i].productname+'</span></P>');
            html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:right;">已售：<span>'+data[i].OutOfPrint+'</span>+</span><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].manvotes+'</span></span></P>');
            html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span>'+data[i].productvotes+'</span></p>');
-           html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>8.9</span><span id="'+data[i].productId+'" onclick="productdetails(this.id)" style="float:right;background:#C3181E;color:#fff;font-size:12px;">查看评分</span></p>');
+           html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>'+data[i].avg+'</span><span id="'+data[i].productId+'" onclick="productdetails(this.id)" style="float:right;background:#C3181E;color:#fff;font-size:12px;">查看评分</span></p>');
            html.push('<button id="'+data[i].productId+'" onclick="votepoll(this.id)"  class="vote">投票</button>');
            html.push('<button onclick="gotobuy('+data[i].productId+')">购买</button>');
            html.push('</div>');
@@ -420,6 +420,7 @@ $("#b"+base).css("color","black");
       $('.contentt-box').children().remove();
       $('.contentt-box').append(html.join(''));
 	}
+	
 </script>
 
 

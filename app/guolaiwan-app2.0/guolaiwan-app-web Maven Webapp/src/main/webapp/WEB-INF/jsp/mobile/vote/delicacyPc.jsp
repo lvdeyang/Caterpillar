@@ -466,7 +466,6 @@ $("#b"+base).css("color","black");
 	 
 		 
 		 
-
 	    
 	     <!-- 置顶 -->
      <!--  <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div> -->
