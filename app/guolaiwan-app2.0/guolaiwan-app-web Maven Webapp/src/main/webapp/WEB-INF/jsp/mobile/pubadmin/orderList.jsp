@@ -538,7 +538,7 @@ var oderinfoid;
 				    }
 				    if('${status}'=='PAYSUCCESS'){				   
 					    if(data[i].logisticsId=="1"){
-					         html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)" value="'+data[i].id+'">&nbsp;&nbsp;发货</a>')
+					         html.push('<a style="font-size:17px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)" value="'+data[i].id+'">&nbsp;&nbsp;发货</a>')
 					    }				       
 				    }
 				   html.push(' </a>');
@@ -642,7 +642,7 @@ var oderinfoid;
 				       html.push('<a class="weui-media-box__desc" style="margin-left:15px;font-size:12px;" href="javascript:void(0)">退款理由:&nbsp;'+data[i].refundReason+'</p>');
 				    }
 				    if('${status}'=='PAYSUCCESS'){				  
-				       html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
+				       html.push('<a style="font-size:16px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
 				    }
 				   html.push(' </a>');
 				   }

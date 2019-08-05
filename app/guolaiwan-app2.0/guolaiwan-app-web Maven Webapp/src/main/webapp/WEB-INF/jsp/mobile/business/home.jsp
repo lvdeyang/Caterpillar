@@ -521,9 +521,9 @@ $(function() {
 	 <!-- 分类  -->
 	  <div  style="background:#fff;width:96%;height:230px;margin:0 auto;z-index:1;border-top-left-radius: 10px;border-top-right-radius: 10px;top:12px;position: relative;overflow: hidden;">
 	     <div style="height:60px;width:100%;clear:both">
-	     <p id="pname" style="display:inline-block;font-size:12px;font-weight: bold;color:black;margin:0;line-height: 60px;margin-left:3%;"> <img style="width:30px;height:30px;display:inline-block;margin:0;" src="lib/images/dizhiss.png"/></p>
-	     <input class="inp" placeholder="关键字/词" style="float:right;margin-top:15px;margin-right:5%;width:45%;height:30px;border:none;outline: none;padding:10px 9%;border-radius:16px;background:#EEEEEE;" onfocus="search()"></input>	     
-	     <img style="width:20px;height:20px;position: absolute;right:42%;top:20px;" src="lib/images/sousuo.png"/> 
+	     <p id="pname" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:55%;display:inline-block;font-size:12px;font-weight: bold;color:black;margin:0;line-height: 60px;margin-left:3%;"> <img style="width:30px;height:30px;display:inline-block;margin:0;" src="lib/images/dizhiss.png"/></p>
+	     <input class="inp" placeholder="关键字/词" style="float:right;margin-top:15px;margin-right:5%;width:35%;height:30px;border:none;outline: none;padding:10px 0 10px 9%;border-radius:16px;background:#EEEEEE;" onfocus="search()"></input>	     
+	     <img style="width:20px;height:20px;position: absolute;right:32%;top:20px;" src="lib/images/sousuo.png"/> 
 	     </div> 
 	    <div class="header_in" style="clear:both">
 	     <ul style="">
