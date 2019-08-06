@@ -140,7 +140,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                <li>
 	                    
 						<div class="ui-list-img-square">
-							<span style="background-image:url(/chenxisoft/${order.worderPhoto}"></span></div>
+							<span style="background-image:url(/${order.worderPhoto}"></span></div>
 						<div class="ui-list-info ui-border-t">
 							<div style="font-size:14px;">${order.workName}</div>
 							<p class="ui-nowrap" style="font-size:12px;">${order.price}元/${order.days}天/${order.region}</p>
