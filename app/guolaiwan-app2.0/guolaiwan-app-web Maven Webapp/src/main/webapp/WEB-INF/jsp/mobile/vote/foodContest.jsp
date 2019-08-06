@@ -227,6 +227,36 @@ margin:0 5px;
 				color:#FFEF39 !important;
 				
 			}
+			.flase,.true{
+			color:#fff;
+			background: #C4191F;
+			padding:0 10%;
+			display: inline-block;
+			height:32px;
+			margin:0 5%;
+			border-radius:10px;
+			border:none;
+			outline:none;
+			font-weight: bold;
+			}
+			.Judges{
+			width:80%;
+			height:150px;
+			background: #fff;
+			margin:0 auto;
+			border-radius:12px;
+			border:1px solid #AEAEAE;
+			text-align: center;
+			font-size:14px;
+			overflow: hidden;
+			position: fixed;
+			top:50%;
+			left:50%;
+			margin:-75px 0 0 -40%;
+			display: none;
+			z-index:11111;
+			}
+			
 </style>
 
 </head>
@@ -245,7 +275,7 @@ margin:0 5px;
 var base;
 var votenum=${pollnum};
 var buynum=${buynum};
-
+var productId;
 $(function() {
 	<!--选项卡  -->
 	$(".tab-btn li").click(function(){
@@ -265,6 +295,22 @@ $(function() {
 	});
   /*返回顶部  */
 $(function(){
+
+	
+	$(document).on('click', '.flase', function() {
+ 		$(".Judges").fadeOut();
+ 	
+ 	});
+ 	
+ 	$(".Judgess").keyup(function(){
+    $(this).val($(this).val().replace( /[^0-9]/g,''));
+	}).bind("paste",function(){
+	    $(this).val($(this).val().replace( /[^0-9]/g,''));
+	})
+	
+
+
+
 	getRecomment();
 	
 	$(window).scroll(function(){
@@ -360,6 +406,7 @@ $("#b"+base).css("color","black");
 				$('#votes'+id).html(votes);
 			}else if(data.msg=="0"){
 				$.toast(votenum+'票/商品/人/天', 'text');
+				getvoteproduct(base);
 			}
 		})
 	}
@@ -376,6 +423,26 @@ $("#b"+base).css("color","black");
 				$.toast('哎呀，出了点小问题！', 'text');
 			}
 		})
+    }
+    //评分弹窗
+    function mark(id){
+    	$(".Judges").fadeIn();
+ 		$(".Judgess").val("");
+ 		productId=id;
+    }
+    //评分方法
+    function score(){
+    	var mark=$(".Judgess").val();
+	    if(mark >= 100) mark=100;
+		if(mark<= 1) mark=1;
+    	var url=window.BASEPATH + 'judges/makescore';
+    	$.post(url,{"userId":"${userId}","score":mark,"productId":productId},function(data){
+    		if(data=="success"){
+    			$(".Judges").fadeOut();
+    			$.toast('感谢您，评分成功！', 'text');
+    			getvoteproduct(base);
+    		}
+    	})
     }
     
     function productdetails(id){
@@ -412,8 +479,12 @@ $("#b"+base).css("color","black");
            html.push('<P style="height:20px;line-height: 20px;width:100%;color:black;text-align:left;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:95%;display: inline-block;">'+data[i].productname+'</span></P>');
            html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:right;">已售：<span>'+data[i].OutOfPrint+'</span>+</span><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].manvotes+'</span></span></P>');
            html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span>'+data[i].productvotes+'</span></p>');
-           html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>'+data[i].avg+'</span><span id="'+data[i].productId+'" onclick="productdetails(this.id)" style="float:right;background:#C3181E;color:#fff;font-size:12px;">查看评分</span></p>');
+           html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>'+data[i].avg+'</span><span id="'+data[i].productId+'" onclick="productdetails(this.id)" style="float:right;background:#C3181E;color:#fff;font-size:12px;border-radius:4px;">查看评分</span></p>');
+           if(${isjudges==1}){
+		   html.push('<button id="'+data[i].productId+'" onclick="mark(this.id)" class="vote">评分</button>');           
+           }else{
            html.push('<button id="'+data[i].productId+'" onclick="votepoll(this.id)"  class="vote">投票</button>');
+           }
            html.push('<button onclick="gotobuy('+data[i].productId+')">购买</button>');
            html.push('</div>');
            html.push('</div>');
@@ -426,18 +497,13 @@ $("#b"+base).css("color","black");
       $('.contentt-box').append(html.join(''));
 	}
 	
+	
+
+	
 </script>
 
 
 <body>
-			<!-- 主页 -->
-		<!-- <div class="header">
-			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div> -->
 		    <div class="content" id="content"  style="position: relative;">
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
@@ -475,7 +541,16 @@ $("#b"+base).css("color","black");
 		 
 	 
 		 
-		 
+	 		<div class="Judges" style="">
+	         <p style="height:50px;line-height: 50px;"><span style="color:#C4191F;">妈妈私厨-鸡肉</span>评委评分</p>
+	         <p style="height:50px;line-height: 50px;color:#C4191F;">
+	         <input class="Judgess" maxlength='3' style="width:25%;height:30px;border-radius:12px;border:1px solid #C4191F;padding:0 3%;text-align: center;margin:0 5px;" type="text" >分
+	         </p>
+	         <p style="height:50px;margin:0 auto;">
+	         <button class="flase" style="">取消</button>
+	         <button class="true" onclick="score()" style="">确定</button>
+	         </p>
+	      </div>	 
 
 	 
 	    <!-- 置顶 -->

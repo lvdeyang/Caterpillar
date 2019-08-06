@@ -37,6 +37,7 @@ import com.guolaiwan.bussiness.admin.po.VoteOptionsPo;
 import com.guolaiwan.bussiness.admin.po.VoteProductPO;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
+import pub.caterpillar.weixin.constants.WXContants;
 
 @RestController
 @RequestMapping("/judges")
@@ -286,14 +287,21 @@ public class JudgesController {
 		//这里上线应该修改成获取的optionId 再用
 		
 		/*String optionId=request.getParameter("optionId");*/
+		String userId =request.getSession().getAttribute("userId").toString();
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong("1"));
+		List<JudgesPo> all = judgesdao.getByOptionId(Long.parseLong("1"));
 		ModelAndView mView = new ModelAndView("mobile/vote/foodContest");
+		for (JudgesPo judgesPo : all) {
+			if(judgesPo.getUserId().equals(userId)){
+				mView.addObject("isjudges", "1");
+			}
+		}
 		mView.addObject("optionId", voteOption.getId());
 		mView.addObject("voterule", voteOption.getVoterule());
 		mView.addObject("pollnum", voteOption.getPollnum());
 		mView.addObject("buynum", voteOption.getOrdernum());
 		//此活动的logo
-		mView.addObject("logo", "http://www.guolaiwan.net/file"+voteOption.getSlidepic().toString());
+		mView.addObject("logo", "http://"+WXContants.Website+"/file"+voteOption.getSlidepic().toString());
 		return mView;
 	}
 
@@ -406,11 +414,18 @@ public class JudgesController {
 			ProductPO productPO = productDao.get(voteProductPO.getProductId());
 			//订单数量
 			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
-			//此商品的评委票数量
-			int judgesvotes=voteImposeDao.countByjudges(voteProductPO.getProductId()+"");
 			//此商品的所有群众投票数
 			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
-			int allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*judgesvotes);
+			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
+			long score=0;
+			if(all!=null){
+				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
+					score+=judgesVoteMsgPO.getScore();
+				}
+				score=score/all.size();
+			}
+
+			long allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*(score));
 			hashMap.put("productpic", "http://www.guolaiwan.net/file"+productPO.getProductShowPic());
 			hashMap.put("productname", productPO.getProductName());
 			hashMap.put("allcount", allcount+"");
@@ -457,5 +472,27 @@ public class JudgesController {
 			list.add(hashMap);
 		}
 		return list;
+	}
+	
+	// Pc端评委页面
+	@ResponseBody
+	@RequestMapping(value = "/getoneproduct")
+	public ProductPO getoneproduct(HttpServletRequest request) {
+		String productId=request.getParameter("productId");
+		ProductPO productPO = productDao.get(Long.parseLong(productId));
+		return productPO;
+	}
+	
+	// 评委评分的方法
+	@ResponseBody
+	@RequestMapping(value = "/makescore")
+	public String makeScore(HttpServletRequest request) {
+		String productId=request.getParameter("productId");
+		String userId=request.getParameter("userId");
+		String score=request.getParameter("score");
+		JudgesVoteMsgPO judges = judgesvotemsgDAO.getByUIdPId(Long.parseLong(userId), Long.parseLong(productId));
+		judges.setScore(Long.parseLong(score));
+		judgesvotemsgDAO.saveOrUpdate(judges);
+		return "success";
 	}
 }
