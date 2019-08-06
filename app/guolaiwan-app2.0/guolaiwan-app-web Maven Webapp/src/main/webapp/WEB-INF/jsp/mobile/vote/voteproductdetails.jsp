@@ -176,7 +176,7 @@ $(function(){
 })
 
 
-
+//获得图片
 function getRecomment() {
 		var _uriRecomment = window.BASEPATH + 'phoneApp/productInfo?productId=${product.id}&userId=${userId}';
 
@@ -197,8 +197,17 @@ function getRecomment() {
 			}
 		});
 }
+	//时间格式化
+	function fmat(time){
+		var da = time;
+	    da = new Date(da);
+	    var year = da.getFullYear()+'年';
+	    var month = da.getMonth()+1+'月';
+	    var date = da.getDate()+'日';
+		return year+month+date+"";
+	}
 
-
+	//展开数据
 	function list(){
 	var url=window.BASEPATH + 'admin/vote/showjudges';
 		$.post(url,{"productId":${product.id}},function(data){
@@ -210,8 +219,9 @@ function getRecomment() {
 		     html.push('<th>分数</th>'); 
 		  	 html.push('</tr>'); 
 	     	for(var i=0;i<data.all.length;i++){
+	     	 var time=fmat(data.all[i].updateTime);
 		  	 html.push('<tr>'); 
-		     html.push('<td>'+data.all[i].updateTime+'</td>'); 
+		     html.push('<td>'+time+'</td>'); 
 		     html.push('<td>'+data.all[i].username+'</td>'); 
 		     html.push('<td>'+data.all[i].score+'</td>'); 
 		     html.push('</tr>'); 

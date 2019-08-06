@@ -307,6 +307,37 @@ public class JudgesController {
 		return findAll;
 	}
 	
+	
+	// 排序商品
+	@ResponseBody
+	@RequestMapping(value = "/sortproduct", method = RequestMethod.POST)
+	public String sortproduct(HttpServletRequest request) {
+		String id=request.getParameter("id");
+		String optionId=request.getParameter("optionId");
+		//按照模块id获取投票的商品
+		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproduct(Long.parseLong(id));
+		if(getvoteproduct==null){
+			return "err";
+		}
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
+		for (VoteProductPO voteProductPO : getvoteproduct) {
+			//订单数量
+			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
+			//此商品的所有群众投票数
+			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
+			long score=0;
+			if(all!=null){
+				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
+					score+=judgesVoteMsgPO.getScore();
+				}
+				score=score/all.size();
+			}
+			long allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*(score));
+			voteProductPO.setAllvotes(allcount);
+		}
+		return "success";
+	}
 
 	//获得投票的商品
 	@ResponseBody
@@ -355,6 +386,7 @@ public class JudgesController {
 		}
 		return list;
 	}
+	
 	
 	
 	

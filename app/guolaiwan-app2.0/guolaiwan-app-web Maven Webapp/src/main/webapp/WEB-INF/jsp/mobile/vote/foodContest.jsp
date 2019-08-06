@@ -323,13 +323,18 @@ function getvoteproduct(id){
 $("#b"+base).css("color","black");
  base=id;
  $("#b"+id).css("color","#F92828");
-    var _uriRecomment = window.BASEPATH + 'judges/getvoteproduct?id='+id+'&userId=${userId}&optionId=${optionId}';
-    $.get(_uriRecomment,null,function(data){
-      list(data);   
-    });
+ 	//计算总票数 用于排序
+ 	var url=window.BASEPATH + 'judges/sortproduct?id='+id+'&userId=${userId}&optionId=${optionId}'
+ 	$.post(url,{"id":id,"optionId":"${optionId}"},function(data){
+ 		//按照总票数查询投票商品
+	    var _uriRecomment = window.BASEPATH + 'judges/getvoteproduct?id='+id+'&userId=${userId}&optionId=${optionId}';
+	    $.get(_uriRecomment,null,function(data){
+	      list(data);   
+	    });
+ 	})
 } 
-//搜索商品
- function search(){
+	//搜索商品
+ 	function search(){
     	if($('.search').val()==""){
     		$.toast('请输入关键字', 'text');
     		return;
@@ -341,7 +346,7 @@ $("#b"+base).css("color","black");
     				list(data);
     	})
     }
-	
+	//投票方法
 	function votepoll(id){
 		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id+'&optionId=${optionId}';
 		$.get(url,null,function(data){
@@ -358,7 +363,7 @@ $("#b"+base).css("color","black");
 			}
 		})
 	}
-	
+	//购买方法
 	function gotobuy(id){
 		var url=window.BASEPATH + 'judges/buypoll';
 		
