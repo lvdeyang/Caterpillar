@@ -222,8 +222,18 @@ text-align: center;
 		$(".pid_in").show();
 	    });
 	});
-	
-	function search() {
+		 change = null;
+		$(".ischange").change(function() {  //特色搜索
+			change = "";
+			$('input:checkbox').each(function() {
+				if ($(this).prop('checked') == true) {
+					change += $(this).val() + ",";
+				}
+			});
+			alert(change);
+			list();
+		});
+		function search() {
 			var _uri = window.BASEPATH + 'reservetable/search.do'; //
 			var patam = {};
 			patam.merchantId = 364 ; //'${merchantId}'
@@ -306,6 +316,7 @@ text-align: center;
 			var _uri = window.BASEPATH + 'reservetable/getlist.do'; //
 			var patam = {};
 			patam.merchantId = 364 ; //'${merchantId}'
+			patam.feature = window.change; //'${merchantId}'
 			patam.tableDate = $("#test2").val(); //时间
 			if ($(".texts").val() != "请选择") {
 				patam.type = $(".texts").val(); //午 晚
@@ -483,11 +494,11 @@ text-align: center;
 	     <span class="pid_in" style="text-align: center;color: black;line-height: 50px;float:right;">楼层：</span>
 	   </div>
 	    <div class="serve" style="height:50px;line-height: 50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-bottom:2px solid #CECACB;">
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">厕所<input class="ischange" name='key' value="11" style="margin:0;vertical-align:middle;" type="checkbox"></p>
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">WIFI<input class="ischange" name='key' value="22" style="margin:0;vertical-align:middle;" type="checkbox"></p>
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">沙发<input class="ischange" name='key' value="33" style="margin:0;vertical-align:middle;" type="checkbox"></p>
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">空调<input class="ischange" name='key' value="44" style="margin:0;vertical-align:middle;" type="checkbox"></p>
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">唱歌<input class="ischange" name='key' value="55" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">厕所<input class="ischange" name='key' value="lavatory" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">WIFI<input class="ischange" name='key' value="wifi" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">沙发<input class="ischange" name='key' value="sofa" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">空调<input class="ischange" name='key' value="airConditioner" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">唱歌<input class="ischange" name='key' value="karaoke" style="margin:0;vertical-align:middle;" type="checkbox"></p>
 	    </div> 
 	     <!-- 搜索 -->
 	     <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;margin: 20px 0;">

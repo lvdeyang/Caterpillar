@@ -88,14 +88,14 @@ public class tableControll extends WebBaseControll  {
 		String tier = pageObject.getString("tier");   //层数
 		String TableDate = pageObject.getString("tableDate");   //时间
 		String type = pageObject.getString("type");   //午餐晚餐
-		String feature = "" ;   //特色     pageObject.getString("feature")
+		String feature = pageObject.getString("feature");   //特色     pageObject.getString("feature")
 		int soleTable = 0; //判断是否 全部都是包间 或 餐桌
 		List<TableVo>   _merchants = null;
 		
 		if(merchantId != null && merchantId != null){
 			
 			List<TablePO> addpo = null;
-			if ( tier != null && tier !="" && feature == "" || feature == null) {  //根据层查询
+			if ( tier != null && tier !="" &&   "".equals(feature) || feature == null) {  //根据层查询
 				addpo =  Table.findByMerchantId(merchant,tier);
 			    int   table = Table.ByMerchantId(merchant,tier,Integer.parseInt("0"));
 				int   room = Table.ByMerchantId(merchant,tier,Integer.parseInt("1"));
