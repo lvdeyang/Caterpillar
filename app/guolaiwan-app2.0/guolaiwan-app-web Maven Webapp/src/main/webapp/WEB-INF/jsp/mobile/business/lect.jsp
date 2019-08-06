@@ -153,9 +153,9 @@ margin:0 1%;
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 <script type="text/javascript">
-          
+  var rtier="1",ridentity="";        
   $(function() {
-  	roomlist(1,"");
+  	roomlist(rtier,ridentity);
 	});
 	
 	
@@ -166,7 +166,7 @@ margin:0 1%;
 		$.post(url,{"merchantId":${merchantId},"tier":tier,"identity":identity},function(data){
 				var html= [];
 				for(var i =0;i<data.length;i++){
-					html.push('<div style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');
+					html.push('<div onclick="gotoroomdetails(this.id)" id="'+data[i].id+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');
 					if(data[i].state=="1"){
 						html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/weixuan.png">');
 					}else{
@@ -177,21 +177,32 @@ margin:0 1%;
 				    html.push('</div>');   
 				}
 				$('.main').append(html.join(''));
+				rtier=tier;
+				ridentity=identity;
 		})
 	}
 	
+	//更改层数
 	function changetier(){
 		var tier=$("#tier").val();
 		var identity=$("#identity").val();
-		alert(tier+""+identity)
+		if($("#identity").val()=="全部"){
+			identity="";
+		}
 		roomlist(tier,identity);
 	}
-	
+	//更改房间规格
 	function changeidentity(){
 		var tier=$("#tier").val();
 		var identity=$("#identity").val();
-		alert(tier+""+identity)
+		if($("#identity").val()=="全部"){
+			identity="";
+		}
 		roomlist(tier,identity);
+	}
+	
+	function gotoroomdetails(id){
+	    location.href=window.BASEPATH + 'business/gotoroomdetails?roomId='+id;
 	}
 </script>
 
@@ -213,7 +224,7 @@ margin:0 1%;
 	       <p style="display: inline-block;"><span style="color:#A4A2A0;">灰色</span>空闲</p>
 	       <p style="display: inline-block;"><span style="color:#D13035;">红色</span>已预定</p>
 	       <span>楼层：</span>
-	       <select class="tier" id="tier" onchange="changetier()" style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
+	       <select class="tier" id="tier" onchange="changetier()"  style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
 		       <option value="1">1层</option>
 		       <option value="2">2层</option>
 		       <option value="3">3层</option>
@@ -225,6 +236,7 @@ margin:0 1%;
 	       </select> 
 	       <span>房型：</span>
 	       <select class="identity" id="identity" onchange="changeidentity()" style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
+		       <option value="全部">全部</option>
 		       <option value="标准间">标准间</option>
 		       <option value="豪华间">豪华间</option>
 		       <option value="三人间">三人间</option>

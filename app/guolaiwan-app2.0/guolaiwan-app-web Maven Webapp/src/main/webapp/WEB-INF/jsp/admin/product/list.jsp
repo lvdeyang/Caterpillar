@@ -122,6 +122,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <a title="分销" href="javascript:;" onclick="addToDistribute('{{ d.id }}')" class="layui-btn layui-btn-xs">分销</a>
 <a title="库存管理" href="javascript:;" onclick="stock_show('库存管理','<%=path%>/admin/stock/room','{{d.id}}','','')" class="layui-btn layui-btn-xs">库存管理</a>
 <a title="套餐" href="javascript:;" onclick="stock_show('套餐管理','<%=path%>/admin/product/combolist','{{d.id}}','','')" class="layui-btn layui-btn-xs">套餐</a>
+<a title="排序" href="javascript:;" onclick="stock_sort('排序内容','sort.do','{{d.id}}','','510')" class="layui-btn layui-btn-xs">排序</a>
+
 </script>
 
 <!-- <a title="分销" href="javascript:;" onclick="product_info('选择分销商','<%=path%>/admin/distributor/distributorlist','{{ d.id }}','','510')" class="layui-btn layui-btn-xs">分销</a>
@@ -143,8 +145,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
   //获取产品列表
   getProductList();
-  
-	//表单提交
+  //表单提交
   form.on('submit(getPro)',function(data){
    layer.load();
    getProductListByf(data.field);
@@ -200,8 +201,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             }
   
   
-  
-  
+   //排序
+  function stock_sort (title,url,id,w,h) {
+      x_admin_show(title,url+"?productId="+id,w,h); 
+    }
   
 
 	//产品详情

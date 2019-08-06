@@ -500,6 +500,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	  addProducntSortIndex();
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -807,6 +808,11 @@ html, body {
 	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0&comCode='+comCode;
 	   
 	   });
+	   
+	   function addProducntSortIndex(){
+	     var _urSortIndex = window.BASEPATH + 'phoneApp/add/proSortIndex';
+	     $.get(_urSortIndex,null,function(msg){	})	   
+	   }
 		
 </script>
 

@@ -20,7 +20,6 @@ public class VoteImposePo extends AbstractBasePO {
 	private Integer buy;// 购买数
 	private String orderId;//订单号
 
-
 	public String getOrderId() {
 		return orderId;
 	}

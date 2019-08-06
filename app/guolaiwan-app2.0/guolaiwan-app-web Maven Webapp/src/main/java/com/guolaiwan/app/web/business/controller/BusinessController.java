@@ -852,10 +852,10 @@ public class BusinessController extends WebBaseControll {
 	@RequestMapping(value = "/buyproduct")
 	public ModelAndView buyProduct(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
-		long productId=Long.parseLong(request.getParameter("productId"));
-		ProductPO product = conn_product.get(productId);
+		String roomId=request.getParameter("roomId");
+		AddTheRoomPO Room = conn_roomdao.get(Long.parseLong(roomId));
 		mv = new ModelAndView("mobile/business/orders");
-		mv.addObject("product", product);
+		mv.addObject("roomId", Room);
 		return mv; 
 	}
 	
@@ -1071,6 +1071,26 @@ public class BusinessController extends WebBaseControll {
 		String identity=request.getParameter("identity");
 		List<AddTheRoomPO> rooms = conn_roomdao.findByMidTier(merchantId, tier,identity);
 		return rooms;
+	}
+	
+	//进入房间详情页面
+	@ResponseBody
+	@RequestMapping(value = "/gotoroomdetails")
+	public ModelAndView goToRoomDetails(HttpServletRequest request) throws Exception {
+		String roomId=request.getParameter("roomId");
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/roomdetails");
+		mv.addObject("roomId", roomId);
+		return mv; 
+	}
+	
+	//获取所有的房间 按照层数 商家
+	@ResponseBody
+	@RequestMapping(value = "/gettheroom")
+	public AddTheRoomPO getTheRoom(HttpServletRequest request) throws Exception {
+		String roomId=request.getParameter("roomId");
+		AddTheRoomPO room = conn_roomdao.get(Long.parseLong(roomId));
+		return room;
 	}
 	
 }

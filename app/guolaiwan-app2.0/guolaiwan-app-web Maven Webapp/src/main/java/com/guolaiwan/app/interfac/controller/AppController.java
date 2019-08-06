@@ -742,7 +742,7 @@ public class AppController extends WebBaseControll {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 
 		// 获取商家列表
-		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSize);
+		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, mapStr, page, pageSize);				
 		List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants, MerchantVO.class);
 		int count = conn_merchant.countMerchantByModularCode(modularCode, mapStr);
 

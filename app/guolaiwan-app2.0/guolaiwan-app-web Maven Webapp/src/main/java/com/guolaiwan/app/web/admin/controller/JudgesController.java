@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.JudgesDao;
+import com.guolaiwan.bussiness.admin.dao.JudgesVoteMsgDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
@@ -27,7 +28,7 @@ import com.guolaiwan.bussiness.admin.dao.VoteModularDAO;
 import com.guolaiwan.bussiness.admin.dao.VoteOptionsDao;
 import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
 import com.guolaiwan.bussiness.admin.po.JudgesPo;
-import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.JudgesVoteMsgPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.VoteImposePo;
@@ -57,9 +58,6 @@ public class JudgesController {
 	private VoteProductDAO voteProductDao;
 
 	@Autowired
-	private VoteProductDAO voteProductDaO;
-
-	@Autowired
 	private VoteModularDAO voteModularDaO;
 
 	@Autowired
@@ -71,6 +69,8 @@ public class JudgesController {
 	@Autowired
 	private VoteOptionsDao voteoptionDAO;
 
+	@Autowired
+	private JudgesVoteMsgDAO judgesvotemsgDAO;
 	// 添加数据页面
 	@ResponseBody
 	@RequestMapping(value = "/getjudges", method = RequestMethod.GET)
@@ -131,17 +131,29 @@ public class JudgesController {
 	@ResponseBody
 	@RequestMapping(value = "/addjudges.do", method = RequestMethod.POST)
 	public String addSubordinate(HttpServletRequest request) {
+		String userid = request.getParameter("id");
+		String optionId=request.getParameter("optionId");
 		try {
-			String id = request.getParameter("id");
-			String optionId=request.getParameter("optionId");
-			JudgesPo judgesUserId = judgesdao.getJudgesUserId(id);
+			UserInfoPO user = conn_UserInfo.get(Long.parseLong(userid));
+			JudgesPo judgesUserId = judgesdao.getJudgesUserId(userid);
 			if (judgesUserId != null) {
 				return "msg";
 			} else {
 				JudgesPo judgesPo = new JudgesPo();
-				judgesPo.setUserId(id);
+				judgesPo.setUserId(userid);
 				judgesPo.setOptionId(Long.parseLong(optionId));
 				judgesdao.save(judgesPo);
+				List<VoteProductPO> products = voteProductDao.getByOptionId(Long.parseLong(optionId));
+				System.out.println(products.size()+"-------");
+				for (VoteProductPO Product : products) {
+					JudgesVoteMsgPO judgesmsg=new JudgesVoteMsgPO();
+					judgesmsg.setOptionId(Long.parseLong(optionId));
+					judgesmsg.setProductId(Product.getProductId());
+					judgesmsg.setVoteproductId(Product.getId());
+					judgesmsg.setUserId(Long.parseLong(userid));
+					judgesmsg.setUsername(user.getUserNickname());
+					judgesvotemsgDAO.save(judgesmsg);
+				}
 			}
 			return "true";
 		} catch (Exception e) {
@@ -157,6 +169,7 @@ public class JudgesController {
 			String id = request.getParameter("id");
 			JudgesPo judgesUserId = judgesdao.getJudgesUserId(id);
 			judgesdao.delete(judgesUserId.getId());
+			judgesvotemsgDAO.deleteByUId(Long.parseLong(id));
 			return "true";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -175,22 +188,6 @@ public class JudgesController {
 			Map<String, String> hashMap = new HashMap<String, String>();
 			//当天的记录数量
 			int count = voteImposeDao.countByUidPid(userId, productId,startTime,endTime);
-			//当天的记录数量为0时
-			if (count == 0) {
-				VoteImposePo voteImposePo1 = new VoteImposePo();
-				voteImposePo1.setUserId(userId);
-				voteImposePo1.setPoll(1);
-				voteImposePo1.setProductId(productId);
-				voteImposeDao.save(voteImposePo1);
-				//将票数封装到后台展示的po中
-				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
-				voteProduct.setPeoplevotenum(count+1);
-				voteProductDao.saveOrUpdate(voteProduct);
-				hashMap.put("msg", "1");
-				hashMap.put("count", count+"");
-				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
-				return hashMap;
-			}
 			//当有记录但是已经满足当天投票总量时
 			if (count != 0 && count == voteOption.getPollnum()) {
 				hashMap.put("msg", "0");
@@ -198,8 +195,8 @@ public class JudgesController {
 				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
 				return hashMap;
 			}
-			//当有记录但是没有满足当天投票总量时
-			if (count != 0 && count != voteOption.getPollnum()) {
+			//当天的记录数量为0时 或者当有记录但是没有满足当天投票总量时
+			if (count==0||(count != 0 && count != voteOption.getPollnum())) {
 				VoteImposePo voteImposePo1 = new VoteImposePo();
 				voteImposePo1.setUserId(userId);
 				voteImposePo1.setPoll(1);
@@ -309,35 +306,80 @@ public class JudgesController {
 		List<VoteModularPO> findAll = voteModularDaO.getByOptionId(Long.parseLong(optionId));
 		return findAll;
 	}
+	
+	
+	// 排序商品
+	@ResponseBody
+	@RequestMapping(value = "/sortproduct", method = RequestMethod.POST)
+	public String sortproduct(HttpServletRequest request) {
+		String id=request.getParameter("id");
+		String optionId=request.getParameter("optionId");
+		//按照模块id获取投票的商品
+		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproduct(Long.parseLong(id));
+		if(getvoteproduct==null){
+			return "err";
+		}
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
+		for (VoteProductPO voteProductPO : getvoteproduct) {
+			//订单数量
+			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
+			//此商品的所有群众投票数
+			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
+			long score=0;
+			if(all!=null){
+				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
+					score+=judgesVoteMsgPO.getScore();
+				}
+				score=score/all.size();
+			}
+			long allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*(score));
+			voteProductPO.setAllvotes(allcount);
+		}
+		return "success";
+	}
 
 	//获得投票的商品
+	@ResponseBody
 	@RequestMapping(value = "/getvoteproduct", method = RequestMethod.GET)
-	public List<Map<String, String>> getvoteproduct(String id,String userId) {
+	public List<Map<String, String>> getvoteproduct(String id,String userId,String optionId) {
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		//按照模块id获取投票的商品
-		List<VoteProductPO> getvoteproduct = voteProductDaO.getvoteproduct(Long.parseLong(id));
+		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproduct(Long.parseLong(id));
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		if(getvoteproduct==null){
 			return list;
 		}
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		for (VoteProductPO voteProductPO : getvoteproduct) {
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			//通过id查到product
 			ProductPO productPO = productDao.get(voteProductPO.getProductId());
 			//此user今天的投票数量
 			int count = voteImposeDao.countByUidPid(userId, voteProductPO.getProductId()+"",startTime,endTime);
-			//此user今天的投票数量
+			//订单数量
 			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
 			//此商品的所有群众投票数
-			int productvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
+			long score=0;
+			if(all!=null){
+				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
+					score+=judgesVoteMsgPO.getScore();
+				}
+				score=score/all.size();
+			}
+			long allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*(score));
 			//封装所有的数据
+			hashMap.put("avg", score+"");
 			hashMap.put("count", count+"");
 			hashMap.put("pollnum", (5-count)+"");
 			hashMap.put("productname", voteProductPO.getProductName());
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
-			hashMap.put("productvotes", productvotes+"");
+			hashMap.put("manvotes", manvotes+"");
+			hashMap.put("productvotes", allcount+"");
 			hashMap.put("hotel", productPO.getProductMerchantName());
 			hashMap.put("image", productPO.getProductShowPic());
 			list.add(hashMap);
@@ -347,21 +389,31 @@ public class JudgesController {
 	
 	
 	
+	
 	//获得投票的商品
 	@RequestMapping(value = "/getvoteproductpc", method = RequestMethod.GET)
-	public List<Map<String, String>> getvoteproductpc(String id) {
+	public List<Map<String, String>> getvoteproductpc(String id,String optionId) {
 		//按照模块id获取投票的商品
-		List<VoteProductPO> getvoteproduct = voteProductDaO.getvoteproduct(Long.parseLong(id));
+		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproduct(Long.parseLong(id));
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		if(getvoteproduct==null){
 			return list;
 		}
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		for (VoteProductPO voteProductPO : getvoteproduct) {
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			//通过id查到product
 			ProductPO productPO = productDao.get(voteProductPO.getProductId());
+			//订单数量
+			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
+			//此商品的评委票数量
+			int judgesvotes=voteImposeDao.countByjudges(voteProductPO.getProductId()+"");
+			//此商品的所有群众投票数
+			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			int allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*judgesvotes);
 			hashMap.put("productpic", "http://www.guolaiwan.net/file"+productPO.getProductShowPic());
 			hashMap.put("productname", productPO.getProductName());
+			hashMap.put("allcount", allcount+"");
 			list.add(hashMap);
 		}
 		return list;
@@ -378,7 +430,7 @@ public class JudgesController {
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		//按照模块id获取投票的商品
-		List<VoteProductPO> getvoteproduct = voteProductDaO.getvoteproduct(name);
+		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproduct(name);
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		if(getvoteproduct==null){
 			return list;

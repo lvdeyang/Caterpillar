@@ -18,7 +18,9 @@
         <meta name="format-detection" content="telephone=no">
         <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
     </head>
+    <style>
     
+    </style>
     <body>
         <div class="x-body">
         <div  >
@@ -44,12 +46,21 @@
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                                                     层                                     
-                    </label>
+                    </label> 
                     <div class="layui-input-block">
-                        <input type="text" id="L_title" name="title" required lay-verify="required"
+                    <select id="title" style="" name="title" size="1" class="sel" required lay-verify="required"
                         autocomplete="off" class="layui-input">
-                    </div>
-                </div>
+						<option value="一层">一层</option>
+						<option value="二层">二层</option>
+						<option value="三层">三层</option>
+						<option value="四层">四层</option>
+						<option value="五层">五层</option>
+						<option value="六层">六层</option>
+						<option value="七层">七层</option>
+						<option value="八层">八层</option>
+				   </select>
+				   </div>
+				</div>
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                          人数                                                                                  
@@ -61,7 +72,7 @@
                 </div>
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
-                                         订金                                                                                 
+                                         订金/元                                                                                
                     </label>
                     <div class="layui-input-block">
                         <input type="text" id="bookprice" name="bookprice" required lay-verify="required"
@@ -77,10 +88,36 @@
                            <input type="radio" name="radio" title="是" value="1">
                     </div>
                 </div>
-                <input  name="merchantId" value="${merchantId}" style="display: none;">
+				<div class="layui-input-inline" style="width:auto;">
+				  <label for="L_title" class="layui-form-label">
+                                                     详情                                                                               
+                    </label>
+					<p style="margin-bottom: 15px;">
+						<img alt="" src=""
+							id="parkingshopPic" style="width:100px;"> <input
+							type="hidden" id="parkingshopImg" name="parkingshopImg"
+							lay-verify="title" autocomplete="off" class="layui-input">
+						<a href="javascript:openMap('上传图片','<%=request.getContextPath()%>/admin/picture/sellist?sel=parkingshopImg&img=parkingshopPic','600','400')"class="layui-btn layui-btn-xs"style="height:40px;line-height:40px;width:90px;">更换图片</a>
+					</p>
+					<p>
+					 <label for="L_title" class="layui-form-label">
+                                                    特色                                                                        
+                    </label> 
+                    <span>厕所</span><input class="sap"  type="checkbox" name='key' value="厕所"> 
+                    <span>wifi</span><input class="sap" type="checkbox" name='key' value="wifi"> 
+                    <span>唱歌</span><input class="sap" type="checkbox" name='key' value="唱歌"> 
+                    <span>电视</span>
+                    <input class="sap" type="checkbox" name='key' value="电视"> 
+                    <span>沙发</span>
+					<input class="sap" type="checkbox" name='key' value="沙发"> 
+					<span>空调</span>
+					<input	class="sap" type="checkbox" name='key' value="空调">
+					</p>
+				</div>
+				<input  name="merchantId" value="${merchantId}" style="display: none;">
 				<div id="view"></div> 
 				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 200px;bottom: 0">
-                    <button class="layui-btn" lay-filter="add" lay-submit>
+                    <button id="btns" class="layui-btn" lay-filter="add" lay-submit>
                         	保存
                     </button>
                 </div>
@@ -101,11 +138,26 @@
         		var form = layui.form,
         			layer = layui.layer,
         			laytpl = layui.laytpl;
-        
+                 var title = '';
         		//监听提交
         		form.on('submit(add)', function(data) {
-        			console.log(data.field);
-        			alert(${merchantId});
+        			console.log(data.field );
+        			$("[name='key']:checked").each(function() {
+                      title += $(this).val()+',';
+                    });
+                    if(title == ""){
+                      data.field.key = "";
+                    }else{
+                      data.field.key = title;
+                    }
+        			if(data.field.radio == null){
+        			alert("请选择是否是包间");
+        			return false;
+        			}
+        			if(data.field.title == null){
+        			alert("请选择层数");
+        			return false;
+        			}
 	        		layer.load();
         			$.ajax({
         				type : "post",
@@ -125,6 +177,13 @@
         		
         
         });
+        
+        
+         /*  alert(title); */
+        //打开分类
+	function openMap(title, url, w, h) {
+		x_admin_show(title, url, w, h);
+	}
         </script>
        
         

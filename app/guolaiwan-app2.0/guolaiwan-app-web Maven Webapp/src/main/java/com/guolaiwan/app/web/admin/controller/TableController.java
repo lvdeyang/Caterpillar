@@ -47,7 +47,7 @@ import pub.caterpillar.mvc.controller.BaseController;
 @RequestMapping("/admin/table")
 public class TableController extends BaseController {
 
-	@Autowired
+/*	@Autowired
 	private TableDAO conn_table;
 	@Autowired
 	private TableStatusDAO conn_tablestatus;
@@ -63,7 +63,7 @@ public class TableController extends BaseController {
 		return mv;
 	}
 	
-	/*// 餐桌列表数据
+	// 餐桌列表数据
 	@RequestMapping(value = "/list.do", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> showTables(HttpServletRequest request) throws Exception {
@@ -117,7 +117,7 @@ public class TableController extends BaseController {
 		
 		map.put("tables", tableVos);
 		return map;
-	}*/
+	}
 	
 	//显示添加餐桌页面
 	@RequestMapping("/addv")
@@ -125,7 +125,7 @@ public class TableController extends BaseController {
 		return "admin/table/add";
 	}
 
-/*	//添加餐桌
+	//添加餐桌
 	@ResponseBody
 	@RequestMapping(value="/add.do",method= RequestMethod.POST)
 	public String add(HttpServletRequest request){
@@ -146,7 +146,7 @@ public class TableController extends BaseController {
 		conn_table.save(table);
 		
 		return "success";
-	}*/
+	}
 	
 	//删除餐桌
 	@ResponseBody
@@ -210,6 +210,6 @@ public class TableController extends BaseController {
 			orderInfoPO.setOrderState(OrderStateType.PAYSUCCESS);
 		}
 		return "success";
-	}
+	}*/
 	
 }

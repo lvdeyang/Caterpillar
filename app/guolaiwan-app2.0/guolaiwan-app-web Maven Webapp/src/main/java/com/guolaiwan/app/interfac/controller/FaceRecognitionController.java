@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.interfac.util.FaceUtil;
+import com.guolaiwan.app.web.business.controller.PictureConvertor;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MessageDAO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
@@ -47,7 +48,7 @@ public class FaceRecognitionController {
 		try {
 
 			for (int i = 0; i < getmerchantid.size(); i++) {
-				String sendPost = FaceUtil.sendPost(localData, getmerchantid.get(i).getBase());
+				String sendPost = FaceUtil.sendPost(localData, PictureConvertor.getImg(getmerchantid.get(i).getFacePicWebUrl()));
 				sendPost = "[" + sendPost + "]";
 				List<Map> list = JSONObject.parseArray(sendPost, Map.class);
 				String number = list.get(0).get("confidence").toString();

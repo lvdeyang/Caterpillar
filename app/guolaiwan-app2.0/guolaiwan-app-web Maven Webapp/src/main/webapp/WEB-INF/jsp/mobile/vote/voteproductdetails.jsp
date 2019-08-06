@@ -172,10 +172,11 @@ html, body {
 <script>
 $(function(){
 	getRecomment();
+	list();
 })
 
 
-
+//获得图片
 function getRecomment() {
 		var _uriRecomment = window.BASEPATH + 'phoneApp/productInfo?productId=${product.id}&userId=${userId}';
 
@@ -196,8 +197,44 @@ function getRecomment() {
 			}
 		});
 }
+	//时间格式化
+	function fmat(time){
+		var da = time;
+	    da = new Date(da);
+	    var year = da.getFullYear()+'年';
+	    var month = da.getMonth()+1+'月';
+	    var date = da.getDate()+'日';
+		return year+month+date+"";
+	}
 
-
+	//展开数据
+	function list(){
+	var url=window.BASEPATH + 'admin/vote/showjudges';
+		$.post(url,{"productId":${product.id}},function(data){
+			var html=[];
+			 html.push('<table border="1"  style="text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; ">'); 
+			 html.push('<tr>'); 
+		     html.push('<th>日期</th>'); 
+		     html.push('<th>评委姓名</th>'); 
+		     html.push('<th>分数</th>'); 
+		  	 html.push('</tr>'); 
+	     	for(var i=0;i<data.all.length;i++){
+	     	 var time=fmat(data.all[i].updateTime);
+		  	 html.push('<tr>'); 
+		     html.push('<td>'+time+'</td>'); 
+		     html.push('<td>'+data.all[i].username+'</td>'); 
+		     html.push('<td>'+data.all[i].score+'</td>'); 
+		     html.push('</tr>'); 
+	     	}
+	     	 html.push('<tr>'); 
+	   		 html.push('<td>平均分</td>'); 
+	  	  	 html.push('<td colspan="2">'+data.score+'</td>'); 
+	         html.push('</tr>'); 
+			 html.push('</table>'); 
+	        $('.lists').children().remove();
+	        $('.lists').append(html.join(''));
+        })
+	}
 	  
 </script>
 <body>
@@ -222,27 +259,6 @@ function getRecomment() {
 	</div>	
 	
 	<div class="lists" style="text-align: center;margin:0 auto;width:100%;">
-	 <table border="1"  style="text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; ">
-	  <tr>
-	    <th>日期</th>
-	    <th>评委姓名</th>
-	    <th>分数</th>
-	  </tr>
-	  <tr>
-	    <td>8月15日</td>
-	    <td>张xx</td>
-	    <td>9</td>
-	  </tr>
-	   <tr>
-	    <td>8月15日</td>
-	    <td>张xx</td>
-	    <td>9</td>
-	  </tr>
-	   <tr>
-	    <td>平均分</td>
-	    <td colspan="2">9</td>
-	  </tr>
-	</table>
 	  
 	 </div>    
 </body>
