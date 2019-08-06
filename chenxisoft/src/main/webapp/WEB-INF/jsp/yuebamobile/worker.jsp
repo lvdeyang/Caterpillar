@@ -130,6 +130,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	             ${worker.moreMsg}
 	        
 	        </p>
+	        
+	        <div class="ftitle">
+	                                    订单列表
+	        </div>
+	       
+	        <ul class="ui-list ui-border-tb" style="font-size:12px;">
+		        <c:forEach items="${orders}" var="order">
+	                <li>
+	                    
+						<div class="ui-list-img-square">
+							<span style="background-image:url(/${order.worderPhoto}"></span></div>
+						<div class="ui-list-info ui-border-t">
+							<div style="font-size:14px;">${order.workName}</div>
+							<p class="ui-nowrap" style="font-size:12px;">${order.price}元/${order.days}天/${order.region}</p>
+							<p class="ui-nowrap" style="font-size:12px;">开始日期:${order.fromDateStr}</p>
+						</div>
+	                </li>
+	            </c:forEach>
+            </ul>
+	        
+	        
 	        <div class="ftitle adminrow" style="display:none;">
 	                                    管理员菜单
 	        </div>
@@ -167,17 +188,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        
 	        
 	        
-	        <div class="ftitle">
+	        <div class="ftitle" style="display:none;">
 	                                    评论列表<a href="javascript:void(0)" id="moreComment" style="">查看更多</a>
 	        </div>
-	        <section class="ui-input-wrap ui-border-t">
+	        <section style="display:none" class="ui-input-wrap ui-border-t">
 			    <div class="ui-input ui-border-radius">
 			        <input  style="font-size:12px;" type="text" id="commentContent" placeholder="我也说一句...">
 			    </div>
 			    <button id="addCommnet" class="ui-btn" style="font-size:12px;">评论</button>
 			</section>
 	        
-	        <ul class="ui-list ui-border-tb" style="font-size:12px;">
+	        <ul style="display:none;" class="ui-list ui-border-tb" style="font-size:12px;">
 		        <c:forEach items="${comments}" var="comment">
 	                <li>
 	                    <div class="ui-avatar-lg">

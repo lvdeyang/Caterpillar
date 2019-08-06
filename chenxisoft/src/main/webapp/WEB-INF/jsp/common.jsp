@@ -25,7 +25,7 @@
 		   menuHtml.push('<div class="ui-tab " style="position:fixed;bottom:0px;top:auto;">');
 		   menuHtml.push('    <ul class="ui-tab-nav ui-border-b ">');
 		   menuHtml.push('        <li data="home/mobile/index" class="bottomMenu '+(num==1?'current':'')+'"><span>首页</span></li>');
-		   menuHtml.push('        <li data="cartest/index" class="bottomMenu '+(num==2?'current':'')+'"><span>育儿</span></li>');
+		   //menuHtml.push('        <li data="cartest/index" class="bottomMenu '+(num==2?'current':'')+'"><span>育儿</span></li>');
 		   menuHtml.push('        <li data="person/index" class="bottomMenu '+(num==3?'current':'')+'"><span>个人</span></li>');
 		   menuHtml.push('    </ul>');
 		   

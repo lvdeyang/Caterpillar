@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.bussiness.admin.dao.JudgesVoteMsgDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.VoteImposeDao;
@@ -28,6 +29,7 @@ import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
 import com.guolaiwan.bussiness.admin.enumeration.LiveStatusType;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.JudgesVoteMsgPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
@@ -59,7 +61,8 @@ public class VoteController extends BaseController {
 	private OrderInfoDAO orderinfoDAO;
 	@Autowired
 	private VoteImposeDao voteimposeDAO;
-	
+	@Autowired
+	private JudgesVoteMsgDAO judgesvotemsgDAO;
 	// 显示列表页面
 	@ResponseBody
 	@RequestMapping(value = "/list")
@@ -232,10 +235,12 @@ public class VoteController extends BaseController {
 		if (count != 0) {
 			return "chongfu";
 		}
+		long optionId = votemodularDAO.get(acId).getOptionId();
 		VoteProductPO voteproduct=new VoteProductPO();
 		voteproduct.setModularcode(acId);
 		voteproduct.setProductId(pId);
 		voteproduct.setProductName(pName);
+		voteproduct.setOptionId(optionId);
 		voteproductDAO.save(voteproduct);
 		return "success";
 	}
@@ -549,13 +554,83 @@ public class VoteController extends BaseController {
 		return null;
 	}
 	
-	// 投票轮播图页面
+	// Pc端页面
 	@RequestMapping(value = "/gotovotepc")
-	public ModelAndView goToVotePc(HttpServletRequest request) {
+	public ModelAndView goToVotePC(HttpServletRequest request) {
 		String optionId=request.getParameter("optionId");
 		ModelAndView mv = new ModelAndView("mobile/vote/delicacyPc");
 		mv.addObject("optionId", optionId);
 		return mv;
 	}
+	
+	// Pc端评委页面
+	@RequestMapping(value = "/gotojudgespc")
+	public ModelAndView goToJudgesPC(HttpServletRequest request) {
+		String productId=request.getParameter("productId");
+		ModelAndView mv = new ModelAndView("mobile/vote/judgeslistPC");
+		mv.addObject("productId", productId);
+		return mv;
+	}
+	
+	// 手动输入评委评分页面
+	@RequestMapping(value = "/gotojudgesvotemsg")
+	public ModelAndView goToJudgesVoteMsg(HttpServletRequest request) {
+		String productId=request.getParameter("productId");
+		ModelAndView mv = new ModelAndView("admin/vote/judgesvotemsglist");
+		mv.addObject("productId", productId);
+		return mv;
+	}
 
+	//查询这个商品的评委信息
+	@ResponseBody
+	@RequestMapping(value = "/getalljudges")
+	public Map<String, Object> getAllJudges(HttpServletRequest request,int page, int limit) throws Exception {
+		String voteproductId=request.getParameter("productId");
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		int count = judgesvotemsgDAO.countByVotePId(Long.parseLong(voteproductId));
+		List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(Long.parseLong(voteproductId));
+		strMap.put("code", "0");
+		strMap.put("msg", "");
+		strMap.put("count", count);
+		strMap.put("data", all);
+		return strMap;
+	}
+	
+	
+	// 修改评分
+	@ResponseBody
+	@RequestMapping(value = "/updetescore", method = RequestMethod.POST)
+	public String updeteScore(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		JudgesVoteMsgPO judgesVoteMsgPO = judgesvotemsgDAO.get(id);
+		String field = request.getParameter("field");
+		if (field.equals("score")) {
+			long score = Long.parseLong(request.getParameter("value"));
+			judgesVoteMsgPO.setScore(score);
+			judgesvotemsgDAO.saveOrUpdate(judgesVoteMsgPO);
+			return "success";
+		}
+		return "error";
+	}
+	
+	
+	// 展示评分的数据
+	@ResponseBody
+	@RequestMapping(value = "/showjudges", method = RequestMethod.POST)
+	public Map<String, Object> showJudges(HttpServletRequest request) throws Exception {
+		long productId=Long.parseLong(request.getParameter("productId"));
+		Map<String, Object> str=new HashMap<String, Object>();
+		long score=0;
+		List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByPId(productId);
+		if(all==null||all.size()==0){
+			return str;
+		}else{
+			for (JudgesVoteMsgPO judges : all) {
+				score+=judges.getScore();
+			}
+			str.put("score", (score/all.size()));
+			str.put("all", all);
+			return str;
+		}
+	}
 }

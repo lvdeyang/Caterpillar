@@ -330,6 +330,9 @@ function getvoteproduct(id){
 $("#b"+base).css("color","black");
  base=id;
  $("#b"+id).css("color","#F92828");
+//计算总票数 用于排序
+var url=window.BASEPATH + 'judges/sortproduct?id='+id+'&userId=${userId}&optionId=${optionId}'
+$.post(url,{"id":id,"optionId":"${optionId}"},function(data){
     var _uriRecomment = window.BASEPATH + 'judges/getvoteproductpc?id='+id+'&optionId=${optionId}';
     $.get(_uriRecomment,null,function(data){
       var html=[],html1=[];
@@ -343,7 +346,7 @@ $("#b"+base).css("color","black");
 			html.push('</div>');   
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:7.6em;margin-left:-13em;" src="lib/images/guanjun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1.8em;">'+data[i].productname+'</p>');   
+			html.push('<p style="border-radius:12px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1.6em;">'+data[i].productname+'</p>');   
 			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
@@ -357,7 +360,7 @@ $("#b"+base).css("color","black");
 			html.push('</div>');   
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/yajun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1.8em;">'+data[i].productname+'</p>');   
+			html.push('<p style="border-radius:12px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1.6em;display: inline-block;">'+data[i].productname+'</p>');   
 			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
@@ -371,7 +374,7 @@ $("#b"+base).css("color","black");
 			html.push('</div>');   
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/jijun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1.8em;">'+data[i].productname+'</p>');   
+			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1.6em;">'+data[i].productname+'</p>');   
 			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
@@ -394,7 +397,7 @@ $("#b"+base).css("color","black");
 		 	html1.push('</div>');
 		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i+1].productpic+'">');
 	  		html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i+1].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+data[i].allcount+'票</p>');
+		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+data[i+1].allcount+'票</p>');
 	     	html1.push('</div>');
 			html1.push('</div>');
         }
@@ -405,6 +408,7 @@ $("#b"+base).css("color","black");
        $('.other').children().remove();
        $('.other').append(html1.join(''));   
     });
+});
 } 
 	
 	function votepoll(id){
@@ -466,7 +470,6 @@ $("#b"+base).css("color","black");
 	 
 		 
 		 
-
 	    
 	     <!-- 置顶 -->
      <!--  <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div> -->
