@@ -64,12 +64,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	             通用
 	</div>
     <ul class="ui-list ui-list-single ui-list-link ui-border-tb">
-	    <li class="ui-border-t" data="worker/mobile/apply">
+	    <li class="ui-border-t" data="worker/mobile/apply" style="display:none">
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap" style="font-size:14px;">月嫂中心</h4> 
 	        </div>
 	    </li>
-	    <li class="ui-border-t"  data="assign/mobile/ulist?orderId=0">
+	    <li class="ui-border-t"  data="assign/mobile/ulist?orderId=0" style="display:none">
 	        <div class="ui-list-info" data="javascript:void(0)">
 	            <h4 class="ui-nowrap" style="font-size:14px;">宝宝记录</h4> 
 	        </div>
