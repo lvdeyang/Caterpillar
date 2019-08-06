@@ -92,4 +92,16 @@ public class OrderDao extends AbstractBaseDao<OrderPo> {
 		return this.findByHql(hql);
 	}
 	
+	
+	public List<OrderPo> findCurrentYearOrder(long workerId) throws ParseException{
+		Date curDate=new Date();
+		Date startDate=DateUtil.parse(DateUtil.format(curDate, "yyyy")+"-01-01 00:00:00","yyyy-MM-dd HH:mm:ss");
+		Date endDate=DateUtil.parse(DateUtil.format(curDate, "yyyy")+"-12-31 00:00:00","yyyy-MM-dd HH:mm:ss");
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("workerId",Condition.eq,workerId);
+		hql.andBy("fromDate",Condition.le,endDate);
+		hql.andBy("fromDate",Condition.ge,startDate);
+		return this.findByHql(hql);
+	}
+	
 }

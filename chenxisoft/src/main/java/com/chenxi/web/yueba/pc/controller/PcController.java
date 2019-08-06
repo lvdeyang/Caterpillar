@@ -40,6 +40,8 @@ public class PcController {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		SysViewRecordPo sysViewRecordPo=new SysViewRecordPo();
 		sysViewRecordPo.setUrl("pchome");
+        request.getRemoteAddr();
+		sysViewRecordPo.setUserName(request.getHeader("user-agent")+"**********"+request.getRemoteAddr());
 		conn_sysview.save(sysViewRecordPo);
 		ModelAndView mv = new ModelAndView("pc/index", strMap);
 		return mv;

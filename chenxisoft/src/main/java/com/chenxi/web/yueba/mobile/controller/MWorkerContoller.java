@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +79,7 @@ public class MWorkerContoller extends BaseController {
 	SeeRecordDao conn_seerecord;
 	
 	@RequestMapping(value = "/mobile/index", method = RequestMethod.GET)
-	public ModelAndView index(HttpServletRequest request,long workerId) {
+	public ModelAndView index(HttpServletRequest request,long workerId) throws ParseException {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		WorkerPo workerPo=conn_worker.get(workerId);
 		workerPo.setOrderCount(workerPo.getBaseOrderCount()+conn_order.countCompleteByWorker(workerPo.getId()));
@@ -106,6 +107,9 @@ public class MWorkerContoller extends BaseController {
         strMap.put("priceHtml", sb.toString());
         
         strMap.put("comments",conn_comment.findByworkerId(workerId, 1, 3));
+        strMap.put("orders",conn_order.findCurrentYearOrder(workerId));
+        
+        
         
         strMap.put("childCount", workerPo.getBaseOrderCount()+conn_order.countByField("workerId", workerId));
         OrderPo currentOrder=conn_order.findMaxWorderOrder(workerId);
@@ -388,4 +392,18 @@ public class MWorkerContoller extends BaseController {
 		conn_worker.update(workerPo);
 		return "success";
 	}
+	
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/mobile/offline", method = RequestMethod.POST)
+	public Object offline(HttpServletRequest request) {
+		Map ret = new HashMap();
+		String id=request.getParameter("id");
+		WorkerPo workerPo=conn_worker.get(Long.parseLong(id));
+        workerPo.setStatus(WorkerStatus.CHECKING);
+		conn_worker.update(workerPo);
+		return "success";
+	}
+	
 }
