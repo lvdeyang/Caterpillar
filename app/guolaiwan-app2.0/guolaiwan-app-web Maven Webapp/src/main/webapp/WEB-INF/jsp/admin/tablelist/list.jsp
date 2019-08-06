@@ -198,6 +198,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		})
 	});
+	$(document).on('click', '#cancel', function() { //取消预订
+		$.ajax({
+			type : "post",
+			url : "cancel.do",
+			data : {
+				"tableStatusid" : $("#tableStatusId").val(),
+				"tableid":$("#inpu").val()
+			},
+			success : function(data) {
+			   if(data.code  == 1){
+			    return alert("此房间没有预订");
+			   }
+				$(".xinxi").fadeOut();
+				list($("#test1").val(), $("#times").val());
+			}
+		})
+	});
+	
 	$(document).on('click', '.delete', function() { //删除此房间
 	     //示范一个公告层
 	     layer.open({
@@ -241,7 +259,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var date = $("#time").val(); 
 		var	type =  $("#midday").val();
 		var img =$("#parkingshopImg").val();
-		alert($(".sap").val());
 		if (userPhone == "") {
 			alert("请输入手机号");
 			return false;
@@ -252,10 +269,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		if (bookprice == "") {
 			alert("请输入房间价格");
-			return false;
-		}
-		if (tableMenu == "") {
-			alert("请输入菜品");
 			return false;
 		}
 		if (date == "") {
@@ -270,7 +283,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			alert("请选择图片");
 			return false;
 		}
-		/*  $.ajax({
+		  $.ajax({
 			type : "post",
 			url : "addData.do",
 			data : {"img":img,"merchantId" : $("#tablelist").val(),"type":type,"userPhone":userPhone,"userName":userName,"tableId":tableId,"tableStatusId":tableStatusId,"tableMenu":tableMenu,"bookprice":bookprice,"date":date},
@@ -278,7 +291,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$(".xinxi").fadeOut();
 			list($("#test1").val(), $("#times").val());
 			}	
-		}) */ 
+		}) 
 	});
 
 
@@ -406,7 +419,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			结束时间：<input style="height:30px;width:300px;"id = "stopTime" >
 		</p> -->
 		<p style="text-align: center;margin:30px auto 0;">
-			<span class="left" style=""  id="save">预订</span><span class="putaway">上架</span><span class="below">下架</span><span class="delete">删除此房间</span><span class="right">关闭窗口</span>
+			<span class="left" style=""  id="save">预订</span><span class="left" style=""  id="cancel">取消预订</span><span class="putaway">上架</span><span class="below">下架</span><span class="delete">删除此房间</span><span class="right">关闭窗口</span>
 		</p> 
 	</div>
 </body>

@@ -115,7 +115,6 @@ public class SmartParkingController  extends WebBaseControll{
 				   long diff = d2.getTime() - d1.getTime();//这样得到的差值是微秒级别
 				   Long date = diff/1000;
 				   if (date<0) {
-					   
 				    int	parkingNumber = orderPO.getParkingNumber();
 					String	parkingLayer = 	orderPO.getParkingLayer();
 					String	district = 	orderPO.getParkingDistrict();
