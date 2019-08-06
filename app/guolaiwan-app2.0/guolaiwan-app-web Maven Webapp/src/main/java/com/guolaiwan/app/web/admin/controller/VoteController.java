@@ -554,12 +554,21 @@ public class VoteController extends BaseController {
 		return null;
 	}
 	
-	// 投票轮播图页面
+	// Pc端页面
 	@RequestMapping(value = "/gotovotepc")
-	public ModelAndView goToVotePc(HttpServletRequest request) {
+	public ModelAndView goToVotePC(HttpServletRequest request) {
 		String optionId=request.getParameter("optionId");
 		ModelAndView mv = new ModelAndView("mobile/vote/delicacyPc");
 		mv.addObject("optionId", optionId);
+		return mv;
+	}
+	
+	// Pc端评委页面
+	@RequestMapping(value = "/gotojudgespc")
+	public ModelAndView goToJudgesPC(HttpServletRequest request) {
+		String productId=request.getParameter("productId");
+		ModelAndView mv = new ModelAndView("mobile/vote/judgeslistPC");
+		mv.addObject("productId", productId);
 		return mv;
 	}
 	
@@ -605,7 +614,7 @@ public class VoteController extends BaseController {
 	}
 	
 	
-	// 编辑轮播图数据
+	// 展示评分的数据
 	@ResponseBody
 	@RequestMapping(value = "/showjudges", method = RequestMethod.POST)
 	public Map<String, Object> showJudges(HttpServletRequest request) throws Exception {
@@ -617,7 +626,7 @@ public class VoteController extends BaseController {
 			return str;
 		}else{
 			for (JudgesVoteMsgPO judges : all) {
-				score=+judges.getScore();
+				score+=judges.getScore();
 			}
 			str.put("score", (score/all.size()));
 			str.put("all", all);
