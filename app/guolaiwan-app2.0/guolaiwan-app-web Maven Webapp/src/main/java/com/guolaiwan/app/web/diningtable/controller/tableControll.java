@@ -176,7 +176,6 @@ public class tableControll extends WebBaseControll  {
 		
 		int soleTable  = 0;
 		List<TablePO> addpo  = Table.findSearch(merchant,search);
-		System.out.println(addpo.size() +" -----------------------");
 		int   table = Table.getfindSearch(merchant,search);
 		int   room = Table.getfindSearch(merchant,search);
 		

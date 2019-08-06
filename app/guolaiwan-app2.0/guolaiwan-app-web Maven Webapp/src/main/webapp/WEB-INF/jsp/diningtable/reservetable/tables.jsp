@@ -230,7 +230,6 @@ text-align: center;
 					change += $(this).val() + ",";
 				}
 			});
-			alert(change);
 			list();
 		});
 		function search() {
@@ -344,28 +343,16 @@ text-align: center;
 					       $(".table").css({"width":"17%","padding-bottom":"17%"});
 					} if (sole == 2){ //只有房
 						   add(data[i],0);
-						   $(".hall").css("width","0");
-					       $(".Room-left").css("width","48%");
-				           $(".Room-right").css("width","48%");
-				           $(".hous").css({"width":"48%","margin-left":"1%"});
+						    $(".hall").css("width","0");
+					       $(".Room-left").css("width","100%");
+				           $(".Room-right").css("width","0%");
+				           $(".hous").css({"width":"23%","margin-left":"1%"});
 				           $(".houss").css({"width":"48%","margin-right":"1%"});
 					}
 				}
 			});
 		}
-     /*   	var title = '';
-       	$(".ischange").change(function(){ 
-        	$("[name='key']:checked").each(function(){
-        	          if($(".ischange").prop("checked")==true){
-                      title += $(this).val()+',';
-                     }else{
-                       alert("quxiao")
-                       title += $(this).val()+',';
-                     }
-                    });
-                     alert(title); 
-           });      */
-             
+   
                     
 	
 		function add(data,boole) { //添加信息
