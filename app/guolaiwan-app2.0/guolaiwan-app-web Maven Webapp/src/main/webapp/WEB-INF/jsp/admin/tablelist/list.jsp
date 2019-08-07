@@ -117,8 +117,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						html.push('<div class="xuanzhong" id="' + data[i].id + '" style="width:auto;height:auto;text-align: center;margin:20px;display: inline-block;overflow: hidden;z-index:111111;">');
 						if (data[i].room == 1) {
 							if (data[i].tableState == 0) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/homes.png">');
-							if (data[i].tableState == 1) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/lu.png">');
-							if (data[i].tableState == 2) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/xuanzhong.png">');
+							if (data[i].tableState == 1) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/luse.png">');
+							if (data[i].tableState == 2) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/xuanzhon.png">');
 						} else {
 							if (data[i].tableState == 0) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/huizuo.png">');
 							if (data[i].tableState == 1) html.push('<img  style="height:80px;width:80px;" src="../../lib/images/luzuo.png">');

@@ -377,7 +377,7 @@ text-align: center;
 					html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
 					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
 					if (data.tableState == 1) html.push('<img style="width:90%;" src="lib/images/luse.png">')
-					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhong.png">')
+					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
 					html.push('<p>' + data.tablename + '</p>');
 					html.push('<p><span>' + data.size + '人间</span></p>');
 					if (data.sofa == 1) { //沙发
@@ -406,7 +406,7 @@ text-align: center;
 					html.push('<div class="houss" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
 					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
 					if (data.tableState == 1) html.push('<img style="width:90%;" src="lib/images/luse.png">')
-					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhong.png">')
+					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
 					html.push('<p>' + data.tablename + '</p>');
 					html.push('<p><span>' + data.size + '人间</span></p>');
 					if (data.sofa == 1) { //沙发
@@ -455,7 +455,7 @@ text-align: center;
 	       <span><span style="color:#D13035;">红色</span>已预定</span>
 	       <span><span style="color:#A4A2A0;">灰色</span>不可选</span>
 	       <!-- <span><span style="color:#4D974B;">绿色</span>已选</span> -->
-	       <span><span><img style="height:25px;width:25px;" src="lib/images/lu.png"></span>包间</span>
+	       <span><span><img style="height:25px;width:25px;" src="lib/images/luse.png"></span>包间</span>
 	       <span><span style="width:25px;height:25px;border-radius:50%;background:#7EBE34;display: inline-block;vertical-align: middle;"></span>大厅</span>
 	      </p>
 	    <div class="nav_in" style="line-height:50px;border-bottom: 2px solid #CECACB;width:100%;height:auto;position: relative;font-size:12px;font-weight: bold;overflow: hidden;height:50px;">
