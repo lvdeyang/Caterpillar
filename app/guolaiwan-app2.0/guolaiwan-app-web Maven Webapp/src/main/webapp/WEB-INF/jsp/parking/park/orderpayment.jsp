@@ -353,7 +353,7 @@ html, body {
 	$(function() {
 	
 	 
-	
+	alert(${param.orderid});
 		window.BASEPATH = '<%=basePath %>';
 		var parseAjaxResult = function(data) {
 			if (data.status !== 200) {
@@ -597,7 +597,7 @@ html, body {
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		             alert("交易成功");  
-	                 window.location.href = "vice/merchant/order?uid="+${param.uid};
+	                 window.location.href = "vice/merchant/order?uid="+${param.orderid};
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
 		             alert("交易取消");  
 	                 window.location.href = "vice/merchant/parking";

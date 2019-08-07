@@ -173,8 +173,10 @@ text-align: center;
 			change : function(value, date) { //监听日期被切换
 			},
 			done : function() {
-			  if ($(".texts").val() != "请选择") {
+			  if ($(".texts").val() != "请选择" && $(".search").val() =="") {
 			    list();
+	          }else if($(".texts").val() != "请选择" && $(".search").val() !=""){
+	            search();
 	          }else{
 	           $.toptip('请选择就餐时间', 'error');
 	          }
@@ -184,16 +186,114 @@ text-align: center;
 	});
 
 	$('.texts').on('change', function() { //就参时间
-		  if ($("#test2").val() != "") {
-			 list(); 
-		}else{
-		    $.toptip('请选择预订时间', 'error');
-		}  
+		if ($("#test2").val() != "" && $(".search").val() == "") {
+			list();
+		} else if ($("#test2").val() != "" && $(".search").val() != "") {//搜索时方法
+            search();
+		} else {
+			$.toptip('请选择预订时间', 'error');
+		}
 	});
 	$('.pid').on('change', function() { //层数
 		list();
 	});
 
+	$('.pic').on('click', function() { //搜索隐藏页面
+		$(".nav").hide();
+		$(".serve").hide();
+		$(".pid").hide();
+		$(".pid_in").hide();
+		$(".nav_in").append("<button class='cancel' style='margin-left:7%;border:none;outline:none;background:#fff;'>取消搜索</button>")
+		if( $(".search").val() != ""){ //搜索为空 不查询
+		 search();
+		}else{
+		    $('.hall').empty();
+			$('.Room-left').empty();
+			$('.Room-right').empty();
+		}
+		
+		$('.cancel').on('click', function() {  
+		$(".search").val("")
+		list();
+		$(".cancel").hide();
+		$(".nav").show();
+		$(".serve").show();
+		$(".pid").show();
+		$(".pid_in").show();
+	    });
+	});
+		 change = null;
+		$(".ischange").change(function() {  //特色搜索
+			change = "";
+			$('input:checkbox').each(function() {
+				if ($(this).prop('checked') == true) {
+					change += $(this).val() + ",";
+				}
+			});
+			list();
+		});
+		function search() {
+			var _uri = window.BASEPATH + 'reservetable/search.do'; //
+			var patam = {};
+			patam.merchantId = 364 ; //'${merchantId}'
+			patam.search = $(".search").val();
+			patam.tableDate = $("#test2").val(); //时间
+			if ($(".texts").val() != "请选择") {
+				patam.type = $(".texts").val(); //午 晚
+			} else {
+				patam.type = "";
+			}
+			$.post(_uri, $.toJSON(patam), function(data) {
+				$('.hall').empty();
+				$('.Room-left').empty();
+				$('.Room-right').empty();
+				var sole = data.sole; //判断此层是否只有包间 或 桌
+				data = data.merchant;
+				boole = 0;
+				for (var i = 0; i < data.length; i++) {
+					if (sole == 0) { //有桌子有包间
+						add(data[i], boole);
+						$(".hall").css("width", "58%");
+						$(".Room-left").css("width", "20%");
+						$(".Room-right").css("width", "20%");
+						$(".hous").css({
+							"width" : "99%",
+							"margin-left" : "1%"
+						});
+						$(".houss").css({
+							"width" : "99%",
+							"margin-right" : "1%"
+						});
+					}
+					if (sole == 1) { //只有桌子
+						add(data[i]);
+						$(".hall").css("width", "100%");
+						$(".Room-left").css("width", "0%");
+						$(".Room-right").css("width", "0%");
+						$(".table").css({
+							"width" : "17%",
+							"padding-bottom" : "17%"
+						});
+					}
+					if (sole == 2) { //只有房
+						add(data[i], 0);
+						$(".hall").css("width", "0");
+						$(".Room-left").css("width", "48%");
+						$(".Room-right").css("width", "48%");
+						$(".hous").css({
+							"width" : "48%",
+							"margin-left" : "1%"
+						});
+						$(".houss").css({
+							"width" : "48%",
+							"margin-right" : "1%"
+						});
+					}
+				}
+			});
+	}
+	
+	
 	
 	
 	/* 日期判断 */
@@ -215,6 +315,7 @@ text-align: center;
 			var _uri = window.BASEPATH + 'reservetable/getlist.do'; //
 			var patam = {};
 			patam.merchantId = 364 ; //'${merchantId}'
+			patam.feature = window.change; //'${merchantId}'
 			patam.tableDate = $("#test2").val(); //时间
 			if ($(".texts").val() != "请选择") {
 				patam.type = $(".texts").val(); //午 晚
@@ -225,29 +326,46 @@ text-align: center;
 			$.post(_uri, $.toJSON(patam), function(data) {
 				var sole = data.sole; //判断此层是否只有包间 或 桌
 				data = data.merchant;
+			    boole = 0;
 				for (var i = 0; i < data.length; i++) {
-					if (sole == 0) {
-						add(data[i]);
-					} else {
-						add(data[i]);
+					if (sole == 0) { //有桌子有包间
+						   add(data[i],boole);
+						   $(".hall").css("width","58%");
+						   $(".Room-left").css("width","20%");
+				           $(".Room-right").css("width","20%");
+				           $(".hous").css({"width":"99%","margin-left":"1%"});
+				           $(".houss").css({"width":"99%","margin-right":"1%"});
+					} if (sole == 1){  //只有桌子
+					       add(data[i]);
+						   $(".hall").css("width","100%");
+						   $(".Room-left").css("width","0%");
+				           $(".Room-right").css("width","0%");
+					       $(".table").css({"width":"17%","padding-bottom":"17%"});
+					} if (sole == 2){ //只有房
+						   add(data[i],0);
+						    $(".hall").css("width","0");
+					       $(".Room-left").css("width","100%");
+				           $(".Room-right").css("width","0%");
+				           $(".hous").css({"width":"23%","margin-left":"1%"});
+				           $(".houss").css({"width":"48%","margin-right":"1%"});
 					}
 				}
 			});
 		}
-
-
-		var boole = 0;
-		function add(data) { //添加信息
+   
+                    
+	
+		function add(data,boole) { //添加信息
 			if (data.room == "0") { //普通桌
 				var html = [];
 				if (data.tableState == 0) {
-					html.push('<div style="text-align:center;background: #BFBFBF;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
+					html.push('<div  class="table" style="text-align:center;background: #BFBFBF;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
 				}
 				if (data.tableState == 1) {
-					html.push('<div style="text-align:center;background: #7EBE34;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
+					html.push('<div class="table" style="text-align:center;background: #7EBE34;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
 				}
 				if (data.tableState == 2) {
-					html.push('<div style="text-align:center;background: #D13035;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
+					html.push('<div class="table" style="text-align:center;background: #D13035;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
 				}
 				html.push('<p><span>' + data.tableNo + '</span></p>');
 				html.push('<p><span>' + data.size + '</span></p>');
@@ -256,10 +374,10 @@ text-align: center;
 			} else { //包间
 				if (boole == 0) {
 					var html = [];
-					html.push('<div style="text-align:center;width:100%;height:auto;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
+					html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
 					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
-					if (data.tableState == 1) html.push('<img style="width:90%;" src="lib/images/lu.png">')
-					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhong.png">')
+					if (data.tableState == 1) html.push('<img style="width:90%;" src="lib/images/luse.png">')
+					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
 					html.push('<p>' + data.tablename + '</p>');
 					html.push('<p><span>' + data.size + '人间</span></p>');
 					if (data.sofa == 1) { //沙发
@@ -282,13 +400,13 @@ text-align: center;
 					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/karaoke.png">');
 					html.push('</div>');
 					$('.Room-left').append(html.join(''));
-					boole = 1;
+					window.boole = 1;
 				} else {
 					var html = [];
-					html.push('<div style="text-align:center;width:100%;height:auto;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
+					html.push('<div class="houss" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
 					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
-					if (data.tableState == 1) html.push('<img style="width:90%;" src="lib/images/lu.png">')
-					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhong.png">')
+					if (data.tableState == 1) html.push('<img style="width:90%;" src="lib/images/luse.png">')
+					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
 					html.push('<p>' + data.tablename + '</p>');
 					html.push('<p><span>' + data.size + '人间</span></p>');
 					if (data.sofa == 1) { //沙发
@@ -313,7 +431,7 @@ text-align: center;
 					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/karaoke.png">');
 					html.push('</div>');
 					$('.Room-right').append(html.join(''));
-					boole = 0;
+					window.boole = 0;
 				}
 			}
 		}
@@ -337,10 +455,10 @@ text-align: center;
 	       <span><span style="color:#D13035;">红色</span>已预定</span>
 	       <span><span style="color:#A4A2A0;">灰色</span>不可选</span>
 	       <!-- <span><span style="color:#4D974B;">绿色</span>已选</span> -->
-	       <span><span><img style="height:25px;width:25px;" src="lib/images/lu.png"></span>包间</span>
+	       <span><span><img style="height:25px;width:25px;" src="lib/images/luse.png"></span>包间</span>
 	       <span><span style="width:25px;height:25px;border-radius:50%;background:#7EBE34;display: inline-block;vertical-align: middle;"></span>大厅</span>
 	      </p>
-	    <div style="line-height:50px;border-bottom: 2px solid #CECACB;width:100%;height:auto;position: relative;font-size:12px;font-weight: bold;overflow: hidden;height:50px;">
+	    <div class="nav_in" style="line-height:50px;border-bottom: 2px solid #CECACB;width:100%;height:auto;position: relative;font-size:12px;font-weight: bold;overflow: hidden;height:50px;">
 	     <p style="float:left;line-height: 50px;width:36%;">
 	      <span style="float:left;">就餐日期:</span>
 	      <input type="text" placeholder="选择日期"   style="line-height: 50px;height:50px;margin:0;padding:0;float:left;cursor: pointer;width:49%;border:none;outline:none;" class="layui-input" id="test2" onchange="myFunction()">
@@ -360,14 +478,14 @@ text-align: center;
 	       <option >二层</option>
 	       <option >三层</option>
 	      </select> 
-	     <span style="text-align: center;color: black;line-height: 50px;float:right;">楼层：</span>
+	     <span class="pid_in" style="text-align: center;color: black;line-height: 50px;float:right;">楼层：</span>
 	   </div>
-	    <div class="" style="height:50px;line-height: 50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-bottom:2px solid #CECACB;">
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">厕所<input name='key'  style="margin:0;vertical-align:middle;" type="checkbox"></p>
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">WIFI<input name='key'  style="margin:0;vertical-align:middle;" type="checkbox"></p>
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">沙发<input  name='key'  style="margin:0;vertical-align:middle;" type="checkbox"></p>
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">空调<input name='key'  style="margin:0;vertical-align:middle;" type="checkbox"></p>
-	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">唱歌<input name='key'  style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	    <div class="serve" style="height:50px;line-height: 50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-bottom:2px solid #CECACB;">
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">厕所<input class="ischange" name='key' value="lavatory" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">WIFI<input class="ischange" name='key' value="wifi" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">沙发<input class="ischange" name='key' value="sofa" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">空调<input class="ischange" name='key' value="airConditioner" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">唱歌<input class="ischange" name='key' value="karaoke" style="margin:0;vertical-align:middle;" type="checkbox"></p>
 	    </div> 
 	     <!-- 搜索 -->
 	     <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;margin: 20px 0;">

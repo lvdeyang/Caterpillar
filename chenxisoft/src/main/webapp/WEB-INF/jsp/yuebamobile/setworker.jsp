@@ -122,6 +122,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <button class="ui-btn-lg ui-btn-primary" id="save" style="background:#FFC0CB;">
 	                                                    保存               
 	            </button>
+	           
+	            
+	        </div>
+	        <div class="ui-btn-wrap" style="">
+
 	            <button class="ui-btn-lg ui-btn-primary" id="offLine" style="background:#FFC0CB;">
 	                                                    下架              
 	            </button>

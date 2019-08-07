@@ -107,7 +107,11 @@ public class MWorkerContoller extends BaseController {
         strMap.put("priceHtml", sb.toString());
         
         strMap.put("comments",conn_comment.findByworkerId(workerId, 1, 3));
-        strMap.put("orders",conn_order.findCurrentYearOrder(workerId));
+        List<OrderPo> orderPos=conn_order.findCurrentYearOrder(workerId);
+        for (OrderPo orderPo : orderPos) {
+        	orderPo.setFromDateStr(DateUtil.format(orderPo.getFromDate(),"yyyy-MM-dd"));
+		}
+        strMap.put("orders",orderPos);
         
         
         

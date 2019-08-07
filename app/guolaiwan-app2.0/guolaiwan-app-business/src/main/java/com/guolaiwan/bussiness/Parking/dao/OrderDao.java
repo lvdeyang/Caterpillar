@@ -177,14 +177,15 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
         * @return
         * @throws ParseException
         */
-       public List<OrderPO>  getOrderform(Long userId,Collection<String> sal,String vehicle) throws ParseException{
+       public List<OrderPO>  getOrderform(Long orderId,Collection<String> sal,String vehicle) throws ParseException{
     	   QueryHql hql = newQueryHql();
-    	   hql.andBy("orderId", Condition.eq,userId);
+    	   hql.andBy("orderId", Condition.eq,orderId);
     	   hql.andBy("orderStatus", Condition.in,sal);
     	   hql.andBy("platenumber", Condition.eq,vehicle);
     	   return findByHql(hql);
     	   
        }
+     
      
        /**
         * 通过用户id 景区id   订单状态  查询订单信息
@@ -196,7 +197,7 @@ public class OrderDao  extends AbstractBaseDao<OrderPO>{
         */
        public  OrderPO  getOrderform(Long userId,Long attractionsId,Collection<String> sal,String vehicle) throws ParseException{
     	   QueryHql hql = newQueryHql();
-    	   hql.andBy("orderId", Condition.eq,userId);
+    	   hql.andBy("id", Condition.eq,userId);
     	   hql.andBy("attractionsId", Condition.eq,attractionsId);
     	   hql.andBy("orderStatus", Condition.in,sal);
     	   hql.andBy("platenumber", Condition.eq,vehicle);
