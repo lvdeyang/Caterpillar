@@ -20,9 +20,9 @@ public class TableStatusPO extends AbstractBasePO {
 
 	private long tableId; //桌号Id
 	private long merchantId;   //商户id
-	private String date; //时间
+	private String tableDate; //时间
 	private BookType type;  
-	private String  userId; //用户id
+	private long  userId; //用户id
 	private String tableMenu; //菜品
   	private String	tableState; // //  NOTPAY 未支付        PAYSUCCESS 已预订          PAST已过期     REFUNDING 申请退款             REFUNDED 退款完成     REFUNDFAIL 退款失败
   	private String userName; //用户名称
@@ -30,6 +30,21 @@ public class TableStatusPO extends AbstractBasePO {
 	
 	
 	
+	public long getMerchantId() {
+		return merchantId;
+	}
+	
+	
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+ 
+
+	public long getUserId() {
+		return userId;
+	}
+
+
 	public String getUserName() {
 		return userName;
 	}
@@ -61,25 +76,27 @@ public class TableStatusPO extends AbstractBasePO {
 		this.tableId = tableId;
 	}
 	
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public long getMerchantId() {
-		return merchantId;
-	}
 	public void setMerchantId(long merchantId) {
 		this.merchantId = merchantId;
 	}
-	public String getDate() {
-		return date;
-	}
-	public void setDate(String date) {
-		this.date = date;
-	}
+
 	
+	
+
+
+	public String getTableDate() {
+		return tableDate;
+	}
+
+
+	public void setTableDate(String tableDate) {
+		this.tableDate = tableDate;
+	}
+
+
+	
+
+
 	@Enumerated(EnumType.STRING)
 	public BookType getType() {
 		return type;
@@ -87,5 +104,6 @@ public class TableStatusPO extends AbstractBasePO {
 	public void setType(BookType type) {
 		this.type = type;
 	}
+	
 	
 }

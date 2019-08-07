@@ -325,6 +325,14 @@ text-align: center;
 			patam.tier = $(".pid").val(); //层
 			$.post(_uri, $.toJSON(patam), function(data) {
 				var sole = data.sole; //判断此层是否只有包间 或 桌
+				if(data.date != "" && data.repast != ""){ //根据时间添加就餐日期  就餐时间
+				  $("#test2").val(""+data.date+"");
+				  if(data.repast == "LUNCH"){ //午餐
+				   $(".texts").val("午餐");
+				  }else{ //晚餐
+				   $(".texts").val("晚餐");
+				  }
+			    }
 				data = data.merchant;
 			    boole = 0;
 				for (var i = 0; i < data.length; i++) {
@@ -362,7 +370,7 @@ text-align: center;
 					html.push('<div  class="table" style="text-align:center;background: #BFBFBF;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
 				}
 				if (data.tableState == 1) {
-					html.push('<div class="table" style="text-align:center;background: #7EBE34;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
+					html.push('<div class="table" onclick="href('+data.id+')" style="text-align:center;background: #7EBE34;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
 				}
 				if (data.tableState == 2) {
 					html.push('<div class="table" style="text-align:center;background: #D13035;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
@@ -376,7 +384,7 @@ text-align: center;
 					var html = [];
 					html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
 					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
-					if (data.tableState == 1) html.push('<img style="width:90%;" src="lib/images/luse.png">')
+					if (data.tableState == 1) html.push('<img style="width:90%;" onclick="href('+data.id+')"src="lib/images/luse.png">')
 					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
 					html.push('<p>' + data.tablename + '</p>');
 					html.push('<p><span>' + data.size + '人间</span></p>');
@@ -405,7 +413,7 @@ text-align: center;
 					var html = [];
 					html.push('<div class="houss" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
 					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
-					if (data.tableState == 1) html.push('<img style="width:90%;" src="lib/images/luse.png">')
+					if (data.tableState == 1) html.push('<img style="width:90%;" onclick="href('+data.id+')" src="lib/images/luse.png">')
 					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
 					html.push('<p>' + data.tablename + '</p>');
 					html.push('<p><span>' + data.size + '人间</span></p>');
@@ -435,7 +443,17 @@ text-align: center;
 				}
 			}
 		}
+		
 	});	
+	
+	function href(id){
+	  if($(".texts").val() == "午餐"){
+	     repast = "LUNCH";
+	  }else{
+	     repast = "DINNER";
+	  }
+	 window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId="+364+"&repast="+repast+"&tableDate="+$("#test2").val();
+	}
 
 </script>
 
@@ -468,8 +486,8 @@ text-align: center;
 	      <span style="float:left;margin-left:2%;">就餐时间:</span>
 	      <select class="texts" style="touch-action: none;width:auto;line-height: 50px;height:50px;padding: 0 2%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
 	       <option >请选择</option>
-	        <option >午餐</option>
-	         <option >晚餐</option>
+	        <option value="午餐">午餐</option>
+	         <option value="晚餐">晚餐</option>
 	      </select> 
 	      
 	     </p> 
