@@ -528,7 +528,7 @@ public class SceneryListController  extends WebBaseControll{
 	public Map<String, Object> SeleBusiness(HttpServletRequest request) throws Exception {
 		String vehicle = null;
 		Long userId = 	(Long) request.getSession().getAttribute("userId");
-		List<String> listHasCup=new ArrayList<String>();
+		List<OrderPO> listHasCup=new ArrayList<OrderPO>();
 		String param = getRequestJson(request);
 		if (param.indexOf("\\") >= 0) {
 			param = param.replaceAll("\\\\", "");
@@ -542,7 +542,7 @@ public class SceneryListController  extends WebBaseControll{
 		Long uid = pageObject.getLong("uid");   
 		List<OrderPO> userByid = Order.getOrderform(userId,uid,vehicle);
 		for (OrderPO orderPO : userByid) {
-			listHasCup.add(orderPO.getOrderStatus());
+			listHasCup.add(orderPO);
 		}
 		return success(listHasCup);
 	}
@@ -812,7 +812,7 @@ public class SceneryListController  extends WebBaseControll{
 	@RequestMapping(value = "/selePay", method = RequestMethod.POST)
 	public Map<String, Object> SelePrevPay(HttpServletRequest request) throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		/*Long userId = 	(Long) request.getSession().getAttribute("userId");*/
 		String param = getRequestJson(request);
 		if (param.indexOf("\\") >= 0) {
 			param = param.replaceAll("\\\\", "");
@@ -820,14 +820,15 @@ public class SceneryListController  extends WebBaseControll{
 		}
 		JSONObject pageObject = JSON.parseObject(param);
 		Long uid = pageObject.getLong("uid"); 
-		String vehicle = pageObject.getString("vehicle"); 
+	/*	String vehicle = pageObject.getString("vehicle"); 
 		List<String> relaIds = new ArrayList<String>();
 		relaIds.add("PAYSUCCESS");
 		relaIds.add("PARKING");
 		relaIds.add("PAST");
 		relaIds.add("REFUNDING");
-		relaIds.add("REFUNDED");
-		OrderPO OrderInfor = Order.getOrderform(userId,uid,relaIds,vehicle);
+		relaIds.add("REFUNDED");*/
+		OrderPO OrderInfor = Order.getOrderform(uid);
+		if(OrderInfor != null){
 			dataMap.put("parkingName",OrderInfor.getParkingName());
 			dataMap.put("orderStatus",OrderInfor.getOrderStatus());
 			dataMap.put("parkingLayer",OrderInfor.getParkingLayer());
@@ -837,6 +838,7 @@ public class SceneryListController  extends WebBaseControll{
 			dataMap.put("parkingCost",OrderInfor.getParkingCost());
 			dataMap.put("bookingTime",OrderInfor.getBookingTime());
 			dataMap.put("dueTime",OrderInfor.getDueTime());
+		}
 		return success(dataMap);
 	}
 	
@@ -909,8 +911,10 @@ public class SceneryListController  extends WebBaseControll{
 		relaIds.add("REFUNDING");
 		relaIds.add("REFUNDED");
 		OrderPO Orderinfo = Order.getOrderform(userId,attid,relaIds,vehicle);
+		if(Orderinfo != null){
 		dataMap.put("img", conn_sysConfig.getSysConfig().getWebUrl()+Orderinfo.getPath());
 		dataMap.put("number", Orderinfo.getId());
+		}
 		return success(dataMap);
 	}
 
