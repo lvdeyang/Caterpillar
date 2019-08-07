@@ -271,6 +271,36 @@ margin:0 5px;
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
 var base;
+var allmodular=[];
+var latermodular=1;
+var flag=0;
+ setTimeout(function(){
+
+ caolilailai();
+
+ },2000);
+ 
+function caolilailai(){
+  var scrollHeight = $(document).height();
+   $('html').animate({'scrollTop':scrollHeight},5000); 
+   if(flag!=0)home();flag=1;
+ } 
+function home(){
+	getvoteproduct(allmodular[latermodular]);
+ 	latermodular+=1;
+    if(latermodular==allmodular.length)latermodular=0;
+}
+ $(window).scroll(function() {
+  	 if ($(document).scrollTop()<=0){
+          setTimeout(function(){
+ 		  caolilailai();
+ 		  },2000);
+     }
+     if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+     	$('html,body').animate({'scrollTop':0},2000);
+     }
+})
+
 
 $(function() {
 	<!--选项卡  -->
@@ -311,9 +341,9 @@ function getvotemodular(){
  var _uriRecomment = window.BASEPATH + 'judges/getvotemodular';
    $.post(_uriRecomment,{"optionId":${optionId}},function(data){
    
-     getvoteproduct(data[0].id)
       var html=[];
       for(var i=0;i<data.length;i++){
+      		allmodular.push(data[i].id);
           if(i==0){
               html.push('<li  onclick="getvoteproduct('+data[0].id+')"><img src="http://www.guolaiwan.net/file'+data[0].slidepic+'"><p id="b'+data[0].id+'">'+data[0].modularName+'</p></li>');
           }else{
@@ -322,6 +352,7 @@ function getvotemodular(){
       }
          $('#menu').append(html.join(''));
          $("#b"+data[0].id).css("color","#F92828");
+     getvoteproduct(data[0].id)
    });
 }
 
@@ -425,6 +456,23 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 	function gotovoteproductdetails(id){
    		location.href=window.BASEPATH + 'admin/vote/gotovoteproductdetails?productId='+id;
     }
+
+</script>
+<script>
+	$(function(){
+		setInterval("test()",3000);
+	})
+     function test() {
+     	var url=window.BASEPATH + 'admin/vote/selectshowproduct';
+         $.post(url,{"optionId":"${optionId}"},function(data){
+         	if(data.length==1){
+         		location.href=window.BASEPATH + 'admin/vote/gotojudgespc?optionId=${optionId}&productId='+data[0].productId;
+         	}else{
+         		return;
+         	}
+         })
+     }
+
 
 </script>
 

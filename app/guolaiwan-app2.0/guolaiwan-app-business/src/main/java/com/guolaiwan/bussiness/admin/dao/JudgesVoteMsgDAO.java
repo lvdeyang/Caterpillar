@@ -49,6 +49,17 @@ public class JudgesVoteMsgDAO extends AbstractBaseDao<JudgesVoteMsgPO> {
 		}
 	}
 	
+	public List<JudgesVoteMsgPO> getByUId(long userId) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("userId", Condition.eq, userId);
+		List<JudgesVoteMsgPO> product = findByHql(hql);
+		if (product.size() == 0) {
+			return null;
+		} else {
+			return product;
+		}
+	}
+	
 	public int countByPId(long pId) {
 		CountHql cHql = this.newCountHql();
 		cHql.andBy("productId", Condition.eq, pId);

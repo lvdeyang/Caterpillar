@@ -254,15 +254,20 @@ border:0.05em solid #CF4D50;
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
+var productId="${productId}";
 $(function() {
-	var url=window.BASEPATH + 'judges/getoneproduct';
-	$.post(url,{"productId":"${productId}"},function(data){
-		list(data.id);
-		$("#name").html(data.productName);
-		$(".name").html(data.productName);
-		$(".pic").attr('src', "http://www.guolaiwan.net/file"+data.productShowPic);
-	})
+	getproduct();
 })
+
+	function getproduct(){
+		var url=window.BASEPATH + 'judges/getoneproduct';
+		$.post(url,{"productId":productId},function(data){
+			list(data.id);
+			$("#name").html(data.productName);
+			$(".name").html(data.productName);
+			$(".pic").attr('src', "http://www.guolaiwan.net/file"+data.productShowPic);
+		})
+	}
 //时间格式化
 	function fmat(time){
 		var da = time;
@@ -303,7 +308,22 @@ $(function() {
 		}
   
 </script>
-
+<script>
+	$(function(){
+		setInterval("test()",3000);
+	})
+     function test() {
+     	var url=window.BASEPATH + 'admin/vote/selectshowproduct';
+         $.post(url,{"optionId":"${optionId}"},function(data){
+         	if(data.length==0){
+         		window.history.back(-1); 
+         	}else{
+         		list(productId);
+         	}
+         })
+     }
+     
+</script>
 
 <body>
        <div class="nav">

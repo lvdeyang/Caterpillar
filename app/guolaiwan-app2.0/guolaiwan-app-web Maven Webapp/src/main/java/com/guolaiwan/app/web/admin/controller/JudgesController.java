@@ -335,13 +335,19 @@ public class JudgesController {
 			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
 			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
 			long score=0;
+			long avg=0;
 			if(all!=null){
 				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
 					score+=judgesVoteMsgPO.getScore();
 				}
 				score=score/all.size();
 			}
-			long allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*(score));
+			if(score<=10){
+				avg=score*10;
+			}else{
+				avg=score;
+			}
+			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
 			voteProductPO.setAllvotes(allcount);
 		}
 		return "success";
@@ -372,13 +378,19 @@ public class JudgesController {
 			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
 			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
 			long score=0;
+			long avg=0;
 			if(all!=null){
 				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
 					score+=judgesVoteMsgPO.getScore();
 				}
 				score=score/all.size();
 			}
-			long allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*(score));
+			if(score<=10){
+				avg=score*10;
+			}else{
+				avg=score;
+			}
+			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
 			//封装所有的数据
 			hashMap.put("avg", score+"");
 			hashMap.put("count", count+"");
@@ -418,14 +430,19 @@ public class JudgesController {
 			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
 			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
 			long score=0;
+			long avg=0;
 			if(all!=null){
 				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
 					score+=judgesVoteMsgPO.getScore();
 				}
 				score=score/all.size();
 			}
-
-			long allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()))/100*(score));
+			if(score<=10){
+				avg=score*10;
+			}else{
+				avg=score;
+			}
+			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
 			hashMap.put("productpic", "http://www.guolaiwan.net/file"+productPO.getProductShowPic());
 			hashMap.put("productname", productPO.getProductName());
 			hashMap.put("allcount", allcount+"");
