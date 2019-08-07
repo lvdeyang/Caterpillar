@@ -567,8 +567,10 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/gotojudgespc")
 	public ModelAndView goToJudgesPC(HttpServletRequest request) {
 		String productId=request.getParameter("productId");
+		String optionId=request.getParameter("optionId");
 		ModelAndView mv = new ModelAndView("mobile/vote/judgeslistPC");
 		mv.addObject("productId", productId);
+		mv.addObject("optionId", optionId);
 		return mv;
 	}
 	
@@ -603,10 +605,20 @@ public class VoteController extends BaseController {
 	public String updeteScore(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
 		JudgesVoteMsgPO judgesVoteMsgPO = judgesvotemsgDAO.get(id);
+		List<JudgesVoteMsgPO> byOptionId = judgesvotemsgDAO.getByUId(judgesVoteMsgPO.getUserId());
 		String field = request.getParameter("field");
 		if (field.equals("score")) {
 			long score = Long.parseLong(request.getParameter("value"));
 			judgesVoteMsgPO.setScore(score);
+			judgesvotemsgDAO.saveOrUpdate(judgesVoteMsgPO);
+			return "success";
+		}else if(field.equals("username")){
+			String username = request.getParameter("value");
+			judgesVoteMsgPO.setUsername(username);
+			for (JudgesVoteMsgPO judges : byOptionId) {
+				judges.setUsername(username);
+				judgesvotemsgDAO.saveOrUpdate(judges);
+			}
 			judgesvotemsgDAO.saveOrUpdate(judgesVoteMsgPO);
 			return "success";
 		}
@@ -632,5 +644,27 @@ public class VoteController extends BaseController {
 			str.put("all", all);
 			return str;
 		}
+	}
+	
+	
+	// 查找评分商品
+	@ResponseBody
+	@RequestMapping(value = "/selectshowproduct", method = RequestMethod.POST)
+	public List<VoteProductPO> selectShowProduct(HttpServletRequest request) throws Exception {
+		long optionId=Long.parseLong(request.getParameter("optionId"));
+		List<VoteProductPO> ShowOnPC = voteproductDAO.findShowOnPC(optionId);
+		return ShowOnPC;
+	}
+	
+	// 修改数据
+	@ResponseBody
+	@RequestMapping(value = "/showonpc", method = RequestMethod.POST)
+	public String showOnPC(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		String value = request.getParameter("value");
+		VoteProductPO voteProduct = voteproductDAO.get(id);
+		voteProduct.setShowonpc(Integer.parseInt(value));
+		voteproductDAO.save(voteProduct);
+		return "success";
 	}
 }

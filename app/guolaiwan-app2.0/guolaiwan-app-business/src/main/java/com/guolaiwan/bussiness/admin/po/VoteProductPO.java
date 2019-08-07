@@ -22,22 +22,31 @@ public class VoteProductPO extends AbstractBasePO{
 	//订单数量
 	private long ordernum;
 	//总票数
-	private long allvotes;
+	private double allvotes;
 	//活动Id
 	private long optionId;
+	//在pc上评分
+	private int showonpc;
 	
 	
 	
+	
+	public int getShowonpc() {
+		return showonpc;
+	}
+	public void setShowonpc(int showonpc) {
+		this.showonpc = showonpc;
+	}
 	public long getOptionId() {
 		return optionId;
 	}
 	public void setOptionId(long optionId) {
 		this.optionId = optionId;
 	}
-	public long getAllvotes() {
+	public double getAllvotes() {
 		return allvotes;
 	}
-	public void setAllvotes(long allvotes) {
+	public void setAllvotes(double allvotes) {
 		this.allvotes = allvotes;
 	}
 	public String getProductName() {
