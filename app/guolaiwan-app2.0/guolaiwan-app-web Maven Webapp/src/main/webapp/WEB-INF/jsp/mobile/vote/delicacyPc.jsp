@@ -271,6 +271,36 @@ margin:0 5px;
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
 var base;
+var allmodular=[];
+var latermodular=1;
+var flag=0;
+ setTimeout(function(){
+
+ caolilailai();
+
+ },2000);
+ 
+function caolilailai(){
+  var scrollHeight = $(document).height();
+   $('html').animate({'scrollTop':scrollHeight},5000); 
+   if(flag!=0)home();flag=1;
+ } 
+function home(){
+	getvoteproduct(allmodular[latermodular]);
+ 	latermodular+=1;
+    if(latermodular==allmodular.length)latermodular=0;
+}
+ $(window).scroll(function() {
+  	 if ($(document).scrollTop()<=0){
+          setTimeout(function(){
+ 		  caolilailai();
+ 		  },2000);
+     }
+     if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+     	$('html,body').animate({'scrollTop':0},2000);
+     }
+})
+
 
 $(function() {
 	<!--选项卡  -->
@@ -311,9 +341,9 @@ function getvotemodular(){
  var _uriRecomment = window.BASEPATH + 'judges/getvotemodular';
    $.post(_uriRecomment,{"optionId":${optionId}},function(data){
    
-     getvoteproduct(data[0].id)
       var html=[];
       for(var i=0;i<data.length;i++){
+      		allmodular.push(data[i].id);
           if(i==0){
               html.push('<li  onclick="getvoteproduct('+data[0].id+')"><img src="http://www.guolaiwan.net/file'+data[0].slidepic+'"><p id="b'+data[0].id+'">'+data[0].modularName+'</p></li>');
           }else{
@@ -322,6 +352,7 @@ function getvotemodular(){
       }
          $('#menu').append(html.join(''));
          $("#b"+data[0].id).css("color","#F92828");
+     getvoteproduct(data[0].id)
    });
 }
 
@@ -330,10 +361,14 @@ function getvoteproduct(id){
 $("#b"+base).css("color","black");
  base=id;
  $("#b"+id).css("color","#F92828");
+//计算总票数 用于排序
+var url=window.BASEPATH + 'judges/sortproduct?id='+id+'&userId=${userId}&optionId=${optionId}'
+$.post(url,{"id":id,"optionId":"${optionId}"},function(data){
     var _uriRecomment = window.BASEPATH + 'judges/getvoteproductpc?id='+id+'&optionId=${optionId}';
     $.get(_uriRecomment,null,function(data){
       var html=[],html1=[];
       for(var i=0;i<data.length;i++){
+      var productvotes=parseInt(data[i].allcount);
             <!-- 1 -->
         if(i==0){
 			html.push('<div style="width:30%;height:30em;position: relative;display: inline-block;">');   
@@ -343,8 +378,8 @@ $("#b"+base).css("color","black");
 			html.push('</div>');   
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:7.6em;margin-left:-13em;" src="lib/images/guanjun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1.8em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
+			html.push('<p style="border-radius:12px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1.6em;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
 		}
@@ -357,8 +392,8 @@ $("#b"+base).css("color","black");
 			html.push('</div>');   
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/yajun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1.8em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
+			html.push('<p style="border-radius:12px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1.6em;display: inline-block;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
 		}
@@ -371,8 +406,8 @@ $("#b"+base).css("color","black");
 			html.push('</div>');   
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/jijun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1.8em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
+			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1.6em;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
 		    html.push('<div style="height:5em;"></div>');   
@@ -385,7 +420,7 @@ $("#b"+base).css("color","black");
 			html1.push('</div>');
 		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i].productpic+'">');
 		   	html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+data[i].allcount+'票</p>');
+		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+productvotes+'票</p>');
 	      	html1.push('</div>');
 	      	if(i+1==data.length)continue;
 	     	html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;float:left;">');
@@ -394,7 +429,7 @@ $("#b"+base).css("color","black");
 		 	html1.push('</div>');
 		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i+1].productpic+'">');
 	  		html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i+1].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+data[i].allcount+'票</p>');
+		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+parseInt(data[i+1].allcount)+'票</p>');
 	     	html1.push('</div>');
 			html1.push('</div>');
         }
@@ -405,6 +440,7 @@ $("#b"+base).css("color","black");
        $('.other').children().remove();
        $('.other').append(html1.join(''));   
     });
+});
 } 
 	
 	function votepoll(id){
@@ -421,6 +457,23 @@ $("#b"+base).css("color","black");
 	function gotovoteproductdetails(id){
    		location.href=window.BASEPATH + 'admin/vote/gotovoteproductdetails?productId='+id;
     }
+
+</script>
+<script>
+	$(function(){
+		setInterval("test()",3000);
+	})
+     function test() {
+     	var url=window.BASEPATH + 'admin/vote/selectshowproduct';
+         $.post(url,{"optionId":"${optionId}"},function(data){
+         	if(data.length==1){
+         		location.href=window.BASEPATH + 'admin/vote/gotojudgespc?optionId=${optionId}&productId='+data[0].productId;
+         	}else{
+         		return;
+         	}
+         })
+     }
+
 
 </script>
 
@@ -466,7 +519,6 @@ $("#b"+base).css("color","black");
 	 
 		 
 		 
-
 	    
 	     <!-- 置顶 -->
      <!--  <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div> -->

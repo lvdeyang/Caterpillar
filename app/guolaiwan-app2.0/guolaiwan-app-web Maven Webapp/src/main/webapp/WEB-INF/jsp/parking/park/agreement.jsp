@@ -117,19 +117,17 @@
 		  para.uid = ${param.useid};
 		 $.post(uri, $.toJSON(para), function(data) {
 			data = parseAjaxResult(data);
-			for(var i = 0; i<data.length; i++){
-			 if("PAYSUCCESS"==data[i] ){
-		     window.location.href="vice/merchant/order?uid="+${param.useid};
-		    }
+			 for(var i = 0; i<data.length; i++){
+		     if("PAYSUCCESS"==data[i].orderStatus ){
+		     window.location.href="vice/merchant/order?uid="+data[i].id;
+		     }
 			 if("REFUNDING"==data[i] ){
-		     window.location.href="vice/merchant/order?uid="+${param.useid};
-		    }
+		     window.location.href="vice/merchant/order?uid="+data[i].id;
+		     }
 			 if("PARKING"==data[i] ){
 		     window.location.href="vice/merchant/parkings";
-		    }
-		    
-		    
-			}
+		     } 
+			} 
 		   
 	     });
   

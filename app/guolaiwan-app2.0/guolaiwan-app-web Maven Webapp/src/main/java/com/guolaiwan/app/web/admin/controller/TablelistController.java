@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -81,14 +82,38 @@ public class TablelistController extends BaseController {
 	public Map<String, Object> historysettle(HttpServletRequest request) throws Exception{ //添加房间
 		String tablename = request.getParameter("name");//名称
         String tableNo = request.getParameter("tableNo");//桌号
+        String feature = request.getParameter("key");//获取特色
         String tier = request.getParameter("title");//层
         String type = request.getParameter("type");//人数
+        String img = request.getParameter("parkingshopImg");//房间详情图片
+        System.out.println(  img +" 1111" );
         String bookprice = request.getParameter("bookprice");//订金
         double money =  Double.parseDouble(bookprice)*100;
         String radio = request.getParameter("radio");//包间
         String merchantId = request.getParameter("merchantId");//包间\
         TablePO add = new TablePO();
 	        add.setTablename(tablename);
+	        if(feature != "" && feature != null){
+	         String split[] = 	feature.split(",");
+	         for (int i = 0; i < split.length; i++) {
+	        	 if ("厕所".equals(split[i])) {
+	        		 add.setLavatory(Integer.parseInt("1"));
+	        	 }else if ("wifi".equals(split[i])) {
+	        		 add.setWifi(Integer.parseInt("1"));	        		 
+	        	 } else if ("唱歌".equals(split[i])) {
+	        		 add.setKaraoke(Integer.parseInt("1"));
+	        	 }else if ("电视".equals(split[i])) {
+	        		 add.setTelevision(Integer.parseInt("1"));
+	        	 }else if ("沙发".equals(split[i])) {
+	        		 add.setSofa(Integer.parseInt("1"));
+	        	 }else if ("空调".equals(split[i])) {
+	        		 add.setAirConditioner(Integer.parseInt("1"));
+	        	 } 
+	          }
+	        }
+	        if (img != null && img != "") {
+				add.setDetailsImg(img);
+			}
 	        add.setTableNo(tableNo);
 	        add.setTier(tier);
 	        add.setTableState(1+"");
@@ -143,7 +168,7 @@ public class TablelistController extends BaseController {
 			if ( TableStatus != null  ) {
 				tablePO.setTableState("2");//已预订
 				tablePO.setTableMenu(TableStatus.getTableMenu());
-				tablePO.setMenuTime(TableStatus.getDate()); //时间
+				tablePO.setMenuTime(TableStatus.getTableDate()); //时间
 				tablePO.setType(TableStatus.getType().toString()); //中午晚上
 				tablePO.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
 				tablePO.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
@@ -183,6 +208,29 @@ public class TablelistController extends BaseController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/cancel.do",method = RequestMethod.POST) // 取消预订
+	public Map<String, Object> cancelMap(HttpServletRequest request) throws Exception{//添加入驻信息
+		Map<String, Object> map = new HashMap<String, Object>();
+		String tableStatusid = request.getParameter("tableStatusid");
+		String Tableid = request.getParameter("tableid");
+		if (tableStatusid != "" && tableStatusid != null   ) {//有人预订房间 修改中间表为过期
+			List<TableStatusPO>  TableStatus =	Table_Status.findByField("id",Long.parseLong(tableStatusid));//查询中间表
+			for (TableStatusPO tableStatusPO : TableStatus) {
+				tableStatusPO.setTableState("PAST");
+				Table_Status.saveOrUpdate(tableStatusPO);
+			}
+		}else {
+			map.put("code", "1");
+			return map;
+		}
+		map.put("code", "0");
+		return map;
+	}
+	
+	
+	
+	
+	@ResponseBody
 	@RequestMapping(value = "/addData.do",method = RequestMethod.POST) //预订添加信息
 	public Map<String, Object> addData(HttpServletRequest request) throws Exception{//添加入驻信息
 		String userPhone = request.getParameter("userPhone"); //手机号
@@ -200,7 +248,7 @@ public class TablelistController extends BaseController {
 			TableStatusPO.setUserName(userName);
 			TableStatusPO.setTableMenu(tableMenu);
 			TableStatusPO.setTableState("PAYSUCCESS");
-			TableStatusPO.setDate(date);
+			TableStatusPO.setTableDate(date);
 			TableStatusPO.setMerchantId(Long.parseLong(merchantId));
 			if("0".equals(type)){
 			   TableStatusPO.setType(BookType.fromString("LUNCH"));

@@ -96,6 +96,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
   })
   
+  form.on('switch(enable)', function(obj){
+                layer.load();
+                var str;
+                var bl = obj.elem.checked;
+                var val;
+                if(bl){
+                    str = "评分";
+                    val = '1';
+                }else{
+                    str = "结束";
+                    val = '0';
+                }
+                console.log(str)
+                $.ajax({
+                    type:'post',
+                    url:'showonpc',
+                    data:{'id':this.id,'value':val},
+                    success:function(msg){
+                        layer.closeAll("loading"); 
+                        if(msg=='success'){
+                           getLiveList();
+                        }else{
+                           layer.msg("系统错误！",{icon:5,time:1000}); 
+                        }
+                    }
+                })
+                layer.tips(this.value+' : '+str,obj.othis);
+              });
+  
  	active = {
         reload: function(){
             var pName = $('#pName');
@@ -167,11 +196,12 @@ function getProductList(){
     ,cols: [[
     {type:'checkbox'}
     ,{field: 'productId', title: '商品Id',sort: true,width:80} 
-    ,{field: 'productName', title: '商品名称',sort: true} 
-    ,{field: 'peoplevotenum', title: '群众投票',sort: true} 
-    ,{field: 'judgesvotenum', title: '评委投票',sort: true} 
-    ,{field: 'ordernum', title: '销售量',sort: true} 
-    ,{fixed: 'right',title: '操作',width:200,toolbar:'#zsgc',unresize:true} 
+    ,{field: 'productName', title: '商品名称',sort: true,width:180} 
+    ,{field: 'peoplevotenum', title: '群众投票',sort: true,width:180} 
+    ,{field: 'judgesvotenum', title: '评委投票',sort: true,width:180} 
+    ,{field: 'ordernum', title: '销售量',sort: true,width:180} 
+    ,{field: 'showonpc',title: '开始评分',align:'center',width:150,templet:'#showonpc'}
+    ,{fixed: 'right',title: '操作',width:230,toolbar:'#zsgc',unresize:true} 
     ]]
     ,id:'activityRel'
     ,done:function(res, curr, count){
@@ -219,7 +249,11 @@ function delAll(){
 </script>
 <script type="text/html" id="zsgc">
 	<a class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:open_win('产品详情','<%=path%>/admin/product/infoId?id={{d.productId}}','','510');">详情</a>
+	<a class="layui-btn layui-btn-xs" href="gotojudgesvotemsg?productId={{ d.id }}">评委评分</a>	
 	<a class="layui-btn layui-btn-xs" lay-event="del">不参与活动</a>
+</script>
+<script type="text/html" id="showonpc">
+ <input type="checkbox" name="showonpc" id='{{d.id}}' value='{{ d.showonpc }}'   lay-skin="switch" lay-text="评分|结束" lay-filter="enable" {{ d.showonpc == 0 ? '' : 'checked' }} >
 </script>
 <script type="text/html" id="content">
 	${content}

@@ -61,7 +61,7 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 	public List<VoteProductPO> getvoteproduct(long moId) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("modularcode", Condition.eq, moId);
-		hql.orderBy("peoplevotenum", true);
+		hql.orderBy("allvotes", true);
 		List<VoteProductPO> findByHql = findByHql(hql);
 		if (findByHql.size() == 0) {
 			return null;
@@ -81,4 +81,26 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 		}
 	}
 
+	public List<VoteProductPO> getByOptionId(long OptionId) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("optionId", Condition.eq, OptionId);
+		List<VoteProductPO> findByHql = findByHql(hql);
+		if (findByHql.size() == 0) {
+			return null;
+		} else {
+			return findByHql;
+		}
+	}
+	
+	public List<VoteProductPO> findShowOnPC(long optionId) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("optionId", Condition.eq, optionId);
+		hql.andBy("showonpc", Condition.eq, 1);
+		List<VoteProductPO> VoteProducts = this.findByHql(hql);
+		if (VoteProducts.size() == 0) {
+			return null;
+		} else {
+			return VoteProducts;
+		}
+	}
 }

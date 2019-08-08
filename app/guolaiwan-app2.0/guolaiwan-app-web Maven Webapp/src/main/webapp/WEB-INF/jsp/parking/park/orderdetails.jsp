@@ -131,14 +131,17 @@ html, body {
 	
 		   	var html5 = [];
 				html5.push('<span>'+data.dueTime+'</span> ');
-				$('#mag5').append(html5.join(''));  
+			   $('#mag5').append(html5.join(''));  
+			var ht = '<img alt="" src="'+data.img+'" style="width:60%;height:100%;">';
+		    $('.img').html(ht);  
+		    document.getElementById("span").innerHTML = data.number;//编号
 		});
 		   
 	 });
     
 	
 	
-		 var _url = window.BASEPATH + 'vice/long';
+		/*  var _url = window.BASEPATH + 'vice/long';
 		 var  param= {};
 		 param.attid =  ${param.uid};
 		 $.post(_url, $.toJSON(param), function(data) {
@@ -147,7 +150,7 @@ html, body {
 		 $('.img').html(ht);  
 		 
 		 document.getElementById("span").innerHTML = data.number;//编号
-		});
+		}); */
      
     
     

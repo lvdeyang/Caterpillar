@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>购票商品详情</title>
+<title>采摘商品列表</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -82,11 +82,8 @@ html, body {
 	background:#E0E0E0 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
 }
-
- 
 * {
 	box-sizing: border-box;
 	list-style: none;
@@ -138,18 +135,28 @@ html, body {
   .inp::-webkit-input-placeholder{
         text-align: center;
 }  
-	.jieshao ul li p{
-	 margin:0;
-	 font-weight: bold;
-	}
 
-	.jieshao ul li{
-	 line-height: 40px;
-	 border-bottom:1px solid #DFDFDF;
+.gotop {
+   position: fixed;
+   right: 20px;
+   bottom: 50px;
+   display: block;
+   width: 50px;
+   height: 50px;
+   opacity: 0.8;
+   z-index:1111;
 	}
-.fangxing p{
- margin:0;
+.fuceng{
+    position: fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top: 0;
+    background-color:rgba(0,0,0,0.6);
+    z-index: 10000;
+
 }
+
 </style>
 
 </head>
@@ -160,28 +167,16 @@ html, body {
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"charset="utf-8"></script>
-<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
-<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-<script>
 
-</script>
 <script type="text/javascript">
-  $(function(){
+	$(function() {
 	  getRecomment();
-	  getallteam();
-	  getComment();
-  
-  
-  })
-
-
-/**/
-		
-	  function getRecomment(){
-	      var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
-		
+	  getAllProduct();
+	});
+	
+	
+	function getRecomment(){
+	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
 		$.get(_uriMerchantInfo, null, function(data){
 			data = parseAjaxResult(data);
 			merchantName = data.shopName + '-过来玩';
@@ -208,71 +203,265 @@ html, body {
 			    }
 			    });
 	  }
-	  	  
-	 function getallteam(){
-     var _uricoms = window.BASEPATH + 'product/package/commodity/info?merchantId=${merchantId}&proId=${proId}';	
-     $.get(_uricoms, null, function(msg){    
-       //商品信息
-       var merfo =  msg.merinfo;
-       var profo =  msg.proinfo;       
-       var html = [];
-       html.push('<ul>');
-       html.push('<li><p style="font-size:18px;">'+profo[0].productName+'</p></li>');
-       html.push('<li><p><span style="font-size:18px;color:#EA6B1F;">4.5分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率96%</span></p></li>');
-       html.push('<li><p>开放时间：8：00-18：00</p></li>');
-       html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：'+merfo[0].shopAddress+'</p></li>');
-       html.push('<ul>');
-       $(".jieshao").append(html.join(""));
-       //票种选择
-       var prc =  msg.pric;
-       var prname = msg.pr_name;
-       var orNum = msg.orderNumber;
-       var htm = [];
-       htm.push('<div style="width:90%;height:auto;background:#E9EBEA;margin:10px auto;border-radius:10px;">');
-       htm.push('<p style="height:40px;line-height: 40px;">');
-       htm.push('<span style="float:left;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:65%;">'+prname+'</span>');
-       htm.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+prc+'</span>');
-       htm.push('</p>');
-       htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前一天订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
-       htm.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销'+orNum+'+</span>');
-       htm.push('<span style="float:right;margin-right:5px;color:#fff;font-size:14px;font-weight:bold;background:#EB6E1E;line-height:30px;border-radius:10px;padding:0px 20px;">立即预订</span></p>');
-       htm.push('</div>');
-       $(".productlist").append(htm.join(""));
-	 });
-}
-	function getComment(){	
-	var _uri = window.BASEPATH + 'product/package/comment?proId=${proId}';	
-	$.get(_uri,null,function(msg){
-	   var comment = msg.comm;
-	   if(comment.length==0){ 
-	    var htlr = [];
-	    htlr.push('<div><p style="text-align:center;line-height:40px;height:40px;">暂无评论</p></div>');
-	    $(".dianping").append(htlr.join(""));	
-	   }
-	  for(var i =0 ;i< comment.length;i++){
-	  //商品评论 
-	  var htl = [];
-	  htl.push('');
-	  htl.push('<div style="height:auto;">');
-	  htl.push('<p style="font-size:14px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;">');
-	  htl.push('<img style="width:35px;height:35px;border-radius:50%;" src="'+comment[i].userHeadimg+'">');
-	  htl.push('<span>'+comment[i].userName+'</span><span style="padding:0 10px;color:#E0E0E0;">|</span><span style="color:#fff;background:#FAB526;border-radius:12px;padding:0 5px;">老用户</span>');
-	  htl.push('</p>');
-	  htl.push(' <p style="padding:0 8%;">'+comment[i].content+'</p>');
-	  htl.push('</div>');
-	  $(".dianping").append(htl.join(""));	
-	  }
-	})	
- }
+	
+	
+	
+	function getAllProduct(){
+			var url="<%=basePath%>business/getproduct";
+           $.post(url,{"merchantId":${merchantId}},function(data){
+           	var html=[];
+           	if(data.length==0){
+           		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
+           	}else{
+				for(var i=0; i<data.length; i++){
+					    html.push('<a onclick="gotodetailspage('+data[i].id+')"><div style="width:48%;height:auto;overflow: hidden;border-radius:10px;text-align:center;float:left;margin:5px 0 0 1.5%;">');
+					    html.push('<img style="width:100%;border-radius:10px;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
+					    html.push('<p style="margin:0 ;height:30px;line-height: 30px;text-align:left;width:90%;white-space: nowrap;overflow:hidden;text-overflow:ellipsis; ">'+data[i].productName+'</p>');
+					    html.push('<p style="margin:0 ;height:20px;line-height: 20px;color:#EA6C1B;text-align:left;">￥<span>'+data[i].productPrice+'</span><span style="text-decoration: line-through;color:#787878;margin-left:10px;font-size:12px;">￥'+data[i].productOldPrice+'</span></p>');
+					    html.push('<button style="border-radius:10px;font-size:12px;color:#fff;background:#EA6C1B;padding:0px 25px;border:none;outline:none;margin:0 auto;">立即购买</button>');
+					    html.push('</div></a>');
+					}
+			}
+	    	$('.productlist').append(html.join(''));
+           })
+	}
+
+	
+   function gotobusinessdetails(){
+   		location.href=window.BASEPATH + 'business/gotobusinessdetails?merchantId=${merchant.id}';
+   }
+   
+  function gotodetailspage(id){
+   		location.href=window.BASEPATH + 'business/gotodetailspage?productId='+id;
+   }
 </script>
+<script>
+$(function(){
+	
+	var pingfen=(${pingfen}+46)/10;
+	if(pingfen>5)pingfen=5;
+	$('.pingfen').html(pingfen+"分");
+    $(window).scroll(function(){
+        var aa = $(window).scrollTop(); //当前滚动条滚动的距离
+        var bb = $(window).height();//浏览器当前窗口可视区域高度
+        var cc = $(document).height(); //浏览器当前窗口文档的高度 
+      
+        if(cc <= aa+bb){
+        }
+    })
+  })
+ /*返回顶部  */
+  $(function(){
+	$(window).scroll(function(){
+		if($(window).scrollTop()>100){
+			$(".gotop").fadeIn(400);	
+		}
+		else{
+			$(".gotop").fadeOut(400);
+		}
+	});
+	$(".gotop").click(function(event){
+        event.preventDefault();
+		$('html,body').animate({'scrollTop':0},500);
+        return false;
+	});
+}); 
+
+
+$(document).on('click', '#zhifu', function(){ 
+  $(".fuceng").fadeIn();
+   $(".tanchuang").fadeIn();
+});
+  $(document).on('click', '.fuceng', function(){ 
+  $(".fuceng").fadeOut();
+  $(".tanchuang").fadeOut();
+}); 
+       
+</script>
+
+<script>
+$(function() {
+	  window.BASEPATH = '<%=basePath%>';
+	  var parseAjaxResult = function(data){
+	  
+			if(data.status !== 200){
+				$.toptip('data.message', 'error');
+				return -1;
+			}else{
+				return data.data;		
+			}
+	  };
+		
+      var _uriRecomment = window.BASEPATH + 'phoneApp/getmerchantid?merchantId=${merchantId}';
+		
+		$.get(_uriRecomment, null, function(data){
+			data = parseAjaxResult(data);
+			if(data === -1) return;
+			if(data){
+			    $('.header-content').html(data.shopName);
+			}
+		});		
+		
+		$('.header-content').html(${shopName});	
+		$("#paytext").keyup(function(){
+		    $(this).val($(this).val().replace( /[^0-9.]/g,''));
+			}).bind("paste",function(){
+	    $(this).val($(this).val().replace( /[^0-9.]/g,''));
+	})
+			
+		$(document).on('click','#paynow',function(){
+			$(".fuceng").fadeOut();
+   			$(".tanchuang").fadeOut();
+		    if($('#paytext').val()==''){
+			   $.toast("请输入金额", "forbidden");
+			   return false;
+			}
+			 if($("#paytext").val() <= 0.01){
+			 $("#paytext").val("0.01");
+			/*  alert($("#paytext").val()) */
+			/*   return false; */
+			 }
+			dopay(0);
+	  });  
+		
+		function dopay(mailId){
+ 		    var _uriAdd = window.BASEPATH + 'phoneApp/goToPay';
+			var params={};
+			params.userId=${userId};
+			params.merchantId=${merchantId};
+			params.source="PUBLICADDRESS";
+			params.payMoney=$('#paytext').val();
+			params.addressId=mailId;
+			$.confirm("确定支付？", function() {
+				$.post(_uriAdd, $.toJSON(params), function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					 $.modal({
+						  title: "付款方式",
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+								    payByWallet(data.id);
+						    } },
+						    { text: "微信支付", onClick: function(){ 
+								    payPublic(data.id);
+						    } },
+						    { text: "取消", className: "default", onClick: function(){ } },
+						  ]
+						}); 
+				});			  
+			  });	 	
+		}
+		 
+	  
+	  function deleteorder(orderId)
+	  {
+	  	var params={};
+	  	params.orderId = orderId;
+	  	$.post(window.BASEPATH +'phoneApp/deleteorder', $.toJSON(params), function(data){
+	  	});
+	  }	
+	  
+	  
+	  	var prepay_id;
+		var paySign;
+		var appId;
+		var timeStamp;
+		var nonceStr;
+		var packageStr;
+		var signType;
+		var orderNo;	
+		
+			
+		function payPublic(orderId){
+			$.get(window.BASEPATH +"pubnum/prev/pay/"+orderId, null, function(data){
+				prepay_id = data.prepay_id;
+		        paySign = data.paySign;
+		        appId = data.appId;
+		        timeStamp = data.timeStamp;
+		        nonceStr = data.nonceStr;
+		        packageStr = data.packageStr;
+		        signType = data.signType;
+		        orderNo = data.orderNo;
+		        callpay(orderId);
+			});
+		}
+		
+		function payByWallet(orderId){
+			var url=window.BASEPATH+'pubnum/wallet/walletbuy';
+			var userId=${userId};
+			$.post(url,{'orderId':orderId,'userId':userId},function(data){
+						data = parseAjaxResult(data);
+				if(data==1){
+						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
+						    if(data.data=="PAYSUCCESS"){				
+						       location.href=window.BASEPATH + 'business/gotopayment?orderId='+orderId;
+						    }
+						});
+				}else{
+					$.alert('您的余额不足！');
+				}
+			})
+		}
+	
+		function onBridgeReady(orderId){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		                $.confirm("交易成功");
+		                //每五秒刷新订单状态
+						
+		                setInterval(function(){ 
+                                $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
+								    
+								    if(data.data=="TESTED"||data.data=='PAYSUCCESS'){
+								       location.href=window.BASEPATH + 'business/gotopayment?orderId='+orderId;
+								    }
+								});
+                        }, 1000);
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") {
+					 	deleteorder(orderId);
+		                alert("交易取消");  
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
+					 	deleteorder(orderId);
+		                alert(res.err_desc); 
+		            }  
+		        }
+		    );
+		}
+		function callpay(orderId){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady(orderId);
+		    }
+		}
+		})
+</script>
+
 
 
 <body>
 			<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
+			<a class="link-left" href="#side-menu">
+			<span class="icon-reorder icon-large"></span>
+			</a>
 				<div class="header-content">商户</div>
 			</div>
 		</div>
@@ -282,25 +471,39 @@ html, body {
 			  </div>
 			</div>
 		</div>
-	</div>  
-	        <!-- 介绍 -->
-            <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;border-radius:10px;overflow: hidden;position: relative;top:-60px;z-index:111;"></div> 
-	  <!-- 票的类型 -->
-	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-40px;padding:0 0 30px 0;">
-	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">票种选择</p>
-	    <div class="productlist">	              		      	          
-	    </div>
-	  </div> 
-	 
-	   <!-- 商品评论 -->
-	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-20px;padding:0 0 30px 0;">
-	   <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">用户评价</p>	    
+	</div>
+	
+	
+	<div style="width:96%;height:auto;background:#fff;text-align:center;margin:10px auto;padding:0 3% 20px 5%;border-radius:10px;">
+	 <p style="height:30px;line-height: 30px;font-size:12px;margin:0;text-align:left;">
+	 <span style="font-size:16px;font-weight:bold;">${merchant.shopName}</span>
+	 <span style="float:right;"><span class="pingfen" style="color:#E65903;"></span>超棒</span>
+	 <p style="text-align: left;margin:0;height:25px;line-height:25px;">联系电话：<span>${merchant.shopTel}</span></p>
+	 </p>
+	 <p style="height:30px;line-height: 30px;font-size:12px;margin:0;text-align:left;">
+	 <img style="height:20px;width:20px;" src="lib/images/dingweis.png;"/>
+	 <span>距离您1000km</span>
+	 <span onclick="gotobusinessdetails()" style="color:#E65903;float:right;">商家详情</span>
+	 </p>
+	 <button id="zhifu"  style="color:#fff;background: #E65903;width:85%;height:40px;border:none;outline:none;border-radius:10px; font-size:12px;">到店支付</button>
+	</div>
+	<!-- 采摘商品列表-->
+	<div class="productlist" style="width:95%;border-radius:10px;padding:10px 0;height:auto;background:#fff; margin:10px auto;overflow: hidden;">
+	</div>
+	
+	
+	<div class='fuceng' style="display: none;">
+	
+	</div>
+	  <div class="tanchuang" style="z-index:11111;width:100%;height:auto;display: none;padding:0 0 50px 0;text-align: center;background: #fff;position: fixed;bottom:0;border-radius:10px; ">
+	   <p style="width:96%;margin:0 auto;height:50px;line-height: 50px;font-size: 18px;font-weight: bold;border-bottom:1px solid #D3D3D3;">${merchant.shopName}</p>
+	    <p style="margin:80px 0 50px 0;text-align: center;font-weight:bold;">支付金额（元）<input id="paytext" style="height:30px;border-radius:8px;padding:0 5px;border:2px solid #EB6E1E;outline: none;"></p>
+	    <button id="paynow" style="height:40px;color:#fff;background:#EB6E1E;width:70%;border:none;outline:none;border-radius:10px;font-size:18px;">立即支付</button>
 	  </div>
-
-
-
+   <!-- 置顶 -->
+    <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
 </body>
- 
+
 
 
 

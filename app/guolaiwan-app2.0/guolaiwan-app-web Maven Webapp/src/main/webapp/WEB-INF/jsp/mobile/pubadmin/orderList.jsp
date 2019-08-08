@@ -538,7 +538,7 @@ var oderinfoid;
 				    }
 				    if('${status}'=='PAYSUCCESS'){				   
 					    if(data[i].logisticsId=="1"){
-					         html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)" value="'+data[i].id+'">&nbsp;&nbsp;发货</a>')
+					         html.push('<a style="font-size:14px;position: absolute;right:0;border-radius:10px;margin:-35px 10px 0 0;color:#8FCBFF;border:1px solid #8FCBFF;text-align:center;padding:0 7px 0 0;" id="ok-'+data[i].id+'" class="check" href="javascript:void(0)" value="'+data[i].id+'">&nbsp;&nbsp;点击发货</a>')
 					    }				       
 				    }
 				   html.push(' </a>');
@@ -588,7 +588,7 @@ var oderinfoid;
 		      });
 		      
 		     //下拉框选择啥快递
-			 $(document).on('click','.icon-check',function(){
+			 $(document).on('click','.check',function(){
 			 oderinfoid=$(this).attr("id");
 			     $(".xianshi").fadeIn();
 			     var html=[];
@@ -642,7 +642,7 @@ var oderinfoid;
 				       html.push('<a class="weui-media-box__desc" style="margin-left:15px;font-size:12px;" href="javascript:void(0)">退款理由:&nbsp;'+data[i].refundReason+'</p>');
 				    }
 				    if('${status}'=='PAYSUCCESS'){				  
-				       html.push('<a style="font-size:12px;margin-left:15px" id="ok-'+data[i].id+'" class="icon-check" href="javascript:void(0)">&nbsp;&nbsp;发货</a>')
+				       html.push('<a style="font-size:14px;position: absolute;right:0;border-radius:10px;margin:-35px 10px 0 0;color:#8FCBFF;border:1px solid #8FCBFF;text-align:center;padding:0 7px 0 0;" id="ok-'+data[i].id+'" class="check" href="javascript:void(0)">&nbsp;&nbsp;点击发货</a>')
 				    }
 				   html.push(' </a>');
 				   }

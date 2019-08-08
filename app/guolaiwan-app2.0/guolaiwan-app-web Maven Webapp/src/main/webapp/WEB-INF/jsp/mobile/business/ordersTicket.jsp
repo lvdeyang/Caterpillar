@@ -213,6 +213,11 @@ color:#fff;
 	    elem: '#useDate' //指定元素
 	  });
 	   $(function() {
+	    if(${choice}== 0){
+	     $("title").html("购票确认订单"); 
+	   
+	    }
+	   
 	    getUserInfo();	   	   	   	   
 	    getordersInfo();
 	     window.BASEPATH = '<%=basePath%>';
@@ -345,7 +350,8 @@ color:#fff;
 	  $.get(url,null,function(msg){
 	  var sign = msg.state;
 	 //普通票判断
-	  if(choice == 0){		        	    	     
+	  if(choice == 0){		   	    
+	  /*  $(document).attr("title","购票确认订单"); */	        	    	     
 	     if(sign == 0){ 
 	         $.toast("票以售空", "forbidden");
 			 return false;

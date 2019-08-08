@@ -19,18 +19,34 @@ public class VoteProductPO extends AbstractBasePO{
 	private String productName;
 	//群众投票数
 	private long peoplevotenum;
-	//评委投票数
-	private long judgesvotenum;
 	//订单数量
 	private long ordernum;
 	//总票数
-	private long allvotes;
+	private double allvotes;
+	//活动Id
+	private long optionId;
+	//在pc上评分
+	private int showonpc;
 	
 	
-	public long getAllvotes() {
+	
+	
+	public int getShowonpc() {
+		return showonpc;
+	}
+	public void setShowonpc(int showonpc) {
+		this.showonpc = showonpc;
+	}
+	public long getOptionId() {
+		return optionId;
+	}
+	public void setOptionId(long optionId) {
+		this.optionId = optionId;
+	}
+	public double getAllvotes() {
 		return allvotes;
 	}
-	public void setAllvotes(long allvotes) {
+	public void setAllvotes(double allvotes) {
 		this.allvotes = allvotes;
 	}
 	public String getProductName() {
@@ -56,12 +72,6 @@ public class VoteProductPO extends AbstractBasePO{
 	}
 	public void setPeoplevotenum(long peoplevotenum) {
 		this.peoplevotenum = peoplevotenum;
-	}
-	public long getJudgesvotenum() {
-		return judgesvotenum;
-	}
-	public void setJudgesvotenum(long judgesvotenum) {
-		this.judgesvotenum = judgesvotenum;
 	}
 	public long getOrdernum() {
 		return ordernum;

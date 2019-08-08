@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>评分列表</title>
+<title>美食大赛pc</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -79,18 +79,20 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#fff !important; 
+    background:#fff;
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
 }
-
+.zong{
+    overflow: hidden;
+}
  
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
+	touch-action: none;
 }
 /* 页面样式 */
 .header {
@@ -138,23 +140,105 @@ html, body {
   .inp::-webkit-input-placeholder{
         text-align: center;
 }  
-.lists tr th{
- width:20%;
- background: #C3191F;
- color:#fff;
- height:40px;
- text-align: center;
- font-size:16px;
+.xia button{
+background:#C3181E;
+color:#fff;
+font-weight: bpld;
+padding:0 15px;
+border:none;
+outline:none;
+border-radius:6px;
+box-shadow:0 3px #D50931;
+font-size:12px;
+font-weight:bold;
+margin:5px 5%;
 }
-.lists tr td{
- width:20%;
- background: #fff;
- color:black;
- height:40px;
- text-align: center;
- font-weight: bold;
- font-size:16px;
+
+.di::before{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-40px;
+  width:100%;
+  height:30px;
+  box-sizing:border-box;
+  border-bottom:1px solid deeppink;
+  transform-origin:bottom center;
+  transform:rotateZ(140deg) scale(1.414);
+  /* animation:slash 5s infinite ease; */
 }
+
+.lists img{
+width:30px;
+height:30px;
+margin:0 5px;
+}
+
+.nav{
+   height:350px;
+   width:100%;
+   background-image: url('lib/images/dasaibeijing.jpg');
+  background-size:100% 100%;
+  position: relative;
+}
+.logo-in,.logo-on,.logo-ou{
+    color: #C3181E;
+    font-weight: bold;
+    font-size:7.5em;
+    font-family: "Just Another Hand",cursive;
+    text-transform: uppercase;
+}
+
+/*定义选项卡内容*/
+.contentt{
+	display: none;
+	width:auto;
+	height:auto;
+}
+/*显示动态选项卡*/
+.active{
+	display: block;
+}
+.tab-btn li{
+	list-style: none;
+	float: left;
+	width: 14%;
+	height:auto;
+	font-weight: bold;
+	line-height: 2em;
+	font-size: 3em;
+	text-align: center;
+	margin:0 0 20px 2.5%;
+	color:black;
+	
+}
+.tab-btn li img{
+ width:100%;
+}
+.btn-active{
+	/* background: orange; */
+	z-index:11111;
+	color:#FFEF39 !important;
+	
+}
+
+ .xiaoguo{
+width:40px;
+height:40px;
+}
+table tr th{
+background: #C3181E;
+color:#fff;
+border:none;
+text-align: center;
+height:3em;
+width:25%;
+}
+table tr td{
+border:none;
+border:0.05em solid #CF4D50;
+
+}          
 </style>
 
 </head>
@@ -170,34 +254,21 @@ html, body {
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
-$(function(){
-	getRecomment();
-	list();
+var productId="${productId}";
+$(function() {
+	getproduct();
 })
 
-
-//获得图片
-function getRecomment() {
-		var _uriRecomment = window.BASEPATH + 'phoneApp/productInfo?productId=${product.id}&userId=${userId}';
-
-		$.get(_uriRecomment, null, function(data) {
-			data = parseAjaxResult(data);
-			if (data === -1) return;
-			if (data) {
-				var html = [];
-				var pics = data.product.productMorePic.split(',');
-				for (var i = 0; i < pics.length; i++) {
-					html.push('<div style="height:200px;" class="swiper-slide"><img style="height:200px" src="' + pics[i] + '" alt=""></div>');
-				}
-				$('.swiper-wrapper').append(html.join(''));
-				$(".swiper-container").swiper({
-					loop : true,
-					autoplay : 3000
-				});
-			}
-		});
-}
-	//时间格式化
+	function getproduct(){
+		var url=window.BASEPATH + 'judges/getoneproduct';
+		$.post(url,{"productId":productId},function(data){
+			list(data.id);
+			$("#name").html(data.productName);
+			$(".name").html(data.productName);
+			$(".pic").attr('src', "http://www.guolaiwan.net/file"+data.productShowPic);
+		})
+	}
+//时间格式化
 	function fmat(time){
 		var da = time;
 	    da = new Date(da);
@@ -208,59 +279,95 @@ function getRecomment() {
 	}
 
 	//展开数据
-	function list(){
-	var url=window.BASEPATH + 'admin/vote/showjudges';
-		$.post(url,{"productId":${product.id}},function(data){
-			var html=[];
-			 html.push('<table border="1"  style="text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; ">'); 
-			 html.push('<tr>'); 
-		     html.push('<th>日期</th>'); 
-		     html.push('<th>评委姓名</th>'); 
-		     html.push('<th>分数</th>'); 
-		  	 html.push('</tr>'); 
-	     	for(var i=0;i<data.all.length;i++){
-	     	 var time=fmat(data.all[i].updateTime);
-		  	 html.push('<tr>'); 
-		     html.push('<td>'+time+'</td>'); 
-		     html.push('<td>'+data.all[i].username+'</td>'); 
-		     html.push('<td>'+data.all[i].score+'</td>'); 
-		     html.push('</tr>'); 
-	     	}
-	     	 html.push('<tr>'); 
-	   		 html.push('<td>平均分</td>'); 
-	  	  	 html.push('<td colspan="2">'+data.score+'</td>'); 
-	         html.push('</tr>'); 
-			 html.push('</table>'); 
-	        $('.lists').children().remove();
-	        $('.lists').append(html.join(''));
-        })
-	}
-	  
+	function list(id){
+		var url=window.BASEPATH + 'admin/vote/showjudges';
+			$.post(url,{"productId":id},function(data){
+				var html=[];
+				 html.push('<table border="1"  style="font-size:2em;text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; width:50%;border:none;">'); 
+				 html.push('<tr>'); 
+			     html.push('<th>日期</th>'); 
+			     html.push('<th>评委姓名</th>'); 
+			     html.push('<th>分数</th>'); 
+			  	 html.push('</tr>'); 
+		     	for(var i=0;i<data.all.length;i++){
+		     	 var time=fmat(data.all[i].updateTime);
+			  	 html.push('<tr>'); 
+			     html.push('<td>'+time+'</td>'); 
+			     html.push('<td>'+data.all[i].username+'</td>'); 
+			     html.push('<td>'+data.all[i].score+'</td>'); 
+			     html.push('</tr>'); 
+		     	}
+		     	 html.push('<tr>'); 
+		   		 html.push('<td>平均分</td>'); 
+		  	  	 html.push('<td colspan="2">'+data.score+'</td>'); 
+		         html.push('</tr>'); 
+				 html.push('</table>'); 
+		        $('.lists').children().remove();
+		        $('.lists').append(html.join(''));
+	        })
+		}
+  
 </script>
+<script>
+	$(function(){
+		setInterval("test()",3000);
+	})
+     function test() {
+     	var url=window.BASEPATH + 'admin/vote/selectshowproduct';
+         $.post(url,{"optionId":"${optionId}"},function(data){
+         	if(data.length==0){
+         		window.history.back(-1); 
+         	}else{
+         		list(productId);
+         	}
+         })
+     }
+     
+</script>
+
 <body>
-			<!-- 主页 -->
-		 <div class="header">
-			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div>
+       <div class="nav">
+        <img style="width:15%;position:absolute;left:3%;top:20px; " src="lib/images/zhengfu.png">
+        <p style="height:2.5em;line-height: 2.5em;width:100%;font-size:4em;text-align: center;color:#C3181E;">2019中国·遵化</p>
+         <p class="logo-in" style="vertical-align: inherit;text-align: center;">美食节大赛评选活动</p>
+         <p style="text-transform:uppercase;text-align: center;font-size:2.5em;color:#C3181E;">food festival competition selection activities</p>
+       </div>
 		   
-		 <div class="content" id="content" style="position: relative;" >
-			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
-			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
-			  </div>
-			</div>
-			<p style="height:30px;line-height: 30px;width:100%;color:#fff;font-weight:bold;padding:0 10%;position: absolute;bottom:0;z-index:111111111111;background: rgba(129,91,84,0.6);">${product.productName}</p>
-	   </div>   
-	<div style="width:100%;text-align: center;">
-		 <button style="background:#C3191F;box-shadow:0 2px #BAB9BA;border-radius:8px;color:#fff;margin:25px auto;font-weight: bold;padding:5px 15px;font-size: 18px;border:none;outline:none;">${product.productName}评分列表</button>        
-	</div>	
-	
-	<div class="lists" style="text-align: center;margin:0 auto;width:100%;">
+		<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 5%;">  
+			  <!-- 选项卡 -->    
+			  <div class="tab" >
+					<ul class="tab-btn active" id="menu">
+						
+					</ul>
+				
+					<div class="contentt-box" style="" >
+							<div class="contentt active" style="text-align: center;">
+							
+							</div>
+							
+							<div class="contentt" style="text-align: center;">
+			
+							</div>
+				  		
+			        </div> 
 	  
-	 </div>    
+	          </div>
+	   </div>
+
+		 
+		 
+        <div  style="width:100%;height:auto;text-align: center;font-weight: bold;">
+          <p class="logo-on" style="line-height:1.5em;color:black;">当前菜品</p>
+          <p id="name" class="logo-ou" style="line-height:1.5em;font-size:5em;"></p>
+          <img class="pic" style="width:45%;border-radius:1em;" src="lib/images/ceshide.jpg">
+          <p style="color:#fff;box-shadow:0 0.1em #C9CBC9;background: #C3181E;width:30%;font-size:3em;border-radius:0.2em;margin: 1em auto;padding:0.5em 1em;">评分列表</br><span class="name"></span></p>
+   			<div class="lists">
+   			
+   			</div>
+   		</div>
+	    
+	  	<div style="height: 200px"></div>
+	
 </body>
  
 

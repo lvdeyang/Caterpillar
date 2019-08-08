@@ -122,6 +122,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <button class="ui-btn-lg ui-btn-primary" id="save" style="background:#FFC0CB;">
 	                                                    保存               
 	            </button>
+	           
+	            
+	        </div>
+	        <div class="ui-btn-wrap" style="">
+
+	            <button class="ui-btn-lg ui-btn-primary" id="offLine" style="background:#FFC0CB;">
+	                                                    下架              
+	            </button>
 	            
 	        </div>
 
@@ -156,7 +164,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				  });
 		     
 		     });
+		     $(document).on('click','#offLine',function(){
+		         var _urioffline = window.BASEPATH + 'worker/mobile/offline';
+		         var data={};
+		         data.id=${workerId};
+		         $.post(_urioffline, data, function(data){
+				       location.href=window.BASEPATH +'worker/mobile/setindex';
+				  });
 		     
+		     });
 		     
 	       
 	          
