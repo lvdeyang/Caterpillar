@@ -3404,7 +3404,7 @@ public class PhoneController extends WebBaseControll {
 			}
 			if (orderInfoPO.getOrderBookDate() != null && orderInfoPO.getProductId() != 0) {
 				MerchantPO merchantPO = conn_merchant.get(orderInfoPO.getShopId());
-				if (merchantPO.getModularCode().equals("0001") || merchantPO.getModularCode().equals("0002")) {
+				if (merchantPO.getModularCode().equals("0001")) {
 					String today = DateUtil.format(new Date(), "yyyy-MM-dd");
 					Date sDate = DateUtil.parse(today + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
 					Date eDate = DateUtil.parse(today + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
