@@ -368,6 +368,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
     $.get(_uriRecomment,null,function(data){
       var html=[],html1=[];
       for(var i=0;i<data.length;i++){
+      var productvotes=parseInt(data[i].allcount);
             <!-- 1 -->
         if(i==0){
 			html.push('<div style="width:30%;height:30em;position: relative;display: inline-block;">');   
@@ -378,7 +379,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:7.6em;margin-left:-13em;" src="lib/images/guanjun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
 			html.push('<p style="border-radius:12px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1.6em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
 		}
@@ -392,7 +393,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/yajun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
 			html.push('<p style="border-radius:12px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1.6em;display: inline-block;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
 		}
@@ -406,7 +407,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/jijun.png">');   
 			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
 			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1.6em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+data[i].allcount+'票</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
 		    html.push('<div style="height:5em;"></div>');   
@@ -419,7 +420,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html1.push('</div>');
 		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i].productpic+'">');
 		   	html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+data[i].allcount+'票</p>');
+		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+productvotes+'票</p>');
 	      	html1.push('</div>');
 	      	if(i+1==data.length)continue;
 	     	html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;float:left;">');
@@ -428,7 +429,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 		 	html1.push('</div>');
 		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i+1].productpic+'">');
 	  		html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i+1].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+data[i+1].allcount+'票</p>');
+		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+parseInt(data[i+1].allcount)+'票</p>');
 	     	html1.push('</div>');
 			html1.push('</div>');
         }
