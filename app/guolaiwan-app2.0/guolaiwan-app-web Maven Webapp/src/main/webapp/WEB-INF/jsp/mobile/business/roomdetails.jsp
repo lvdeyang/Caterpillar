@@ -147,6 +147,29 @@ width:33%;
 margin-bottom:20px;
 text-align: center;
 }
+.fuceng{
+    position: fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top: 0;
+    background-color:rgba(0,0,0,0.6);
+    z-index: 10000;
+
+}
+.listbox-2 li input{
+    width: 100%;
+    height: 60px;
+    margin:5px auto;
+    text-align:center;
+  
+
+    border-radius:6px;
+    border:none;
+    background:#fff;
+    outline: none;
+    border:1px solid  rgb(230, 230, 230);
+}
 </style>
 
 </head>
@@ -163,28 +186,50 @@ text-align: center;
 	getroomdetails();
       $(".goshopping").click(function(){
       $(".zong").fadeOut();  
-      $(".modDiv").fadeIn();     
+      $(".window-1").fadeIn();     
 	});
-	 $(".weui-btn_primary").click(function(){
-	 $(".modDiv").fadeOut();  
+	 $(".modDiv").click(function(){
+	 $(".window-1").fadeOut();  
       $(".zong").fadeIn(); 
       $(".shopping").fadeIn();    
    	 setTimeout(function () {  
         $(".shopping").fadeOut();  
     	}, 2000);   
         });
+        
+     $(document).on('click', '.close-window-1', function(){ 
+		    $(".window-1").fadeOut();
+		     $(".zong").fadeIn();
+		}); 	   
 	});
+	
+	 //跳转用户添加详情页面
+    function addInfo(){
+	
+	  $("#_name").val(""),
+      $("#_phone").val(""),
+      $("#_idcard").val(""),
+	     
+	  $(".window-2").fadeIn();
+	  $(".window-1").fadeOut();
+	}	
+	
+	//关闭用户添加详情页面	
+    function shutdown(){
+    
+      $(".window-2").fadeOut();
+      $(".window-1").fadeIn();  
+    }        
 	
 	
 	function getroomdetails(){
 	      var url = window.BASEPATH + 'business/gettheroom?roomId=${roomId}';
 		$.get(url, null, function(data){
-			    $('.header-content').html(data.name);
 			    $('.roomimg').attr( "src" , "http://www.guolaiwan.net/file"+data.roomimg);
 			    $('.roomname').html(data.name+"——"),
 			    $('.roomidentity').html("("+data.identity+")");
 			    $('.roomdetails').html(data.roomdetails);
-			    $('.roomprice').html("￥   "+data.price/100);
+			    //$('.roomprice').html("￥   "+data.price/100);
 			    if(data.isreception==1)$('.isreception').addClass("show");
 			    if(data.iswifi==1)$('.iswifi').addClass("show");
 			    if(data.istv==1)$('.istv').addClass("show");
@@ -196,9 +241,200 @@ text-align: center;
 	  }
     
     function gotoorders(){
-    	location.href=window.BASEPATH + 'business/buyproduct?roomId=${roomId}';
+    	location.href=window.BASEPATH + 'business/buyproduct?roomId=${roomId}&inRoomDate=${inRoomDate}&outRoomDate=${outRoomDate}';
     }
+    
+    //人脸识别
+    var base="";
+        $(document).on('click','#photo',function(){
+
+		    //人脸采集部分
+
+		    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+
+            var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+
+			$.get(_uri, null, function(data){
+
+				data = parseAjaxResult(data);
+
+				if(data === -1) return;
+
+				if(data){
+					share=data;
+					wx.config({
+			            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+
+			            appId : share.appId, // 必填，公众号的唯一标识
+
+			            timestamp : share.timestamp, // 必填，生成签名的时间戳
+
+			            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+
+			            signature : share.signature,// 必填，签名，见附录1
+
+			            jsApiList : ['chooseImage',
+
+		                        'previewImage',
+
+		                        'uploadImage',
+
+		                        'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	       	        });
+                }
+            }); 
+
+             wx.ready(function () {
+                wx.checkJsApi({
+                    jsApiList: [
+
+                        'chooseImage',
+
+                        'previewImage',
+
+                        'uploadImage',
+
+                        'downloadImage'
+                    ],
+                    success: function (res) {
+                        if (res.checkResult.getLocation == false) {
+                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                            return;
+                        }else{
+                            choosePic(this.id);
+                        }
+                    }
+                });
+            });
+            wx.error(function(res){
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                alert("验证失败，请重试！");
+                wx.closeWindow();
+            });		
+		});
+
+		function choosePic(id) {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    $.toast("照片处理中...", "loading");
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    getLocalData(localIds[0]);
+                }
+            });
+        }
+
+        function getLocalData(localid) {
+			//获取本地图片资源
+            wx.getLocalImgData({
+                localId: localid, // 图片的localID
+                success: function (res) {
+                    var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+                    var str=new String();
+                    var arr=new Array();
+                    str=localData ;
+                    var sear=new RegExp(',');
+                      if(sear.test(str)) {
+                        arr=str.split(',');//注split可以用字符或字符串分割
+						$('#uploadImages').attr('src','data:image/png;base64,'+arr[1]);
+						base=arr[1];
+                       }else{
+                            $('#uploadImages').attr('src','data:image/png;base64,'+localData);
+                            base=localData;
+                       }                                 
+                    photos[id]=localData;
+                }
+            });
+        }
         
+      //人脸识别保存方法
+      var state ="";
+      function  save(){
+        if($('#_phone').val()==''){
+			   $.toast("请输入手机号", "forbidden");
+			   return false;
+			}
+			if(!(/^1[34578]\d{9}$/.test($('#_phone').val()))){ 
+		       $.toast("手机号码有误，请重填", "forbidden");  
+		       return false; 
+		    } 
+			if($('#_name').val()==''){
+			   $.toast("请输入姓名", "forbidden");
+			   return false;
+			} 
+			if($('#_idcard').val()==''){
+			   $.toast("请输入身份证号", "forbidden");
+			   return false;
+			} 
+			 var re = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X|x)$/;
+                      
+		    if(re.test($('#_idcard').val())==false){
+		       $.toast("身份证号码有误，请重填", "forbidden");  
+		       return false;  		    
+		    }	
+		    
+		      if(base==""){
+              $.toast("照片获取失败", "forbidden");
+			  return false;
+             }    	     
+                $(".window-2").fadeOut();
+                $(".window-1").fadeOut();
+			    $(".homepage").fadeIn();s
+			                 
+              var url = window.BASEPATH + 'product/package/add/info';
+              if(state == ""){           
+              var date = {"name":$("#_name").val(),
+                          "phone":$("#_phone").val(),
+                          "idcard":$("#_idcard").val(),
+                          "facedate":base,
+                          "state": 0
+                      }
+               }else{
+                 var date = {"name":$("#_name").val(),
+                          "phone":$("#_phone").val(),
+                          "idcard":$("#_idcard").val(),                         
+                          "facedate":base,
+                          "state": state           
+              }  
+              }            
+	          $.post(url, date,function(msg){ 
+	          	if(msg == 'success') {
+	          	    $(".homepage_add").children().remove();
+	          	    $("#window-1-message").children().remove();          	    
+	          	    clientNumber.splice(0,clientNumber.length);	          	   
+	           		getUserInfo();	           			           		
+	           	}
+	         })                                                                                                       
+         }
+        
+         //查询用户信息
+	     var clientInfo = " "; 	    
+	  	 function  getUserInfo(){
+	  	  var url_ = window.BASEPATH + 'product/package/user/list';
+	  	  $.get(url_,null,function(msg){
+	  	  var mesage = msg.message;
+	  	  clientInfo = msg.message; 	  
+	  	  if(mesage.length==0){return;}
+	   
+	  	  for(var i = 0; i<mesage.length;i++){	  	    	  	     
+	  	     var html = [];  	  	             
+             html.push('<div  style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;border-bottom:1px solid #A6A6A6;text-align: left;padding:10px 10%;">');
+             html.push('<input id="input-'+i+'"  onclick="clientMessage(this.id)"  type="checkbox" name="sex" value="1" style="position: absolute;top:30px;left:5%;" />');
+             html.push('<P>姓名：'+mesage[i].name+'</P>');
+             html.push('<P>手机号：'+mesage[i].phone+'</P>');
+             html.push('<P>身份证号：'+mesage[i].number+'</P>');
+             html.push('<img id="img1-'+mesage[i].id+'" onclick="deleteClientMessage(this.id)" style="width:28px;height:28px;position: absolute;top:26px;right:15%;border-radius:50%;" src="lib/images/trashss.png">');
+             html.push('<img id="'+mesage[i].id+'" onclick="update(this.id)"  style="width:20px;height:20px;position: absolute;top:30px;right:5%;" src="lib/images/xiugai.png">');
+			 html.push('</div>');
+             $("#window-1-message").append(html.join(''));
+			 
+	  	  }
+	  	  	})  	 	  	 
+	  	 }
+   
 </script>
 
 
@@ -250,7 +486,7 @@ text-align: center;
          
          <div style="height:50px;width:100%;background: #fff;color:#fff;position: fixed;bottom:0;font-size:16px;font-weight: bold;">
           
-          <p onclick="gotoorders()" style="width:50%;line-height: 50px;text-align: center;background: #FF6501;float:right;">立即预订<span class="roomprice"></span></p>
+          <p onclick="gotoorders()" style="width:50%;line-height: 50px;text-align: center;background: #FF6501;float:right;">立即预订<!-- <span class="roomprice"></span> --></p>
           <p class="goshopping" style="width:50%;line-height: 50px;text-align: center;display: inline-block;background: #FD9E06;float:left;">加入购物车</p>
          </div>
          
@@ -261,77 +497,41 @@ text-align: center;
          
 </div>         
          
-
-
-
-					<div class="modDiv" id="addressSecond" style="display:none;">
-
-						<div class="weui-cells weui-cells_form" style="margin:0;">
-							
-							<div class="weui-cell">
-								<div class="weui-cell__hd">
-									<label class="weui-label">预订人</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input id="name" class="weui-input" type="text" placeholder="">
-								</div>
-							</div>
-							<div class="weui-cell" style="display:none;">
-							    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
-							    <div class="weui-cell__bd">
-							      <input id="idNum" class="weui-input" type="text" placeholder="">
-							    </div>
-							    
-							 </div>
-							<div class="weui-cell">
-								<div class="weui-cell__hd">
-									<label class="weui-label">联系电话</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input id="addressphone" class="weui-input" type="text"
-										placeholder="">
-								</div>
-							</div>
-							<div class="weui-cell" id="weui">
-								<div class="weui-cell__hd">
-									<label for="name" class="weui-label">地址选择</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input class="weui-input" id="address" type="text" value=""
-										readonly="" data-code="420106"
-										data-codes="420000,420100,420106">
-								</div>
-							</div>
-							<div class="weui-cell" id="weui-cell">
-								<div class="weui-cell__hd">
-									<label class="weui-label">详细地址</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input id="moreAddress" class="weui-input" type="text"
-										placeholder="">
-								</div>
-							</div>
-						</div>
-						<a id="save"
-							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
-
-					</div>	
-                    <div class="modDiv" id="cameraDiv" style="display:none;">
-                          <div id="cameraContent"></div>
-							  
-						  <div>
-                        <!--   <a id="cancelPhoto"
-							style="width:47%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 取消</a>
-                          <a id="confirmPhoto"
-							style="width:47%;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a> -->
-							</div>
-                    </div>
-				</div>
-
-         
+       <div  class="window-1" style="z-index:11111;width:100%;display: none;height:500px;padding:0 0 50px 0;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0; ">
+	   <p style="text-align:center;width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">添加/修改信息<span class="close-window-1" style="float:right;color:#fff;margin-right:5%;font-weight:bold;">关闭</span></p>
+	   <button onclick="addInfo()" style="width:30%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 3%;">添加信息</button>	
+	   <button class="modDiv" onclick="" style="width:30%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 3%;">确认</button>	  
+	  <div id="window-1-message"></div>
+	  </div>
+	  
+	  
+	  
+	<!-- 添加信息 -->  
+		<div class="window-2" style="z-index:111111;display: none;">
+		<ul class="listbox-2" style="color:black;">
+		    <li>
+		    <input  id="_name" type="text" placeholder="请输入您的姓名" minlength="4" maxlength="4" style="" >
+		    <p    style="position: absolute;top:65px;left:10%;">用户姓名</p>
+		    </li>
+		    <li>
+		     <input id="_phone" class="phone" type="text" placeholder="请输入正确的手机号码" minlength="11" maxlength="11" style="" >
+		    <p   style="position: absolute;top:135px;left:10%;">联系电话</p>
+		    </li>
+		    <li>
+		    <input id="_idcard" class="pid"  type="text" placeholder="请输入身份证号码" minlength="18" maxlength="18" style="" >
+		     <img style="height:20px;height:20px;position: absolute;top:205px;right:10%;" src="lib/images/zhaoxiang.png"> 
+		    <p  style="position: absolute;top:205px;left:10%;">身份证号码</p>
+		    </li>
+		 </ul>
+		    
+<div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;">
+          <img id="uploadImages" style="width:140px;height:171px;position: absolute;left:50%;margin:40px 0 0 -70px;" alt="" src="lib/images/renliansss.png">
+          <p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-126px;">请保持正脸，平视屏幕，面部足够清晰。</p>
+          <button id="photo" style="position: absolute;left:50%;margin-left:-50px;top:300px;font-size:18px;width:100px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>
+          <button onclick="save()" style="position: absolute;left:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">保存</button>
+          <button onclick="shutdown()" style="position: absolute;right:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">关闭</button>
+      </div>
+  </div>    
          
          <!-- 空白 -->
          <p style="height:50px;"></p>

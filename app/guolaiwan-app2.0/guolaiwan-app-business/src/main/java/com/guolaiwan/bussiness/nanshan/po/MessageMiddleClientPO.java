@@ -19,6 +19,33 @@ public class MessageMiddleClientPO extends AbstractBasePO{
 		//产品Id
 		private Long proId;
 		
+		//房间Id
+		private Long roomId;
+		
+		//开始日期(房间)
+		private String startDate;
+		
+		//结束时间
+		private String endDate;
+		
+		public Long getRoomId() {
+			return roomId;
+		}
+		public void setRoomId(Long roomId) {
+			this.roomId = roomId;
+		}
+		public String getStartDate() {
+			return startDate;
+		}
+		public void setStartDate(String startDate) {
+			this.startDate = startDate;
+		}
+		public String getEndDate() {
+			return endDate;
+		}
+		public void setEndDate(String endDate) {
+			this.endDate = endDate;
+		}
 		//支付状态 0代表未支付，1代表已支付，2代表以验单
 		private String payState;
 		
