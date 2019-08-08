@@ -27,9 +27,31 @@ public class TableStatusPO extends AbstractBasePO {
   	private String	tableState; // //  NOTPAY 未支付        PAYSUCCESS 已预订          PAST已过期     REFUNDING 申请退款             REFUNDED 退款完成     REFUNDFAIL 退款失败
   	private String userName; //用户名称
 	private String userPhone; // 用户手机号
+	private String oderNo; // 订单号
+	private String ydNO; //订单二维码
 	
 	
 	
+	public String getYdNO() {
+		return ydNO;
+	}
+
+
+	public void setYdNO(String ydNO) {
+		this.ydNO = ydNO;
+	}
+
+
+	public String getOderNo() {
+		return oderNo;
+	}
+
+
+	public void setOderNo(String oderNo) {
+		this.oderNo = oderNo;
+	}
+
+
 	public long getMerchantId() {
 		return merchantId;
 	}

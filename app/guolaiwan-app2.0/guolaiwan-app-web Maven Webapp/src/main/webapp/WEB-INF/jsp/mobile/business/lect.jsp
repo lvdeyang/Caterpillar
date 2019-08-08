@@ -151,10 +151,59 @@ margin:0 1%;
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
+<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
+ <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
+<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script type="text/javascript">
+		layui.use('laydate', function(){ var laydate = layui.laydate; //执行一个laydate实例 
+			laydate.render({ 
+			elem: '#useDate1' 
+			//指定元素uscDate 
+			,done:function(value){
+			  var todayDate = new Date();
+			  var beginDate = new Date(value);
+			   var nowDate = new Date(formatDate(todayDate,0));
+			   if(beginDate < nowDate){
+			     $.toast("日期不能少于当前日期", "forbidden");
+			     setTimeout(function(){ $("#useDate1").val("")},2000);
+			    
+			   }			   
+			}
+			}); 
+			laydate.render({ 
+			elem: '#uscDate2' 
+			//指定元素 
+			 ,done:function(value){
+			   if( $("#useDate1").val() == ""){
+			   $.toast("请先选择入店时间", "forbidden");
+			   setTimeout(function(){ $("#uscDate2").val("")},2000);
+			   }else{
+			     var endDate = new Date(value);
+			   	 var beginDate = new Date($("#useDate1").val());	
+			     if(endDate <= beginDate){
+			     $.toast("离店时间应大于入店时间", "forbidden");
+			     setTimeout(function(){ $("#uscDate2").val("")},2000);
+			     }else{				      	     
+			      roomlist($("#tier").val(),$("#identity").val());   			     
+			     }
+			   } 			   			   
+			}
+			}); 
+		}); 
+   //设置时间转换格式
+	  function formatDate(date,obj){
+	   var y = date.getFullYear();//获取年
+	   var m = date.getMonth()+1;//获取月
+	   m = m < 10?'0'+m:m; //判断月是否大于10
+	   var d = date.getDate()+obj;//获取日      
+	   d=d<10?('0'+d):d;//判断日期是否大于10
+	   return y+'-'+m+'-'+d;//返回时间格式 
+	  }
+
   var rtier="1",ridentity="";        
   $(function() {
+    $("#useDate1").val(formatDate(new Date(),0)),
   	roomlist(rtier,ridentity);
 	});
 	
@@ -163,7 +212,7 @@ margin:0 1%;
 	function roomlist(tier,identity){
 		$('.main').children().remove();
 	 var url=window.BASEPATH + 'business/getallroom'; 
-		$.post(url,{"merchantId":${merchantId},"tier":tier,"identity":identity},function(data){
+		$.post(url,{"merchantId":${merchantId},"tier":tier,"identity":identity,"inRoomDate":$("#useDate1").val()},function(data){
 				var html= [];
 				for(var i =0;i<data.length;i++){
 					html.push('<div onclick="gotoroomdetails(this.id)" id="'+data[i].id+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');
@@ -202,7 +251,11 @@ margin:0 1%;
 	}
 	
 	function gotoroomdetails(id){
-	    location.href=window.BASEPATH + 'business/gotoroomdetails?roomId='+id;
+	if($("#useDate1").val() != "" && $("#uscDate2").val() != ""){
+	  location.href=window.BASEPATH + 'business/gotoroomdetails?roomId='+id+'&inRoomDate='+$("#useDate1").val()+'&outRoomDate='+$("#uscDate2").val();
+	  }else{
+	  $.toast("请选择入店或离店时间", "forbidden");
+	  }
 	}
 </script>
 
@@ -236,12 +289,16 @@ margin:0 1%;
 	       </select> 
 	       <span>房型：</span>
 	       <select class="identity" id="identity" onchange="changeidentity()" style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
-		       <option value="全部">全部</option>
+		       <!-- <option value="全部">全部</option> -->
 		       <option value="标准间">标准间</option>
 		       <option value="豪华间">豪华间</option>
 		       <option value="三人间">三人间</option>
 		       <option value="五人间">五人间</option>
 	      </select> 
+	      </div>
+	      <div style="height:50px;line-height:50px;text-align: center;font-size:12px;width:100%;">
+	        <p style="display: inline-block;width:40%"><span>入住时间：</span><input type="text" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="useDate1"></p>
+	        <p style="display: inline-block;width:40%"><span>离店时间：</span><input type="text" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="uscDate2"></p>
 	      </div>
 	      
 	      <!-- 房间选择 -->

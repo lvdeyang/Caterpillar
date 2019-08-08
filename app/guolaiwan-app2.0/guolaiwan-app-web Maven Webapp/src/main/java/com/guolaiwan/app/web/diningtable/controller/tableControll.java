@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,13 +26,20 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.TableVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
+import com.guolaiwan.app.web.weixin.WxConfig;
+import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
+import com.guolaiwan.app.web.weixin.YuebaWxUtil;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.TableDAO;
 import com.guolaiwan.bussiness.admin.dao.TableStatusDAO;
+import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.BookType;
 import com.guolaiwan.bussiness.admin.po.TablePO;
 import com.guolaiwan.bussiness.admin.po.TableStatusPO;
+import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.sun.jna.platform.win32.WinDef.LONG;
+
+import pub.caterpillar.weixin.constants.WXContants;
 
 
 @Controller
@@ -43,6 +51,11 @@ public class tableControll extends WebBaseControll  {
 	private  TableStatusDAO Table_Status;
 	@Autowired
 	private SysConfigDAO conn_sysConfig;
+	@Autowired
+	private UserInfoDAO conn_user;
+	
+	
+	
 	@RequestMapping(value = "/tables/home") //订桌首页
 	public ModelAndView tables(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
@@ -296,7 +309,30 @@ public class tableControll extends WebBaseControll  {
 	
 	
 	
-	
+
+	// 购买订桌
+	@ResponseBody
+	@RequestMapping(value = "/prev/table/{id}/{money}")
+	public Object prevRtrenew(@PathVariable String id, @PathVariable Integer money,  HttpServletRequest request) throws Exception {
+		String orderNo = "table-" + id  /* +"-"ID+"-"景ID */;
+		TableStatusPO TableStatus =	Table_Status.getByField("id",Long.parseLong(id));//查询中间表
+		TableStatus.setOderNo(orderNo);
+		Table_Status.saveOrUpdate(TableStatus);
+		int payMoney = 1;
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		UserInfoPO user = conn_user.get(userId);
+		YuebaWxPayConstants.set("http://" + WXContants.Website + "/website/wxreport/tablePayment", WxConfig.appId,
+				WxConfig.appsrcret);
+		// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, payMoney,
+				"192.165.56.64", user.getUserOpenID());
+		// 生成包含prepay_id的map，map传入前端
+		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
+		// 将订单号放入map，用以支付后处理
+		map.put("orderNo", orderNo);
+		return map;
+	}
+
 	
 	
 	

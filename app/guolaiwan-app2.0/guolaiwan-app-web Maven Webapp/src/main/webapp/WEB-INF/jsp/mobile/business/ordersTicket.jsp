@@ -750,7 +750,7 @@ color:#fff;
 	 } 
        
 	     //查询用户信息
-	      var clientInfo = " "; 	    
+	     var clientInfo = " "; 	    
 	  	 function  getUserInfo(){
 	  	  var url_ = window.BASEPATH + 'product/package/user/list';
 	  	  $.get(url_,null,function(msg){
@@ -765,7 +765,7 @@ color:#fff;
              html.push('<P>姓名：'+mesage[i].name+'</P>');
              html.push('<P>手机号：'+mesage[i].phone+'</P>');
              html.push('<P>身份证号：'+mesage[i].number+'</P>');
-             html.push('<img id="img1-'+mesage[i].id+'" onclick="deleteClientMessage(this.id)" style="width:28px;height:28px;position: absolute;top:26px;right:15%;border-radius:50%;" src="lib/images/trashs.png">');
+             html.push('<img id="img1-'+mesage[i].id+'" onclick="deleteClientMessage(this.id)" style="width:28px;height:28px;position: absolute;top:26px;right:15%;border-radius:50%;" src="lib/images/trashss.png">');
              html.push('<img id="'+mesage[i].id+'" onclick="update(this.id)"  style="width:20px;height:20px;position: absolute;top:30px;right:5%;" src="lib/images/xiugai.png">');
 			 html.push('</div>');
              $("#window-1-message").append(html.join(''));

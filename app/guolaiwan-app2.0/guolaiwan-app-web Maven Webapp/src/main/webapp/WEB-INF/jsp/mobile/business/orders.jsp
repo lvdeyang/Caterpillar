@@ -206,8 +206,9 @@ color:#fff;
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>	
 	var room;
+	var dayNumber;
  	$(function() {
-	    getUserInfo();	   	   	   	   
+	     getUserInfo();	 	   	   	   
 	     window.BASEPATH = '<%=basePath%>';
 	     var parseAjaxResult = function(data){
 				if(data.status !== 200){
@@ -216,7 +217,7 @@ color:#fff;
 				}else{
 					return data.data;		
 				}
-	  	};	 
+	  	};	  		 
 	  	
 	  	$(document).on('click', '.change', function(){ 															
 		    $(".window-1").fadeIn();
@@ -224,17 +225,20 @@ color:#fff;
 	    $(document).on('click', '.close-window-1', function(){ 
 		    $(".window-1").fadeOut();
 		});
+		var inroomdate =formatDate(new Date("${inRoomDate}"));
+		var outroomdate =formatDate(new Date("${outRoomDate}"));
+		 dayNumber = calculateDate(inroomdate,outroomdate);
+		$('#zong').text((${room.price/100}*dayNumber).toFixed(2));
 		
-		$('#zong').text(${Room.price/100});
     }); 
 	 
 	 layui.use('laydate', function(){
 		  var laydate = layui.laydate;
 		  //执行一个laydate实例
-		  laydate.render({
-		    elem: '#test1'//指定元素
-		  });
-	}); 
+          	
+	});
+	
+		 
 	//添加信息
 	function addInfo(){
 	   $("#_name").val(""),
@@ -243,8 +247,9 @@ color:#fff;
 	   $(".window-2").fadeIn();
 	   $(".homepage").fadeOut();
 	   $(".window-1").fadeOut();
-	}			
-	//-------------------------------------------------------------------------
+	}	
+	
+     //
 		
 	    var prepay_id,paySign,appId,timeStamp,nonceStr,packageStr,signType,orderNo;
 	   			  	   	  	
@@ -252,10 +257,29 @@ color:#fff;
 	var userId = ${userId};
 	var clientNumber = []; //所选的用户ID
 	$(document).on('click','#nowbuy',function(){
-	
-			   	
+	    if(clientNumber.length==0){
+	     $.toast("请添加住宿人信息", "forbidden");
+	      return false;
+	    }
+	    var room_url = window.BASEPATH + 'business/search.do?roomId=${room.id}';
+	    $.get(room_url,null,function(msg){	    
+	       if(msg == "success"){
+	         dobuy();
+	       }else{
+	         $.toast("该房间已被购买,请重新选择!", "forbidden");	       
+	       }  	    
+	    })	      	     	
 	}) 
 	
+	 //用时间算天数
+	 function  calculateDate(sDate1,  sDate2){	    
+	   var  oDate1,  oDate2,  iDays;  
+       oDate1  =  new  Date(sDate1.substring(4,6)  +  '-'  + sDate1.substring(6)  +  '-'  +  sDate1.substring(0,4));     
+       oDate2  =  new  Date(sDate2.substring(4,6)  +  '-'  + sDate2.substring(6)  +  '-'  +  sDate2.substring(0,4));  
+       iDays  =  parseInt(Math.abs(oDate1  -  oDate2) / 1000 / 60 / 60 /24);     
+       return  iDays;
+	 }
+		
 	 //设置时间转换格式
 	  function formatDate(date){
 	   var y = date.getFullYear();//获取年
@@ -263,35 +287,32 @@ color:#fff;
 	   m = m < 10?'0'+m:m; //判断月是否大于10
 	   var d = date.getDate();//获取日
 	   d=d<10?('0'+d):d;//判断日期是否大于10
-	   return y+'/'+m+'/'+d;//返回时间格式 
+	   return y+m+d;//返回时间格式 
 	  }
 	  				 
 	 function dobuy(){
 		    var param={};
-			param.id=${Room.id};      //-------------------这玩意有坑 我是room
-			
-			param.productNum=1; 
-			param.userId=${userId};
+			param.id=${room.id};      //-------------------这玩意有坑 我是room			
+			param.userId=${userId};			
+			param.numberDays = dayNumber;
 			param.paytype='WEICHAT';
 			param.source='PUBLICADDRESS';
-			param.bookDate=$("#useDate").val();
-		   		   	                   
-	        var _uriPay = window.BASEPATH + 'product/package/order/add';
+			param.bookstartDate= "${inRoomDate}";
+		   	param.bookendDate = "${outRoomDate}";	   	                   
+	        var _uriPay = window.BASEPATH + 'business/addRoomOrder';
 				$.post(_uriPay, $.toJSON(param), function(data){
 					data = parseAjaxResult(data);
-					if(data === -1) return;
-
-					//refreshActivity();
+					if(data === -1) return;				    
 					$.modal({
 						  title: "付款方式",
 						  buttons: [
-						    { text: "余额支付", onClick: function(){ 
+						    /* { text: "余额支付", onClick: function(){ 
 
 						    	$.confirm("确定支付？", function() {
 									addMessageOrderId(data.orderId,0);										
 								  }, function() {});
 
-						    } },						    
+						    } }, */						    
 						    { text: "微信支付", onClick: function(){ 
 							    $.confirm("确定支付？", function() {
 							       addMessageOrderId(data.orderId,1);							      							      						       													    
@@ -309,21 +330,25 @@ color:#fff;
 	        var gather = {};
 	        gather.oderId= orderId;
 	        gather.clientList = clientNumber;
-	        gather.proId =${Room.id};
+	        gather.proId =${room.id};
 	        gather.userId = ${userId};
-	        gather.merchantId =${Room.merchantId};
-		    var addMessage_url = window.BASEPATH+'product/package/addMessage';		    
+	        gather.merchantId =${room.merchantId};
+	        gather.bookstartDate = "${inRoomDate}";
+	        gather.bookendDate = "${outRoomDate}";
+		    var addMessage_url = window.BASEPATH+'business/addMessage';		    
 		     $.post(addMessage_url,$.toJSON(gather),function(msg){
 		       	if(msg == 'success'){
     	            if(paytipe == '0'){
     	             payByWallet(orderId);
     	            }else{
-    	             payPublic(orderId);	
+    	           //  payPublic(orderId);	
     	            }
 		       	}else{
 		       	 $.toast("用户信息保存失败", "forbidden");
 		       	}	     
 		     })		    
+		    }else{		    
+		     $.toast("住房人信息为空", "forbidden");		    
 		    }				  	  
 	  }		  
 	 
@@ -360,7 +385,7 @@ color:#fff;
 		}
 	 
 	 function payPublic(orderId){
-			$.get(window.BASEPATH +"pubnum/prev/pay/"+orderId, null, function(data){
+			$.get(window.BASEPATH +"business/prev/pay/"+orderId, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;
@@ -418,7 +443,8 @@ color:#fff;
 		    );
 		} 
 			 	  		
-  	//----------------------------------------------------------------------
+  	    //人脸识别生成base64码
+  	    
      	var base="";
         $(document).on('click','#photo',function(){
 
@@ -524,7 +550,6 @@ color:#fff;
             });
         }
         
-      //----------------------------------------------------------------------  
       //区分 保存 还是更新 
       var state ="";   
       function  save(){
@@ -551,10 +576,10 @@ color:#fff;
 		       return false;  		    
 		    }	
 		    
-		      if(base==""){
+		     /*  if(base==""){
               $.toast("照片获取失败", "forbidden");
 			  return false;
-             }   	    
+             }  */  	    
                 $(".window-2").fadeOut();
                 $(".window-1").fadeOut();
 			    $(".homepage").fadeIn();
@@ -580,29 +605,42 @@ color:#fff;
 	          	    $(".homepage_add").children().remove();
 	          	    $("#window-1-message").children().remove();          	    
 	          	    clientNumber.splice(0,clientNumber.length);
-	           		getUserInfo();
-	           		
-	           		
+	           		getUserInfo();       			           		
 	           	}
 	         })                                                                                                       
      }	
-	     //保存用户信息
+        //删除用户  	 
+	    function deleteClientMessage(id){
+	    var merssageId = id.split("-");
+	    var url =  window.BASEPATH + 'product/package/deleteClientMessage?merssageId='+merssageId[1]; 
+	    $.get(url,null,function(msg){   
+	      if(msg=="success"){
+	        $(".homepage_add").children().remove();
+	        $("#window-1-message").children().remove();          	    
+	        clientNumber.splice(0,clientNumber.length);	        
+	        getUserInfo();
+	        alert("操作成功")
+	        }
+	     })	 	 	    
+	    }    
+	     //查询用户信息
 	      var clientInfo = " "; 	    
 	  	 function  getUserInfo(){
+	  	 
 	  	  var url_ = window.BASEPATH + 'product/package/user/list';
 	  	  $.get(url_,null,function(msg){
 	  	  var mesage = msg.message;
 	  	  clientInfo = msg.message; 	  
 	  	  if(mesage.length==0){return;}
 	   
-	  	  for(var i = 0; i<mesage.length;i++){	  	    	  	     
+	  	 for(var i = 0; i<mesage.length;i++){	  	    	  	     
 	  	     var html = [];  	  	             
              html.push('<div  style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;border-bottom:1px solid #A6A6A6;text-align: left;padding:10px 10%;">');
              html.push('<input id="input-'+i+'"  onclick="clientMessage(this.id)"  type="checkbox" name="sex" value="1" style="position: absolute;top:30px;left:5%;" />');
              html.push('<P>姓名：'+mesage[i].name+'</P>');
              html.push('<P>手机号：'+mesage[i].phone+'</P>');
              html.push('<P>身份证号：'+mesage[i].number+'</P>');
-             html.push('<img style="width:40px;height:40px;position: absolute;top:19px;right:15%;border-radius:50%;" src="lib/images/logo.png">');
+             html.push('<img id="img1-'+mesage[i].id+'" onclick="deleteClientMessage(this.id)" style="width:28px;height:28px;position: absolute;top:26px;right:15%;border-radius:50%;" src="lib/images/trashss.png">');
              html.push('<img id="'+mesage[i].id+'" onclick="update(this.id)"  style="width:20px;height:20px;position: absolute;top:30px;right:5%;" src="lib/images/xiugai.png">');
 			 html.push('</div>');
              $("#window-1-message").append(html.join(''));
@@ -638,7 +676,7 @@ color:#fff;
             //添加勾选的信息
              clientNumber[i[1]] = clientInfo[i[1]].id;	
 			 var htm = [];					
-             htm.push('<p id="homepage-'+i[1]+'">姓名：'+clientInfo[i[1]].name+'</p>');            
+             htm.push('<p style="width:20%;padding:2px 5px;background:#FF9C00;color:#fff;border-radius:12px;margin:2px 5px;display: inline-block;text-align:center;" id="homepage-'+i[1]+'">'+clientInfo[i[1]].name+'</p>');            
              $(".homepage_add").append(htm.join(''));         
             } 
             //取消勾选删除
@@ -665,29 +703,28 @@ color:#fff;
 	     	
 	    </div>
 	  
-	  
+	    <div class="main" style="width:96%;height:120px;border-radius: 10px;background:#fff;padding:10px 10px;margin:10px auto;overflow: hidden;position: relative;">
+		   <img  style="width:30%;height:100%;border-radius: 10px;" src="http://www.guolaiwan.net/file/${room.roomimg}"/>
+		   <p id="proName" style="position: absolute;top:20px;font-size:14px;left:35%"><span>${merchant.shopName}</span><span>${room.name}包间（${room.identity}）</span></p>
+		    <p style="position: absolute;bottom:20px;margin:0;font-size:12px;color:#9A9A9A;left:35%">单价<span style="color:#EA712C;font-size:18px;">￥${room.price/100}</span></p> 
+		  </div>  
+        <div class="footer" style="width:96%;height:auto;padding:10px 5px;background: #fff;margin:10px auto;overflow: hidden;border-radius:12px;font-weight: bold;"> 
+          <p style="height:40px;line-height: 40px;margin:0;width:100%;padding:0 5%;border-bottom:1px solid #D4D6D5;text-align:left;"><span>入住时间</span><span style="float:right;">${inRoomDate}</span></p>
+          <p style="height:40px;line-height: 40px;margin:0;width:100%;padding:0 5%;border-bottom:1px solid #D4D6D5;text-align:left;"><span>离店时间</span><span style="float:right;">${outRoomDate}</span></p>
+          
+        </div> 
 	  
       <div class="layui-inline" style="width:96%;height:auto;position: relative;"> <!-- 注意：这一层元素并不是必须的 -->
   			<ul class="listbox" style="color:black;">
-		    <li>
-  			<input type="text" placeholder="请您选择入住日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="test1">
-	        <p style="position: absolute;top:30px;left:10%;">入住日期</p>
-	        <p style="position: absolute;top:30px;right:5%;">❯</p>
-		    </li>
-		    <li>
-  			<input type="text" placeholder="请您选择离店日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="test1">
-	        <p style="position: absolute;top:100px;left:10%;">离店日期</p>
-	        <p style="position: absolute;top:100px;right:5%;">❯</p>
-		    </li>
+		   <!--  <li>
+		    <input type="button">
+		    <p style="position: absolute;top:25px;left:10%;">优惠券</p>
+		    <p style="position: absolute;top:25px;right:7%;"><span>0</span>张可用</p>
+		    </li>  -->
 		    <li>
 		    <input type="button">
-		    <p style="position: absolute;top:175px;left:10%;">优惠券</p>
-		    <p style="position: absolute;top:175px;right:7%;"><span>0</span>张可用</p>
-		    </li> 
-		    <li>
-		    <input type="button">
-		    <p style="position: absolute;top:245px;left:10%;">填写身份信息 </p>
-		    <p class="change" style="position: absolute;top:245px;right:7%;color:#FCB735;">添加/修改▲</p>
+		    <p style="position: absolute;top:25px;left:10%;color:#666;">填写身份信息 </p>
+		    <p class="change" style="position: absolute;top:25px;right:7%;color:#FCB735;">添加/修改▲</p>
 		    <div class="homepage_add" style="height:auto;width:85%;background: #fff;margin:-20px auto 0;padding:20px 0;border-radius:10px;">		   						     
 		    </div> 		   
 		    </li>
