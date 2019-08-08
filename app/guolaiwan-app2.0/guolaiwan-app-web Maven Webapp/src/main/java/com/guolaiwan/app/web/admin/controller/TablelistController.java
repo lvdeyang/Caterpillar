@@ -168,7 +168,7 @@ public class TablelistController extends BaseController {
 			if ( TableStatus != null  ) {
 				tablePO.setTableState("2");//已预订
 				tablePO.setTableMenu(TableStatus.getTableMenu());
-				tablePO.setMenuTime(TableStatus.getDate()); //时间
+				tablePO.setMenuTime(TableStatus.getTableDate()); //时间
 				tablePO.setType(TableStatus.getType().toString()); //中午晚上
 				tablePO.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
 				tablePO.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
@@ -248,7 +248,7 @@ public class TablelistController extends BaseController {
 			TableStatusPO.setUserName(userName);
 			TableStatusPO.setTableMenu(tableMenu);
 			TableStatusPO.setTableState("PAYSUCCESS");
-			TableStatusPO.setDate(date);
+			TableStatusPO.setTableDate(date);
 			TableStatusPO.setMerchantId(Long.parseLong(merchantId));
 			if("0".equals(type)){
 			   TableStatusPO.setType(BookType.fromString("LUNCH"));

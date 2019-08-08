@@ -18,7 +18,7 @@ public class TableStatusDAO extends AbstractBaseDao<TableStatusPO>{
 	public TableStatusPO findBytidt(long tableId, String date, BookType type) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("tableId", Condition.eq, tableId);
-		hql.andBy("date", Condition.eq, date);
+		hql.andBy("tableDate", Condition.eq, date);
 		hql.andBy("type", Condition.eq, type);
 		hql.andBy("tableState", Condition.eq, "PAYSUCCESS");
 		List<TableStatusPO> tableStatuList = findByHql(hql);

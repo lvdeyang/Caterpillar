@@ -353,7 +353,6 @@ html, body {
 	$(function() {
 	
 	 
-	alert(${param.orderid});
 		window.BASEPATH = '<%=basePath %>';
 		var parseAjaxResult = function(data) {
 			if (data.status !== 200) {
