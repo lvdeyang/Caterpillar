@@ -3,6 +3,7 @@ package com.guolaiwan.app.web.business.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,23 +16,33 @@ import java.util.Map;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transaction;
 
 import org.bytedeco.javacpp.RealSense.intrinsics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.coupleback.vo.CoupleBackVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
+import com.guolaiwan.app.web.weixin.WxConfig;
+import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
+import com.guolaiwan.app.web.weixin.YuebaWxUtil;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
+import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantChildrenDao;
@@ -44,8 +55,13 @@ import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.VPCommentDAO;
 import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
 import com.guolaiwan.bussiness.admin.dao.VideoPicDAO;
+import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
+import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
+import com.guolaiwan.bussiness.admin.enumeration.OrderType;
+import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
+import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
 import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
 import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
@@ -55,14 +71,24 @@ import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 import com.guolaiwan.bussiness.admin.po.VPRelPO;
 import com.guolaiwan.bussiness.admin.po.VideoPicPO;
 import com.guolaiwan.bussiness.coupleback.dao.CoupleBackDao;
 import com.guolaiwan.bussiness.coupleback.po.CoupleBackPO;
+import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
+import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
+import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
+import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
+import pub.caterpillar.weixin.constants.WXContants;
+import pub.caterpillar.weixin.wxpay.GuolaiwanWxPayApp;
+import pub.caterpillar.weixin.wxpay.WXPayUtil;
+import pub.caterpillar.weixin.wxpay.WXPayConstants.SignType;
 
 @Controller
 @RequestMapping("/business")
@@ -124,6 +150,8 @@ public class BusinessController extends WebBaseControll {
 	private VideoPicDAO conn_videoPic;
 	@Autowired
 	private AddTheRoomDAO conn_roomdao;
+	@Autowired
+	private CurrentRoomSateDao conn_roomSateDao; 
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
 	public ModelAndView nsAndView(HttpServletRequest request, long merchantId, String comCode) throws Exception {
@@ -850,12 +878,19 @@ public class BusinessController extends WebBaseControll {
 	//套餐购买页面
 	@ResponseBody
 	@RequestMapping(value = "/buyproduct")
-	public ModelAndView buyProduct(HttpServletRequest request) throws Exception {
+	public ModelAndView buyProduct(HttpServletRequest request,String inRoomDate,String outRoomDate) throws Exception {
 		ModelAndView mv = null;
 		String roomId=request.getParameter("roomId");
 		AddTheRoomPO Room = conn_roomdao.get(Long.parseLong(roomId));
+		MerchantPO  merchant = Mer_chant.get(Long.parseLong(Room.getMerchantId()));
+		HttpSession  session  =  request.getSession();
+		 long userId =(long)session.getAttribute("userId");
 		mv = new ModelAndView("mobile/business/orders");
-		mv.addObject("roomId", Room);
+		mv.addObject("inRoomDate",inRoomDate);
+		mv.addObject("userId",userId);
+		mv.addObject("outRoomDate",outRoomDate);
+		mv.addObject("merchant",merchant);
+		mv.addObject("room", Room);		
 		return mv; 
 	}
 	
@@ -1052,13 +1087,10 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/gotolect")
 	public ModelAndView goToLect(HttpServletRequest request) throws Exception {
-		/*String merchantId=request.getParameter("merchantId");*/
-//		这里先写死 等有跳转方法的时候 在动态获取
-		
-		
+		String merchantId=request.getParameter("merchantId");
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/business/lect");
-		mv.addObject("merchantId", "189");
+		mv.addObject("merchantId", merchantId);
 		return mv; 
 	}
 	
@@ -1068,18 +1100,40 @@ public class BusinessController extends WebBaseControll {
 	public List<AddTheRoomPO> getAllRoom(HttpServletRequest request) throws Exception {
 		String tier=request.getParameter("tier");
 		String merchantId=request.getParameter("merchantId");
-		String identity=request.getParameter("identity");
+		String identity=request.getParameter("identity");		
 		List<AddTheRoomPO> rooms = conn_roomdao.findByMidTier(merchantId, tier,identity);
-		return rooms;
+		//根据时间筛选房间
+		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+		String inRoomDate = request.getParameter("inRoomDate");
+	    long beginRoom = sdf.parse(inRoomDate).getTime();
+		for(int i =0;i<rooms.size();i++){
+		   long roomId = rooms.get(i).getId();			
+		   List<CurrentRoomSatePO> roomState =  conn_roomSateDao.findByField("roomId", roomId);	
+		   if("0".equals(roomState.get(0).getRoomState()) && "1".equals(roomState.get(0).getCurrentRoomState())){
+		  //时间为空
+		   if(null != roomState.get(0).getOutRoomDate()){
+		   long endDate = sdf.parse(roomState.get(0).getOutRoomDate()).getTime();
+		   if(endDate > beginRoom){
+		     	rooms.remove(i);  			   
+		    }   		   		   
+		  }else{
+			  continue;
+		  }
+		}
+		}
+	     	return rooms;
 	}
+	
 	
 	//进入房间详情页面
 	@ResponseBody
 	@RequestMapping(value = "/gotoroomdetails")
-	public ModelAndView goToRoomDetails(HttpServletRequest request) throws Exception {
+	public ModelAndView goToRoomDetails(HttpServletRequest request,String inRoomDate,String outRoomDate) throws Exception {
 		String roomId=request.getParameter("roomId");
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/business/roomdetails");
+		mv.addObject("inRoomDate",inRoomDate);
+		mv.addObject("outRoomDate",outRoomDate);
 		mv.addObject("roomId", roomId);
 		return mv; 
 	}
@@ -1093,4 +1147,301 @@ public class BusinessController extends WebBaseControll {
 		return room;
 	}
 	
+	/**
+	 * 
+	 * 检索房间购买前的状态
+	 * 
+	 * */
+	@ResponseBody
+	@RequestMapping("/search.do")
+	public String  searchingRoomState(Long roomId){
+		CurrentRoomSatePO currentRoomSatePO = conn_roomSateDao.findByRoomId(roomId);
+		if("1".equals(currentRoomSatePO.getRoomState()) &&  "0".equals(currentRoomSatePO.getCurrentRoomState())){
+			
+			return "flase";
+		}		
+		return "success";
+	}
+	
+	   @Autowired
+	   private MessageMiddleClientDao conn_mesMidleClien;
+	
+	/**
+	 * 住宿信息保存
+	 * 
+	 * */
+	@ResponseBody
+	@RequestMapping(value = "/addMessage")
+	public String addRoomClientInfo(HttpServletRequest request){
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		 String oderId = pageObject.getString("oderId");
+		 String  clientLists = pageObject.getString("clientList");
+		 JSONArray clientList =  pageObject.parseArray(clientLists);
+		 String  roomId = pageObject.getString("proId");
+		 String  userId =  pageObject.getString("userId");
+		 String merchantId = pageObject.getString("merchantId");
+		 String startDate = pageObject.getString("bookstartDate");
+		 String endDate = pageObject.getString("bookendDate");
+		 //遍历保存用户信息
+		 for(int i = 0;i<clientList.size();i++){
+			 long clientMessage = clientList.getLong(i);		 			 
+			 MessageMiddleClientPO mesMidClien = new MessageMiddleClientPO();
+			 mesMidClien.setMerchantId(Long.parseLong(merchantId));
+			 mesMidClien.setMessageId(clientMessage);			
+			 mesMidClien.setOrderId(Long.parseLong(oderId));
+			 mesMidClien.setUserId(Long.parseLong(userId));
+			 mesMidClien.setRoomId(Long.parseLong(roomId));
+			 mesMidClien.setStartDate(startDate);
+			 mesMidClien.setEndDate(endDate);
+			 conn_mesMidleClien.save(mesMidClien);
+			 }	
+		
+		return "success";												
+	}
+	
+	
+	/**
+	 * 订单：立即支付
+	 * 
+	 * @param request
+	 * @param response
+	 * @returncahung
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/addRoomOrder", method = RequestMethod.POST)
+	public Map<String, Object> addOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		
+		String roomId = pageObject.getString("id");
+		Long userId = Long.parseLong(pageObject.getString("userId"));
+		String paytype = pageObject.getString("paytype");				
+		String numberDays = pageObject.getString("numberDays");
+		
+		OrderInfoPO order = new OrderInfoPO();	
+		//支付的金额
+		
+		AddTheRoomPO aTheRoomPO	= conn_roomdao.get(Long.parseLong(roomId));
+		long roomPrice = aTheRoomPO.getPrice();
+		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date date = new Date();
+		
+		// 支付金额		
+		long payMoney = Integer.parseInt(numberDays) * roomPrice;
+		// 订单总金额
+		long orderAllMoney = payMoney;
+
+		// 获取商家
+		MerchantPO merchant = Mer_chant.get(Long.parseLong(aTheRoomPO.getMerchantId()));		
+		UserInfoPO user = conn_user.get(userId);
+		
+		String orderStartDate = pageObject.getString("bookstartDate");
+		String orderEndDate = pageObject.getString("bookendDate");
+		if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
+			order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.defaultDatePattern));
+		}
+		if (orderEndDate != null && orderEndDate != "" && orderEndDate.length() != 0) {
+			order.setEndBookDate(DateUtil.parse(orderEndDate, DateUtil.defaultDatePattern));
+		}
+		// 会员ID
+		order.setUserId(userId);
+		if (user.getUserPhone() != null) {
+			// 会员手机号
+			order.setUserTel(user.getUserPhone());
+			// 会员信息
+			// 会员坐标经度
+			// 会员坐标维度
+			// 提成金额比例
+		}
+		if (user.getUserNickname() != null) {
+			order.setUserName(user.getUserNickname());
+		}
+
+		// 订单号（商家id+板块Code+时间戳+用户ID）
+		String orderNO = merchant.getId() + merchant.getModularCode() + df.format(date)
+				+ userId;
+		order.setOrderNO(orderNO);
+		// 验单码
+
+		// 下单时间
+		order.setCreateDate(date);
+		order.setUpdateTime(date);
+		// 验单时间
+
+		// 供应商ID
+		order.setShopId(merchant.getId());
+		// 供应商名称
+		order.setShopName(merchant.getShopName());
+		// 站点ID
+		// 站点名称
+		// 房间ID
+		order.setRoomId(Long.parseLong(roomId));
+		// 商品图片
+		order.setProductPic(aTheRoomPO.getRoomimg());
+		// 商品名称
+		order.setProductName(aTheRoomPO.getName());
+		// 商品数量
+		order.setProductNum(Long.parseLong(numberDays));
+		
+		// 商品单价
+		order.setProductPrice((long)aTheRoomPO.getPrice());
+		// 所属板块DI
+		order.setBkCode(merchant.getModularCode());
+		// 所属板块名称
+		order.setBkName(merchant.getModularName());
+										
+		// 支付金额
+		order.setPayMoney(payMoney);
+		// 订单总金额
+		order.setOrderAllMoney(orderAllMoney);
+		// 订单说明
+		if (request.getParameter("orderRemark") != null && request.getParameter("orderRemark").length() > 0) {
+			order.setOrderRemark(request.getParameter("orderRemark"));
+		}
+		// 订单状态
+		order.setOrderState(OrderStateType.NOTPAY);
+		// 订单支付类型 //ALIPAY WEICHAT
+		order.setPayMode(PayType.fromString(paytype));
+		// 有效期
+		
+		// 是否评价
+		order.setCommentIs(0);
+		// // 预订日期
+		 order.setOrderBookDate(date);
+
+		if (pageObject.getString("source") != null) {
+			order.setSource(OrderSource.fromString(pageObject.getString("source")));
+		} else {
+			// 订单来源
+			order.setSource(OrderSource.APP);
+		}
+		order.setOrderType(OrderType.MERCHANT);
+				
+		orderInfoDao.saveOrUpdate(order);
+	
+		long PayMoney = order.getPayMoney();
+		String tradeNum=order.getOrderNO(); 
+		String orderIdStr = String.valueOf(order.getId());
+		// 调微信和支付宝
+		if (paytype.equals("WEICHAT")) { // 微信
+			Map<String, String> weichatPay = weichatPay(PayMoney, orderIdStr);
+			weichatPay.put("orderId", order.getId() + "");
+			return success(weichatPay);
+		} else if (paytype.equals("ALIPAY")) {
+			String productnum = String.valueOf(order.getProductNum());
+			String pname = order.getProductName();
+			// String num,Long allMoney,String productName,String orderNo
+			String sign = AliAppOrderInfo.getInstance().getSign(productnum, PayMoney, pname, orderIdStr);
+			data.put("orderId", order.getId());
+			data.put("orderInfo", sign);
+			return success(data);
+		} else {
+			return ERROR("系统错误！");
+		}
+	}
+      /**
+       * 微信统一下单
+       * 
+       * */
+		public Map<String, String> weichatPay(long PayMoney, String tradeNum) {
+			Map<String, String> reqData = new HashMap<String, String>();
+			Map<String, String> resData = null;
+			try {
+				GuolaiwanWxPayApp wxPay = GuolaiwanWxPayApp
+						.getInstance("http://" + WXContants.Website + "/website/wxreport/payroomPrice");
+				reqData.put("total_fee", "" + PayMoney); // 总价
+				reqData.put("attach", "test"); // 订单的自定义数据
+				reqData.put("body", "guolaiwan-order"); // 内容
+				reqData.put("out_trade_no", tradeNum); // 订单号
+				reqData.put("spbill_create_ip", "192.165.56.64");
+				reqData.put("trade_type", "APP"); // 支付类型APP
+				reqData.put("device_info", "WEB");
+				resData = wxPay.pay(reqData);
+				System.out.println("7" + resData);
+				String noncestr = resData.get("nonce_str");
+				String partnerid = resData.get("mch_id");
+				String prepay_id = resData.get("prepay_id");
+
+				resData.put("noncestr", noncestr);
+				resData.put("package", "Sign=WXPay");
+				resData.put("partnerid", partnerid);
+				resData.put("prepayid", prepay_id);
+				resData.put("timestamp", "" + new Date().getTime() / 1000);
+				resData.remove("nonce_str");
+				resData.remove("return_msg");
+				resData.remove("mch_id");
+				resData.remove("prepay_id");
+				resData.remove("device_info");
+				resData.remove("trade_type");
+				resData.remove("result_code");
+				resData.remove("return_code");
+				resData.remove("sign");
+				System.out.println(resData);
+				resData.put("sign", WXPayUtil.generateSignature(resData, GuolaiwanWxPayApp.AppKey, SignType.MD5));
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println(e.getMessage());
+			}
+			System.out.println(resData.toString());
+			return resData;
+			
+		}
+		
+		@Autowired
+		private BundleOrderDAO conn_bundleOrder;
+		
+		/**
+		 * 微信付款
+		 * 
+		 * */
+		
+		@ResponseBody
+		@RequestMapping(value = "/prev/pay/{id}")
+		public Object prevPay(@PathVariable String id, String cip, HttpServletRequest request) throws Exception {
+			String orderNo = id + "";
+			int payMoney = 0;
+			if (id.contains("A")) {
+				BundleOrder order = new BundleOrder();
+				order.setOrderStr(id);
+				conn_bundleOrder.save(order);
+				orderNo = "bundle-" + order.getId();
+				String[] orderNos = id.split("A");
+				for (String string : orderNos) {
+					OrderInfoPO orderInfoPO = orderInfoDao.get(Long.parseLong(string));
+					payMoney += orderInfoPO.getPayMoney();
+				}
+			} else {
+				OrderInfoPO orderInfoPO = orderInfoDao.get(Long.parseLong(id));
+				payMoney += orderInfoPO.getPayMoney();
+			}
+
+			Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+			UserInfoPO user = conn_user.get(userId);
+			YuebaWxPayConstants.set("http://" + WXContants.Website + "/website/wxreport/payroomPrice", WxConfig.appId,
+					WxConfig.appsrcret);
+			// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
+			String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, payMoney,
+					"192.165.56.64", user.getUserOpenID());
+			// 生成包含prepay_id的map，map传入前端
+			java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
+			// 将订单号放入map，用以支付后处理
+			map.put("orderNo", orderNo);
+			return map;
+		}
+	
+		
 }

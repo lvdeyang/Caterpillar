@@ -17,6 +17,8 @@ import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
+import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
+import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 
 @Controller
 @RequestMapping("/admin/room")
@@ -27,6 +29,9 @@ public class RoomController {
 	
 	@Autowired
 	private MerchantDAO merchantDAO;
+	
+	@Autowired
+	private CurrentRoomSateDao roomState;
 	/**
 	 * 跳转房间管理
 	 * @param request
@@ -98,7 +103,15 @@ public class RoomController {
         if(istv!=null)add.setIstv(Integer.parseInt(istv));
         if(iswifi!=null)add.setIswifi(Integer.parseInt(iswifi));
         addtheroomDAO.save(add);
-		
+        
+        //获取roomId
+        CurrentRoomSatePO cSatePO = new CurrentRoomSatePO();  
+        String[] fields = {"merchantId","name","tier"};
+        Object[] values = {merchantId,name,tier};     
+        List<AddTheRoomPO> list = addtheroomDAO.findByFields(fields, values);
+        cSatePO.setRoomId(list.get(0).getId());
+        cSatePO.setRoomState("0");
+        roomState.save(cSatePO);      	
 		return "success";
 	}
 	
@@ -111,6 +124,11 @@ public class RoomController {
 		AddTheRoomPO addpo =  addtheroomDAO.get(Long.parseLong(id));
 		addpo.setState(Integer.parseInt(a));
 		addtheroomDAO.saveOrUpdate(addpo);
+		//保存房间状态表数据
+		CurrentRoomSatePO  cSatePO = roomState.findByRoomId(Long.parseLong(id));
+		cSatePO.setCurrentRoomState(a);
+		roomState.saveOrUpdate(cSatePO);
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", "0");
 		return map;
@@ -122,6 +140,7 @@ public class RoomController {
 	public Map<String, Object> delete(HttpServletRequest request) throws Exception{//添加入驻信息
 		String id = request.getParameter("id");
 		addtheroomDAO.delete(Long.parseLong(id));
+		roomState.deleteByField("roomId", Long.parseLong(id));
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", "0");
 		return map;
@@ -159,7 +178,7 @@ public class RoomController {
         if(iswifi!=null){add.setIswifi(Integer.parseInt(iswifi));}else{add.setIswifi(0);}
         add.setState(1);
         addtheroomDAO.save(add);
-		
+        		
 		return "success";
 	}
 	
