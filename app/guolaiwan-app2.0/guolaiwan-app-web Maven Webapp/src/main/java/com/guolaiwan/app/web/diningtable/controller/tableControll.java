@@ -321,7 +321,7 @@ public class tableControll extends WebBaseControll  {
 		int payMoney = 1;
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user = conn_user.get(userId);
-		YuebaWxPayConstants.set("http://" + WXContants.Website + "/website/wxreport/payreportrenew", WxConfig.appId,
+		YuebaWxPayConstants.set("http://" + WXContants.Website + "/website/wxreport/tablePayment", WxConfig.appId,
 				WxConfig.appsrcret);
 		// 统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
 		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, payMoney,

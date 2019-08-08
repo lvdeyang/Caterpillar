@@ -838,6 +838,8 @@ public class SceneryListController  extends WebBaseControll{
 			dataMap.put("parkingCost",OrderInfor.getParkingCost());
 			dataMap.put("bookingTime",OrderInfor.getBookingTime());
 			dataMap.put("dueTime",OrderInfor.getDueTime());
+			dataMap.put("img",OrderInfor.getPath());
+			dataMap.put("number",OrderInfor.getId());
 		}
 		return success(dataMap);
 	}

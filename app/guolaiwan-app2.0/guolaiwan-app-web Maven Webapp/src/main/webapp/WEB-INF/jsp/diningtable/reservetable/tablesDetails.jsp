@@ -274,14 +274,15 @@ text-align: center;
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 						alert("交易成功");  
+						window.location.href = "reservetable/tables/home";
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
 		             alert("交易取消");  
-	                 window.location.href = "pubnum/product/index/merchant/renewall";
+	                 window.location.href = "reservetable/tables/home";
 		            }  
 		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
 		                alert(res.err_desc); 
-                     window.location.href = "pubnum/product/index/merchant/renewall";
+                     window.location.href = "reservetable/tables/home";
 		            }  
 		        }
 		    );
@@ -392,11 +393,11 @@ text-align: center;
           <p style="width:24.5%;line-height: 50px;text-align: center;display: inline-block;background: #FD9E06;float:right;">加入购物车</p>
          </div>
          
-        <div class="shopping" style="z-index:11111111111;display:none;margin:0 0 -60px -25%;border-radius:10px;height:120px;width:50%;background: #E6E6E6;color:#797778;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;">
+      <!--   <div class="shopping" style="z-index:11111111111;display:none;margin:0 0 -60px -25%;border-radius:10px;height:120px;width:50%;background: #E6E6E6;color:#797778;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;">
         <img style="width:30%;position: absolute;left:50%;margin-left:-15%;top:20px;" src="lib/images/trues.png">
         <p  style="line-height: 190px;">成功加入购物车</p>
         </div> 
-         
+          -->
 </div>
 
 	<div class="modDiv" id="addressSecond" style="display:none;">
@@ -423,11 +424,11 @@ text-align: center;
 		</div>
 		<a id="save"
 			style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
-			href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
+			href="javascript:;" class="weui-btn weui-btn_primary"> 立即购买</a>
 
 	</div>
-	<div class="modDiv" id="cameraDiv" style="display:none;">
-		<div id="cameraContent"></div>
+<!-- 	<div class="modDiv" id="cameraDiv" style="display:none;">
+		<div id="cameraContent"></div> -->
 
 		<div>
 			<!--   <a id="cancelPhoto"

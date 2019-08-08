@@ -591,6 +591,7 @@ public class WxPayReportController extends WebBaseControll {
 		
 		System.out.println("返回的参数："+respData.toString());
 		
+	
 		String returncode = respData.get("return_code");
 		String resultcode = respData.get("result_code");
 		System.out.println("returncode是："+returncode+";resultcode是"+resultcode);
@@ -697,9 +698,6 @@ public class WxPayReportController extends WebBaseControll {
 				//获取订单号
 				String tradeNum = respData.get("out_trade_no");
 				Long orderId= Long.parseLong(tradeNum.split("-")[1]);
-				Long attactionsId = Long.parseLong(tradeNum.split("-")[2]);
-				//获取商品订单号
-				String transaction = respData.get("transaction_id");
 				// 查询 订单信息 
 				TableStatusPO TableStatus = Table_Status.getByField("id",orderId);
 				TableStatus.setTableState("PAYSUCCESS");
