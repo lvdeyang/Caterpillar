@@ -517,13 +517,22 @@ html, body {
 			
 		});		
 		
-		$('.header-content').html(${shopName});		
+		$('.header-content').html(${shopName});	
+			$("#paytext").keyup(function(){
+		    $(this).val($(this).val().replace( /[^0-9.]/g,''));
+			}).bind("paste",function(){
+	    $(this).val($(this).val().replace( /[^0-9.]/g,''));
+	})	
 		$(document).on('click','#paynow',function(){
 		    if($('#paytext').val()==''){
 			   $.toast("请输入金额", "forbidden");
 			   return false;
 			}
-			
+			 if($("#paytext").val() <= 0.01){
+			 $("#paytext").val("0.01");
+			/*  alert($("#paytext").val()) */
+			/*   return false; */
+			 }
 			//AddAddress();
 			dopay(0);
 
@@ -733,7 +742,12 @@ html, body {
           console.log(values, displayValues);
         }
      });
-     
+     	$('.header-content').html(${shopName});	
+		$("#paytext").keyup(function(){
+		    $(this).val($(this).val().replace( /[^0-9.]/g,''));
+			}).bind("paste",function(){
+	    $(this).val($(this).val().replace( /[^0-9.]/g,''));
+	})
      getAllAddr();
      function getAllAddr(){
         var _uriAddress = window.BASEPATH + 'phoneApp/address/list?userId=${userId}';
