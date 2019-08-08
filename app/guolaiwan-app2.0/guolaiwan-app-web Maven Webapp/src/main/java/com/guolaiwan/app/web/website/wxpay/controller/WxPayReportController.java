@@ -700,6 +700,7 @@ public class WxPayReportController extends WebBaseControll {
 				Long orderId= Long.parseLong(tradeNum.split("-")[1]);
 				// 查询 订单信息 
 				TableStatusPO TableStatus = Table_Status.getByField("id",orderId);
+				if( !"PAYSUCCESS".equals(TableStatus.getTableState()) ){
 				TableStatus.setTableState("PAYSUCCESS");
 				//生成验单码,和二维码图片
 				String ydNO = ydNoCode(orderId+"");
@@ -804,7 +805,7 @@ public class WxPayReportController extends WebBaseControll {
 					
 				}
 		    	Table_Status.saveOrUpdate(TableStatus);
-				
+				}
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("SUCCESS");
 				stringBuffer.append("]]></return_code>");
