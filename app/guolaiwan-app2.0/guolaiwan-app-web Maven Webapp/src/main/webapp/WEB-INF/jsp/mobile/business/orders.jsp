@@ -274,8 +274,8 @@ color:#fff;
 	 //用时间算天数
 	 function  calculateDate(sDate1,  sDate2){	    
 	   var  oDate1,  oDate2,  iDays;  
-       oDate1  =  new  Date(sDate1.substring(4,6)  +  '-'  + sDate1.substring(6)  +  '-'  +  sDate1.substring(0,4));     
-       oDate2  =  new  Date(sDate2.substring(4,6)  +  '-'  + sDate2.substring(6)  +  '-'  +  sDate2.substring(0,4));  
+       oDate1  =  new  Date(sDate1.substring(4,6)  +  '/'  + sDate1.substring(6)  +  '/'  +  sDate1.substring(0,4));     
+       oDate2  =  new  Date(sDate2.substring(4,6)  +  '/'  + sDate2.substring(6)  +  '/'  +  sDate2.substring(0,4));  
        iDays  =  parseInt(Math.abs(oDate1  -  oDate2) / 1000 / 60 / 60 /24);     
        return  iDays;
 	 }
@@ -341,7 +341,7 @@ color:#fff;
     	            if(paytipe == '0'){
     	             payByWallet(orderId);
     	            }else{
-    	           //  payPublic(orderId);	
+    	             payPublic(orderId);	
     	            }
 		       	}else{
 		       	 $.toast("用户信息保存失败", "forbidden");
