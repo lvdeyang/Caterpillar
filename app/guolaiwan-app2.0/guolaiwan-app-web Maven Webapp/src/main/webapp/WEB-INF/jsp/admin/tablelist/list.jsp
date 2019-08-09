@@ -279,14 +279,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			alert("发生未知错误 没有商户ID");
 			return false;
 		}
-		if ($("#parkingshopImg").val() == "") {
-			alert("请选择图片");
-			return false;
-		}
 		  $.ajax({
 			type : "post",
 			url : "addData.do",
-			data : {"img":img,"merchantId" : $("#tablelist").val(),"type":type,"userPhone":userPhone,"userName":userName,"tableId":tableId,"tableStatusId":tableStatusId,"tableMenu":tableMenu,"bookprice":bookprice,"date":date},
+			data : {"merchantId" : $("#tablelist").val(),"type":type,"userPhone":userPhone,"userName":userName,"tableId":tableId,"tableStatusId":tableStatusId,"tableMenu":tableMenu,"bookprice":bookprice,"date":date},
 			success : function(data) {
 			$(".xinxi").fadeOut();
 			list($("#test1").val(), $("#times").val());

@@ -138,12 +138,15 @@ public class TablelistController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/getlist.do", method = RequestMethod.POST)
-	public Map<String, Object> SeleFinish(long merchantId ,HttpServletRequest request) throws Exception {
-		List<TablePO> addpo =  Table.findByMerchantId(merchantId);
+	public Map<String, Object> SeleFinish(HttpServletRequest request) throws Exception {
 		String TableDate = request.getParameter("TableDate");//时间
+		String merchantId = request.getParameter("merchantId");//时间
 		String type = request.getParameter("type");//午晚
+		List<TablePO> addpo =  Table.findByMerchantId(Long.parseLong(merchantId));
 		List<TableVo>   _merchants = TableVo.getConverter(TableVo.class).convert(addpo,
 				TableVo.class);
+		String nowDate = "";
+		String repast = "";
 		for (TableVo tablePO : _merchants) {
 			 TableStatusPO TableStatus= null;
 			if (TableDate != null&&type !=null && TableDate !="" ) {//传入已选时间
@@ -163,6 +166,8 @@ public class TablelistController extends BaseController {
 			    	 c.add(Calendar.DAY_OF_MONTH, 1);
 			    	 type =  "LUNCH";
 				 }
+				 nowDate = def.format(new Date()).toString();
+				 repast = BookType.fromString(type).toString();
 				 TableStatus =	Table_Status.findBytidt(tablePO.getId(),def.format(new Date()).toString(),BookType.fromString(type));//查询中间表
 			}
 			if ( TableStatus != null  ) {
@@ -176,6 +181,8 @@ public class TablelistController extends BaseController {
 	       }
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("date", nowDate);
+		map.put("repast", repast);
 		map.put("po", _merchants);
 		return map;
 	}
