@@ -1471,6 +1471,11 @@ html, body {
 		 location.href=window.BASEPATH + 'face/recognition?merchantid='+myName;
 
 	});
+	$(document).on('click','#manage',function(){	  
+         var myName="${merchantId}"; 
+		 location.href=window.BASEPATH + 'reservetable/mobile/tables?merchantId='+myName;
+
+	});
 	
 	$(document).on('click','#roomoption',function(){	  
 		 location.href=window.BASEPATH + 'admin/room/gotoroomoption?merchantId=${merchantId}';
@@ -1781,6 +1786,20 @@ html, body {
 			    <div class="weui-cell__bd">
 
 			      <p>已评论</p>
+
+			    </div>
+
+			    <div class="weui-cell__ft" id="comment"><span class="circle">0</span>
+
+			    </div>
+
+			  </a>
+			  
+			  <a class="weui-cell weui-cell_access"  id="manage">
+
+			    <div class="weui-cell__bd">
+
+			      <p>订桌管理</p>
 
 			    </div>
 

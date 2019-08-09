@@ -111,6 +111,7 @@ public class RoomController {
         List<AddTheRoomPO> list = addtheroomDAO.findByFields(fields, values);
         cSatePO.setRoomId(list.get(0).getId());
         cSatePO.setRoomState("0");
+        cSatePO.setCurrentRoomState("1");
         roomState.save(cSatePO);      	
 		return "success";
 	}

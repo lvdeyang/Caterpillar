@@ -1106,7 +1106,7 @@ public class BusinessController extends WebBaseControll {
 		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		String inRoomDate = request.getParameter("inRoomDate");
 	    long beginRoom = sdf.parse(inRoomDate).getTime();
-		for(int i =0;i<rooms.size();i++){
+		/*for(int i =0;i<rooms.size();i++){
 		   long roomId = rooms.get(i).getId();			
 		   List<CurrentRoomSatePO> roomState =  conn_roomSateDao.findByField("roomId", roomId);	
 		   if("0".equals(roomState.get(0).getRoomState()) && "1".equals(roomState.get(0).getCurrentRoomState())){
@@ -1120,7 +1120,7 @@ public class BusinessController extends WebBaseControll {
 			  continue;
 		  }
 		}
-		}
+		}*/
 	     	return rooms;
 	}
 	
