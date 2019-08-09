@@ -160,21 +160,147 @@ text-align: center;
 
 <script type="text/javascript">
 	$(function() {
-       getRecomment();
-      $(".goshopping").click(function(){
-      $(".zong").fadeOut();  
-      $(".modDiv").fadeIn();     
+		$(".goshopping").click(function() {
+			$(".zong").fadeOut();
+			$(".modDiv").fadeIn();
+		});
+		$(".weui-btn_primary").click(function() {
+			$(".modDiv").fadeOut();
+			$(".zong").fadeIn();
+			$(".shopping").fadeIn();
+			setTimeout(function() {
+				$(".shopping").fadeOut();
+			}, 2000);
+		});
+
+        var _uri = window.BASEPATH + 'reservetable/particulars.do'; 
+			var patam = {};
+			patam.tableId = '${param.tablesId}'; //时间
+			$.post(_uri, $.toJSON(patam), function(data) {
+		      $("#meony").text(data.table.bookprice/100);
+		      $("#room").append('<span>'+data.table.tablename+'</span>');
+		      $("#headerWrapper").append('<img  src="'+data.table.detailsImg+'" />');
+		      if(data.table.sofa == 1){
+		       $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/lusofa.png"><span>沙发</span></li>');
+		      } else $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/sofa.png"><span>沙发</span></li>');
+		      if(data.table.television == 1){
+		       $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/lutelevision.png"><span>电视</span></li>');
+		      } else $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/television.png"><span>电视</span></li>');
+		      if(data.table.airConditioner == 1){
+		       $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/luairConditioner.png"><span>空调</span></li>');
+		      } else $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/airConditioner.png"><span>空调</span></li>');
+		      if(data.table.wifi == 1){
+		       $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/luwifi.png"><span>无线</span></li>');
+		      } else $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/wifi.png"><span>无线</span></li>');
+		      if(data.table.lavatory == 1){
+		       $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/lulavatory.png"><span>卫生间</span></li>');
+		      } else $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/lavatory.png"><span>卫生间</span></li>');
+		      if(data.table.lavatory == 1){
+		       $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/lukaraoke.png"><span>唱歌</span></li>');
+		      } else $("#facil").append('<li><img style="width:25px;height:25px;" src="lib/images/karaoke.png"><span>唱歌</span></li>');
+             
+			});
+
 	});
-	 $(".weui-btn_primary").click(function(){
-	 $(".modDiv").fadeOut();  
-      $(".zong").fadeIn(); 
-      $(".shopping").fadeIn();    
-   	 setTimeout(function () {  
-        $(".shopping").fadeOut();  
-    	}, 2000);   
-        });
+	
+	
+	
+	
+	$(document).on('click', '#save', function() {
+			var _uri = window.BASEPATH + 'reservetable/addition.do'; 
+			var patam = {};
+			patam.userName = $("#name").val(); //用户名
+			patam.userPhone = $("#addressphone").val(); //用户手机号
+			patam.merchantId = '${merchantId}'; 
+			patam.tableDate = '${tableDate}'; //用户手机号
+			patam.repast = '${repast}'; //用户手机号
+			if ($("#addressphone").val() == "") {
+				alert("请输入手机号");
+				return false;
+			}
+			if ($("#idNum").val() == "") {
+				alert("请输入用户名");
+				return false;
+			}
+			patam.tablesId = '${param.tablesId}' ;
+			$.post(_uri, $.toJSON(patam), function(data) {
+		         payPublic(data.code, $("#meony").text());  
+			});
+			
 	});
-	function getRecomment(){
+	
+	
+	
+	
+	
+	
+	
+  		var time;
+  		var attid;
+		var meony;  // 
+		var prepay_id;
+		var paySign; 
+		var appId;   
+		var timeStamp;   
+		var nonceStr;  
+		var packageStr;  
+		var signType; 
+		var orderNo;	
+		
+		function payPublic(orderId,meony){
+		    meony =  meony*100;	
+		$.get(window.BASEPATH +"reservetable/prev/table/"+orderId+"/"+meony, null, function(data){
+				prepay_id = data.prepay_id;
+		        paySign = data.paySign;
+		        appId = data.appId;
+		        timeStamp = data.timeStamp;
+		        nonceStr = data.nonceStr;
+		        packageStr = data.packageStr;
+		        signType = data.signType;
+		        orderNo = data.orderNo;
+		        callpay();
+			});
+		}
+	function onBridgeReady(){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+						alert("交易成功");  
+						window.location.href = "reservetable/tables/home";
+		            }
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
+		             alert("交易取消");  
+	                 window.location.href = "reservetable/tables/home";
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
+		                alert(res.err_desc); 
+                     window.location.href = "reservetable/tables/home";
+		            }  
+		        }
+		    );
+		}
+		function callpay(){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady();
+		    }
+		}
+	
+	<%-- function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
 		$.get(_uriMerchantInfo, null, function(data){
 			data = parseAjaxResult(data);
@@ -201,7 +327,7 @@ text-align: center;
 			    });
 			    }
 			    });
-	  }
+	  } --%>
           
         
 </script>
@@ -229,120 +355,93 @@ text-align: center;
 		</div>
 	   
         <div style="width:96%;margin:5px auto;text-align: center;height:auto;background: #fff;border-radius:8px;font-weight: bold;">
-          <p style="width:100%;height:50px;line-height: 50px;padding:0 5%;margin:0;text-align:left;color:black;"><span>日月星酒店</span><span>401包间</span><span>（豪华型）</span></p>
+          <p style="width:100%;height:50px;line-height: 50px;padding:0 5%;margin:0;text-align:left;color:black;" id="room"></p>
         </div>
         
          <div style="width:96%;margin:5px auto;height:auto;background: #fff;border-radius:8px;font-weight: bold;">
           <p style="padding:0 5%;height:40px;line-height: 40px;font-size:16px;"><img style="width:20px;height:20px;" src="lib/images/sheshi.png">设施</p>
-             <ul class="facilities" style="width:100%;padding:0 8%;overflow: hidden;list-style: none;">
-             <li><img style="width:25px;height:25px;" src="lib/images/sheshi.png"><span>xxx</span></li>
-             <li><img style="width:25px;height:25px;" src="lib/images/sheshi.png"><span>xxx</span></li>
-             <li><img style="width:25px;height:25px;" src="lib/images/sheshi.png"><span>xxx</span></li>
-             <li><img style="width:25px;height:25px;" src="lib/images/sheshi.png"><span>xxx</span></li>
+             <ul class="facilities" id="facil" style="width:100%;padding:0 8%;overflow: hidden;list-style: none;">
+             
              </ul>
         </div>
         
         
         <div style="width:96%;margin:5px auto;height:auto;background: #fff;border-radius:8px;">
           <p style="padding:0 5%;height:40px;line-height: 40px;font-size:16px;margin:0;font-weight: bold;"><img style="width:20px;height:20px;" src="lib/images/refund.png">退款规则</p>
-          <p style="width:100%;height:30px;line-height: 30px;padding:0 5%;margin:0;text-align:left;color:black;"><span style="color:red;">不可取消</span>  <span>xxxxxxxxxxxxxxxxx</span></p>
+          <p style="width:100%;height:auto;line-height: 30px;padding:0 5%;margin:0;text-align:left;color:black;"><span style="color:red;">不可取消</span>  <span>目前通过预付费方式购买的轻量应用服务器，支持 5 天（自然日）内无理由全额退款，相关限制条件如下：
+
+提出退款申请的时间需要在购买成功之后 5 个自然日以内。
+每个用户最多退款 1 次，最多累积可退 1 个实例。
+在使用过程中已产生的后付费费用（如后付费流量费用）不退还。
+仅退还实付金额，已使用的代金券不退还。
+如用户在使用产品过程中，违反了相关法律法规或违反了所购产品服务条款的规定，将不予退款。</span></p>
         </div>
         
           <div style="width:96%;margin:5px auto;height:auto;background: #fff;border-radius:8px;">
           <p style="padding:0 5%;height:40px;line-height: 40px;font-size:16px;margin:0;font-weight: bold;"><img style="width:20px;height:20px;" src="lib/images/rule.png">使用规则</p>
-          <ul style="width:100%;padding:0 8%;overflow: hidden;">
-           <li><span>xxxxxxxxxxxxxxxxxxx</span></li>
-           <li><span>xxxxxxxxxxxxxxxxxxx</span></li>
+          <ul style="width:100%;padding:0 8%;overflow: hidden;height:auto;">
+           <li><span>我们可能将在向您提供服务的过程之中所收集的信息用作下列用途：</span></li>
+           <li><span>向您提供服务;</span></li>
+           <li><span>在我们提供服务时，用于身份验证、客户服务、安全防范、诈骗监测、存档和备份用途，确保我们向您提供的产品和服务的安全性;</span></li>
           </ul>
          </div>
          
          
          <div style="height:50px;width:100%;background: #fff;color:#fff;position: fixed;bottom:0;font-size:16px;font-weight: bold;">
-          <p style="width:50%;line-height: 50px;color:#EC6C1F;text-align: center;display: inline-block;font-size:20px;"><span>￥50</span></p>
-          <p style="width:24%;line-height: 50px;text-align: center;background: #FF6501;float:right;">立即预订</p>
-          <p class="goshopping" style="width:24.5%;line-height: 50px;text-align: center;display: inline-block;background: #FD9E06;float:right;">加入购物车</p>
+          <p style="width:50%;line-height: 50px;color:#EC6C1F;text-align: center;display: inline-block;font-size:20px;"><span id="meony">￥50</span></p>
+          <p class="goshopping" style="width:24%;line-height: 50px;text-align: center;background: #FF6501;float:right;">立即预订</p>
+          <p style="width:24.5%;line-height: 50px;text-align: center;display: inline-block;background: #FD9E06;float:right;">加入购物车</p>
          </div>
          
-        <div class="shopping" style="z-index:11111111111;display:none;margin:0 0 -60px -25%;border-radius:10px;height:120px;width:50%;background: #E6E6E6;color:#797778;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;">
+      <!--   <div class="shopping" style="z-index:11111111111;display:none;margin:0 0 -60px -25%;border-radius:10px;height:120px;width:50%;background: #E6E6E6;color:#797778;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;">
         <img style="width:30%;position: absolute;left:50%;margin-left:-15%;top:20px;" src="lib/images/trues.png">
         <p  style="line-height: 190px;">成功加入购物车</p>
         </div> 
-         
-</div>         
-         
+          -->
+</div>
 
+	<div class="modDiv" id="addressSecond" style="display:none;">
 
+		<div class="weui-cells weui-cells_form" style="margin:0;">
 
-					<div class="modDiv" id="addressSecond" style="display:none;">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">预订人</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="name" class="weui-input" type="text" placeholder="">
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">联系电话</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input id="addressphone" class="weui-input" type="text"
+						placeholder="">
+				</div>
+			</div>
+		</div>
+		<a id="save"
+			style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
+			href="javascript:;" class="weui-btn weui-btn_primary"> 立即购买</a>
 
-						<div class="weui-cells weui-cells_form" style="margin:0;">
-							
-							<div class="weui-cell">
-								<div class="weui-cell__hd">
-									<label class="weui-label">预订人</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input id="name" class="weui-input" type="text" placeholder="">
-								</div>
-							</div>
-							<div class="weui-cell" style="display:none;">
-							    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
-							    <div class="weui-cell__bd">
-							      <input id="idNum" class="weui-input" type="text" placeholder="">
-							    </div>
-							    
-							 </div>
-							<div class="weui-cell">
-								<div class="weui-cell__hd">
-									<label class="weui-label">联系电话</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input id="addressphone" class="weui-input" type="text"
-										placeholder="">
-								</div>
-							</div>
-							<div class="weui-cell" id="weui">
-								<div class="weui-cell__hd">
-									<label for="name" class="weui-label">地址选择</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input class="weui-input" id="address" type="text" value=""
-										readonly="" data-code="420106"
-										data-codes="420000,420100,420106">
-								</div>
-							</div>
-							<div class="weui-cell" id="weui-cell">
-								<div class="weui-cell__hd">
-									<label class="weui-label">详细地址</label>
-								</div>
-								<div class="weui-cell__bd">
-									<input id="moreAddress" class="weui-input" type="text"
-										placeholder="">
-								</div>
-							</div>
-						</div>
-						<a id="save"
-							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
-							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
+	</div>
+<!-- 	<div class="modDiv" id="cameraDiv" style="display:none;">
+		<div id="cameraContent"></div> -->
 
-					</div>	
-                    <div class="modDiv" id="cameraDiv" style="display:none;">
-                          <div id="cameraContent"></div>
-							  
-						  <div>
-                        <!--   <a id="cancelPhoto"
+		<div>
+			<!--   <a id="cancelPhoto"
 							style="width:47%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 							href="javascript:;" class="weui-btn weui-btn_primary"> 取消</a>
                           <a id="confirmPhoto"
 							style="width:47%;background-color:#18b4ed;height:40px;line-height:40px;"
 							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a> -->
-							</div>
-                    </div>
-				</div>
+		</div>
+	</div>
+	</div>
 
-         
-         
-         <!-- 空白 -->
+	<!-- 空白 -->
          <p style="height:50px;"></p>
 </body>
 

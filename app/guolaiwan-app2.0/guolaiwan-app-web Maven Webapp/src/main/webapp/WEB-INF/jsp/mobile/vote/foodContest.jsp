@@ -458,6 +458,7 @@ $("#b"+base).css("color","black");
    			 $('.contentt-box').append(html.join(''));
 		}
      for(var i=0;i<data.length;i++){
+     var productvotes=parseInt(data[i].productvotes);
            html.push('<div style="width:47%;margin:10px 1%;height:auto;float:left;position: relative;min-height:auto;">');
            if(i==0){
              html.push('<img style="width:30px;height:30px;position: absolute;z-index:111;top:-15px;left:-15px;transform:rotate(-45deg);" src="lib/images/king.png">');
@@ -478,7 +479,7 @@ $("#b"+base).css("color","black");
            html.push('<div class="xia" style="width:100%;height:auto;position: relative;padding:0 3% 3px;color:black;text-align: center;font-weight:bold;">');
            html.push('<P style="height:20px;line-height: 20px;width:100%;color:black;text-align:left;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:95%;display: inline-block;">'+data[i].productname+'</span></P>');
            html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:right;">已售：<span>'+data[i].OutOfPrint+'</span>+</span><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].manvotes+'</span></span></P>');
-           html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span>'+data[i].productvotes+'</span></p>');
+           html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span>'+productvotes+'</span></p>');
            html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>'+data[i].avg+'</span><span id="'+data[i].productId+'" onclick="productdetails(this.id)" style="float:right;background:#C3181E;color:#fff;font-size:12px;border-radius:4px;">查看评分</span></p>');
            if(${isjudges==1}){
 		   html.push('<button id="'+data[i].productId+'" onclick="mark(this.id)" class="vote">评分</button>');           

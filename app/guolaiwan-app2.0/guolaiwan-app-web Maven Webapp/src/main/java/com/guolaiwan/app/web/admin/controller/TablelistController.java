@@ -168,7 +168,7 @@ public class TablelistController extends BaseController {
 			if ( TableStatus != null  ) {
 				tablePO.setTableState("2");//已预订
 				tablePO.setTableMenu(TableStatus.getTableMenu());
-				tablePO.setMenuTime(TableStatus.getDate()); //时间
+				tablePO.setMenuTime(TableStatus.getTableDate()); //时间
 				tablePO.setType(TableStatus.getType().toString()); //中午晚上
 				tablePO.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
 				tablePO.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
@@ -208,6 +208,29 @@ public class TablelistController extends BaseController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/cancel.do",method = RequestMethod.POST) // 取消预订
+	public Map<String, Object> cancelMap(HttpServletRequest request) throws Exception{//添加入驻信息
+		Map<String, Object> map = new HashMap<String, Object>();
+		String tableStatusid = request.getParameter("tableStatusid");
+		String Tableid = request.getParameter("tableid");
+		if (tableStatusid != "" && tableStatusid != null   ) {//有人预订房间 修改中间表为过期
+			List<TableStatusPO>  TableStatus =	Table_Status.findByField("id",Long.parseLong(tableStatusid));//查询中间表
+			for (TableStatusPO tableStatusPO : TableStatus) {
+				tableStatusPO.setTableState("PAST");
+				Table_Status.saveOrUpdate(tableStatusPO);
+			}
+		}else {
+			map.put("code", "1");
+			return map;
+		}
+		map.put("code", "0");
+		return map;
+	}
+	
+	
+	
+	
+	@ResponseBody
 	@RequestMapping(value = "/addData.do",method = RequestMethod.POST) //预订添加信息
 	public Map<String, Object> addData(HttpServletRequest request) throws Exception{//添加入驻信息
 		String userPhone = request.getParameter("userPhone"); //手机号
@@ -225,7 +248,7 @@ public class TablelistController extends BaseController {
 			TableStatusPO.setUserName(userName);
 			TableStatusPO.setTableMenu(tableMenu);
 			TableStatusPO.setTableState("PAYSUCCESS");
-			TableStatusPO.setDate(date);
+			TableStatusPO.setTableDate(date);
 			TableStatusPO.setMerchantId(Long.parseLong(merchantId));
 			if("0".equals(type)){
 			   TableStatusPO.setType(BookType.fromString("LUNCH"));

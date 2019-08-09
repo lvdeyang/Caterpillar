@@ -218,6 +218,10 @@ padding:10px 5px;
 	function buyproduct(id){
 		location.href=window.BASEPATH + 'business/buyproduct?productId='+id;
 	} 
+	
+	function gotolect(){
+		location.href=window.BASEPATH + 'business/gotolect?merchantId=${merchant.id}';	
+	}
 </script>
 
 
@@ -248,7 +252,7 @@ padding:10px 5px;
 	  </div>
 	  <div class="homes" style="width:100%;height:auto;border-radius:10px;margin-top:-20px;">
 	    <ul class="facilities" style="width:100%;padding:0 4%;overflow: hidden;list-style: none;font-size: 12px;font-weight: bold;">
-             <li><img style="width:60%;" src="lib/images/roomType.png"><p>房型选择</p></li>
+             <li onclick="gotolect()"><img style="width:60%;" src="lib/images/roomType.png"><p>房型选择</p></li>
              <li><img style="width:60%;" src="lib/images/bookingTable.png"><p>订桌</p></li>
              <li><img style="width:60%;" src="lib/images/order.png"><p>点餐</p></li>
              <li><img style="width:60%;" src="lib/images/serve.png"><p>服务</p></li>
