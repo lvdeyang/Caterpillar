@@ -210,15 +210,15 @@ margin:0 5px;
 				width: 14%;
 				height:auto;
 				font-weight: bold;
-				line-height: 2em;
-				font-size: 3em;
+			/* 	line-height: 2em; */
+				font-size: 2em;
 				text-align: center;
-				margin:0 0 20px 2.5%;
+				margin:0 0 10px 2.5%;
 				color:black;
 				
 			}
 			.tab-btn li img{
-			 width:100%;
+			 width:30%;
 			}
 			.btn-active{
 				/* background: orange; */
@@ -227,7 +227,7 @@ margin:0 5px;
 				
 			}
 .nav{
-   height:350px;
+   height:15em;
    width:100%;
    background-image: url('lib/images/dasaibeijing.jpg');
   background-size:100% 100%;
@@ -236,7 +236,7 @@ margin:0 5px;
 .logo-in{
     color: #C3181E;
     font-weight: bold;
-    font-size:7.5em;
+    font-size:4.5em;
     font-family: "Just Another Hand",cursive;
     text-transform: uppercase;
 }
@@ -247,14 +247,17 @@ margin:0 5px;
      clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
      transition: 1s clip-path;
      border:0.2em solid #CDAD5D;
-     height:5em;
-     width:5em;
+     height:3em;
+     width:3em;
      background: #060606;
-     line-height: 4em;
+     line-height: 3em;
      color:#fff;
      font-weight:bold;
 
 }
+ .other::-webkit-scrollbar {
+        display: none;
+    }
 </style>
 
 </head>
@@ -274,7 +277,7 @@ var base;
 var allmodular=[];
 var latermodular=1;
 var flag=0;
- setTimeout(function(){
+  setTimeout(function(){
 
  caolilailai();
 
@@ -282,7 +285,7 @@ var flag=0;
  
 function caolilailai(){
   var scrollHeight = $(document).height();
-   $('html').animate({'scrollTop':scrollHeight},5000); 
+   $('.other').animate({'scrollTop':scrollHeight},2000); 
    if(flag!=0)home();flag=1;
  } 
 function home(){
@@ -290,16 +293,42 @@ function home(){
  	latermodular+=1;
     if(latermodular==allmodular.length)latermodular=0;
 }
- $(window).scroll(function() {
+/*  $(window).scroll(function() {
   	 if ($(document).scrollTop()<=0){
           setTimeout(function(){
  		  caolilailai();
  		  },2000);
      }
      if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
-     	$('html,body').animate({'scrollTop':0},2000);
+     	$('.other').animate({'scrollTop':0},2000);
      }
-})
+})  */
+
+$	(document).on('click', '.zong', function() {
+ 		$(".other").pause();
+ 	
+ 	});
+  $(document).ready(function (){
+       var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)
+       var nScrollTop = 0;   //滚动到的当前位置
+       var nDivHight = $(".other").height();
+       $(".other").scroll(function(){
+         nScrollHight = $(this)[0].scrollHeight;
+         nScrollTop = $(this)[0].scrollTop;
+         if(nScrollTop + nDivHight >= nScrollHight){//底部
+         $('.other').animate({'scrollTop':0},2000);
+         }
+         if ($('.other').scrollTop()<=0){ //顶部
+             setTimeout(function(){
+ 		      caolilailai();
+ 		    },2000);
+         } 
+           
+         });
+         
+     });
+
+
 
 
 $(function() {
@@ -320,7 +349,7 @@ $(function() {
 	getvotemodular();
 	});
   /*返回顶部  */
-$(function(){
+/* $(function(){
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -334,7 +363,7 @@ $(function(){
 		$('html,body').animate({'scrollTop':0},500);
         return false;
 	});
-});
+}); */
 
 //获取选项卡标签
 function getvotemodular(){
@@ -371,65 +400,65 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
       var productvotes=parseInt(data[i].allcount);
             <!-- 1 -->
         if(i==0){
-			html.push('<div style="width:30%;height:30em;position: relative;display: inline-block;">');   
-			html.push('<img style="width:17em;border-radius:50%;height:17em;z-index:10;position: absolute;left:50%;margin-left:-8.5em;" src="'+data[i].productpic+'">');   
-			html.push('<div class="paiming" style="position: absolute;top:14em;left:50%;z-index:11;text-align: center;margin-left:-2.5em;">');   
-			html.push('<p style="font-size:2.5em;">1</p>');   
+			html.push('<div style="width:30%;height:18em;position: relative;display: inline-block;">');   
+			html.push('<img style="width:10em;border-radius:50%;height:10em;z-index:10;position: absolute;left:50%;margin-left:-5em;" src="'+data[i].productpic+'">');   
+			html.push('<div class="paiming" style="position: absolute;top:8.2em;left:50%;z-index:11;text-align: center;margin-left:-1.5em;">');   
+			html.push('<p style="font-size:2em;">1</p>');   
 			html.push('</div>');   
-			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:7.6em;margin-left:-13em;" src="lib/images/guanjun.png">');   
-			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1.6em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
+			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:4em;margin-left:-7.8em;" src="lib/images/guanjun.png">');   
+			html.push('<div style="width:10em;height:auto;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
+			html.push('<p style="border-radius:10px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1em;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
 		}
 	   	<!-- 2 -->
 	   	if(i==1){
-			html.push('<div style="width:30%;height:30em;position: relative;display: inline-block;float:left;left:5%;top:4em;">');   
-			html.push('<img style="width:16em;border-radius:50%;height:16em;z-index:10;position: absolute;left:50%;margin-left:-8em;" src="'+data[i].productpic+'">');   
-			html.push('<div class="paiming" style="position: absolute;top:13em;left:50%;z-index:11;text-align: center;margin-left:-2.5em;">');   
-			html.push('<p style="font-size:2.5em;">2</p>');   
+			html.push('<div style="width:30%;height:18em;position: relative;display: inline-block;float:left;left:15%;top:4em;">');   
+			html.push('<img style="width:9em;border-radius:50%;height:9em;z-index:10;position: absolute;left:50%;margin-left:-4.5em;" src="'+data[i].productpic+'">');   
+			html.push('<div class="paiming" style="position: absolute;top:7em;left:50%;z-index:11;text-align: center;margin-left:-1.5em;">');   
+			html.push('<p style="font-size:2em;">2</p>');   
 			html.push('</div>');   
-			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/yajun.png">');   
-			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1.6em;display: inline-block;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
+			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:5em;margin-left:-7.8em;" src="lib/images/yajun.png">');   
+			html.push('<div style="width:10em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
+			html.push('<p style="border-radius:10px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1em;display: inline-block;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
 		}
 		<!-- 3 -->
 		if(i==2){
-			html.push('<div style="width:30%;height:30em;position: relative;display: inline-block;float:right;right:5%;top:4em;">');   
-			html.push('<img style="width:16em;border-radius:50%;height:16em;z-index:10;position: absolute;left:50%;margin-left:-8em;" src="'+data[i].productpic+'">');   
-			html.push('<div class="paiming" style="position: absolute;top:13em;left:50%;z-index:11;text-align: center;margin-left:-2.5em;">');   
-			html.push('<p style="font-size:2.5em;">3</p>');   
+			html.push('<div style="width:30%;height:18em;position: relative;display: inline-block;float:right;right:15%;top:4em;">');   
+			html.push('<img style="width:9em;border-radius:50%;height:9em;z-index:10;position: absolute;left:50%;margin-left:-4.5em;" src="'+data[i].productpic+'">');   
+			html.push('<div class="paiming" style="position: absolute;top:7em;left:50%;z-index:11;text-align: center;margin-left:-1.5em;">');   
+			html.push('<p style="font-size:2em;">3</p>');   
 			html.push('</div>');   
-			html.push('<img style="width:25em;height:17em;z-index:9;position: absolute;left:50%;bottom:8em;margin-left:-13em;" src="lib/images/jijun.png">');   
-			html.push('<div style="width:17em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-8.5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1.6em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:2.5em;">'+productvotes+'票</p>');   
+			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:5em;margin-left:-7.8em;" src="lib/images/jijun.png">');   
+			html.push('<div style="width:10em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
+			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1em;">'+data[i].productname+'</p>');   
+			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
-		    html.push('<div style="height:5em;"></div>');   
+		    html.push('<div style="height:3em;"></div>');   
         }  
         if(i>2&&i%2==1){
-        	html1.push('<div style="width:80%;background: #B4B6B5;height:8em;margin: 1em auto;border-radius:1em;padding:0 2%;">');
+        	html1.push('<div style="width:80%;background: #B4B6B5;height:6em;margin: 0.5em auto;border-radius:1em;padding:0 2%;">');
 		    html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;float:left;">');
 	        html1.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">');
-			html1.push('<p style="font-size:2.5em;">'+(i+1)+'</p>');
+			html1.push('<p style="font-size:1.5em;">'+(i+1)+'</p>');
 			html1.push('</div>');
-		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i].productpic+'">');
-		   	html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+productvotes+'票</p>');
+		  	html1.push('<img style="width:4em;border-radius:50%;height:4em;align-items: center;margin:0 1em 1em 1em;" src="'+data[i].productpic+'">');
+		   	html1.push('<p style="color:black;display: inline-block;font-size:1.5em;margin:0 2%;">'+data[i].productname+'</p>');
+		  	html1.push('<p style="color:#fff;font-size:1.5em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+productvotes+'票</p>');
 	      	html1.push('</div>');
 	      	if(i+1==data.length)continue;
 	     	html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;float:left;">');
          	html1.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">');
-			html1.push('<p style="font-size:2.5em;">'+(i+2)+'</p>');
+			html1.push('<p style="font-size:1.5em;">'+(i+2)+'</p>');
 		 	html1.push('</div>');
-		  	html1.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0 1em;" src="'+data[i+1].productpic+'">');
-	  		html1.push('<p style="color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i+1].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:2em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+parseInt(data[i+1].allcount)+'票</p>');
+		  	html1.push('<img style="width:4em;border-radius:50%;height:4em;align-items: center;margin:0 1em 1em 1em;" src="'+data[i+1].productpic+'">');
+	  		html1.push('<p style="color:black;display: inline-block;font-size:1.5em;margin:0 2%;">'+data[i+1].productname+'</p>');
+		  	html1.push('<p style="color:#fff;font-size:1.5em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+parseInt(data[i+1].allcount)+'票</p>');
 	     	html1.push('</div>');
 			html1.push('</div>');
         }
@@ -480,10 +509,10 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 
 <body>
        <div class="nav">
-        <img style="width:15%;position:absolute;left:3%;top:20px; " src="lib/images/zhengfu.png">
-        <p style="height:2.5em;line-height: 2.5em;width:100%;font-size:4em;text-align: center;color:#C3181E;">2019中国·遵化</p>
+        <img style="width:10%;position:absolute;left:3%;top:10px; " src="lib/images/zhengfu.png">
+        <p style="height:2em;line-height: 2em;width:100%;font-size:2.5em;text-align: center;color:#C3181E;">2019中国·遵化</p>
          <p class="logo-in" style="vertical-align: inherit;text-align: center;">美食节大赛评选活动</p>
-         <p style="text-transform:uppercase;text-align: center;font-size:2.5em;color:#C3181E;">food festival competition selection activities</p>
+         <p style="text-transform:uppercase;text-align: center;font-size:1.5em;color:#C3181E;">food festival competition selection activities</p>
        </div>
 		   
 		<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 5%;">  
@@ -511,7 +540,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			</div>	
 					   
 			<!-- 4--无限父级  -->
-		 <div class="other" style="width:100%;overflow:hidden;font-weight:bold;">     	
+		 <div class="other" style="width:100%;height:19.5em;overflow-y:auto;font-weight:bold;">     	
 	      </div>
 						
 						

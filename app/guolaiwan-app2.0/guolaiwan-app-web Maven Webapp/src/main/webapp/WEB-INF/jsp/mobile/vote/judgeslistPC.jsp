@@ -168,23 +168,24 @@ margin:5px 5%;
   /* animation:slash 5s infinite ease; */
 }
 
-.lists img{
+/* .lists img{
 width:30px;
 height:30px;
 margin:0 5px;
-}
+} */
 
 .nav{
-   height:350px;
+   height:15em;
    width:100%;
    background-image: url('lib/images/dasaibeijing.jpg');
   background-size:100% 100%;
   position: relative;
 }
+
 .logo-in,.logo-on,.logo-ou{
     color: #C3181E;
     font-weight: bold;
-    font-size:7.5em;
+    font-size:4.5em;
     font-family: "Just Another Hand",cursive;
     text-transform: uppercase;
 }
@@ -232,12 +233,12 @@ color:#fff;
 border:none;
 text-align: center;
 height:3em;
-width:25%;
+width:30%;
 }
 table tr td{
 border:none;
 border:0.05em solid #CF4D50;
-
+height:3em;
 }          
 </style>
 
@@ -283,7 +284,7 @@ $(function() {
 		var url=window.BASEPATH + 'admin/vote/showjudges';
 			$.post(url,{"productId":id},function(data){
 				var html=[];
-				 html.push('<table border="1"  style="font-size:2em;text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; width:50%;border:none;">'); 
+				 html.push('<table border="1"  style="font-size:2em;text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; width:100%;border:none;">'); 
 				 html.push('<tr>'); 
 			     html.push('<th>日期</th>'); 
 			     html.push('<th>评委姓名</th>'); 
@@ -326,11 +327,11 @@ $(function() {
 </script>
 
 <body>
-       <div class="nav">
-        <img style="width:15%;position:absolute;left:3%;top:20px; " src="lib/images/zhengfu.png">
-        <p style="height:2.5em;line-height: 2.5em;width:100%;font-size:4em;text-align: center;color:#C3181E;">2019中国·遵化</p>
+     	<div class="nav">
+        <img style="width:10%;position:absolute;left:3%;top:10px; " src="lib/images/zhengfu.png">
+        <p style="height:2em;line-height: 2em;width:100%;font-size:2.5em;text-align: center;color:#C3181E;">2019中国·遵化</p>
          <p class="logo-in" style="vertical-align: inherit;text-align: center;">美食节大赛评选活动</p>
-         <p style="text-transform:uppercase;text-align: center;font-size:2.5em;color:#C3181E;">food festival competition selection activities</p>
+         <p style="text-transform:uppercase;text-align: center;font-size:1.5em;color:#C3181E;">food festival competition selection activities</p>
        </div>
 		   
 		<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 5%;">  
@@ -357,11 +358,10 @@ $(function() {
 		 
 		 
         <div  style="width:100%;height:auto;text-align: center;font-weight: bold;">
-          <p class="logo-on" style="line-height:1.5em;color:black;">当前菜品</p>
-          <p id="name" class="logo-ou" style="line-height:1.5em;font-size:5em;"></p>
-          <img class="pic" style="width:45%;border-radius:1em;" src="lib/images/ceshide.jpg">
-          <p style="color:#fff;box-shadow:0 0.1em #C9CBC9;background: #C3181E;width:30%;font-size:3em;border-radius:0.2em;margin: 1em auto;padding:0.5em 1em;">评分列表</br><span class="name"></span></p>
-   			<div class="lists">
+          <p class="logo-on" style="line-height:2em;color:black;font-size:3em;">当前评分菜品</p>
+          <p id="name" class="logo-ou" style="line-height:2em;font-size:3em;"></p>
+          <img class="pic" style="width:35%;border-radius:1em;float: left;margin-left:12%;" src="lib/images/ceshide.jpg">
+   			<div class="lists" style="width:35%;float: right;margin-right:12%;">
    			
    			</div>
    		</div>

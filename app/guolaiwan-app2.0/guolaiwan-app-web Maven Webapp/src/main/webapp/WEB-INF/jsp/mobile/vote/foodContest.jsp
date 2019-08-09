@@ -143,15 +143,15 @@ html, body {
 .xia button{
 background:#C3181E;
 color:#fff;
-font-weight: bpld;
-padding:0 15px;
+font-weight: bold;
+padding:0 2px;
 border:none;
 outline:none;
 border-radius:6px;
 box-shadow:0 3px #D50931;
 font-size:12px;
 font-weight:bold;
-margin:5px 5%;
+margin:5px 2%;
 }
 
 .di::before{
@@ -475,18 +475,20 @@ $("#b"+base).css("color","black");
              html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+3+'</span>');
            }
            html.push('<img style="width:100%;height:100%;" src="http://www.guolaiwan.net/file'+data[i].image+'">');
+           html.push('<p style="position:absolute;right:0;bottom:0;background: #C3181E;color:#fff;font-size:12px;">已售：<span>'+data[i].OutOfPrint+'</span>+</p>');
            html.push('</div>');
            html.push('<div class="xia" style="width:100%;height:auto;position: relative;padding:0 3% 3px;color:black;text-align: center;font-weight:bold;">');
            html.push('<P style="height:20px;line-height: 20px;width:100%;color:black;text-align:left;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:95%;display: inline-block;">'+data[i].productname+'</span></P>');
-           html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:right;">已售：<span>'+data[i].OutOfPrint+'</span>+</span><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].manvotes+'</span></span></P>');
+           html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].manvotes+'</span></span></P>');
            html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span>'+productvotes+'</span></p>');
-           html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>'+data[i].avg+'</span><span id="'+data[i].productId+'" onclick="productdetails(this.id)" style="float:right;background:#C3181E;color:#fff;font-size:12px;border-radius:4px;">查看评分</span></p>');
+           html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>'+data[i].avg+'</span></p>');
            if(${isjudges==1}){
-		   html.push('<button id="'+data[i].productId+'" onclick="mark(this.id)" class="vote">评分</button>');           
+		   html.push('<button id="'+data[i].productId+'" onclick="mark(this.id)" style="width:40%" class="vote">评分</button>');           
            }else{
-           html.push('<button id="'+data[i].productId+'" onclick="votepoll(this.id)"  class="vote">投票</button>');
+           html.push('<button id="'+data[i].productId+'" onclick="votepoll(this.id)" style="width:40%" class="vote">投票</button>');
            }
-           html.push('<button onclick="gotobuy('+data[i].productId+')">购买</button>');
+           html.push('<button id="'+data[i].productId+'" onclick="productdetails(this.id)" style="width:40%">查看评分</button>');
+           html.push('<button style="width:84%;" onclick="gotobuy('+data[i].productId+')">购买</button>');
            html.push('</div>');
            html.push('</div>');
            html.push('<div class="tanchuang'+data[i].productId+'" style="text-indent:2em;display: none;z-index:111111;width:90%;height:auto;font-weight:bold;background:#fff;bottom:5px;left:5%;border:2px solid #C3181E;border-radius:12px;padding:20px 10%;position: absolute;">');
