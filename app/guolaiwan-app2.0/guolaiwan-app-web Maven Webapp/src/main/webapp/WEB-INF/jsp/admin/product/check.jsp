@@ -339,6 +339,17 @@
                         autocomplete="off" class="layui-input" value="${product.productntegral}">
                  	</div>
                  </div>
+                 
+                 <div class="layui-inline">
+                    <label for="distributeId" class="layui-form-label">
+						分销ID：
+                    </label>
+                    <div class="layui-input-inline">
+                    <input type="text" id="distributeId" name="distributeId"
+                        autocomplete="off" class="layui-input" value="${product.distributeId}">
+                 	</div>
+                 </div>
+                 
                 </div>
                 
                 

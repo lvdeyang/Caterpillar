@@ -478,6 +478,16 @@
                         	autocomplete="off" class="layui-input">
                  	</div>
                  </div>
+                 
+                 <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
+						分销ID：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="distributeId" name="distributeId"
+                        	autocomplete="off" class="layui-input">
+                 	</div>
+                 </div>
                 </div>
                 <div class="layui-form-item proLine">
                 <div class="layui-inline">
@@ -866,8 +876,14 @@
 				if((!(/^[0-9]*[1-9][0-9]*$/).test(SaleNum))&&SaleNum!=""){
 						layer.msg("销量为大于0的数字！",{time: 5000, icon:5});
 						return false;
-				}
+				} 
 				
+				//分销商品Id
+				var distributeId =$("#distributeId").val();
+				if((!(/^[0-9]*[1-9][0-9]*$/).test(distributeId))&&distributeId!=""){
+						layer.msg("分销商品Id为大于0的数字！",{time: 5000, icon:5});
+						return false;
+				}
 				//销量
 				var ntegral =$("#productntegral").val();
 				if((!(/^[0-9]*[1-9][0-9]*$/).test(ntegral))&&ntegral!=""){

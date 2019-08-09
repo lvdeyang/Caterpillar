@@ -157,6 +157,26 @@ public class OrderInfoPO extends AbstractBasePO {
 	private String trackingnumber;
 	//是不是钱包支付的
 	private boolean iswallet;
+	//分销商品的ID
+	private String distributeId;
+	//分销上回调二维码
+	private String distributeQcode;
+
+	public String getDistributeId() {
+		return distributeId;
+	}
+
+	public void setDistributeId(String distributeId) {
+		this.distributeId = distributeId;
+	}
+
+	public String getDistributeQcode() {
+		return distributeQcode;
+	}
+
+	public void setDistributeQcode(String distributeQcode) {
+		this.distributeQcode = distributeQcode;
+	}
 
 	public boolean isIswallet() {
 		return iswallet;
