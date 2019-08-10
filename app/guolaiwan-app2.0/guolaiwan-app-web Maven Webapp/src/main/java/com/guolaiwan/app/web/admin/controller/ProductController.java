@@ -493,6 +493,10 @@ public class ProductController extends BaseController {
 		long productMerchantID = Long.parseLong(request.getParameter("productMerchantID"));
 		String productMerchantName = request.getParameter("productMerchantName");
 		String merMName = request.getParameter("merMName");
+		String distributeId=request.getParameter("distributeId");
+		if (distributeId!=""&&distributeId!=null) {
+			product.setDistributeId(distributeId);
+		}
 		if (!(merMName.length() == 0 || merMName == null)) {
 			product.setMerMName(merMName);
 		}
