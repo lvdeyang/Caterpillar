@@ -44,6 +44,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.interfac.util.FilterSensitive;
 import com.guolaiwan.app.interfac.util.KdniaoTrackQueryAPI;
+import com.guolaiwan.app.interfac.util.TianShiTongChengAPI;
 import com.guolaiwan.app.web.admin.vo.ActiveBundleVO;
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
 import com.guolaiwan.app.web.admin.vo.ActivityVO;
@@ -3260,7 +3261,16 @@ public class PhoneController extends WebBaseControll {
 		if (_order.getProductName() == null) {
 			_order.setProductName("");
 		}
-		_order.setYdNO(sysConfig.getWebUrl() + _order.getYdNO());
+		//如果有分销商品ID 返回来的二维码的话 验单码是分销商的   凤凰山
+		if(order.getDistributeId()!=null && order.getDistributeId()!="" && order.getDistributeQcode()!=null&&order.getDistributeQcode()!=""){
+			// 生成二维码图片
+			String ydNO = ydNoCode(order.getDistributeQcode());
+			order.setDistributeQcode(ydNO);
+			_order.setYdNO(sysConfig.getWebUrl() + ydNO);
+		}else{
+			_order.setYdNO(sysConfig.getWebUrl() + _order.getYdNO());
+		}
+		
 		_order.setProductPic(sysConfig.getWebUrl() + _order.getProductPic());
 		_order.setShopLongitude(merchantPO.getShopLongitude());
 		_order.setShopLatitude(merchantPO.getShopLatitude());
@@ -7612,5 +7622,49 @@ public class PhoneController extends WebBaseControll {
 	   }		
 		return "success";
 	}
+	
+	/**
+	 * 判断是不是分销商品
+	 * 天使同城的对接（凤凰山）
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/isdistribute")
+	public String isDistribute(Long orderId){
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");	
+		OrderInfoPO order = conn_order.get(orderId);
+		ProductPO product = conn_product.get(order.getProductId());
+		String distributeId = product.getDistributeId();
+		if(distributeId.equals("")&&distributeId==null){
+			return "error";
+		}else{
+			String id = order.getId().toString();
+			String userName = order.getUserName();
+			String buynum=String.valueOf(order.getProductNum());
+			String userTel = conn_address.get(order.getMailAddress()).getConsigneePhone();
+			String startDate = df.format(order.getOrderBookDate());
+			String result = TianShiTongChengAPI.sendPost(id, distributeId,buynum, userName, userTel, startDate);
+			System.err.println(result);
+		    JSONObject parseObject = JSON.parseObject(result);
+			String success = parseObject.get("success").toString();
+			if(success.equals("true")){
+				String qrcode = parseObject.get("qrcode").toString();
+				order.setDistributeQcode(qrcode);
+				order.setDistributeId(distributeId);
+				conn_order.saveOrUpdate(order);
+			}else{
+				return "没成功";
+			}
+				
+				
+			return "success";
+		}
+	}
+	
+	
+	
+	
+	
+	
 	
 }
