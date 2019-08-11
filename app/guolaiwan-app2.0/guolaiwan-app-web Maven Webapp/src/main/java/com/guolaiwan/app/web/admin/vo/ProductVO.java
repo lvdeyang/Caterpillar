@@ -166,8 +166,21 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	private long groupnum;
 	//拼团价格
 	private String groupprice;
+	//分销商品ID（过来玩代理其他家）
+	private String distributeId;
 	
 	
+	public String getDistributeId() {
+		return distributeId;
+	}
+
+
+	public ProductVO setDistributeId(String distributeId) {
+		this.distributeId = distributeId;
+		return this;
+	}
+
+
 	public long getGroupnum() {
 		return groupnum;
 	}
@@ -193,8 +206,9 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	}
 
 
-	public void setIsgroup(int isgroup) {
+	public ProductVO setIsgroup(int isgroup) {
 		this.isgroup = isgroup;
+		return this;
 	}
 
 
@@ -1177,6 +1191,55 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 
 
 
+
+
+
+
+
+	public int getIsSurpport() {
+		return isSurpport;
+	}
+
+
+
+
+
+	public void setIsSurpport(int isSurpport) {
+		this.isSurpport = isSurpport;
+	}
+	private String traffic;
+
+	public String getTraffic() {
+		return traffic;
+	}
+
+	public ProductVO setTraffic(String traffic) {
+		this.traffic = traffic;
+		return this;
+	}
+
+
+	public int getIfFace() {
+		return ifFace;
+	}
+
+
+	public ProductVO setIfFace(int ifFace) {
+		this.ifFace = ifFace;
+		return this;
+	}
+
+
+	public int getProductIsRefund() {
+		return productIsRefund;
+	}
+
+
+	public ProductVO setProductIsRefund(int productIsRefund) {
+		this.productIsRefund = productIsRefund;
+		return this;
+	}
+	
 	@Override
 	public ProductVO set(ProductPO entity) throws Exception {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1236,58 +1299,10 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setProductIsRefund(entity.getProductIsRefund())
 		.setSite(entity.getSite())
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)))
-		.setIsgroup(entity.getIsgroup());
-		
+		.setIsgroup(entity.getIsgroup())
+		.setDistributeId(entity.getDistributeId());
 		return this;
 	}
 
-
-
-
-
-	public int getIsSurpport() {
-		return isSurpport;
-	}
-
-
-
-
-
-	public void setIsSurpport(int isSurpport) {
-		this.isSurpport = isSurpport;
-	}
-	private String traffic;
-
-	public String getTraffic() {
-		return traffic;
-	}
-
-	public ProductVO setTraffic(String traffic) {
-		this.traffic = traffic;
-		return this;
-	}
-
-
-	public int getIfFace() {
-		return ifFace;
-	}
-
-
-	public ProductVO setIfFace(int ifFace) {
-		this.ifFace = ifFace;
-		return this;
-	}
-
-
-	public int getProductIsRefund() {
-		return productIsRefund;
-	}
-
-
-	public ProductVO setProductIsRefund(int productIsRefund) {
-		this.productIsRefund = productIsRefund;
-		return this;
-	}
-	
 
 }

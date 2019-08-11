@@ -193,11 +193,19 @@ public class ProductPO extends AbstractBasePO {
 	private int productRestrictNumber;
 	//是否可拼团
 	private int isgroup;
+	//分销商品ID（过来玩代理其他家）
+	private String distributeId;
 	
+	
+	
+	public String getDistributeId() {
+		return distributeId;
+	}
 
-	
-	
-	
+	public void setDistributeId(String distributeId) {
+		this.distributeId = distributeId;
+	}
+
 	public int getIsgroup() {
 		return isgroup;
 	}
