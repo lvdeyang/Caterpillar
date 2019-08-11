@@ -57,9 +57,10 @@ public class tableControll extends WebBaseControll  {
 	
 	
 	@RequestMapping(value = "/tables/home") //订桌首页
-	public ModelAndView tables(HttpServletRequest request) throws Exception {
+	public ModelAndView tables(HttpServletRequest request,Long merchantId) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("diningtable/reservetable/tables");
+		if (merchantId != null && merchantId != -1) mv.addObject("merchantId",merchantId);
 		return mv;
 	}
 	@RequestMapping(value = "/diningtable/tablePayment") //订桌支付

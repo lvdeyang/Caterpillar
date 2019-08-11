@@ -509,10 +509,12 @@ html, body {
   margin:10px 0 !important;
   font-size:20px !important;
   font-weight:bold !important;
-  height:48px !important;
- padding:5px 25%;
+  height:40px !important;
+ padding:5px 3%;
+  width:35%;
   border-radius:12px !important;
-  line-height:80px;
+  line-height:30px;
+  display: inline-block;
 }
 /*定义选项卡内容*/
 	.contentt{
@@ -740,10 +742,14 @@ html, body {
 	  
 		
 		
-	$(document).on('click','.zhifu',function(){
+	$(document).on('click','#zhifu',function(){
   	 
 		    location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId=198&comCode=0001'; 
-  });
+    });
+	$(document).on('click','#tables',function(){
+  	 
+		    location.href=window.BASEPATH + 'reservetable/tables/home?merchantId=${merchantId}'; 
+    });
 	    
 	  
 	   
@@ -802,9 +808,9 @@ html, body {
 	    
 		    var array = [];  //商户特色 营业时间
 		    var feature = msg.merch.feature;
-		    if(feature !=null && feature!="" && msg.merch.date != null){ //商家特色
+		    if(feature != null && feature != "" && msg.merch.businessDate != null){ //商家特色
 		      var split  =   feature.split(',');
-		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> '+msg.merch.date+'</span></p>');
+		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> '+msg.merch.businessDate+'</span></p>');
 		      array.push('<div style="position: absolute;top:55px;width:100%;height:auto;">');
 		      for(var j=0;j<split.length ;j++){
 		        array.push('<button style="margin-left:2%;border-radius:6px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">'+split[j]+'</button>');		       	        
@@ -1070,9 +1076,10 @@ html, body {
              </div>
              
             <div style="width:100%;height:80px;text-align: center;border-bottom:10px solid #F4F4F4;">
-             <a href="pubnum/product/index/payinshop/${merchantId}" class="zhifu">到店支付</a>
+              <a style="" href="pubnum/product/index/payinshop/${merchantId}" class="zhifu" id="zhifu">到店支付</a>
+              <a style=""　href="reservetable/tables/home?merchantId=${merchantId}" class="zhifu" id="tables">订桌</a> 
             </div>
-
+            
              <!-- 选项卡 -->
 			<div class="tab" style="">
 					<ul class="tab-btn active" >

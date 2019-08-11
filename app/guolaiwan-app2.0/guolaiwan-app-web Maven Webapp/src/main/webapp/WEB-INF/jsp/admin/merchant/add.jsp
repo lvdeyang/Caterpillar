@@ -247,7 +247,21 @@
 				 
 				</div>
 			</div>
-			
+			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 商家特色 </label>
+					<div class="layui-input-block">
+						<input type="checkbox" name="like" title="有Wif" value="有Wif"> <input
+							type="checkbox" name="like" title="有电视" value="有电视"> <input
+							type="checkbox" name="like" title="有空调" value="有空调"> <input
+							type="checkbox" name="like" title="可上网" value="可上网">
+					</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 商家营业时间 </label>
+					<div class="layui-input-block">
+						 <input style="width: 20%;" name="businessDate" type="text" class="layui-input" id="test9" autocomplete="off"   placeholder=" - ">
+					</div>
+			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">板块名称</label>
 				<div class="layui-input-inline">
@@ -389,10 +403,15 @@
 				    elem: '#test4'
 				    ,type: 'time'				    
 				  });
-
-
-              //监听提交
-              form.on('submit(add1)', function(data){
+			//时间范围
+			laydate.render({
+				elem : '#test9',
+				type : 'time',
+				range : true
+			});
+	
+			//监听提交
+			form.on('submit(add1)', function(data){
           	
               data.field.shopAuditstates = "D";
               var message = "提交待审核成功！";  
@@ -415,8 +434,11 @@
             $('#deletePic').click(function(){
             	$('#shopHeadingPic').empty();
             });
-            
-            function resetMo(index){
+	
+	
+	
+	
+		function resetMo(index){
                if(index==0){
                    $("input[name='modularName']").val('');
 	               $("input[name='modularCode']").val('');
@@ -439,15 +461,22 @@
            }            
             
             function add(data,message) {
-            	//联系人手机号用于创建一个用户
-                //var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+                var title = '';
+				//联系人手机号用于创建一个用户
+				//var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
 				//if(!myreg.test($("#shopLoginName").val())){ 
-   				//	layer.msg('登录名为有效手机号码！',{icon:2}); 
-    			//	return false; 
+				//	layer.msg('登录名为有效手机号码！',{icon:2}); 
+				//	return false; 
 				//} 
-				
-            	
-              //多图字段          
+				$("[name='like']:checked").each(function() {
+				 if(title == ""){
+				    title += $(this).val();
+				 }else{
+				    title += ","+$(this).val();
+				 }
+				});
+	            data.field.like =  title;
+				//多图字段          
            		var proMpic="";
            		var strPic;
            		for(var i=1;i<6;i++){
@@ -463,39 +492,38 @@
            		}
            		data.field.shopMpic= proMpic;
               
-                
               //business不能是""
              if(data.field.business==""){
              	layer.msg("商户业务不能是空",{icon:5});
              	return false;
              }	
               console.log(data.field);
-            
-                 $.ajax({
-                	  type:"post",
-           			  url:"add.do",
-                      data:data.field,
-                      success:function(msg){
-                      	if(msg=="has"){
-                      		layer.alert("登录名的已经注册过了");
-                      	}
-                        if(msg=="success"){
-                          layer.alert(message, {icon: 6},function () {
-                           try{
-                               var index = parent.layer.getFrameIndex(window.name);
-                               console.log(index);
-                               //关闭当前frame
-                               parent.window.location.reload();
-                               parent.layer.close(index);
-                             }catch(exception)
-                             {
-                               window.location.reload();
-                             }
-                           });
-                        }
-                       }
-                })
-            }
+			$.ajax({
+				type : "post",
+				url : "add.do",
+				data : data.field,
+				success : function(msg) {
+					if (msg == "has") {
+						layer.alert("登录名的已经注册过了");
+					}
+					if (msg == "success") {
+						layer.alert(message, {
+							icon : 6
+						}, function() {
+							try {
+								var index = parent.layer.getFrameIndex(window.name);
+								console.log(index);
+								//关闭当前frame
+								parent.window.location.reload();
+								parent.layer.close(index);
+							} catch (exception) {
+								window.location.reload();
+							}
+						});
+					}
+				}
+			})
+			}
             
             // 验证商户登录名称是否重复
             $("#shopLoginName").blur(function() {

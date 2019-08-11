@@ -235,7 +235,7 @@ text-align: center;
 		function search() {
 			var _uri = window.BASEPATH + 'reservetable/search.do'; //
 			var patam = {};
-			patam.merchantId = 364 ; //'${merchantId}'
+			patam.merchantId = '${merchantId}' ; //'${merchantId}'
 			patam.search = $(".search").val();
 			patam.tableDate = $("#test2").val(); //时间
 			if ($(".texts").val() != "请选择") {
@@ -314,7 +314,7 @@ text-align: center;
 			$('.Room-right').empty();
 			var _uri = window.BASEPATH + 'reservetable/getlist.do'; //
 			var patam = {};
-			patam.merchantId = 364 ; //'${merchantId}'
+			patam.merchantId = '${merchantId}' ; //'${merchantId}'
 			patam.feature = window.change; //'${merchantId}'
 			patam.tableDate = $("#test2").val(); //时间
 			if ($(".texts").val() != "请选择") {
@@ -375,69 +375,68 @@ text-align: center;
 				if (data.tableState == 2) {
 					html.push('<div class="table" style="text-align:center;background: #D13035;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
 				}
-				html.push('<p><span>' + data.tableNo + '</span></p>');
+				html.push('<p style="font-size:0.5rem"><span>' + data.tableNo + '</span></p>');
 				html.push('<p><span>' + data.size + '</span></p>');
 				html.push('</div>');
 				$('.hall').append(html.join(''));
 			} else { //包间
 				if (boole == 0) {
 					var html = [];
-					html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
+					html.push('<div class="hous" style="position: relative;font-size:12px;text-align:center;width:100%;height:auto;display: inline-block;">');
 					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
-					if (data.tableState == 1) html.push('<img style="width:90%;" onclick="href('+data.id+')"src="lib/images/luse.png">')
+					if (data.tableState == 1) html.push('<img style="width:100%;height:100%;" onclick="href('+data.id+')"src="lib/images/huise.png">')
 					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
-					html.push('<p>' + data.tablename + '</p>');
-					html.push('<p><span>' + data.size + '人间</span></p>');
+				 	html.push('<p style="position: absolute;top:17%;left:50%;margin-left:-25%;">' + data.tablename + '</p>');
+					html.push('<p style="position: absolute;top:30%;left:50%;margin-left:-25%;"><span>' + data.size + '人间</span></p>'); 
 					if (data.sofa == 1) { //沙发
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lusofa.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/sofa.png">');
-					if (data.television == 1) { //电视
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lutelevision.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/television.png">');
-					if (data.airConditioner == 1) { //空调
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/luairConditioner.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/airConditioner.png">');
-					if (data.wifi == 1) { //无线
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/luwifi.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/wifi.png">');
-					if (data.lavatory == 1) { //卫生间
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lulavatory.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lavatory.png">');
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:11%;" src="lib/images/lusofa.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:11%;" src="lib/images/sofa.png">');
 					if (data.karaoke == 1) { //唱歌
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lukaraoke.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/karaoke.png">');
-					html.push('</div>');
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:11%;" src="lib/images/lukaraoke.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:11%;" src="lib/images/karaoke.png">');
+					if (data.airConditioner == 1) { //空调
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:65%;" src="lib/images/luairConditioner.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:65%;" src="lib/images/airConditioner.png">');
+					if (data.wifi == 1) { //无线
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:65%;" src="lib/images/luwifi.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:65%;" src="lib/images/wifi.png">');
+					if (data.lavatory == 1) { //卫生间
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:40%;" src="lib/images/lulavatory.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:40%;" src="lib/images/lavatory.png">');
+								 if (data.television == 1) { //电视
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:40%;" src="lib/images/lutelevision.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:40%;" src="lib/images/television.png">'); 
+					html.push('</div>'); 
 					$('.Room-left').append(html.join(''));
 					window.boole = 1;
 				} else {
 					var html = [];
-					html.push('<div class="houss" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
+					html.push('<div class="houss" style="text-align:center;width:100%;height:auto;display: inline-block;position: relative;font-size:12px;">');
 					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
-					if (data.tableState == 1) html.push('<img style="width:90%;" onclick="href('+data.id+')" src="lib/images/luse.png">')
+					if (data.tableState == 1) html.push('<img style="width:100%;height:100%;" onclick="href('+data.id+')" src="lib/images/huise.png">')
 					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
-					html.push('<p>' + data.tablename + '</p>');
-					html.push('<p><span>' + data.size + '人间</span></p>');
-					if (data.sofa == 1) { //沙发
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lusofa.png">');
-					} else {
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/sofa.png">');
-					}
-					if (data.television == 1) { //电视
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lutelevision.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/television.png">');
-					if (data.airConditioner == 1) { //空调
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/luairConditioner.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/airConditioner.png">');
-					if (data.wifi == 1) { //无线
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/luwifi.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/wifi.png">');
+						 	html.push('<p style="position: absolute;top:17%;left:50%;margin-left:-25%;">' + data.tablename + '</p>');
+					html.push('<p style="position: absolute;top:30%;left:50%;margin-left:-25%;"><span>' + data.size + '人间</span></p>'); 
+					 if (data.sofa == 1) { //沙发
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:11%;" src="lib/images/lusofa.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:11%;" src="lib/images/sofa.png">');
 					if (data.lavatory == 1) { //卫生间
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lulavatory.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lavatory.png">');
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:40%;" src="lib/images/lulavatory.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:40%;" src="lib/images/lavatory.png">');
+					
+					if (data.airConditioner == 1) { //空调
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:65%;" src="lib/images/luairConditioner.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:65%;" src="lib/images/airConditioner.png">');
+					if (data.wifi == 1) { //无线
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:65%;" src="lib/images/luwifi.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:65%;" src="lib/images/wifi.png">');
 					if (data.karaoke == 1) { //唱歌
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lukaraoke.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/karaoke.png">');
-					html.push('</div>');
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:11%;" src="lib/images/lukaraoke.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:65%;left:11%;" src="lib/images/karaoke.png">');
+					if (data.television == 1) { //电视
+						html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:40%;" src="lib/images/lutelevision.png">');
+					} else html.push('<img style="width:25%;display: inline-block;position: absolute;top:45%;left:40%;" src="lib/images/television.png">');
+					html.push('</div>'); 
 					$('.Room-right').append(html.join(''));
 					window.boole = 0;
 				}
@@ -452,7 +451,7 @@ text-align: center;
 	  }else{
 	     repast = "DINNER";
 	  }
-	 window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId="+364+"&repast="+repast+"&tableDate="+$("#test2").val();
+	 window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId=${merchantId}&repast="+repast+"&tableDate="+$("#test2").val();
 	}
 
 </script>
@@ -515,13 +514,14 @@ text-align: center;
 	     
 <div class="main" style="width:100%;height:auto;overflow: hidden;">
 	      <!-- 左包间 -->
+	      
 	      <div class="Room-left" style="width:20%;height:auto;float:left;overflow: hidden;margin-left:1%;">
 	          
 	      </div>
 	      
 	        <!-- 右包间 -->
 	      <div class="Room-right" style="width:20%;height:auto;float:right;overflow: hidden;margin-right:1%;">
-	           
+	          
 	      </div>
 	        
 	      <!-- 大厅 -->

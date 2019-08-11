@@ -178,6 +178,8 @@ public class MerchantController extends BaseController {
 		String modularCode = request.getParameter("modularCode");
 		String modularClass = request.getParameter("modularClass");
 		String modularClassId = request.getParameter("modularClassId");
+		String like = request.getParameter("like"); //特色
+		String businessDate = request.getParameter("businessDate"); //商家时间
 		
 		
 		String modularName1 = request.getParameter("modularName1");
@@ -228,8 +230,12 @@ public class MerchantController extends BaseController {
 		user.setUserPassword(Sha1Util.getSha1(shopLoginPwd));
 		user.setUpdateTime(new Date());
 		user.setSource(0);
-        
-		
+        if(like != "" && like!=null){
+        	merchant.setFeature(like);
+        }
+        if(businessDate != "" && businessDate!=null){
+        	merchant.setBusinessDate(businessDate);
+        }
 		merchant.setDistributionId(Integer.parseInt(distributionId));
 		merchant.setShopName(shopName);
 		merchant.setShopLoginName(shopLoginName);
