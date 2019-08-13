@@ -80,9 +80,10 @@ public class tableControll extends WebBaseControll  {
 		return mv;
 	}
 	@RequestMapping(value = "/diningtable/tableSuccess")//订桌
-	public ModelAndView home(HttpServletRequest request) throws Exception {
+	public ModelAndView home(HttpServletRequest request,Long orderId) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("diningtable/reservetable/tableSuccess");
+		mv.addObject("orderId",orderId);
 		return mv;
 	}
 	
