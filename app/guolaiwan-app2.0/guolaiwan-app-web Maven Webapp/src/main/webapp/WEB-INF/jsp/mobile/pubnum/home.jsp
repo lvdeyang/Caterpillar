@@ -757,8 +757,17 @@ return $.cookie(str);
 			    var liveModal={};
 			    liveModal.modularCode='0000';
 			    liveModal.modularPic='lib/images/live.jpg';
-			    liveModal.modularName='直播';
-			    modals.push(liveModal);
+			    liveModal.modularName='直播';			    
+			    //按照心意改变 "直播模块位置"
+			    var starp;
+			    for(var i = 0; i<modals.length;i++){
+			      if(modals[i].modularCode == '2021'){
+			        starp =modals[i];
+			        modals[i] = liveModal;
+			      }			    
+			    }
+			    modals.push(starp);
+			    			    
 			    if(modals.length<20){
 			       for(var k=modals.length;k<20;k++){
 			          modals.push({});
