@@ -1277,11 +1277,11 @@ public class BusinessController extends WebBaseControll {
 			 mesMidClien.setOrderId(Long.parseLong(oderId));
 			 mesMidClien.setUserId(Long.parseLong(userId));
 			 mesMidClien.setRoomId(Long.parseLong(roomId));
+			 mesMidClien.setPayState("0");
 			 mesMidClien.setStartDate(startDate);
 			 mesMidClien.setEndDate(endDate);
 			 conn_mesMidleClien.save(mesMidClien);
-			 }	
-		
+			 }			
 		return "success";												
 	}
 	
@@ -1415,20 +1415,7 @@ public class BusinessController extends WebBaseControll {
 		order.setOrderType(OrderType.MERCHANT);
 				
 		orderInfoDao.saveOrUpdate(order);
-		
-		//时间格式转换
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		//住户信息状态更新
-		String[] mes_fields = {"roomId","startDate","endDate"};
-		Object[] mes_values = {Long.parseLong(roomId),sdf.format(order.getOrderBookDate()),sdf.format(order.getEndBookDate())};
-		List<MessageMiddleClientPO> mClientPOs = conn_mesMidleClien.findByFields(mes_fields, mes_values);
-		for(MessageMiddleClientPO po : mClientPOs ){
-	    	po.setOrderId(order.getId());
-	    	po.setPayState("0");
-	    	conn_mesMidleClien.saveOrUpdate(po);					    	
-	    }
-			
+								
 		long PayMoney = order.getPayMoney();
 		String tradeNum=order.getOrderNO(); 
 		String orderIdStr = String.valueOf(order.getId());
