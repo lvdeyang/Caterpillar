@@ -15,7 +15,7 @@ public class AddTheRoomPO extends AbstractBasePO {
 	
 	private String name; //名称
 	
-	private int  state; //状态
+	private int  state; //状态   0下架  1 为上架 
 	
 	private String tier;  // 层
 	
