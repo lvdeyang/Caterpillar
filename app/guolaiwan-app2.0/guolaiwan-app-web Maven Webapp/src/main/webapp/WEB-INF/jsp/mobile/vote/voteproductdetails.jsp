@@ -152,8 +152,8 @@ html, body {
  color:black;
  height:40px;
  text-align: center;
- font-weight: bold;
- font-size:16px;
+ font-weight:bold;
+ font-size:12px;
 }
 </style>
 
@@ -221,7 +221,7 @@ function getRecomment() {
 	     	for(var i=0;i<data.all.length;i++){
 	     	 var time=fmat(data.all[i].updateTime);
 		  	 html.push('<tr>'); 
-		     html.push('<td>'+time+'</td>'); 
+		     html.push('<td>2019年10月10日</td>'); //'+time+'
 		     html.push('<td>'+data.all[i].username+'</td>'); 
 		     html.push('<td>'+data.all[i].score+'</td>'); 
 		     html.push('</tr>'); 
@@ -252,13 +252,13 @@ function getRecomment() {
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-			<p style="height:30px;line-height: 30px;width:100%;color:#fff;font-weight:bold;padding:0 10%;position: absolute;bottom:0;z-index:111111111111;background: rgba(129,91,84,0.6);">${product.productName}</p>
+			<p style="height:30px;line-height: 30px;width:100%;color:#fff;font-weight:bold;padding:0 4%;position: absolute;bottom:0;z-index:111111111111;background: rgba(129,91,84,0.6);">${product.productName}</p>
 	   </div>   
 	<div style="width:100%;text-align: center;">
 		 <button style="background:#C3191F;box-shadow:0 2px #BAB9BA;border-radius:8px;color:#fff;margin:25px auto;font-weight: bold;padding:5px 15px;font-size: 18px;border:none;outline:none;">${product.productName}评分列表</button>        
 	</div>	
 	
-	<div class="lists" style="text-align: center;margin:0 auto;width:100%;">
+	<div class="lists" style="text-align: center;margin:0 auto;width:100%;padding:0 4%;">
 	  
 	 </div>    
 </body>
