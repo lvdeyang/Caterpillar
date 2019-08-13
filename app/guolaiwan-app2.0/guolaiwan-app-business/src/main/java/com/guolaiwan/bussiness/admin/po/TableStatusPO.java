@@ -22,7 +22,7 @@ public class TableStatusPO extends AbstractBasePO {
 	private long merchantId;   //商户id
 	private String tableDate; //时间
 	private BookType type;  
-	private long  userId; //用户id
+	private String  userId; //用户id
 	private String tableMenu; //菜品
   	private String	tableState; // //  NOTPAY 未支付        PAYSUCCESS 已预订          PAST已过期     REFUNDING 申请退款             REFUNDED 退款完成     REFUNDFAIL 退款失败
   	private String userName; //用户名称
@@ -55,17 +55,14 @@ public class TableStatusPO extends AbstractBasePO {
 	public long getMerchantId() {
 		return merchantId;
 	}
-	
-	
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
- 
 
-	public long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public String getUserName() {
 		return userName;

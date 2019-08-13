@@ -146,6 +146,29 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 	
 	// 新增快递单号--------------Dongsuyan
 	private String trackingnumber;
+	//分销商品的ID
+	private String distributeId;
+	//分销上回调二维码
+	private String distributeQcode;
+
+	
+	public String getDistributeId() {
+		return distributeId;
+	}
+
+	public OrderInfoVO setDistributeId(String distributeId) {
+		this.distributeId = distributeId;
+		return this;
+	}
+
+	public String getDistributeQcode() {
+		return distributeQcode;
+	}
+
+	public OrderInfoVO setDistributeQcode(String distributeQcode) {
+		this.distributeQcode = distributeQcode;
+		return this;
+	}
 
 	public String getTrackingnumber() {
 		return trackingnumber;
@@ -746,6 +769,8 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 		.setPhoto(entity.getPhoto())
 		.setIdNum(entity.getIdNum())
 		.setSettleDate(SettleDate)
+		.setDistributeId(entity.getDistributeId())
+		.setDistributeQcode(entity.getDistributeQcode())
 		.setTrackingnumber(entity.getTrackingnumber());
 		return this;
 

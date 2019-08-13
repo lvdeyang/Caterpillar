@@ -57,9 +57,10 @@ public class tableControll extends WebBaseControll  {
 	
 	
 	@RequestMapping(value = "/tables/home") //订桌首页
-	public ModelAndView tables(HttpServletRequest request) throws Exception {
+	public ModelAndView tables(HttpServletRequest request,Long merchantId) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("diningtable/reservetable/tables");
+		if (merchantId != null && merchantId != -1) mv.addObject("merchantId",merchantId);
 		return mv;
 	}
 	@RequestMapping(value = "/diningtable/tablePayment") //订桌支付
@@ -82,6 +83,14 @@ public class tableControll extends WebBaseControll  {
 	public ModelAndView home(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("diningtable/reservetable/tableSuccess");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/mobile/tables")//订桌
+	public ModelAndView mobile(HttpServletRequest request ,long merchantId ) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("diningtable/reservetable/tableMoblie");
+		mv.addObject("merchantId",merchantId);
 		return mv;
 	}
 
@@ -294,7 +303,7 @@ public class tableControll extends WebBaseControll  {
 		tableStatus.setTableDate(tableDate);
 		tableStatus.setType(BookType.fromString(type));
 		tableStatus.setTableState("NOTPAY");
-		tableStatus.setUserId(userId);
+		tableStatus.setUserId(userId+"");
 		tableStatus.setMerchantId(Long.parseLong(merchantId));
 		tableStatus.setTableId(Long.parseLong(tableId));
 		Table_Status.save(tableStatus);

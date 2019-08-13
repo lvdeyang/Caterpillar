@@ -419,6 +419,16 @@
                  
                  <div class="layui-inline">
                     <label for="sent" class="layui-form-label">
+						分销ID：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="distributeId" name="distributeId" value="${product.distributeId}"
+                        	autocomplete="off" class="layui-input">
+                 	</div>
+                 </div>
+                 
+                 <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
 						积分商品：
                     </label>
                     <div class="layui-input-inline">
@@ -426,6 +436,8 @@
                         	autocomplete="off" class="layui-input">
                  	</div>
                  </div>
+                 
+                 
                  
                   <div class="layui-inline">
                     <label for="sent" class="layui-form-label">

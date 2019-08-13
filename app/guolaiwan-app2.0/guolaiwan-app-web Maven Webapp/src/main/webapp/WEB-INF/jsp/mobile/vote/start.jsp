@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>订桌支付</title>
+<title>开幕式</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -78,116 +78,64 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
-	background:#E0E0E0 !important; 
-	position: relative;
-	-webkit-text-size-adjust: none;
+	height:100%;
 	
+	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
+    overflow: hidden;
 }
 
 * {
 	box-sizing: border-box;
-
+	list-style: none;
 	text-decoration: none;
-}
-/* 页面样式 */
-.header {
-	height: 40px;
-	line-height: 40px;
-	background-color: #18b4ed;
-	color: #fff;
-	border-bottom: 1px solid #bababa;
+	touch-action: none;
 }
 
-.header .link-left {
-	margin-left: 10px;
-	margin-right: 10px;
-	position: relative;
-	z-index: 1;
-}
-
-.header-content {
-	height:auto;
-	width: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	padding-left: 40px;
-	padding-right: 40px;
-	text-align: center;
-	z-index: 0;
-}
-
-  .swiper-container {
-    width: 100%;
-    padding:0;
-    margin:0;
-    height:200px;
-  } 
-
-  .swiper-container img {
-    display: block;
-    width: 100%;
-  }
-    
-.weui-navbar{
- display: none !important;
-}
-  .inp::-webkit-input-placeholder{
-        text-align: center;
-}  
-
-
+		
 </style>
 
 </head>
-
+	
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
+<link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 
-<script type="text/javascript">
+<script>
+$(document).ready(function() {
+var aud = document.getElementById("myVideo");
+/*  aud.currentTime=8;//从第8秒开始播放 */
+aud.onended = function() 
+{
+    
+   window.location.href="http://www.guolaiwan.net/admin/vote/gotovotepc?optionId=1" 
+   
+};
 
-          
-        
+/* var md=document.getElementById("myVideo");
+    md.onended = function(){
+        console.log("结束1");
+    }
+    md.addEventListener("ended",function(){
+         console.log("结束2");
+    }) */
+
+});
 </script>
-
-
-
-
-
 <body>
-			<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div>
+<video id="myVideo" style="" src="lib/images/ceshi.mp4" autoplay="autoplay" start="5">
+	  网络出了个小差-.-
+</video>
 
-
-         <div class="main" style="width:96%;height:120px;border-radius: 10px;padding:10px 10px;margin:0 auto;overflow: hidden;position: relative;">
-		   <img  style="width:30%;height:100%;border-radius: 10px;" src="lib/images/2.jpg"/>
-		   <p id="proName" style="position: absolute;top:20px;font-size:14px;left:35%"><span>日月星大酒店</span><span>401包间（豪华间）</span></p>
-		    <p style="position: absolute;bottom:20px;margin:0;font-size:12px;color:#9A9A9A;left:35%">预订金<span style="color:#EA712C;font-size:18px;">￥50</span> x1</p>
-		  </div>  
-        <div class="footer" style="width:96%;height:auto;padding:2px 10px;background: #fff;margin:10px auto;overflow: hidden;border-radius:12px;font-weight: bold;"> 
-          <p style="height:40px;line-height: 40px;margin:0;width:100%;padding:0 5%;border-bottom:1px solid #D4D6D5;"><span style="font-size:16px;">就餐时间</span><span style="float:right;">2019年7月24日，11：30</span></p>
-          <p style="height:40px;line-height: 40px;margin:0;width:100%;padding:0 5%;border-bottom:1px solid #D4D6D5;">预订人<input style="height:100%;width:50%;float:right;border:none;outline:none;text-align: right;" placeholder="填写真实姓名" type="text"></p>
-          <p style="height:40px;line-height: 40px;margin:0;width:100%;padding:0 5%;border-bottom:1px solid #D4D6D5;">联系电话<input style="height:100%;width:50%;float:right;border:none;outline:none;text-align: right;" placeholder="用于就餐提醒" type="text"></p>
-        </div>  
-         
-          <div style="height:50px;width:100%;background: #fff;color:#fff;position: fixed;bottom:0;font-size:18px;font-weight: bold;">
-          <p style="width:50%;line-height: 50px;color:#EC6C1F;text-align: center;display: inline-block;font-size:20px;"><span>￥50</span></p>
-          <p style="width:50%;line-height: 50px;text-align: center;background: #EB6E1E;float:right;">确认支付</p>
-         </div>
 </body>
-
+ 
 
 
 

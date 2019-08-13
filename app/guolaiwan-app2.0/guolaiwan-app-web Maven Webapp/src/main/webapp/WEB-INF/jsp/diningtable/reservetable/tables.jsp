@@ -83,15 +83,26 @@ html, body {
 	background:#FFF !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
+	font-family:微软雅黑;
 	text-decoration: none !important;
+		
 }
 
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
+	font-size:1rem;
+	
+	
 }
+@media screen and (min-width: 10px) and (max-width: 320px) {
+  * {
+    font-size: 64%; } }
+
+@media screen and (min-width: 411px) and (max-width: 768px) {
+  * {
+    font-size: 95%; } }
 /* 页面样式 */
 .header {
 	height: 40px;
@@ -144,6 +155,13 @@ margin:0 1%;
 .pid option{
 text-align: center;
 }
+.texts,.pid{
+appearance:none;
+-moz-appearance:none;
+-webkit-appearance:none;
+background: #fff;
+}
+
 
 
 
@@ -235,7 +253,7 @@ text-align: center;
 		function search() {
 			var _uri = window.BASEPATH + 'reservetable/search.do'; //
 			var patam = {};
-			patam.merchantId = 364 ; //'${merchantId}'
+			patam.merchantId = 240 ; //240 '${merchantId}'
 			patam.search = $(".search").val();
 			patam.tableDate = $("#test2").val(); //时间
 			if ($(".texts").val() != "请选择") {
@@ -253,7 +271,7 @@ text-align: center;
 				for (var i = 0; i < data.length; i++) {
 					if (sole == 0) { //有桌子有包间
 						add(data[i], boole);
-						$(".hall").css("width", "58%");
+						$(".hall").css("width", "50%");
 						$(".Room-left").css("width", "20%");
 						$(".Room-right").css("width", "20%");
 						$(".hous").css({
@@ -314,7 +332,7 @@ text-align: center;
 			$('.Room-right').empty();
 			var _uri = window.BASEPATH + 'reservetable/getlist.do'; //
 			var patam = {};
-			patam.merchantId = 364 ; //'${merchantId}'
+			patam.merchantId = 240 ; //'${merchantId}'
 			patam.feature = window.change; //'${merchantId}'
 			patam.tableDate = $("#test2").val(); //时间
 			if ($(".texts").val() != "请选择") {
@@ -338,11 +356,11 @@ text-align: center;
 				for (var i = 0; i < data.length; i++) {
 					if (sole == 0) { //有桌子有包间
 						   add(data[i],boole);
-						   $(".hall").css("width","58%");
+						   $(".hall").css("width","50%");
 						   $(".Room-left").css("width","20%");
 				           $(".Room-right").css("width","20%");
-				           $(".hous").css({"width":"99%","margin-left":"1%"});
-				           $(".houss").css({"width":"99%","margin-right":"1%"});
+				           $(".hous").css({"width":"97%","margin-left":"3%"});
+				           $(".houss").css({"width":"97%","margin-right":"3%"});
 					} if (sole == 1){  //只有桌子
 					       add(data[i]);
 						   $(".hall").css("width","100%");
@@ -367,13 +385,13 @@ text-align: center;
 			if (data.room == "0") { //普通桌
 				var html = [];
 				if (data.tableState == 0) {
-					html.push('<div  class="table" style="text-align:center;background: #BFBFBF;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
+					html.push('<div  class="table" style="text-align:center;background: #BFBFBF;width:26%;height: 0;padding-bottom: 26%;border-radius:50%;margin:5px 3.5%;overflow: hidden;display: inline-block;line-height:25px;">');
 				}
 				if (data.tableState == 1) {
-					html.push('<div class="table" onclick="href('+data.id+')" style="text-align:center;background: #7EBE34;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
+					html.push('<div class="table" onclick="href('+data.id+')" style="text-align:center;background: #7EBE34;width:26%;height: 0;padding-bottom: 26%;border-radius:50%;margin:5px 3.5%;overflow: hidden;display: inline-block;line-height:25px;">');
 				}
 				if (data.tableState == 2) {
-					html.push('<div class="table" style="text-align:center;background: #D13035;width:28%;height: 0;padding-bottom: 28%;border-radius:50%;margin:5px 5px;overflow: hidden;display: inline-block;line-height:30px;">');
+					html.push('<div class="table" style="text-align:center;background: #D13035;width:26%;height: 0;padding-bottom: 26%;border-radius:50%;margin:5px 3.5%;overflow: hidden;display: inline-block;line-height:25px;">');
 				}
 				html.push('<p><span>' + data.tableNo + '</span></p>');
 				html.push('<p><span>' + data.size + '</span></p>');
@@ -382,61 +400,61 @@ text-align: center;
 			} else { //包间
 				if (boole == 0) {
 					var html = [];
-					html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
-					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
+					html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #7EBE34;border-radius:8px;padding:2px 2px;margin:8px 3%;">');
+					/* if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
 					if (data.tableState == 1) html.push('<img style="width:90%;" onclick="href('+data.id+')"src="lib/images/luse.png">')
-					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
-					html.push('<p>' + data.tablename + '</p>');
-					html.push('<p><span>' + data.size + '人间</span></p>');
+					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">') */
+					html.push('<p style="line-height:20px;font-weight:bold;">' + data.tablename + '</p>');
+					html.push('<p style="line-height:20px;font-weight:bold;"><span>' + data.size + '人间</span></p>');
 					if (data.sofa == 1) { //沙发
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lusofa.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/sofa.png">');
-					if (data.television == 1) { //电视
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lutelevision.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/television.png">');
-					if (data.airConditioner == 1) { //空调
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/luairConditioner.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/airConditioner.png">');
-					if (data.wifi == 1) { //无线
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/luwifi.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/wifi.png">');
-					if (data.lavatory == 1) { //卫生间
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lulavatory.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lavatory.png">');
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lusofa.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:2px 2px;" src="lib/images/sofa.png">');
 					if (data.karaoke == 1) { //唱歌
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lukaraoke.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/karaoke.png">');
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lukaraoke.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/karaoke.png">');
+					
+					if (data.airConditioner == 1) { //空调
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/luairConditioner.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/airConditioner.png">');
+					if (data.wifi == 1) { //无线
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/luwifi.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/wifi.png">');
+					if (data.lavatory == 1) { //卫生间
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lulavatory.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lavatory.png">');
+					if (data.television == 1) { //电视
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lutelevision.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/television.png">');
 					html.push('</div>');
 					$('.Room-left').append(html.join(''));
 					window.boole = 1;
 				} else {
 					var html = [];
-					html.push('<div class="houss" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #E0E0E0;border-radius:8px;padding:5px 5px;margin:2px 0;">');
-					if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
+					html.push('<div class="houss" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #7EBE34;border-radius:8px;padding:2px 2px;margin:8px 3%;">');
+					/* if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
 					if (data.tableState == 1) html.push('<img style="width:90%;" onclick="href('+data.id+')" src="lib/images/luse.png">')
-					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">')
-					html.push('<p>' + data.tablename + '</p>');
-					html.push('<p><span>' + data.size + '人间</span></p>');
+					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">') */
+					html.push('<p style="line-height:20px;font-weight:bold;">' + data.tablename + '</p>');
+					html.push('<p style="line-height:20px;font-weight:bold;"><span>' + data.size + '人间</span></p>');
 					if (data.sofa == 1) { //沙发
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lusofa.png">');
-					} else {
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/sofa.png">');
-					}
-					if (data.television == 1) { //电视
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lutelevision.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/television.png">');
-					if (data.airConditioner == 1) { //空调
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/luairConditioner.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/airConditioner.png">');
-					if (data.wifi == 1) { //无线
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/luwifi.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/wifi.png">');
-					if (data.lavatory == 1) { //卫生间
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lulavatory.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lavatory.png">');
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lusofa.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/sofa.png">');
 					if (data.karaoke == 1) { //唱歌
-						html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/lukaraoke.png">');
-					} else html.push('<img style="width:40%;display: inline-block;margin:2px 2px;" src="lib/images/karaoke.png">');
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lukaraoke.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/karaoke.png">');
+					
+					if (data.airConditioner == 1) { //空调
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/luairConditioner.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/airConditioner.png">');
+					if (data.wifi == 1) { //无线
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/luwifi.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/wifi.png">');
+					if (data.lavatory == 1) { //卫生间
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lulavatory.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lavatory.png">');
+					if (data.television == 1) { //电视
+						html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/lutelevision.png">');
+					} else html.push('<img style="width:22%;display: inline-block;margin:1px 2px;" src="lib/images/television.png">');
 					html.push('</div>');
 					$('.Room-right').append(html.join(''));
 					window.boole = 0;
@@ -452,7 +470,7 @@ text-align: center;
 	  }else{
 	     repast = "DINNER";
 	  }
-	 window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId="+364+"&repast="+repast+"&tableDate="+$("#test2").val();
+	 window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId="+240+"&repast="+repast+"&tableDate="+$("#test2").val();
 	}
 
 </script>
@@ -468,15 +486,15 @@ text-align: center;
 		</div>	
 	     
 	     
-	     	<p class="nav" style="height:50px;line-height: 50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-top:2px solid #CECACB;border-bottom:2px solid #CECACB;">
+	     	<p class="nav" style="height:50px;line-height: 50px;text-align: center;width:100%;font-weight:bold;border-top:2px solid #CECACB;border-bottom:2px solid #CECACB;">
 	       <span><span style="color:#7EBE34;">绿色</span>空闲</span>
 	       <span><span style="color:#D13035;">红色</span>已预定</span>
 	       <span><span style="color:#A4A2A0;">灰色</span>不可选</span>
 	       <!-- <span><span style="color:#4D974B;">绿色</span>已选</span> -->
-	       <span><span><img style="height:25px;width:25px;" src="lib/images/luse.png"></span>包间</span>
-	       <span><span style="width:25px;height:25px;border-radius:50%;background:#7EBE34;display: inline-block;vertical-align: middle;"></span>大厅</span>
+	       <span><span style="width:18px;height:18px;border-radius:5px;border:1px solid #7EBE34;display: inline-block;vertical-align: middle;"></span>包间</span>
+	       <span><span style="width:18px;height:18px;border-radius:50%;background:#7EBE34;display: inline-block;vertical-align: middle;"></span>大厅</span>
 	      </p>
-	    <div class="nav_in" style="line-height:50px;border-bottom: 2px solid #CECACB;width:100%;height:auto;position: relative;font-size:12px;font-weight: bold;overflow: hidden;height:50px;">
+	    <div class="nav_in" style="line-height:50px;border-bottom: 2px solid #CECACB;width:100%;height:auto;position: relative;font-weight: bold;overflow: hidden;height:50px;padding:0 0 0 5px;">
 	     <p style="float:left;line-height: 50px;width:36%;">
 	      <span style="float:left;">就餐日期:</span>
 	      <input type="text" placeholder="选择日期"   style="line-height: 50px;height:50px;margin:0;padding:0;float:left;cursor: pointer;width:49%;border:none;outline:none;" class="layui-input" id="test2" onchange="myFunction()">
@@ -488,17 +506,22 @@ text-align: center;
 	       <option >请选择</option>
 	        <option value="午餐">午餐</option>
 	         <option value="晚餐">晚餐</option>
+	         
 	      </select> 
-	      
+	      <span>▼</span>
 	     </p> 
+	          <span style="float:right;">▼</span>
 	     <select class="pid" style="line-height: 50px;touch-action: none;width:auto;height:50px;float:right;padding: 0 2%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
 	       <option >一层</option>
 	       <option >二层</option>
 	       <option >三层</option>
-	      </select> 
+	       
+	      </select>
+	      
 	     <span class="pid_in" style="text-align: center;color: black;line-height: 50px;float:right;">楼层：</span>
+	
 	   </div>
-	    <div class="serve" style="height:50px;line-height: 50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-bottom:2px solid #CECACB;">
+	    <div class="serve" style="height:50px;line-height: 50px;text-align: center;width:100%;font-weight:bold;border-bottom:2px solid #CECACB;">
 	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">厕所<input class="ischange" name='key' value="lavatory" style="margin:0;vertical-align:middle;" type="checkbox"></p>
 	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">WIFI<input class="ischange" name='key' value="wifi" style="margin:0;vertical-align:middle;" type="checkbox"></p>
 	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">沙发<input class="ischange" name='key' value="sofa" style="margin:0;vertical-align:middle;" type="checkbox"></p>
@@ -515,20 +538,24 @@ text-align: center;
 	     
 <div class="main" style="width:100%;height:auto;overflow: hidden;">
 	      <!-- 左包间 -->
-	      <div class="Room-left" style="width:20%;height:auto;float:left;overflow: hidden;margin-left:1%;">
+	      <div class="Room-left" style="width:20%;height:auto;float:left;overflow: hidden;margin-left:3%;">
 	          
 	      </div>
 	      
 	        <!-- 右包间 -->
-	      <div class="Room-right" style="width:20%;height:auto;float:right;overflow: hidden;margin-right:1%;">
+	      <div class="Room-right" style="width:20%;height:auto;float:right;overflow: hidden;margin-right:3%;">
 	           
 	      </div>
 	        
 	      <!-- 大厅 -->
-	       <div class="hall" style="width:58%;height:auto;overflow: hidden;padding:0 2%;"> 
+	       <div class="hall" style="width:50%;height:auto;overflow: hidden;margin: 0 auto;"> 
 	         
 	      </div>
 </div> 
+<div style="color:#fff;background: #FF9855;width:100%;height:40px;line-height: 40px;text-align: center;position: fixed;bottom:0;">
+<p style="font-size:12px;">请选择包间或桌位</p>
+</div>
+<p style="height:40px;"></p>
 </body>
 
 

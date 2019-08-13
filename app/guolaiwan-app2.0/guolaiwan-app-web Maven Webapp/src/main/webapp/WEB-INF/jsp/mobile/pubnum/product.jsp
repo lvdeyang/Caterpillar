@@ -1782,7 +1782,9 @@ input[type="datetime-local"]:before{
 					            if(isvote=="YES"){
 					           		 addvoteorder(orderId);	
 					            }
-						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+								/* //判断是不是分销商品 是的话后台会处理返回来的Qcode  这里是凤凰山
+					            isdistribute(orderId);  */
+					            location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
 						    }
 						});
 				}else{
@@ -1791,6 +1793,21 @@ input[type="datetime-local"]:before{
                    
 			})
 		}
+		 /* //判断是不是分销的商品 是的话后台会处理返回来的Qcode  这里是凤凰山
+		function isdistribute(orderId){
+			var url=window.BASEPATH +"phoneApp/isdistribute";
+			$.post(url,{"orderId":orderId},function(data){
+				if(data=="没成功"){
+					alert("走的没成功");
+				}else if(data=="error"){
+					alert("走的error");
+				}else if(data=="success"){
+					alert("走的success");
+				}else {
+					alert("哪里都没走");
+				}
+			})
+		}  */
 		
 		function addvoteorder(orderId){
 			var url=window.BASEPATH +"admin/vote/addvoteorder";

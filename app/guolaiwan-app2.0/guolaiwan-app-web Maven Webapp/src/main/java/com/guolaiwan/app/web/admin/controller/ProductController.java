@@ -260,6 +260,8 @@ public class ProductController extends BaseController {
 		String regionFirst=request.getParameter("regionFirst");
 		String regionSecond=request.getParameter("regionSecond");
 		String regionThird=request.getParameter("regionThird");
+		//分销商品ID
+		String distributeId=request.getParameter("distributeId");
 		//张羽 新增 5/1 商品购买最低数量限制
 		String productRestrictNumber=request.getParameter("productRestrictNumber");
 		int isgroup=0;
@@ -269,6 +271,9 @@ public class ProductController extends BaseController {
 		}
 		product.setIsgroup(isgroup);
 		
+		if(distributeId!=null&&distributeId!=""){
+			product.setDistributeId(distributeId);	
+		}
 		
 		product.setProductRestrictNumber(Integer.parseInt(productRestrictNumber));
 		
@@ -488,6 +493,10 @@ public class ProductController extends BaseController {
 		long productMerchantID = Long.parseLong(request.getParameter("productMerchantID"));
 		String productMerchantName = request.getParameter("productMerchantName");
 		String merMName = request.getParameter("merMName");
+		String distributeId=request.getParameter("distributeId");
+		if (distributeId!=""&&distributeId!=null) {
+			product.setDistributeId(distributeId);
+		}
 		if (!(merMName.length() == 0 || merMName == null)) {
 			product.setMerMName(merMName);
 		}
