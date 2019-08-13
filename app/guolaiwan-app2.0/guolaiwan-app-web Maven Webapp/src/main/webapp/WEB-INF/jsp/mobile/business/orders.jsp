@@ -248,9 +248,7 @@ color:#fff;
 	   $(".homepage").fadeOut();
 	   $(".window-1").fadeOut();
 	}	
-	
-     //
-		
+	   		
 	    var prepay_id,paySign,appId,timeStamp,nonceStr,packageStr,signType,orderNo;
 	   			  	   	  	
 	//购买条件判断	
@@ -261,7 +259,8 @@ color:#fff;
 	     $.toast("请添加住宿人信息", "forbidden");
 	      return false;
 	    }
-	    var room_url = window.BASEPATH + 'business/search.do?roomId=${room.id}';
+	           
+	    var room_url = window.BASEPATH + 'business/search.do?roomId=${room.id}&inRoomDate=${inRoomDate}&outRoomDate=${outRoomDate}';
 	    $.get(room_url,null,function(msg){	    
 	       if(msg == "success"){
 	         dobuy();

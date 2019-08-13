@@ -14,17 +14,7 @@ public class CurrentRoomSatePO extends AbstractBasePO {
    private String roomState;
    //住店时间
    private String inRoomDate;
-   //房间上下架      (0为 下架  1为 上架)   
-   private String currentRoomState;
    
-   
-   
-   public String getCurrentRoomState() {
-	return currentRoomState;
-}
-public void setCurrentRoomState(String currentRoomState) {
-	this.currentRoomState = currentRoomState;
-}
 public Long getRoomId() {
 	return roomId;
 }

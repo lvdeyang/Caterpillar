@@ -258,6 +258,42 @@ margin:0 5px;
  .other::-webkit-scrollbar {
         display: none;
     }
+   	.a,.b{
+		font-size: 3em;
+		display: inline-block;
+		text-align: center;
+		/* font-family: georgia; */
+		Filter:Blur(add=1,direction=45,strength=5);	
+	  color:#228DFF;
+	  font-family:Iceland;
+	   -webkit-animation: neon2 1.5s ease-in-out infinite alternate;
+	  -moz-animation: neon2 1.5s ease-in-out infinite alternate;
+	  animation: neon2 1.5s ease-in-out infinite alternate; 
+	}
+
+@-webkit-keyframes neon2 {
+  from {
+    text-shadow: 0 0 10px #fff,
+               0 0 20px  #fff,
+               0 0 30px  #fff,
+               0 0 40px  #228DFF,
+               0 0 70px  #228DFF,
+               0 0 80px  #228DFF,
+               0 0 100px #228DFF,
+               0 0 150px #228DFF;
+  }
+  to {
+    text-shadow: 0 0 5px #fff,
+               0 0 10px #fff,
+               0 0 15px #fff,
+               0 0 20px #228DFF,
+               0 0 35px #228DFF,
+               0 0 40px #228DFF,
+               0 0 50px #228DFF,
+               0 0 75px #228DFF;
+  }
+} 
+    
 </style>
 
 </head>
@@ -348,22 +384,7 @@ $(function() {
 			})
 	getvotemodular();
 	});
-  /*返回顶部  */
-/* $(function(){
-	$(window).scroll(function(){
-		if($(window).scrollTop()>100){
-			$(".gotop").fadeIn(400);	
-		}
-		else{
-			$(".gotop").fadeOut(400);
-		}
-	});
-	$(".gotop").click(function(event){
-        event.preventDefault();
-		$('html,body').animate({'scrollTop':0},500);
-        return false;
-	});
-}); */
+
 
 //获取选项卡标签
 function getvotemodular(){
@@ -505,7 +526,31 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 
 
 </script>
+<script>
+	$(document).ready(function() {
+		var times = 60 * 100; // 60秒	
+		countTime = setInterval(function() {
+			times = --times < 0 ? 0 : times;
+			var ms = Math.floor(times / 100).toString();
 
+			if(ms.length <= 1) {
+				ms = "0" + ms;
+			}
+			var hm = Math.floor(times % 100).toString();
+			if(hm.length <= 1) {
+				hm = "0" + hm;
+			}
+			if(times == 0) {
+			/*	alert("结束");*/
+			 window.location.href="http://localhost:8080/guolaiwan-app-web/judges/getclosing"
+				clearInterval(countTime);
+			}
+			// 获取分钟、毫秒数
+			$(".a").html(ms+"秒");
+			$(".b").html(hm);
+		}, 10);
+	});
+</script>
 
 <body>
        <div class="nav">
@@ -547,7 +592,9 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 	        </div>			
 	 
 		 
-		 
+	  <div class="warp" style="position: fixed;right:3%;top:10px;width:auto;height:50px;">
+	    <p class="a">3天15时30分15秒</p><p class="b"></p>
+	   </div>
 	    
 	     <!-- 置顶 -->
      <!--  <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div> -->

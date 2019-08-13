@@ -175,7 +175,7 @@ padding:10px 5px;
 
 </script>
 <script type="text/javascript">
-	$(function() {
+  $(function() {
 	getRecomment();
 
 	var pingfen=${pingfen}+46/10;

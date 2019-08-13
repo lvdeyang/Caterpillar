@@ -139,7 +139,7 @@ html, body {
 }  
 
 .nav p{
-margin:0 1%;
+margin:0 0.5%;
 }
 </style>
 
@@ -156,21 +156,41 @@ margin:0 1%;
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script type="text/javascript">
-		layui.use('laydate', function(){ var laydate = layui.laydate; //执行一个laydate实例 
+		layui.use('laydate', function(){ 
+		var laydate = layui.laydate; 
+		//执行一个laydate实例
+		
+		    //开始日期 
 			laydate.render({ 
 			elem: '#useDate1' 
 			//指定元素uscDate 
 			,done:function(value){
+			 //当前日期
 			  var todayDate = new Date();
-			  var beginDate = new Date(value);
-			   var nowDate = new Date(formatDate(todayDate,0));
-			   if(beginDate < nowDate){
+			  var nowDate = new Date(formatDate(todayDate,0));
+			  //选择开始日期
+			  var inRoomDate = new Date(value);
+			  if($("#uscDate2").val() == ""){
+			   if(inRoomDate < nowDate){
 			     $.toast("日期不能少于当前日期", "forbidden");
 			     setTimeout(function(){ $("#useDate1").val("")},2000);
-			    
-			   }			   
+			     }			    
+			   }else{
+			     var outRoomDate = new Date($("#uscDate2").val()); 
+			     if(inRoomDate >= outRoomDate ){
+			      $.toast("开始日期不能大于结束日期", "forbidden");
+			      setTimeout(function(){
+			       $("#useDate1").val("");
+			       $("#uscDate2").val("");
+			      },2000);			     			   				  
+			     }else{  
+			      roomlist($("#tier").val(),$("#identity").val());
+			    }			   		   
 			}
-			}); 
+		  }
+		}); 
+			
+			//结束日期
 			laydate.render({ 
 			elem: '#uscDate2' 
 			//指定元素 
@@ -179,19 +199,79 @@ margin:0 1%;
 			   $.toast("请先选择入店时间", "forbidden");
 			   setTimeout(function(){ $("#uscDate2").val("")},2000);
 			   }else{
-			     var endDate = new Date(value);
-			   	 var beginDate = new Date($("#useDate1").val());	
-			     if(endDate <= beginDate){
+			     var outRoomDate = new Date(value);
+			   	 var inRoomDate = new Date($("#useDate1").val());	
+			     if(outRoomDate <= inRoomDate){
 			     $.toast("离店时间应大于入店时间", "forbidden");
 			     setTimeout(function(){ $("#uscDate2").val("")},2000);
 			     }else{				      	     
 			      roomlist($("#tier").val(),$("#identity").val());   			     
 			     }
 			   } 			   			   
-			}
+			 }
 			}); 
 		}); 
-   //设置时间转换格式
+    
+	$(function(){
+	 $("#useDate1").val(formatDate(new Date(),0));
+     $("#uscDate2").val(formatDate(new Date(),1)); 
+     //根据条件查询列表
+     roomlist($("#tier").val(),$("#identity").val());      
+	})
+		
+	function roomlist(tier,identity){	
+	 $('.main').children().remove(); 
+	 var url=window.BASEPATH + 'business/getallroom'; 
+		$.post(url,{"merchantId":${merchantId},"tier":tier,"identity":identity,"inRoomDate":$("#useDate1").val(),"outRoomDate":$("#uscDate2").val()},function(data){
+		       var room = data.room;
+		       var roomState = data.roomState;
+		       if(room.length == 0){return;}
+				var html= [];
+				for(var i =0;i<room.length;i++){
+					html.push('<div onclick="gotoroomdetails(this.id)" id="'+room[i].id+'-'+roomState[i]+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');															 
+					if(roomState[i] == "0"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/weixuan.png">');} 					
+					if(roomState[i] == "1"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/lvse.png">');} 					  
+					if(roomState[i] == "2"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/xuanzhong.png">');}  																																						
+					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:45%;margin:0 0 0 -40%;"><span>'+room[i].name+'</span>   <span>'+room[i].identity+'</span></p>');
+					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:68%;margin:0 0 0 -40%;color:#FB9361;"><span>￥'+(room[i].price/100)+'</span></p>');    
+				    html.push('</div>');   
+				}
+				
+				$('.main').append(html.join(''));
+		})
+	}
+	
+	//更改层数
+	function changetier(){	
+		var tier=$("#tier").val();		
+		var identity=$("#identity").val();
+		roomlist(tier,identity);
+	}
+	//更改房间规格
+	function changeidentity(){
+		var tier=$("#tier").val();
+		var identity=$("#identity").val();
+		roomlist(tier,identity);
+	}
+	
+	function gotoroomdetails(obj){
+	 var id =  obj.split("-");
+	 if(id[1] == "0"){
+	  $.toast("该房间已下架", "forbidden");
+	  return false;
+	 }
+	 if(id[1] == "2"){
+	  $.toast("该房间已售出", "forbidden");
+	  return false;
+	 }
+	 if($("#useDate1").val() != "" && $("#uscDate2").val() != "" && id[1] == "1"){
+	 location.href=window.BASEPATH + 'business/gotoroomdetails?roomId='+id[0]+'&inRoomDate='+$("#useDate1").val()+'&outRoomDate='+$("#uscDate2").val();
+	  }else{
+	  $.toast("请选择入店或离店时间", "forbidden");
+	  }
+	}
+	
+	//设置时间转换格式
 	  function formatDate(date,obj){
 	   var y = date.getFullYear();//获取年
 	   var m = date.getMonth()+1;//获取月
@@ -200,69 +280,8 @@ margin:0 1%;
 	   d=d<10?('0'+d):d;//判断日期是否大于10
 	   return y+'-'+m+'-'+d;//返回时间格式 
 	  }
-
-  var rtier="1",ridentity="";        
-  $(function() {
-    $("#useDate1").val(formatDate(new Date(),0)),
-  	roomlist(rtier,ridentity);
-	});
-	
-	
-	
-	function roomlist(tier,identity){
-		$('.main').children().remove();
-	 var url=window.BASEPATH + 'business/getallroom'; 
-		$.post(url,{"merchantId":${merchantId},"tier":tier,"identity":identity,"inRoomDate":$("#useDate1").val()},function(data){
-				var html= [];
-				for(var i =0;i<data.length;i++){
-					html.push('<div onclick="gotoroomdetails(this.id)" id="'+data[i].id+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');
-					if(data[i].state=="1"){
-						html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/weixuan.png">');
-					}else{
-						html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/xuanzhong.png">');
-					}
-					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:45%;margin:0 0 0 -40%;"><span>'+data[i].name+'</span>   <span>'+data[i].identity+'</span></p>');
-					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:68%;margin:0 0 0 -40%;color:#FB9361;"><span>￥'+(data[i].price/100)+'</span></p>');    
-				    html.push('</div>');   
-				}
-				$('.main').append(html.join(''));
-				rtier=tier;
-				ridentity=identity;
-		})
-	}
-	
-	//更改层数
-	function changetier(){
-		var tier=$("#tier").val();
-		var identity=$("#identity").val();
-		if($("#identity").val()=="全部"){
-			identity="";
-		}
-		roomlist(tier,identity);
-	}
-	//更改房间规格
-	function changeidentity(){
-		var tier=$("#tier").val();
-		var identity=$("#identity").val();
-		if($("#identity").val()=="全部"){
-			identity="";
-		}
-		roomlist(tier,identity);
-	}
-	
-	function gotoroomdetails(id){
-	if($("#useDate1").val() != "" && $("#uscDate2").val() != ""){
-	  location.href=window.BASEPATH + 'business/gotoroomdetails?roomId='+id+'&inRoomDate='+$("#useDate1").val()+'&outRoomDate='+$("#uscDate2").val();
-	  }else{
-	  $.toast("请选择入店或离店时间", "forbidden");
-	  }
-	}
+	 
 </script>
-
-
-
-
-
 <body>
 			<!-- 主页 -->
 		<div class="header">
@@ -273,8 +292,9 @@ margin:0 1%;
 			</div>
 		</div>
        
-         <div class="nav" style="background:#fff;height:50px;line-height:50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-top:2px solid #CECACB;border-bottom:2px solid #CECACB;">
-	       <p style="display: inline-block;"><span style="color:#A4A2A0;">灰色</span>空闲</p>
+         <div class="nav" style="background:#fff;height:50px;width:auto;line-height:50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-top:2px solid #CECACB;border-bottom:2px solid #CECACB;">
+           <p style="display: inline-block;"><span style="color:green;">绿色</span>空闲</p>
+	       <p style="display: inline-block;"><span style="color:#A4A2A0;">灰色</span>下架</p>
 	       <p style="display: inline-block;"><span style="color:#D13035;">红色</span>已预定</p>
 	       <span>楼层：</span>
 	       <select class="tier" id="tier" onchange="changetier()"  style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
@@ -289,7 +309,7 @@ margin:0 1%;
 	       </select> 
 	       <span>房型：</span>
 	       <select class="identity" id="identity" onchange="changeidentity()" style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
-		       <!-- <option value="全部">全部</option> -->
+		        <option value="全部">全部</option>
 		       <option value="标准间">标准间</option>
 		       <option value="豪华间">豪华间</option>
 		       <option value="三人间">三人间</option>

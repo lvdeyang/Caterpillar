@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,7 +57,9 @@ import com.guolaiwan.bussiness.admin.po.TablePO;
 import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
+import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
 import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
+import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 
 import pub.caterpillar.weixin.constants.WXContants;
@@ -1157,6 +1160,10 @@ public class WxPayReportController extends WebBaseControll {
 	
 	@Autowired
 	private CurrentRoomSateDao currentRoomDao;
+	@Autowired
+	private AddTheRoomDAO addTheRoom;
+	@Autowired
+	private MessageMiddleClientDao mesclient;
 	/**
 	 * 新版住房支付
 	 * 
@@ -1238,8 +1245,31 @@ public class WxPayReportController extends WebBaseControll {
 						//支付状态、减库存
 						order.setOrderState(OrderStateType.PAYSUCCESS); 
  
-						CurrentRoomSatePO cSatePO = currentRoomDao.findByRoomId(order.getRoomId());
-						if(cSatePO == null){
+						AddTheRoomPO aRoomPO = addTheRoom.get(order.getRoomId());
+						
+						//时间格式转换
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						
+						//修改房间状态
+						String[] cur_fields= {"roomId","inRoomDate","outRoomDate"};
+						Object[] cur_values = {order.getRoomId(),sdf.format(order.getOrderBookDate()),sdf.format(order.getEndBookDate())};
+					    List<CurrentRoomSatePO> cPos = currentRoomDao.findByFields(cur_fields, cur_values);
+						
+					    for(CurrentRoomSatePO po : cPos){
+					    	po.setRoomState("1");
+					    	currentRoomDao.saveOrUpdate(po);
+					    }
+						//修改房间对应住户的支付状态
+					    String[] mes_fields = {"roomId","startDate","endDate"};
+					    Object[] mes_values = {order.getRoomId(),sdf.format(order.getOrderBookDate()),sdf.format(order.getEndBookDate())};
+					    List<MessageMiddleClientPO> mClientPOs = mesclient.findByFields(mes_fields, mes_values);
+					    for(MessageMiddleClientPO po : mClientPOs ){
+					    	po.setOrderId(Long.parseLong(orderId));
+					    	po.setPayState("1");
+					    	mesclient.saveOrUpdate(po);					    	
+					    }
+						
+						if(aRoomPO == null){
 							MerchantPO merchantPO=conn_merchant.get(order.getShopId());
 							if(merchantPO.getShopyd()==1){
 								order.setOrderState(OrderStateType.PAYSUCCESS); 
