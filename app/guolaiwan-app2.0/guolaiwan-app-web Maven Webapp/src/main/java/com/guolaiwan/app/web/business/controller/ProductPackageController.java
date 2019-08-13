@@ -581,7 +581,7 @@ public class ProductPackageController extends BaseController {
 			}else{
 				//判断是否存在最低限购数量
 				if(pro_po.getProductRestrictNumber() != 0){
-					if(ticketnumber> pro_po.getProductRestrictNumber()){
+					if(ticketnumber>= pro_po.getProductRestrictNumber()){
 						map.put("state", 3);//购买成功
 					}else{						
 						map.put("state", 2);//买的数量低于最低限购数量						
@@ -615,7 +615,7 @@ public class ProductPackageController extends BaseController {
 	    			    long productId	= activityRelPO.getProductId();	    			    
 	    			    ProductPO productPO = productDao.get(productId);
 	    			    if(productPO.getProductRestrictNumber() != 0){
-	    					if(ticketnumber> productPO.getProductRestrictNumber()){
+	    					if(ticketnumber>= productPO.getProductRestrictNumber()){
 	    						map.put("state", 4);//购买成功	    						
 	    					}else{
 	    						map.put("state", 3);//买的数量少于最低限购数量						

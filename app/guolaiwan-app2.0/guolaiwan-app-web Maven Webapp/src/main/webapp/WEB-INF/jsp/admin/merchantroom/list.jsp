@@ -270,10 +270,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				
 				//房间预定时间显示
 				if(id[1] == 1){
+				  $("#bookname").val("");
+			      $("#bookphone").val("");	
+			      $("#bookcard").val("");
 				  $("#nowCacheRoom").attr("disabled",false);
 				  $("#deleteCacheRoom").attr("disabled","disabled");				  				  
 				  $("#date1").val($("#test1").val());
-				  $("#date2").val($("#test2").val());
+				  $("#date2").val($("#test2").val());				  
 				}	
 										
 				//回显住房预定信息				
