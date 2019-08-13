@@ -346,9 +346,10 @@ layui.use('laydate', function(){
 	function  noliveRoom(state,id){
 	  var noLive_url = window.BASEPATH + 'admin/room/deleteInRoomMessage';
 	  var date = {"roomId":id,"inRoomDate":$("#useDate1").val(),"outRoomDate":$("#uscDate2").val()};
-	  $.psot(noLive_url,date,function(msg){
+	  $.post(noLive_url,date,function(msg){
 	     if(msg == "success"){
-	     $.toast("退房成功", "forbidden");	     
+	     $.toast("退房成功", "forbidden");
+	     roomlist($("#tier").val(),$("#identity").val());	     
 	     }else{
 	      $.toast("退房失败", "forbidden");
 	     }	      
