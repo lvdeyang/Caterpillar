@@ -258,41 +258,30 @@ margin:0 5px;
  .other::-webkit-scrollbar {
         display: none;
     }
-   	.a,.b{
-		font-size: 3em;
-		display: inline-block;
-		text-align: center;
-		/* font-family: georgia; */
-		Filter:Blur(add=1,direction=45,strength=5);	
-	  color:#228DFF;
-	  font-family:Iceland;
-	   -webkit-animation: neon2 1.5s ease-in-out infinite alternate;
-	  -moz-animation: neon2 1.5s ease-in-out infinite alternate;
-	  animation: neon2 1.5s ease-in-out infinite alternate; 
+  #remainTime{
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size:1.2em;
+  height:2em;
+  color:#C3181E;
+  line-height: 2em;
+  position:absolute;
+  right:2%;
+  top:20px;
+  }   
+ #remainTime span{
+	  display: inline-block;
+	  background: #C3181E;
+	  color:#fff;
+	  width:2em;
+	  height:2em;
+	  border-radius: 8px;
+	  text-align: center;
+	  margin: 0 5px;
+	  
 	}
 
-@-webkit-keyframes neon2 {
-  from {
-    text-shadow: 0 0 10px #fff,
-               0 0 20px  #fff,
-               0 0 30px  #fff,
-               0 0 40px  #228DFF,
-               0 0 70px  #228DFF,
-               0 0 80px  #228DFF,
-               0 0 100px #228DFF,
-               0 0 150px #228DFF;
-  }
-  to {
-    text-shadow: 0 0 5px #fff,
-               0 0 10px #fff,
-               0 0 15px #fff,
-               0 0 20px #228DFF,
-               0 0 35px #228DFF,
-               0 0 40px #228DFF,
-               0 0 50px #228DFF,
-               0 0 75px #228DFF;
-  }
-} 
+
     
 </style>
 
@@ -321,7 +310,9 @@ var flag=0;
  
 function caolilailai(){
   var scrollHeight = $(document).height();
-   $('.other').animate({'scrollTop':scrollHeight},2000); 
+    setTimeout(function(){
+   $('.other').animate({'scrollTop':scrollHeight},5000); 
+   },4000);
    if(flag!=0)home();flag=1;
  } 
 function home(){
@@ -352,12 +343,12 @@ $	(document).on('click', '.zong', function() {
          nScrollHight = $(this)[0].scrollHeight;
          nScrollTop = $(this)[0].scrollTop;
          if(nScrollTop + nDivHight >= nScrollHight){//底部
-         $('.other').animate({'scrollTop':0},2000);
+         $('.other').animate({'scrollTop':0},5000);
          }
          if ($('.other').scrollTop()<=0){ //顶部
              setTimeout(function(){
  		      caolilailai();
- 		    },2000);
+ 		    },4000);
          } 
            
          });
@@ -428,7 +419,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html.push('</div>');   
 			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:4em;margin-left:-7.8em;" src="lib/images/guanjun.png">');   
 			html.push('<div style="width:10em;height:auto;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
-			html.push('<p style="border-radius:10px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1em;">'+data[i].productname+'</p>');   
+			html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:10em;border-radius:10px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1em;">'+data[i].productname+'</p>');   
 			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
@@ -442,7 +433,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html.push('</div>');   
 			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:5em;margin-left:-7.8em;" src="lib/images/yajun.png">');   
 			html.push('<div style="width:10em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
-			html.push('<p style="border-radius:10px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1em;display: inline-block;">'+data[i].productname+'</p>');   
+			html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:10em;border-radius:10px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1em;display: inline-block;">'+data[i].productname+'</p>');   
 			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
@@ -456,7 +447,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html.push('</div>');   
 			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:5em;margin-left:-7.8em;" src="lib/images/jijun.png">');   
 			html.push('<div style="width:10em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
-			html.push('<p style="border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1em;">'+data[i].productname+'</p>');   
+			html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:10em;border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1em;">'+data[i].productname+'</p>');   
 			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
 			html.push('</div>');   
 			html.push('</div>');   
@@ -469,7 +460,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html1.push('<p style="font-size:1.5em;">'+(i+1)+'</p>');
 			html1.push('</div>');
 		  	html1.push('<img style="width:4em;border-radius:50%;height:4em;align-items: center;margin:0 1em 1em 1em;" src="'+data[i].productpic+'">');
-		   	html1.push('<p style="color:black;display: inline-block;font-size:1.5em;margin:0 2%;">'+data[i].productname+'</p>');
+		   	html1.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:60%;color:black;display: inline-block;font-size:1.5em;margin:0 2%;">'+data[i].productname+'</p>');
 		  	html1.push('<p style="color:#fff;font-size:1.5em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+productvotes+'票</p>');
 	      	html1.push('</div>');
 	      	if(i+1==data.length)continue;
@@ -478,7 +469,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html1.push('<p style="font-size:1.5em;">'+(i+2)+'</p>');
 		 	html1.push('</div>');
 		  	html1.push('<img style="width:4em;border-radius:50%;height:4em;align-items: center;margin:0 1em 1em 1em;" src="'+data[i+1].productpic+'">');
-	  		html1.push('<p style="color:black;display: inline-block;font-size:1.5em;margin:0 2%;">'+data[i+1].productname+'</p>');
+	  		html1.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:60%;color:black;display: inline-block;font-size:1.5em;margin:0 2%;">'+data[i+1].productname+'</p>');
 		  	html1.push('<p style="color:#fff;font-size:1.5em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+parseInt(data[i+1].allcount)+'票</p>');
 	     	html1.push('</div>');
 			html1.push('</div>');
@@ -526,40 +517,50 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 
 
 </script>
-<script>
-	$(document).ready(function() {
-		var times = 60 * 100; // 60秒	
-		countTime = setInterval(function() {
-			times = --times < 0 ? 0 : times;
-			var ms = Math.floor(times / 100).toString();
+<script type="text/javascript"> 
+var SysSecond;
+var InterValObj;
+  
+$(document).ready(function() {
+  SysSecond = parseInt($("#remainSeconds").html()); //这里获取倒计时的起始时间
+  InterValObj = window.setInterval(SetRemainTime, 1000); //间隔函数，1秒执行
+});
+ 
+//将时间减去1秒，计算天、时、分、秒
+function SetRemainTime() {
+  if (SysSecond > 0) {
+   SysSecond = SysSecond - 1;
+   var second = Math.floor(SysSecond % 60);            // 计算秒     
+   var minite = Math.floor((SysSecond / 60) % 60);      //计算分 
+   var hour = Math.floor((SysSecond / 3600) % 24);      //计算小时
+   var day = Math.floor((SysSecond / 3600) / 24);       //计算天 
+ 
+   var hourDiv = "<span id='hourSpan'>"+ hour +"</span>";
+   var dayDiv = "<span id='daySpan'>"+ day +"</span>";
+   var miniteDiv = "<span id='miniteSpan'>"+ minite +"</span>";
+   var secondDiv = "<span id='secondSpan'>"+ second +"</span>";
+ 
+    $("#remainTime").html( "距结束"+dayDiv + "天" + hourDiv +"小时"+ miniteDiv + "分" + secondDiv + "秒");
 
-			if(ms.length <= 1) {
-				ms = "0" + ms;
-			}
-			var hm = Math.floor(times % 100).toString();
-			if(hm.length <= 1) {
-				hm = "0" + hm;
-			}
-			if(times == 0) {
-			/*	alert("结束");*/
-			 window.location.href="http://localhost:8080/guolaiwan-app-web/judges/getclosing"
-				clearInterval(countTime);
-			}
-			// 获取分钟、毫秒数
-			$(".a").html(ms+"秒");
-			$(".b").html(hm);
-		}, 10);
-	});
+  if(second == 10 && minite == 0 && hour == 0 && day == 0){//剩余时间小于或等于0的时候，就停止间隔函数
+   window.clearInterval(InterValObj);
+   //这里可以添加倒计时时间为0后需要执行的事件
+   	window.location.href="http://www.guolaiwan.net/guolaiwan/judges/getclosing"
+   
+  }
+ }
+}
 </script>
 
 <body>
        <div class="nav">
-        <img style="width:10%;position:absolute;left:3%;top:10px; " src="lib/images/zhengfu.png">
+        <img style="width:10%;position:absolute;left:2%;top:10px; " src="lib/images/zhengfu.png">
         <p style="height:2em;line-height: 2em;width:100%;font-size:2.5em;text-align: center;color:#C3181E;">2019中国·遵化</p>
          <p class="logo-in" style="vertical-align: inherit;text-align: center;">美食节大赛评选活动</p>
          <p style="text-transform:uppercase;text-align: center;font-size:1.5em;color:#C3181E;">food festival competition selection activities</p>
        </div>
-		   
+       
+		 
 		<div class="zong" style="width:100%;height:auto;margin:0 auto;overflow: hidden;position: relative;padding:0 5%;">  
 			  <!-- 选项卡 -->    
 			  <div class="tab" >
@@ -592,9 +593,10 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 	        </div>			
 	 
 		 
-	  <div class="warp" style="position: fixed;right:3%;top:10px;width:auto;height:50px;">
-	    <p class="a">3天15时30分15秒</p><p class="b"></p>
-	   </div>
+	    <!--倒计时  -->
+		<div id="remainSeconds" style="display:none">180</div> <!-- 秒 -->
+		<div id="remainTime" style="">	
+		</div> 
 	    
 	     <!-- 置顶 -->
      <!--  <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div> -->

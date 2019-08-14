@@ -389,7 +389,7 @@ $("#b"+base).css("color","black");
     	}
     	var name=$('.search').val();
     	var url = window.BASEPATH + 'judges/getproductbyname';
-    	$.post(url,{"userId":${userId},"name":name},function(data){
+    	$.post(url,{"userId":${userId},"name":name,"optionId":"${optionId}"},function(data){
     				$("#b"+base).css("color","black");
     				list(data);
     	})

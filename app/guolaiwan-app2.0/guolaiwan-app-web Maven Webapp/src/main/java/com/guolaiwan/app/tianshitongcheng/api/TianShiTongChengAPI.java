@@ -1,4 +1,4 @@
-﻿package com.guolaiwan.app.interfac.util;
+﻿package com.guolaiwan.app.tianshitongcheng.api;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -12,7 +12,7 @@ import pub.caterpillar.communication.http.client.HttpClient;
 
 
 /**
- * 凤凰山的接口
+ * 天时同城的接口
  * @author Administrator
  *
  */
@@ -43,7 +43,17 @@ public class TianShiTongChengAPI {
 	 * 测试下单时不会真正发送短信 后台登录地址：http://demo.demo1.sjdzp.com 登录账号 demo_seller 密码
 	 * 123456
 	 */
-	public static String sendPost(String orderId,String productId,String buynum,String buyUserName,String mobile,String startDate){
+	/**
+	 * 凤凰山下单接口
+	 * @param orderId 合作商订单号	
+	 * @param productId 购买商品的天时Id	
+	 * @param buynum	购买数量	
+	 * @param buyUserName 购买人
+	 * @param mobile	购买人手机号
+	 * @param startDate 	预定时间
+	 * @return
+	 */
+	public static String sendFHSPost(String orderId,String productId,String buynum,String buyUserName,String mobile,String startDate){
 			Map<String, Object> paramsMap = new TreeMap<String, Object>(new Comparator<String>() {
 		
 				@Override
@@ -82,9 +92,9 @@ public class TianShiTongChengAPI {
 			 * http://hhs.sjdzp.com/Api/Seller/api.json?g_cid=58010
 			 * 1796133
 			 * 51b277d6c5a6f2b997a98939a62dd1d6
+			 * 409712 409812 测试生成的订单 待退款  
 			 * */
-
-		
+			
 			paramsMap.put("_sig", Md5Utils.MD5("51b277d6c5a6f2b997a98939a62dd1d6&" + signStr + "51b277d6c5a6f2b997a98939a62dd1d6").toUpperCase());
 			JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
 			System.out.println(json.toJSONString());
@@ -99,4 +109,44 @@ public class TianShiTongChengAPI {
 			}
 			return "ERROR";
 	}
+	
+	
+	public static String huidiao(String orderId,String productId,String buynum,String buyUserName,String mobile,String startDate){
+		Map<String, Object> paramsMap = new TreeMap<String, Object>(new Comparator<String>() {
+	
+			@Override
+			public int compare(String o1, String o2) {
+				// TODO Auto-generated method stub
+				return o1.compareTo(o2);
+			}
+		});
+		
+		paramsMap.put("method", "item_orders");
+		paramsMap.put("_pid", "1796133");
+		paramsMap.put("is_pay", "1");
+		paramsMap.put("orders_id", orderId+12);
+		paramsMap.put("item_id", productId);
+		paramsMap.put("size", buynum);
+		paramsMap.put("name", buyUserName);
+		paramsMap.put("mobile", mobile);
+		paramsMap.put("start_date", startDate);
+		
+		String signStr = "";
+		for (String key : paramsMap.keySet()) {
+			signStr += key + "=" + paramsMap.get(key) + "&";
+		}
+		
+		paramsMap.put("_sig", Md5Utils.MD5("51b277d6c5a6f2b997a98939a62dd1d6&" + signStr + "51b277d6c5a6f2b997a98939a62dd1d6").toUpperCase());
+		JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
+		System.out.println(json.toJSONString());
+	
+		try {
+			String result = HttpClient.postHttps("http://localhost:8080/guolaiwan-app-web/phoneApp/huidiao", json);
+			return result;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "ERROR";
+}
 }
