@@ -592,7 +592,12 @@ html, body {
 	   });
 	   $(document).on('click','.merchant',function(){
 	      var ids=this.id.split('-');
-	      location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+ids[1];
+	      if(ids[1]==387){
+	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	      }else{
+	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+ids[1];
+	      }
+	      
 	   });
 	
 	});
