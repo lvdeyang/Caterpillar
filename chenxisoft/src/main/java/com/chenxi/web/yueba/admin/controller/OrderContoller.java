@@ -55,7 +55,7 @@ public class OrderContoller {
 		strMap.put("count", conn_order.countAll());
 		List<OrderPo> orderPos=conn_order.findAll(page, limit);
 		for (OrderPo orderPo : orderPos) {
-			
+			orderPo.setFromDateStr(DateUtil.format(orderPo.getFromDate(), "yyyy年MM月dd日"));
 		}
 		strMap.put("data", orderPos);
 		strMap.put("code", 0);
