@@ -59,7 +59,7 @@ public class ContextListener extends InitLoader {
 		initOrderThread();
 
 		try {
-			initGateSocket();
+			//initGateSocket();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -87,6 +87,14 @@ public class ContextListener extends InitLoader {
 			@Override
 			public void run() {
 
+				List<OrderInfoPO> deliOrderInfoPOs=conn_OrderInfo.findByField("orderState", OrderStateType.DELIVER);
+				for (OrderInfoPO orderInfoPO : deliOrderInfoPOs) {
+					orderInfoPO.setOrderState(OrderStateType.TESTED);
+					conn_OrderInfo.update(orderInfoPO);
+				}
+				
+				
+				
 				SimpleDateFormat sdy = new SimpleDateFormat("yyyy");
 				SimpleDateFormat sdm = new SimpleDateFormat("MM");
 				SimpleDateFormat sdd = new SimpleDateFormat("dd");

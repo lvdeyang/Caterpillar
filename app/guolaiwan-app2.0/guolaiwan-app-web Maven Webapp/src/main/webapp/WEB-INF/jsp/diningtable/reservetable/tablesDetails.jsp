@@ -246,9 +246,10 @@ text-align: center;
 		var packageStr;  
 		var signType; 
 		var orderNo;	
-		
+		var orderId;
 		function payPublic(orderId,meony){
 		    meony =  meony*100;	
+		    orderId = orderId;
 		$.get(window.BASEPATH +"reservetable/prev/table/"+orderId+"/"+meony, null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
@@ -274,7 +275,7 @@ text-align: center;
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 						alert("交易成功");  
-						window.location.href = "reservetable/tables/home";
+						window.location.href = "reservetable/diningtable/tableSuccess?orderId="+orderId;
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
 		             alert("交易取消");  

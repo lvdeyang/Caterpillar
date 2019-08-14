@@ -46,7 +46,7 @@ public class MessageMiddleClientPO extends AbstractBasePO{
 		public void setEndDate(String endDate) {
 			this.endDate = endDate;
 		}
-		//支付状态 0代表未支付，1代表已支付，2代表以验单
+		//支付状态 0代表未支付，1代表已支付，2取消支付
 		private String payState;
 		
 		public Long getMessageId() {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -152,6 +153,10 @@ public class BusinessController extends WebBaseControll {
 	private AddTheRoomDAO conn_roomdao;
 	@Autowired
 	private CurrentRoomSateDao conn_roomSateDao; 
+	
+	 @Autowired
+	 private MessageMiddleClientDao conn_mesMidleClien;
+	 
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
 	public ModelAndView nsAndView(HttpServletRequest request, long merchantId, String comCode) throws Exception {
@@ -229,14 +234,6 @@ public class BusinessController extends WebBaseControll {
 		couple_back.save(coup);
 		return success("");
 	}
-
-	
-	
-	
-	
-	
-	
-	
 	
 	// 封装南山首页需要活动版块的数据
 	@ResponseBody
@@ -1097,31 +1094,77 @@ public class BusinessController extends WebBaseControll {
 	//获取所有的房间 按照层数 商家
 	@ResponseBody
 	@RequestMapping(value = "/getallroom")
-	public List<AddTheRoomPO> getAllRoom(HttpServletRequest request) throws Exception {
-		String tier=request.getParameter("tier");
-		String merchantId=request.getParameter("merchantId");
-		String identity=request.getParameter("identity");		
-		List<AddTheRoomPO> rooms = conn_roomdao.findByMidTier(merchantId, tier,identity);
-		//根据时间筛选房间
-		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+	public Map<String,Object> getAllRoom(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String,Object>();
+		//存储房间状态
+		List<String> roomState = new ArrayList<String>();
+		//获取查询信息
+		String tier = request.getParameter("tier");
+		String merchantId = request.getParameter("merchantId");
+		//检索房间的时间
 		String inRoomDate = request.getParameter("inRoomDate");
-	    long beginRoom = sdf.parse(inRoomDate).getTime();
-		/*for(int i =0;i<rooms.size();i++){
-		   long roomId = rooms.get(i).getId();			
-		   List<CurrentRoomSatePO> roomState =  conn_roomSateDao.findByField("roomId", roomId);	
-		   if("0".equals(roomState.get(0).getRoomState()) && "1".equals(roomState.get(0).getCurrentRoomState())){
-		  //时间为空
-		   if(null != roomState.get(0).getOutRoomDate()){
-		   long endDate = sdf.parse(roomState.get(0).getOutRoomDate()).getTime();
-		   if(endDate > beginRoom){
-		     	rooms.remove(i);  			   
-		    }   		   		   
-		  }else{
-			  continue;
-		  }
-		}
-		}*/
-	     	return rooms;
+		String outRoomDate = request.getParameter("outRoomDate");
+		//时间格式转换
+		SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd");
+		long sdf_inRoomDate = sdf.parse(inRoomDate).getTime();
+		long sdf_outRoomDate = sdf.parse(outRoomDate).getTime();
+        //检索房间类型选项		
+		String identity = request.getParameter("identity");		
+		//判断房间类型  全部 还是指定类型
+		List<AddTheRoomPO> aRoomPOs = new ArrayList<AddTheRoomPO>();
+		if("全部".equals(identity)){
+			String[] room_fields = {"merchantId","tier"};
+			Object[] room_values = {merchantId,tier};
+			 aRoomPOs = conn_roomdao.findByFields(room_fields, room_values);			
+		}else{			
+			 aRoomPOs = conn_roomdao.findByMidTier(merchantId,tier,identity);			
+		}	
+		//判断房间的状态信息
+	    String state = null;
+	    boolean oneReal = false;
+	  	boolean twoReal = false;
+		if(aRoomPOs.size()>0){
+			for(AddTheRoomPO po : aRoomPOs){
+		     if( 0 == po.getState()){
+		    	 state = "0";//下架状态
+		     }else{
+		      //查询房间状态表	 
+		      List<CurrentRoomSatePO> cRoomSatePOs	= conn_roomSateDao.findByRoomId(po.getId());
+		  	for(CurrentRoomSatePO cRoomSatePO : cRoomSatePOs){
+				//上架状态 				
+			    try{			   	
+			    //获取日期			    
+			    long beginTime = sdf.parse(cRoomSatePO.getInRoomDate()).getTime();
+			    long endTime = sdf.parse(cRoomSatePO.getOutRoomDate()).getTime();
+			    	if(beginTime>=sdf_inRoomDate && beginTime<sdf_outRoomDate){	
+			    		if("1".equals(cRoomSatePO.getRoomState())){			    			
+			    			 oneReal = true;
+			    		}		    						    						    			
+			    	}else if(endTime>sdf_inRoomDate && endTime <sdf_outRoomDate){					    	  
+			    		if("1".equals(cRoomSatePO.getRoomState())){			    			
+			    			twoReal = true;
+			    		}							    	
+					}					    					    					    	     			    
+			     }
+			    //房间时间为空
+			    catch(Exception e){
+			    	
+			    }			 			  
+			 }
+			   //根据判断结果返回状态	
+			   if(oneReal || twoReal){
+				   state = "2";//已售状态
+			   }else{
+				   state = "1";//空闲状态  
+			   }	
+		     }	
+		     roomState.add(state);
+		  }						
+		}		
+        map.put("room", aRoomPOs);
+        map.put("roomState", roomState);
+	    
+	    return map;
 	}
 	
 	
@@ -1150,21 +1193,59 @@ public class BusinessController extends WebBaseControll {
 	/**
 	 * 
 	 * 检索房间购买前的状态
+	 * @throws ParseException 
 	 * 
 	 * */
 	@ResponseBody
 	@RequestMapping("/search.do")
-	public String  searchingRoomState(Long roomId){
-		CurrentRoomSatePO currentRoomSatePO = conn_roomSateDao.findByRoomId(roomId);
-		if("1".equals(currentRoomSatePO.getRoomState()) &&  "0".equals(currentRoomSatePO.getCurrentRoomState())){
-			
-			return "flase";
-		}		
-		return "success";
+	public String  searchingRoomState(HttpServletRequest request,Long roomId) throws ParseException{
+		//检索房间的时间
+		String inRoomDate = request.getParameter("inRoomDate");
+		String outRoomDate = request.getParameter("outRoomDate");
+	   //时间格式转换
+		SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd");
+		long sdf_inRoomDate = sdf.parse(inRoomDate).getTime();
+		long sdf_outRoomDate = sdf.parse(outRoomDate).getTime();
+		//判断房间是否下架
+		 boolean oneReal = false;
+		 boolean twoReal = false;
+		AddTheRoomPO aRoomPO = conn_roomdao.get(roomId);
+		if(0 == aRoomPO.getState()){			
+			return "false";			
+		}else{
+			  //查询房间状态表	 
+		      List<CurrentRoomSatePO> cRoomSatePOs	= conn_roomSateDao.findByRoomId(aRoomPO.getId());
+		  	for(CurrentRoomSatePO cRoomSatePO : cRoomSatePOs){
+				//上架状态 				
+			    try{			   	
+			    //获取日期			    
+			    long beginTime = sdf.parse(cRoomSatePO.getInRoomDate()).getTime();
+			    long endTime = sdf.parse(cRoomSatePO.getOutRoomDate()).getTime();
+			    	if(beginTime>=sdf_inRoomDate && beginTime<sdf_outRoomDate){	
+			    		if("1".equals(cRoomSatePO.getRoomState())){			    			
+			    			 oneReal = true;
+			    		}		    						    						    			
+			    	}else if(endTime>sdf_inRoomDate && endTime <sdf_outRoomDate){					    	  
+			    		if("1".equals(cRoomSatePO.getRoomState())){			    			
+			    			twoReal = true;
+			    		}							    	
+					}					    					    					    	     			    
+			     }
+			    //房间时间为空
+			    catch(Exception e){
+			    	
+			    }			 			  
+			 }
+			   //根据判断结果返回状态	
+			   if(oneReal || twoReal){
+				   return "false";
+			   }else{
+				   return "success";
+			   }			
+		}
 	}
 	
-	   @Autowired
-	   private MessageMiddleClientDao conn_mesMidleClien;
+	  
 	
 	/**
 	 * 住宿信息保存
@@ -1196,11 +1277,11 @@ public class BusinessController extends WebBaseControll {
 			 mesMidClien.setOrderId(Long.parseLong(oderId));
 			 mesMidClien.setUserId(Long.parseLong(userId));
 			 mesMidClien.setRoomId(Long.parseLong(roomId));
+			 mesMidClien.setPayState("0");
 			 mesMidClien.setStartDate(startDate);
 			 mesMidClien.setEndDate(endDate);
 			 conn_mesMidleClien.save(mesMidClien);
-			 }	
-		
+			 }			
 		return "success";												
 	}
 	
@@ -1230,6 +1311,7 @@ public class BusinessController extends WebBaseControll {
 		Long userId = Long.parseLong(pageObject.getString("userId"));
 		String paytype = pageObject.getString("paytype");				
 		String numberDays = pageObject.getString("numberDays");
+				
 		
 		OrderInfoPO order = new OrderInfoPO();	
 		//支付的金额
@@ -1250,12 +1332,14 @@ public class BusinessController extends WebBaseControll {
 		
 		String orderStartDate = pageObject.getString("bookstartDate");
 		String orderEndDate = pageObject.getString("bookendDate");
+				
 		if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
 			order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.defaultDatePattern));
 		}
 		if (orderEndDate != null && orderEndDate != "" && orderEndDate.length() != 0) {
 			order.setEndBookDate(DateUtil.parse(orderEndDate, DateUtil.defaultDatePattern));
 		}
+	
 		// 会员ID
 		order.setUserId(userId);
 		if (user.getUserPhone() != null) {
@@ -1331,7 +1415,7 @@ public class BusinessController extends WebBaseControll {
 		order.setOrderType(OrderType.MERCHANT);
 				
 		orderInfoDao.saveOrUpdate(order);
-	
+								
 		long PayMoney = order.getPayMoney();
 		String tradeNum=order.getOrderNO(); 
 		String orderIdStr = String.valueOf(order.getId());

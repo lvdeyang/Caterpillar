@@ -18,11 +18,11 @@ import pub.caterpillar.orm.hql.QueryHql;
 @Repository("com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao")
 public class CurrentRoomSateDao extends AbstractBaseDao<CurrentRoomSatePO> {
 	
-	public CurrentRoomSatePO findByRoomId(Long roomId) {
+	public List<CurrentRoomSatePO> findByRoomId(Long roomId) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("roomId", Condition.eq, roomId);
 		List<CurrentRoomSatePO> currentRoomSatePOs = findByHql(hql);
-		return currentRoomSatePOs.get(0);
+		return currentRoomSatePOs;
 	}
 	
   

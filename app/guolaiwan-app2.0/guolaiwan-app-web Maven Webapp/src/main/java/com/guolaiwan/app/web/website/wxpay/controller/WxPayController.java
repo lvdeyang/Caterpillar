@@ -250,7 +250,7 @@ public class WxPayController extends BaseController {
 	@RequestMapping(value = "/refund", method = RequestMethod.GET)
 	public Object refund(HttpServletRequest request, HttpServletResponse response, String orderId) throws Exception {
 		
-		if(conn_orderInfo.get(Long.parseLong(orderId)).isIswallet()==false){
+		if(orderId.indexOf("bundle") != -1||conn_orderInfo.get(Long.parseLong(orderId)).isIswallet()==false){
 				long amount = 0;
 				Map<String, Object> result = new HashMap<String, Object>();
 				if (orderId.indexOf("bundle") != -1) {
