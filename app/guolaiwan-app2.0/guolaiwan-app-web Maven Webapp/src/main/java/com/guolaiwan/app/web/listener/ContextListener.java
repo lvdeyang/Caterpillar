@@ -42,6 +42,7 @@ import com.guolaiwan.bussiness.gateway.GateWayTcpManager;
 
 import pub.caterpillar.commons.context.SpringContext;
 import pub.caterpillar.commons.util.binary.Sha1Util;
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.init.InitLoader;
 import pub.caterpillar.weixin.constants.WXContants;
 
@@ -57,7 +58,7 @@ public class ContextListener extends InitLoader {
 
 		
 		initOrderThread();
-
+		initSendProductCheck();
 		try {
 			initGateSocket();
 		} catch (Exception e) {
@@ -186,6 +187,29 @@ public class ContextListener extends InitLoader {
 		
 		
 	}
+	//发货七天自动验单
+	private void initSendProductCheck(){
+		TimerTask task = new TimerTask() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				List<OrderInfoPO> orderList=conn_OrderInfo.findByField("orderState", OrderStateType.DELIVER);
+				for (OrderInfoPO orderInfoPO : orderList) {
+					long days=DateUtil.daysBetween(orderInfoPO.getUpdateTime(),new Date()) ;
+					if(days>7){
+						orderInfoPO.setOrderState(OrderStateType.TESTED);
+					}
+				}
+			}
+			
+		};
+		Timer timer = new Timer();
+		long delay = 0;
+		long intevalPeriod = 3600 *24 * 1000;
+		timer.scheduleAtFixedRate(task, delay, intevalPeriod);
+	}
+	
 	
 
 }
