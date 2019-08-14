@@ -791,9 +791,7 @@ input[type="datetime-local"]:before{
 					    festival: true, //显示节日
 
 					    choose: function(datas){ //选择日期完毕的回调
-
-					       
-
+                             initDatePrice();
 					    }
 
 					});
@@ -812,7 +810,7 @@ input[type="datetime-local"]:before{
 
 					    choose: function(datas){ //选择日期完毕的回调
 
-	
+	                         initDatePrice();
 
 					    }
 
