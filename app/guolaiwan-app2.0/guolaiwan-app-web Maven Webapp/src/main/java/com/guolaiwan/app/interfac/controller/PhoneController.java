@@ -7637,7 +7637,7 @@ public class PhoneController extends WebBaseControll {
 		long merchatId=order.getShopId();
 		ProductPO product = conn_product.get(order.getProductId());
 		String distributeId = product.getDistributeId();
-		if(distributeId.equals("")&&distributeId==null){
+		if(distributeId==null||distributeId==""){
 			return "error";
 		}else{
 			String id = order.getId().toString();
