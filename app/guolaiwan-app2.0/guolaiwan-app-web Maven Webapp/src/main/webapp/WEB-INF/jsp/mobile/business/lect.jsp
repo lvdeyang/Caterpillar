@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+﻿<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -88,9 +88,19 @@ html, body {
 
 * {
 	box-sizing: border-box;
-
+	list-style: none;
 	text-decoration: none;
+	font-size:1rem;
+	
+	
 }
+@media screen and (min-width: 10px) and (max-width: 320px) {
+  * {
+    font-size: 64%; } }
+
+@media screen and (min-width: 411px) and (max-width: 768px) {
+  * {
+    font-size: 95%; } }
 /* 页面样式 */
 .header {
 	height: 40px;
@@ -137,10 +147,14 @@ html, body {
   .inp::-webkit-input-placeholder{
         text-align: center;
 }  
+.nav{
 
-.nav p{
-margin:0 0.5%;
 }
+.nav p{
+margin:0 1%;
+
+}
+
 </style>
 
 </head>
@@ -292,7 +306,7 @@ margin:0 0.5%;
 			</div>
 		</div>
        
-         <div class="nav" style="background:#fff;height:50px;width:auto;line-height:50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-top:2px solid #CECACB;border-bottom:2px solid #CECACB;">
+         <div class="nav" style="background:#fff;height:50px;width:auto;line-height:50px;text-align: center;width:100%;font-weight:bold;border-top:2px solid #CECACB;border-bottom:2px solid #CECACB;">
            <p style="display: inline-block;"><span style="color:green;">绿色</span>空闲</p>
 	       <p style="display: inline-block;"><span style="color:#A4A2A0;">灰色</span>下架</p>
 	       <p style="display: inline-block;"><span style="color:#D13035;">红色</span>已预定</p>
@@ -316,7 +330,7 @@ margin:0 0.5%;
 		       <option value="五人间">五人间</option>
 	      </select> 
 	      </div>
-	      <div style="height:50px;line-height:50px;text-align: center;font-size:12px;width:100%;">
+	      <div style="height:50px;line-height:50px;text-align: center;width:100%;">
 	        <p style="display: inline-block;width:40%"><span>入住时间：</span><input type="text" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="useDate1"></p>
 	        <p style="display: inline-block;width:40%"><span>离店时间：</span><input type="text" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="uscDate2"></p>
 	      </div>
