@@ -56,7 +56,11 @@ public class ContextListener extends InitLoader {
 	@Override
 	public void customInitialize() {
 
-		
+		conn_Merchant = SpringContext.getBean("com.guolaiwan.bussiness.merchant.dao.MerchantDAO");
+		conn_Product = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.ProductDAO");
+		conn_OrderInfo = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.OrderInfoDAO");
+		conn_Balance = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.BalanceDAO");
+
 		initOrderThread();
 		initSendProductCheck();
 		try {
@@ -78,11 +82,7 @@ public class ContextListener extends InitLoader {
 	
 	private void initOrderThread(){
 		
-		conn_Merchant = SpringContext.getBean("com.guolaiwan.bussiness.merchant.dao.MerchantDAO");
-		conn_Product = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.ProductDAO");
-		conn_OrderInfo = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.OrderInfoDAO");
-		conn_Balance = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.BalanceDAO");
-
+		
 		// 定时商家结算
 		TimerTask task = new TimerTask() {
 			@Override
@@ -199,6 +199,7 @@ public class ContextListener extends InitLoader {
 					long days=DateUtil.daysBetween(orderInfoPO.getUpdateTime(),new Date()) ;
 					if(days>7){
 						orderInfoPO.setOrderState(OrderStateType.TESTED);
+						conn_OrderInfo.update(orderInfoPO);
 					}
 				}
 			}
