@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+﻿<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -88,9 +88,19 @@ html, body {
 
 * {
 	box-sizing: border-box;
-
+	list-style: none;
 	text-decoration: none;
+	font-size:1rem;
+	
+	
 }
+@media screen and (min-width: 10px) and (max-width: 320px) {
+  * {
+    font-size: 64%; } }
+
+@media screen and (min-width: 411px) and (max-width: 768px) {
+  * {
+    font-size: 95%; } }
 /* 页面样式 */
 .header {
 	height: 40px;
@@ -346,9 +356,10 @@ layui.use('laydate', function(){
 	function  noliveRoom(state,id){
 	  var noLive_url = window.BASEPATH + 'admin/room/deleteInRoomMessage';
 	  var date = {"roomId":id,"inRoomDate":$("#useDate1").val(),"outRoomDate":$("#uscDate2").val()};
-	  $.psot(noLive_url,date,function(msg){
+	  $.post(noLive_url,date,function(msg){
 	     if(msg == "success"){
-	     $.toast("退房成功", "forbidden");	     
+	     $.toast("退房成功", "forbidden");
+	     roomlist($("#tier").val(),$("#identity").val());	     
 	     }else{
 	      $.toast("退房失败", "forbidden");
 	     }	      
