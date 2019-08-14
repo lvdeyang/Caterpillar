@@ -81,7 +81,20 @@ public class JudgesController {
 		mv.addObject("optionId", optionId);
 		return mv;
 	}
-
+	// 开幕式
+	@ResponseBody
+	@RequestMapping(value = "/getOpening", method = RequestMethod.GET)
+	public ModelAndView getOpening(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("mobile/vote/start");
+		return mv;
+	}
+	// 闭幕式
+	@ResponseBody
+	@RequestMapping(value = "/getclosing", method = RequestMethod.GET)
+	public ModelAndView getclosing(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("mobile/vote/closing");
+		return mv;
+	}
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	public Map<String, Object> GetList(HttpServletRequest request) throws Exception {

@@ -561,6 +561,7 @@ public class MerchantVO extends AbstractBaseVO<MerchantVO, MerchantPO> {
 		.setAveragePrice(entity.getAveragePrice())
 		.setUserName(entity.getUserName())
 		.setIsGuide(entity.getIsGuide())
+		.setBusinessDate(entity.getBusinessDate())
 		.setSignPic(entity.getSignPic())
 		.setChatUserId(entity.getChatUserId());
 		return this;

@@ -1803,7 +1803,7 @@ html, body {
 
 			    </div>
 
-			    <div class="weui-cell__ft" id="comment"><span class="circle">0</span>
+			    <div class="weui-cell__ft" id="comment">
 
 			    </div>
 

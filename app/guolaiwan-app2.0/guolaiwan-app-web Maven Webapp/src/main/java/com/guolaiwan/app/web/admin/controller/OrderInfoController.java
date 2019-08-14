@@ -525,19 +525,45 @@ public class OrderInfoController extends BaseController {
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/changeOrderStatus", method = RequestMethod.GET)
-	public Object changeOrderStatus(HttpServletRequest request, Long orderId, String status) throws Exception {
-		OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
-		orderInfoPO.setOrderState(OrderStateType.REFUNDED);
-		conn_OrderInfo.update(orderInfoPO);
+	public Object changeOrderStatus(HttpServletRequest request, String orderId, String status) throws Exception {
+		if(orderId.indexOf("bundle") != -1){
+			Long bundleOrderId=Long.parseLong(orderId.split("-")[1]);
+			BundleOrder bOrder=conn_bundleOrder.get(bundleOrderId);
+			String[] orderIds=bOrder.getOrderStr().split("A");
+			for (String orderidStr : orderIds) {
+				OrderInfoPO orderInfoPO = conn_OrderInfo.get(Long.parseLong(orderidStr));
+				orderInfoPO.setOrderState(OrderStateType.REFUNDED);
+				conn_OrderInfo.update(orderInfoPO);
+			}
+			
+		}else{
+			OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
+			orderInfoPO.setOrderState(OrderStateType.REFUNDED);
+			conn_OrderInfo.update(orderInfoPO);
+		}
+		
 		return success();
 	}
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/rejectOrderStatus", method = RequestMethod.GET)
-	public Object rejectOrderStatus(HttpServletRequest request, Long orderId, String status) throws Exception {
-		OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
-		orderInfoPO.setOrderState(OrderStateType.PAYSUCCESS);
-		conn_OrderInfo.update(orderInfoPO);
+	public Object rejectOrderStatus(HttpServletRequest request, String orderId, String status) throws Exception {
+		if(orderId.indexOf("bundle") != -1){
+			Long bundleOrderId=Long.parseLong(orderId.split("-")[1]);
+			BundleOrder bOrder=conn_bundleOrder.get(bundleOrderId);
+			String[] orderIds=bOrder.getOrderStr().split("A");
+			for (String orderidStr : orderIds) {
+				OrderInfoPO orderInfoPO = conn_OrderInfo.get(Long.parseLong(orderidStr));
+				orderInfoPO.setOrderState(OrderStateType.REFUNDED);
+				conn_OrderInfo.update(orderInfoPO);
+			}
+			
+		}else{
+			OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
+			orderInfoPO.setOrderState(OrderStateType.PAYSUCCESS);
+			conn_OrderInfo.update(orderInfoPO);
+		}
+		
 		return success();
 	}
 
