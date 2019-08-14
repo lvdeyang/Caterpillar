@@ -42,7 +42,6 @@ import com.guolaiwan.bussiness.gateway.GateWayTcpManager;
 
 import pub.caterpillar.commons.context.SpringContext;
 import pub.caterpillar.commons.util.binary.Sha1Util;
-import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.init.InitLoader;
 import pub.caterpillar.weixin.constants.WXContants;
 
@@ -56,12 +55,9 @@ public class ContextListener extends InitLoader {
 	@Override
 	public void customInitialize() {
 
-		conn_Merchant = SpringContext.getBean("com.guolaiwan.bussiness.merchant.dao.MerchantDAO");
-		conn_Product = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.ProductDAO");
-		conn_OrderInfo = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.OrderInfoDAO");
-		conn_Balance = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.BalanceDAO");
-
+		
 		initOrderThread();
+
 		try {
 			initGateSocket();
 		} catch (Exception e) {
@@ -81,7 +77,11 @@ public class ContextListener extends InitLoader {
 	
 	private void initOrderThread(){
 		
-		
+		conn_Merchant = SpringContext.getBean("com.guolaiwan.bussiness.merchant.dao.MerchantDAO");
+		conn_Product = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.ProductDAO");
+		conn_OrderInfo = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.OrderInfoDAO");
+		conn_Balance = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.BalanceDAO");
+
 		// 定时商家结算
 		TimerTask task = new TimerTask() {
 			@Override
@@ -177,15 +177,6 @@ public class ContextListener extends InitLoader {
 					}
 
 				}
-				//发货7日不收货自动验单
-				List<OrderInfoPO> orderList=conn_OrderInfo.findByField("orderState", OrderStateType.DELIVER);
-				for (OrderInfoPO orderInfoPO : orderList) {
-					long days=DateUtil.daysBetween(orderInfoPO.getUpdateTime(),new Date()) ;
-					if(days>7){
-						orderInfoPO.setOrderState(OrderStateType.TESTED);
-						conn_OrderInfo.update(orderInfoPO);
-					}
-				}
 			}
 		};
 		Timer timer = new Timer();
@@ -195,6 +186,6 @@ public class ContextListener extends InitLoader {
 		
 		
 	}
-
+	
 
 }
