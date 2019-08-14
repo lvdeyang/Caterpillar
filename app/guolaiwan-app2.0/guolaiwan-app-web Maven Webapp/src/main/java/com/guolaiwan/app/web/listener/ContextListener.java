@@ -62,7 +62,6 @@ public class ContextListener extends InitLoader {
 		conn_Balance = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.BalanceDAO");
 
 		initOrderThread();
-		initSendProductCheck();
 		try {
 			initGateSocket();
 		} catch (Exception e) {
@@ -178,22 +177,7 @@ public class ContextListener extends InitLoader {
 					}
 
 				}
-			}
-		};
-		Timer timer = new Timer();
-		long delay = 0;
-		long intevalPeriod = 3600 * 1000;
-		timer.scheduleAtFixedRate(task, delay, intevalPeriod);
-		
-		
-	}
-	//发货七天自动验单
-	private void initSendProductCheck(){
-		TimerTask task = new TimerTask() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+				//发货7日不收货自动验单
 				List<OrderInfoPO> orderList=conn_OrderInfo.findByField("orderState", OrderStateType.DELIVER);
 				for (OrderInfoPO orderInfoPO : orderList) {
 					long days=DateUtil.daysBetween(orderInfoPO.getUpdateTime(),new Date()) ;
@@ -203,14 +187,14 @@ public class ContextListener extends InitLoader {
 					}
 				}
 			}
-			
 		};
 		Timer timer = new Timer();
 		long delay = 0;
-		long intevalPeriod = 3600 *24 * 1000;
+		long intevalPeriod = 3600 * 1000;
 		timer.scheduleAtFixedRate(task, delay, intevalPeriod);
+		
+		
 	}
-	
-	
+
 
 }
