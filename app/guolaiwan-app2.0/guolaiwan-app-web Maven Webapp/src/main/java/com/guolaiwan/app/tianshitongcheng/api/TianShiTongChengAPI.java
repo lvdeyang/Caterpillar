@@ -110,43 +110,4 @@ public class TianShiTongChengAPI {
 			return "ERROR";
 	}
 	
-	
-	public static String huidiao(String orderId,String productId,String buynum,String buyUserName,String mobile,String startDate){
-		Map<String, Object> paramsMap = new TreeMap<String, Object>(new Comparator<String>() {
-	
-			@Override
-			public int compare(String o1, String o2) {
-				// TODO Auto-generated method stub
-				return o1.compareTo(o2);
-			}
-		});
-		
-		paramsMap.put("method", "item_orders");
-		paramsMap.put("_pid", "1796133");
-		paramsMap.put("is_pay", "1");
-		paramsMap.put("orders_id", orderId+12);
-		paramsMap.put("item_id", productId);
-		paramsMap.put("size", buynum);
-		paramsMap.put("name", buyUserName);
-		paramsMap.put("mobile", mobile);
-		paramsMap.put("start_date", startDate);
-		
-		String signStr = "";
-		for (String key : paramsMap.keySet()) {
-			signStr += key + "=" + paramsMap.get(key) + "&";
-		}
-		
-		paramsMap.put("_sig", Md5Utils.MD5("51b277d6c5a6f2b997a98939a62dd1d6&" + signStr + "51b277d6c5a6f2b997a98939a62dd1d6").toUpperCase());
-		JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
-		System.out.println(json.toJSONString());
-	
-		try {
-			String result = HttpClient.postHttps("http://localhost:8080/guolaiwan-app-web/phoneApp/huidiao", json);
-			return result;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "ERROR";
-}
 }
