@@ -714,9 +714,9 @@ input[type="datetime-local"]:before{
 			    }
 			    
 			    phone=data.shopTel;
-			    
+			    //
 			    $('.header-content').html(data.product.productName);
-			    $('#proName').html(data.product.productName+'￥<span id="price">'+data.product.productPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
+			    $('#proName').html('<span id="prics">'+data.product.productName+'</span>￥<span id="price">'+data.product.productPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
 			    $('#proContent').html(data.product.productIntroduce);
 			    $('#total').html((data.product.productPrice*${productRestrictNumber}).toFixed(2));
 			    $('#proShowNum').html('销量'+data.product.productSaleNum);
@@ -724,6 +724,29 @@ input[type="datetime-local"]:before{
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
 				$('#addressphone1').html('<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopTel);
 			    $('#addressphone1').data('phone',data.merchant.shopTel);
+
+				   function initLogistics(data){
+					   var html=[];
+					   var str = $('#prics').text();
+					   for(var i=0;i<data.length;i++){  
+					     if(i==0){
+					          html.push('<option value="'+data[i+1].id+'">'+data[i+1].name+'</option>'); 
+					     }
+					     if(i==1){
+					          html.push('<option value="'+data[i-1].id+'">'+data[i-1].name+'</option>');
+					     }
+ 
+					   }
+					   $('#logisticsList').append(html.join(''));
+					    if(str.indexOf("包邮") != -1)
+						    {    
+						          $("#logisticsList").val(1);//过来玩物流
+						    }else{
+						       
+						        $("#logisticsList").val(2);//到店领取
+						    }
+					}
+					
 			    generateComment(data.comments , data.userimgs , data.useridlist)
 			    iscollect=data.product.ifcollection;
 			    qq=data.product.ifcollection;
@@ -791,9 +814,7 @@ input[type="datetime-local"]:before{
 					    festival: true, //显示节日
 
 					    choose: function(datas){ //选择日期完毕的回调
-
-					       
-
+                             initDatePrice();
 					    }
 
 					});
@@ -812,7 +833,7 @@ input[type="datetime-local"]:before{
 
 					    choose: function(datas){ //选择日期完毕的回调
 
-	
+	                         initDatePrice();
 
 					    }
 
@@ -860,19 +881,16 @@ input[type="datetime-local"]:before{
 		} 
 		
 		
-		function initLogistics(data){
-		   var html=[];
-		   for(var i=0;i<data.length;i++){
-		     if(i==0){
-		          html.push('<option value="'+data[i+1].id+'">'+data[i+1].name+'</option>');
-		     }
-		     if(i==1){
-		          html.push('<option value="'+data[i-1].id+'">'+data[i-1].name+'</option>');
-		     }
-		   }
-		   $('#logisticsList').append(html.join(''));
+	/* 	if($('#price').text().indexOf('包邮')==0){
+		console.log("这里面没有包邮这个单词");
 		}
+		if($('#price').text().indexOf('包邮')!=0){
+		alert(111);
+		console.log("这里有包邮");
 		
+		} */
+	 
+ 	
 		function initCombos(data,price){
 		   var html=[];
 		   if(data.length==0){
@@ -1782,32 +1800,26 @@ input[type="datetime-local"]:before{
 					            if(isvote=="YES"){
 					           		 addvoteorder(orderId);	
 					            }
-								/* //判断是不是分销商品 是的话后台会处理返回来的Qcode  这里是凤凰山
-					            isdistribute(orderId);  */
-					            location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+									 //判断是不是分销商品 是的话后台会处理返回来的Qcode  这里是凤凰山
+						            isdistribute(orderId);  
 						    }
 						});
 				}else{
 					$.alert('您的余额不足！');
 				}
-                   
 			})
 		}
-		 /* //判断是不是分销的商品 是的话后台会处理返回来的Qcode  这里是凤凰山
+		//判断是不是分销的商品 是的话后台会处理返回来的Qcode  这里是 凤凰山 皮影乐园(后台判断)
 		function isdistribute(orderId){
 			var url=window.BASEPATH +"phoneApp/isdistribute";
 			$.post(url,{"orderId":orderId},function(data){
 				if(data=="没成功"){
-					alert("走的没成功");
-				}else if(data=="error"){
-					alert("走的error");
-				}else if(data=="success"){
-					alert("走的success");
-				}else {
-					alert("哪里都没走");
+					$.alert('您的购买未成功，可申请退款。');
+				}else{
+					location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
 				}
 			})
-		}  */
+		} 
 		
 		function addvoteorder(orderId){
 			var url=window.BASEPATH +"admin/vote/addvoteorder";
@@ -1862,7 +1874,8 @@ input[type="datetime-local"]:before{
 								       if(ifFace==1){
 					                      updatemessage(orderNo);
 					                    }
-								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+								    //判断是不是分销商品 是的话后台会处理返回来的Qcode  这里是凤凰山
+						            isdistribute(orderNo);  
 								    }
 								});
 
@@ -1903,6 +1916,10 @@ input[type="datetime-local"]:before{
 		$(document).on('click','#save',function(){
 		    if($('#address').val()==''&&product!="0001"&&product!="0002"){
 			   $.toast("请选择地址", "forbidden");
+			   return false;
+			}
+			if($('#moreAddress').val()==''){
+			   $.toast("请输入详细地址", "forbidden");
 			   return false;
 			}
 			if($('#addressphone').val()==''){

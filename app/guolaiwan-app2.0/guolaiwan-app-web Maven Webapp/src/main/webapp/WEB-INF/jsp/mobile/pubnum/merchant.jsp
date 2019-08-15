@@ -621,7 +621,7 @@ html, body {
 			    $('#address').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.shopAddress+'&tocoord='+data.shopLongitude+','+data.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.shopAddress+'</a>');
 				$('#addressphone').html('<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;'+data.shopTel);
 			    $('#addressphone').data('phone',data.shopTel);
-			    if(data.modularName != '景区景点' && data.modularName != '住宿预订')
+			    if(data.modularName != '景点' && data.modularName != '住宿预订')
 			    {
 			    	html.push('</br>');
 			    	$('#payinshop').html('<a href="pubnum/product/index/payinshop/${merchantId}" style="width:96%;margin-top:15px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">到店支付</a>');

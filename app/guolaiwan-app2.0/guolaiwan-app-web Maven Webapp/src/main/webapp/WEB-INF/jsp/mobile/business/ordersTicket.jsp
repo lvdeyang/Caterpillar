@@ -944,7 +944,7 @@ color:#fff;
       <div class="layui-inline" style="width:96%;height:auto;position: relative;"> <!-- 注意：这一层元素并不是必须的 -->
   			<ul class="listbox" style="color:black;">
 		    <li>
-  			<input type="text" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="useDate">
+  			<input type="text" readonly="readonly" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="useDate">
 	        <p style="position: absolute;top:30px;left:10%;">游玩日期</p>
 	        <p style="position: absolute;top:30px;right:5%;">❯</p>
 		    </li>

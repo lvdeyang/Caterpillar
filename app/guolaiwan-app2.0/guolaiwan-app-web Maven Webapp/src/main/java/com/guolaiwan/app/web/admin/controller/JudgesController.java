@@ -472,6 +472,7 @@ public class JudgesController {
 	public List<Map<String, String>> getproductbyname(HttpServletRequest request) {
 		String userId=request.getParameter("userId");
 		String name=request.getParameter("name");
+		String optionId=request.getParameter("optionId");
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		//按照模块id获取投票的商品
@@ -480,23 +481,43 @@ public class JudgesController {
 		if(getvoteproduct==null){
 			return list;
 		}
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		for (VoteProductPO voteProductPO : getvoteproduct) {
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			//通过id查到product
 			ProductPO productPO = productDao.get(voteProductPO.getProductId());
 			//此user今天的投票数量
 			int count = voteImposeDao.countByUidPid(userId, voteProductPO.getProductId()+"",startTime,endTime);
-			//此user今天的投票数量
+			//此user今天的购买数量
 			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
 			//此商品的所有群众投票数
 			int productvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			//此商品的所有群众投票数
+			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
+			long score=0;
+			long avg=0;
+			if(all!=null){
+				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
+					score+=judgesVoteMsgPO.getScore();
+				}
+				score=score/all.size();
+			}
+			if(score<=10){
+				avg=score*10;
+			}else{
+				avg=score;
+			}
+			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
 			//封装所有的数据
+			hashMap.put("avg", score+"");
 			hashMap.put("count", count+"");
 			hashMap.put("pollnum", (5-count)+"");
 			hashMap.put("productname", voteProductPO.getProductName());
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
-			hashMap.put("productvotes", productvotes+"");
+			hashMap.put("manvotes", manvotes+"");
+			hashMap.put("productvotes", allcount+"");
 			hashMap.put("hotel", productPO.getProductMerchantName());
 			hashMap.put("image", productPO.getProductShowPic());
 			list.add(hashMap);
