@@ -594,8 +594,11 @@ html, body {
 		
 		$(document).on('click','.topmod',function(){
 	       var codes=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
-	    
+	       if(codes[1]==387){
+	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	       }else{
+	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       }
 	    });
 		
 		
@@ -707,14 +710,23 @@ html, body {
 		
 		$(document).on('click','.merchant',function(){
 	       var codes=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
-	       $('.flag').val(1);
+	       if(codes[1]==387){
+	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	       }else{
+		      location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+		      $('.flag').val(1);
+		   }
 	    });
 	    
 	    $(document).on('click','.merchant1',function(){
 	       var codes=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
-	       $('.flag').val(1);
+	       if(codes[1]==387){
+	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	       }else{
+	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	          $('.flag').val(1);
+	       }
+	       
 	    });
 		
 		function getLine(modal){

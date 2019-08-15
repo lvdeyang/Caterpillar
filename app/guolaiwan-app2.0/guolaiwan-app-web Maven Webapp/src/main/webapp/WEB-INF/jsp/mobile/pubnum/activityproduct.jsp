@@ -1153,7 +1153,7 @@ html, body {
 
 			data = parseAjaxResult(data);
 
-			activityproductName = data.product.productName + '，一元购-过来玩';
+			activityproductName = data.product.productName + '-过来玩';
 
 			activityproductPic = data.product.productShowPic;
 
