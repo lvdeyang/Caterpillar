@@ -34,6 +34,7 @@ public class TianShiController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/changeorderstate")
 	public String  huidiao(HttpServletRequest request){
+		System.out.println("天时同城回调成功");
 		// 解析json
 		String param = getRequestJson(request);
 		if (param.indexOf("\\") >= 0) {
@@ -50,6 +51,7 @@ public class TianShiController extends BaseController {
         		System.out.println(orderId+"--------------------------");
         		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
         		order.setOrderState(OrderStateType.TESTED);
+        		orderinfoDAO.saveOrUpdate(order);
         	}
         	
         }
