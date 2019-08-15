@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+﻿<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -386,8 +386,8 @@ html, body {
            return false;
             }
 			var startdiv = document.getElementById("startdiv").style.display;
-			var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
-			var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
+			var sDate = new Date(document.getElementById("startDate").value.replace(/\-/g, "/"));
+			var eDate = new Date(document.getElementById("endDate").value.replace(/\-/g, "/"));
 			if (sDate >= eDate) {
 				$.toast("离场时间不能小于进场时间", "forbidden");
 				return false;
@@ -518,8 +518,8 @@ html, body {
 	
 	function testStart(){
 		var startdiv = document.getElementById("startdiv").style.display;
-		var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//")).format("yyyy-MM-dd HH:mm:ss");
-		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//")).format("yyyy-MM-dd HH:mm:ss");
+		var sDate = new Date(document.getElementById("startDate").value.replace(/\-/g, "/")).format("yyyy-MM-dd HH:mm:ss");
+		var eDate = new Date(document.getElementById("endDate").value.replace(/\-/g, "/")).format("yyyy-MM-dd HH:mm:ss");
 		if (sDate >= eDate) {
 			$.toast("离场时间不能小于进场时间", "forbidden");
 			$("#endDate").val("")
@@ -536,8 +536,8 @@ html, body {
 	
 		   function test() {
 					var startdiv = document.getElementById("startdiv").style.display;
-					var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, ""));
-					var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, ""));
+					var sDate = new Date(document.getElementById("startDate").value.replace(/\-/g, "/"));
+					var eDate = new Date(document.getElementById("endDate").value.replace(/\-/g, "/"));
 					var demoP = document.getElementById("spa");
 					demoP.innerHTML = (parseInt(eDate - sDate) / 1000 / 60 / 60).toFixed(2);
 					

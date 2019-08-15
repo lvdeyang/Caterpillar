@@ -870,9 +870,13 @@ public class SceneryListController  extends WebBaseControll{
 		for (VehiclePO vehiclePO : userBy) {
 			vehicle =  vehiclePO.getNumber();
 		}
-		List<String> relaIds = new ArrayList<String>();
-		relaIds.add("PAYSUCCESS");
-		OrderPO OrderInfor = Order.getOrderform(userId,uid,relaIds,vehicle);
+		//List<String> relaIds = new ArrayList<String>();
+		//OrderPO OrderInfor = Order.getOrderform(userId,uid,relaIds,vehicle);	
+		String relaIds = "PAYSUCCESS";
+		String[] fields = {"id","attractionsId","orderStatus","platenumber"};
+		Object[] values = {userId,uid,relaIds,vehicle};
+		List<OrderPO> list  = Order.findByFields(fields, values);
+		OrderPO	OrderInfor = list.get(0);
 		OrderInfor.setRefund(refund);
 		OrderInfor.setOrderStatus("REFUNDING");
 		Order.saveOrUpdate(OrderInfor);
