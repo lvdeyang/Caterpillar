@@ -322,8 +322,8 @@ layui.use('laydate', function(){
            <input type="text" style="cursor: pointer;width:100%;height:50px;"> 
            <img style="width:25px;height:30px;position: absolute;right:34px;top:46px;" alt="" src="lib/images/dingweis.png">
            <p style="position: absolute;right:23px;top:70px;font-size:12px;">当前位置</p>
-           <input type="text" style="width:100%;height:50px;padding:0 0 0 28%;" class="layui-input" id="test6" placeholder=" - ">
-           <p style="position: absolute;left:9%;top:110px;font-size:14px;">入住时间</p>
+         <!--   <input type="text" style="width:100%;height:50px;padding:0 0 0 28%;" class="layui-input" id="test6" placeholder=" - "> -->
+       <!--     <p style="position: absolute;left:9%;top:110px;font-size:14px;">入住时间</p> -->
            <input class="hotelname" type="text" placeholder="关键字/酒店名" style="cursor: pointer;width:100%;height:50px;"> 
            <button onclick="search()" style="height:30px;width:50%;margin:30px auto;color:#fff;background:#EB6E1E;border:none;outline:none;border-radius:10px;">查询</button>
        </div>

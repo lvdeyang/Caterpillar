@@ -331,7 +331,7 @@ function home(){
      }
 })  */
 
-$	(document).on('click', '.zong', function() {
+$(document).on('click', '.zong', function() {
  		$(".other").pause();
  	
  	});
@@ -352,9 +352,17 @@ $	(document).on('click', '.zong', function() {
          } 
            
          });
-         
+       $('.other').mouseenter(function() {
+	  $(this).stop();
+	})
+	 $('.other').mouseleave(function(){
+	 /* $(this).start();  */
+	 var scrollHeight = $(document).height();
+	$('.other').animate({'scrollTop':scrollHeight},5000); 
+	  
+	})   
+	
      });
-
 
 
 
