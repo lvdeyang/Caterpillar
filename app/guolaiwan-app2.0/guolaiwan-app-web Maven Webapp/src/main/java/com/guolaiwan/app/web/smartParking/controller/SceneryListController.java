@@ -873,7 +873,7 @@ public class SceneryListController  extends WebBaseControll{
 		//List<String> relaIds = new ArrayList<String>();
 		//OrderPO OrderInfor = Order.getOrderform(userId,uid,relaIds,vehicle);	
 		String relaIds = "PAYSUCCESS";
-		String[] fields = {"id","attractionsId","orderStatus","platenumber"};
+		String[] fields = {"orderId","id","orderStatus","platenumber"};
 		Object[] values = {userId,uid,relaIds,vehicle};
 		List<OrderPO> list  = Order.findByFields(fields, values);
 		OrderPO	OrderInfor = list.get(0);
