@@ -537,7 +537,7 @@ public class OrderInfoController extends BaseController {
 			}
 			
 		}else{
-			OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
+			OrderInfoPO orderInfoPO = conn_OrderInfo.get(Long.parseLong(orderId));
 			orderInfoPO.setOrderState(OrderStateType.REFUNDED);
 			conn_OrderInfo.update(orderInfoPO);
 		}

@@ -7663,8 +7663,10 @@ public class PhoneController extends WebBaseControll {
 				String info = parseObject.get("info").toString();
 				JSONObject infojson = JSON.parseObject(info);
 				String qrcode = infojson.get("qrcode").toString();
-				order.setDistributeQcode(qrcode.toString());
-				order.setDistributeId(distributeId);
+				String orders_id = infojson.get("id").toString();
+				order.setDistributeQcode(qrcode);
+				order.setDistributeId(orders_id);
+				conn_order.saveOrUpdate(order);
 			}else{
 				System.out.println("接口调用失败");
 				return "没成功";

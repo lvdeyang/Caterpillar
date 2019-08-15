@@ -88,11 +88,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }); 
              
              function agreeOrder(obj,orderId){
+             	var url="<%=basePath%>tianshi/isdistributerefund";
                  var _urirefund = '../../website/wxpay/refund?orderId='+orderId;
-		          $.get(_urirefund, null, function(data){
-					changeOrderStatus(obj,orderId,'REFUNDED');
+             	$.post(url,{"orderId":orderId},function(data){
+             		if(data=="error"||data=="success"){
+			         	 $.get(_urirefund, null, function(data){
+							changeOrderStatus(obj,orderId,'REFUNDED');
+						 });
+             		}else if(data=="lose"){
+             			layer.msg("退款出错，请技术查看");
+             		}
+             	})
 					
-				 });
              }
              function rejectOrder(obj,orderId){
              		//添加弹窗输入理由的方法

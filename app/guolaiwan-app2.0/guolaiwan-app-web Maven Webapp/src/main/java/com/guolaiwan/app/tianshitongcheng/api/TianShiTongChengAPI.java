@@ -76,7 +76,7 @@ public class TianShiTongChengAPI {
 			paramsMap.put("method", "item_orders");
 			paramsMap.put("_pid", "1796133");
 			paramsMap.put("is_pay", "1");
-			paramsMap.put("orders_id", orderId+12);
+			paramsMap.put("orders_id", orderId);
 			paramsMap.put("item_id", productId);
 			paramsMap.put("size", buynum);
 			paramsMap.put("name", buyUserName);
@@ -110,6 +110,55 @@ public class TianShiTongChengAPI {
 			return "ERROR";
 	}
 	
+	/**
+	 * 凤凰山退单接口
+	 * @param orderId 合作商订单号	
+	 * @param productId 购买商品的天时Id	
+	 * @param buynum	购买数量	
+	 * @param buyUserName 购买人
+	 * @param mobile	购买人手机号
+	 * @param startDate 	预定时间        
+	 * @return
+	 */
+	public static String refundFHSPost(String orderId){
+			Map<String, Object> paramsMap = new TreeMap<String, Object>(new Comparator<String>() {
+		
+				@Override
+				public int compare(String o1, String o2) {
+					// TODO Auto-generated method stub
+					return o1.compareTo(o2);
+				}
+			});
+			paramsMap.put("method", "item_refund");
+			paramsMap.put("_pid", "1796133");
+			paramsMap.put("orders_id", orderId);
+			
+			String signStr = "";
+			for (String key : paramsMap.keySet()) {
+				signStr += key + "=" + paramsMap.get(key) + "&";
+			}
+			
+			paramsMap.put("_sig", Md5Utils.MD5("51b277d6c5a6f2b997a98939a62dd1d6&" + signStr + "51b277d6c5a6f2b997a98939a62dd1d6").toUpperCase());
+			JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
+			System.out.println(json.toJSONString());
+		
+			try {
+				String result = HttpClient.postHttps("http://hhs.sjdzp.com/Api/Seller/api.json?g_cid=58010", json);
+				System.out.println(result);
+				return result;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return "ERROR";
+	}
+	
+	/* 测试退款接口
+	 * public static void main(String[] args) {
+		String a=refundFHSPost("199837701");
+		System.out.println(a);
+		//199837701     411211
+	}*/
 	
 	/**
 	 * 皮影乐园下单接口
@@ -134,7 +183,7 @@ public class TianShiTongChengAPI {
 			paramsMap.put("method", "item_orders");
 			paramsMap.put("_pid", "1797248");
 			paramsMap.put("is_pay", "1");
-			paramsMap.put("orders_id", orderId+13);
+			paramsMap.put("orders_id", orderId);
 			paramsMap.put("item_id", productId);
 			paramsMap.put("size", buynum);
 			paramsMap.put("name", buyUserName);
@@ -153,6 +202,50 @@ public class TianShiTongChengAPI {
 			 * http://tswltx.sjdzp.com/Api/Seller/api.json?g_cid=58319
 			 * 
 			 * */
+			
+			paramsMap.put("_sig", Md5Utils.MD5("b2d0b972bff1e34d0b602efbe49b4340&" + signStr + "b2d0b972bff1e34d0b602efbe49b4340").toUpperCase());
+			JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
+			System.out.println(json.toJSONString());
+		
+			try {
+				String result = HttpClient.postHttps("http://tswltx.sjdzp.com/Api/Seller/api.json?g_cid=58319", json);
+				System.out.println(result);
+				return result;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return "ERROR";
+	}
+	
+	
+	/**
+	 * 皮影乐园退单接口
+	 * @param orderId 合作商订单号	
+	 * @param productId 购买商品的天时Id	
+	 * @param buynum	购买数量	
+	 * @param buyUserName 购买人
+	 * @param mobile	购买人手机号
+	 * @param startDate 	预定时间
+	 * @return
+	 */
+	public static String refundPYLYPost(String orderId){
+			Map<String, Object> paramsMap = new TreeMap<String, Object>(new Comparator<String>() {
+		
+				@Override
+				public int compare(String o1, String o2) {
+					// TODO Auto-generated method stub
+					return o1.compareTo(o2);
+				}
+			});
+			paramsMap.put("method", "item_refund");
+			paramsMap.put("_pid", "1797248");
+			paramsMap.put("orders_id", orderId);
+			
+			String signStr = "";
+			for (String key : paramsMap.keySet()) {
+				signStr += key + "=" + paramsMap.get(key) + "&";
+			}
 			
 			paramsMap.put("_sig", Md5Utils.MD5("b2d0b972bff1e34d0b602efbe49b4340&" + signStr + "b2d0b972bff1e34d0b602efbe49b4340").toUpperCase());
 			JSONObject json = (JSONObject) JSONObject.toJSON(paramsMap);
