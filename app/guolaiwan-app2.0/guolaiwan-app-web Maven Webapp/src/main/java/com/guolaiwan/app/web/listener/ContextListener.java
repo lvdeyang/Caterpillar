@@ -42,6 +42,7 @@ import com.guolaiwan.bussiness.gateway.GateWayTcpManager;
 
 import pub.caterpillar.commons.context.SpringContext;
 import pub.caterpillar.commons.util.binary.Sha1Util;
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.init.InitLoader;
 import pub.caterpillar.weixin.constants.WXContants;
 
@@ -89,8 +90,11 @@ public class ContextListener extends InitLoader {
 
 				List<OrderInfoPO> deliOrderInfoPOs=conn_OrderInfo.findByField("orderState", OrderStateType.DELIVER);
 				for (OrderInfoPO orderInfoPO : deliOrderInfoPOs) {
-					orderInfoPO.setOrderState(OrderStateType.TESTED);
-					conn_OrderInfo.update(orderInfoPO);
+					long dayCount=DateUtil.daysBetween(orderInfoPO.getUpdateTime(), new Date());
+					if(dayCount>7){
+						orderInfoPO.setOrderState(OrderStateType.TESTED);
+						conn_OrderInfo.update(orderInfoPO);
+					}				
 				}
 				
 				
