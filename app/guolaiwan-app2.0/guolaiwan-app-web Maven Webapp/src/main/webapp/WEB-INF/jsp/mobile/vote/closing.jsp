@@ -92,7 +92,23 @@ html, body {
 	touch-action: none;
 }
 
-		
+#myVideo{
+ z-index: 100;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: fill;/*这里是关键*/
+    width: auto;
+    height: auto;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+
+    background-size: cover;
+
+}			
 </style>
 
 </head>
@@ -115,7 +131,7 @@ var aud = document.getElementById("myVideo");
 aud.onended = function() 
 {
     
-   //window.location.href="http://www.guolaiwan.net/admin/vote/gotovotepc?optionId=1" 
+   window.location.href="http://www.guolaiwan.net/admin/vote/gotovotepc?optionId=1" 
    
 };
 
@@ -130,7 +146,7 @@ aud.onended = function()
 });
 </script>
 <body>
-<video id="myVideo" style="" src="lib/images/ceshi.mp4" autoplay="autoplay" start="5">
+<video id="myVideo" style="" src="lib/images/bi.mp4" autoplay="autoplay" start="5">
 	  网络出了个小差-.-
 </video>
 

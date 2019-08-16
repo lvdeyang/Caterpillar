@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+﻿<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -88,9 +88,19 @@ html, body {
 
 * {
 	box-sizing: border-box;
-
+	list-style: none;
 	text-decoration: none;
+	font-size:1rem;
+	
+	
 }
+@media screen and (min-width: 10px) and (max-width: 320px) {
+  * {
+    font-size: 64%; } }
+
+@media screen and (min-width: 411px) and (max-width: 768px) {
+  * {
+    font-size: 95%; } }
 /* 页面样式 */
 .header {
 	height: 40px;
@@ -139,7 +149,7 @@ html, body {
 }  
 
 .nav p{
-margin:0 1%;
+margin:0 0.5%;
 }
 </style>
 
@@ -160,45 +170,99 @@ layui.use('laydate', function(){
 	  var laydate = layui.laydate;
 	  
 	  //执行一个laydate实例
-	  laydate.render({
-	    elem: '#useDate' //指定元素uscDate
-	  });
-	    laydate.render({
-	    elem: '#uscDate' //指定元素
-	  });
-	  
-	   });
+		    //开始日期 
+			laydate.render({ 
+			elem: '#useDate1' 
+			//指定元素uscDate 
+			,done:function(value){
+			 //当前日期
+			  var todayDate = new Date();
+			  var nowDate = new Date(formatDate(todayDate,0));
+			  //选择开始日期
+			  var inRoomDate = new Date(value);
+			  if($("#uscDate2").val() == ""){
+			   if(inRoomDate < nowDate){
+			     $.toast("日期不能少于当前日期", "forbidden");
+			     setTimeout(function(){ $("#useDate1").val("")},2000);
+			     }			    
+			   }else{
+			     var outRoomDate = new Date($("#uscDate2").val()); 
+			     if(inRoomDate >= outRoomDate ){
+			      $.toast("开始日期不能大于结束日期", "forbidden");
+			      setTimeout(function(){
+			       $("#useDate1").val("");
+			       $("#uscDate2").val("");
+			      },2000);			     			   				  
+			     }else{  
+			      roomlist($("#tier").val(),$("#identity").val());
+			    }			   		   
+			}
+		  }
+		}); 
+			
+			//结束日期
+			laydate.render({ 
+			elem: '#uscDate2' 
+			//指定元素 
+			 ,done:function(value){
+			   if( $("#useDate1").val() == ""){
+			   $.toast("请先选择入店时间", "forbidden");
+			   setTimeout(function(){ $("#uscDate2").val("")},2000);
+			   }else{
+			     var outRoomDate = new Date(value);
+			   	 var inRoomDate = new Date($("#useDate1").val());	
+			     if(outRoomDate <= inRoomDate){
+			     $.toast("离店时间应大于入店时间", "forbidden");
+			     setTimeout(function(){ $("#uscDate2").val("")},2000);
+			     }else{				      	     
+			      roomlist($("#tier").val(),$("#identity").val());   			     
+			     }
+			   } 			   			   
+			 }
+			});
+        });
 
-  var rtier="1",ridentity="";
   $(function() {
-  	roomlist(rtier,ridentity);
-  	
-	  	$(document).on('click', '.close', function() {
-				$.closePopup();
+  
+  	 $("#useDate1").val(formatDate(new Date(),0));
+     $("#uscDate2").val(formatDate(new Date(),1)); 
+     //根据条件查询列表
+     roomlist($("#tier").val(),$("#identity").val()); 
+      	
+	 $(document).on('click', '.close', function() {
+		$.closePopup();
 		})
+		
+		$(document).on('click', '.closelist', function() {
+		    $("#option").fadeOut();	
+		    $(".homePage").fadeIn();		    
+		})
+		
 	});
 	
+	var overall="";
 	
 	//房间列表
-	function roomlist(tier,identity){
-		$('.main').children().remove();
+	function roomlist(tier,identity){	
+	 $('.main').children().remove(); 
 	 var url=window.BASEPATH + 'business/getallroom'; 
-		$.post(url,{"merchantId":${merchantId},"tier":tier,"identity":identity},function(data){
+		$.post(url,{"merchantId":${merchantId},"tier":tier,"identity":identity,"inRoomDate":$("#useDate1").val(),"outRoomDate":$("#uscDate2").val()},function(data){
+		       var room = data.room;
+		       overall = room;
+		       var roomState = data.roomState;
+		       if(room.length == 0){return;}
 				var html= [];
-				for(var i =0;i<data.length;i++){
-					html.push('<div onclick="openoption(this.id)" id="'+data[i].id+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');
-					if(data[i].state=="1"){
-						html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/weixuan.png">');
-					}else{
-						html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/xuanzhong.png">');
-					}
-					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:45%;margin:0 0 0 -40%;"><span>'+data[i].name+'</span>   <span>'+data[i].identity+'</span></p>');
-					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:68%;margin:0 0 0 -40%;color:#FB9361;"><span>￥'+(data[i].price/100)+'</span></p>');    
+				for(var i =0;i<room.length;i++){
+					html.push('<div onclick="openoption(this.id)" id="'+room[i].id+'-'+roomState[i]+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');															 
+					if(roomState[i] == "0"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/weixuan.png">');} 					
+					if(roomState[i] == "1"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/lvse.png">');} 					  
+					if(roomState[i] == "2"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/xuanzhong.png">');}  																																						
+					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:45%;margin:0 0 0 -40%;"><span>'+room[i].name+'</span>   <span>'+room[i].identity+'</span></p>');
+					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:68%;margin:0 0 0 -40%;color:#FB9361;"><span>￥'+(room[i].price/100)+'</span></p>');    
 				    html.push('</div>');   
 				}
+				
 				$('.main').append(html.join(''));
-				rtier=tier;
-				ridentity=identity;
 		})
 	}
 	//更改层数
@@ -214,56 +278,113 @@ layui.use('laydate', function(){
 	function changeidentity(){
 		var tier=$("#tier").val();
 		var identity=$("#identity").val();
-		if($("#identity").val()=="全部"){
-			identity="";
-		}
+		
 		roomlist(tier,identity);
 	}
 	
-	//下弹框
-	function openoption(id){
-	
+	//房间操作信息
+	function openoption(obj){	 
+	   var id = obj.split("-");
 		$.actions({
 		  actions: [{
-		    text: "房客信息",
-		    onClick: function() {
-		      $("#option").popup();
-		    }
-		  },{
 		    text: "上架",
 		    onClick: function() {
-		      change("1",id);
+		      change("1",id[0]);
 		    }
 		  },{
 		    text: "下架",
 		    onClick: function() {
-		      change("0",id);
+		      change("0",id[0]);
 		    }
 		  },{
 		    text: "退房",
 		    onClick: function() {
-		      change("1",id);
+		      if(id[1] == '2'){		     
+		       noliveRoom("0",id[0]);
+		    }else{
+		     $.toast("该房间没有被预订", "forbidden");		    
+		    }		    
 		    }
+		  },{
+		    text: "房间信息",
+		    onClick: function() {
+		    if(id[1] == "2"){		     
+		     $(".homePage").fadeOut();
+		     $("#option").fadeIn();	
+		    }else{
+		    $.toast("该房间暂无住户信息", "forbidden");		    
+		    }		     	     
+		    }		  
 		  }]
 		});
-	
+															
+	 	//回显住房预定信息				
+		if(id[1] == "2"){	
+		   $('.roomclient').children().remove();						
+			var echo_url = window.BASEPATH + 'admin/room/echoRoomClient';
+			var echo_date = {"roomId":id[0],"inRoomDate":$("#useDate1").val(),"outRoomDate":$("#uscDate2").val()}
+			 $.post(echo_url,echo_date,function(msg){
+			 if(msg.length ==0){return;}
+				var names = msg.nameList;
+				var phones = msg.phoneList;
+				var cards = msg.cardList;
+			    var message = msg.message;				   
+			    //房间号 和规格
+			     var html =[];
+			    for(var i = 0;i<overall.length;i++){
+			      if(overall[i].id == id[0]){			      
+			      html.push('<p class="" style="text-align: center;margin:20px 0;font-weight: bold;"><span>'+overall[i].name+'</span><span>'+overall[i].identity+'</span>入住信息</p>');
+			      $(".roomclient").append(html.join(""));
+			      }
+			    }			    	    
+			    //房间住户信息
+			    var html2 = [];
+			    for(var j = 0; j<names.length;j++){
+			     html2.push('<img style="width:35%;float:left;height:100px;" src="'+message[j].facePicWebUrl+'" alt="暂无图片"">');
+			     html2.push('<ul style="float:left;width:60%;margin:0 0 20px 2%;line-height:30px;font-size:12px;">');
+			     html2.push('<li style="width:100%;height:40px;">入住人姓名：<span style="width:60%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">'+names[j]+'</span></li>');
+			     html2.push('<li style="width:100%;height:40px;">联系电话：<span style="width:60%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">'+phones[j]+'</span></li>');
+			     html2.push(' <li style="width:100%;height:40px;">身份证号：<span style="width:60%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">'+cards[j]+'</span></li>');
+			     html2.push('</ul>');	
+			     				     
+			    }
+			    $(".roomclient").append(html2.join(""));			   				 				 
+			})
+		} 				
 	}
+	//退房
+	function  noliveRoom(state,id){
+	  var noLive_url = window.BASEPATH + 'admin/room/deleteInRoomMessage';
+	  var date = {"roomId":id,"inRoomDate":$("#useDate1").val(),"outRoomDate":$("#uscDate2").val()};
+	  $.post(noLive_url,date,function(msg){
+	     if(msg == "success"){
+	     $.toast("退房成功", "forbidden");
+	     roomlist($("#tier").val(),$("#identity").val());	     
+	     }else{
+	      $.toast("退房失败", "forbidden");
+	     }	      
+	  })	
+	}
+	
 	//更改状态 并重新刷新列表
 	function change(type,id){
 		var url=window.BASEPATH + 'admin/room/amend.do'; 
 		$.post(url,{"state":type,"id":id},function(){
-				roomlist(rtier,ridentity);
+				roomlist($("#tier").val(),$("#identity").val());
 		})
 	}
-	 
+	//设置时间转换格式
+	function formatDate(date,obj){
+	   var y = date.getFullYear();//获取年
+	   var m = date.getMonth()+1;//获取月
+	   m = m < 10?'0'+m:m; //判断月是否大于10
+	   var d = date.getDate()+obj;//获取日      
+	   d=d<10?('0'+d):d;//判断日期是否大于10
+	   return y+'-'+m+'-'+d;//返回时间格式 
+	  }	 
 </script>
-
-
-
-
-
 <body>
-			<!-- 主页 -->
+		<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
@@ -271,9 +392,10 @@ layui.use('laydate', function(){
 				<div class="header-content">商户</div>
 			</div>
 		</div>
-       
-         <div class="nav" style="background:#fff;height:50px;line-height:50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-top:2px solid #CECACB;border-bottom:2px solid #CECACB;">
-	       <p style="display: inline-block;"><span style="color:#A4A2A0;">灰色</span>空闲</p>
+         <div class="homePage">
+          <div class="nav" style="background:#fff;height:50px;width:auto;line-height:50px;text-align: center;font-size:12px;width:100%;font-weight:bold;border-top:2px solid #CECACB;border-bottom:2px solid #CECACB;">
+           <p style="display: inline-block;"><span style="color:green;">绿色</span>空闲</p>
+	       <p style="display: inline-block;"><span style="color:#A4A2A0;">灰色</span>下架</p>
 	       <p style="display: inline-block;"><span style="color:#D13035;">红色</span>已预定</p>
 	       <span>楼层：</span>
 	       <select class="tier" id="tier" onchange="changetier()"  style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
@@ -288,7 +410,7 @@ layui.use('laydate', function(){
 	       </select> 
 	       <span>房型：</span>
 	       <select class="identity" id="identity" onchange="changeidentity()" style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
-		       <option value="全部">全部</option>
+		        <option value="全部">全部</option>
 		       <option value="标准间">标准间</option>
 		       <option value="豪华间">豪华间</option>
 		       <option value="三人间">三人间</option>
@@ -296,52 +418,22 @@ layui.use('laydate', function(){
 	      </select> 
 	      </div>
 	      <div style="height:50px;line-height:50px;text-align: center;font-size:12px;width:100%;">
-	       <p style="display: inline-block;width:40%"><span>入住时间：</span><input type="text" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="useDate"></p>
-	       <p style="display: inline-block;width:40%"><span>离店时间：</span><input type="text" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="uscDate"></p>
+	        <p style="display: inline-block;width:40%"><span>入住时间：</span><input type="text" placeholder="yyyy-mm-dd"   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="useDate1"></p>
+	        <p style="display: inline-block;width:40%"><span>离店时间：</span><input type="text" placeholder="yyyy-mm-dd"   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;" class="layui-input" id="uscDate2"></p>
 	      </div>
+	      
 	      <!-- 房间选择 -->
 	      <div class="main" style="width:100%;height:auto;padding:0 5%;">
-	      
+	       
 	        
 	      </div>
-	      
-	      
-	      <div id="option" class="weui-popup__container">
-				<div class="weui-popup__overlay"></div>
-				<div class="weui-popup__modal">
-				
-				<!-- <p style="font-size: 20px;color: green;text-align: center;">这里动态获取房客信息</p>
-				<p class="close">close</p> -->
-				
-				<div style="height:auto;width:96%;padding:20px 20px;margin:0 auto;background:#fff;overflow: hidden;">
-				   <p class="" style="text-align: center;margin:20px 0;font-weight: bold;"><span>301</span><span>标准间</span>入住信息</p>
-				  
-				   <img style="width:35%;float:left;height:120px;" src="lib/images/1.jpg">
-				   <ul style="float:left;width:60%;margin:0 0 20px 2%;line-height:30px;">
-				    <li style="width:100%;height:40px;">入住人姓名：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
-				    <li style="width:100%;height:40px;">身份证号：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
-				    <li style="width:100%;height:40px;">联系电话：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
-				   </ul>
-				    <img style="width:35%;float:left;height:120px;" src="lib/images/1.jpg">
-				   <ul style="float:left;width:60%;margin:0 0 20px 2%;line-height:30px;">
-				    <li style="width:100%;height:40px;">入住人姓名：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
-				    <li style="width:100%;height:40px;">身份证号：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
-				    <li style="width:100%;height:40px;">联系电话：<span style="width:50%;border-bottom:1px solid #A2A2A2;display: inline-block;float:right;">xxx</span></li>
-				   </ul>
-				</div>
-				
-				
-				</div>
-		  </div>
-	      
-	      
-	      
-	      
-	      
+	      </div>
+	      <!-- 住房用户信息 --> 
+				<div id="option"  style="height:auto;width:96%;padding:10px 10px;margin:10px auto 0;background:#fff;overflow: hidden;display: none;">
+				     <span class="closelist" style="float:right;">关闭</span>
+				     <div class="roomclient" style="overflow: hidden;"><div>
+				  																
+		  </div>	      	      	      		      
 </body>
-
-
-
-
 
 </html>

@@ -303,15 +303,15 @@ public class RoomController {
 		    middleClientPO.setRoomId(Long.parseLong(roomId));
 		    middleClientPO.setStartDate(inRoomDate);
 		    middleClientPO.setEndDate(outRoomDate);
-		    mesMidClient.save(middleClientPO);
-            //添加房间状态信息
-		    CurrentRoomSatePO cRoomSatePO = new CurrentRoomSatePO();		  
-		    cRoomSatePO.setInRoomDate(inRoomDate);
-		    cRoomSatePO.setOutRoomDate(outRoomDate);
-		    cRoomSatePO.setRoomId(Long.parseLong(roomId));
-		    cRoomSatePO.setRoomState("1");
-		    CurrentRoomSateDao.save(cRoomSatePO);
+		    mesMidClient.save(middleClientPO);           
 		}
+		//添加房间状态信息
+	    CurrentRoomSatePO cRoomSatePO = new CurrentRoomSatePO();		  
+	    cRoomSatePO.setInRoomDate(inRoomDate);
+	    cRoomSatePO.setOutRoomDate(outRoomDate);
+	    cRoomSatePO.setRoomId(Long.parseLong(roomId));
+	    cRoomSatePO.setRoomState("1");
+	    CurrentRoomSateDao.save(cRoomSatePO);
 			      
 	     return "success";
 	}
@@ -381,13 +381,16 @@ public class RoomController {
 	    List<String> names = new ArrayList<String>();
 	    List<String> phones = new ArrayList<String>();
 	    List<String> cards = new ArrayList<String>();
+	    List<MessagePO> _message = new ArrayList<MessagePO>();
 	    for(MessageMiddleClientPO po : mClientPO){
 	      MessagePO mPo = MessageDAO.get(po.getMessageId());
 	      names.add(mPo.getName());
 	      phones.add(mPo.getPhone());
 	      cards.add(mPo.getNumber());
+	      _message.add(mPo);
 	    } 
-	   
+	    
+	    map.put("message", _message);
 	    map.put("beginDate",minInRoomDate);
 	    map.put("endDate",minOutRoomDate);
 	    map.put("nameList", names);

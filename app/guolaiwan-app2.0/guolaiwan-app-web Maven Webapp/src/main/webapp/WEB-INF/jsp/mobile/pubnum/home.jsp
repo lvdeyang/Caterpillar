@@ -766,7 +766,10 @@ return $.cookie(str);
 			        modals[i] = liveModal;
 			      }			    
 			    }
-			    modals.push(starp);
+			    if(starp){
+			       modals.push(starp);
+			    }
+			    
 			    			    
 			    if(modals.length<20){
 			       for(var k=modals.length;k<20;k++){
@@ -776,12 +779,15 @@ return $.cookie(str);
 				for(var i=0; i<modals.length; i++){
 				
 				   var index=i;
-				   if(i==6){
-				     index=10;
+				   if(modals[11].modularCode){
+				       if(i==6){
+					     index=10;
+					   }
+					   if(i==10){
+					     index=6;
+					   }
 				   }
-				   if(i==10){
-				     index=6;
-				   }
+				   
 				   if(i%10==0){
 				     html.push('<div style="height:180px;" class="swiper-slide">');
 				     html.push('<table class="columnTable" style="margin-top:10px;">');
@@ -865,6 +871,8 @@ return $.cookie(str);
 	          location.href=window.BASEPATH + 'pubnum/ipost';
 	       }else if(codes[1]=='101112'){
 	          location.href=window.BASEPATH + 'back/merchant/comment';
+	       }else if(codes[1]=='2124'){
+	          location.href=window.BASEPATH + 'judges/votepage';
 	       }else{
 	         location.href=window.BASEPATH + 'pubnum/column/index?modularCode='+codes[1];
 	    
@@ -874,18 +882,33 @@ return $.cookie(str);
 	
 	   $(document).on('click','.merchant',function(){
 	       var codes=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       if(codes[1]==387){
+	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	       }else{
+	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       }
+	       
 	    
 	    });
 	    $(document).on('click','.merchant1',function(){
 	       var codes=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       if(codes[1]==387){
+	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	       }else{
+	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       }
+	       
 	    
 	    });
 	    $(document).on('click','.topmod',function(){
 	       var codes=this.id.split('-');
-	       if(codes[2]==''){return;}
-	       location.href=window.BASEPATH + 'pubnum/merchant/index1?code='+codes[1]+'&classify='+codes[2];
+	       if(codes[1]==387){
+	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	       }else{
+	          if(codes[2]==''){return;}
+	          location.href=window.BASEPATH + 'pubnum/merchant/index1?code='+codes[1]+'&classify='+codes[2];
+	       }
+	       
 	    });
 	
 	
