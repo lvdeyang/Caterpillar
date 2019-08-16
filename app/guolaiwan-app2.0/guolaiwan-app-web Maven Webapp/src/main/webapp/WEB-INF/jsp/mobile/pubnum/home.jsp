@@ -871,6 +871,8 @@ return $.cookie(str);
 	          location.href=window.BASEPATH + 'pubnum/ipost';
 	       }else if(codes[1]=='101112'){
 	          location.href=window.BASEPATH + 'back/merchant/comment';
+	       }else if(codes[1]=='2124'){
+	          location.href=window.BASEPATH + 'judges/votepage';
 	       }else{
 	         location.href=window.BASEPATH + 'pubnum/column/index?modularCode='+codes[1];
 	    

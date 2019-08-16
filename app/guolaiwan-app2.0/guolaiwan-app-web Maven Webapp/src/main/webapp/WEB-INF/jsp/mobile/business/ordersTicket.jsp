@@ -565,10 +565,9 @@ color:#fff;
 			 	  		
   	//----------------------------------------------------------------------
      	var base="";
-        $(document).on('click','#photo',function(){
-
+       function  getPicture(){                                                       
 		    //人脸采集部分
-
+             
 		    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
 
             var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
@@ -631,7 +630,7 @@ color:#fff;
                 alert("验证失败，请重试！");
                 wx.closeWindow();
             });		
-		});
+		};
 
 		function choosePic(id) {
             wx.chooseImage({
@@ -646,7 +645,7 @@ color:#fff;
             });
         }
 
-        function getLocalData(localid) {
+        function getLocalData(localid) {       
 			//获取本地图片资源
             wx.getLocalImgData({
                 localId: localid, // 图片的localID
@@ -658,13 +657,121 @@ color:#fff;
                     var sear=new RegExp(',');
                       if(sear.test(str)) {
                         arr=str.split(',');//注split可以用字符或字符串分割
-						$('#uploadImages').attr('src','data:image/png;base64,'+arr[1]);
+                      
+                        $('#uploadImages').attr('src','data:image/png;base64,'+arr[1]);
+                      						
 						base=arr[1];
+                       }else{                     
+                         $('#uploadImages').attr('src','data:image/png;base64,'+localData);                                               
+                          base=localData;
+                       }                                                                                                                                                                                  
+                }
+            });
+        }
+        
+        	
+		//点击输入框识别图片
+		$(document).on('click','#face',function(){
+	       discern();
+	    });
+	 
+	    
+	    function  discern() {
+	           //人脸采集部分
+		    var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+            var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			$.get(_uri, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				    
+					share=data;
+					wx.config({
+			            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			            appId : share.appId, // 必填，公众号的唯一标识
+			            timestamp : share.timestamp, // 必填，生成签名的时间戳
+			            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+			            signature : share.signature,// 必填，签名，见附录1
+			            jsApiList : ['chooseImage',
+		                        'previewImage',
+		                        'uploadImage',
+		                        'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	       	        });
+                }
+            });                        
+             wx.ready(function () {
+                wx.checkJsApi({
+                    jsApiList: [
+                        'chooseImage',
+                        'previewImage',
+                        'uploadImage',
+                        'downloadImage'
+                    ],
+                    success: function (res) {
+                      
+                        if (res.checkResult.getLocation == false) {
+                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                            return;
+                        }else{
+                            choosePicone(this.id);
+                        }
+                    }
+                });
+            });
+            wx.error(function(res){
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                alert("验证失败，请重试！");
+                wx.closeWindow();
+            });
+	    }
+		
+		
+		function choosePicone(id) {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    $.toast("照片处理中...", "loading");
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    getLocalDataone(localIds[0]);
+                }
+            });
+        }
+		
+        function getLocalDataone(localid) {
+
+			//获取本地图片资源
+            wx.getLocalImgData({
+                localId: localid, // 图片的localID
+                success: function (res) {
+                    var localData = res.localData; // localData是图片的base64数据，可以用img标签显示    
+                
+                    var _uri = window.BASEPATH + 'pubnum/IdentityCard';
+                    var params = {};
+                   var str=new String();
+                    var arr=new Array();
+                    str=localData ;
+　               var sear=new RegExp(',');
+                     if(sear.test(str)) {
+                          arr=str.split(',');//注split可以用字符或字符串分割
+                          params.localData=arr[1];
                        }else{
-                            $('#uploadImages').attr('src','data:image/png;base64,'+localData);
-                            base=localData;
-                       }                                 
-                    photos[id]=localData;
+                                      params.localData=localData; 
+                         }
+                     
+                                 
+                      
+		$.post(_uri, params, function(data){                                                  
+			           if(data.msg==0){
+						   $("#_idcard").val(data.sfz)
+						   $("#_name").val(data.name) 	
+						}			   
+					     if(data.msg==1){
+						     alert("识别失败,请继续上传或者手动输入");
+						 }			        
+				    });
                 }
             });
         }
@@ -837,7 +944,7 @@ color:#fff;
       <div class="layui-inline" style="width:96%;height:auto;position: relative;"> <!-- 注意：这一层元素并不是必须的 -->
   			<ul class="listbox" style="color:black;">
 		    <li>
-  			<input type="text" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="useDate">
+  			<input type="text" readonly="readonly" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="useDate">
 	        <p style="position: absolute;top:30px;left:10%;">游玩日期</p>
 	        <p style="position: absolute;top:30px;right:5%;">❯</p>
 		    </li>
@@ -894,7 +1001,7 @@ color:#fff;
 		    </li>
 		    <li>
 		    <input id="_idcard" class="pid"  type="text" placeholder="请输入身份证号码" minlength="18" maxlength="18" style="" >
-		     <img style="height:20px;height:20px;position: absolute;top:205px;right:10%;" src="lib/images/zhaoxiang.png"> 
+		     <img id="face" style="height:20px;height:20px;position: absolute;top:205px;right:10%;" src="lib/images/zhaoxiang.png"> 
 		    <p  style="position: absolute;top:205px;left:10%;">身份证号码</p>
 		    </li>
 		 </ul>
@@ -902,7 +1009,7 @@ color:#fff;
 <div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;">
           <img id="uploadImages" style="width:140px;height:171px;position: absolute;left:50%;margin:40px 0 0 -70px;" alt="" src="lib/images/renliansss.png">
           <p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-126px;">请保持正脸，平视屏幕，面部足够清晰。</p>
-          <button id="photo" style="position: absolute;left:50%;margin-left:-50px;top:300px;font-size:18px;width:100px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>
+          <button onclick="getPicture()" style="position: absolute;left:50%;margin-left:-50px;top:300px;font-size:18px;width:100px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>
           <button onclick="save()" style="position: absolute;left:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">保存</button>
           <button onclick="shutdown()" style="position: absolute;right:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">关闭</button>
       </div>

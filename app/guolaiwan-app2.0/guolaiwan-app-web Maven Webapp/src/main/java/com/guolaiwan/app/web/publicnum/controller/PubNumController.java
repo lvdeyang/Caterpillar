@@ -1096,7 +1096,12 @@ public class PubNumController extends WebBaseControll {
 			orderInfoPO.setOrderState(OrderStateType.REFUNDING);
 			orderInfoPO.setRefundReason(reason);
 			conn_order.save(orderInfoPO);
-			sendMessage(orderInfoPO, reason);
+			try{
+				sendMessage(orderInfoPO, reason);
+			}catch(Exception e){
+				 e.printStackTrace();
+			}
+			
 		}
 		return success();
 	}

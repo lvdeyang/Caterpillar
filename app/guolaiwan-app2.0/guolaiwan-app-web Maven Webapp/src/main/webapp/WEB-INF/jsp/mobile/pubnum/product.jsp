@@ -735,7 +735,7 @@ input[type="datetime-local"]:before{
 					     if(i==1){
 					          html.push('<option value="'+data[i-1].id+'">'+data[i-1].name+'</option>');
 					     }
-
+ 
 					   }
 					   $('#logisticsList').append(html.join(''));
 					    if(str.indexOf("包邮") != -1)
