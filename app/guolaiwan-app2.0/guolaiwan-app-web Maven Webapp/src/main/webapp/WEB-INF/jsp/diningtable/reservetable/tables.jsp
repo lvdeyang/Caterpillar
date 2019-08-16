@@ -253,7 +253,7 @@ background: #fff;
 		function search() {
 			var _uri = window.BASEPATH + 'reservetable/search.do'; //
 			var patam = {};
-			patam.merchantId = 240 ; //240 '${merchantId}'
+			patam.merchantId = '${merchantId}' ; //240 '${merchantId}'
 			patam.search = $(".search").val();
 			patam.tableDate = $("#test2").val(); //时间
 			if ($(".texts").val() != "请选择") {
@@ -332,7 +332,7 @@ background: #fff;
 			$('.Room-right').empty();
 			var _uri = window.BASEPATH + 'reservetable/getlist.do'; //
 			var patam = {};
-			patam.merchantId = 240 ; //'${merchantId}'
+			patam.merchantId = '${merchantId}' ; //'${merchantId}'
 			patam.feature = window.change; //'${merchantId}'
 			patam.tableDate = $("#test2").val(); //时间
 			if ($(".texts").val() != "请选择") {
@@ -400,10 +400,9 @@ background: #fff;
 			} else { //包间
 				if (boole == 0) {
 					var html = [];
-					html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #7EBE34;border-radius:8px;padding:2px 2px;margin:8px 3%;">');
-					/* if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
-					if (data.tableState == 1) html.push('<img style="width:90%;" onclick="href('+data.id+')"src="lib/images/luse.png">')
-					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">') */
+					if (data.tableState == 0) html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #A4A2A0;border-radius:8px;padding:2px 2px;margin:8px 3%;">');
+					if (data.tableState == 1) html.push('<div class="hous" onclick="href('+data.id+')" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #7EBE34;border-radius:8px;padding:2px 2px;margin:8px 3%;">');
+					if (data.tableState == 2) html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #D13035;border-radius:8px;padding:2px 2px;margin:8px 3%;">'); 
 					html.push('<p style="line-height:20px;font-weight:bold;">' + data.tablename + '</p>');
 					html.push('<p style="line-height:20px;font-weight:bold;"><span>' + data.size + '人间</span></p>');
 					if (data.sofa == 1) { //沙发
@@ -430,10 +429,9 @@ background: #fff;
 					window.boole = 1;
 				} else {
 					var html = [];
-					html.push('<div class="houss" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #7EBE34;border-radius:8px;padding:2px 2px;margin:8px 3%;">');
-					/* if (data.tableState == 0) html.push('<img style="width:90%;" src="lib/images/room.png">')
-					if (data.tableState == 1) html.push('<img style="width:90%;" onclick="href('+data.id+')" src="lib/images/luse.png">')
-					if (data.tableState == 2) html.push('<img style="width:90%;" src="lib/images/xuanzhon.png">') */
+					if (data.tableState == 0) html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #A4A2A0;border-radius:8px;padding:2px 2px;margin:8px 3%;">');
+					if (data.tableState == 1) html.push('<div class="hous" onclick="href('+data.id+')" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #7EBE34;border-radius:8px;padding:2px 2px;margin:8px 3%;">');
+					if (data.tableState == 2) html.push('<div class="hous" style="text-align:center;width:100%;height:auto;display: inline-block;border:1px solid #D13035;border-radius:8px;padding:2px 2px;margin:8px 3%;">'); 
 					html.push('<p style="line-height:20px;font-weight:bold;">' + data.tablename + '</p>');
 					html.push('<p style="line-height:20px;font-weight:bold;"><span>' + data.size + '人间</span></p>');
 					if (data.sofa == 1) { //沙发
@@ -470,7 +468,7 @@ background: #fff;
 	  }else{
 	     repast = "DINNER";
 	  }
-	 window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId="+240+"&repast="+repast+"&tableDate="+$("#test2").val();
+	 window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId=${merchantId}&repast="+repast+"&tableDate="+$("#test2").val();
 	}
 
 </script>

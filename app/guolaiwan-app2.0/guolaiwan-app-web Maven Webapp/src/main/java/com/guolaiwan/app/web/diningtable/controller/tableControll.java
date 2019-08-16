@@ -281,6 +281,32 @@ public class tableControll extends WebBaseControll  {
 		return map;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/getOrder.do",method = RequestMethod.POST) // 搜索功能
+	public Map<String, Object> getOrder(HttpServletRequest request) throws Exception{//添加入驻信息
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		String orderId = pageObject.getString("orderId");  
+		String type  =null;
+		TableStatusPO TableStatus  =  Table_Status.getByField("id",Long.parseLong(orderId));
+		if("LUNCH".equals(TableStatus.getType())){
+			type = "午餐";
+		}else{
+			type = "晚餐";
+		}
+		System.out.println(TableStatus.getType());
+		TablePO addpo  = Table.getByField("id",TableStatus.getTableId());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("tables", TableStatus);
+		map.put("table", addpo);
+		map.put("type", type);
+		return map;
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/addition.do",method = RequestMethod.POST) // 保存用户信息
