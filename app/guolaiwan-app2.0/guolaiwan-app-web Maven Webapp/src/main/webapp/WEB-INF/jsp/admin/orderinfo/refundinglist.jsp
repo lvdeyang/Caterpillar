@@ -97,6 +97,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						 });
              		}else if(data=="lose"){
              			layer.msg("退款出错，请技术查看");
+             		}else if(data=="later"){
+             			layer.msg("已申请退款等待审核（天时同城）");
              		}
              	})
 					

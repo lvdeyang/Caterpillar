@@ -42,21 +42,38 @@ public class TianShiController {
 			param = param.replaceAll("\\\\", "");
 			param = param.substring(1, param.length() - 1);
 		}
+		System.out.println("转完之后的String：------"+param);
 		JSONObject result = JSON.parseObject(param);
         System.out.println("通知类型为验单："+result.getString("method"));
         String method=result.getString("method");
+        String success=result.getString("success");
+        String info=result.getString("info");
+        JSONObject infos = JSON.parseObject(info);
         if(method.equals("validate")){
-        	String success=result.getString("success");
         	if(success.equals("true")){
-        		String info=result.getString("info");
-        		JSONObject infos = JSON.parseObject(info);
         		String orderId=infos.getString("another_orders_id");
         		System.out.println("回调获得过来玩的订单ID为："+orderId);
         		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
         		order.setOrderState(OrderStateType.TESTED);
-        		orderinfoDAO.saveOrUpdate(order);
+        		orderinfoDAO.update(order);
         	}
         	
+        }else if(method.equals("refundResult")){
+        	if(success.equals("true")){
+        		String orderId=infos.getString("another_orders_id");
+        		String type=infos.getString("type");
+        		System.out.println("回调获得过来玩的订单ID为："+orderId);
+        		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
+        		if(type.equals("3")){
+        			order.setOrderState(OrderStateType.REFUNDED);
+        			orderinfoDAO.update(order);
+        		}
+        	}
+        }else if(method.equals("send")){
+        	if(success.equals("true")){
+        		String out_code=infos.getString("out_code");
+        		System.out.println(out_code);
+        	}
         }
 		return "success";
 	}
@@ -113,6 +130,7 @@ public class TianShiController {
 				JSONObject infojson = JSON.parseObject(info);
 				String status = infojson.get("status").toString();
 				if(status.equals("3"))return "success";
+				if(status.equals("2"))return "later";
 			}else{
 				System.out.println("接口调用失败");
 				return "lose";
