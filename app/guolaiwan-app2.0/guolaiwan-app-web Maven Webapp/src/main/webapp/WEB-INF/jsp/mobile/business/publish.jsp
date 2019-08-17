@@ -190,7 +190,7 @@ html, body {
 		    }
    });
    $(document).on('click','#return', function() { //返回
-     	  window.location.href="business/merchant/nsAndView?merchantId=198&comCode=0001";
+     	  history.back();
   });
 </script>
 

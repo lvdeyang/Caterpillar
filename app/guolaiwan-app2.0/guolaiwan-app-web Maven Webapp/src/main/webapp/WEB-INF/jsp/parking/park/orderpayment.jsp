@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+﻿<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -386,8 +386,8 @@ html, body {
            return false;
             }
 			var startdiv = document.getElementById("startdiv").style.display;
-			var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "//"));
-			var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "//"));
+			var sDate = new Date(document.getElementById("startDate").value.replace(/\-/g, "/"));
+			var eDate = new Date(document.getElementById("endDate").value.replace(/\-/g, "/"));
 			if (sDate >= eDate) {
 				$.toast("离场时间不能小于进场时间", "forbidden");
 				return false;

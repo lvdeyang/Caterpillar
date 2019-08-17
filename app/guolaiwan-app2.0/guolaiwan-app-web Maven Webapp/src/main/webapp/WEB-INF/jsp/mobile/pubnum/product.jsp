@@ -1907,9 +1907,9 @@ input[type="datetime-local"]:before{
 		}
 		//编辑地址
 		$(document).on('click','#addAddress',function(){
-		   if(product=="0001"||product=="0002"){
+		  /*  if(product=="0001"||product=="0002"){
 		     $('#weui,#weui-cell').hide();
-		   };
+		   }; */
 		    $('.modDiv').hide();
 		    $('#addressSecond').show();
 		});
@@ -1918,10 +1918,10 @@ input[type="datetime-local"]:before{
 			   $.toast("请选择地址", "forbidden");
 			   return false;
 			}
-			if($('#moreAddress').val()==''){
+			 if($('#moreAddress').val()==''){
 			   $.toast("请输入详细地址", "forbidden");
 			   return false;
-			}
+			} 
 			if($('#addressphone').val()==''){
 			   $.toast("请输入手机号", "forbidden");
 			   return false;
@@ -2309,9 +2309,9 @@ input[type="datetime-local"]:before{
 					<div class="modDiv" id="addressFitst">
 
 						<div class="weui-cells__title" style="color:red;font-weight:bold">点击地址选择或添加新联系人</div>
-						<a id="addAddress"
+						 <a id="addAddress"
 								style="width:96%;font-size:14px;margin-left:2%;background-color:#18b4ed;height:30px;line-height:30px;margin-top:0"
-								href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a>
+								href="javascript:;" class="weui-btn weui-btn_primary">添加地址</a> 
 						<div class="weui-panel__bd" id="addressList"
 							style="padding-bottom:40px;"></div>
 

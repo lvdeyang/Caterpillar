@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
@@ -245,6 +246,9 @@ public class WxPayController extends BaseController {
 
 	@Autowired
 	private BundleOrderDAO conn_bundle;
+	
+	@Autowired
+	private InvestWalletDAO conn_investWallet;
 
 	@ResponseBody
 	@RequestMapping(value = "/refund", method = RequestMethod.GET)
@@ -291,10 +295,18 @@ public class WxPayController extends BaseController {
 		
 				return result;
 		}else{
+			//钱包退款
 			if (conn_orderInfo.get(Long.parseLong(orderId)).getOrderState() == OrderStateType.REFUNDING) {
 				UserInfoPO user = conn_user.get(conn_orderInfo.get(Long.parseLong(orderId)).getUserId());
 				user.setWallet(user.getWallet()+conn_orderInfo.get(Long.parseLong(orderId)).getPayMoney());
 				conn_user.saveOrUpdate(user);
+				//添加退款明细
+				InvestWalletPO iWalletPO = new InvestWalletPO();
+				iWalletPO.setUserid(user.getId());
+				iWalletPO.setMoney(-(conn_orderInfo.get(Long.parseLong(orderId)).getPayMoney()));
+				iWalletPO.setProductname(conn_orderInfo.get(Long.parseLong(orderId)).getProductName());
+				iWalletPO.setUsername(user.getUserNickname());
+				conn_investWallet.save(iWalletPO);
 			}
 			return success();
 		}

@@ -766,7 +766,10 @@ return $.cookie(str);
 			        modals[i] = liveModal;
 			      }			    
 			    }
-			    modals.push(starp);
+			    if(starp){
+			       modals.push(starp);
+			    }
+			    
 			    			    
 			    if(modals.length<20){
 			       for(var k=modals.length;k<20;k++){
@@ -776,12 +779,15 @@ return $.cookie(str);
 				for(var i=0; i<modals.length; i++){
 				
 				   var index=i;
-				   if(i==6){
-				     index=10;
+				   if(modals[11].modularCode){
+				       if(i==6){
+					     index=10;
+					   }
+					   if(i==10){
+					     index=6;
+					   }
 				   }
-				   if(i==10){
-				     index=6;
-				   }
+				   
 				   if(i%10==0){
 				     html.push('<div style="height:180px;" class="swiper-slide">');
 				     html.push('<table class="columnTable" style="margin-top:10px;">');

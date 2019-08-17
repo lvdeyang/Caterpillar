@@ -1096,7 +1096,12 @@ public class PubNumController extends WebBaseControll {
 			orderInfoPO.setOrderState(OrderStateType.REFUNDING);
 			orderInfoPO.setRefundReason(reason);
 			conn_order.save(orderInfoPO);
-			sendMessage(orderInfoPO, reason);
+			try{
+				sendMessage(orderInfoPO, reason);
+			}catch(Exception e){
+				 e.printStackTrace();
+			}
+			
 		}
 		return success();
 	}
@@ -2237,10 +2242,9 @@ public class PubNumController extends WebBaseControll {
 					// 更换订单
 					OrderInfoPO newOrder = (OrderInfoPO) orderInfoPO.clone();
 					newOrder.setId(null);
-					newOrder.setPayMoney((newOrder.getPayMoney() / newOrder.getProductNum()) * numReal);
-					newOrder.setPayMode(PayType.WEICHAT);
+					newOrder.setPayMoney((newOrder.getPayMoney() / newOrder.getProductNum()) * numReal);					
 					newOrder.setProductNum(numReal);
-
+					newOrder.setIswallet(true);
 					conn_order.save(newOrder);
 					conn_order.delete(orderInfoPO);
 					payMoney += newOrder.getPayMoney();
