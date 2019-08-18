@@ -37,10 +37,11 @@ public class TianShiController {
 	/**
 	 * 回调结果通知 根据回调的是啥来写相应的逻辑
 	 * @param request
+	 * @throws Exception 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/changeorderstate")
-	public String  huidiao(HttpServletRequest request){
+	public String  huidiao(HttpServletRequest request) throws Exception{
 		System.out.println("天时同城回调成功");
 		// 解析json
 		String param = getRequestJson(request);
@@ -54,25 +55,41 @@ public class TianShiController {
 		String[] split;
 		for (String string : result) {
 			split = string.split("=");
+			if(split.length==1)continue;
+			//转成键值对之后的样式
 			System.out.println(split[0]+"----"+split[1]);
+			//放进map
 			all.put(split[0], split[1]);
 		}
+		//判断回调的数据属于什么类型
 		String method=all.get("method");
+		//验单回调
         if(method.equals("validate")){
         		String orderId=all.get("another_orders_id");
-        		System.out.println("回调获得过来玩的订单ID为："+orderId);
+        		System.out.println("验单回调 过来玩的订单ID为："+orderId);
         		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
         		order.setOrderState(OrderStateType.TESTED);
         		orderinfoDAO.update(order);
+        //退款回调
         }else if(method.equals("refundResult")){
         		String orderId=all.get("orders_id");
         		String type=all.get("type");
-        		System.out.println("回调获得过来玩的订单ID为："+orderId);
+        		System.out.println("退款回调 过来玩的订单ID为："+orderId);
         		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
         		if(type.equals("3")){
-        			/*WxPayController wxPay=WxPayController.getInstance("http://"+WXContants.Website+"/website/wxpay/refund");*/
-        			/*order.setOrderState(OrderStateType.REFUNDED);
-        			orderinfoDAO.update(order);*/
+        			//调用微信的退款方法
+        			GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+					Map<String, String> reqData = new HashMap<String, String>();
+					long amount = order.getPayMoney();
+					String refundOrderNum = "refund" + orderId;
+					reqData.put("out_trade_no", orderId + "");
+					reqData.put("out_refund_no", refundOrderNum);
+					reqData.put("total_fee", amount + "");
+					reqData.put("refund_fee", amount + "");
+					Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据
+					//退款了之后修改订单状态
+        			order.setOrderState(OrderStateType.REFUNDED);
+        			orderinfoDAO.update(order);
         		}
         }else if(method.equals("send")){
         		String out_code=all.get("out_code");

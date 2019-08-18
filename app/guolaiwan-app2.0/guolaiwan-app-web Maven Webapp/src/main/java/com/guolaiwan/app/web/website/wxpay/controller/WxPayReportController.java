@@ -259,7 +259,7 @@ public class WxPayReportController extends WebBaseControll {
 		}else{
 			System.out.println("判断此商品是分销商品");
 			String id = order.getId().toString();
-			String userName = order.getUserName();
+			String userName = conn_address.get(order.getMailAddress()).getConsigneeName();
 			String buynum=String.valueOf(order.getProductNum());
 			String userTel = conn_address.get(order.getMailAddress()).getConsigneePhone();
 			String startDate = df.format(order.getOrderBookDate());
