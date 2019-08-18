@@ -7632,6 +7632,7 @@ public class PhoneController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/isdistribute")
 	public String isDistribute(Long orderId){
+		System.out.println("进行判断是否分销商品");
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");	
 		OrderInfoPO order = conn_order.get(orderId);
 		long merchatId=order.getShopId();
@@ -7641,6 +7642,7 @@ public class PhoneController extends WebBaseControll {
 			System.out.println("判断此商品不是分销商品");
 			return "error";
 		}else{
+			System.out.println("判断此商品是分销商品");
 			String id = order.getId().toString();
 			String userName = order.getUserName();
 			String buynum=String.valueOf(order.getProductNum());
@@ -7671,7 +7673,7 @@ public class PhoneController extends WebBaseControll {
 				System.out.println("接口调用失败");
 				return "没成功";
 			}
-			return "success";
+			return "没成功";
 		}
 	}
 	
