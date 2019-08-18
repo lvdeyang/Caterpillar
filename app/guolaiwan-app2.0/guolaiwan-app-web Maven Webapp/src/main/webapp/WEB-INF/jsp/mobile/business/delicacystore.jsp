@@ -614,10 +614,11 @@ html, body {
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript">
+
 	$(function() {
    	 image(); //顶部图片 营业时间 特色
    	 two();
-   	 
+  
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -750,6 +751,11 @@ html, body {
   	 
 		    location.href=window.BASEPATH + 'reservetable/tables/home?merchantId=${merchantId}'; 
     });
+	$(document).on('click','#btnselect',function(){
+  	     if( $("#totalcountshow").html()  >0 ){ //支付
+  	     
+  	     }
+    });
 	    
 	  
 	   
@@ -771,7 +777,7 @@ html, body {
 			});
 	    }
 	    
-	  
+	
 <!--选项卡  -->
 	$(".tab-btn li").click(function(){
 	//为按钮添加样式
@@ -863,6 +869,7 @@ html, body {
 	
 	var storage =[];//存储菜品分类
 	var  list =null; //保存数据
+	var  boole = 1;
 	function two(){ //左边列表
 	     storage =[];
 	     var _uricoms = window.BASEPATH + '/cate/order/list?merchantId='+${merchantId};	
@@ -878,13 +885,17 @@ html, body {
 	                html.push('<li id="'+data.name[i].productClassCode+'" onclick="sel(this.id)">'+data.name[i].productClassName+'</li>');
 	            } else{
 	              for(var j=0; j<storage.length;j++){
-	                if(storage[j] != data.name[i].productClassName ){
-	                   storage.push(data.name[i].productClassName);
-	                   html.push('<li id="'+data.name[i].productClassCode+'" onclick="sel(this.id)">'+data.name[i].productClassName+'</li>');
+	                if(storage[j] == data.name[i].productClassName ){
+	                  boole = 0;
+	                  break ;
 	                }
 	              }
+	              if(boole == 1){
+	               storage.push(data.name[i].productClassName);
+	               html.push('<li id="'+data.name[i].productClassCode+'" onclick="sel(this.id)">'+data.name[i].productClassName+'</li>');
+	               boole = 0;
+	              }
 	            }
-			 		/* select(code[i]); */
 		   }
 		   $('#meau').append(html.join(''));	  
 		   select();//显示菜品   	
@@ -930,31 +941,45 @@ html, body {
 		 for(var i = 0; i<list.length; i++){
 		    if(list[i].productClassName == storage[j]){
 	            html.push('<li>');           
-		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+list[i].productShowPic+' width="55" height="55" /></div>');
-		        html.push('<div class="menu-txt">');
+		        html.push('<div class="menu-img"><img class="men_img" src=http://www.guolaiwan.net/file'+list[i].productShowPic+' width="55" height="55" /></div>');
+		        html.push('<div class="menu-txt" >');
 		        html.push('<font>'+list[i].productName+'</font>');
-		        html.push('<p class="list1">月销<span>120</span></p>');
+		        html.push('<p class="list1"  >月销<span>120</span></p>');
 		        html.push('<p class="list2">');
 		        html.push('<b>￥'+list[i].productPrice+'</b>');
-		        html.push('<div class="btn"> ');
-		        html.push(' <button class="minus"  id ="minus'+list[i].uuid+'"  onclick="minus(this.id)" >  <strong></strong>   </button>');
-		        html.push(' <i >0</i> ');
-		        html.push('<button class="add" id ="add'+list[i].uuid+'" onclick="add(this.id)">  <strong></strong>  </button> ');
-		        html.push('<i class="price">'+list[i].productPrice+'</i>');
-		        html.push(' </div> ');
-		        html.push('</p>');
-		        html.push('</div> ');
-		        html.push('</li>');		 
+		        html.push('<div class="btn">');
+		        if(list[i].mealAmount >0){
+		       	  html.push(' <button class="minus" style="display:block;display: inline-block;"  id ="minus'+list[i].uuid+'"  onclick="minus(this.id,'+list[i].id+')" >  <strong class="minuss" ></strong>   </button>');
+		          html.push(' <i style="display:block;display: inline-block;">'+list[i].mealAmount+'</i> ');
+		          html.push('<button class="add" id ="add'+list[i].uuid+'" onclick="add(this.id,'+list[i].id+')">  <strong class="adds"></strong>  </button> ');
+		          html.push('<i class="price">'+list[i].productPrice+'</i>');
+		          html.push(' </div> ');
+		       	  html.push('</p>');
+		       	  html.push('</div> ');
+		       	  html.push('</li>');	
+		          calculate(list[i].productPrice,list[i].mealAmount);
+		        }else{
+		          html.push(' <button class="minus"  id ="minus'+list[i].uuid+'"  onclick="minus(this.id,'+list[i].id+')" >  <strong class="minuss"></strong>   </button>');
+		          html.push(' <i >0</i> ')
+		          html.push('<button class="add" id ="add'+list[i].uuid+'" onclick="add(this.id,'+list[i].id+')">  <strong class="adds"></strong>  </button> ');
+		          html.push('<i class="price">'+list[i].productPrice+'</i>');
+		          html.push(' </div> ');
+		       	  html.push('</p>');
+		       	  html.push('</div> ');
+		       	  html.push('</li>');	
+		        }
 		    }
+		    	
 		}
 		html.push('</ul>');   	
 		html.push('</div>');
+	
 	    $('.con').append(html.join(''));
 	    $(".con>div").hide();  //隐藏别的菜品 只显示初始
 		$(".con>div:eq(0)").show();
   	  }
 	}
-	
+	  
  function  sel(code){ //切换菜品类型
     $("#"+code).addClass("active").siblings().removeClass("active");
 	var n = $(".left-menu li").index("#"+code);
@@ -967,36 +992,59 @@ html, body {
 <script type="text/javascript">
 
   /* 美团外卖  */
-
- 
+       function calculate (danjia,mealAmount){
+        /* var danjia = $("#"+cls).next().text();//获取单价   */
+		var a = $("#totalpriceshow").html();//获取当前所选总价    
+		$("#totalpriceshow").html((a * 1 + danjia * mealAmount).toFixed(2));//计算当前所选总价  
+		var nm = $("#totalcountshow").html();//获取数量  
+		$("#totalcountshow").html(nm*1+mealAmount);  
+		jss();
+       }
 	 //加的效果  
-       function add(cls){
+       function add(cls,id){
 		$("#"+cls).prevAll().css("display", "inline-block");  
 		var n = $("#"+cls).prev().text();  
 		var num = parseInt(n) + 1;  
-		if (num == 0) { return; }  
+		if (num == 0) { return; } 
+		var  aggregate =  num; 
 		$("#"+cls).prev().text(num);  
 		var danjia = $("#"+cls).next().text();//获取单价  
 		var a = $("#totalpriceshow").html();//获取当前所选总价    
 		$("#totalpriceshow").html((a * 1 + danjia * 1).toFixed(2));//计算当前所选总价  
-		  
 		var nm = $("#totalcountshow").html();//获取数量  
 		$("#totalcountshow").html(nm*1+1);  
 		jss();//<span style='font-family: Arial, Helvetica, sans-serif;'></span>   改变按钮样式
+		var _uril = window.BASEPATH + '/cate//order/setmeal';
+		var param = {};
+	 	param.merchantId = '${merchantId}';
+		param.tableId = '${tableId}';
+		param.productId = id;
+		param.mealAmount = aggregate;
+		$.post(_uril, $.toJSON(param), function(data) {
+	     
+	    }); 
 	}  
 	//减的效果  
-	  function minus(cls){
+	  function minus(cls,id){
 		var n = $("#"+cls).next().text();  
 		var num = parseInt(n) - 1;  
-
+		var  aggregate =  num; 
 		$("#"+cls).next().text(num);//减1  
-
 		var danjia = $("#"+cls).nextAll(".price").text();//获取单价  
 		var a = $("#totalpriceshow").html();//获取当前所选总价  
 		$("#totalpriceshow").html((a * 1 - danjia * 1).toFixed(2));//计算当前所选总价  
 		 
 		var nm = $("#totalcountshow").html();//获取数量  
 		$("#totalcountshow").html(nm * 1 - 1);  
+		var _uril = window.BASEPATH + '/cate//order/setmeal';
+		var param = {};
+	 	param.merchantId = '${merchantId}';
+		param.tableId = '${tableId}';
+		param.productId = id;
+		param.mealAmount = aggregate;
+		$.post(_uril, $.toJSON(param), function(data) {
+	     
+	    });
 		//如果数量小于或等于0则隐藏减号和数量  
 		if (num <= 0) {  
 			$("#"+cls).next().css("display", "none");  
@@ -1051,6 +1099,7 @@ html, body {
 	     var url = window.BASEPATH + 'pubnum/product/index/payinshop/'+${merchantId};	
 	     $.get(url,null,function(msg){})   
 	  }	
+	  
 </script>
 
 <body>

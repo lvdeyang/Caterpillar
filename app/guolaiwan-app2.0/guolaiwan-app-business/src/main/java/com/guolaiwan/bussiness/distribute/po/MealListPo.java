@@ -15,21 +15,28 @@ import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import pub.caterpillar.orm.po.AbstractBasePO;
 
 @Entity
-@Table(name = "retail_policy")
+@Table(name = "meal_list")
 public class MealListPo extends AbstractBasePO {
 
 	private String  mealName; //菜品名称
-	private String  productId; //产品Id
+	private long  productId; //产品Id
     private int  mealAmount; //菜品数量
 	private long userId;   // 用户ID
 	private long merchantId; //商家id
+	private long tableId; //订桌表id
 	
 	
 	
-	public String getProductId() {
+	public long getTableId() {
+		return tableId;
+	}
+	public void setTableId(long tableId) {
+		this.tableId = tableId;
+	}
+	public long getProductId() {
 		return productId;
 	}
-	public void setProductId(String productId) {
+	public void setProductId(long productId) {
 		this.productId = productId;
 	}
 	public String getMealName() {

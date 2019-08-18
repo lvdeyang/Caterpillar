@@ -1,6 +1,8 @@
 package com.guolaiwan.app.web.business.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.CommentVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
@@ -41,6 +46,8 @@ import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.distribute.dao.MealListDao;
+import com.guolaiwan.bussiness.distribute.po.MealListPo;
 
 import pub.caterpillar.mvc.controller.BaseController;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
@@ -65,7 +72,9 @@ public class CateController extends BaseController {
 	@Autowired
 	private OrderInfoDAO orderInfoDao;
 	@Autowired
-	 private ProductDAO productDao;
+	private ProductDAO productDao;
+	@Autowired
+	private MealListDao MealList;
 	/**
 	 * 二级页面 轮播图（模块）
 	 * 美食轮播图
@@ -126,20 +135,79 @@ public class CateController extends BaseController {
 	@RequestMapping(value="/order/list")
 	public Map<String, Object> orderList(HttpServletRequest request) throws Exception{
 		String merchantId = request.getParameter("merchantId");	 
+		long userId = 	(Long) request.getSession().getAttribute("userId");
 		//根据productMerchantID查询商品信息
 		List<ProductPO> productPOs = productDao.findByMerchantId(Long.parseLong(merchantId)); 
 		//对商品进行类型的存储
 		Map<String, Object> hashMap = new HashMap<String, Object>();
 		//遍历商品信息
-		List<ProductVO> merlist	=null;
-		for(ProductPO po :productPOs){
-			merlist	 = ProductVO.getConverter(ProductVO.class).convert(productPOs, ProductVO.class);
+		List<ProductVO> merlist	 = ProductVO.getConverter(ProductVO.class).convert(productPOs, ProductVO.class);
+		for (ProductVO productVO : merlist) {
+			MealListPo MealListPo = MealList.findByDistributor(productVO.getId(),userId,Long.parseLong(merchantId));
+			if (MealListPo != null) {
+				productVO.setMealAmount(MealListPo.getMealAmount());
+			}
 		}
 		hashMap.put("name", merlist);
 		return hashMap ;	  
 	}
 	
 	
-				
+	//整减 菜存入数据库
+	@ResponseBody
+	@RequestMapping(value="/order/setmeal")
+	public Object setmeal(HttpServletRequest request) throws Exception{
+	    long userId = 	(Long) request.getSession().getAttribute("userId");
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		long merchantId = pageObject.getLong("merchantId"); // 商户id
+		String tableId = pageObject.getString("tableId"); // 订桌Id
+		long productId = pageObject.getLong("productId"); // 产品Id
+		int mealAmount = pageObject.getInteger("mealAmount"); // 数量
+		MealListPo MealListPo = MealList.findByDistributor(productId,userId,merchantId);
+		if (  MealListPo!= null) {
+			if(mealAmount >0){
+				MealListPo.setMealAmount(mealAmount);
+				MealList.save(MealListPo);
+			}else{
+				MealList.delete(MealListPo);
+			}
+		}else{
+			MealListPo meal = new MealListPo();
+			meal.setProductId(productId);
+			meal.setMerchantId(merchantId);
+			if (tableId != null &&  !"".equals(tableId)) {
+				meal.setTableId(Long.parseLong(tableId));
+			}
+			meal.setMealAmount(mealAmount);
+			meal.setUserId(userId);
+			MealList.saveOrUpdate(meal);
+		}
+		return "" ;	  
+	}
+	
+	
+
+	private String getRequestJson(HttpServletRequest request) {
+		try {
+			BufferedReader br;
+			br = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream(), "utf-8"));
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+			request.getInputStream().close();
+			br.close();
+			return sb.toString();
+		} catch (IOException e) {
+			return "";
+		}
+	}
+	
 	
 }

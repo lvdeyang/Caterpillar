@@ -593,8 +593,10 @@ public class BusinessController extends WebBaseControll {
 	public ModelAndView goToDelicacystore(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		long orderId=Long.parseLong(request.getParameter("orderId"));
 		mv = new ModelAndView("mobile/business/delicacystore");
 		mv.addObject("merchantId", merchantId);
+		if(orderId != -1 && orderId != 0) mv.addObject("orderId", orderId);
 		return mv; 
 	}
 	

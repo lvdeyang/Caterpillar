@@ -168,8 +168,20 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	private String groupprice;
 	//分销商品ID（过来玩代理其他家）
 	private String distributeId;
+    private int  mealAmount; //菜品数量
 	
-	
+	 
+	 
+	public int getMealAmount() {
+		return mealAmount;
+	}
+
+
+	public void setMealAmount(int mealAmount) {
+		this.mealAmount = mealAmount;
+	}
+
+
 	public String getDistributeId() {
 		return distributeId;
 	}
