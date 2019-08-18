@@ -3,6 +3,8 @@ package com.guolaiwan.app.tianshitongcheng.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
+import com.guolaiwan.app.web.website.wxpay.controller.WxPayController;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+
+import pub.caterpillar.weixin.constants.WXContants;
+import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
 
 
 @Controller
@@ -43,37 +49,34 @@ public class TianShiController {
 			param = param.substring(1, param.length() - 1);
 		}
 		System.out.println("转完之后的String：------"+param);
-		JSONObject result = JSON.parseObject(param);
-        System.out.println("通知类型为验单："+result.getString("method"));
-        String method=result.getString("method");
-        String success=result.getString("success");
-        String info=result.getString("info");
-        JSONObject infos = JSON.parseObject(info);
+		Map<String, String> all=new HashMap<String, String>();
+		String result[]=param.split("&");
+		String[] split;
+		for (String string : result) {
+			split = string.split("=");
+			System.out.println(split[0]+"----"+split[1]);
+			all.put(split[0], split[1]);
+		}
+		String method=all.get("method");
         if(method.equals("validate")){
-        	if(success.equals("true")){
-        		String orderId=infos.getString("another_orders_id");
+        		String orderId=all.get("another_orders_id");
         		System.out.println("回调获得过来玩的订单ID为："+orderId);
         		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
         		order.setOrderState(OrderStateType.TESTED);
         		orderinfoDAO.update(order);
-        	}
-        	
         }else if(method.equals("refundResult")){
-        	if(success.equals("true")){
-        		String orderId=infos.getString("another_orders_id");
-        		String type=infos.getString("type");
+        		String orderId=all.get("orders_id");
+        		String type=all.get("type");
         		System.out.println("回调获得过来玩的订单ID为："+orderId);
         		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
         		if(type.equals("3")){
-        			order.setOrderState(OrderStateType.REFUNDED);
-        			orderinfoDAO.update(order);
+        			/*WxPayController wxPay=WxPayController.getInstance("http://"+WXContants.Website+"/website/wxpay/refund");*/
+        			/*order.setOrderState(OrderStateType.REFUNDED);
+        			orderinfoDAO.update(order);*/
         		}
-        	}
         }else if(method.equals("send")){
-        	if(success.equals("true")){
-        		String out_code=infos.getString("out_code");
+        		String out_code=all.get("out_code");
         		System.out.println(out_code);
-        	}
         }
 		return "success";
 	}
