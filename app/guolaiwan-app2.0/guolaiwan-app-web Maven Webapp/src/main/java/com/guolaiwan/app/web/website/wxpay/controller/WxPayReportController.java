@@ -3,6 +3,7 @@ package com.guolaiwan.app.web.website.wxpay.controller;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.domain.RefundDetail;
+import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.bussiness.Parking.dao.AttractionsDao;
@@ -199,6 +202,11 @@ public class WxPayReportController extends WebBaseControll {
 							}
 						}
 						conn_orderInfo.saveOrUpdate(order);
+						
+						//判断是不是分销商品 调用接口 买票（凤凰山 皮影乐园）
+						isDistribute(order);
+						
+						
 						sendMessage(order);
 					}	
 				}
@@ -231,6 +239,56 @@ public class WxPayReportController extends WebBaseControll {
 		System.out.println("微信返回字符串:"+stringBuffer);
 
 		return stringBuffer.toString();
+	}
+	
+	
+	/**
+	 * 判断是不是分销商品
+	 * 天使同城的对接
+	 * （凤凰山）（皮影乐园）
+	 * @return
+	 */
+	private void isDistribute(OrderInfoPO order){
+		System.out.println("进行判断是否分销商品");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");	
+		long merchatId=order.getShopId();
+		ProductPO product = conn_product.get(order.getProductId());
+		String distributeId = product.getDistributeId();
+		if(distributeId==null||distributeId==""){
+			System.out.println("判断此商品不是分销商品");
+		}else{
+			System.out.println("判断此商品是分销商品");
+			String id = order.getId().toString();
+			String userName = conn_address.get(order.getMailAddress()).getConsigneeName();
+			String buynum=String.valueOf(order.getProductNum());
+			String userTel = conn_address.get(order.getMailAddress()).getConsigneePhone();
+			String startDate = df.format(order.getOrderBookDate());
+			String result="";
+			if(merchatId==358){
+				System.out.println("调用了凤凰山的接口");
+				result = TianShiTongChengAPI.sendFHSPost(id, distributeId,buynum, userName, userTel, startDate);
+			}else if(merchatId==386){
+				System.out.println("调用了皮影乐园的接口");
+				result = TianShiTongChengAPI.sendPYLYPost(id, distributeId,buynum, userName, userTel, startDate);
+			}
+			System.out.println("接口返回参数：");
+			System.err.println(result);
+		    JSONObject parseObject = JSON.parseObject(result);
+			String success = parseObject.get("success").toString();
+			if(success.equals("true")){
+				System.out.println("接口调用成功 获取qcode存起来");
+				String info = parseObject.get("info").toString();
+				JSONObject infojson = JSON.parseObject(info);
+				String qrcode = infojson.get("qrcode").toString();
+				String orders_id = infojson.get("id").toString();
+				order.setDistributeQcode(qrcode);
+				order.setDistributeId(orders_id);
+				conn_orderInfo.saveOrUpdate(order);
+				System.out.println("购买成功");
+			}else{
+				System.out.println("接口调用失败");
+			}
+		}
 	}
 	
 	
