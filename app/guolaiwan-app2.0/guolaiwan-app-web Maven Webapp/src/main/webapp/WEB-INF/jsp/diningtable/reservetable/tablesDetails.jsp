@@ -273,7 +273,7 @@ text-align: center;
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 						alert("交易成功");  
-						window.location.href = "reservetable/diningtable/tableSuccess?orderId="+window.orderId; 
+						window.location.href = "reservetable/diningtable/tableSuccess?orderId="+window.orderId+"&merchantId=${merchantId}"; 
 		            }
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
 		             alert("交易取消");  

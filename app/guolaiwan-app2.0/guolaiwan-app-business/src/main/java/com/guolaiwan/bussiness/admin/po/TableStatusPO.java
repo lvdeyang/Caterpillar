@@ -29,9 +29,31 @@ public class TableStatusPO extends AbstractBasePO {
 	private String userPhone; // 用户手机号
 	private String oderNo; // 订单号
 	private String ydNO; //订单二维码
+	private String  dishState; //菜品状态
+	private long   dishMoney;
 	
 	
 	
+	public String getDishState() {
+		return dishState;
+	}
+
+
+	public void setDishState(String dishState) {
+		this.dishState = dishState;
+	}
+
+
+	public long getDishMoney() {
+		return dishMoney;
+	}
+
+
+	public void setDishMoney(long dishMoney) {
+		this.dishMoney = dishMoney;
+	}
+
+
 	public String getYdNO() {
 		return ydNO;
 	}
