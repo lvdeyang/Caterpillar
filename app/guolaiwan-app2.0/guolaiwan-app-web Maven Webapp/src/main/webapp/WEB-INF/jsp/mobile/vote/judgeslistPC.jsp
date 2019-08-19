@@ -227,18 +227,32 @@ margin:0 5px;
 width:40px;
 height:40px;
 }
-table tr th{
+.list table tr th{
 background: #C3181E;
 color:#fff;
 border:none;
 text-align: center;
-height:3em;
-width:30%;
+height:2em;
+width:20%;
 }
-table tr td{
+.list table tr td{
 border:none;
 border:0.05em solid #CF4D50;
-height:3em;
+height:2em;
+} 
+
+.lists table tr th{
+background: #C3181E;
+color:#fff;
+border:none;
+text-align: center;
+height:2em;
+width:30%;
+}
+.lists table tr td{
+border:none;
+border:0.05em solid #CF4D50;
+height:2em;
 }          
 </style>
 
@@ -273,16 +287,20 @@ $(function() {
 	function fmat(time){
 		var da = time;
 	    da = new Date(da);
-	    var year = da.getFullYear()+'年';
 	    var month = da.getMonth()+1+'月';
 	    var date = da.getDate()+'日';
-		return year+month+date+"";
+		return month+date+"";
 	}
 
 	//展开数据
 	function list(id){
 		var url=window.BASEPATH + 'admin/vote/showjudges';
 			$.post(url,{"productId":id},function(data){
+		        $('.DATE').text(fmat(new Date()));
+		        $('.ORDER').text(data.ordercount);
+		        $('.MANVOTE').text(data.manvotes);
+		        $('.AVG').text(data.score);
+		        $('.ALLVOTE').text(parseInt(data.allcount));
 				var html=[];
 				 html.push('<table border="1"  style="font-size:2em;text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; width:100%;border:none;">'); 
 				 html.push('<tr>'); 
@@ -361,8 +379,26 @@ $(function() {
           <p class="logo-on" style="line-height:2em;color:black;font-size:3em;">当前评分菜品</p>
           <p id="name" class="logo-ou" style="line-height:2em;font-size:3em;"></p>
           <img class="pic" style="width:35%;border-radius:1em;float: left;margin-left:12%;" src="lib/images/ceshide.jpg">
+   			<div class="list" style="width:35%;float: right;margin:0 12% 0.2em 0;">
+   				<table border="1"  style="font-size:2em;text-align: center;margin:0 auto;border-collapse:   separate;   border-spacing:3px; width:100%;border:none;">
+   			    <tr>
+   			    <th>日期</th>
+   			     <th>已售</th>
+   			      <th>投票数</th>
+   			       <th>评委评分</th>
+   			        <th>总投票量</th>
+   			    </tr> 
+   			    <tr>
+   			     <td class="DATE"></td>
+   			     <td class="ORDER"></td>
+   			     <td class="MANVOTE"></td>
+   			     <td class="AVG"></td>
+   			     <td class="ALLVOTE"></td>
+   			    </tr>
+   			    </table>
+   			</div>
    			<div class="lists" style="width:35%;float: right;margin-right:12%;">
-   			
+   			   
    			</div>
    		</div>
 	    

@@ -640,6 +640,16 @@ public class VoteController extends BaseController {
 			for (JudgesVoteMsgPO judges : all) {
 				score+=judges.getScore();
 			}
+			VoteProductPO voteProductPO = voteproductDAO.getVoteProduct(productId);
+			VoteOptionsPo voteOption = voteoptionsDAO.get(voteProductPO.getOptionId());
+			//订单数量
+			int ordercount = voteimposeDAO.buyCountByPid(voteProductPO.getProductId()+"");
+			//此商品的所有群众投票数
+			int manvotes = voteimposeDAO.countByPid(voteProductPO.getProductId()+"");
+			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(score*1.0/100));
+			str.put("ordercount", ordercount+"");
+			str.put("manvotes", manvotes+"");
+			str.put("allcount", allcount+"");
 			str.put("score", (score/all.size()));
 			str.put("all", all);
 			return str;
