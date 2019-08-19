@@ -59,6 +59,8 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.TablePO;
 import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.distribute.dao.MealListDao;
+import com.guolaiwan.bussiness.distribute.po.MealListPo;
 import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
 import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
 import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
@@ -870,6 +872,195 @@ public class WxPayReportController extends WebBaseControll {
 				}
 		    	Table_Status.saveOrUpdate(TableStatus);
 				}
+				stringBuffer.append("<xml><return_code><![CDATA[");
+				stringBuffer.append("SUCCESS");
+				stringBuffer.append("]]></return_code>");
+				stringBuffer.append("<return_msg><![CDATA[");
+				stringBuffer.append("OK");
+				stringBuffer.append("]]></return_msg>");
+				System.out.println("微信支付付款成功!订单号："+tradeNum);
+			}else{
+				stringBuffer.append("<xml><return_code><![CDATA[");
+				stringBuffer.append("FAIL");
+				stringBuffer.append("]]></return_code>");
+				stringBuffer.append("<return_msg><![CDATA[");                                                             
+				stringBuffer.append("交易失败");
+				stringBuffer.append("]]></return_msg>");
+				System.out.println("微信支付交易失败");
+			}
+		}else{
+			stringBuffer.append("<xml><return_code><![CDATA[");
+			stringBuffer.append("FAIL");
+			stringBuffer.append("]]></return_code>");
+			stringBuffer.append("<return_msg><![CDATA[");
+			stringBuffer.append("签名失败");
+			stringBuffer.append("]]></return_msg>");
+			System.out.println("微信支付签名失败");
+		}
+		
+		System.out.println("微信返回字符串:"+stringBuffer);
+		
+		return stringBuffer.toString();
+	}
+	@Autowired
+	private MealListDao MealList;
+	@ResponseBody
+	@RequestMapping(value = "/buyDishPayment", method = RequestMethod.POST)
+	public String  buyDish(HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		Map<String, Object> ret=new HashMap<String, Object>();
+		System.out.println("*****************wxreport****************");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String xml="";
+		String tempStr="";
+		while((tempStr=reader.readLine())!=null){
+			xml+=tempStr;
+			System.out.println(tempStr);
+		}
+		
+		GuolaiwanWxPay wxPay=GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+		Map<String, String> respData = wxPay.processResponseXml(xml);
+		
+		System.out.println("返回的参数："+respData.toString());
+		
+		String returncode = respData.get("return_code");
+		String resultcode = respData.get("result_code");
+		System.out.println("returncode是："+returncode+";resultcode是"+resultcode);
+		StringBuffer stringBuffer = new StringBuffer();
+		if(returncode.equals("SUCCESS")){
+			if(resultcode.equals("SUCCESS")){
+				//获取订单号
+				String tradeNum = respData.get("out_trade_no");
+				Long orderId= Long.parseLong(tradeNum.split("-")[1]);
+				List<TableStatusPO> TableStatus =  Table_Status .findByField("id", orderId);
+				String table ="";
+				if(TableStatus != null && TableStatus.size()>0 && !"PAYSUCCESS".equals(TableStatus.get(0).getDishState())){
+					TableStatus.get(0).setDishState("PAYSUCCESS");
+					long userId = 	(Long) request.getSession().getAttribute("userId");
+					List<MealListPo> MealListPo = MealList.findByDistributor(userId,TableStatus.get(0).getMerchantId());
+					String meal = null;
+					for (MealListPo mealListPo2 : MealListPo) {
+						mealListPo2.setTableId(TableStatus.get(0).getId());
+						MealList.saveOrUpdate(mealListPo2);
+					    List<ProductPO> product = 	 conn_product.findByField("id", TableStatus.get(0).getId());
+					    if(meal == null){
+					    	meal = product.get(0).getProductName()+"X"+mealListPo2.getMealAmount();
+					    }else{
+					    	meal += ","+product.get(0).getProductName()+"X"+mealListPo2.getMealAmount();
+					    }
+					}
+					System.out.println(meal +"  --------------------------------------------------------------");
+					if(!"0".equals(TableStatus.get(0).getTableId())){
+						List<TablePO> addpo = null;addpo =  Table.findByField("id",TableStatus.get(0).getTableId());
+						table = "用户已订桌 订桌号:"+addpo.get(0).getTableNo()+" 房间名称 : "+addpo.get(0).getTablename()+" ,用户姓名:"+TableStatus.get(0).getUserName()+" ,用户手机号:" +TableStatus.get(0).getUserPhone();
+					}else{
+						table = "用户未订桌,请留好桌位 用户姓名:"+TableStatus.get(0).getUserName()+" ,用户手机号:" +TableStatus.get(0).getUserPhone();
+					}
+					System.out.println(table +"  -------------+++++++++++++++++++++++++++++++++++------------");
+					//用户推送消息
+			    	Double amount=Double.parseDouble(TableStatus.get(0).getDishMoney()+"")/100;
+			    	DecimalFormat df=new DecimalFormat("0.00");  
+			    	UserInfoPO buyUser=conn_user.get(TableStatus.get(0).getUserId());
+			    	if(buyUser!=null){
+			    		JSONObject obj=new JSONObject();
+			    		obj.put("touser", buyUser.getUserOpenID());
+			        	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+			        	obj.put("url", "");
+			        	JSONObject microProObj=new JSONObject();
+			        	microProObj.put("appid", "");
+			        	microProObj.put("pagepath", "");
+			        	obj.put("miniprogram", microProObj);
+			        	JSONObject dataObject=new JSONObject();
+			        	JSONObject firstObj=new JSONObject();
+			        	firstObj.put("value", "您的订单支付成功");
+			        	firstObj.put("color", "");
+			        	dataObject.put("first", firstObj);
+			        	
+			        	
+			        	JSONObject nameObj=new JSONObject();
+			        	nameObj.put("value", buyUser.getUserNickname());
+			        	nameObj.put("color", "");
+			        	dataObject.put("keyword1", nameObj);
+			        	
+			        	JSONObject accountTypeObj=new JSONObject();
+			        	accountTypeObj.put("value", TableStatus.get(0).getId());
+			        	accountTypeObj.put("color", "");
+			        	dataObject.put("keyword2", accountTypeObj);
+
+			        	JSONObject accountObj=new JSONObject();
+			        	accountObj.put("value", df.format(amount));
+			        	accountObj.put("color", "");
+			        	dataObject.put("keyword3", accountObj);
+			        	JSONObject timeObj=new JSONObject();
+			        	timeObj.put("color", "");
+			        	dataObject.put("keyword4", timeObj);
+			        	JSONObject remarkObj=new JSONObject();
+			        	remarkObj.put("value", "感谢使用过来玩服务");
+			        	remarkObj.put("color", "");
+			        	dataObject.put("remark", remarkObj);
+			        	obj.put("data", dataObject);
+			        	SendMsgUtil.sendTemplate(obj.toJSONString());
+			    	}
+			    	
+			    	//商户推送消息
+			    	//UserInfoPO userInfoPO=merchantPO.getUser();
+			    	List<MerchantUser> merchantUsers=conn_merchantUser.findByField("merchantId", TableStatus.get(0).getMerchantId());
+			    	try {
+			    		for (MerchantUser merchantUser : merchantUsers) {
+			        		UserInfoPO userInfoPO=conn_user.get(merchantUser.getUserId());
+			        		if(userInfoPO==null){
+			        			continue;
+			        		}
+			        		JSONObject obj=new JSONObject();
+			        		obj.put("touser",userInfoPO.getUserOpenID() );
+			            	obj.put("template_id", "FqlDkv8NKzKkDaWDYpY8V3t5krEXB86AeGkkJRbbws0");
+			            	obj.put("url", "");
+			            	JSONObject microProObj=new JSONObject();
+			            	microProObj.put("appid", "");
+			            	microProObj.put("pagepath", "");
+			            	obj.put("miniprogram", microProObj);
+			            	JSONObject dataObject=new JSONObject();
+			            	JSONObject firstObj=new JSONObject();
+			            	firstObj.put("value", "新的过来玩订单");
+			            	firstObj.put("color", "");
+			            	dataObject.put("first", firstObj);
+			            	
+			            	
+			            	JSONObject nameObj=new JSONObject();
+			            	nameObj.put("value", buyUser.getUserNickname());
+			            	nameObj.put("color", "");
+			            	dataObject.put("keyword1", TableStatus.get(0).getDishMoney());
+			            	
+			            	JSONObject accountTypeObj=new JSONObject();
+			            	accountTypeObj.put("value", TableStatus.get(0).getId());
+			            	accountTypeObj.put("color", "");
+			            	dataObject.put("keyword2", meal);
+			            	
+			            	JSONObject accountObj=new JSONObject();
+			            	accountObj.put("value", df.format(amount));
+			            	accountObj.put("color", "");
+			            	dataObject.put("keyword3", TableStatus.get(0).getTableDate() +" , "+TableStatus.get(0).getType());
+			            	JSONObject timeObj=new JSONObject();
+			            	timeObj.put("color", "");
+			            	dataObject.put("keyword4", table);
+			            	JSONObject remarkObj=new JSONObject();
+			            	remarkObj.put("value", "预订");
+			            	remarkObj.put("color", "");
+			            	dataObject.put("remark", remarkObj);
+			            	obj.put("data", dataObject);
+			            	SendMsgUtil.sendTemplate(obj.toJSONString());
+			    		}
+					} catch (Exception e) {
+						// TODO: handle exception
+						
+					}
+					
+			    	Table_Status.saveOrUpdate(TableStatus.get(0));
+					
+					
+				}
+				
+				
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("SUCCESS");
 				stringBuffer.append("]]></return_code>");

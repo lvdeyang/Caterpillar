@@ -604,6 +604,18 @@ html, body {
 .menu-txt p,h4{
  margin:0 !important;
 }
+.olderss{
+text-align: center;
+}
+.olderss p input{
+border:none;outline:none;border-bottom:1px solid #E0E0E0;
+width:70%;
+text-align: center;
+}
+.olderss p{
+width:100%;margin-top:20px;
+line-height: 30px;
+}
 </style>
 
 </head>
@@ -613,8 +625,19 @@ html, body {
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
+<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
+<%--  <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
+<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">  --%>
 <script type="text/javascript">
-
+      layui.use('laydate', function(){
+	  var laydate = layui.laydate;
+	  
+	  //执行一个laydate实例
+	  laydate.render({
+	    elem: '#useDate' //指定元素
+	  });
+	    });
 	$(function() {
    	 image(); //顶部图片 营业时间 特色
    	 two();
@@ -751,31 +774,70 @@ html, body {
   	 
 		    location.href=window.BASEPATH + 'reservetable/tables/home?merchantId=${merchantId}'; 
     });
+	$(document).on('click','#payment',function(){
+	    if($("#username").val() == "" || $("#username").val() == null){
+	     $.toast("请输入名称!", "cancel");
+	     return ;
+	    }
+	    if($("#userPhone").val() == "" || $("#userPhone").val() == null){
+	     $.toast("请输入手机号!", "cancel");
+	        return ;
+	    }
+	    if($("#useDate").val() == "" || $("#useDate").val() == null){
+	     $.toast("请选择时间!", "cancel");
+	        return ;
+	    }
+	    if($("#sele").val() == "" || $("#sele").val() == null){
+	     $.toast("请选择就餐时间!", "cancel");
+	        return ;
+	    }
+  	    newTableStatus();
+    });
 	$(document).on('click','#btnselect',function(){
   	     if( $("#totalcountshow").html()  >0 ){ //支付
-  	     
+	  	     var  orderId = '${orderId}';
+	  	     if(orderId !=null && orderId!=""){ //已订房
+	  	         newTableStatus();
+	  	     }else{ //未定
+	  	     $(".nav").hide();
+	  	     $(".olderss").show();
+	  	     } 
   	     }
     });
 	    
-	  
-	   
-
+  function newTableStatus(){ //创建订单 
+    var _uri = window.BASEPATH + 'cate/newTableStatus'; //
+	var patam = {};
+	patam.merchantId = '${merchantId}' ; //240 '${merchantId}'
+	patam.orderId = '${orderId}';
+	patam.dishMoney = $("#totalpriceshow").html(); //钱
+	patam.userName = $("#username").val(); //用户名
+	patam.userPhone = $("#userPhone").val(); //用户手机
+	patam.tableDate = $("#useDate").val(); //时间
+	patam.type = $("#sele").val(); //就餐时间
+	$.post(_uri, $.toJSON(patam), function(data) {
+	   payPublic(data.orderId,$("#totalpriceshow").html());
+	    $(".olderss").hide();
+	  	$(".nav").show();
+        /*  */
+    });
+  }
 	    
-	    var share={};
-	    function initSharewx(){
-	        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	  
-	    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
-			    $.get(_uri, null, function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					if(data){
-					    
-						share=data;
-						
-					}
-			});
-	    }
+    var share={};
+    function initSharewx(){
+        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+  
+    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+		    $.get(_uri, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				    
+					share=data;
+					
+				}
+		});
+    }
 	    
 	
 <!--选项卡  -->
@@ -794,8 +856,72 @@ html, body {
 			})						  							
 	});
 	
+		var orderId=0; 
+		var text; 
+		var prepay_id;
+		var paySign; 
+		var appId;   
+		var timeStamp;   
+		var nonceStr;  
+		var packageStr;  
+		var signType; 
+		var orderNo;	
+		
+		function payPublic(orderId,text){
+			text =  (text*100).toFixed(0);	
+		$.get(window.BASEPATH +"cate/buydish/port/"+orderId+"/"+text, null, function(data){
+				prepay_id = data.prepay_id;
+		        paySign = data.paySign;
+		        appId = data.appId;
+		        timeStamp = data.timeStamp;
+		        nonceStr = data.nonceStr;
+		        packageStr = data.packageStr;
+		        signType = data.signType;
+		        orderNo = data.orderNo;
+		        callpay();
+			});
+		}
+		
 	
-	function image(){ 
+		function onBridgeReady(){
+		    WeixinJSBridge.invoke(
+		        'getBrandWCPayRequest', {
+		           "appId"     : appId,     //公众号名称，由商户传入
+		           "timeStamp" : timeStamp, //时间戳，自1970年以来的秒数
+		           "nonceStr"  : nonceStr , //随机串
+		           "package"   : packageStr,
+		           "signType"  : signType,  //微信签名方式：
+		           "paySign"   : paySign    //微信签名
+		        },
+		        function(res){
+		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		             alert("交易成功");  
+	                 /* window.location.href = "vice/merchant/order?uid="+${param.orderid}; */
+		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
+		             alert("交易取消");  
+		            }  
+		            if (res.err_msg == "get_brand_wcpay_request:fail") {  
+		                alert(res.err_desc); 
+		            }  
+		        }
+		      }
+		    )
+		}
+		function callpay(){
+		    if (typeof WeixinJSBridge == "undefined"){
+		        if( document.addEventListener ){
+		            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+		        }else if (document.attachEvent){
+		            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		        }
+		    }else{
+		        onBridgeReady();
+		    }
+		}
+		
+		
+	function image(){ //商家图片 特色 营业时间
 	     var url = window.BASEPATH + 'product/delicacystore/info.do?merchantId='+${merchantId};
 	  	 $.get(url,null,function(msg){
 		  	 var ht=[];
@@ -831,39 +957,6 @@ html, body {
 	
 	
 	
-	 /* ***********************************************************************************************8 */
-   	/* function getallteam(){
-   	  var url = window.BASEPATH + '/product/delicacystore/hotsell?merchantId='+${merchantId};
-        $.get(url,null,function(msg){
-          	two();      
-        var pNam = msg.prd;
-	    var pic =msg.prcList;
-        var html=[];
-	   	html.push('<div class="right-con con-active">');   
-	   	html.push('<ul>');  		   	
-         for(var i=0;i<pNam.length;i++){              
-         		html.push('<li>');           
-		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+pNam[i].productShowPic+' width="55" height="55" /></div>');
-		        html.push('<div class="menu-txt">');
-		        html.push('<font>'+pNam[i].productName+'</font>');
-		        html.push('<p class="list1">月销<span>120</span></p>');
-		        html.push('<p class="list2">');
-		        html.push('<b>￥'+pic[i]+'</b>');
-		        html.push('<div class="btn"> ');
-		        html.push(' <button class="minus"  id ="minuss'+pNam[i].uuid+'"  onclick="minus(this.id)" >  <strong></strong>   </button>');
-		        html.push(' <i >0</i> ');
-		        html.push('<button class="add" id ="adds'+pNam[i].uuid+'" onclick="add(this.id)">  <strong></strong>  </button> ');
-		        html.push('<i class="price">'+pic[i]+'</i>');
-		        html.push(' </div> ');
-		        html.push('</p>');
-		        html.push('</div> ');
-		        html.push('</li>');	        
-	     	}
-	        html.push('</ul>');   
-		    html.push('</div>');
-	     	$('.con').append(html.join(''));  
-       })   	  	            
-}  */
 	
 	
 	
@@ -903,37 +996,6 @@ html, body {
    }
  function select(){      // 加载codeid 加载菜品
      $('.con').empty()
-	 /* var url = window.BASEPATH + '/product/delicacystore/greens';
-	 var date = {"codeID":code,"merchantId":${merchantId}}
-	 $.post(url,date,function(msg){
-	   var proName = msg.productPO;
-	   var price =msg.priceList;
-	    var html=[];
-	   	html.push('<div class="right-con con-active">');   
-	   	html.push('<ul>');  
-	   for(var i=0;i<proName.length;i++){ 	               		 
-         		html.push('<li>');           
-		        html.push('<div class="menu-img"><img src=http://www.guolaiwan.net/file'+proName[i].productShowPic+' width="55" height="55" /></div>');
-		        html.push('<div class="menu-txt">');
-		        html.push('<font>'+proName[i].productName+'</font>');
-		        html.push('<p class="list1">月销<span>120</span></p>');
-		        html.push('<p class="list2">');
-		        html.push('<b>￥'+price[i]+'</b>');
-		        html.push('<div class="btn"> ');
-		        html.push(' <button class="minus"  id ="minus'+proName[i].uuid+'"  onclick="minus(this.id)" >  <strong></strong>   </button>');
-		        html.push(' <i >0</i> ');
-		        html.push('<button class="add" id ="add'+proName[i].uuid+'" onclick="add(this.id)">  <strong></strong>  </button> ');
-		        html.push('<i class="price">'+price[i]+'</i>');
-		        html.push(' </div> ');
-		        html.push('</p>');
-		        html.push('</div> ');
-		        html.push('</li>');		               
-	     	}	     	
-	      html.push('</ul>');   
-	      html.push('</div>');
-          $('.con').append(html.join(''));
-          showDiv();	    
-	 })  */
 	 for(var j = 0; j<storage.length; j++){
 		 var html=[];
 		 html.push('<div class="right-con con-active">');   
@@ -1112,6 +1174,7 @@ html, body {
 			</div>
 		</div>
 	   <!-- 美食店铺  -->
+	   <div class="nav">
 		   	  <span class='_name'></span><!-- <p style="margin:10px 0 0 2%;font-size:16px;font-weight:bold;">临街小馆</p>   -->
 		     <div class="meishi" style="width:100%;height:120px;white-space:nowrap;overflow-x:auto;overflow-y:hidden;padding:10px 0;position: relative;">
 		     <!--  <img  style="" alt="" src="lib/images/1.jpg">
@@ -1193,7 +1256,17 @@ html, body {
 						</div>
 				   </div>
 		    </div>
+  </div>   
             
+		       <div class="olderss" style="width:100%;height:100%;overflow: hidden;display: none;z-index:111111;padding:0 10%; ">
+			            <p style="">用户姓名:<input id="username" type="text" style=""></p>
+			            <p>联系电话:<input id="userPhone"  type="text"></p>
+			            <p>就餐日期:<input id="useDate" type="text"></p>
+			            <p>就餐时间:<select id="sele"  style="width:70%;border:none;outline:none;border-bottom:1px solid #E0E0E0;padding:0 0 0 28%;"> <option>午餐</option><option>晚餐</option>    </select></p>
+			  
+			     <button id="payment"  style="border:none;outiline:none;font-weight:bold;color:#fff;height:40px;width:40%;background: #F03C03;position: fixed;bottom:5%;left:50%;margin-left:-20%;border-radius:12px;">立即支付</button>
+			  </div>  
+
 </body>
 
 

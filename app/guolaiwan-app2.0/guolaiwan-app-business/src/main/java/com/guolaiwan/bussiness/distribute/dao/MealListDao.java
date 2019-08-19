@@ -30,4 +30,12 @@ public class MealListDao extends AbstractBaseDao<MealListPo> {
 		return findByHql.get(0);
 		
 	}
+	public List<MealListPo> findByDistributor(long userId,long merchantId){
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("userId",Condition.eq,userId);
+		hql.andBy("merchantId",Condition.eq,merchantId);
+		List<MealListPo> findByHql = findByHql(hql);
+		return findByHql;
+		
+	}
 }
