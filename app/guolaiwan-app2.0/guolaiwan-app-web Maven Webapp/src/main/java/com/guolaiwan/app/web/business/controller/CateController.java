@@ -182,6 +182,7 @@ public class CateController extends BaseController {
 		String userPhone = pageObject.getString("userPhone"); // 用户手机号
 		String tableDate = pageObject.getString("tableDate"); // 用户选择时间
 		String type = pageObject.getString("type"); //就餐时间
+		long userId = 	(Long) request.getSession().getAttribute("userId");
 		String orderNo = null;
 		if(orderId != null &&  !"".equals(orderId)){ //已有订单
 			orderNo = orderId+"";
@@ -193,6 +194,7 @@ public class CateController extends BaseController {
 			table.setUserName(userName);
 			table.setUserPhone(userPhone);
 			table.setTableDate(tableDate);
+			table.setUserId(userId+"");
 			table.setType(BookType.fromName(type));
 			Table_Status.saveOrUpdate(table);
 			orderNo = table.getId()+"";

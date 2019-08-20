@@ -305,13 +305,13 @@ color:#fff;
 					$.modal({
 						  title: "付款方式",
 						  buttons: [
-						    /* { text: "余额支付", onClick: function(){ 
+						    /*  { text: "余额支付", onClick: function(){ 
 
 						    	$.confirm("确定支付？", function() {
 									addMessageOrderId(data.orderId,0);										
 								  }, function() {});
 
-						    } }, */						    
+						    } },  */					    
 						    { text: "微信支付", onClick: function(){ 
 							    $.confirm("确定支付？", function() {
 							       addMessageOrderId(data.orderId,1);							      							      						       													    
@@ -362,7 +362,7 @@ color:#fff;
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
 						    if(data.data=="PAYSUCCESS"){						    	
 					           updatemessage(orderId);					            
-						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						        location.href=window.BASEPATH +"business/gotopayment?merchantId=${merchantId}&orderId="+orderId;
 						    }
 						});
 				}else{
@@ -426,8 +426,8 @@ color:#fff;
 		                //每五秒刷新订单状态					
 		                setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){								    
-								    if(data.data=="PAYSUCCESS"){								      							    
-								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+								    if(data.data=="PAYSUCCESS"){								      							    								       
+								       location.href=window.BASEPATH +"business/gotopayment?merchantId=${merchantId}&orderId="+orderNo;
 								    }
 								});
                         }, 1000);

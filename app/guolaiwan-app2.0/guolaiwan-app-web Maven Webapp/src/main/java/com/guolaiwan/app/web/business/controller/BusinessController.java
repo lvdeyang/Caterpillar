@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +36,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
+import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.coupleback.vo.CoupleBackVo;
+import com.guolaiwan.app.web.publicnum.vo.BundleOrderVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
@@ -46,6 +49,7 @@ import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
+import com.guolaiwan.bussiness.admin.dao.LogisticsDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantChildrenDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
@@ -53,6 +57,7 @@ import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.UserOnedayBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.VPCommentDAO;
 import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
 import com.guolaiwan.bussiness.admin.dao.VideoPicDAO;
@@ -65,6 +70,7 @@ import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
 import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
 import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
+import com.guolaiwan.bussiness.admin.po.LogisticsPo;
 import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
@@ -160,7 +166,12 @@ public class BusinessController extends WebBaseControll {
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
 	public ModelAndView nsAndView(HttpServletRequest request, long merchantId, String comCode) throws Exception {
-		ModelAndView mv = null;
+		//保存商户的id
+		ServletContext sContext = request.getServletContext();
+		if(sContext.getAttribute("merch_id") == null){			
+			sContext.setAttribute("merch_id",merchantId);
+		}
+		ModelAndView mv = null;		
 		mv = new ModelAndView("mobile/business/home");
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("comCode", comCode);
@@ -1532,6 +1543,405 @@ public class BusinessController extends WebBaseControll {
 			map.put("orderNo", orderNo);
 			return map;
 		}
-	
+		
+	    //订单jsp跳转
+		@RequestMapping(value = "/order/list")
+		public ModelAndView orderList(HttpServletRequest request) throws Exception {
+			//获取商户ID
+	        String merchantId = request.getParameter("merchantId");
+			ModelAndView mv = null;
+			mv = new ModelAndView("mobile/business/orderList");
+			HttpSession session = request.getSession();
+			mv.addObject("userId", session.getAttribute("userId"));
+			mv.addObject("merchantId",merchantId);
+			return mv;
+		}
+		
+		//购物车jsp跳转
+		@RequestMapping(value = "/basket/index")
+		public ModelAndView basketIndex(HttpServletRequest request) throws Exception {
+			//获取商户ID
+	        String merchantId = request.getParameter("merchantId");
+			ModelAndView mv = null;
+			mv = new ModelAndView("mobile/business/basket");
+			HttpSession session = request.getSession();
+			mv.addObject("userId", session.getAttribute("userId"));
+			mv.addObject("merchantId",merchantId);
+			return mv;
+		}
+		
+		@Autowired
+		private LogisticsDao conn_logistics;
+		@Autowired
+		UserOnedayBuyDAO conn_userone;
+
+		/**
+		 * 订单：获取购物车信息
+		 * 
+		 * @param userId
+		 * @param request
+		 * @param response
+		 * @return
+		 * @throws Exception
+		 */
+		@ResponseBody
+		@RequestMapping(value = "/backet/get", method = RequestMethod.GET)
+		public Map<String, Object> getOrder(Long userId,String ifpay,Long merchantId, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			    SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+			    List<OrderInfoVO> orders = new ArrayList<OrderInfoVO>(); 																		
+					//查询商户下的子商户
+					List<Long> merchList = new ArrayList<Long>();
+					merchList.add(merchantId);
+					List<MerchantChildrenPO> mChildrenPOs = merchant_Children.findByField("merchantId",merchantId);
+					if(mChildrenPOs != null){
+						for(MerchantChildrenPO po : mChildrenPOs){
+							merchList.add(po.getChildrenId());
+						}					
+					}
+					//查询商户对应的订单
+					List<OrderInfoPO> orderingOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.NOTPAY);
+					 															
+					List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
+							OrderInfoVO.class);
+					//封装数据
+					List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
+					for (OrderInfoVO orderInfoVO : orderingOrders) {
+						//订单预订时间判断
+						if (!orderInfoVO.getOrderBookDate().equals("")) {
+							Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");							
+							if (bookDate.getTime() < new Date().getTime()) {
+								continue;
+							}
+						}
+						//订单商品限购	
+						orderInfoVO.setProductRestrictNumber(
+								conn_product.get(orderInfoVO.getProductId()).getProductRestrictNumber());
+						//订单图片			
+						orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
+						//判断是否为套餐
+						if (orderInfoVO.getComboId() != 0) {
+							//获取套餐
+							ProductComboPO comboPO = conn_combo.get(orderInfoVO.getComboId());
+							//添加套餐订单价格
+							orderInfoVO.setProductPrice(
+									new DecimalFormat("0.00").format((double) comboPO.getComboprice() / 100));
+							//设置套餐名称
+							orderInfoVO.setComboName(comboPO.getCombo());
+						} else {
+							orderInfoVO.setComboName("标准");
+						}
+						//订单的物流查询
+						LogisticsPo logisticsPo = conn_logistics.get(orderInfoVO.getLogisticsId());
+						if (logisticsPo != null) {
+							//添加物流名称
+							orderInfoVO.setLogisticsName(logisticsPo.getName());
+						} else {
+							orderInfoVO.setLogisticsName("-");
+						}
+						//是否为活动商品
+						if (orderInfoVO.getActivityId() != 0) {							
+							ActivityRelPO activityRelPO = conn_activityRel.get(orderInfoVO.getActivityId());
+							if (activityRelPO != null) {
+								Date setDate = DateUtil.parse(orderInfoVO.getUpdateTime(), DateUtil.dateTimePattern);
+								long between = DateUtil.daysBetween(setDate, new Date());
+								if ((between * 24) > activityRelPO.getExpireTime()) {
+									OrderInfoPO innerOrderInfoPO = orderInfoDao.get(orderInfoVO.getId());
+									conn_userone.deleteByUserAndDate(innerOrderInfoPO.getUserId(),
+											innerOrderInfoPO.getActivityId(), innerOrderInfoPO.getOrderBookDate());
+									ActivityRelPO actPro = conn_activityRel.get(innerOrderInfoPO.getActivityId());
+									actPro.setDayStock(actPro.getDayStock() + (int) innerOrderInfoPO.getProductNum());
+									conn_activityRel.save(actPro);
+
+									continue;
+								}
+								orderInfoVO.setProductPrice(
+										new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+							} else {
+								continue;
+							}
+
+						}
+						checkOrders.add(orderInfoVO);
+					}
+					orders = checkOrders;
+											
+			// 移除购物车中到店支付订单
+			if (ifpay.equals("false")) {
+				for (int i = 0; i < orders.size(); i++) {
+					if (orders.get(i).getProductName() == null) {
+						orders.remove(orders.get(i));
+					}
+				}
+			}
+			for (OrderInfoVO orderInfoVO : orders) {
+
+				if (orderInfoVO.getProductName() == null) {
+					orderInfoVO.setProductName("(到店支付)" + orderInfoVO.getShopName());
+					orderInfoVO.setProductPrice(orderInfoVO.getPayMoney());
+					orderInfoVO.setProductNum(1);
+				}
+			}
+			return success(orders);
+
+		}
+		
+		/**
+		 * 订单：获取订单
+		 * 
+		 * @param userId
+		 * @param request
+		 * @param response
+		 * @return
+		 * @throws Exception
+		 */
+		@ResponseBody
+		@RequestMapping(value = "/order/get", method = RequestMethod.GET)
+		public Map<String, Object> getOrder(Long userId, int type, // 1.未支付;2.已支付;3.已发货;4.待退款;5.已退款;6.已收货;7.已评价
+				Long merchantId,String uType, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			SysConfigPO sysConfig = conn_sys.getSysConfig();
+			List<OrderInfoVO> orders = new ArrayList<OrderInfoVO>(); // 已付款订单
+			
+			//查询商户下的子商户
+			List<Long> merchList = new ArrayList<Long>();
+			merchList.add(merchantId);
+			List<MerchantChildrenPO> mChildrenPOs = merchant_Children.findByField("merchantId",merchantId);
+			if(mChildrenPOs != null){
+				for(MerchantChildrenPO po : mChildrenPOs){
+					merchList.add(po.getChildrenId());
+				}					
+			}
+      
+			if (uType.equals("USER")) {
+				switch (type) {
+				case 1:// 未支付
+					
+					//查询商户对应的订单
+					List<OrderInfoPO> orderingOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.NOTPAY);				
+					List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
+							OrderInfoVO.class);
+
+					for (OrderInfoVO orderInfoVO : orderingOrders) {
+						orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
+					}
+					orders = orderingOrders;
+					break;
+
+				case 2:// 已支付
+					List<OrderInfoPO> orderedOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.PAYSUCCESS);	
+					List<OrderInfoPO> orderedOrderpo2 = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.PAYFINISH);
+					
+					if (orderedOrderpo2.size() > 0) {
+						orderedOrderpos.addAll(orderedOrderpo2);
+					}
+
+					List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
+							OrderInfoVO.class);
+					// 张羽 添加退款限制 4/28
+					for (int i = 0; i < orderedOrderpos.size(); i++) {
+						orderedOrders.get(i).setProductIsRefund(orderedOrderpos.get(i).getProductIsRefund());
+					}
+					orders = orderedOrders;
+					break;
+				case 3:// 已发货
+					List<OrderInfoPO> deliverOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.DELIVER);
+					List<OrderInfoVO> deliverOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(deliverOrderpos,
+							OrderInfoVO.class);
+
+					orders = deliverOrders;
+					break;
+
+				case 4:// 待退款
+					List<OrderInfoPO> refundingOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.REFUNDING);
+					List<OrderInfoVO> refundingOrders = OrderInfoVO.getConverter(OrderInfoVO.class)
+							.convert(refundingOrderpos, OrderInfoVO.class);
+
+					orders = refundingOrders;
+					break;
+				case 5:// 已退款
+					List<OrderInfoPO> refundedOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.REFUNDED);
+					List<OrderInfoVO> refundedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(refundedOrderpos,
+							OrderInfoVO.class);
+
+					orders = refundedOrders;
+					break;
+				case 6:// 已收货
+					List<OrderInfoPO> receiptOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.RECEIPT);
+					List<OrderInfoVO> receiptOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(receiptOrderpos,
+							OrderInfoVO.class);
+
+					orders = receiptOrders;
+					break;
+				case 7:// 已评价
+					List<OrderInfoPO> commentedOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.COMMENTED);
+					List<OrderInfoVO> commentedOrders = OrderInfoVO.getConverter(OrderInfoVO.class)
+							.convert(commentedOrderpos, OrderInfoVO.class);
+
+					orders = commentedOrders;
+					break;
+				case 8:// 已评价
+					List<OrderInfoPO> testOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.TESTED);
+					List<OrderInfoVO> testOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(testOrderpos,
+							OrderInfoVO.class);
+					List<OrderInfoPO> commentedOrderpos1 = orderInfoDao.getOrdersByState(userId, OrderStateType.COMMENTED);
+					List<OrderInfoVO> commentedOrders1 = OrderInfoVO.getConverter(OrderInfoVO.class)
+							.convert(commentedOrderpos1, OrderInfoVO.class);
+
+					orders = testOrders;
+					orders.addAll(commentedOrders1);
+					break;
+				case 9:// 拒绝退款 4/24新增
+					List<OrderInfoPO> rOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.PAYSUCCESS);
+					List<OrderInfoPO> rOrderpos2 = new ArrayList<OrderInfoPO>();
+					for (OrderInfoPO orderInfoPO : rOrderpos) {
+						if (orderInfoPO.getJustification() != "" && orderInfoPO.getJustification() != null) {
+							rOrderpos2.add(orderInfoPO);
+						}
+					}
+					List<OrderInfoVO> rOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(rOrderpos2,
+							OrderInfoVO.class);
+					for (int i = 0; i < rOrderpos2.size(); i++) {
+						rOrders.get(i).setJustification(rOrderpos2.get(i).getJustification());
+					}
+					orders = rOrders;
+					break;
+
+				default:
+					break;
+				}
+			} else if (uType.equals("MERCHANT")) {
+				UserInfoPO user = conn_user.get(userId);
+				MerchantPO merchant = user.getMerchant();
+				if (merchant == null) {
+					return FORBIDDEN("该用户不是商户！");
+				}
+				long _merchantId = merchant.getId();
+				switch (type) {
+				case 1:// 未支付
+					List<OrderInfoPO> orderingOrderpos = orderInfoDao.getOrdersByMerState(_merchantId, OrderStateType.NOTPAY);
+					List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
+							OrderInfoVO.class);
+
+					orders = orderingOrders;
+					break;
+
+				case 2:// 已支付
+					List<OrderInfoPO> orderedOrderpos = orderInfoDao.getOrdersByMerState(_merchantId,
+							OrderStateType.PAYSUCCESS);
+					List<OrderInfoPO> orderedOrderpo2 = orderInfoDao.getOrdersByMerState(_merchantId,
+							OrderStateType.PAYFINISH);
+					orderedOrderpos.addAll(orderedOrderpo2);
+					List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
+							OrderInfoVO.class);
+					// 张羽 添加退款限制 4/28
+					for (int i = 0; i < orderedOrderpos.size(); i++) {
+						orderedOrders.get(i).setProductIsRefund(orderedOrderpos.get(i).getProductIsRefund());
+					}
+
+					orders = orderedOrders;
+					break;
+				case 3:// 已发货
+					List<OrderInfoPO> deliverOrderpos = orderInfoDao.getOrdersByMerState(_merchantId, OrderStateType.DELIVER);
+					List<OrderInfoVO> deliverOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(deliverOrderpos,
+							OrderInfoVO.class);
+
+					orders = deliverOrders;
+					break;
+
+				case 4:// 待退款
+					List<OrderInfoPO> refundingOrderpos = orderInfoDao.getOrdersByMerState(_merchantId,
+							OrderStateType.REFUNDING);
+					List<OrderInfoVO> refundingOrders = OrderInfoVO.getConverter(OrderInfoVO.class)
+							.convert(refundingOrderpos, OrderInfoVO.class);
+
+					orders = refundingOrders;
+					break;
+				case 5:// 已退款
+					List<OrderInfoPO> refundedOrderpos = orderInfoDao.getOrdersByMerState(_merchantId,
+							OrderStateType.REFUNDED);
+					List<OrderInfoVO> refundedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(refundedOrderpos,
+							OrderInfoVO.class);
+
+					orders = refundedOrders;
+					break;
+				case 6:// 已收货
+					List<OrderInfoPO> receiptOrderpos = orderInfoDao.getOrdersByMerState(_merchantId, OrderStateType.RECEIPT);
+					List<OrderInfoVO> receiptOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(receiptOrderpos,
+							OrderInfoVO.class);
+
+					orders = receiptOrders;
+					break;
+				case 7:// 已评价
+					List<OrderInfoPO> commentedOrderpos = orderInfoDao.getOrdersByMerState(_merchantId,
+							OrderStateType.COMMENTED);
+					List<OrderInfoVO> commentedOrders = OrderInfoVO.getConverter(OrderInfoVO.class)
+							.convert(commentedOrderpos, OrderInfoVO.class);
+
+					orders = commentedOrders;
+					break;
+				case 9:// 拒绝退款 4/24新增
+					List<OrderInfoPO> rOrderpos = orderInfoDao.getOrdersByState(userId, OrderStateType.PAYSUCCESS);
+					List<OrderInfoPO> rOrderpos2 = new ArrayList<OrderInfoPO>();
+					for (OrderInfoPO orderInfoPO : rOrderpos) {
+						if (orderInfoPO.getJustification() != "" && orderInfoPO.getJustification() != null) {
+
+							rOrderpos2.add(orderInfoPO);
+						}
+					}
+					List<OrderInfoVO> rOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(rOrderpos2,
+							OrderInfoVO.class);
+					for (int i = 0; i < rOrderpos2.size(); i++) {
+						rOrders.get(i).setJustification(rOrderpos2.get(i).getJustification());
+					}
+					orders = rOrders;
+					break;
+
+				default:
+					break;
+				}
+			} else {
+				return FORBIDDEN("错误的用户类型！");
+			}
+
+			// 合并订单
+			Map<Long, BundleOrderVo> bundleMap = new HashMap<Long, BundleOrderVo>();
+			List<BundleOrderVo> vos = new ArrayList<BundleOrderVo>();
+			for (OrderInfoVO orderInfoVO : orders) {
+				if (orderInfoVO.getProductName() == null) {
+					orderInfoVO.setProductName("(到店支付)" + orderInfoVO.getShopName());
+					orderInfoVO.setProductPrice(orderInfoVO.getPayMoney());
+					orderInfoVO.setProductNum(1);
+				}
+				orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
+
+				BundleOrder bOrder = conn_bundleOrder.getBundleByOrderId(orderInfoVO.getId());
+				if (bOrder != null) {
+					if (bundleMap.containsKey(bOrder.getId())) {
+						bundleMap.get(bOrder.getId()).getOrderList().add(orderInfoVO);
+					} else {
+						BundleOrderVo vo = new BundleOrderVo();
+						vo.setOrderStatus(orderInfoVO.getOrderState());
+						vo.setIsBundle(1);
+						vo.setPayDate(orderInfoVO.getCreateDate());
+						vo.setOrderId(bOrder.getId());
+						vo.setUserName(orderInfoVO.getUserName());
+						vo.getOrderList().add(orderInfoVO);
+						bundleMap.put(bOrder.getId(), vo);
+						vos.add(vo);
+					}
+				} else {
+					BundleOrderVo vo = new BundleOrderVo();
+					vo.setOrderStatus(orderInfoVO.getOrderState());
+					vo.setIsBundle(0);
+					vo.setPayDate(orderInfoVO.getCreateDate());
+					vo.setOrderId(orderInfoVO.getId());
+					vo.setUserName(orderInfoVO.getUserName());
+					vo.getOrderList().add(orderInfoVO);
+					vos.add(vo);
+				}
+
+			}
+			return success(vos);
+
+		}
 		
 }
