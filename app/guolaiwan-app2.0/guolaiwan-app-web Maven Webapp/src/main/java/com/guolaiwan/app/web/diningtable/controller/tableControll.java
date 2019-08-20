@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -25,18 +26,23 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.TableVo;
+import com.guolaiwan.app.web.business.vo.MealListVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
+import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.TableDAO;
 import com.guolaiwan.bussiness.admin.dao.TableStatusDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.BookType;
+import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.TablePO;
 import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.distribute.dao.MealListDao;
+import com.guolaiwan.bussiness.distribute.po.MealListPo;
 import com.sun.jna.platform.win32.WinDef.LONG;
 
 import pub.caterpillar.weixin.constants.WXContants;
@@ -53,8 +59,10 @@ public class tableControll extends WebBaseControll  {
 	private SysConfigDAO conn_sysConfig;
 	@Autowired
 	private UserInfoDAO conn_user;
-	
-	
+	@Autowired
+	private MealListDao MealList;
+	@Autowired
+	private ProductDAO productDao;
 	
 	@RequestMapping(value = "/tables/home") //订桌首页
 	public ModelAndView tables(HttpServletRequest request,Long merchantId) throws Exception {
@@ -74,7 +82,7 @@ public class tableControll extends WebBaseControll  {
 		return mv;
 	}
 	@RequestMapping(value = "/diningtable/tableSuccess")//订桌
-	public ModelAndView home(HttpServletRequest request,Long orderId,Long merchantId ) throws Exception {
+	public ModelAndView home(HttpServletRequest request,Long orderId,Long merchantId) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("diningtable/reservetable/tableSuccess");
 		mv.addObject("orderId",orderId);
@@ -296,8 +304,24 @@ public class tableControll extends WebBaseControll  {
 		System.out.println(TableStatus.getType());
 		TablePO addpo  = Table.getByField("id",TableStatus.getTableId());
 		Map<String, Object> map = new HashMap<String, Object>();
+		if(addpo != null){
+			map.put("table", addpo);
+		}else{
+			List<MealListPo> MealListPo = MealList.getMealList(Long.parseLong(orderId),Long.parseLong(TableStatus.getUserId()),TableStatus.getMerchantId());
+			List<MealListVo>  _merchants = MealListVo.getConverter(MealListVo.class).convert(MealListPo,
+					MealListVo.class);
+			for (MealListVo mealListVo : _merchants) {
+				List<ProductPO> productPOs = productDao.findByField("id",mealListVo.getProductId()); 
+				if(productPOs != null){
+					mealListVo.setMealName(productPOs.get(0).getProductName());
+					mealListVo.setMoney((productPOs.get(0).getProductPrice()/100)*mealListVo.getMealAmount()+"");
+					mealListVo.setPicture(productPOs.get(0).getProductShowPic());
+				}
+			}
+			map.put("table", 0);
+			map.put("mealList",_merchants);
+		}
 		map.put("tables", TableStatus);
-		map.put("table", addpo);
 		map.put("type", type);
 		return map;
 	}
