@@ -60,7 +60,9 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 
 	public List<VoteProductPO> getvoteproduct(long moId) {
 		QueryHql hql = this.newQueryHql();
+		if(moId!=0){
 		hql.andBy("modularcode", Condition.eq, moId);
+		}
 		hql.orderBy("allvotes", true);
 		List<VoteProductPO> findByHql = findByHql(hql);
 		if (findByHql.size() == 0) {
