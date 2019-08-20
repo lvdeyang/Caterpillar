@@ -483,7 +483,7 @@ color:#fff;
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
 						    if(data.data=="PAYSUCCESS"){						    	
 					           updatemessage(orderId);					            
-						       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						      location.href=window.BASEPATH +"business/gotopayment?merchantId=${merchantId}&orderId="+orderId;
 						    }
 						});
 				}else{
@@ -548,7 +548,7 @@ color:#fff;
 		                setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){								    
 								    if(data.data=="PAYSUCCESS"){								      							    
-								       location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
+								       location.href=window.BASEPATH +"business/gotopayment?merchantId=${merchantId}&orderId="+orderNo;
 								    }
 								});
                         }, 1000);
@@ -779,7 +779,7 @@ color:#fff;
       //----------------------------------------------------------------------  
       //区分 保存 还是更新 
       var state ="";   
-      function  save(){
+      function  save(){       
         if($('#_phone').val()==''){
 			   $.toast("请输入手机号", "forbidden");
 			   return false;
@@ -803,16 +803,17 @@ color:#fff;
 		       return false;  		    
 		    }	
 		    
-		      if(base==""){
+		     /*  if(base==""){
               $.toast("照片获取失败", "forbidden");
 			  return false;
-             }    	     
+             }   */  	     
                 $(".window-2").fadeOut();
                 $(".window-1").fadeOut();
-			    $(".homepage").fadeIn();s
-			                 
+			    $(".homepage").fadeIn();
+			                
               var url = window.BASEPATH + 'product/package/add/info';
-              if(state == ""){           
+               
+              if(state == ""){                                  
               var date = {"name":$("#_name").val(),
                           "phone":$("#_phone").val(),
                           "idcard":$("#_idcard").val(),
