@@ -935,32 +935,33 @@ public class WxPayReportController extends WebBaseControll {
 				List<TableStatusPO> TableStatus =  Table_Status .findByField("id", orderId);
 				String table ="";
 				if(TableStatus != null && TableStatus.size()>0 && !"PAYSUCCESS".equals(TableStatus.get(0).getDishState())){
+					if (TableStatus.get(0).getYdNO() != null && TableStatus.get(0).getYdNO() != "") {
+						String ydNO = ydNoCode(orderId+"");
+						TableStatus.get(0).setYdNO(ydNO);
+					}
 					TableStatus.get(0).setDishState("PAYSUCCESS");
-					long userId = 	(Long) request.getSession().getAttribute("userId");
-					List<MealListPo> MealListPo = MealList.findByDistributor(userId,TableStatus.get(0).getMerchantId());
+					List<MealListPo> MealListPo = MealList.findByDistributor(Long.parseLong(TableStatus.get(0).getUserId()),TableStatus.get(0).getMerchantId());
 					String meal = null;
 					for (MealListPo mealListPo2 : MealListPo) {
 						mealListPo2.setTableId(TableStatus.get(0).getId());
 						MealList.saveOrUpdate(mealListPo2);
-					    List<ProductPO> product = 	 conn_product.findByField("id", TableStatus.get(0).getId());
+					    List<ProductPO> product = 	 conn_product.findByField("id", mealListPo2.getProductId());
 					    if(meal == null){
 					    	meal = product.get(0).getProductName()+"X"+mealListPo2.getMealAmount();
 					    }else{
 					    	meal += ","+product.get(0).getProductName()+"X"+mealListPo2.getMealAmount();
 					    }
 					}
-					System.out.println(meal +"  --------------------------------------------------------------");
-					if(!"0".equals(TableStatus.get(0).getTableId())){
+					if(!"0".equals(TableStatus.get(0).getTableId()+"")){
 						List<TablePO> addpo = null;addpo =  Table.findByField("id",TableStatus.get(0).getTableId());
 						table = "用户已订桌 订桌号:"+addpo.get(0).getTableNo()+" 房间名称 : "+addpo.get(0).getTablename()+" ,用户姓名:"+TableStatus.get(0).getUserName()+" ,用户手机号:" +TableStatus.get(0).getUserPhone();
 					}else{
 						table = "用户未订桌,请留好桌位 用户姓名:"+TableStatus.get(0).getUserName()+" ,用户手机号:" +TableStatus.get(0).getUserPhone();
 					}
-					System.out.println(table +"  -------------+++++++++++++++++++++++++++++++++++------------");
 					//用户推送消息
 			    	Double amount=Double.parseDouble(TableStatus.get(0).getDishMoney()+"")/100;
 			    	DecimalFormat df=new DecimalFormat("0.00");  
-			    	UserInfoPO buyUser=conn_user.get(TableStatus.get(0).getUserId());
+			    	UserInfoPO buyUser=conn_user.get(Long.parseLong(TableStatus.get(0).getUserId()));
 			    	if(buyUser!=null){
 			    		JSONObject obj=new JSONObject();
 			    		obj.put("touser", buyUser.getUserOpenID());

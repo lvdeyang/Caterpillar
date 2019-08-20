@@ -2,6 +2,7 @@ package com.guolaiwan.bussiness.admin.dao;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 
 import com.guolaiwan.bussiness.admin.dto.CountGroupDTO;
@@ -744,5 +746,15 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		}
 		return result;
 	}
+	 //查询多个商户的订单
+	 public List<OrderInfoPO> findOrdersByMerchantMessage(long userId, Collection<Long> ids,OrderStateType state){
+		 QueryHql hql = this.newQueryHql();
+			hql.andBy("userId", Condition.eq, userId);
+			hql.andBy("orderState", Condition.eq, state);						
+			hql.andBy("shopId", Condition.in, ids);
+			hql.orderBy("createDate", true);
+			List<OrderInfoPO> orders = findByHql(hql);
+		    return orders;		
+	 }
 
 }

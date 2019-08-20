@@ -124,6 +124,7 @@ html, body {
 	padding-right: 40px;
 	text-align: center;
 	z-index: 0;
+	
 }
   .gotop {
 	    position: fixed;
@@ -144,6 +145,29 @@ html, body {
  height:30px;
  line-height: 30px;
 }
+.tuijian{
+    width: 96%;
+    height:200px;
+    border-radius: 10px;
+    margin: 10px auto;
+    text-align: center;
+    background: #fff;
+    padding: 10px 10px;
+  
+    overflow: hidden;
+    overflow:scroll;
+   display: none;
+}
+.tuijian ul li{
+width:100%;
+height:50px;
+list-style-type:none;
+border-bottom:1px solid #eeeeee;
+
+line-height: 50px;
+
+}
+
 </style>
 
 </head>
@@ -159,14 +183,36 @@ html, body {
 		var patam = {};
 		patam.orderId = '${orderId}' ; //'${merchantId}'
 		$.post(_uri, $.toJSON(patam), function(data) {
-		$("#pic").attr("src",'http://www.guolaiwan.net/file/'+data.table.detailsImg+'');
-		$("#name").append('<span>'+data.table.tablename+'</span>'); //名称
-		$("#money").append(data.table.bookprice/100); //钱
-		$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">订单编号</span><span>'+data.tables.id+'</span></p></li>');
-		$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">就餐时间</span><span>'+data.tables.tableDate+'  '+data.type +'</span></p></li>');
-		$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订人</span><span>'+data.tables.userName+'</span></p></li>');
-		$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订电话</span><span>'+data.tables.userPhone+'</span></p></li>');
-		$("#ydImage").attr("src",'http://www.guolaiwan.net/file/'+data.tables.ydNO+'');
+		if(data.table != 0){
+			$("#pic").attr("src",'http://www.guolaiwan.net/file/'+data.table.detailsImg+'');
+			$("#name").append('<span>'+data.table.tablename+'</span>'); //名称
+			$("#money").append(data.table.bookprice/100); //钱
+			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">订单编号</span><span>'+data.tables.id+'</span></p></li>');
+			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">就餐时间</span><span>'+data.tables.tableDate+'  '+data.type +'</span></p></li>');
+			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订人</span><span>'+data.tables.userName+'</span></p></li>');
+			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订电话</span><span>'+data.tables.userPhone+'</span></p></li>');
+			$("#ydImage").attr("src",'http://www.guolaiwan.net/file/'+data.tables.ydNO+'');
+		}else{
+		    $(".tuijian").show();
+		    $("#pic").attr("src",'http://www.guolaiwan.net/file/'+data.table.detailsImg+'');
+			$("#name").append('<span>未订桌</span>'); //名称
+			$("#money").append(0.00); //钱
+			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">订单编号</span><span>'+data.tables.id+'</span></p></li>');
+			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">就餐时间</span><span>'+data.tables.tableDate+'  '+data.type +'</span></p></li>');
+			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订人</span><span>'+data.tables.userName+'</span></p></li>');
+			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订电话</span><span>'+data.tables.userPhone+'</span></p></li>');
+			$("#ydImage").attr("src",'http://www.guolaiwan.net/file/'+data.tables.ydNO+'');
+			for(var i=0; i<data.mealList.length; i++){
+			  var array = [];  
+		      array.push('<li style="position:relative;">');
+		      array.push('<img style="height:49px;width:49px;float:left;margin-left:5%;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
+		      array.push('<p style="position: absolute;top:0px;left:25%;">'+data.mealList[i].mealName+'</p>');
+		      array.push('<p style="position: absolute;top:17px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
+		      array.push('<p style="position: absolute;top:7px;right:5%;">￥'+data.mealList[i].money+'</p>');
+		      array.push('</li>');
+			  $('#mealList').append(array.join(''));	       
+			}
+		}
 		});
 		
 			
@@ -211,9 +257,19 @@ html, body {
 		
 
 		<!-- 推荐 -->
-		<p style="color:#EE7826;font-weight: bold;text-align: center;margin:10px 5px;">——<span style="margin:10px 5px;">您可能还喜欢</span>——</p>
+		<p style="color:#EE7826;font-weight: bold;text-align: center;margin:10px 5px;">——<span style="margin:10px 5px;">您的菜单</span>——</p>
      		<div class="tuijian">
-     		
+     		   <ul id="mealList" >
+     		   <!--  <li >
+     		    <img style="height:49px;width:49px;float:left;margin-left:5%;" src="lib/images/logo.png">
+     		    <p style="position: absolute;top:0px;left:25%;">麻辣鸡丝</p>
+     		    <p style="position: absolute;top:17px;left:25%;">x1</p>
+     		    <p style="position: absolute;top:7px;right:5%;">$20</p>
+     		    </li>
+     		    <li></li>
+     		    <li></li>
+     		    <li></li> -->
+     		   </ul>
 			</div>
    
    <!-- 置顶 -->
