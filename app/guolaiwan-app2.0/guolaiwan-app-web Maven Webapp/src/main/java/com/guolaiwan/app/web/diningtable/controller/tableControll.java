@@ -63,12 +63,6 @@ public class tableControll extends WebBaseControll  {
 		if (merchantId != null && merchantId != -1) mv.addObject("merchantId",merchantId);
 		return mv;
 	}
-	@RequestMapping(value = "/diningtable/tablePayment") //订桌支付
-	public ModelAndView tablePayment(HttpServletRequest request) throws Exception {
-		ModelAndView mv = null;
-		mv = new ModelAndView("diningtable/reservetable/tablePayment");
-		return mv;
-	}
 	@RequestMapping(value = "/diningtable/tablesDetails") //订桌详情
 	public ModelAndView tablesDetails(HttpServletRequest request ,long tablesId,long merchantId ,String repast ,String tableDate) throws Exception {
 		ModelAndView mv = null;
@@ -80,10 +74,11 @@ public class tableControll extends WebBaseControll  {
 		return mv;
 	}
 	@RequestMapping(value = "/diningtable/tableSuccess")//订桌
-	public ModelAndView home(HttpServletRequest request,Long orderId) throws Exception {
+	public ModelAndView home(HttpServletRequest request,Long orderId,Long merchantId ) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("diningtable/reservetable/tableSuccess");
 		mv.addObject("orderId",orderId);
+		mv.addObject("merchantId",merchantId);
 		return mv;
 	}
 	

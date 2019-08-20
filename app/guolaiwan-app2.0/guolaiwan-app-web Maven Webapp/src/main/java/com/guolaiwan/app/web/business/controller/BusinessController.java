@@ -604,8 +604,14 @@ public class BusinessController extends WebBaseControll {
 	public ModelAndView goToDelicacystore(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
+		String parId =  request.getParameter("orderId");
 		mv = new ModelAndView("mobile/business/delicacystore");
 		mv.addObject("merchantId", merchantId);
+		if(parId != "" && parId!= null){
+			mv.addObject("orderId", Long.parseLong(parId));
+		};
+	
+		
 		return mv; 
 	}
 	

@@ -7623,57 +7623,5 @@ public class PhoneController extends WebBaseControll {
 		return "success";
 	}
 	
-	/**
-	 * 判断是不是分销商品
-	 * 天使同城的对接
-	 * （凤凰山）（皮影乐园）
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/isdistribute")
-	public String isDistribute(Long orderId){
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");	
-		OrderInfoPO order = conn_order.get(orderId);
-		long merchatId=order.getShopId();
-		ProductPO product = conn_product.get(order.getProductId());
-		String distributeId = product.getDistributeId();
-		if(distributeId==null||distributeId==""){
-			System.out.println("判断此商品不是分销商品");
-			return "error";
-		}else{
-			String id = order.getId().toString();
-			String userName = order.getUserName();
-			String buynum=String.valueOf(order.getProductNum());
-			String userTel = conn_address.get(order.getMailAddress()).getConsigneePhone();
-			String startDate = df.format(order.getOrderBookDate());
-			String result="";
-			if(merchatId==358){
-				System.out.println("调用了凤凰山的接口");
-				result = TianShiTongChengAPI.sendFHSPost(id, distributeId,buynum, userName, userTel, startDate);
-			}else if(merchatId==386){
-				System.out.println("调用了皮影乐园的接口");
-				result = TianShiTongChengAPI.sendPYLYPost(id, distributeId,buynum, userName, userTel, startDate);
-			}
-			System.out.println("接口返回参数：");
-			System.err.println(result);
-		    JSONObject parseObject = JSON.parseObject(result);
-			String success = parseObject.get("success").toString();
-			if(success.equals("true")){
-				System.out.println("接口调用成功 获取qcode存起来");
-				String info = parseObject.get("info").toString();
-				JSONObject infojson = JSON.parseObject(info);
-				String qrcode = infojson.get("qrcode").toString();
-				String orders_id = infojson.get("id").toString();
-				order.setDistributeQcode(qrcode);
-				order.setDistributeId(orders_id);
-				conn_order.saveOrUpdate(order);
-			}else{
-				System.out.println("接口调用失败");
-				return "没成功";
-			}
-			return "success";
-		}
-	}
-	
 	
 }

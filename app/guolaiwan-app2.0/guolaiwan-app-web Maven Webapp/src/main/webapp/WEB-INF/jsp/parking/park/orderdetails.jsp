@@ -132,7 +132,7 @@ html, body {
 		   	var html5 = [];
 				html5.push('<span>'+data.dueTime+'</span> ');
 			   $('#mag5').append(html5.join(''));  
-			var ht = '<img alt="" src="'+data.img+'" style="width:60%;height:100%;">';
+			var ht = '<img alt="" src="http://www.guolaiwan.net/file/'+data.img+'" style="width:60%;height:100%;">';
 		    $('.img').html(ht);  
 		    document.getElementById("span").innerHTML = data.number;//编号
 		});

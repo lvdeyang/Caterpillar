@@ -169,7 +169,10 @@ html, body {
 		$("#ydImage").attr("src",'http://www.guolaiwan.net/file/'+data.tables.ydNO+'');
 		});
 		
-		
+			
+	$(document).on('click','#click',function(){
+		 location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId=${merchantId}&orderId=${orderId}'; 
+    });
 		
 	});
 </script>
@@ -202,7 +205,7 @@ html, body {
 		   <p style="text-align: left;font-size:12px;padding:0 5%;"><span>如果您超出预订时间没有就餐，订单将会自动取消，所交预订金不退还。</span></p>
 		  <img id="ydImage" style="height:170px;width:170px;" src="lib/images/logo.png"/> 
 		  <p style="font-size:14px;line-height: 30px;">扫码验单</p>
-		  <p style="width:25%;color:#fff;background: #FC6100;height:30px;line-height: 30px;margin: 0 auto;border-radius:10px;">点餐</p>
+		  <p id = "click" style="width:25%;color:#fff;background: #FC6100;height:30px;line-height: 30px;margin: 0 auto;border-radius:10px;">点餐</p>
 		  </div>
 
 		

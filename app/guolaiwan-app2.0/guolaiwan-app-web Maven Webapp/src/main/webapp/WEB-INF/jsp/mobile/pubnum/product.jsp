@@ -1800,8 +1800,7 @@ input[type="datetime-local"]:before{
 					            if(isvote=="YES"){
 					           		 addvoteorder(orderId);	
 					            }
-									 //判断是不是分销商品 是的话后台会处理返回来的Qcode  这里是凤凰山
-						            isdistribute(orderId);  
+								location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
 						    }
 						});
 				}else{
@@ -1809,17 +1808,6 @@ input[type="datetime-local"]:before{
 				}
 			})
 		}
-		//判断是不是分销的商品 是的话后台会处理返回来的Qcode  这里是 凤凰山 皮影乐园(后台判断)
-		function isdistribute(orderId){
-			var url=window.BASEPATH +"phoneApp/isdistribute";
-			$.post(url,{"orderId":orderId},function(data){
-				if(data=="没成功"){
-					$.alert('您的购买未成功，可申请退款。');
-				}else{
-					location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
-				}
-			})
-		} 
 		
 		function addvoteorder(orderId){
 			var url=window.BASEPATH +"admin/vote/addvoteorder";
@@ -1874,8 +1862,7 @@ input[type="datetime-local"]:before{
 								       if(ifFace==1){
 					                      updatemessage(orderNo);
 					                    }
-								    //判断是不是分销商品 是的话后台会处理返回来的Qcode  这里是凤凰山
-						            isdistribute(orderNo);  
+								   location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
 								    }
 								});
 

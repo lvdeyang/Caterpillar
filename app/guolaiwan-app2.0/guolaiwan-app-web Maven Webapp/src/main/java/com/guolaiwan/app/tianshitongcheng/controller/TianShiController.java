@@ -3,6 +3,8 @@ package com.guolaiwan.app.tianshitongcheng.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
+import com.guolaiwan.app.web.website.wxpay.controller.WxPayController;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+
+import pub.caterpillar.weixin.constants.WXContants;
+import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
 
 
 @Controller
@@ -31,10 +37,11 @@ public class TianShiController {
 	/**
 	 * 回调结果通知 根据回调的是啥来写相应的逻辑
 	 * @param request
+	 * @throws Exception 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/changeorderstate")
-	public String  huidiao(HttpServletRequest request){
+	public String  huidiao(HttpServletRequest request) throws Exception{
 		System.out.println("天时同城回调成功");
 		// 解析json
 		String param = getRequestJson(request);
@@ -42,21 +49,51 @@ public class TianShiController {
 			param = param.replaceAll("\\\\", "");
 			param = param.substring(1, param.length() - 1);
 		}
-		JSONObject result = JSON.parseObject(param);
-        System.out.println("通知类型为验单："+result.getString("method"));
-        String method=result.getString("method");
+		System.out.println("转完之后的String：------"+param);
+		Map<String, String> all=new HashMap<String, String>();
+		String result[]=param.split("&");
+		String[] split;
+		for (String string : result) {
+			split = string.split("=");
+			if(split.length==1)continue;
+			//转成键值对之后的样式
+			System.out.println(split[0]+"----"+split[1]);
+			//放进map
+			all.put(split[0], split[1]);
+		}
+		//判断回调的数据属于什么类型
+		String method=all.get("method");
+		//验单回调
         if(method.equals("validate")){
-        	String success=result.getString("success");
-        	if(success.equals("true")){
-        		String info=result.getString("info");
-        		JSONObject infos = JSON.parseObject(info);
-        		String orderId=infos.getString("another_orders_id");
-        		System.out.println("回调获得过来玩的订单ID为："+orderId);
+        		String orderId=all.get("another_orders_id");
+        		System.out.println("验单回调 过来玩的订单ID为："+orderId);
         		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
         		order.setOrderState(OrderStateType.TESTED);
-        		orderinfoDAO.saveOrUpdate(order);
-        	}
-        	
+        		orderinfoDAO.update(order);
+        //退款回调
+        }else if(method.equals("refundResult")){
+        		String orderId=all.get("orders_id");
+        		String type=all.get("type");
+        		System.out.println("退款回调 过来玩的订单ID为："+orderId);
+        		OrderInfoPO order = orderinfoDAO.get(Long.parseLong(orderId));
+        		if(type.equals("3")){
+        			//调用微信的退款方法
+        			GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+					Map<String, String> reqData = new HashMap<String, String>();
+					long amount = order.getPayMoney();
+					String refundOrderNum = "refund" + orderId;
+					reqData.put("out_trade_no", orderId + "");
+					reqData.put("out_refund_no", refundOrderNum);
+					reqData.put("total_fee", amount + "");
+					reqData.put("refund_fee", amount + "");
+					Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据
+					//退款了之后修改订单状态
+        			order.setOrderState(OrderStateType.REFUNDED);
+        			orderinfoDAO.update(order);
+        		}
+        }else if(method.equals("send")){
+        		String out_code=all.get("out_code");
+        		System.out.println(out_code);
         }
 		return "success";
 	}
@@ -113,6 +150,7 @@ public class TianShiController {
 				JSONObject infojson = JSON.parseObject(info);
 				String status = infojson.get("status").toString();
 				if(status.equals("3"))return "success";
+				if(status.equals("2"))return "later";
 			}else{
 				System.out.println("接口调用失败");
 				return "lose";
