@@ -172,10 +172,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                <image src="/${worker.expertPhoto}" style="margin-left:12px;">
 	            </c:if>
 	        </div>
-	        <div class="ftitle" style="float:left">
+	        <div class="ftitle" style="float:left;display:none;">
 	                                    价格表(单位:元)
 	        </div>
-	        <table id="priceTable">
+	        <table id="priceTable" style="display:none;">
 	           ${priceHtml}
 	        </table>
 	        <div class="ftitle" style="display:none;">
