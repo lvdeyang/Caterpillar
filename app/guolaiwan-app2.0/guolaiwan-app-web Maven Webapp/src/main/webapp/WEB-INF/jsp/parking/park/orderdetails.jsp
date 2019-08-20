@@ -156,7 +156,7 @@ html, body {
     
     
 	   $(".btn").bind("click", function () {   
-		  if(state!= null &&state == 'PAYSUCCESS' ){
+		  if(state!= null && state == 'PAYSUCCESS' ){
 		      window.location.href="vice/merchant/cance?uid="+${param.uid}; 
 		  }else{
 		      $.toast("您的订单已不能退款哦!", "cancel");
