@@ -274,6 +274,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		}
     		
     		
+    function amend_info(id,state){ //上移下移
+         　　　　　 $.ajax({
+              type:"post",
+              url:"chengesortindex",
+              data:{"activityId":id,"state":state},
+              success:function(msg){
+            	 if(msg.data == "success"){
+            	 	getactivityList();
+            	 }else{
+            	    alert(msg.data);
+            	 }
+              }
+          })
+      }
+    		
     		
     		//删除
 	function del(id){
@@ -300,6 +315,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </script>
           
           <script type="text/html" id="zsgc">
+			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:void(0)' onclick="amend_info('{{ d.id }}','T')">上移</a>
+			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:void(0)' onclick="amend_info('{{ d.id }}','D')">下移</a>                  
 			<a class='layui-btn layui-btn-primary layui-btn-xs' href="javascript:open_win('活动图片','<%=path%>/admin/picture/addlist?&sImg=actImg{{d.id}}&sId={{ d.id }}&source=activity','600','500')">活动图片</a>
 			<a class='layui-btn layui-btn-primary layui-btn-xs' href="javascript:open_win('规则图片','<%=path%>/admin/picture/addlist?&sImg=actruleImg{{d.id}}&sId={{ d.id }}&source=activityrule','600','500')">规则图片</a>
 			<a class="layui-btn layui-btn-xs" href="productList?activityId={{ d.id }}&content={{ d.content }}">商品列表</a>
