@@ -296,7 +296,7 @@ public class tableControll extends WebBaseControll  {
 		String orderId = pageObject.getString("orderId");  
 		String type  =null;
 		TableStatusPO TableStatus  =  Table_Status.getByField("id",Long.parseLong(orderId));
-		if("LUNCH".equals(TableStatus.getType())){
+		if("LUNCH".equals(TableStatus.getType()+"")){
 			type = "午餐";
 		}else{
 			type = "晚餐";
