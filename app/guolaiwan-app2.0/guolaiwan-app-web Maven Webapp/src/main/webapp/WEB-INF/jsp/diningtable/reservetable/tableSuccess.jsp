@@ -182,6 +182,7 @@ line-height: 50px;
 		var _uri = window.BASEPATH + 'reservetable/getOrder.do'; //
 		var patam = {};
 		patam.orderId = '${orderId}' ; //'${merchantId}'
+		alert(${orderId});
 		$.post(_uri, $.toJSON(patam), function(data) {
 		if(data.table != 0){
 			$("#pic").attr("src",'http://www.guolaiwan.net/file/'+data.table.detailsImg+'');
@@ -194,7 +195,7 @@ line-height: 50px;
 			$("#ydImage").attr("src",'http://www.guolaiwan.net/file/'+data.tables.ydNO+'');
 		}else{
 		    $(".tuijian").show();
-		    $("#pic").attr("src",'http://www.guolaiwan.net/file/'+data.table.detailsImg+'');
+		    $("#pic").attr("src",'lib/images/undecideds.png');
 			$("#name").append('<span>未订桌</span>'); //名称
 			$("#money").append(0.00); //钱
 			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">订单编号</span><span>'+data.tables.id+'</span></p></li>');
@@ -216,7 +217,7 @@ line-height: 50px;
 		});
 		
 			
-	$(document).on('click','#click',function(){
+	$(document).on('click','#clic',function(){
 		 location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId=${merchantId}&orderId=${orderId}'; 
     });
 		
@@ -251,7 +252,7 @@ line-height: 50px;
 		   <p style="text-align: left;font-size:12px;padding:0 5%;"><span>如果您超出预订时间没有就餐，订单将会自动取消，所交预订金不退还。</span></p>
 		  <img id="ydImage" style="height:170px;width:170px;" src="lib/images/logo.png"/> 
 		  <p style="font-size:14px;line-height: 30px;">扫码验单</p>
-		  <p id = "click" style="width:25%;color:#fff;background: #FC6100;height:30px;line-height: 30px;margin: 0 auto;border-radius:10px;">点餐</p>
+		  <p id = "clic" style="width:25%;color:#fff;background: #FC6100;height:30px;line-height: 30px;margin: 0 auto;border-radius:10px;">点餐</p>
 		  </div>
 
 		

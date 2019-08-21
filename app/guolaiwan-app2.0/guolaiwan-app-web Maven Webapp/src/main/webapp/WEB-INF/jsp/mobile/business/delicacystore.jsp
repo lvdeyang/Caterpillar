@@ -765,7 +765,7 @@ line-height: 30px;
 		
 	  
 		
-	 var  orderId ;	
+    window.orderId = null;	
 	$(document).on('click','#zhifu',function(){
   	 
 		    location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId=198&comCode=0001'; 
@@ -796,7 +796,7 @@ line-height: 30px;
 	$(document).on('click','#btnselect',function(){
   	     if( $("#totalcountshow").html()  >0 ){ //支付
 	  	      orderId = '${orderId}';
-	  	     if(orderId !=null && orderId!=""){ //已订房
+	  	     if(window.orderId !=null && window.orderId!=""){ //已订房
 	  	         newTableStatus();
 	  	     }else{ //未定
 	  	     $(".nav").hide();
@@ -819,7 +819,7 @@ line-height: 30px;
 	   payPublic(data.orderId,$("#totalpriceshow").html());
 	    $(".olderss").hide();
 	  	$(".nav").show();
-	  	orderId = data.orderId;
+	  	window.orderId = data.orderId;
         /*  */
     });
   }
@@ -897,7 +897,7 @@ line-height: 30px;
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		             alert("交易成功");  
-		             window.location.href = "reservetable/diningtable/tableSuccess?orderId="+orderId+"&merchantId=${merchantId}"; 
+		             window.location.href = "reservetable/diningtable/tableSuccess?orderId="+window.orderId+"&merchantId=${merchantId}"; 
 		            if (res.err_msg == "get_brand_wcpay_request:cancel") {  
 		             alert("交易取消");  
 		            }  
