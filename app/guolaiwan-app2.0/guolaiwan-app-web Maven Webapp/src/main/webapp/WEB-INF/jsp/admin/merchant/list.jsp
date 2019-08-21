@@ -292,7 +292,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       
       //导出所有商户
 		function exportallmerchant() {
-			var url = "<%=path%>/admin/merchant/exportallmerchant"+"?mName="+$("#mName").val();
+			var url = "<%=path%>/admin/merchant/exportallmerchant"+"?mName="+$("#mName").val()+"&status=";
 			window.open(url);
 			layer.close(index);
 		}

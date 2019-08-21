@@ -43,6 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							autocomplete="off">
 					</div>
 					<button class="layui-btn" data-type="reload" onclick="select(this)">搜索</button>
+					<button type="button" class="layui-btn" id="exportallmerchant" onclick="exportallmerchant()">导出商户</button>
 				</div>
 		</xblock>
 		<table id="passList" lay-filter="passList">
@@ -144,6 +145,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var type = $(obj).data('type');
     		active[type] ? active[type].call(this) : '';
 		}
+		
+		//导出所有商户
+		function exportallmerchant() {
+			var url = "<%=path%>/admin/merchant/exportallmerchant"+"?mName="+$("#mName").val()+"&status=T";
+			window.open(url);
+			layer.close(index);
+		}
+		
+		
+		
             </script>
 <script type="text/html" id="zsgc">  
    <a title="编辑" href="javascript:;" onclick="merchant_submit('编辑','check','{{ d.uuid }}','','510')"

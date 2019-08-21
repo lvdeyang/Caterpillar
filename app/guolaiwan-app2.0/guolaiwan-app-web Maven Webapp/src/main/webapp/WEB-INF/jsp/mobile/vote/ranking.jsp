@@ -419,79 +419,88 @@ var url=window.BASEPATH + 'judges/sortproduct?id='+id+'&userId=${userId}&optionI
 $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
     var _uriRecomment = window.BASEPATH + 'judges/getvoteproductpc?id='+id+'&optionId=${optionId}';
     $.get(_uriRecomment,null,function(data){
-      var html=[],html1=[];
+      var html=[];
       for(var i=0;i<data.length;i++){
       var productvotes=parseInt(data[i].allcount);
+      var avg=parseInt(data[i].avg).toFixed(1);
             <!-- 1 -->
-       /*  if(i==0){
-			html.push('<div style="width:30%;height:18em;position: relative;display: inline-block;">');   
-			html.push('<img style="width:10em;border-radius:50%;height:10em;z-index:10;position: absolute;left:50%;margin-left:-5em;" src="'+data[i].productpic+'">');   
-			html.push('<div class="paiming" style="position: absolute;top:8.2em;left:50%;z-index:11;text-align: center;margin-left:-1.5em;">');   
-			html.push('<p style="font-size:2em;">1</p>');   
-			html.push('</div>');   
-			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:4em;margin-left:-7.8em;" src="lib/images/guanjun.png">');   
-			html.push('<div style="width:10em;height:auto;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
-			html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:10em;border-radius:10px;color:#fff;background: #F2C148;padding:0.5em 0.2em;font-size:1em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
-			html.push('</div>');   
-			html.push('</div>');   
+        if(i==0){
+			html.push('<div style="width:80%;height:9em;color:red;margin: 0.5em auto;border-radius:1em;padding:0 2%;border:0.15em solid red;position: relative;">'); 
+	      	html.push('<img style="position: absolute;width:5em;height:5em;transform:rotate(-45deg);left:1em;top:-0.5em;" src="lib/images/king1.png">'); 
+	      	html.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">'); 
+			html.push('<p style="font-size:2.5em;">'+(i+1)+'</p>'); 
+		  	html.push('</div>'); 
+		  	html.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0.5em 2em 2em 2em;" src="'+data[i].productpic+'">'); 
+		   	html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:30%;color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i].productname+'</p>'); 
+		    html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:55%;width:10%;text-align: center;">已售</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:55%;width:10%;text-align: center;">'+data[i].ordercount+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:65%;width:10%;text-align: center;">投票数</p>');  
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:65%;width:10%;text-align: center;">'+data[i].manvotes+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:75%;width:10%;text-align: center;">评委评分</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:75%;width:10%;text-align: center;">'+avg+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:85%;width:10%;text-align: center;">总投票数</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:85%;width:10%;text-align: center;">'+productvotes+'票</p>'); 
+	    	html.push('</div>  ');  
 		}
 	   	<!-- 2 -->
 	   	if(i==1){
-			html.push('<div style="width:30%;height:18em;position: relative;display: inline-block;float:left;left:15%;top:4em;">');   
-			html.push('<img style="width:9em;border-radius:50%;height:9em;z-index:10;position: absolute;left:50%;margin-left:-4.5em;" src="'+data[i].productpic+'">');   
-			html.push('<div class="paiming" style="position: absolute;top:7em;left:50%;z-index:11;text-align: center;margin-left:-1.5em;">');   
-			html.push('<p style="font-size:2em;">2</p>');   
-			html.push('</div>');   
-			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:5em;margin-left:-7.8em;" src="lib/images/yajun.png">');   
-			html.push('<div style="width:10em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
-			html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:10em;border-radius:10px;color:#fff;background:#BDC9C9;padding:0.5em 0.2em;font-size:1em;display: inline-block;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
-			html.push('</div>');   
-			html.push('</div>');   
+			html.push('<div style="width:80%;height:9em;color:red;margin: 0.5em auto;border-radius:1em;padding:0 2%;border:0.15em solid red;position: relative;">'); 
+	      	html.push('<img style="position: absolute;width:5em;height:5em;transform:rotate(-45deg);left:1em;top:-0.5em;" src="lib/images/king2.png">'); 
+	      	html.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">'); 
+			html.push('<p style="font-size:2.5em;">'+(i+1)+'</p>'); 
+		  	html.push('</div>'); 
+		  	html.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0.5em 2em 2em 2em;" src="'+data[i].productpic+'">'); 
+		   	html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:30%;color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i].productname+'</p>'); 
+		    html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:55%;width:10%;text-align: center;">已售</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:55%;width:10%;text-align: center;">'+data[i].ordercount+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:65%;width:10%;text-align: center;">投票数</p>');  
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:65%;width:10%;text-align: center;">'+data[i].manvotes+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:75%;width:10%;text-align: center;">评委评分</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:75%;width:10%;text-align: center;">'+avg+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:85%;width:10%;text-align: center;">总投票数</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:85%;width:10%;text-align: center;">'+productvotes+'票</p>'); 
+	    	html.push('</div>  ');
 		}
 		<!-- 3 -->
 		if(i==2){
-			html.push('<div style="width:30%;height:18em;position: relative;display: inline-block;float:right;right:15%;top:4em;">');   
-			html.push('<img style="width:9em;border-radius:50%;height:9em;z-index:10;position: absolute;left:50%;margin-left:-4.5em;" src="'+data[i].productpic+'">');   
-			html.push('<div class="paiming" style="position: absolute;top:7em;left:50%;z-index:11;text-align: center;margin-left:-1.5em;">');   
-			html.push('<p style="font-size:2em;">3</p>');   
-			html.push('</div>');   
-			html.push('<img style="width:15em;height:12em;z-index:9;position: absolute;left:50%;bottom:5em;margin-left:-7.8em;" src="lib/images/jijun.png">');   
-			html.push('<div style="width:10em;position: absolute;text-align: center;font-weight:bold;left:50%;bottom:1em;margin-left:-5em;">');   
-			html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:10em;border-radius:12px;color:#fff;background:#955A38;padding:0.5em 0.2em;font-size:1em;">'+data[i].productname+'</p>');   
-			html.push('<p style="padding:0.2em 0.5em;font-size:1.5em;">'+productvotes+'票</p>');   
-			html.push('</div>');   
-			html.push('</div>');   
-		    html.push('<div style="height:3em;"></div>');   
-        }   */
-     /*    if(i>2&&i%2==1){
-        	html1.push('<div style="width:80%;background: #B4B6B5;height:6em;margin: 0.5em auto;border-radius:1em;padding:0 2%;">');
-		    html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;float:left;">');
-	        html1.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">');
-			html1.push('<p style="font-size:1.5em;">'+(i+1)+'</p>');
-			html1.push('</div>');
-		  	html1.push('<img style="width:4em;border-radius:50%;height:4em;align-items: center;margin:0 1em 1em 1em;" src="'+data[i].productpic+'">');
-		   	html1.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:60%;color:black;display: inline-block;font-size:1.5em;margin:0 2%;">'+data[i].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:1.5em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+productvotes+'票</p>');
-	      	html1.push('</div>');
-	      	if(i+1==data.length)continue;
-	     	html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;float:left;">');
-         	html1.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">');
-			html1.push('<p style="font-size:1.5em;">'+(i+2)+'</p>');
-		 	html1.push('</div>');
-		  	html1.push('<img style="width:4em;border-radius:50%;height:4em;align-items: center;margin:0 1em 1em 1em;" src="'+data[i+1].productpic+'">');
-	  		html1.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:60%;color:black;display: inline-block;font-size:1.5em;margin:0 2%;">'+data[i+1].productname+'</p>');
-		  	html1.push('<p style="color:#fff;font-size:1.5em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+parseInt(data[i+1].allcount)+'票</p>');
-	     	html1.push('</div>');
-			html1.push('</div>');
-        } */
+			html.push('<div style="width:80%;height:9em;color:red;margin: 0.5em auto;border-radius:1em;padding:0 2%;border:0.15em solid red;position: relative;">'); 
+	      	html.push('<img style="position: absolute;width:5em;height:5em;transform:rotate(-45deg);left:1em;top:-0.5em;" src="lib/images/king3.png">'); 
+	      	html.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">'); 
+			html.push('<p style="font-size:2.5em;">'+(i+1)+'</p>'); 
+		  	html.push('</div>'); 
+		  	html.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0.5em 2em 2em 2em;" src="'+data[i].productpic+'">'); 
+		   	html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:30%;color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i].productname+'</p>'); 
+		    html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:55%;width:10%;text-align: center;">已售</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:55%;width:10%;text-align: center;">'+data[i].ordercount+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:65%;width:10%;text-align: center;">投票数</p>');  
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:65%;width:10%;text-align: center;">'+data[i].manvotes+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:75%;width:10%;text-align: center;">评委评分</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:75%;width:10%;text-align: center;">'+avg+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:85%;width:10%;text-align: center;">总投票数</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:85%;width:10%;text-align: center;">'+productvotes+'票</p>'); 
+	    	html.push('</div>  ');  
+        }   
+        if(i>2){
+        	html.push('<div style="width:80%;height:9em;color:red;margin: 0.5em auto;border-radius:1em;padding:0 2%;border:0.15em solid red;position: relative;">'); 
+	      	html.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">'); 
+			html.push('<p style="font-size:2.5em;">'+(i+1)+'</p>'); 
+		  	html.push('</div>'); 
+		  	html.push('<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0.5em 2em 2em 2em;" src="'+data[i].productpic+'">'); 
+		   	html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:30%;color:black;display: inline-block;font-size:2em;margin:0 2%;">'+data[i].productname+'</p>'); 
+		    html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:55%;width:10%;text-align: center;">已售</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:55%;width:10%;text-align: center;">'+data[i].ordercount+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:65%;width:10%;text-align: center;">投票数</p>');  
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:65%;width:10%;text-align: center;">'+data[i].manvotes+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:75%;width:10%;text-align: center;">评委评分</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:75%;width:10%;text-align: center;">'+avg+'</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:85%;width:10%;text-align: center;">总投票数</p>'); 
+            html.push('<p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:85%;width:10%;text-align: center;">'+productvotes+'票</p>'); 
+	    	html.push('</div>  ');
+        } 
          
       }
-       $('.main').children().remove();
-       $('.main').append(html.join('')); 
-       $('.other').children().remove();
-       $('.other').append(html1.join(''));   
+       $('.ranking').children().remove();
+       $('.ranking').append(html.join('')); 
     });
 });
 } 
@@ -560,32 +569,9 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 	  
 	          </div>
 	   </div>
-
-		  <div class="main" style="width:100%;height:auto;text-align: center;margin:0 auto;">	
-			</div>	
-					   
-			<!-- 4--无限父级  -->
-	<!-- 	 <div class="other" style="width:100%;height:19.5em;overflow-y:auto;font-weight:bold;">     	
-	     
-	         </div> -->
 		 
 	<div class="ranking" style="width:100%;height:38em;overflow-y:auto;background: #fff;">     	
-	   <div style="width:80%;height:9em;color:red;margin: 0.5em auto;border-radius:1em;padding:0 2%;border:0.15em solid red;position: relative;">
-	      <img style="position: absolute;width:5em;height:5em;transform:rotate(-45deg);left:1em;top:-0.5em;" src="lib/images/king1.png">
-	      <div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">
-			<p style="font-size:2.5em;">1</p>
-		  </div>
-		  	<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0.5em 2em 2em 2em;" src="lib/images/ceshi.jpg">
-		   	<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:30%;color:black;display: inline-block;font-size:2em;margin:0 2%;">麻辣鸡丝</p>
-		    <p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:55%;width:10%;text-align: center;">已售</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:55%;width:10%;text-align: center;">500</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:65%;width:10%;text-align: center;">投票数</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:65%;width:10%;text-align: center;">500</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:75%;width:10%;text-align: center;">评委评分</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:75%;width:10%;text-align: center;">8.7</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:85%;width:10%;text-align: center;">总投票数</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:85%;width:10%;text-align: center;">500</p>
-	    </div>
+	   
 	    
 	 </div> 				
 		
