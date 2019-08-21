@@ -12,6 +12,7 @@ import com.guolaiwan.bussiness.admin.dto.MerchantDTO;
 import com.guolaiwan.bussiness.admin.dto.ProductDTO;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.AdminPO;
+import com.guolaiwan.bussiness.admin.po.ColumnPO;
 import com.guolaiwan.bussiness.admin.po.ModularPO;
 
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -36,6 +37,7 @@ public class ActivityDAO extends AbstractBaseDao<ActivityPO> {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("comId", Condition.eq, comId);
 		hql.andBy("recommend",Condition.eq, 1);
+		hql.orderBy("sortindex", false);
 		List<ActivityPO> activitys = findByHql(hql);
 		return activitys;
 	}
@@ -46,6 +48,7 @@ public class ActivityDAO extends AbstractBaseDao<ActivityPO> {
 	public List<ActivityPO> findByCom(long comId,int pageNum,int pageSize){
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("comId", Condition.eq, comId);
+		hql.orderBy("sortindex", false);
 		List<ActivityPO> activitys = findByHqlPage(hql, pageNum, pageSize);
 		return activitys;
 	}
@@ -248,5 +251,17 @@ public class ActivityDAO extends AbstractBaseDao<ActivityPO> {
 		if(query.uniqueResult()==null) return 0;
 		int acount = (int)query.uniqueResult();
 		return acount;
+	}
+	
+	public ActivityPO getByCode(long comId,long index){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("comId", Condition.eq, comId);
+		hql.andBy("sortindex", Condition.eq, index);
+		List<ActivityPO> list = findByHql(hql);
+		if (list.size()==0) {
+			return null;
+		}else {
+			return list.get(0);
+		}
 	}
 }

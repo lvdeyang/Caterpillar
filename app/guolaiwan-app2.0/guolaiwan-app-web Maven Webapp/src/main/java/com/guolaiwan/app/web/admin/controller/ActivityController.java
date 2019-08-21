@@ -29,6 +29,7 @@ import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.ActivityType;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.ColumnPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 
@@ -70,6 +71,15 @@ public class ActivityController extends BaseController {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		long comId = getLoginInfo().getComId();
 		int count = conn_activity.countByCom(comId);
+		List<ActivityPO> findAll = conn_activity.appFindBycomId(comId);
+		long index=1;
+		for (ActivityPO activity : findAll) {
+			if(activity.getSortindex()==0){
+				activity.setSortindex(index);
+				conn_activity.update(activity);
+			}
+			index+=1;
+		}
 		List<ActivityPO> activitys = conn_activity.findByCom(comId, page, limit);
 		List<ActivityVO> activityVOs = ActivityVO.getConverter(ActivityVO.class).convert(activitys, ActivityVO.class);
 
@@ -96,13 +106,14 @@ public class ActivityController extends BaseController {
 		String name = request.getParameter("name");
 		String type = request.getParameter("type");
 		String rule = request.getParameter("rule");
+		int index = conn_activity.countByCom(comId);
 		ActivityPO activity = new ActivityPO();
 		activity.setUpdateTime(new Date());
 		activity.setName(name);
 		activity.setActivityRule(rule);
 		activity.setComId(comId);
 		activity.setComName(comName);
-		;
+		activity.setSortindex(index+1);
 		activity.setType(ActivityType.fromString(type));
 		switch (type) {
 		case "MANJIAN":
@@ -439,6 +450,46 @@ public class ActivityController extends BaseController {
 		map.put("expireTime", expireTime);
 		ModelAndView mav = new ModelAndView("admin/activity/modify" , map);
 		return mav;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/chengesortindex" , method = RequestMethod.POST)
+	public Map<String, Object> chengeSortIndex(long activityId, String state){
+		Map<String, Object> map = new HashMap<String, Object>();
+		long comId = getLoginInfo().getComId();
+		if ("T".equals(state)) { // 上架
+			ActivityPO activity = conn_activity.get(activityId);
+			long index  =  activity.getSortindex();
+			ActivityPO activity1 = conn_activity.getByCode(comId,index-1);
+			if (activity1 != null){
+				activity.setSortindex(index-1);
+				conn_activity.saveOrUpdate(activity);
+				conn_activity.flush();
+				activity1.setSortindex(index);
+				conn_activity.saveOrUpdate(activity1);
+				conn_activity.flush();
+			}else {
+				map.put("data", "已是优先显示");
+				return  map;
+			}
+		}else { // 下架
+			ActivityPO activity = conn_activity.get(activityId);
+			long index  =  activity.getSortindex();
+			ActivityPO activity1 = conn_activity.getByCode(comId,index+1);
+			if (activity1 != null){
+				activity.setSortindex(index+1);
+				conn_activity.saveOrUpdate(activity);
+				conn_activity.flush();
+				activity1.setSortindex(index);
+				conn_activity.saveOrUpdate(activity1);
+				conn_activity.flush();
+			}else {
+				map.put("data", "已是最尾");
+				return  map;
+			}
+		}
+		map.put("data", "success");
+		return map;
 	}
 
 }
