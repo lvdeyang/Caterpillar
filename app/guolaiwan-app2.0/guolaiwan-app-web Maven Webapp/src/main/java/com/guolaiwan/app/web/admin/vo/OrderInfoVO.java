@@ -712,10 +712,11 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
 		String OrderBookDate =entity.getOrderBookDate()==null?"":df.format(entity.getOrderBookDate());
 		String EndBookDate=entity.getEndBookDate()==null?"":df.format(entity.getEndBookDate());
 		String SettleDate = entity.getSettleDate()==null?"":df.format(entity.getSettleDate());
+		String updateDate = entity.getUpdateTime()==null?"":df.format(entity.getUpdateTime());
 		String payMode = entity.getPayMode()==null?"":entity.getPayMode().getName();
 		this.setId(entity.getId())
 		.setUuid(entity.getUuid())
-		.setUpdateTime(entity.getUpdateTime())
+		.setUpdateTime(updateDate)
 		.setOrderNO(entity.getOrderNO())
 		.setYdNO(entity.getYdNO())
 		.setCreateDate(df.format(entity.getCreateDate()))

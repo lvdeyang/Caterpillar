@@ -692,7 +692,12 @@ public class PhoneController extends WebBaseControll {
 		}
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 
-		List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, 1, recommendSize);
+		//List<MerchantPO> merchants = conn_merchant.getMerchantByModularCode(modularCode, 1, recommendSize);
+		List<MerchantPO> merchants = new ArrayList<MerchantPO>();
+		List<ColumnPO> columnPOs = conn_column.getsortindex(modularCode);
+		for (ColumnPO columnPO : columnPOs) {
+			merchants.add(conn_merchant.get(columnPO.getMerchantId()));
+		}
 		List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants, MerchantVO.class);
 		for (MerchantVO merchantVO : _merchants) {
 			merchantVO.setShopPic(sysConfig.getWebUrl() + merchantVO.getShopPic());

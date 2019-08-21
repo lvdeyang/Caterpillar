@@ -807,8 +807,12 @@ public class MerchantController extends BaseController {
 		if (getLoginInfo() != null) {
 			Long comId = getLoginInfo().getComId();
 			String mName = request.getParameter("mName");
+			String status=request.getParameter("status");
 			strMap.put("comId", comId);
 			strMap.put("shopName", mName);
+			if(status!=null&&!status.equals("")){
+				strMap.put("status", status);
+			}
 			listpo = conn_merchant.findAllByMapParams(strMap);
 		} else {
 			listpo.add(conn_merchant.get(getMerchantInfo().getMerchantId()));
