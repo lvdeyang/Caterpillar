@@ -47,7 +47,15 @@ public class ActivityPO extends AbstractBasePO {
 	//规则图片
 	private long rulepicId;
 	private String rulepic;
+	private long sortindex;// 排序显示
 	
+	
+	public long getSortindex() {
+		return sortindex;
+	}
+	public void setSortindex(long sortindex) {
+		this.sortindex = sortindex;
+	}
 	public long getRulepicId() {
 		return rulepicId;
 	}
