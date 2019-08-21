@@ -459,6 +459,9 @@ public class JudgesController {
 			hashMap.put("productpic", "http://www.guolaiwan.net/file"+productPO.getProductShowPic());
 			hashMap.put("productname", productPO.getProductName());
 			hashMap.put("allcount", allcount+"");
+			hashMap.put("manvotes", manvotes+"");
+			hashMap.put("ordercount", ordercount+"");
+			hashMap.put("avg", avg/10+"");
 			list.add(hashMap);
 		}
 		return list;
@@ -545,5 +548,14 @@ public class JudgesController {
 		judges.setScore(Long.parseLong(score));
 		judgesvotemsgDAO.saveOrUpdate(judges);
 		return "success";
+	}
+	
+	// Pc端页面
+	@RequestMapping(value = "/gotoranking")
+	public ModelAndView goToVotePC(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
+		ModelAndView mv = new ModelAndView("mobile/vote/ranking");
+		mv.addObject("optionId", optionId);
+		return mv;
 	}
 }

@@ -487,11 +487,11 @@ html, body {
 }
 #merchantContent img{
     width:280px;
-    height:280px;
+ 
 }
 #merchantContent image{
     width:280px;
-    height:280px;
+
 }
 /*#address{
         -webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;

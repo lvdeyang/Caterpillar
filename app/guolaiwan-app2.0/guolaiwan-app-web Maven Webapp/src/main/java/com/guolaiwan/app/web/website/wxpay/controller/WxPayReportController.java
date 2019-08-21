@@ -935,7 +935,7 @@ public class WxPayReportController extends WebBaseControll {
 				List<TableStatusPO> TableStatus =  Table_Status .findByField("id", orderId);
 				String table ="";
 				if(TableStatus != null && TableStatus.size()>0 && !"PAYSUCCESS".equals(TableStatus.get(0).getDishState())){
-					if (TableStatus.get(0).getYdNO() != null && TableStatus.get(0).getYdNO() != "") {
+					if (TableStatus.get(0).getYdNO() == null || TableStatus.get(0).getYdNO() == "") {
 						String ydNO = ydNoCode(orderId+"");
 						TableStatus.get(0).setYdNO(ydNO);
 					}

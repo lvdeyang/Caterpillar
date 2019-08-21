@@ -25,7 +25,7 @@ public class MealListDao extends AbstractBaseDao<MealListPo> {
 		hql.andBy("productId",Condition.eq,productId);
 		hql.andBy("userId",Condition.eq,userId);
 		hql.andBy("merchantId",Condition.eq,merchantId);
-		hql.andBy("tableId",Condition.eq,"0");
+		hql.andBy("tableId",Condition.eq,Long.parseLong("0"));
 		List<MealListPo> findByHql = findByHql(hql);
 		if(findByHql == null || findByHql.size() ==0) return null;
 		return findByHql.get(0);
@@ -46,7 +46,7 @@ public class MealListDao extends AbstractBaseDao<MealListPo> {
 		QueryHql hql=this.newQueryHql();
 		hql.andBy("userId",Condition.eq,userId);
 		hql.andBy("merchantId",Condition.eq,merchantId);
-		hql.andBy("tableId",Condition.eq,"0");
+		hql.andBy("tableId",Condition.eq,Long.parseLong("0"));
 		List<MealListPo> findByHql = findByHql(hql);
 		return findByHql;
 		
