@@ -184,7 +184,7 @@ line-height: 50px;
 		patam.orderId = '${orderId}' ; //'${merchantId}'
 		alert(${orderId});
 		$.post(_uri, $.toJSON(patam), function(data) {
-		if(data.table != 0){
+		if(data.state != 0){
 			$("#pic").attr("src",'http://www.guolaiwan.net/file/'+data.table.detailsImg+'');
 			$("#name").append('<span>'+data.table.tablename+'</span>'); //名称
 			$("#money").append(data.table.bookprice/100); //钱
@@ -193,6 +193,19 @@ line-height: 50px;
 			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订人</span><span>'+data.tables.userName+'</span></p></li>');
 			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订电话</span><span>'+data.tables.userPhone+'</span></p></li>');
 			$("#ydImage").attr("src",'http://www.guolaiwan.net/file/'+data.tables.ydNO+'');
+			if(data.mealList != null && data.mealList.length >0){
+			  $(".tuijian").show();
+              for(var i=0; i<data.mealList.length; i++){
+				  var array = [];  
+			      array.push('<li style="position:relative;">');
+			      array.push('<img style="height:49px;width:49px;float:left;margin-left:5%;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
+			      array.push('<p style="position: absolute;top:0px;left:25%;">'+data.mealList[i].mealName+'</p>');
+			      array.push('<p style="position: absolute;top:17px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
+			      array.push('<p style="position: absolute;top:7px;right:5%;">￥'+data.mealList[i].money+'</p>');
+			      array.push('</li>');
+				  $('#mealList').append(array.join(''));	       
+			  }
+			}
 		}else{
 		    $(".tuijian").show();
 		    $("#pic").attr("src",'lib/images/undecideds.png');
@@ -244,7 +257,7 @@ line-height: 50px;
 		    <p style="position: absolute;bottom:20px;margin:0;font-size:12px;color:#9A9A9A;left:35%">预订金<span style="color:#EA712C;font-size:18px;" id="money">￥</span> </p>
 		  </div>
 	
-		  <div class="main" style="width:96%;height:auto;border-radius: 10px;margin:10px auto;text-align: center;background: #fff;padding:10px 10px;font-weight: bold;">
+		  <div class="main" style="width:96%;height:auto;border-radius: 10px;margin:10px auto;text-align: center;background: #fff;padding:10px 5%;font-size:12px;text-indent:5px">
 		  <ul style="text-align: left;list-style: none;" id = "message">
 		  
 		  </ul>
