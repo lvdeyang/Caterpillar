@@ -314,17 +314,7 @@ background: #fff;
 	
 	
 	
-	/* 日期判断 */
- 	$(document).on('click', '.pic', function() {
-	var sDate = new Date(document.getElementById("test2").value.replace(/-T/g, "//"));
-	var eDate = new Date();
-    var sewData = Number(sDate)+57599999;
-    var newData = Number(eDate);
-			if (sewData < newData) {
-				$.toast("请选择正确就餐日期", "forbidden");
-				return false;
-			} 
-	});
+
 
 		function list() {
 			$('.hall').empty();
@@ -468,7 +458,17 @@ background: #fff;
 	  }else{
 	     repast = "DINNER";
 	  }
-	 window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId=${merchantId}&repast="+repast+"&tableDate="+$("#test2").val();
+	  	/* 日期判断 */
+	var sDate = new Date(document.getElementById("test2").value.replace(/-T/g, "//"));
+	var eDate = new Date();
+    var sewData = Number(sDate)+57599999;
+    var newData = Number(eDate);
+			if (sewData < newData) {
+				$.toast("请选择正确就餐日期", "forbidden");
+				return;
+			}else{
+			window.location.href = "reservetable/diningtable/tablesDetails?tablesId="+id+"&merchantId=${merchantId}&repast="+repast+"&tableDate="+$("#test2").val();
+			} 
 	}
 
 </script>
@@ -495,7 +495,7 @@ background: #fff;
 	    <div class="nav_in" style="line-height:50px;border-bottom: 2px solid #CECACB;width:100%;height:auto;position: relative;font-weight: bold;overflow: hidden;height:50px;padding:0 0 0 5px;">
 	     <p style="float:left;line-height: 50px;width:36%;">
 	      <span style="float:left;">就餐日期:</span>
-	      <input type="text" placeholder="选择日期"   style="line-height: 50px;height:50px;margin:0;padding:0;float:left;cursor: pointer;width:49%;border:none;outline:none;" class="layui-input" id="test2" onchange="myFunction()">
+	      <input type="text" readonly="readonly" placeholder="选择日期"   style="line-height: 50px;height:50px;margin:0;padding:0;float:left;cursor: pointer;width:49%;border:none;outline:none;" class="layui-input" id="test2" onchange="myFunction()">
 	      <span>▼</span>
 	     </p> 
 	      <p style="float:left;line-height: 50px;width:33%;margin-left:2%;text-align: center;">

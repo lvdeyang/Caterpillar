@@ -796,6 +796,14 @@ appearance:none;
 	     $.toast("请选择就餐时间!", "cancel");
 	        return ;
 	    }
+	    var sDate = new Date(document.getElementById("useDate").value.replace(/-T/g, "//"));
+		var eDate = new Date();
+	    var sewData = Number(sDate)+57599999;
+	    var newData = Number(eDate);
+		if (sewData < newData) {
+			$.toast("请选择正确就餐日期", "cancel");
+			return;
+		}
   	    newTableStatus();
     });
 	$(document).on('click','#btnselect',function(){
