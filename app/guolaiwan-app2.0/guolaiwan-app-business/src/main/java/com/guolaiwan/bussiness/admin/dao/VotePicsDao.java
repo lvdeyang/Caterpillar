@@ -21,7 +21,7 @@ public class VotePicsDao extends AbstractBaseDao<VotePicsPo> {
 	public List<VotePicsPo> getByOptionId(Long optionId) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("optionId", Condition.eq, optionId);
-		hql.orderBy("ranking", true);
+		hql.orderBy("ranking", false);
 		List<VotePicsPo> VotePics = findByHql(hql);
 		if (VotePics == null || VotePics.size() == 0)
 			return null;
@@ -39,5 +39,15 @@ public class VotePicsDao extends AbstractBaseDao<VotePicsPo> {
 		DeleteHql dHql = this.newDeleteHql();
 		dHql.andBy("optionId", Condition.eq, optionId);
 		this.deleteByHql(dHql);
+	}
+	
+	public VotePicsPo getByCode(Long optionId,Long index) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("optionId", Condition.eq, optionId);
+		hql.andBy("ranking", Condition.eq,index);
+		List<VotePicsPo> VotePics = findByHql(hql);
+		if (VotePics == null || VotePics.size() == 0)
+			return null;
+		return VotePics.get(0);
 	}
 }

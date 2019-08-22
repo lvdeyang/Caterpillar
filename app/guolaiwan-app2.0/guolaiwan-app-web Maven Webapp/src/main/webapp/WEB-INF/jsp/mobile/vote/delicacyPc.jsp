@@ -247,10 +247,10 @@ margin:0 5px;
      clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
      transition: 1s clip-path;
      border:0.2em solid #CDAD5D;
-     height:6em;
-     width:6em;
+     height:3em;
+     width:3em;
      background: #060606;
-     line-height: 6em;
+     line-height: 3em;
      color:#fff;
      font-weight:bold;
 
@@ -312,8 +312,8 @@ $(function(){
 }); 
 function Roll(){
     setTimeout(function(){
-    var scrollHeight = $('.ranking').scrollHeight();
-   $('.ranking').animate({'scrollTop':scrollHeight},5000); 
+    var scrollHeight = $('.other').scrollHeight();
+   $('.other').animate({'scrollTop':scrollHeight},5000); 
    },4000);
   
   
@@ -332,14 +332,14 @@ function home(){
   $(document).ready(function (){
        var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)
        var nScrollTop = 0;   //滚动到的当前位置
-       var nDivHight = $(".ranking").height();
-       $(".ranking").scroll(function(){
+       var nDivHight = $(".other").height();
+       $(".other").scroll(function(){
          nScrollHight = $(this)[0].scrollHeight;
          nScrollTop = $(this)[0].scrollTop;
          if(nScrollTop + nDivHight >= nScrollHight){//底部
-         $('.ranking').animate({'scrollTop':0},5000);
+         $('.other').animate({'scrollTop':0},5000);
          }
-         if ($('.ranking').scrollTop()<=0){ //顶部
+         if ($('.other').scrollTop()<=0){ //顶部
              setTimeout(function(){
               if(flag!=0)home();flag=1;
  		      Roll();  
@@ -348,13 +348,13 @@ function home(){
          } 
            
          });
-       $('.ranking').mouseenter(function() {
+       $('.other').mouseenter(function() {
 	  $(this).stop();
 	})
-	 $('.ranking').mouseleave(function(){
+	 $('.other').mouseleave(function(){
 	 /* $(this).start();  */
-	 var scrollHeight = $('.ranking').scrollHeight();
-	$('.ranking').animate({'scrollTop':scrollHeight},5000); 
+	 var scrollHeight = $('.other').scrollHeight();
+	$('.other').animate({'scrollTop':scrollHeight},5000); 
 	  
 	})   
 	
@@ -423,7 +423,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
       for(var i=0;i<data.length;i++){
       var productvotes=parseInt(data[i].allcount);
             <!-- 1 -->
-       /*  if(i==0){
+        if(i==0){
 			html.push('<div style="width:30%;height:18em;position: relative;display: inline-block;">');   
 			html.push('<img style="width:10em;border-radius:50%;height:10em;z-index:10;position: absolute;left:50%;margin-left:-5em;" src="'+data[i].productpic+'">');   
 			html.push('<div class="paiming" style="position: absolute;top:8.2em;left:50%;z-index:11;text-align: center;margin-left:-1.5em;">');   
@@ -464,8 +464,8 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			html.push('</div>');   
 			html.push('</div>');   
 		    html.push('<div style="height:3em;"></div>');   
-        }   */
-     /*    if(i>2&&i%2==1){
+        }  
+        if(i>2&&i%2==1){
         	html1.push('<div style="width:80%;background: #B4B6B5;height:6em;margin: 0.5em auto;border-radius:1em;padding:0 2%;">');
 		    html1.push('<div style="width:50%;height:100%;text-align: left;align-items: center;float:left;">');
 	        html1.push('<div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">');
@@ -485,7 +485,7 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 		  	html1.push('<p style="color:#fff;font-size:1.5em;display: inline-block;float:right;line-height:4em;margin-right:0.5em;">'+parseInt(data[i+1].allcount)+'票</p>');
 	     	html1.push('</div>');
 			html1.push('</div>');
-        } */
+        }
          
       }
        $('.main').children().remove();
@@ -529,7 +529,40 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 
 
 </script>
+<script type="text/javascript"> 
+var SysSecond;
+var InterValObj;
+  
+$(document).ready(function() {
+  SysSecond = parseInt($("#remainSeconds").html()); //这里获取倒计时的起始时间
+  InterValObj = window.setInterval(SetRemainTime, 1000); //间隔函数，1秒执行
+});
+ 
+//将时间减去1秒，计算天、时、分、秒
+function SetRemainTime() {
+  if (SysSecond > 0) {
+   SysSecond = SysSecond - 1;
+   var second = Math.floor(SysSecond % 60);            // 计算秒     
+   var minite = Math.floor((SysSecond / 60) % 60);      //计算分 
+   var hour = Math.floor((SysSecond / 3600) % 24);      //计算小时
+   var day = Math.floor((SysSecond / 3600) / 24);       //计算天 
+ 
+   var hourDiv = "<span id='hourSpan'>"+ hour +"</span>";
+   var dayDiv = "<span id='daySpan'>"+ day +"</span>";
+   var miniteDiv = "<span id='miniteSpan'>"+ minite +"</span>";
+   var secondDiv = "<span id='secondSpan'>"+ second +"</span>";
+ 
+    $("#remainTime").html( "距结束"+dayDiv + "天" + hourDiv +"小时"+ miniteDiv + "分" + secondDiv + "秒");
 
+  if(second == 10 && minite == 0 && hour == 0 && day == 0){//剩余时间小于或等于0的时候，就停止间隔函数
+   window.clearInterval(InterValObj);
+   //这里可以添加倒计时时间为0后需要执行的事件
+   	window.location.href="http://www.guolaiwan.net/guolaiwan/judges/getclosing"
+   
+  }
+ }
+}
+</script>
 
 <body>
        <div class="nav">
@@ -565,33 +598,20 @@ $.post(url,{"id":id,"optionId":"${optionId}"},function(data){
 			</div>	
 					   
 			<!-- 4--无限父级  -->
-	<!-- 	 <div class="other" style="width:100%;height:19.5em;overflow-y:auto;font-weight:bold;">     	
-	     
-	         </div> -->
+		 <div class="other" style="width:100%;height:19.5em;overflow-y:auto;font-weight:bold;">     	
+	      </div>
+						
+						
+	        </div>			
+	 
 		 
-	<div class="ranking" style="width:100%;height:38em;overflow-y:auto;background: #fff;">     	
-	   <div style="width:80%;height:9em;color:red;margin: 0.5em auto;border-radius:1em;padding:0 2%;border:0.15em solid red;position: relative;">
-	      <img style="position: absolute;width:5em;height:5em;transform:rotate(-45deg);left:1em;top:-0.5em;" src="lib/images/king1.png">
-	      <div class="paiming" style="margin:1.5em 0;display: inline-block;text-align: center;">
-			<p style="font-size:2.5em;">1</p>
-		  </div>
-		  	<img style="width:6em;border-radius:50%;height:6em;align-items: center;margin:0.5em 2em 2em 2em;" src="lib/images/ceshi.jpg">
-		   	<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:30%;color:black;display: inline-block;font-size:2em;margin:0 2%;">麻辣鸡丝</p>
-		    <p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:55%;width:10%;text-align: center;">已售</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:55%;width:10%;text-align: center;">500</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:65%;width:10%;text-align: center;">投票数</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:65%;width:10%;text-align: center;">500</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:75%;width:10%;text-align: center;">评委评分</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:75%;width:10%;text-align: center;">8.7</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;top:0.5em;left:85%;width:10%;text-align: center;">总投票数</p>
-            <p style="font-size:2em;display: inline-block;position: absolute;bottom:0.5em;left:85%;width:10%;text-align: center;">500</p>
-	    </div>
+	    <!--倒计时  -->
+		<div id="remainSeconds" style="display:none">1800</div> <!-- 秒 -->
+		<div id="remainTime" style="">	
+		</div> 
 	    
-	 </div> 				
-		
-	 
-
-	 
+	     <!-- 置顶 -->
+     <!--  <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div> -->
 </body>
  
 

@@ -254,6 +254,7 @@ public class WxPayReportController extends WebBaseControll {
 		System.out.println("进行判断是否分销商品");
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");	
 		long merchatId=order.getShopId();
+		if(order.getProductId()==0)return;
 		ProductPO product = conn_product.get(order.getProductId());
 		String distributeId = product.getDistributeId();
 		if(distributeId==null||distributeId==""){

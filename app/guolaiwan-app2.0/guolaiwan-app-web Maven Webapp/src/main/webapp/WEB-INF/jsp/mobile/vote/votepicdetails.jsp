@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>闭幕式</title>
+<title></title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -78,41 +78,93 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	height:100%;
-	
+	min-height:auto;
+    background:#fff;
+	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
-    overflow: hidden;
 }
 
+ 
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
 	touch-action: none;
+	font-family: "微软雅黑";
+}
+/* 页面样式 */
+.header {
+	height: 40px;
+	line-height: 40px;
+	background-color: #18b4ed;
+	color: #fff;
+	border-bottom: 1px solid #bababa;
 }
 
-#myVideo{
- z-index: 100;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: fill;/*这里是关键*/
-    width: auto;
-    height: auto;
-    -ms-transform: translateX(-50%) translateY(-50%);
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
+.header .link-left {
+	margin-left: 10px;
+	margin-right: 10px;
+	position: relative;
+	z-index: 1;
+}
 
-    background-size: cover;
+.header-content {
+	height: auto;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-left: 40px;
+	padding-right: 40px;
+	text-align: center;
+	z-index: 0;
+}
 
-}			
+  .swiper-container {
+    width: 100%;
+    padding:0;
+    margin:0;
+    height:200px;
+  } 
+
+  .swiper-container img {
+    display: block;
+    width: 100%;
+  }
+    
+.weui-navbar{
+ display: none !important;
+}
+  .inp::-webkit-input-placeholder{
+        text-align: center;
+}  
+.nav li{
+line-height: 40px;
+height:40px;
+
+
+}
+.nav li p{
+margin:0;
+display: inline-block;
+text-indent: 1em;
+}
+.nav li img{
+height:20px;
+width:20px;
+}
+.main img{
+width:100%;
+}
+.main p{
+ margin:0 0 5px 0;
+}
+
 </style>
 
 </head>
-	
+
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
@@ -124,33 +176,19 @@ html, body {
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 
-<script>
-$(document).ready(function() {
-var aud = document.getElementById("myVideo");
-/*  aud.currentTime=8;//从第8秒开始播放 */
-aud.onended = function() 
-{
-    
-   window.location.href="http://www.guolaiwan.net/guolaiwan/judges/gotoranking?optionId=1"
-  
-   
-};
 
-/* var md=document.getElementById("myVideo");
-    md.onended = function(){
-        console.log("结束1");
-    }
-    md.addEventListener("ended",function(){
-         console.log("结束2");
-    }) */
-
-});
-</script>
 <body>
-<video id="myVideo" style="" src="lib/images/bi.mp4" autoplay="autoplay" start="5">
-	  网络出了个小差-.-
-</video>
+<div style="">
+  <h3 style="text-align: center;line-height: 50px;">${title}</h3>
+  <ul class="nav" style="margin:0 auto;width:90%;height:auto;padding:0 5%;border:1px solid #C1C1C1;border-radius:8px;">
+   <li style="border-bottom: 1px solid #C1C1C1;"><img src="lib/images/di.png"><p><a style="text-decoration:none;" href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=${shopaddress}&tocoord='',''&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">${shopaddress}</a></p></li>
+   <li style=""><img style="" src="lib/images/lian.png"><p><a href = "tel://${shopphone}" style="text-decoration:none;">${shopphone}</a></p></li>
+  </ul>
+</div>
+<div class="main" style="width:100%;height:auto;padding:20px 5%;">
+${picdetails}
 
+</div>
 </body>
  
 

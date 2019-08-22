@@ -924,6 +924,10 @@ html, body {
 		$(document).on('click','.topmod',function(){
 	       var codes=this.id.split('-');
 	       if(codes[2]==''){return;}
+	       if(codes[1]==0){
+		       location.href='http://www.guolaiwan.net/guolaiwan/pubnum/index';
+		       return;
+	       }
 	       location.href=window.BASEPATH + 'pubnum/merchant/index1?code='+codes[1]+'&classify='+codes[2];
 	    });
 		</script>

@@ -340,7 +340,7 @@ function getRecomment(){
 		$.get(_uriMerchantInfo, null, function(data){
 			    	var html=[];
 				for(var i=0; i<data.length; i++){
-					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="http://www.guolaiwan.net/file'+data[i].slidepic+'" alt=""></div>');
+					html.push('<div onclick="gotopicdetails(this.id)" id="'+data[i].id+'" class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="http://www.guolaiwan.net/file'+data[i].slidepic+'" alt=""></div>');
 				}
 				$('.swiper-wrapper').append(html.join(''));
 				$(".swiper-container").swiper({
@@ -457,6 +457,10 @@ $("#b"+base).css("color","black");
     			getvoteproduct(base);
     		}
     	})
+    }
+    
+    function gotopicdetails(id){
+    	location.href=window.BASEPATH + 'admin/vote/gotovotepicdetails?picId='+id;
     }
     
     function productdetails(id){
