@@ -177,7 +177,6 @@ public class CateController extends BaseController {
 		JSONObject pageObject = JSON.parseObject(param);
 		long merchantId = pageObject.getLong("merchantId"); // 商户id
 		String orderId = pageObject.getString("orderId"); // 订单id
-		String dishMoney = pageObject.getString("dishMoney"); // 买菜金额
 		String userName = pageObject.getString("userName"); // 用户名称
 		String userPhone = pageObject.getString("userPhone"); // 用户手机号
 		String tableDate = pageObject.getString("tableDate"); // 用户选择时间
@@ -188,7 +187,6 @@ public class CateController extends BaseController {
 			orderNo = orderId+"";
 		}else{ //无订桌
 			TableStatusPO table = new TableStatusPO();
-			table.setDishMoney((long)Double.parseDouble(dishMoney)*100);
 			table.setDishState("NOTPAY");
 			table.setMerchantId(merchantId);
 			table.setUserName(userName);
@@ -253,6 +251,9 @@ public class CateController extends BaseController {
 	@RequestMapping(value = "/buydish/port/{id}/{money}")
 	public Object buyDish(@PathVariable String id, @PathVariable Integer money, HttpServletRequest request) throws Exception {
 		String	orderNo = "buydish-" + id;
+		TableStatusPO TableStatus  =  Table_Status.getByField("id",Long.parseLong(id));
+		TableStatus.setDishMoney(money);
+		Table_Status.saveOrUpdate(TableStatus);
 		int payMoney = 1;
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user = conn_user.get(userId);

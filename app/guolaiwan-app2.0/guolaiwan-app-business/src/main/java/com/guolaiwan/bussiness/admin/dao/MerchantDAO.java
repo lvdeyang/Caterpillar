@@ -233,7 +233,10 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 
 		return merchants;
 	}
-
+	
+	
+	
+	
 	/**
 	 * 获取指定模块下的商家（App接口调用）（检索条件）
 	 * 
@@ -579,15 +582,19 @@ public class MerchantDAO extends AbstractBaseDao<MerchantPO> {
 	 * 
 	 * @param map
 	 * @return
+	 * @throws Exception 
 	 */
-	public List<MerchantPO> findAllByMapParams(Map<String, Object> map) {
+	public List<MerchantPO> findAllByMapParams(Map<String, Object> map) throws Exception {
 		QueryHql hql = this.newQueryHql();
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			if (entry.getKey().equals("shopName") && entry.getValue() != null) {
 				hql.andBy(entry.getKey(), Condition.lk, entry.getValue());
+			} else if(entry.getKey().equals("status")){
+				hql.andBy("shopAuditState", Condition.eq, ShopAuditStateType.fromString(entry.getValue().toString()));
 			} else {
 				hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 			}
+			
 		}
 		hql.orderBy("updateTime", true);
 		List<MerchantPO> merchants = findByHql(hql);

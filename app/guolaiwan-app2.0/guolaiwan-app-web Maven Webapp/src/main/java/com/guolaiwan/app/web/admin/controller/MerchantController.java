@@ -807,15 +807,19 @@ public class MerchantController extends BaseController {
 		if (getLoginInfo() != null) {
 			Long comId = getLoginInfo().getComId();
 			String mName = request.getParameter("mName");
+			String status=request.getParameter("status");
 			strMap.put("comId", comId);
 			strMap.put("shopName", mName);
+			if(status!=null&&!status.equals("")){
+				strMap.put("status", status);
+			}
 			listpo = conn_merchant.findAllByMapParams(strMap);
 		} else {
 			listpo.add(conn_merchant.get(getMerchantInfo().getMerchantId()));
 		}
 		List<MerchantVO> listvo = MerchantVO.getConverter(MerchantVO.class).convert(listpo, MerchantVO.class);
 		String title = "商户" + DateUtil.format(new Date(), "yyyyMMddhhmmss") + ".xls";
-		String[] headers = new String[] { "序号", "商家名称", "商户地址", "联系人", "联系电话", "板块" };
+		String[] headers = new String[] { "序号", "商家名称", "商户地址", "联系人", "联系电话", "板块","登录名" };
 		List<Object[]> dataList = new ArrayList<Object[]>();
 		if (listvo != null) {
 			for (int i = 0; i < listvo.size(); i++) {
@@ -825,7 +829,7 @@ public class MerchantController extends BaseController {
 				obj[3] = listvo.get(i).getShopLinkperson();
 				obj[4] = listvo.get(i).getShopTel();
 				obj[5] = listvo.get(i).getModularName();
-
+				obj[6] = listvo.get(i).getShopLoginName();
 				dataList.add(obj);
 			}
 		}
