@@ -78,9 +78,9 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	height:auto;
-    background:#eeeeee;
-
+	min-height:auto;
+    background:#fff;
+	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
 }
@@ -92,7 +92,6 @@ html, body {
 	text-decoration: none;
 	touch-action: none;
 	font-family: "微软雅黑";
-	
 }
 /* 页面样式 */
 .header {
@@ -111,7 +110,7 @@ html, body {
 }
 
 .header-content {
-	height:100%;
+	height: auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -143,12 +142,17 @@ html, body {
 .nav li{
 line-height: 40px;
 height:40px;
-border-bottom: 1px dashed #C1C1C1;
+
 
 }
 .nav li p{
 margin:0;
-text-indent: 2em;
+display: inline-block;
+text-indent: 1em;
+}
+.nav li img{
+height:20px;
+width:20px;
 }
 .main img{
 width:100%;
@@ -174,19 +178,17 @@ width:100%;
 
 
 <body>
-<div style="background:#eeeeee;">
+<div style="">
   <h3 style="text-align: center;line-height: 50px;">${title}</h3>
-  <ul class="nav" style="width:100%;height:auto;padding:0 5%;">
-   <li style=""><p>地址：${shopaddress}</p></li>
-   <li style=""><p>联系电话：${shopphone}</p></li>
+  <ul class="nav" style="margin:0 auto;width:90%;height:auto;padding:0 5%;border:1px solid #C1C1C1;border-radius:8px;">
+   <li style="border-bottom: 1px solid #C1C1C1;"><img src="lib/images/di.png"><p>${shopaddress}</p></li>
+   <li style=""><img style="" src="lib/images/lian.png"><p>${shopphone}</p></li>
   </ul>
 </div>
-<div class="main" style="width:100%;height:auto;padding:20px 5%;background:#eeeeee;">
-	${picdetails}
+<div class="main" style="width:100%;height:auto;padding:20px 5%;">
+${picdetails}
 
 </div>
-
-
 </body>
  
 
