@@ -461,7 +461,7 @@ public class JudgesController {
 			hashMap.put("allcount", allcount+"");
 			hashMap.put("manvotes", manvotes+"");
 			hashMap.put("ordercount", ordercount+"");
-			hashMap.put("avg", avg/10+"");
+			hashMap.put("avg", (avg/10)+"");
 			list.add(hashMap);
 		}
 		return list;
