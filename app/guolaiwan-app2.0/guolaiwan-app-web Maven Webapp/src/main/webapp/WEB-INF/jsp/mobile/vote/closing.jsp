@@ -131,7 +131,8 @@ var aud = document.getElementById("myVideo");
 aud.onended = function() 
 {
     
-   window.location.href="http://www.guolaiwan.net/admin/vote/gotovotepc?optionId=1" 
+   window.location.href="http://www.guolaiwan.net/guolaiwan/judges/gotoranking?optionId=1"
+  
    
 };
 
