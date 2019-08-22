@@ -616,6 +616,11 @@ text-align: center;
 width:100%;margin-top:20px;
 line-height: 30px;
 }
+#sele{
+appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+}
 </style>
 
 </head>
@@ -1263,7 +1268,9 @@ line-height: 30px;
 			            <p style="">用户姓名:<input id="username" type="text" style=""></p>
 			            <p>联系电话:<input id="userPhone"  type="text"></p>
 			            <p>就餐日期:<input id="useDate" type="text"></p>
-			            <p>就餐时间:<select id="sele"  style="width:70%;border:none;outline:none;border-bottom:1px solid #E0E0E0;padding:0 0 0 28%;"> <option>午餐</option><option>晚餐</option>    </select></p>
+			            <p>就餐时间:<select id="sele"  style="width:70%;border:none;outline:none;border-bottom:1px solid #E0E0E0;padding:0 0 0 28%;"> 
+			            <option>午餐</option><option>晚餐</option>    
+			            </select></p>
 			  
 			     <button id="payment"  style="border:none;outiline:none;font-weight:bold;color:#fff;height:40px;width:40%;background: #F03C03;position: fixed;bottom:5%;left:50%;margin-left:-20%;border-radius:12px;">立即支付</button>
 			  </div>  

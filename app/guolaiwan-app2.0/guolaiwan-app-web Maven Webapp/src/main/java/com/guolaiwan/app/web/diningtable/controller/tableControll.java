@@ -55,7 +55,7 @@ public class tableControll extends WebBaseControll  {
 	private  TableDAO Table;
 	@Autowired
 	private  TableStatusDAO Table_Status;
-	@Autowired
+	@Autowired	
 	private SysConfigDAO conn_sysConfig;
 	@Autowired
 	private UserInfoDAO conn_user;
@@ -304,7 +304,7 @@ public class tableControll extends WebBaseControll  {
 		System.out.println(TableStatus.getType());
 		TablePO addpo  = Table.getByField("id",TableStatus.getTableId());
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(addpo != null){
+		if(addpo != null && "PAYSUCCESS".equals(TableStatus.getTableState()+"") ){
 			map.put("table", addpo);
 			map.put("state", 1);
 			if("PAYSUCCESS".equals(TableStatus.getDishState()+"")){
@@ -355,8 +355,8 @@ public class tableControll extends WebBaseControll  {
 		JSONObject pageObject = JSON.parseObject(param);
 		String merchantId = pageObject.getString("merchantId");  
 		String tableId = pageObject.getString("tablesId");  
-		String userName = pageObject.getString("userName");  
-		String userPhone = pageObject.getString("userPhone");  
+		String userName = pageObject.getString("userName");  	
+		String userPhone = pageObject.getString("userPhone");  									
 		String tableDate = pageObject.getString("tableDate");  
 		String type = pageObject.getString("repast");  
 		TableStatusPO tableStatus = new TableStatusPO();
@@ -388,8 +388,14 @@ public class tableControll extends WebBaseControll  {
 		String orderNo = "table-" + id  /* +"-"ID+"-"景ID */;
 		TableStatusPO TableStatus =	Table_Status.getByField("id",Long.parseLong(id));//查询中间表
 		TableStatus.setOderNo(orderNo);
-		Table_Status.saveOrUpdate(TableStatus);
 		int payMoney = 1;
+		/*TablePO addpo  = Table.getByField("id",TableStatus.getTableId());
+		if (addpo != null && "PAYSUCCESS".equals(TableStatus.getTableState()+"")) {
+			payMoney = money - Integer.parseInt(addpo.getBookprice()+"");
+		}else{
+			payMoney = money;
+		}*/
+		Table_Status.saveOrUpdate(TableStatus);
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user = conn_user.get(userId);
 		YuebaWxPayConstants.set("http://" + WXContants.Website + "/website/wxreport/tablePayment", WxConfig.appId,
