@@ -253,6 +253,7 @@ html, body {
 	text-align: center;
 }
 
+
 .form-col-half.sm {
 	line-height: 50px;
 }

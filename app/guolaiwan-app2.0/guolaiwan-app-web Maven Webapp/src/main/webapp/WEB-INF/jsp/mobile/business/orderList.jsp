@@ -508,11 +508,59 @@ html, body {
 		
 	  $(document).on('click','.product',function(){
 	       var codes=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/order/info?orderId='+codes[1];
-	    
+	       location.href=window.BASEPATH +"business/gotopayment?merchantId=${merchantId}&orderId="+codes[1];
+	  });
+	  
+	    $(document).on('click','.table',function(){
+	       var codes=this.id.split('-');	      
+	       location.href=window.BASEPATH +"reservetable/diningtable/tableSuccess?merchantId="+codes[2]+"&orderId="+codes[1];
 	  });
 	  getOrder(2);
-      function getOrder(type){
+	  getTableOrder(2);
+	  // 美食订单
+	    function getTableOrder(type){	  
+          var _uriorder = window.BASEPATH + 'business/tableOrder/get?userId=${userId}&type='+type+'&uType=USER&ifpay=true&merchantId=${merchantId}';
+          $.get(_uriorder, null, function(data){
+			var lStatusPOs = data.lStatusPOs;
+			var tList = data.tList;
+			var disList = data.disList;
+			if(lStatusPOs.length == 0) return;
+			var html=[];
+			
+			html.push('<div class="weui-panel__bd">');
+			if(lStatusPOs.length>0){
+			    
+				for(var i=0; i<lStatusPOs.length; i++){
+				   
+				html.push('<div class="weui-cells__title">'+lStatusPOs[i].tableDate.replace('-','年').replace('-','月')+"日");
+				    
+                    if(type==2){
+					 html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+lStatusPOs[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
+					html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')
+							    
+					 }            
+				        html.push('</div>');
+				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg table" id="pro-'+lStatusPOs[i].id+'-'+lStatusPOs[i].merchantId+'">');
+					    html.push('<div class="weui-media-box__hd">');
+					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+tList[i].detailsImg+'">');
+					    html.push('</div>');
+					    html.push('<div class="weui-media-box__bd">');
+					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+tList[i].tablename+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+lStatusPOs[i].dishMoney+'</h4>');
+					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+lStatusPOs[i].tableDate.replace('-','年').replace('-','月')+"日"+'</p>');
+					    html.push('</div>');				  
+					    html.push('</a>');				    
+				}
+			}else{
+			 	html.push("<div style='width:100%;margin-top:10px;font-size:12px;text-align:center'>暂无数据</div>");
+			}
+			html.push('</div>');
+			$('#tab'+type).children().remove();
+			$('#tab'+type).append(html.join(''));
+			
+		});
+	   }
+	  //其它商品订单
+     function getOrder(type){
           var _uriorder = window.BASEPATH + 'business/order/get?userId=${userId}&type='+type+'&uType=USER&ifpay=true&merchantId=${merchantId}';
           $.get(_uriorder, null, function(data){
 			data = parseAjaxResult(data);
@@ -529,8 +577,9 @@ html, body {
 				    if(data[i].isBundle==1){
 				       addStr="bundle-";
 				    }
-				    			    
-				   for(var j=0;j<data[i].orderList.length;j++){
+				    
+				    
+				    for(var j=0;j<data[i].orderList.length;j++){
 				        if(j==0){
 				            var bookDate=data[i].orderList[j].orderBookDate.replace('年','/').replace('月','/').replace('日','');
 					        if('2019/04/15 00:00:00'<=bookDate&&bookDate<='2019/04/19 23:59:59'){
@@ -590,7 +639,7 @@ html, body {
 			 	html.push("<div style='width:100%;margin-top:10px;font-size:12px;text-align:center'>暂无数据</div>");
 			}
 			html.push('</div>');
-			$('#tab'+type).children().remove();
+			//$('#tab'+type).children().remove();
 			$('#tab'+type).append(html.join(''));
 			
 		});

@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+﻿<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -201,6 +201,7 @@ html, body {
 </head>
 
 <!-- 公共脚本引入 -->
+<jsp:include page="../../../mobile/commons/jsp/public.jsp"></jsp:include>
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
