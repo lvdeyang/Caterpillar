@@ -181,8 +181,8 @@ width:100%;
 <div style="">
   <h3 style="text-align: center;line-height: 50px;">${title}</h3>
   <ul class="nav" style="margin:0 auto;width:90%;height:auto;padding:0 5%;border:1px solid #C1C1C1;border-radius:8px;">
-   <li style="border-bottom: 1px solid #C1C1C1;"><img src="lib/images/di.png"><p><a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=${shopaddress}&tocoord='',''&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">${shopaddress}</a></p></li>
-   <li style=""><img style="" src="lib/images/lian.png"><p>${shopphone}</p></li>
+   <li style="border-bottom: 1px solid #C1C1C1;"><img src="lib/images/di.png"><p><a style="text-decoration:none;" href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=${shopaddress}&tocoord='',''&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">${shopaddress}</a></p></li>
+   <li style=""><img style="" src="lib/images/lian.png"><p><a href = "tel://${shopphone}" style="text-decoration:none;">${shopphone}</a></p></li>
   </ul>
 </div>
 <div class="main" style="width:100%;height:auto;padding:20px 5%;">
