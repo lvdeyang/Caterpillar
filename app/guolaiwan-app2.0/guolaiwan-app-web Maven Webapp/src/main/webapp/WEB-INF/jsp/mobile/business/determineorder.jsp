@@ -31,7 +31,6 @@
 <!-- 添加到主屏后的标题（iOS 6 新增） -->
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
-
 <meta name="apple-itunes-app"
 	content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
 <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
@@ -66,7 +65,6 @@
 <title>确认订单</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
-
 <style type="text/css">
 a {
 	cursor: pointer !important;
@@ -142,7 +140,7 @@ html, body {
 .liebiao li input{
     width: 100%;
     height: 60px;
-    margin: 10px auto;
+    margin: 10px auto 0;
     text-align: right;
     margin-left: 2%;
     padding: 0 10%;
@@ -156,9 +154,7 @@ html, body {
   background: -webkit-linear-gradient(left,rgba(254,187,56,1),rgba(254,104,33,1)); /* Safari 5.1 - 6 */
 }
 </style>
-
 </head>
-
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
@@ -170,13 +166,10 @@ html, body {
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script type="text/javascript">
-   
 	$(function() {
 	    affirmorder();
 	});
-	
 	function affirmorder(){
-	 
 	 var url = window.BASEPATH + 'business/affirmorder?productid='+${productid};
 	 $.get(url, null, function(data){
           document.getElementById("zong").innerText = data.ProductPrice;
@@ -190,9 +183,7 @@ html, body {
 		 html.push("</div>");
 		 $('#order').append(html.join(''));	
 	 });	 
-	   
 }
-	
 </script>
 <script>
 	layui.use('laydate', function(){
@@ -203,8 +194,6 @@ html, body {
 	    elem: '#test1' //指定元素
 	  });
 	});
-	   
-	
      /*控制数量  */
 	$(document).on('click','.p1',function(){
 	 var value=parseInt($('.zhi').val())-1;
@@ -263,47 +252,38 @@ html, body {
 			</div>
 		</div>	
 	 <!-- 订单信息  -->
-	  	<div id="order"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">
-	     	
-	    </div>
-	  
-	  
-	  
+  	<div id="order"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">
+    </div>
       <div class="layui-inline" style="width:96%;height:auto;position: relative;"> <!-- 注意：这一层元素并不是必须的 -->
   			<ul class="liebiao" style="color:black;">
   			<li>
-  			<input type="text" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="test1">
+  			<input type="text" readonly="readonly" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="test1">
 	        <p style="position: absolute;top:30px;left:10%;">游玩日期</p>
 	        <p style="position: absolute;top:30px;right:5%;">❯</p>
 		    </li>
 		    <li>
 		    <input type="button">
-		    <p style="position: absolute;top:110px;left:10%;">数量</p>
-		    <p class="p1" style="position: absolute;top:110px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
-		    <input type="text" readonly="true"  class="zhi" id="shuliang" value="1"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:112px;font-size:14px;font-weight:bold;text-align: center;">
-		    <p class="p2" style="position: absolute;top:110px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
+		    <p style="position: absolute;top:100px;left:10%;">数量</p>
+		    <p class="p1" style="position: absolute;top:100px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
+		    <input type="text" readonly="true"  class="zhi" id="shuliang" value="1"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:104px;font-size:14px;font-weight:bold;text-align: center;">
+		    <p class="p2" style="position: absolute;top:100px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
 		    </li>
 		    <li>
 		    <input class="pid"  type="text" placeholder="请输入身份证号码" minlength="18" maxlength="18" style="padding:0 7%" >
-		    <p style="position: absolute;top:190px;left:10%;">身份证号码</p>
+		    <p style="position: absolute;top:173px;left:10%;">身份证号码</p>
 		    </li>
 		    <li>
 		    <input type="text" placeholder="请输入您的姓名" minlength="4" maxlength="4" style="padding:0 7%" >
-		    <p style="position: absolute;top:270px;left:10%;">姓名</p>
+		    <p style="position: absolute;top:243px;left:10%;">姓名</p>
 		    </li>
 		    <li>
 		     <input class="phone" type="text" placeholder="请输入正确的手机号码" minlength="11" maxlength="11" style="padding:0 7%" >
-		    <p style="position: absolute;top:350px;left:10%;">联系电话</p>
-		    </li>
-		      <li>
-		    <input type="button">
-		    <p style="position: absolute;top:430px;left:10%;">优惠券</p>
-		    <p style="position: absolute;top:430px;right:7%;"><span>0</span>张可用</p>
+		    <p style="position: absolute;top:313px;left:10%;">联系电话</p>
 		    </li>
 		    </ul>	 
 	  </div>
 	  
-      <div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:20px;">
+      <div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:12px;">
           <img style="width:140px;height:171px;position: absolute;left:50%;margin:40px 0 0 -70px;" alt="" src="lib/images/renliansss.png">
           <p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-126px;">请保持正脸，平视屏幕，面部足够清晰。</p>
           <button style="position: absolute;left:50%;top:300px;font-size:18px;margin-left:-100px;width:200px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>

@@ -506,7 +506,7 @@ html, body {
 .zhifu{
   background: -webkit-linear-gradient(left,rgba(254,176,1,1),rgba(255,73,0,1)) !important;/* Safari 5.1 - 6 */
   color:#fff !important;
-  margin:10px 0 !important;
+  margin:10px 4% !important;
   font-size:20px !important;
   font-weight:bold !important;
   height:40px !important;
@@ -600,7 +600,7 @@ html, body {
 .footer .left{float:left;margin:5px 10px;}  
 .footer .right{float:right;}  
 .footer .right .disable{background:#dbdbdb;}  
-.footer .xhlbtn{display:block;text-align:center;line-height:50px;background-color:#F03C03;padding:0 30px;color:#fff;font-weight:bold;}  
+.footer .xhlbtn{display:block;text-decoration:none;text-align:center;line-height:50px;background-color:#F03C03;padding:0 30px;color:#fff;font-weight:bold;}  
 .menu-txt p,h4{
  margin:0 !important;
 }
@@ -1203,11 +1203,11 @@ appearance:none;
 		      <img  style="" alt="" src="lib/images/1.jpg"> -->
 		      <button style="position: absolute;bottom:15px;left:15px;background-color:rgba(44,17,6,0.5);border-radius:12px;outline:none;border:none;color:#fff;padding:0 8px;font-size:12px;"></button>
 		     </div>
-		     <div id="feature" class="" style="height:100px;width:100%;border-bottom:1px solid #EFEFEF;position: relative;">
+		     <div id="feature" class="" style="height:80px;width:100%;border-bottom:1px solid #EFEFEF;position: relative;">
             
              </div>
              
-            <div style="width:100%;height:80px;text-align: center;border-bottom:10px solid #F4F4F4;">
+            <div style="width:100%;height:70px;text-align: center;border-bottom:10px solid #F4F4F4;">
               <a style="" href="pubnum/product/index/payinshop/${merchantId}" class="zhifu" id="zhifu">到店支付</a>
               <a style=""　href="reservetable/tables/home?merchantId=${merchantId}" class="zhifu" id="tables">订桌</a> 
             </div>
