@@ -501,8 +501,8 @@ html, body {
 	border-radius: 5px;
 	position: absolute;
 	top: 70%;
-	right: 2px;
-	width: 50px;
+	right: 5px;
+	width: 100%;
 	color: #FD6770;
 	text-align: center;
 
@@ -1002,7 +1002,7 @@ html, body {
 				<div id="zong">
 					<div class="demo"></div>
 					<div id="btn1" class="btn"></div>
-					<div class="jishu">${live.giveLike}</div>
+					<div class="jishu"><p style="width:100%;text-align: right;">${live.giveLike}</p></div>
 					<!-- 礼物 -->
 					<div id="btn2" class="btn2"></div>
 					<!-- 回放 -->

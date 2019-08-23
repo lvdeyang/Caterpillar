@@ -163,7 +163,7 @@ width:100%;
 height:50px;
 list-style-type:none;
 border-bottom:1px solid #eeeeee;
-
+font-size:12px;
 line-height: 50px;
 
 }
@@ -199,10 +199,10 @@ line-height: 50px;
               for(var i=0; i<data.mealList.length; i++){
 				  var array = [];  
 			      array.push('<li style="position:relative;">');
-			      array.push('<img style="height:49px;width:49px;float:left;margin-left:5%;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
-			      array.push('<p style="position: absolute;top:0px;left:25%;">'+data.mealList[i].mealName+'</p>');
-			      array.push('<p style="position: absolute;top:17px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
-			      array.push('<p style="position: absolute;top:7px;right:5%;">￥'+data.mealList[i].money+'</p>');
+			      array.push('<img style="height:45px;width:45px;float:left;margin-left:5%;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
+			      array.push('<p style="position: absolute;top:-2px;left:25%;">'+data.mealList[i].mealName+'</p>');
+			      array.push('<p style="position: absolute;top:15px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
+			      array.push('<p style="position: absolute;top:-2px;right:5%;">￥'+data.mealList[i].money+'</p>');
 			      array.push('</li>');
 				  $('#mealList').append(array.join(''));	       
 			  }
@@ -221,10 +221,10 @@ line-height: 50px;
 			for(var i=0; i<data.mealList.length; i++){
 			  var array = [];  
 		      array.push('<li style="position:relative;">');
-		      array.push('<img style="height:49px;width:49px;float:left;margin-left:5%;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
-		      array.push('<p style="position: absolute;top:0px;left:25%;">'+data.mealList[i].mealName+'</p>');
-		      array.push('<p style="position: absolute;top:17px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
-		      array.push('<p style="position: absolute;top:7px;right:5%;">￥'+data.mealList[i].money+'</p>');
+		      array.push('<img style="height:45px;width:45px;float:left;margin-left:5%;border-radius:4px;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
+		      array.push('<p style="position: absolute;top:-15px;left:25%;">'+data.mealList[i].mealName+'</p>');
+		      array.push('<p style="position: absolute;top:10px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
+		      array.push('<p style="position: absolute;top:-2px;right:5%;">￥'+data.mealList[i].money+'</p>');
 		      array.push('</li>');
 			  $('#mealList').append(array.join(''));	       
 			}

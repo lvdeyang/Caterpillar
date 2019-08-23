@@ -155,7 +155,6 @@ html, body {
 </style>
 
 </head>
-
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
@@ -166,7 +165,6 @@ html, body {
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-
 <script>
 	var page=1;
   $(function(){
@@ -183,10 +181,8 @@ html, body {
 		$('html,body').animate({'scrollTop':0},500);
         return false;
 	});
-	
 	getMerchant();
 }); 
-
  		function getMerchant(){
 			var url="<%=basePath%>business/search";
 	            $.post(url,{"merchantId":${merchantId},"name":"${name}","type":"0002"},function(data){
@@ -211,16 +207,10 @@ html, body {
 	            	page++;
 	            })
 			}
-			
 	function accommodation(id){
    		location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+id;
     }
-    
 </script>
-
-
-
-
 <body>
 			<!-- 主页 -->
 		<div class="header">
@@ -230,16 +220,12 @@ html, body {
 				<div class="header-content">商户</div>
 			</div>
 		</div>
-		
-	  <select style="width:100%;margin:1px auto;font-weight: bold;padding:0 5%;height:30px;border:none;outline:none;appearance:none; -moz-appearance:none;  -webkit-appearance:none;">
-	    <option>智能排序ⅴ</option>
-	    <option>低价优先ⅴ</option>
-	    <option>高价优先ⅴ</option>
+	  <select style="width:100%;background:#E1E1E1;margin:1px auto;font-weight: bold;padding:0 5%;height:30px;border:none;outline:none;appearance:none; -moz-appearance:none;  -webkit-appearance:none;">
+	    <option>智能排序▼</option>
+	    <option>低价优先▼</option>
+	    <option>高价优先▼</option>
 	  </select>
-    
-	 
 	 <div class="huodong"></div>
-   
    </div>    	
    <!-- 置顶 -->
     <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
