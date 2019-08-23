@@ -12,7 +12,8 @@
 <script type="text/javascript" src="<%=basePath %>mobile/lib/jQuery-weui-v1.2.0/lib/fastclick.js"></script>
 <script type="text/javascript">
     
-
+  
+  
 
     $(function() {
     $(document).on('click',' #index',function(){ 

@@ -460,22 +460,100 @@ public class VoteController extends BaseController {
 		return mv;
 	}
 	
-	// 编辑轮播图数据
-	@ResponseBody
-	@RequestMapping(value = "/editpic", method = RequestMethod.POST)
-	public String editPic(HttpServletRequest request) throws Exception {
-		long id = Long.parseLong(request.getParameter("id"));
-		VotePicsPo votePics = votepicDAO.get(id);
-		String field = request.getParameter("field");
-		if (field.equals("ranking")) {
-			String ranking = request.getParameter("value");
-			votePics.setRanking(Integer.parseInt(ranking));
-			votepicDAO.save(votePics);
-			return "success";
+	// 投票轮播图页面
+		@RequestMapping(value = "/gotovotepicdetails")
+		public ModelAndView goToVotePicDetails(HttpServletRequest request) {
+			String picId=request.getParameter("picId");
+			VotePicsPo votePic = votepicDAO.get(Long.parseLong(picId));
+			String shopaddress = votePic.getShopaddress();
+			long shopphone = votePic.getShopphone();
+			String picdetails = votePic.getPicdetails();
+			String title = votePic.getTitle();
+			ModelAndView mv = new ModelAndView("mobile/vote/votepicdetails");
+			mv.addObject("picId", picId);
+			mv.addObject("shopaddress", shopaddress);
+			mv.addObject("shopphone", shopphone);
+			mv.addObject("picdetails", picdetails);
+			mv.addObject("title", title);
+			return mv;
 		}
-		return "error";
+	
+	
+	// 添加轮播图详细数据
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/addpicdetails", method = RequestMethod.POST)
+	public String addPicDetails(HttpServletRequest request) throws Exception {
+		String picId = request.getParameter("picId");
+		String shopaddress = request.getParameter("shopaddress");
+		String shopphone = request.getParameter("shopphone");
+		String picdetails = request.getParameter("picdetails");
+		String title = request.getParameter("title");
+		VotePicsPo votePic = votepicDAO.get(Long.parseLong(picId));
+		votePic.setShopaddress(shopaddress);
+		votePic.setShopphone(Long.parseLong(shopphone));
+		votePic.setPicdetails(picdetails);
+		votePic.setTitle(title);
+		votepicDAO.update(votePic);
+		return "success";
 	}
 	
+	// 投票轮播图页面
+	@RequestMapping(value = "/gotopicdetails")
+	public ModelAndView goToPicDetails(HttpServletRequest request) {
+		String picId=request.getParameter("picId");
+		VotePicsPo votePic = votepicDAO.get(Long.parseLong(picId));
+		String shopaddress = votePic.getShopaddress();
+		long shopphone = votePic.getShopphone();
+		String picdetails = votePic.getPicdetails();
+		String title = votePic.getTitle();
+		ModelAndView mv = new ModelAndView("admin/vote/addpicdetails");
+		mv.addObject("picId", picId);
+		mv.addObject("shopaddress", shopaddress);
+		mv.addObject("shopphone", shopphone);
+		mv.addObject("picdetails", picdetails);
+		mv.addObject("title", title);
+		return mv;
+	}
+	
+	//轮播图的排序
+	@ResponseBody
+	@RequestMapping(value = "/chengepicsort" , method = RequestMethod.POST)
+	public Map<String, Object> chengeSortIndex(long picId, String state){
+		Map<String, Object> map = new HashMap<String, Object>();
+		VotePicsPo votepics = votepicDAO.get(picId);
+		long optionId=votepics.getOptionId();
+		long index  =  votepics.getRanking();
+		if ("T".equals(state)) { // 上架
+			VotePicsPo byCode = votepicDAO.getByCode(optionId,index-1);
+			if (byCode != null){
+				votepics.setRanking(index-1);
+				votepicDAO.saveOrUpdate(votepics);
+				votepicDAO.flush();
+				byCode.setRanking(index);
+				votepicDAO.saveOrUpdate(byCode);
+				votepicDAO.flush();
+			}else {
+				map.put("data", "已是优先显示");
+				return  map;
+			}
+		}else { // 下架
+			VotePicsPo byCode = votepicDAO.getByCode(optionId,index+1);
+			if (byCode != null){
+				votepics.setRanking(index+1);
+				votepicDAO.saveOrUpdate(votepics);
+				votepicDAO.flush();
+				byCode.setRanking(index);
+				votepicDAO.saveOrUpdate(byCode);
+				votepicDAO.flush();
+			}else {
+				map.put("data", "已是最尾");
+				return  map;
+			}
+		}
+		map.put("data", "success");
+		return map;
+	}
 	
 	
 	//查询所有轮播图
@@ -498,8 +576,10 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/apendpic", method = RequestMethod.POST)
 	public String apendPic(HttpServletRequest request) throws Exception {
 		long optionId=Long.parseLong(request.getParameter("optionId"));
+		long ranking=votepicDAO.getCountByOptionId(optionId);
 		VotePicsPo pic=new VotePicsPo();
 		pic.setOptionId(optionId);
+		pic.setRanking(ranking+1);
 		votepicDAO.save(pic);
 		return "success";
 	}

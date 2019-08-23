@@ -3,6 +3,7 @@ package com.guolaiwan.app.web.business.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -10,9 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
@@ -56,6 +59,8 @@ import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
+import com.guolaiwan.bussiness.admin.dao.TableDAO;
+import com.guolaiwan.bussiness.admin.dao.TableStatusDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.UserOnedayBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.VPCommentDAO;
@@ -74,9 +79,13 @@ import com.guolaiwan.bussiness.admin.po.LogisticsPo;
 import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.OrderPeoplePo;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
+import com.guolaiwan.bussiness.admin.po.RoomStatusPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.guolaiwan.bussiness.admin.po.TablePO;
+import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 import com.guolaiwan.bussiness.admin.po.VPRelPO;
@@ -90,6 +99,7 @@ import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
+import javassist.expr.NewArray;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.weixin.constants.WXContants;
@@ -622,12 +632,17 @@ public class BusinessController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/business/payment");
 		String orderId=request.getParameter("orderId");
+        //封装个人信息
+		 HttpSession session = request.getSession();
+		long userId = (long)session.getAttribute("userId");
+	    UserInfoPO  uInfoPO = userDao.get(userId);
 		if(orderInfoDao.get(Long.parseLong(orderId)).getProductId()!=0){
 			String productClassCode = productDAO.get(orderInfoDao.get(Long.parseLong(orderId)).getProductId()).getProductClassCode();
 			mv.addObject("type", productClassCode);
 		}else{
 			mv.addObject("type", "006");
 		}
+		mv.addObject("uInfoPO", uInfoPO);
 		mv.addObject("orderId", orderId);
 		return mv;
 	}
@@ -1192,6 +1207,12 @@ public class BusinessController extends WebBaseControll {
 		String roomId=request.getParameter("roomId");
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/business/roomdetails");
+		//封装数据
+	    AddTheRoomPO addTheRoomPO = conn_roomdao.get(Long.parseLong(roomId));
+	    HttpSession session = request.getSession();
+	    long userId = (long)session.getAttribute("userId");	
+	    mv.addObject("merchantId",addTheRoomPO.getMerchantId());
+	    mv.addObject("userId",userId);
 		mv.addObject("inRoomDate",inRoomDate);
 		mv.addObject("outRoomDate",outRoomDate);
 		mv.addObject("roomId", roomId);
@@ -1685,6 +1706,11 @@ public class BusinessController extends WebBaseControll {
 
 		}
 		
+		@Autowired
+		private TableStatusDAO conn_tablestatus;
+		@Autowired
+		private TableDAO conn_table;
+		
 		/**
 		 * 订单：获取订单
 		 * 
@@ -1699,8 +1725,7 @@ public class BusinessController extends WebBaseControll {
 		public Map<String, Object> getOrder(Long userId, int type, // 1.未支付;2.已支付;3.已发货;4.待退款;5.已退款;6.已收货;7.已评价
 				Long merchantId,String uType, HttpServletRequest request, HttpServletResponse response) throws Exception {
 			SysConfigPO sysConfig = conn_sys.getSysConfig();
-			List<OrderInfoVO> orders = new ArrayList<OrderInfoVO>(); // 已付款订单
-			
+			List<OrderInfoVO> orders = new ArrayList<OrderInfoVO>(); // 已付款订单			
 			//查询商户下的子商户
 			List<Long> merchList = new ArrayList<Long>();
 			merchList.add(merchantId);
@@ -1724,6 +1749,8 @@ public class BusinessController extends WebBaseControll {
 						orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
 					}
 					orders = orderingOrders;
+																			
+				
 					break;
 
 				case 2:// 已支付
@@ -1940,8 +1967,517 @@ public class BusinessController extends WebBaseControll {
 				}
 
 			}
+			
+		
 			return success(vos);
 
+		}	
+		
+		//美食订单获取
+		@ResponseBody
+		@RequestMapping(value = "/tableOrder/get", method = RequestMethod.GET)
+		public Map<String, Object> getTableOrder(Long userId, int type, // 1.未支付;2.已支付;3.已发货;4.待退款;5.已退款;6.已收货;7.已评价
+				Long merchantId,String uType, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			    Map<String, Object> map = new HashMap<String, Object>();
+				SysConfigPO sysConfig = conn_sys.getSysConfig();						
+				//查询商户下的子商户
+				List<Long> merchList = new ArrayList<Long>();
+				merchList.add(merchantId);
+				List<MerchantChildrenPO> mChildrenPOs = merchant_Children.findByField("merchantId",merchantId);
+				if(mChildrenPOs != null){
+					for(MerchantChildrenPO po : mChildrenPOs){
+						merchList.add(po.getChildrenId());
+					}					
+				}
+				if (uType.equals("USER")) {
+					switch (type) {
+					case 1:// 未支付					
+						String[] field1 = {"userId","tableState"};
+						Object[] value1 ={String.valueOf(userId),"NOTPAY"};
+						List<TableStatusPO>  table_order1 =  conn_tablestatus.findByFields(field1, value1);
+						//查询美食菜的订单
+						String[] _field1 = {"userId","dishState","tableId"};
+						Object[] _value1 ={String.valueOf(userId),"NOTPAY",0L};
+						List<TableStatusPO>  dish_order1 =  conn_tablestatus.findByFields(_field1, _value1);
+						
+						List<Object> tableslist1 =  new ArrayList<Object>();
+						//一个商户下多条订单封装
+						
+						List<TableStatusPO> tableStatusPOs1 = new ArrayList<TableStatusPO>();
+						List<TablePO> tablePOs1 = new ArrayList<TablePO>();
+					 //对应桌订单进行筛选	
+					 int index1 = -1;
+					 boolean event1 = false;
+					 Map<String, Object> tablesMap1 = null;					
+					  for(int i= 0; i<merchList.size();i++){
+						  System.out.println("123:"+merchList.get(i));
+						  for(int j =0;j<table_order1.size();j++){								  
+							if((long)merchList.get(i) == table_order1.get(j).getMerchantId()){
+								
+								if(index1 != i){
+								   index1 = i;
+								   tablesMap1 = new HashMap<String, Object>();
+							       List<MerchantPO> merchant_ = Mer_chant.findByField("id", merchList.get(i));
+						           List<MerchantVO> merchantVOs = MerchantVO.getConverter(MerchantVO.class)
+								      .convert(merchant_, MerchantVO.class);
+									tablesMap1.put("merchant",merchantVOs.get(0));
+									event1 =true;
+								}	
+							    TablePO tPo = conn_table.get(table_order1.get(j).getTableId());
+							    String img = tPo.getDetailsImg();
+							    tPo.setDetailsImg(sysConfig.getWebUrl()+img);
+							    tablePOs1.add(tPo);
+								tableStatusPOs1.add(table_order1.get(j));
+								tablesMap1.put("table_order", tableStatusPOs1);	
+								tablesMap1.put("table", tablePOs1);
+							}							  
+						  }
+						  if(event1){
+							  tableslist1.add(tablesMap1); 
+							  event1 = false;
+						  }					  						  						  
+					  }
+						map.put("tableslist", tableslist1);
+						
+						//未订桌的
+						List<Object> dishlist1 =  new ArrayList<Object>();
+						//一个商户下多条订单封装
+						
+						List<TableStatusPO> dishStatusPOs1 = new ArrayList<TableStatusPO>();
+						//对应菜订单进行筛选
+						 int index1_1 = -1;
+						 boolean event1_1 = false;
+						 Map<String, Object> dishMap1_1 = null;
+						  for(int i= 0; i<merchList.size();i++){							  
+							  for(int j =0;j<dish_order1.size();j++){								  
+								if((long)merchList.get(i) == dish_order1.get(j).getMerchantId()){
+									if(index1_1 != i){
+										index1_1 = i;
+										dishMap1_1 = new HashMap<String, Object>();
+										List<MerchantPO> merchant_2 = Mer_chant.findByField("id", merchList.get(i));
+								        List<MerchantVO> merchantVOs2 = MerchantVO.getConverter(MerchantVO.class)
+										      .convert(merchant_2, MerchantVO.class);								        								       
+								        dishMap1_1.put("merchant",merchantVOs2.get(0));
+								        event1_1 =true;
+									}															
+									dishStatusPOs1.add(dish_order1.get(j));
+									dishMap1_1.put("table_orders", dishStatusPOs1);								
+								}							  
+							  }
+							  if(event1_1){
+								  dishlist1.add(dishMap1_1); 
+								  event1_1 = false;
+							  }					  							  							  
+						  }
+						map.put("disList",dishlist1);
+																						 																														
+						break;
+
+					case 2:// 已支付						
+						String[] field2 = {"userId","tableState"};
+						Object[] value2 ={String.valueOf(userId),"PAYSUCCESS"};
+						List<TableStatusPO>  table_order2 =  conn_tablestatus.findByFields(field2, value2);
+						//查询美食菜的订单
+						String[] _field2 = {"userId","dishState","tableId"};
+						Object[] _value2 ={String.valueOf(userId),"PAYSUCCESS",0L};
+						List<TableStatusPO>  dish_order2 =  conn_tablestatus.findByFields(_field2, _value2);
+						
+						List<Object> tableslist2 =  new ArrayList<Object>();
+						//一个商户下多条订单封装						
+						List<TableStatusPO> tableStatusPOs2 = new ArrayList<TableStatusPO>();
+						List<TablePO> tablePOs2 = new ArrayList<TablePO>();
+					 //对应桌订单进行筛选	
+					 int index2 = -1;
+					 boolean event2 = false;
+					 Map<String, Object> tablesMap2 = null;
+					  for(int i= 0; i<merchList.size();i++){	
+						  
+						  for(int j =0;j<table_order2.size();j++){								  
+							if(String.valueOf(merchList.get(i)).equals(String.valueOf(table_order2.get(j).getMerchantId())) ){	
+								System.out.println(merchList.get(i));
+								if(index2 != i){
+								   index2 = i;
+								   tablesMap2 = new HashMap<String, Object>();
+							       List<MerchantPO> merchant_ = Mer_chant.findByField("id", merchList.get(i));
+						           List<MerchantVO> merchantVOs = MerchantVO.getConverter(MerchantVO.class)
+								      .convert(merchant_, MerchantVO.class);
+						           tablesMap2.put("merchant",merchantVOs.get(0));
+									event2 =true;
+								}
+							    TablePO tPo = conn_table.get(table_order2.get(j).getTableId());
+							    String img = tPo.getDetailsImg();
+							    tPo.setDetailsImg(sysConfig.getWebUrl()+img);
+							    tablePOs2.add(tPo);
+							    tableStatusPOs2.add(table_order2.get(j));
+							    tablesMap2.put("table_order", tableStatusPOs2);	
+								tablesMap2.put("table", tablePOs2);
+							}							  
+						  }
+						  if(event2){
+							  tableslist2.add(tablesMap2); 
+							  event2 = false;
+						  }					  						  						  
+					  }
+						map.put("tableslist", tableslist2);
+						
+						//未订桌的
+						List<Object> dishlist2 =  new ArrayList<Object>();
+						//一个商户下多条订单封装
+						
+						List<TableStatusPO> dishStatusPOs2 = new ArrayList<TableStatusPO>();
+						//对应菜订单进行筛选
+						 int index2_1 = -1;
+						 boolean event2_1 = false;
+						 Map<String, Object> dishMap2 = null;
+						  for(int i= 0; i<merchList.size();i++){							  
+							  for(int j =0;j<dish_order2.size();j++){								  
+								if((long)merchList.get(i) == dish_order2.get(j).getMerchantId()){
+									if(index2_1 != i){
+										index2_1 = i;
+										dishMap2 = new HashMap<String, Object>();
+										List<MerchantPO> merchant_2 = Mer_chant.findByField("id", merchList.get(i));
+								        List<MerchantVO> merchantVOs2 = MerchantVO.getConverter(MerchantVO.class)
+										      .convert(merchant_2, MerchantVO.class);								        								       
+										dishMap2.put("merchant",merchantVOs2.get(0));
+										event2_1 =true;
+									}															
+									dishStatusPOs2.add(dish_order2.get(j));
+									dishMap2.put("table_orders", dishStatusPOs2);								
+								}							  
+							  }
+							  if(event2_1){
+								  dishlist2.add(dishMap2); 
+								  event2_1 = false;
+							  }					  							  							  
+						  }
+						map.put("disList",dishlist2);
+																	
+						break;
+					
+
+					default:
+						break;
+					}
+				} else if (uType.equals("MERCHANT")) {
+					UserInfoPO user = conn_user.get(userId);
+					MerchantPO merchant = user.getMerchant();
+					if (merchant == null) {
+						return FORBIDDEN("该用户不是商户！");
+					}
+					long _merchantId = merchant.getId();
+					switch (type) {
+					case 1:// 未支付
+						String[] field1 = {"userId","tableState"};
+						Object[] value1 ={String.valueOf(userId),"NOTPAY"};
+						List<TableStatusPO>  table_order1 =  conn_tablestatus.findByFields(field1, value1);
+						//查询美食菜的订单
+						String[] _field1 = {"userId","dishState","tableId"};
+						Object[] _value1 ={String.valueOf(userId),"NOTPAY",0L};
+						List<TableStatusPO>  dish_order1 =  conn_tablestatus.findByFields(_field1, _value1);
+						
+						List<Object> tableslist1 =  new ArrayList<Object>();
+						//一个商户下多条订单封装
+						
+						List<TableStatusPO> tableStatusPOs1 = new ArrayList<TableStatusPO>();
+						List<TablePO> tablePOs1 = new ArrayList<TablePO>();
+					 //对应桌订单进行筛选	
+					 int index1 = -1;
+					 boolean event1 = false;
+					 Map<String, Object> tablesMap1 = null;					
+					  for(int i= 0; i<merchList.size();i++){
+						  System.out.println("123:"+merchList.get(i));
+						  for(int j =0;j<table_order1.size();j++){								  
+							if((long)merchList.get(i) == table_order1.get(j).getMerchantId()){
+								
+								if(index1 != i){
+								   index1 = i;
+								   tablesMap1 = new HashMap<String, Object>();
+							       List<MerchantPO> merchant_ = Mer_chant.findByField("id", merchList.get(i));
+						           List<MerchantVO> merchantVOs = MerchantVO.getConverter(MerchantVO.class)
+								      .convert(merchant_, MerchantVO.class);
+									tablesMap1.put("merchant",merchantVOs.get(0));
+									event1 =true;
+								}	
+							    TablePO tPo = conn_table.get(table_order1.get(j).getTableId());
+							    String img = tPo.getDetailsImg();
+							    tPo.setDetailsImg(sysConfig.getWebUrl()+img);
+							    tablePOs1.add(tPo);
+								tableStatusPOs1.add(table_order1.get(j));
+								tablesMap1.put("table_order", tableStatusPOs1);	
+								tablesMap1.put("table", tablePOs1);
+							}							  
+						  }
+						  if(event1){
+							  tableslist1.add(tablesMap1); 
+							  event1 = false;
+						  }					  						  						  
+					  }
+						map.put("tableslist", tableslist1);
+						
+						//未订桌的
+						List<Object> dishlist1 =  new ArrayList<Object>();
+						//一个商户下多条订单封装
+						
+						List<TableStatusPO> dishStatusPOs1 = new ArrayList<TableStatusPO>();
+						//对应菜订单进行筛选
+						 int index1_1 = -1;
+						 boolean event1_1 = false;
+						 Map<String, Object> dishMap1_1 = null;
+						  for(int i= 0; i<merchList.size();i++){							  
+							  for(int j =0;j<dish_order1.size();j++){								  
+								if((long)merchList.get(i) == dish_order1.get(j).getMerchantId()){
+									if(index1_1 != i){
+										index1_1 = i;
+										dishMap1_1 = new HashMap<String, Object>();
+										List<MerchantPO> merchant_2 = Mer_chant.findByField("id", merchList.get(i));
+								        List<MerchantVO> merchantVOs2 = MerchantVO.getConverter(MerchantVO.class)
+										      .convert(merchant_2, MerchantVO.class);								        								       
+								        dishMap1_1.put("merchant",merchantVOs2.get(0));
+								        event1_1 =true;
+									}															
+									dishStatusPOs1.add(dish_order1.get(j));
+									dishMap1_1.put("table_orders", dishStatusPOs1);								
+								}							  
+							  }
+							  if(event1_1){
+								  dishlist1.add(dishMap1_1); 
+								  event1_1 = false;
+							  }					  							  							  
+						  }
+						map.put("disList",dishlist1);
+						
+						break;
+
+					case 2:// 已支付
+						String[] field2 = {"userId","tableState"};
+						Object[] value2 ={String.valueOf(userId),"PAYSUCCESS"};
+						List<TableStatusPO>  table_order2 =  conn_tablestatus.findByFields(field2, value2);
+						//查询美食菜的订单
+						String[] _field2 = {"userId","dishState","tableId"};
+						Object[] _value2 ={String.valueOf(userId),"PAYSUCCESS",0L};
+						List<TableStatusPO>  dish_order2 =  conn_tablestatus.findByFields(_field2, _value2);
+						
+						List<Object> tableslist2 =  new ArrayList<Object>();
+						//一个商户下多条订单封装						
+						List<TableStatusPO> tableStatusPOs2 = new ArrayList<TableStatusPO>();
+						List<TablePO> tablePOs2 = new ArrayList<TablePO>();
+					 //对应桌订单进行筛选	
+					 int index2 = -1;
+					 boolean event2 = false;
+					 Map<String, Object> tablesMap2 = null;
+					  for(int i= 0; i<merchList.size();i++){	
+						  
+						  for(int j =0;j<table_order2.size();j++){								  
+							if(String.valueOf(merchList.get(i)).equals(String.valueOf(table_order2.get(j).getMerchantId())) ){	
+								System.out.println(merchList.get(i));
+								if(index2 != i){
+								   index2 = i;
+								   tablesMap2 = new HashMap<String, Object>();
+							       List<MerchantPO> merchant_ = Mer_chant.findByField("id", merchList.get(i));
+						           List<MerchantVO> merchantVOs = MerchantVO.getConverter(MerchantVO.class)
+								      .convert(merchant_, MerchantVO.class);
+						           tablesMap2.put("merchant",merchantVOs.get(0));
+									event2 =true;
+								}
+							    TablePO tPo = conn_table.get(table_order2.get(j).getTableId());
+							    String img = tPo.getDetailsImg();
+							    tPo.setDetailsImg(sysConfig.getWebUrl()+img);
+							    tablePOs2.add(tPo);
+							    tableStatusPOs2.add(table_order2.get(j));
+							    tablesMap2.put("table_order", tableStatusPOs2);	
+								tablesMap2.put("table", tablePOs2);
+							}							  
+						  }
+						  if(event2){
+							  tableslist2.add(tablesMap2); 
+							  event2 = false;
+						  }					  						  						  
+					  }
+						map.put("tableslist", tableslist2);
+						
+						//未订桌的
+						List<Object> dishlist2 =  new ArrayList<Object>();
+						//一个商户下多条订单封装
+						
+						List<TableStatusPO> dishStatusPOs2 = new ArrayList<TableStatusPO>();
+						//对应菜订单进行筛选
+						 int index2_1 = -1;
+						 boolean event2_1 = false;
+						 Map<String, Object> dishMap2 = null;
+						  for(int i= 0; i<merchList.size();i++){							  
+							  for(int j =0;j<dish_order2.size();j++){								  
+								if((long)merchList.get(i) == dish_order2.get(j).getMerchantId()){
+									if(index2_1 != i){
+										index2_1 = i;
+										dishMap2 = new HashMap<String, Object>();
+										List<MerchantPO> merchant_2 = Mer_chant.findByField("id", merchList.get(i));
+								        List<MerchantVO> merchantVOs2 = MerchantVO.getConverter(MerchantVO.class)
+										      .convert(merchant_2, MerchantVO.class);								        								       
+										dishMap2.put("merchant",merchantVOs2.get(0));
+										event2_1 =true;
+									}															
+									dishStatusPOs2.add(dish_order2.get(j));
+									dishMap2.put("table_orders", dishStatusPOs2);								
+								}							  
+							  }
+							  if(event2_1){
+								  dishlist2.add(dishMap2); 
+								  event2_1 = false;
+							  }					  							  							  
+						  }
+						map.put("disList",dishlist2);	
+						break;
+					
+					default:
+						break;
+					}
+				} else {
+					return FORBIDDEN("错误的用户类型！");
+				}
+									
+			return map;
+		}
+		
+		
+		/**
+		 * 订单：加入购物车
+		 * 
+		 * @param request
+		 * @param userId
+		 * @param productId
+		 * @return
+		 * @throws Exception
+		 */
+		@ResponseBody
+		@RequestMapping(value = "/joinBasket", method = RequestMethod.POST)
+		public Map<String, Object> joinBasket(HttpServletRequest request) throws Exception {
+			Map<String, Object> data = new HashMap<String, Object>();
+
+			String param = getRequestJson(request);
+			if (param.indexOf("\\") >= 0) {
+				param = param.replaceAll("\\\\", "");
+				param = param.substring(1, param.length() - 1);
+			}
+			JSONObject pageObject = JSON.parseObject(param);
+			Long userId = Long.parseLong(pageObject.getString("userId"));
+			// 可选
+			String num = pageObject.getString("productNum");
+			
+
+			String roomId = pageObject.getString("roomId");
+			String roomName = pageObject.getString("roomName");
+			if (num == null || num.length() == 0) {
+				num = "1";
+			}
+
+			OrderInfoPO order = new OrderInfoPO();
+			// 4/26新增的comId值 获取 张羽 4/28 添加退款限制
+
+			String orderStartDate = pageObject.getString("startDate");
+			if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
+				orderStartDate = orderStartDate.replace("T", " ");
+				order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.defaultDatePattern));
+			}
+			String endBookDate = pageObject.getString("endDate");
+			if (endBookDate != null && endBookDate != "" && endBookDate.length() != 0) {
+				endBookDate = endBookDate.replace("T", " ");
+				order.setEndBookDate(DateUtil.parse(endBookDate, DateUtil.defaultDatePattern));
+			}
+			if (roomId != null && roomId != "" && roomId.length() != 0) {
+
+				order.setRoomId(Long.parseLong(roomId));
+				order.setRoomName(roomName);
+
+				CurrentRoomSatePO cRoomSatePO = new CurrentRoomSatePO();
+				cRoomSatePO.setInRoomDate(orderStartDate);
+				cRoomSatePO.setOutRoomDate(endBookDate);
+				cRoomSatePO.setRoomState("1");
+				conn_roomSateDao.save(cRoomSatePO);
+				order.setRoomStatusId(cRoomSatePO.getId());
+			}
+
+			
+			Date date = new Date();
+			DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+
+			long productprice = conn_roomdao.get(Long.parseLong(roomId)).getPrice();
+			// 支付金额
+			long payMoney = Integer.parseInt(num) * productprice;
+			// 订单总金额
+			long orderAllMoney = payMoney;
+			// 获取产品
+
+			// 获取商家
+			MerchantPO merchant = Mer_chant.get(Long.parseLong(conn_roomdao.get(Long.parseLong(roomId)).getMerchantId()));
+
+			// 获取用户
+			UserInfoPO user = conn_user.get(userId);
+			
+			// 用户电话
+			if (user.getUserPhone() != null) {
+				order.setUserTel(user.getUserPhone());
+			}
+
+			// 订单号（城市编码+商家id+板块Code+时间戳+用户ID）
+			String orderNO = getCityCodeByDomain() + merchant.getId()  + df.format(date)
+					+ userId;
+			order.setOrderNO(orderNO);
+			// 验单码
+
+			// 下单时间
+			order.setCreateDate(date);
+			order.setUpdateTime(date);
+			// 验单时间
+
+			// 供应商ID
+			order.setShopId(merchant.getId());
+			// 供应商名称
+			order.setShopName(merchant.getShopName());
+			// 站点ID
+			// 站点名称
+		
+			// 商品图片
+			order.setProductPic(conn_roomdao.get(Long.parseLong(roomId)).getRoomimg());
+			// 商品名称
+			order.setProductName(roomName);
+			// 商品数量
+			order.setProductNum(Long.parseLong(num));
+
+			order.setProductPrice(productprice);
+			// 所属板块DI
+			order.setBkCode(merchant.getModularCode());
+			// 所属板块名称
+			order.setBkName(merchant.getModularName());
+			// 套餐ID
+			// 套餐名称
+
+			// 会员ID
+			order.setUserId(userId);
+			
+			// 支付金额
+			order.setPayMoney(payMoney);
+			// 订单总金额
+			order.setOrderAllMoney(orderAllMoney);
+			// 订单说明
+			if (request.getParameter("orderRemark") != null && request.getParameter("orderRemark").length() > 0) {
+				order.setOrderRemark(request.getParameter("orderRemark"));
+			}
+			// 订单状态
+			order.setOrderState(OrderStateType.NOTPAY);
+			// 有效期
+			// 是否评价
+			order.setCommentIs(0);
+
+			// 订单来源
+			order.setOrderType(OrderType.MERCHANT);
+			if (pageObject.getString("source") != null) {
+				order.setSource(OrderSource.fromString(pageObject.getString("source")));
+			} else {
+				order.setSource(OrderSource.APP);
+			}
+			orderInfoDao.saveOrUpdate(order);	
+			data.put("orderId", order.getId());		
+			return data;
 		}
 		
 }

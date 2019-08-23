@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>住宿</title>
+<title></title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -79,17 +79,19 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#E1E1E1 !important; 
+    background:#fff;
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
 }
 
+ 
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
+	touch-action: none;
+	font-family: "微软雅黑";
 }
 /* 页面样式 */
 .header {
@@ -108,7 +110,7 @@ html, body {
 }
 
 .header-content {
-	height:auto;
+	height: auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -137,98 +139,60 @@ html, body {
   .inp::-webkit-input-placeholder{
         text-align: center;
 }  
+.nav li{
+line-height: 40px;
+height:40px;
 
- .youxuan-in p{
-  margin-left:3%;
- }
-.gotop {
-   position: fixed;
-   right: 20px;
-   bottom: 50px;
-   display: block;
-   width: 50px;
-   height: 50px;
-   opacity: 0.8;
-   z-index:111111;
-	}
+
+}
+.nav li p{
+margin:0;
+display: inline-block;
+text-indent: 1em;
+}
+.nav li img{
+height:20px;
+width:20px;
+}
+.main img{
+width:100%;
+}
+.main p{
+ margin:0 0 5px 0;
+}
 
 </style>
 
 </head>
+
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
- <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-<script>
-	var page=1;
-  $(function(){
-	$(window).scroll(function(){
-		if($(window).scrollTop()>100){
-			$(".gotop").fadeIn(400);	
-		}
-		else{
-			$(".gotop").fadeOut(400);
-		}
-	});
-	$(".gotop").click(function(event){
-        event.preventDefault();
-		$('html,body').animate({'scrollTop':0},500);
-        return false;
-	});
-	getMerchant();
-}); 
- 		function getMerchant(){
-			var url="<%=basePath%>business/search";
-	            $.post(url,{"merchantId":${merchantId},"name":"${name}","type":"0002"},function(data){
-	            	var html=[];
-	            	if(data.merlist.length==0){
-	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
-	            	}else{
-						for(var i=0; i<data.merlist.length; i++){
-				 			 var pingfen=(data.pingfens[i]+46)/10;
-					  		 if(pingfen>5)pingfen=5;
-							 html.push('<a onclick="accommodation('+data.merlist[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
-					         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
-							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');
-							 html.push('<div class="zhifu-in">');
-							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>'); 
-							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+(23+data.pingfens[i])+'人来过</span></p>');
-							 html.push('</div></div></div></a>');
-							}
-					}
-			    	$('.huodong').append(html.join(''));
-	            	page++;
-	            })
-			}
-	function accommodation(id){
-   		location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+id;
-    }
-</script>
+<link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+
+
 <body>
-			<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div>
-	  <select style="width:100%;background:#E1E1E1;margin:1px auto;font-weight: bold;padding:0 5%;height:30px;border:none;outline:none;appearance:none; -moz-appearance:none;  -webkit-appearance:none;">
-	    <option>智能排序▼</option>
-	    <option>低价优先▼</option>
-	    <option>高价优先▼</option>
-	  </select>
-	 <div class="huodong"></div>
-   </div>    	
-   <!-- 置顶 -->
-    <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
+<div style="">
+  <h3 style="text-align: center;line-height: 50px;">${title}</h3>
+  <ul class="nav" style="margin:0 auto;width:90%;height:auto;padding:0 5%;border:1px solid #C1C1C1;border-radius:8px;">
+   <li style="border-bottom: 1px solid #C1C1C1;"><img src="lib/images/di.png"><p><a style="text-decoration:none;" href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=${shopaddress}&tocoord='',''&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">${shopaddress}</a></p></li>
+   <li style=""><img style="" src="lib/images/lian.png"><p><a href = "tel://${shopphone}" style="text-decoration:none;">${shopphone}</a></p></li>
+  </ul>
+</div>
+<div class="main" style="width:100%;height:auto;padding:20px 5%;">
+${picdetails}
+
+</div>
 </body>
+ 
 
 
+
+
+</html>

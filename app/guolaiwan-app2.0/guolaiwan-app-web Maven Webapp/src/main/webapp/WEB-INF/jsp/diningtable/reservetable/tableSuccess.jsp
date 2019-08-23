@@ -163,7 +163,7 @@ width:100%;
 height:50px;
 list-style-type:none;
 border-bottom:1px solid #eeeeee;
-
+font-size:12px;
 line-height: 50px;
 
 }
@@ -182,8 +182,8 @@ line-height: 50px;
 		var _uri = window.BASEPATH + 'reservetable/getOrder.do'; //
 		var patam = {};
 		patam.orderId = '${orderId}' ; //'${merchantId}'
-		alert(${orderId});
 		$.post(_uri, $.toJSON(patam), function(data) {
+		alert(data.state);
 		if(data.state != 0){
 			$("#pic").attr("src",'http://www.guolaiwan.net/file/'+data.table.detailsImg+'');
 			$("#name").append('<span>'+data.table.tablename+'</span>'); //名称
@@ -193,21 +193,23 @@ line-height: 50px;
 			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订人</span><span>'+data.tables.userName+'</span></p></li>');
 			$("#message").append(' <li><p><span style="text-align: left;width:30%;display: inline-block;">预订电话</span><span>'+data.tables.userPhone+'</span></p></li>');
 			$("#ydImage").attr("src",'http://www.guolaiwan.net/file/'+data.tables.ydNO+'');
-			if(data.mealList != null && data.mealList.length >0){
+			if(data.mealList != null && data.mealList.length >0  ){
 			  $(".tuijian").show();
+			  $("#clic").hide();
               for(var i=0; i<data.mealList.length; i++){
 				  var array = [];  
 			      array.push('<li style="position:relative;">');
-			      array.push('<img style="height:49px;width:49px;float:left;margin-left:5%;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
-			      array.push('<p style="position: absolute;top:0px;left:25%;">'+data.mealList[i].mealName+'</p>');
-			      array.push('<p style="position: absolute;top:17px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
-			      array.push('<p style="position: absolute;top:7px;right:5%;">￥'+data.mealList[i].money+'</p>');
+			      array.push('<img style="height:45px;width:45px;float:left;margin-left:5%;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
+			      array.push('<p style="position: absolute;top:-2px;left:25%;">'+data.mealList[i].mealName+'</p>');
+			      array.push('<p style="position: absolute;top:15px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
+			      array.push('<p style="position: absolute;top:-2px;right:5%;">￥'+data.mealList[i].money+'</p>');
 			      array.push('</li>');
 				  $('#mealList').append(array.join(''));	       
 			  }
 			}
 		}else{
 		    $(".tuijian").show();
+		    $("#clic").hide();
 		    $("#pic").attr("src",'lib/images/undecideds.png');
 			$("#name").append('<span>未订桌</span>'); //名称
 			$("#money").append(0.00); //钱
@@ -219,10 +221,10 @@ line-height: 50px;
 			for(var i=0; i<data.mealList.length; i++){
 			  var array = [];  
 		      array.push('<li style="position:relative;">');
-		      array.push('<img style="height:49px;width:49px;float:left;margin-left:5%;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
-		      array.push('<p style="position: absolute;top:0px;left:25%;">'+data.mealList[i].mealName+'</p>');
-		      array.push('<p style="position: absolute;top:17px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
-		      array.push('<p style="position: absolute;top:7px;right:5%;">￥'+data.mealList[i].money+'</p>');
+		      array.push('<img style="height:45px;width:45px;float:left;margin-left:5%;border-radius:4px;" src="http://www.guolaiwan.net/file/'+data.mealList[i].picture+'">');
+		      array.push('<p style="position: absolute;top:-15px;left:25%;">'+data.mealList[i].mealName+'</p>');
+		      array.push('<p style="position: absolute;top:10px;left:25%;">x'+data.mealList[i].mealAmount+'</p>');
+		      array.push('<p style="position: absolute;top:-2px;right:5%;">￥'+data.mealList[i].money+'</p>');
 		      array.push('</li>');
 			  $('#mealList').append(array.join(''));	       
 			}

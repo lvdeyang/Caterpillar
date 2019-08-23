@@ -62,31 +62,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               getvoteList();
               
               
-              table.on("edit(voteList)",function(obj){
-              		//加载
-              		layer.msg('加载中', {
- 						 icon: 16
-  						,shade: 0.01
-					})
-              		var data = obj.data,
-              		value = obj.value,
-              		field = obj.field;
-              		
-              		$.ajax({
-              			type:"post",
-              			url:"editpic",
-              			data:{"id":data.id,"value":value,"field":field},
-              			success:function(msg){
-              				layer.closeAll("loading");
-              				if(msg=="success"){
-              					layer.msg("修改成功！",{icon:1});
-              				}else{
-              					layer.msg("系统错误！",{icon:2});
-              				}
-              			
-              			}
-              		})
-              })
             });
 	         
 	         function getvoteList(){
@@ -100,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					,cols: [[
    						{type:"checkbox"}
    						,{field:"picId",title:"图片Id",align:'center',width:160}
-   						,{field:"ranking",title:"排序",edit:"text",align:'center',width:160,sort: true}
+   						,{field:"ranking",title:"排序",align:'center',width:160,sort: true}
    						,{title: '标签缩略图',templet:"#picTpl",align: 'center',width:100} 
    						,{title:"操作",templet:"#zsgc"}
    						]]
@@ -136,6 +111,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		})
 		
 	}
+	
+	function amend_info(id,state){ //上移下移
+         　　　　　 $.ajax({
+              type:"post",
+              url:"chengepicsort",
+              data:{"picId":id,"state":state},
+              success:function(msg){
+            	 if(msg.data == "success"){
+            	 	getvoteList();
+            	 }else{
+            	    layer.msg(msg.data);
+            	 }
+              }
+          })
+      }
 		
 		
 		function show_pic(id){
@@ -166,8 +156,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </script>
           
 <script type="text/html" id="zsgc">
+<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:void(0)' onclick="amend_info('{{ d.id }}','T')">上移</a>
+<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:void(0)' onclick="amend_info('{{ d.id }}','D')">下移</a>
 <a class='layui-btn layui-btn-xs' href="javascript:open_win('选择图片','<%=path%>/admin/picture/addlist?sImg=caImg{{d.id}}&sId={{ d.id }}&source=votePic','800','600')">选择图片</a>
-			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
+<a class='layui-btn layui-btn-xs' href="javascript:open_win('编写详情','gotopicdetails?picId={{d.id}}','1300','800')">编写详情</a>
+<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
 </script>
 <script type="text/html" id="picTpl">
  <a href="javascript:show_pic('caImg{{d.id}}')"><img id="caImg{{d.id}}"  src= "http://www.guolaiwan.net/file/{{ d.slidepic}}" alt="" style="width:35px;height:35px"></a>

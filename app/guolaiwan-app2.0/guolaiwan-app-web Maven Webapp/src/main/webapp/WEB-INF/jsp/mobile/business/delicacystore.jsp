@@ -506,7 +506,7 @@ html, body {
 .zhifu{
   background: -webkit-linear-gradient(left,rgba(254,176,1,1),rgba(255,73,0,1)) !important;/* Safari 5.1 - 6 */
   color:#fff !important;
-  margin:10px 0 !important;
+  margin:10px 4% !important;
   font-size:20px !important;
   font-weight:bold !important;
   height:40px !important;
@@ -591,16 +591,16 @@ html, body {
 .right-con li .btn button.minus{margin-right:-10px;display:none;}  
 .right-con li .btn button{width:40px;height:40px;border:none;background:transparent;padding:0;outline:none;}  
 .right-con li .btn button strong{padding:5px 10px;font-size:15px;display:inline-block;text-indent:-100px;padding:5px 11px;height:22px;}  
-.right-con li .btn button.minus strong{background:url(lib/images/down.png) no-repeat;background-size:22px 22px;}  
+.right-con li .btn button.minus strong{background:url(lib/images/down.png) no-repeat;background-size:22px 22px;cursor:pointer;}  
 .right-con li .btn i{display:none;width:22px;text-align:center;font-style:normal;vertical-align:top;margin-top:11px;line-height:18px;}
 .right-con li .btn button.add{margin-left:-10px;}  
-.right-con li .btn button.add strong{background:url(lib/images/up.png) no-repeat;background-size:22px 22px;}  
+.right-con li .btn button.add strong{background:url(lib/images/up.png) no-repeat;background-size:22px 22px;cursor:pointer;}  
 .right-con li .btn .price{display:none;} 
 .footer{display:block;position:fixed;width:100%;z-index:3;height:50px;font-weight:bold;bottom:0px;color:#f03c03;background:#fff;line-height:40px;font-size:15px;border-top:1px solid #e2e2e2;}  
 .footer .left{float:left;margin:5px 10px;}  
 .footer .right{float:right;}  
 .footer .right .disable{background:#dbdbdb;}  
-.footer .xhlbtn{display:block;text-align:center;line-height:50px;background-color:#F03C03;padding:0 30px;color:#fff;font-weight:bold;}  
+.footer .xhlbtn{display:block;text-decoration:none;text-align:center;line-height:50px;background-color:#F03C03;padding:0 30px;color:#fff;font-weight:bold;}  
 .menu-txt p,h4{
  margin:0 !important;
 }
@@ -615,6 +615,11 @@ text-align: center;
 .olderss p{
 width:100%;margin-top:20px;
 line-height: 30px;
+}
+#sele{
+appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
 }
 </style>
 
@@ -783,6 +788,12 @@ line-height: 30px;
 	     $.toast("请输入手机号!", "cancel");
 	        return ;
 	    }
+	    	 /*手机号正则  */
+		var re = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+			if ($("#userPhone").val().search(re)) {
+			   $.toast("请输入正确的手机号码!", "cancel"); 
+				return false;
+			}
 	    if($("#useDate").val() == "" || $("#useDate").val() == null){
 	     $.toast("请选择时间!", "cancel");
 	        return ;
@@ -791,6 +802,14 @@ line-height: 30px;
 	     $.toast("请选择就餐时间!", "cancel");
 	        return ;
 	    }
+	    var sDate = new Date(document.getElementById("useDate").value.replace(/-T/g, "//"));
+		var eDate = new Date();
+	    var sewData = Number(sDate)+57599999;
+	    var newData = Number(eDate);
+		if (sewData < newData) {
+			$.toast("请选择正确就餐日期", "cancel");
+			return;
+		}
   	    newTableStatus();
     });
 	$(document).on('click','#btnselect',function(){
@@ -1184,11 +1203,11 @@ line-height: 30px;
 		      <img  style="" alt="" src="lib/images/1.jpg"> -->
 		      <button style="position: absolute;bottom:15px;left:15px;background-color:rgba(44,17,6,0.5);border-radius:12px;outline:none;border:none;color:#fff;padding:0 8px;font-size:12px;"></button>
 		     </div>
-		     <div id="feature" class="" style="height:100px;width:100%;border-bottom:1px solid #EFEFEF;position: relative;">
+		     <div id="feature" class="" style="height:80px;width:100%;border-bottom:1px solid #EFEFEF;position: relative;">
             
              </div>
              
-            <div style="width:100%;height:80px;text-align: center;border-bottom:10px solid #F4F4F4;">
+            <div style="width:100%;height:70px;text-align: center;border-bottom:10px solid #F4F4F4;">
               <a style="" href="pubnum/product/index/payinshop/${merchantId}" class="zhifu" id="zhifu">到店支付</a>
               <a style=""　href="reservetable/tables/home?merchantId=${merchantId}" class="zhifu" id="tables">订桌</a> 
             </div>
@@ -1260,12 +1279,14 @@ line-height: 30px;
   </div>   
             
 		       <div class="olderss" style="width:100%;height:100%;overflow: hidden;display: none;z-index:111111;padding:0 10%; ">
-			            <p style="">用户姓名:<input id="username" type="text" style=""></p>
+			            <p style="">用户姓名:<input id="username" type="text" minlength="4" maxlength="4" style=""></p>
 			            <p>联系电话:<input id="userPhone"  type="text"></p>
 			            <p>就餐日期:<input id="useDate" type="text"></p>
-			            <p>就餐时间:<select id="sele"  style="width:70%;border:none;outline:none;border-bottom:1px solid #E0E0E0;padding:0 0 0 28%;"> <option>午餐</option><option>晚餐</option>    </select></p>
+			            <p>就餐时间:<select id="sele"  style="width:70%;background:#fff;border:none;outline:none;border-bottom:1px solid #E0E0E0;padding:0 0 0 28%;"> 
+			            <option>午餐</option><option>晚餐</option>    
+			            </select></p>
 			  
-			     <button id="payment"  style="border:none;outiline:none;font-weight:bold;color:#fff;height:40px;width:40%;background: #F03C03;position: fixed;bottom:5%;left:50%;margin-left:-20%;border-radius:12px;">立即支付</button>
+			     <button id="payment"  style="border:none;outline:none;font-weight:bold;color:#fff;height:40px;width:40%;background: #F03C03;position: fixed;bottom:5%;left:50%;margin-left:-20%;border-radius:12px;">立即支付</button>
 			  </div>  
 
 </body>

@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+﻿<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -10,7 +10,6 @@
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
 <head>
-
 <!-- 声明文档使用的字符编码 -->
 <meta charset='utf-8'>
 <!-- 优先使用 IE 最新版本和 Chrome -->
@@ -32,7 +31,6 @@
 <!-- 添加到主屏后的标题（iOS 6 新增） -->
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
-
 <meta name="apple-itunes-app"
 	content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
 <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
@@ -64,22 +62,17 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-
 <title>公众号首页</title>
-
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
-
 <style type="text/css">
 a {
 	cursor: pointer !important;
 }
-
 a, a:link, a:active, a:visited, a:hover {
 	color: inherit;
 	text-decoration: none;
 }
-
 html, body {
 	width: 100%;
 	min-height:auto;
@@ -89,15 +82,12 @@ html, body {
 	background-color: #fbfbfb;
 	text-decoration: none !important;
 }
-
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
+	font-family: "微软雅黑";
 }
-
-
-
 /* 页面样式 */
 .header {
 	height: 40px;
@@ -106,14 +96,12 @@ html, body {
 	color: #fff;
 	border-bottom: 1px solid #bababa;
 }
-
 .header .link-left {
 	margin-left: 10px;
 	margin-right: 10px;
 	position: relative;
 	z-index: 1;
 }
-
 .header-content {
 	height:auto;
 	width: 100%;
@@ -125,19 +113,16 @@ html, body {
 	text-align: center;
 	z-index: 0;
 }
-
-  .swiper-container {
-    width: 100%;
-    padding:0;
-    margin:0;
-    height:200px;
-  } 
-
-  .swiper-container img {
-    display: block;
-    width: 100%;
-  }
-    
+.swiper-container {
+  width: 100%;
+  padding:0;
+  margin:0;
+  height:200px;
+} 
+.swiper-container img {
+  display: block;
+  width: 100%;
+}
 .weui-navbar{
  display: none !important;
 }
@@ -156,7 +141,6 @@ html, body {
  	width:10%;
    float:left;
    margin:10px 5% 25px 5%;
-   
  }
  .header_in ul li{
   text-align: center;
@@ -166,7 +150,6 @@ html, body {
     display: inline-block;
     font-size:12px;
     color:#C0C0C0;
-    
  }
   .header_on img{
    height:20px;
@@ -174,7 +157,6 @@ html, body {
  .header_on span{
   margin-left:5px;
  }
-
  .wenti ol li{
   margin:10px 0 10px 5%;
   font-weight: bold;
@@ -190,30 +172,21 @@ html, body {
  .youxuan-in p{
   margin-left:3%;
  }
- 
  #phone{
  position:absolute;
  right:60px !important;
-
  }
 </style>
-
 </head>
-
 <!-- 公共脚本引入 -->
+<jsp:include page="../../../mobile/commons/jsp/public.jsp"></jsp:include>
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
 <script type="text/javascript">
-
-
-
-   
 $(function() {
- 
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -225,35 +198,26 @@ $(function() {
 				return data.data;		
 			}
 	  };
-	  
-		
-		
  		getRecomment();
 	  function getCom(){
 	     var _uricoms = window.BASEPATH + 'pubnum/getComs';
-		
 		 $.get(_uricoms, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
 				if(data && data.length>0){
 				    var html=[];
-				   
 					for(var i=0; i<data.length; i++){
 					    if(data[i].comCode==comCode){
 					        $('#selCom').html(data[i].comName);
 					    }
-					    	
 					    html.push('<li><a data="'+data[i].comCode+'" href="javascript:void(0)" class="comSel">'+data[i].comName+'</a></li>');
-					    
 					}
 					$('#com').append(html.join(''));
 				}				
 		  });	  
 	 }
-      /**/	
 	  function getRecomment(){
 	    var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
-		
 		 $.get(_uriMerchantInfo, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
@@ -279,7 +243,6 @@ $(function() {
 				}
 		 });
 	  }
-	  
 	  //下面的方法是微信分享的方法
     var share={};
 	    function initSharewx(){
@@ -290,17 +253,11 @@ $(function() {
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					if(data){
-					    
 						share=data;
 						doScanShare();
 					}
-					
 			});
-	    
 	    }
-	    
-	    
-	    
 	    function doScanShare(){
             wx.config({
 	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -502,22 +459,19 @@ $(function() {
 <body>
 	<!-- 主页 -->
 	<div class="header">
-			<div class="wrapper">
-		
-	    <img style="width:25px;height:25px;position: absolute;left:2%;top:7.5px;z-index:11;" src="lib/images/homes.png" onclick="index()">
-		<img style="width:30px;height:30px;position: absolute;right:2%;z-index:11;top:5px;" alt="" src="lib/images/personals.png" onclick="personal()">
-			
-				<div class="header-content" >商户</div>
-			</div>
+		<div class="wrapper">
+	    <img style="width:20px;height:20px;position: absolute;left:2%;top:7.5px;z-index:11;" src="lib/images/homes.png" onclick="index()">
+		<img style="width:25px;height:25px;position: absolute;right:2%;z-index:11;top:7.5px;" alt="" src="lib/images/personals.png" onclick="personal()">
+	    <div class="header-content" >商户</div>
+	    </div>
 	</div>
 	<div class="content" id="content" >
-			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+		<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
-			</div>
+		</div>
 	</div>
 	</div>
-	
 	 <!-- 分类  -->
 	  <div  style="background:#fff;width:96%;height:230px;margin:0 auto;z-index:1;border-top-left-radius: 10px;border-top-right-radius: 10px;top:12px;position: relative;overflow: hidden;">
 	     <div style="height:60px;width:100%;clear:both">
@@ -525,7 +479,7 @@ $(function() {
 	     <input class="inp" placeholder="关键字/词" style="float:right;margin-top:15px;margin-right:5%;width:35%;height:30px;border:none;outline: none;padding:10px 0 10px 9%;border-radius:16px;background:#EEEEEE;" onfocus="search()"></input>	     
 	     <img style="width:20px;height:20px;position: absolute;right:32%;top:20px;" src="lib/images/sousuo.png"/> 
 	     </div> 
-	    <div class="header_in" style="clear:both">
+	     <div class="header_in" style="clear:both">
 	     <ul style="">
 	     <li><img src="lib/images/goupiaos.png" onclick="ticket()"/></li>
    	     <li onclick="accommodation()"><img src="lib/images/zhusus.png"/></li>
@@ -550,45 +504,41 @@ $(function() {
 	     </ul>
 	    </div> 
 	  </div>
-	  
 	   <!-- 导览  -->
 	  <div id="guide" style="width:96%;height:230px;margin:0 auto;text-align: center;background:#fff;top:24px;position: relative;overflow: hidden;">
 	    <p style="font-size:14px;height:35px;line-height:35px;font-weight: bold;color:black;margin:0;">
 	    <span style="margin-left:5%;float:left;">景区导览</span>
 	    <span style="margin-right:8%;float:right;color:#C0C0C0;font-size:18px">&gt;</span>
 	    </p>
-	   <img style="width:85%;height:60%;" alt="" src="lib/images/daolantishi.png">
+	    <img style="width:85%;height:60%;" alt="" src="lib/images/daolantishi.png">
 	    <div class="header_on" style=" text-align:center;margin:0 auto;height:50px;width:83%;">
 	      <p style="float:left;"><img src="lib/images/daohangss.png"/><span>导航</span></p>
 	      <p><img src="lib/images/yuyins.png"/><span>语音讲解</span></p>
 	      <p style="float:right"><img src="lib/images/zidongdaolan.png"/><span>自动导览</span></p>
 	    </div>
 	  </div>
-	     
 	   <!-- 活动  -->
-	  	<div  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="hd"">
+<!-- 	  	<div  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="hd"">
 	     <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><img style="width:30px;height:30px;" src="lib/images/huodongss.png"/>活动<span style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px" onclick="activity()">查看更多&gt;</span></p>
-	     	
-    
-	  </div>	
-	  
-	     <!-- 攻略  -->
-	  	<div  style="width:96%;height:230px;text-align:center;margin:0 auto;background:#fff;position: relative;top:48px;overflow: hidden;" id="gl">
+	    </div>	 -->
+	   <!-- 攻略  -->
+	  	<div  style="width:96%;padding:0 0 10px 0;text-align:center;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="gl">
             <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/gongluess.png"/>攻略  </span> <span onclick="raiders()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>  
-         </div>
-        
+        </div>
          <!-- 常见问题  -->
-	  	<div class="wenti"  style="width:96%;height:260px;margin:0 auto;background:#fff;position: relative;top:60px;overflow: hidden;">
-            <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/wentis.png"/>常见问题  </span> <span onclick="question()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
+	  	<div class="wenti"  style="width:96%;height:260px;margin:0 auto;background:#fff;position: relative;top:48px;overflow: hidden;">
+             <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/wentis.png"/>常见问题  </span> <span onclick="question()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
              <ol id="ol">
              </ol>
         </div> 
          <!-- 为你优选  -->
-	  	<div class="youxuan"   style="width:96%;height:790px;margin:0 auto;background:#fff;position: relative;top:72px;overflow: hidden;">
+	  	<div class="youxuan"   style="width:96%;height:790px;margin:0 auto;background:#fff;position: relative;top:60px;overflow: hidden;">
             <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;">
             <span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> 
             <span onclick="preferably()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span>
             </p>     
         </div> 
+        <!-- 空 -->
+        <div style="height:100px;"></div>
 </body>
 </html>

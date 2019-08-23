@@ -10,6 +10,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
 <head>
+
 <!-- 声明文档使用的字符编码 -->
 <meta charset='utf-8'>
 <!-- 优先使用 IE 最新版本和 Chrome -->
@@ -26,6 +27,7 @@
 <meta name="viewport"
 	content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
 <!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
+
 <!-- iOS 设备 begin -->
 <meta name="apple-mobile-web-app-title" content="标题">
 <!-- 添加到主屏后的标题（iOS 6 新增） -->
@@ -63,98 +65,80 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>闭幕式</title>
-<!-- 公共样式引用 -->
-<jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
+
+<link rel="stylesheet"
+	href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
 <style type="text/css">
-a {
-	cursor: pointer !important;
+html, body, #container {
+	height: 100%;
 }
 
-a, a:link, a:active, a:visited, a:hover {
-	color: inherit;
-	text-decoration: none;
+.info {
+	width: 20rem;
 }
-
-html, body {
-	width: 100%;
-	height:100%;
-	
-	-webkit-text-size-adjust: none;
-	text-decoration: none !important;
-    overflow: hidden;
-}
-
-* {
-	box-sizing: border-box;
-	list-style: none;
-	text-decoration: none;
-	touch-action: none;
-}
-
-#myVideo{
- z-index: 100;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: fill;/*这里是关键*/
-    width: auto;
-    height: auto;
-    -ms-transform: translateX(-50%) translateY(-50%);
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
-
-    background-size: cover;
-
-}			
 </style>
 
+
+
+
+
+<script type="text/javascript"
+	src="https://webapi.amap.com/maps?v=1.4.13&key=ff4672efcfc6279cbe3b2815dd70a1ec"></script>
+
+
+<title>导览</title>
 </head>
-	
-<!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
-<script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
-<script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"charset="utf-8"></script>
-<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
-<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-
-<script>
-$(document).ready(function() {
-var aud = document.getElementById("myVideo");
-/*  aud.currentTime=8;//从第8秒开始播放 */
-aud.onended = function() 
-{
-    
-   window.location.href="http://www.guolaiwan.net/guolaiwan/judges/gotoranking?optionId=1"
-  
-   
-};
-
-/* var md=document.getElementById("myVideo");
-    md.onended = function(){
-        console.log("结束1");
-    }
-    md.addEventListener("ended",function(){
-         console.log("结束2");
-    }) */
-
-});
-</script>
 <body>
-<video id="myVideo" style="" src="lib/images/bi.mp4" autoplay="autoplay" start="5">
-	  网络出了个小差-.-
-</video>
+	<div id='container'></div>
+<div class="info">
+    <h4 id='status'></h4><hr>
+    <p id='result'></p><hr>
+    <p >由于众多浏览器已不再支持非安全域的定位请求，为保位成功率和精度，请升级您的站点到HTTPS。</p>
+</div>
+	
+<script type="text/javascript">
+    //初始化地图时，若center属性缺省，地图默认定位到用户所在城市的中心
+    <script type="text/javascript">
+    var map = new AMap.Map('container', {
+        resizeEnable: true
+    });
+    AMap.plugin('AMap.Geolocation', function() {
+        var geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：5s
+            buttonPosition:'RB',    //定位按钮的停靠位置
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
 
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition(function(status,result){
+            if(status=='complete'){
+                onComplete(result)
+            }else{
+                onError(result)
+            }
+        });
+    });
+    //解析定位结果
+    function onComplete(data) {
+        document.getElementById('status').innerHTML='定位成功'
+        var str = [];
+        str.push('定位结果：' + data.position);
+        str.push('定位类别：' + data.location_type);
+        if(data.accuracy){
+             str.push('精度：' + data.accuracy + ' 米');
+        }//如为IP精确定位结果则没有精度信息
+        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
+        document.getElementById('result').innerHTML = str.join('<br>');
+    }
+    //解析定位错误信息
+    function onError(data) {
+        document.getElementById('status').innerHTML='定位失败'
+        document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
+    }
+</script>
+    
+</script>
 </body>
- 
-
-
-
-
 </html>

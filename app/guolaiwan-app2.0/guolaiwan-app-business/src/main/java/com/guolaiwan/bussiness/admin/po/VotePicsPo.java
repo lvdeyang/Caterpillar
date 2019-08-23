@@ -18,9 +18,39 @@ public class VotePicsPo extends AbstractBasePO {
 	private String slidepic;
 	//排序
 	private long ranking;
+	//详情
+	private String picdetails;
+	//详情电话
+	private long shopphone;
+	//商家地址
+	private String shopaddress;
+	//详情标题
+	private String title;
 	
-	
-	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public long getShopphone() {
+		return shopphone;
+	}
+	public void setShopphone(long shopphone) {
+		this.shopphone = shopphone;
+	}
+	public String getShopaddress() {
+		return shopaddress;
+	}
+	public void setShopaddress(String shopaddress) {
+		this.shopaddress = shopaddress;
+	}
+	public String getPicdetails() {
+		return picdetails;
+	}
+	public void setPicdetails(String picdetails) {
+		this.picdetails = picdetails;
+	}
 	public long getRanking() {
 		return ranking;
 	}
