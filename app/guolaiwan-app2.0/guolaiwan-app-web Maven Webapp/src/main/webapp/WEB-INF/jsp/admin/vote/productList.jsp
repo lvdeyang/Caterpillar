@@ -201,7 +201,7 @@ function getProductList(){
     ,{field: 'judgesvotenum', title: '评委投票',sort: true,width:180} 
     ,{field: 'ordernum', title: '销售量',sort: true,width:180} 
     ,{field: 'showonpc',title: '开始评分',align:'center',width:150,templet:'#showonpc'}
-    ,{fixed: 'right',title: '操作',width:230,toolbar:'#zsgc',unresize:true} 
+    ,{fixed: 'right',title: '操作',width:500,toolbar:'#zsgc',unresize:true} 
     ]]
     ,id:'activityRel'
     ,done:function(res, curr, count){
@@ -250,6 +250,7 @@ function delAll(){
 <script type="text/html" id="zsgc">
 	<a class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:open_win('产品详情','<%=path%>/admin/product/infoId?id={{d.productId}}','','510');">详情</a>
 	<a class="layui-btn layui-btn-xs" href="gotojudgesvotemsg?productId={{ d.id }}">评委评分</a>	
+	<a class="layui-btn layui-btn-xs" href="gotoproductdetails?productId={{ d.id }}">添加介绍</a>
 	<a class="layui-btn layui-btn-xs" lay-event="del">不参与活动</a>
 </script>
 <script type="text/html" id="showonpc">

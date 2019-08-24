@@ -416,7 +416,7 @@ $("#b"+base).css("color","black");
 				$('#polled'+id).html(count);
 				$('#pollnum'+id).html(pollnum);
 				$('#votes'+id).html(votes);
-					getvoteproduct(base);
+					
 	
 			}else if(data.msg=="0"){
 				$.toast(votenum+'票/商品/人/天', 'text');
@@ -492,7 +492,7 @@ $("#b"+base).css("color","black");
            if(i==2){
              html.push('<span style="color:#fff;background: #FF1A48;padding:3px 8px;font-size:18px;font-weight: bold;position: absolute;sss">NO'+3+'</span>');
            } */
-           html.push('<img style="width:100%;height:100%;" src="http://www.guolaiwan.net/file'+data[i].image+'">');
+           html.push('<img onclick="gotoproductdetails(this.id)" id="'+data[i].productId+'" style="width:100%;height:100%;z-index:111;" src="http://www.guolaiwan.net/file'+data[i].image+'"> ');
            //html.push('<p style="position:absolute;right:0;bottom:0;background: #C3181E;color:#fff;font-size:12px;padding:0 5px;height:20px;line-height:20px;">已售：<span>'+data[i].OutOfPrint+'</span>+</p>');
            html.push('</div>');
            html.push('<div class="xia" style="width:100%;height:auto;position: relative;padding:5px 7.5% 3px 7.5%;color:black;text-align: center;">');
@@ -519,7 +519,9 @@ $("#b"+base).css("color","black");
       $('.contentt-box').append(html.join(''));
 	}
 	
-	
+	function gotoproductdetails(id){
+		location.href=window.BASEPATH + 'admin/vote/getoproductdetails?productId='+id;
+	}
 
 	
 </script>
@@ -541,7 +543,7 @@ $("#b"+base).css("color","black");
 		  </div> --%>
 		     <!-- 搜索  -->
 		  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;margin:20px 0;">
-		   <input placeholder="搜索" class="search" style="padding:0 15%;width:70%;height:30px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;background:#fff;text-align: center; " type="text">
+		   <input placeholder="搜索" class="search" style="padding:0 15%;width:70%;line-height:30px;position: absolute;top:5px;margin-left:-35%;height:30px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;background:#fff;text-align: center; " type="text">
 		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="search()" src="lib/images/sousuo.png"/>
 		  </div>
 		 

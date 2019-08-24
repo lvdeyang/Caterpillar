@@ -232,6 +232,10 @@ html, body {
 	});
 	
 		layui.use('laydate', function(){
+			  //禁止软键盘弹出
+	   $("#bookDate").focus(function(){
+        document.activeElement.blur();
+    });
 	  var laydate = layui.laydate;
 	  
 	  //执行一个laydate实例
@@ -519,7 +523,7 @@ $(function(){
 		  <p class="p2" style="margin:0;position: absolute;bottom:10px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
         </div>
         <div class="riqi" style="position: relative;display: none; ">
-        <input class="layui-input" id="bookDate" readonly="readonly" type="text" placeholder="请您选择采摘日期"   style="cursor: pointer;width:100%;height:60px;margin:5px auto;padding:0 10%;text-align: center;" >
+        <input class="layui-input" id="bookDate"  type="text" placeholder="请您选择采摘日期"   style="cursor: pointer;width:100%;height:60px;margin:5px auto;padding:0 10%;text-align: center;" >
          <p style="position: absolute;font-size: 16px;font-weight: bold;top:19px;left:5%;">预订日期</p>
         </div>
         <div style="position: relative;background: #fff;margin: 0 auto;text-align: center;">
