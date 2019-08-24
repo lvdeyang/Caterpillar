@@ -27,10 +27,19 @@ public class VoteProductPO extends AbstractBasePO{
 	private long optionId;
 	//在pc上评分
 	private int showonpc;
+	//商品介绍
+	private String productdetails;
 	
 	
 	
 	
+	
+	public String getProductdetails() {
+		return productdetails;
+	}
+	public void setProductdetails(String productdetails) {
+		this.productdetails = productdetails;
+	}
 	public int getShowonpc() {
 		return showonpc;
 	}
