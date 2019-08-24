@@ -6,10 +6,14 @@ public class TableOrderVO {
 	private String orderid;
 	//商家名称
 	private String merchantName;
+	//商家Id
+	private long merchantId;
 //	桌子Id
 	private String tableId;
 //	客户姓名
 	private String userName;
+	//客户Id
+	private String userId;
 //	客户电话
 	private String userPhone;
 //	用餐时间
@@ -26,6 +30,18 @@ public class TableOrderVO {
 	private String dishPrice;
 	
 	
+	public long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(long merchantId) {
+		this.merchantId = merchantId;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	public String getOrderid() {
 		return orderid;
 	}
