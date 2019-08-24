@@ -184,6 +184,10 @@ background: #fff;
 		list();
 
 	layui.use('laydate', function() {
+		  //禁止软键盘弹出
+	   $("#test2").focus(function(){
+        document.activeElement.blur();
+    });
 		var laydate = layui.laydate;
 		//执行一个laydate实例
 		laydate.render({
@@ -495,7 +499,7 @@ background: #fff;
 	    <div class="nav_in" style="line-height:50px;border-bottom: 2px solid #CECACB;width:100%;height:auto;position: relative;font-weight: bold;overflow: hidden;height:50px;padding:0 0 0 5px;">
 	     <p style="float:left;line-height: 50px;width:36%;">
 	      <span style="float:left;">就餐日期:</span>
-	      <input type="text" readonly="readonly" placeholder="选择日期"   style="line-height: 50px;height:50px;margin:0;padding:0;float:left;cursor: pointer;width:49%;border:none;outline:none;" class="layui-input" id="test2" onchange="myFunction()">
+	      <input type="text"  placeholder="选择日期"   style="line-height: 50px;height:50px;margin:0;padding:0;float:left;cursor: pointer;width:49%;border:none;outline:none;" class="layui-input" id="test2" onchange="myFunction()">
 	      <span>▼</span>
 	     </p> 
 	      <p style="float:left;line-height: 50px;width:33%;margin-left:2%;text-align: center;">
