@@ -543,7 +543,7 @@ $("#b"+base).css("color","black");
 		  </div> --%>
 		     <!-- 搜索  -->
 		  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;margin:20px 0;">
-		   <input placeholder="搜索" class="search" style="padding:0 15%;width:70%;height:30px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;background:#fff;text-align: center; " type="text">
+		   <input placeholder="搜索" class="search" style="padding:0 15%;width:70%;line-height:30px;position: absolute;top:5px;margin-left:-35%;height:30px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;background:#fff;text-align: center; " type="text">
 		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="search()" src="lib/images/sousuo.png"/>
 		  </div>
 		 
