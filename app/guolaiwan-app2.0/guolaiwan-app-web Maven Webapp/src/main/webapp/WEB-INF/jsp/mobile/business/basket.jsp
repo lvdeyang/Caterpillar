@@ -531,7 +531,9 @@ color: #EC6D1E!important;
 				return data.data;		
 			}
 	  };
-		
+		var roomId = "";
+	    var inRoomDate = "";
+	    var outRoomDate = "";
           //查询未支付订单       
           var _uriorder = window.BASEPATH + 'business/backet/get?userId=${userId}&ifpay=false&merchantId=${merchantId}';
           $.get(_uriorder, null, function(data){
@@ -557,7 +559,7 @@ color: #EC6D1E!important;
 					html.push('	    </div>');
 					html.push('	  </label>');
 					html.push('	</div>');
-					html.push('    <a style="" href="javascript:void(0);"  id="pro-'+data[i].id+'-'+data[i].productId+'-'+data[i].activityId+'" class="weui-media-box weui-media-box_appmsg orderproduct">');
+					html.push('    <a style="" href="javascript:void(0);"  id="pro-'+data[i].id+'-'+data[i].productId+'-'+data[i].activityId+'-'+data[i].bkCode+'-'+data[i].shopId+'" class="weui-media-box weui-media-box_appmsg orderproduct">');
 					html.push('      <div class="weui-media-box__hd">');
 					html.push('       <img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].productPic+'">');
 					html.push('      </div>');
@@ -574,6 +576,11 @@ color: #EC6D1E!important;
 					html.push('		<a style="width:65%;" placeholder="">'+data[i].logisticsName+'</a>');
 					html.push('</p>');
 					if(data[i].bkCode=='0002'){
+					     roomId = data[i].roomId;
+					     var inRoomdate = data[i].orderBookDate.split(" ");	  
+					     inRoomDate = inRoomdate[0].replace('年','-').replace('月','-').replace('日','');			    
+					     var outRoomdate = data[i].endBookDate.split(" ");
+					     outRoomDate = outRoomdate[0].replace('年','-').replace('月','-').replace('日','');					      
 						html.push('<p class="weui-media-box__desc startDate" style="margin-left:75px;font-size:12px;">'+'入住时间：');
 						html.push('		<a class="startdateText"  id="startdateText-'+data[i].id+'" style="width:65%;" placeholder="">'+data[i].orderBookDate+'</a>');
 						/* html.push('		<a href="javascript:;" class="updatestartDate" style="background:#18b4ed;" id="updstart-'+data[i].id+'">修改</a>');  */
@@ -941,11 +948,25 @@ color: #EC6D1E!important;
 				});	
 		});
 	    
-	    
-	    $(document).on('click','.orderproduct',function(){
-	    
+	    $(document).on('click','.orderproduct',function(){	      
 	       var ids=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/product/index?id='+ids[2]+'&activityproId='+ids[3];
+	       //景点  普通票
+	       if(ids[4]== "0001" && ids[3] == "0"){
+	        location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+id+'&choice=0';
+	       }
+	       //景点  活动票
+	       if(ids[4]== "0001" && ids[2] == "0"){
+	       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+id+'&choice=1';	       
+	       }
+	       //住宿
+	       if(ids[4]== "0002"){
+	        location.href=window.BASEPATH + '/business/gotoroomdetails?roomId='+roomId+'&inRoomDate='+inRoomDate+'&outRoomDate='+outRoomDate;
+	       }
+	       //采摘
+	       if(ids[4]== "2126"){
+	        location.href=window.BASEPATH +'/business/gotodetailspage?productId='+ids[2];
+	       }
+	     
 	    });
 	    
 	    

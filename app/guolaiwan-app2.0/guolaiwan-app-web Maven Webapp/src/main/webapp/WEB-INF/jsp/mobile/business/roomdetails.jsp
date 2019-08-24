@@ -187,8 +187,17 @@ text-align: center;
 	getUserInfo();
 	getroomdetails();
       $(".goshopping").click(function(){
-      $(".zong").fadeOut();  
-      $(".window-1").fadeIn();     
+      //判断房间是否被购买
+      var url = window.BASEPATH + 'business/search.do?roomId=${roomId}&inRoomDate=${inRoomDate}&outRoomDate=${outRoomDate}';
+      $.get(url,null,function(msg){
+      if(msg == "success"){
+	         $(".zong").fadeOut();  
+             $(".window-1").fadeIn();
+	       }else{
+	         $.toast("该房间已被购买,加入购物车失败!", "forbidden");	       
+	       }      
+      })
+          
 	});	       
      $(document).on('click', '.close-window-1', function(){ 
 		    $(".window-1").fadeOut();

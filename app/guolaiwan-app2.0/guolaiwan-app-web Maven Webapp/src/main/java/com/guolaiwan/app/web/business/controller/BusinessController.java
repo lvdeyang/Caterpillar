@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.druid.sql.visitor.functions.Now;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -1608,7 +1609,9 @@ public class BusinessController extends WebBaseControll {
 		@ResponseBody
 		@RequestMapping(value = "/backet/get", method = RequestMethod.GET)
 		public Map<String, Object> getOrder(Long userId,String ifpay,Long merchantId, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			    //图片访问公共地址 
 			    SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		        //封封装订单数据
 			    List<OrderInfoVO> orders = new ArrayList<OrderInfoVO>(); 																		
 					//查询商户下的子商户
 					List<Long> merchList = new ArrayList<Long>();
@@ -1621,29 +1624,36 @@ public class BusinessController extends WebBaseControll {
 					}
 					//查询商户对应的订单
 					List<OrderInfoPO> orderingOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.NOTPAY);
-					 															
+					//查询出未支付的订单转成Vo				
 					List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
 							OrderInfoVO.class);
-					//封装数据
+					//封装数据 筛选后的数据
 					List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
 					for (OrderInfoVO orderInfoVO : orderingOrders) {
+						
 						//订单预订时间判断
 						if (!orderInfoVO.getOrderBookDate().equals("")) {
-							Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");							
-							if (bookDate.getTime() < new Date().getTime()) {
+							Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");	
+						    String nowTime = DateUtil.format(new Date(), "yyyy年MM月dd日");							
+							Date nowdate = DateUtil.parse(nowTime+" 00:00:00", "yyyy年MM月dd日 HH:mm:ss");								
+							if (bookDate.getTime() < nowdate.getTime()) {
 								continue;
 							}
 						}
+						
+						if(orderInfoVO.getProductId() != 0){
 						//订单商品限购	
 						orderInfoVO.setProductRestrictNumber(
 								conn_product.get(orderInfoVO.getProductId()).getProductRestrictNumber());
+						}
+
 						//订单图片			
 						orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
 						//判断是否为套餐
 						if (orderInfoVO.getComboId() != 0) {
 							//获取套餐
 							ProductComboPO comboPO = conn_combo.get(orderInfoVO.getComboId());
-							//添加套餐订单价格
+							//添加套餐订单价格 
 							orderInfoVO.setProductPrice(
 									new DecimalFormat("0.00").format((double) comboPO.getComboprice() / 100));
 							//设置套餐名称
@@ -1702,6 +1712,9 @@ public class BusinessController extends WebBaseControll {
 					orderInfoVO.setProductNum(1);
 				}
 			}
+			
+		
+			
 			return success(orders);
 
 		}
@@ -1718,7 +1731,8 @@ public class BusinessController extends WebBaseControll {
 		 * @param request
 		 * @param response
 		 * @return
-		 * @throws Exception
+		 * @throws Exceptio
+		 * n
 		 */
 		@ResponseBody
 		@RequestMapping(value = "/order/get", method = RequestMethod.GET)
@@ -2363,13 +2377,12 @@ public class BusinessController extends WebBaseControll {
 			// 可选
 			String num = pageObject.getString("productNum");
 			
-
+			
 			String roomId = pageObject.getString("roomId");
 			String roomName = pageObject.getString("roomName");
 			if (num == null || num.length() == 0) {
 				num = "1";
-			}
-
+			}		       
 			OrderInfoPO order = new OrderInfoPO();
 			// 4/26新增的comId值 获取 张羽 4/28 添加退款限制
 
@@ -2392,6 +2405,7 @@ public class BusinessController extends WebBaseControll {
 				cRoomSatePO.setInRoomDate(orderStartDate);
 				cRoomSatePO.setOutRoomDate(endBookDate);
 				cRoomSatePO.setRoomState("1");
+				cRoomSatePO.setRoomId(Long.parseLong(roomId));
 				conn_roomSateDao.save(cRoomSatePO);
 				order.setRoomStatusId(cRoomSatePO.getId());
 			}
@@ -2417,6 +2431,7 @@ public class BusinessController extends WebBaseControll {
 			if (user.getUserPhone() != null) {
 				order.setUserTel(user.getUserPhone());
 			}
+			
 
 			// 订单号（城市编码+商家id+板块Code+时间戳+用户ID）
 			String orderNO = getCityCodeByDomain() + merchant.getId()  + df.format(date)
