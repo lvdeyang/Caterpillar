@@ -507,6 +507,9 @@ color: #EC6D1E!important;
 .weui-navbar {
  display: none !important;
 }
+#pay,#selectAll{
+ background: #EC6D1E !important;
+}
 </style>
 
 </head>

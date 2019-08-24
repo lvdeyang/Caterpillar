@@ -21,9 +21,9 @@ public class TestClass {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String inputFile = "rtmp://"+WXContants.Website+"/live/216A45";
+		String inputFile = "rtmp://192.165.56.70/live/test";
 
-		String outputFile = "rtmp://"+WXContants.Website+"/live/test";
+		String outputFile = "rtmp://192.165.56.70/live/test2";
 
 		try {
 			recordPush(inputFile, outputFile, 25);
@@ -38,9 +38,9 @@ public class TestClass {
 		Loader.load(opencv_objdetect.class);
 		FFmpegFrameGrabber grabber=FFmpegFrameGrabber.createDefault(inputFile);
 		grabber.start();
-		FFmpegFrameGrabber grabber2=FFmpegFrameGrabber.createDefault("rtmp://"+WXContants.Website+"/live/79A46");
+		FFmpegFrameGrabber grabber2=FFmpegFrameGrabber.createDefault("rtmp://192.165.56.70/live/test1");
 		grabber2.start();
-		FFmpegFrameRecorder recorder=new FFmpegFrameRecorder(outputFile, 360, 640,1);
+		FFmpegFrameRecorder recorder=new FFmpegFrameRecorder(outputFile, 640, 360,1);
 		recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264); // 28
 		recorder.setFormat("flv"); // rtmp的类型
 		recorder.setFrameRate(25);
@@ -55,24 +55,24 @@ public class TestClass {
 		    if (startTime == 0) {
 				startTime = System.currentTimeMillis();
 			}
-		    if(count<1000){
-		    	//recorder.setTimestamp(frame.timestamp);// 时间戳
+		    if(count<500){
+		    	recorder.setTimestamp(frame.timestamp);// 时间戳
 		    	
 				recorder.record(frame);
-		    }else if(count<2000){
-		    	//recorder.setTimestamp(frame2.timestamp);// 时间戳
+		    }else if(count<1000){
+		    	recorder.setTimestamp(frame.timestamp);// 时间戳
 		    	frame2.timestamp=frame.timestamp;
 				recorder.record(frame2);
-		    }else if(count<3000){
-		    	//recorder.setTimestamp(frame.timestamp);// 时间戳
+		    }else if(count<1500){
+		    	recorder.setTimestamp(frame.timestamp);// 时间戳
 				recorder.record(frame);
 				
-		    }else if(count<4000){
-		    	//recorder.setTimestamp(frame2.timestamp);// 时间戳
+		    }else if(count<2000){
+		    	recorder.setTimestamp(frame.timestamp);// 时间戳
 		    	frame2.timestamp=frame.timestamp;
 				recorder.record(frame2);
 		    }
-			if(count==4000){
+			if(count==2000){
 				count=0;
 			}
 			count++;
