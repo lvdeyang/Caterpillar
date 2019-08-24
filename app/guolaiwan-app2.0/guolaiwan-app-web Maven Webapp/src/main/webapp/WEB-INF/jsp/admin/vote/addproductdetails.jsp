@@ -90,22 +90,12 @@
                       data:data.field,
                       success:function(msg){
                         if(msg=="success"){
-                          layer.alert(message, {icon: 6},function () {
-                           // 获得frame索引
-                           try{
-                               var index = parent.layer.getFrameIndex(window.name);
-                               console.log(index);
-                               //关闭当前frame
-                               parent.layer.close(index);
-                             }catch(exception)
-                             {
-                              layer.msg("系统错误！",{icon:2,time:3000});
-                             }
-                           });
+                          layer.alert(message, {icon: 6});
                         }
                        }
                 }) 
               }
+              
               
               
         </script>
