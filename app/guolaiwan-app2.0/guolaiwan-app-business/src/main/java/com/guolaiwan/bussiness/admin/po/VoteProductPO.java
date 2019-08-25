@@ -29,11 +29,20 @@ public class VoteProductPO extends AbstractBasePO{
 	private int showonpc;
 	//商品介绍
 	private String productdetails;
+	//排名
+	private int ranking;
 	
 	
 	
 	
 	
+	
+	public int getRanking() {
+		return ranking;
+	}
+	public void setRanking(int ranking) {
+		this.ranking = ranking;
+	}
 	public String getProductdetails() {
 		return productdetails;
 	}

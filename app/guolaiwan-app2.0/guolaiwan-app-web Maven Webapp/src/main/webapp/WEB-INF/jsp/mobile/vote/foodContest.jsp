@@ -499,7 +499,7 @@ $("#b"+base).css("color","black");
            html.push('<P style="height:20px;line-height: 20px;width:100%;color:black;text-align:left;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:95%;display: inline-block;">'+data[i].productname+'</span></P>');
             //html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].manvotes+'</span></span></P>');
            html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span class="add">'+productvotes+'</span></p>');
-           html.push('<p style="text-align: left;height:20px;line-height: 20px;">排名：<span>'+(i+1)+'</span></p>');
+           html.push('<p style="text-align: left;height:20px;line-height: 20px;">排名：<span>'+data[i].ranking+'</span></p>');
            //html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>'+data[i].avg+'</span></p>');
           /*  if(${isjudges==1}){
 		    html.push('<button id="'+data[i].productId+'" onclick="mark(this.id)" style="width:42%;float:left;" class="vote">评分</button>');           
