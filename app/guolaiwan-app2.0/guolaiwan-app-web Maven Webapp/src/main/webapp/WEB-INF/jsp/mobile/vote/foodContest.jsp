@@ -416,7 +416,9 @@ $("#b"+base).css("color","black");
 				$('#polled'+id).html(count);
 				$('#pollnum'+id).html(pollnum);
 				$('#votes'+id).html(votes);
-					
+				  setTimeout(function(){
+				  getvoteproduct(base);	
+				    },1000);
 	
 			}else if(data.msg=="0"){
 				$.toast(votenum+'票/商品/人/天', 'text');
@@ -443,6 +445,7 @@ $("#b"+base).css("color","black");
     	$(".Judges").fadeIn();
  		$(".Judgess").val("");
  		productId=id;
+ 		
     }
     //评分方法
     function score(){

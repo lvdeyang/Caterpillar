@@ -504,7 +504,7 @@ html, body {
 	right: 5px;
 	width: 100%;
 	color: #FD6770;
-	text-align: center;
+	text-align: right;
 
 }
 
