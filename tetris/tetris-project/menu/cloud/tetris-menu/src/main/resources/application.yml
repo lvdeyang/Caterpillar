@@ -1,0 +1,112 @@
+spring:
+  #cache:
+    #type: ehcache
+    #ehcache:
+      #config: classpath:ehcache.xml
+  #activiti:    #check-process-definitions: true
+    #database-schema-update: true
+    #这里保存全部历史记录
+    #history-level: full
+  application:
+    name: tetris-menu
+  cloud:
+#    config:
+#      uri: http://192.165.56.71:8081
+#      fail-fast: true
+    client:
+      ipAddress: localhost
+#  profiles:
+#    active: pro
+  datasource:
+    base:
+      url: jdbc:mysql://localhost:3306/menu?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&&useSSL=true
+      username: root
+      password: sumavisionrd
+      driver-class-name: com.mysql.jdbc.Driver
+      initial-size : 10
+      min-idle : 20
+      max-active : 100
+      validation-query : SELECT 1
+      test-while-idle : true
+      test-on-borrow : true
+      time-between-eviction-runs-millis : 600000
+      min-evictable-idle-time-millis : 3600000
+#    resource:
+#      url: jdbc:mysql://localhost:3306/venus_resource?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&&useSSL=true
+#      username: root
+#      password: sumavisionrd
+#      driver-class-name: com.mysql.jdbc.Driver
+#      initial-size : 10
+#      min-idle : 20
+#      max-active : 100
+#      validation-query : SELECT 1
+#      test-while-idle : true
+#      test-on-borrow : true
+#      time-between-eviction-runs-millis : 600000
+#      min-evictable-idle-time-millis : 3600000
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  thymeleaf:
+    cache: false
+    
+  #spring mvc视图
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  #http文件上传    
+  http: 
+    multipart:
+      enabled: true    
+server:
+#  context-path: /menu 
+#  address: 192.165.56.71
+  port: 8083
+logging:
+  pattern:
+    console: "%d - %msg%n" 
+    level: INFO 
+  path: /var/log/tomcat  
+ribbon:
+  eager-load:
+      enabled: true
+      clients: tetris-user
+  ReadTimeout: 120000
+  ConnectTimeout: 30000
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+  instance:
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+    prefer-ip-address: true
+    # 心跳检测检测与续约时间
+    # 测试时将值设置设置小些，保证服务关闭后注册中心能及时踢出服务
+    #lease-renewal-interval-in-seconds: 1
+    #lease-expiration-duration-in-seconds: 2
+#security:
+#  oauth2:
+#    resource:
+      #指定resource的唯一标识
+#      id: ${spring.application.name}
+      #是否使用token info
+#      prefer-token-info: false
+      #指定user info的URI
+#      user-info-uri: http://192.165.56.64:5000/uaa/users/current
+feign: 
+  hystrix: 
+   enabled: true    
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread: 
+            timeoutInMilliseconds: 5000
+          strategy: SEMAPHORE    

@@ -1,0 +1,96 @@
+spring:
+  application:
+    name: tetris-spring-zuul
+  cloud:
+    client:
+      ipAddress: 192.165.56.85
+  datasource:
+    base:
+      url: jdbc:mysql://localhost:3306/zuul?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&&useSSL=true
+      username: root
+      password: sumavisionrd
+      driver-class-name: com.mysql.jdbc.Driver
+      initial-size : 10
+      min-idle : 20
+      max-active : 100
+      validation-query : SELECT 1
+      test-while-idle : true
+      test-on-borrow : true
+      time-between-eviction-runs-millis : 600000
+      min-evictable-idle-time-millis : 3600000 
+#    resource:
+#      url: jdbc:mysql://localhost:3306/venus_resource?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&&useSSL=true
+#      username: root
+#      password: sumavisionrd
+#      driver-class-name: com.mysql.jdbc.Driver
+#      initial-size : 10
+#      min-idle : 20
+#      max-active : 100
+#      validation-query : SELECT 1
+#      test-while-idle : true
+#      test-on-borrow : true
+#      time-between-eviction-runs-millis : 600000
+#      min-evictable-idle-time-millis : 3600000     
+  #http文件上传    
+  http:
+    multipart:
+      file-size-threshold: 1Mb
+      max-file-size: 1000Mb
+      max-request-size: 1000Mb
+server:
+  port: 8082      
+zuul:
+  servlet-path: /
+#需要忽略的头部信息，不在传播到其他服务
+  sensitive-headers: Access-Control-Allow-Origin
+  ignored-headers: Access-Control-Allow-Origin,H-APP-Id,Token,APPToken
+  routes:
+#标识你服务的名字，这里可以自己定义，一般方便和规范来讲还是跟自己服务的名字一样
+    tetris-user:
+#服务映射的路径，通过这路径就可以从外部访问你的服务了，目的是为了不爆露你机器的IP，面向服务的路由了，给你选一个可用的出来，
+#这里zuul是自动依赖hystrix，ribbon的，不是面向单机
+      path: /tetris-user/**
+#这里一定要是你Eureka注册中心的服务的名称，是所以这里配置serviceId因为跟eureka结合了，如果单独使用zuul,那么就必须写自己机器的IP了，
+#如url:http://localhost:8080/  这样的不好就是写死IP了，万一这IP挂了，这高可用性，服务注册那套东西就用不起来了
+      serviceId: tetris-user
+    tetris-menu: 
+      path: /tetris-menu/**
+      serviceId: tetris-menu
+    tetris-mims:
+      path: /tetris-mims/**
+      serviceId: tetris-mims
+    tetris-cms:
+      path: /tetris-cms/**
+      serviceId: tetris-cms    
+eureka:
+#客户端
+  client:
+#注册中心地址
+    service-url:
+      defaultZone: http://192.165.56.85:8081/eureka/
+#security:
+#  basic:
+#    enabled: false
+#  oauth2:
+#    client:
+#      access-token-uri: http://localhost:8071/oauth/token
+#      user-authorization-uri: http://localhost:8071/oauth/authorize
+#    resource:
+#      user-info-uri:  http://localhost:8071/user
+#      prefer-token-info: false
+feign: 
+  hystrix: 
+   enabled: true    
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread: 
+            timeoutInMilliseconds: 60000
+          strategy: SEMAPHORE
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 60000          

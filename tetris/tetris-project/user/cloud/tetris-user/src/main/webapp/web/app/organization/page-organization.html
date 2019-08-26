@@ -1,0 +1,134 @@
+<mi-frame id="page-organization-wrapper" :menus="menus" :user="user" :groups="groups" :active-id="activeId">
+
+    <template slot="title">公司“{{companyName}}”架构</template>
+
+    <template slot="links">
+        <el-breadcrumb-item><a href="#/page-home">首页</a></el-breadcrumb-item>
+        <el-breadcrumb-item><a href="#/page-company">{{companyName}}</a></el-breadcrumb-item>
+        <el-breadcrumb-item>公司架构</el-breadcrumb-item>
+    </template>
+
+    <template>
+        <div style="width:100%; height:100%; position:relative;">
+            <el-card class="box-card" shadow="hover" style="width:100%; height:100%;">
+                <div style="box-sizing:border-box; width:420px; position:absolute; left:0; top:0; bottom:0; padding:10px; border-right:1px solid #ebeef5;">
+                    <div style="width:100%; height:100%; position:relative">
+                        <el-scrollbar style="height:100%;">
+                            <el-tree
+                                    v-loading="tree.loading"
+                                    ref="organizationTree"
+                                    :props = "tree.props"
+                                    :data = "tree.data"
+                                    node-key="uuid"
+                                    :current-node-key="tree.current"
+                                    check-strictly
+                                    :expand-on-click-node="false"
+                                    default-expand-all
+                                    highlight-current
+                                    @current-change="currentTreeNodeChange">
+
+                                <span style="flex:1; display:flex; align-items:center; justify-content:space-between; padding-right:8px; position:relative; bottom:1px; padding-right:8px;" slot-scope="{node, data}">
+                                    <span style="font-size:14px;">
+                                         <span class="feather-icon-users" style="position:relative; top:1px;"></span>
+                                         <span>{{data.name}}</span>
+                                    </span>
+                                    <span>
+                                        <el-button type="text" size="mini" style="padding:0;" @click.stop="treeNodeAppend(node, data)">
+                                            <span style="font-size:16px;" class="icon-plus"></span>
+                                        </el-button>
+                                        <el-button type="text" size="mini" style="padding:0;" @click.stop="treeNodeEdit(node, data)">
+                                            <span style="font-size:16px;" class="el-icon-edit"></span>
+                                        </el-button>
+                                        <el-button v-if="!data.autoGeneration" type="text" size="mini" style="padding:0; margin-left:5px;" @click.stop="treeNodeDelete(node, data)">
+                                            <span style="font-size:16px;" class="icon-trash"></span>
+                                        </el-button>
+                                    </span>
+                                </span>
+
+                            </el-tree>
+                        </el-scrollbar>
+                        <el-button type="primary" size="medium" circle style="position:absolute; left:-15px; bottom:-15px; box-shadow:0 2px 12px 0 rgba(0,0,0,1);" @click="handleCreateOrganization" icon="el-icon-plus"></el-button>
+                    </div>
+                </div>
+                <div v-if="tree.current" style="box-sizing:border-box; position:absolute; left:420px; top:0; bottom:0; right:0; padding:10px;">
+                    <div style="width:100%; height:100%; position:relative;">
+                        <el-button type="primary" size="small" @click="bindUsers"><span class="icon-plus" style="position:relative; right:1px;"></span>&nbsp;添加用户</el-button>
+                        <el-button type="warning" size="small" @click="unbindUsers"><span class="icon-trash" style="position:relative; right:1px;"></span>&nbsp;删除用户</el-button>
+                        <div style="position:absolute; top:86px; left:0; bottom:0; right:0;">
+                            <el-scrollbar style="height:100%;">
+                                <el-table
+                                        :data="table.rows"
+                                        :row-key="rowKey"
+                                        style="width:100%">
+                                    <el-table-column
+                                            type="selection"
+                                            width="55">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="用户"
+                                            prop="nickname">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="操作"
+                                            width="250">
+                                        <template slot-scope="scope">
+                                            <el-tooltip class="item" effect="dark" content="移除用户" placement="bottom-end">
+                                                <el-button type="text" icon="el-icon-delete" style="font-size:20px; padding:0; margin-left:20px;" @click="handleRowDelete(scope)"></el-button>
+                                            </el-tooltip>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <div style="height:48px; width:100%;">
+                                    <el-pagination
+                                            style="float:right; margin-top:10px;"
+                                            @current-change="handleCurrentChange"
+                                            background
+                                            layout="total, prev, pager, next, jumper"
+                                            :total="table.total">
+                                    </el-pagination>
+                                </div>
+                            </el-scrollbar>
+                        </div>
+                    </div>
+                </div>
+            </el-card>
+        </div>
+
+        <!-- 添加部门对话框 -->
+        <el-dialog
+                title="新建部门"
+                :visible.sync="dialog.createOrganization.visible"
+                width="500px"
+                :before-close="handleCreateOrganizationClose">
+
+            <el-input v-model="dialog.createOrganization.name" placeholder="起个名吧！"></el-input>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="medium" @click="dialog.createOrganization.visible = false">取消</el-button>
+                <el-button size="medium" type="primary" @click="handleCreateOrganizationSubmit" :loading="dialog.createOrganization.loading">确定</el-button>
+            </span>
+
+        </el-dialog>
+
+        <!-- 编辑部门对话框 -->
+        <el-dialog
+                title="编辑部门"
+                :visible.sync="dialog.editOrganization.visible"
+                width="500px"
+                :before-close="handleEditOrganizationClose">
+
+            <el-input v-model="dialog.editOrganization.name" placeholder="起个名吧！"></el-input>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="medium" @click="dialog.editOrganization.visible = false">取消</el-button>
+                <el-button size="medium" type="primary" @click="handleEditOrganizationSubmit" :loading="dialog.editOrganization.loading">确定</el-button>
+            </span>
+
+        </el-dialog>
+
+        <!-- 添加用户对话框 -->
+        <mi-user-dialog ref="userDialog" @on-dialog-close="selectedUsers"></mi-user-dialog>
+
+    </template>
+
+</mi-frame>

@@ -1,0 +1,150 @@
+<div class="frame-wrapper">
+
+    <el-container style="width:100%; height:100%">
+        <el-aside width="auto; height:100%;">
+            <el-scrollbar style="height:100%;">
+                <el-menu :default-active="active"
+                         class="aside-menu"
+                         :collapse="isCollapsed"
+                         >
+                    <div class="platform-logo-wrapper">
+                        <div class="platform-logo">
+                            <img :src="logo.logoUrl" :style="logo.logoStyle"/>
+                        </div>
+                        <div class="platform-logo collapse">{{logo.logoShortName}}</div>
+                        <div class="platform-title">{{logo.platformFullName}}</div>
+                        <div class="platform-title collapse">{{logo.platformShortName}}</div>
+                    </div>
+
+                    <!-- 侧边栏导航 -->
+                    <template v-for="(menu, index) in menus">
+                        <el-menu-item v-if="!menu.sub || menu.sub.length<=0" :index="menu.uuid" @click="goto(menu)">
+                            <i :class="menu.icon" :style="menu.style"></i>
+                            <span slot="title">{{menu.title}}</span>
+                        </el-menu-item>
+                        <el-submenu v-else :index="menu.uuid">
+                            <template slot="title">
+                                <i :class="menu.icon" :style="menu.style"></i>
+                                <span slot="title">{{menu.title}}</span>
+                            </template>
+                            <template v-for="(sub0, index0) in menu.sub">
+                                <el-menu-item v-if="!sub0.sub || sub0.sub.length<=0" :index="sub0.uuid" @click="goto(sub0)">
+                                    <i :class="sub0.icon" :style="sub0.style"></i>
+                                    <span slot="title">{{sub0.title}}</span>
+                                </el-menu-item>
+                                <el-submenu v-else :index="sub0.uuid">
+                                    <template slot="title">
+                                        <i :class="sub0.icon" :style="sub0.style"></i>
+                                        <span slot="title">{{sub0.title}}</span>
+                                    </template>
+                                    <template v-for="(sub1, index1) in sub0.sub" @click="goto(sub1)">
+                                        <el-menu-item :index="sub1.uuid">
+                                            <i :class="sub1.icon" :style="sub1.style"></i>
+                                            <span slot="title">{{sub1.title}}</span>
+                                        </el-menu-item>
+                                    </template>
+                                </el-submenu>
+                            </template>
+                        </el-submenu>
+                    </template>
+
+                </el-menu>
+            </el-scrollbar>
+        </el-aside>
+
+        <el-main style="padding:0; position:relative;">
+            <div class="frame-header">
+                <el-menu class="header-menu"
+                         background-color="#37404f"
+                         text-color="#fff"
+                         active-text-color="#ffd04b"
+                         mode="horizontal"
+                         @select="menuSelect">
+                    <el-menu-item v-if="user.classify==='COMPANY_ADMIN' || user.classify==='COMPANY_USER'" @click="userGroupToggle" class="no-border-bottom-style right item-message" index="1">
+                        <span class="el-icon-message" style="position:relative; left:4px;"></span>
+                        <span class="tag error" v-if="numberOfMessage>0">{{numberOfMessage}}</span>
+                    </el-menu-item>
+                    <el-submenu class="no-border-bottom-style right" index="2">
+                        <template slot="title"><span v-if="!user.icon" class="icon-user" style="padding:0 5px; margin-right:5px;"></span>{{user.nickname}}</template>
+                        <el-menu-item index="2-1">个人中心</el-menu-item>
+                        <el-menu-item index="2-2">注销登录</el-menu-item>
+                    </el-submenu>
+                    <el-menu-item class="no-border-bottom-style right" index="3"><span class="icon-flag" style="position:relative; top:1px; padding:0 5px;"></span></el-menu-item>
+                    <el-menu-item class="no-border-bottom-style right" index="4"><span class="el-icon-bell" style="position:relative; left:3px; bottom:1px;"></span></el-menu-item>
+                    <el-menu-item class="no-border-bottom-style" index="5" @click="sideMenuToggle"><span class="icon-reorder" style="font-size:18px; position:relative; top:1px; padding:0 5px;"></span></el-menu-item>
+                </el-menu>
+            </div>
+
+            <div class="frame-body">
+                <div class="frame-body-wrapper">
+                    <mi-sub-title>
+                        <template slot="title"><slot name="title"></slot></template>
+                        <template slot="links">
+                            <slot name="links"></slot>
+                        </template>
+                    </mi-sub-title>
+                    <div class="content-wrapper">
+                        <div class="content">
+                            <slot></slot>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="frame-footer">
+                <div class="frame-footer-wrapper">
+                    <div class="copyright">
+                        <!--<strong>Copyright © {{footer.company.time}}</strong>
+                        &nbsp;版权归<a :href="footer.company.link" class="company" target="_blank">{{footer.company.name}}</a>所有.-->
+                        <strong>Copyright © {{footer.company.time}}</strong>
+                        &nbsp;版权归<a :href="user.groupHomeLink" class="company" target="_blank">{{user.groupName}}</a>所有.
+                    </div>
+                    <div class="minimize">
+                        <el-breadcrumb separator="" style="float:right;">
+                            <el-breadcrumb-item v-for="item in footer.minimize" :key="item.key">
+                                <el-button class="single" v-if="item.type==='single'" @click="minimizeClick(item)">
+                                    <span :class="item.icon" :style="item.style"></span>
+                                </el-button>
+                                <el-button class="multiple" v-if="item.type==='multiple'">
+                                    <div class="layer">
+                                        <div class="layer">
+                                            <span :class="item.icon" :style="item.style"></span>
+                                        </div>
+                                    </div>
+                                </el-button>
+                            </el-breadcrumb-item>
+                        </el-breadcrumb>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 组织机构成员 -->
+            <transition
+                    enter-active-class="animated bounceInRight"
+                    leave-active-class="animated bounceOutRight">
+                <div v-if="userGroupShow" class="userGroup">
+                    <el-scrollbar style="height:100%;">
+                        <el-collapse>
+                            <el-collapse-item v-for="group in groups" :title="group.name+'('+group.numbersOfOnline+'/'+group.numbersObTotal+')'" :name="group.uuid" :key="group.uuid">
+                                <template v-if="group.users && group.users.length>0">
+                                    <div class="user-item" v-for="user in group.users" :key="user.uuid">
+                                        <div class="user-icon">
+                                            <span v-if="!user.icon" class="icon-user icon-2x"></span>
+                                        </div>
+                                        <div class="user-info">
+                                            <div class="user-name">{{user.name}}</div>
+                                            <div class="user-status">[ {{user.status}} ]</div>
+                                        </div>
+                                        <div class="user-badge">
+                                            <span v-if="!isNaN(user.numbersOfMessage) && user.numbersOfMessage>0" class="el-badge__content el-badge__content--success">{{user.numbersOfMessage}}</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </el-collapse-item>
+                        </el-collapse>
+                    </el-scrollbar>
+                </div>
+            </transition>
+        </el-main>
+     </el-container>
+</div>

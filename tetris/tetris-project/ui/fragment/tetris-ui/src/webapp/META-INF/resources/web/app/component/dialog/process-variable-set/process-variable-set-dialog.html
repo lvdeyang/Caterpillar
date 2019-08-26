@@ -1,0 +1,73 @@
+<el-dialog
+        class="mi-process-variable-set-dialog"
+        title="设置变量"
+        :visible.sync="visible"
+        width="500px"
+        :before-close="handleProcessVariableSetClose">
+
+    <el-dialog
+            title="添加变量映射"
+            :visible.sync="dialog.addReference.visible"
+            width="350px"
+            :before-close="handleAddReferenceClose"
+            append-to-body>
+
+        <el-form label-width="100px">
+            <el-form-item label="变量标签：">
+                <el-input v-model="dialog.addReference.label"></el-input>
+            </el-form-item>
+            <el-form-item label="变量值：">
+                <el-input v-model="dialog.addReference.value"></el-input>
+            </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+            <div class="footer">
+                <el-button size="small" type="primary" @click="handleAddReferenceCommit">确 定</el-button>
+            </div>
+        </span>
+
+    </el-dialog>
+
+    <div class="content">
+        <div v-if="variable" style="margin-bottom:22px;">变量：{{variable.name}}({{variable.key}})</div>
+        <el-select v-if="variable" v-model="type" placeholder="请设置变量类型" style="margin-bottom:22px; width:100%;">
+            <el-option
+                    v-for="item in variableTypes"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+        </el-select>
+        <el-button v-if="type === 'e'" style="padding:3px 6px;" size="mini" @click="handleRowAdd"><span class="icon-plus"></span>&nbsp;添加映射</el-button>
+        <div v-if="type === 'e'" style="max-height:200px; overflow-y:auto;">
+            <el-table
+                    :data="radio"
+                    style="width:100%">
+                <el-table-column
+                        label="标签"
+                        prop="label">
+                </el-table-column>
+                <el-table-column
+                        label="值"
+                        prop="value">
+                </el-table-column>
+                <el-table-column
+                        label="操作"
+                        width="100">
+                    <template slot-scope="scope">
+                        <el-tooltip class="item" effect="dark" content="删除映射" placement="bottom-end">
+                            <el-button type="text" icon="el-icon-delete" style="font-size:18px; padding:0;" @click="handleRowDelete(scope)"></el-button>
+                        </el-tooltip>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
+
+    <span slot="footer" class="dialog-footer">
+        <div class="footer">
+            <el-button size="small" type="primary" @click="handleProcessVariableSetOk">确 定</el-button>
+        </div>
+    </span>
+</el-dialog>

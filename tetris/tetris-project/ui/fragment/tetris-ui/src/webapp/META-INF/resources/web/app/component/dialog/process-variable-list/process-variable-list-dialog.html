@@ -1,0 +1,45 @@
+<el-dialog
+        class="mi-process-variable-list-dialog"
+        title="选择变量"
+        :visible.sync="visible"
+        width="640px"
+        :before-close="handleProcessVariableListClose">
+
+    <div class="content">
+        <div class="content-wrapper">
+            <el-input placeholder="搜索变量" size="small" suffix-icon="el-icon-search"></el-input>
+            <div class="table-wrapper">
+                <el-table
+                        :data="rows"
+                        style="width:100%"
+                        height="100%"
+                        @selection-change="handleProcessVariableSelectionChange"
+                        tooltip-effect="dark">
+                    <el-table-column
+                            type="selection"
+                            width="55">
+                    </el-table-column>
+                    <el-table-column
+                            label="变量"
+                            prop="name">
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+    </div>
+
+    <span slot="footer" class="dialog-footer">
+        <div class="footer">
+            <!--<el-pagination
+                    style="float:left; margin-right:10px;"
+                    background
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-size="pageSize"
+                    layout="prev, pager, next"
+                    :total="total">
+            </el-pagination>-->
+            <el-button size="small" type="primary" @click="handleProcessVariableBindingOk" :loading="loading" style="float:right;">确 定</el-button>
+        </div>
+    </span>
+</el-dialog>

@@ -1,0 +1,8 @@
+{
+	"status": false,
+	"rate": 60000,
+	"ip": "10.10.40.125",
+	"port": "8480",
+	"keyName": "unifiedId",
+	"keyValue": "41522210000000310010201"
+ }

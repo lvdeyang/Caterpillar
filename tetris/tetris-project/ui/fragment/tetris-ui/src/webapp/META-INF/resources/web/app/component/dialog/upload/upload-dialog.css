@@ -1,0 +1,6 @@
+.mi-upload-dialog .el-dialog__header{min-height:40px;}
+.mi-upload-dialog .el-dialog__body{padding:0;}
+.mi-upload-dialog .dialog-body{height:300px; position:relative;}
+.mi-upload-dialog .dialog-header-wrapper{position:absolute; top:-55px; left:20px;}
+.mi-upload-dialog .mimetype-summary{margin-top:5px;}
+.mi-upload-dialog .table-wrapper{padding-left:20px; padding-right:20px;}

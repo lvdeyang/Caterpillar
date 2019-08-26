@@ -1,0 +1,20 @@
+<mi-frame id="page-error-wrapper" :menus="menus" :user="user" :groups="groups">
+    <div class="page-error-line">
+        <div class="page-error-inline">
+            <h1 :class="'page-error-code page-error-' + status">{{code}}</h1>
+            <div class="page-error-message">
+                <div class="page-error-message-default">
+                    <span :class="'page-error-message-default-icon icon-warning-sign page-error-' + status"></span>
+                    {{defaultMessage}}
+                </div>
+
+                <div class="page-error-message-custom">
+                    {{message}}
+                </div>
+                <div class="page-error-options">
+                    <el-button plain size="small" @click="goHome">返回首页</el-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mi-frame>

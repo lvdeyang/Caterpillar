@@ -1,0 +1,27 @@
+<el-dialog
+        class="mi-system-role-dialog"
+        title="绑定角色"
+        width="600px"
+        :visible.sync="dialog.visible"
+        @closed="closed">
+
+    <div style="height:240px;">
+        <el-scrollbar style="height:100%;">
+            <el-tree
+                    ref="roleTree"
+                    :props = "tree.props"
+                    :data = "tree.data"
+                    show-checkbox
+                    :render-content = "render"
+                    :expand-on-click-node="false"
+                    @check-change="checkChange">
+            </el-tree>
+        </el-scrollbar>
+    </div>
+
+    <span slot="footer" class="dialog.footer">
+        <el-button size="medium" @click="dialog.visible = false">取 消</el-button>
+        <el-button size="medium" type="primary" :loading="dialog.loading" @click="handleOkButton">确 定</el-button>
+    </span>
+
+</el-dialog>

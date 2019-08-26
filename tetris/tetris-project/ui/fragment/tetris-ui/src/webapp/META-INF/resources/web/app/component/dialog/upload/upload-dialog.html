@@ -1,0 +1,48 @@
+<el-dialog
+        class="mi-upload-dialog"
+        title=" "
+        :visible.sync="visible"
+        width="800px"
+        @closed="closed">
+    <div class="dialog-body">
+        <div class="dialog-header-wrapper">
+            <el-button type="primary" size="small" style="position:relative;" @click="selectFile">
+                <span class="feather-icon-file" style="position:absolute; font-size:14px; top:7px;"></span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择文件
+                <input v-if="multiple" type="file" multiple @change="fileSelected" style="display:none;" :accept="accept()"/>
+                <input v-else type="file" @change="fileSelected" style="display:none;" :accept="accept()"/>
+            </el-button>
+            <div class="mimetype-summary">{{requireTypes()}}</div>
+        </div>
+        <el-scrollbar style="height:100%;">
+            <div class="table-wrapper">
+                <el-table :data="files" style="width:100%">
+                    <el-table-column label="文件">
+                        <template slot-scope="scope">
+                            {{scope.row.name}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="格式" width="100">
+                        <template slot-scope="scope">
+                            {{type(scope.row.type)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="大小" width="100">
+                        <template slot-scope="scope">
+                            {{formatSize(scope.row.size)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="80">
+                        <template slot-scope="scope">
+                            <el-button type="text" size="mini" style="margin:0; padding:0; font-size:18px; position:relative; top:2px;" @click="removeFile(scope)"><span class="el-icon-delete"></span></el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-scrollbar>
+    </div>
+    <span slot="footer" class="dialog-footer">
+        <el-button size="medium" @click="visible = false">取 消</el-button>
+        <el-button size="medium" type="primary" @click="handleOkClick">确 定</el-button>
+    </span>
+</el-dialog>

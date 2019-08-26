@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+eureka:
+  instance:
+    hostname: localhost
+  # 关闭自我保护机制，保证不可用服务及时踢出
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 4000
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+spring:
+  application:
+    name: tetris-spring-eureka
+feign: 
+  hystrix: 
+   enabled: true    
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread: 
+            timeoutInMilliseconds: 5000
+          strategy: SEMAPHORE  

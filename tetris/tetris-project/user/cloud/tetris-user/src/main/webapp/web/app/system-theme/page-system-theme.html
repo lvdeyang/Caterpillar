@@ -1,0 +1,114 @@
+<mi-frame id="page-system-theme-wrapper" :menus="menus" :user="user" :groups="groups">
+
+    <template slot="title">皮肤管理</template>
+
+    <template slot="links">
+        <el-breadcrumb-item><a href="#/page-home">首页</a></el-breadcrumb-item>
+        <el-breadcrumb-item>皮肤管理</el-breadcrumb-item>
+    </template>
+
+    <template>
+        <el-card class="box-card" shadow="hover" style="width:100%; height:100%;">
+
+            <el-button type="primary" size="small" @click="handleCreate"><span class="icon-plus" style="position:relative; right:1px;"></span>&nbsp;添加主题</el-button>
+            <el-button type="warning" size="small" @click="handleDelete"><span class="icon-trash" style="position:relative; right:1px;"></span>&nbsp;删除主题</el-button>
+
+            <div style="position:absolute; top:86px; bottom:50px; left:0; right:0; padding:0 20px;">
+                <el-scrollbar style="height:100%;">
+                    <el-table
+                            :data="table.rows"
+                            :row-key="rowKey"
+                            style="width:100%">
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
+                        <el-table-column
+                                label="名称"
+                                prop="name">
+                        </el-table-column>
+                        <el-table-column
+                                label="url"
+                                prop="url">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                width="250">
+                            <template slot-scope="scope">
+                                <el-tooltip class="item" effect="dark" content="修改皮肤" placement="bottom-end">
+                                    <el-button type="text" icon="el-icon-edit" style="font-size:20px; padding:0;" @click="handleRowEdit(scope)"></el-button>
+                                </el-tooltip>
+                                <el-tooltip class="item" effect="dark" content="删除皮肤" placement="bottom-end">
+                                    <el-button type="text" icon="el-icon-delete" style="font-size:20px; padding:0; margin-left:20px;" @click="handleRowDelete(scope)"></el-button>
+                                </el-tooltip>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-scrollbar>
+            </div>
+
+            <div style="height:50px; width:100%; position:absolute; left:0; bottom:0; box-sizing:border-box; padding-right:20px;">
+                <el-pagination
+                        style="float:right;"
+                        background
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="table.currentPage"
+                        :page-sizes="table.pageSizes"
+                        :page-size="table.pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="table.total">
+                </el-pagination>
+            </div>
+
+        </el-card>
+
+        <!-- 添加主题对话框 -->
+        <el-dialog
+                title="添加主题"
+                :visible.sync="dialog.createTheme.visible"
+                width="500px"
+                :before-close="handleCreateThemeClose">
+
+            <el-form label-width="80px">
+                <el-form-item label="名称:">
+                    <el-input v-model="dialog.createTheme.name"></el-input>
+                </el-form-item>
+                <el-form-item label="url:">
+                    <el-input type="textarea" v-model="dialog.createTheme.url"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="medium" @click="handleCreateThemeClose">取消</el-button>
+                <el-button size="medium" type="primary" @click="handleCreateThemeSubmit" :loading="dialog.createTheme.loading">确定</el-button>
+            </span>
+
+        </el-dialog>
+
+        <!-- 修改主题话框 -->
+        <el-dialog
+                title="修改主题"
+                :visible.sync="dialog.editTheme.visible"
+                width="500px"
+                :before-close="handleEditThemeClose">
+
+            <el-form label-width="80px">
+                <el-form-item label="名称:">
+                    <el-input v-model="dialog.editTheme.name"></el-input>
+                </el-form-item>
+                <el-form-item label="url:">
+                    <el-input type="textarea" v-model="dialog.editTheme.url"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="medium" @click="handleEditThemeClose">取消</el-button>
+                <el-button size="medium" type="primary" @click="handleEditThemeSubmit" :loading="dialog.editTheme.loading">确定</el-button>
+            </span>
+
+        </el-dialog>
+
+    </template>
+
+</mi-frame>

@@ -1,0 +1,11 @@
+html,
+body,
+#app{width:100%!important; height:100%!important; margin:0!important; padding:0!important; overflow:hidden!important;}
+
+#app{background-color:#F2F3F7!important; position:relative!important;}
+
+.page-wrapper{width:100%; height:100%; position:relative;}
+
+aside,main{height:100%!important;}
+
+.el-loading-mask{transition:none !important;}

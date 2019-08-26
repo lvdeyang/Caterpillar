@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html lang="zh-cmn-Hans">
+<head>
+
+    <!-- 声明文档使用的字符编码 -->
+    <meta charset='utf-8'>
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <!-- 页面描述 -->
+    <meta name="description" content=""/>
+    <!-- 页面关键词 -->
+    <meta name="keywords" content=""/>
+    <!-- 网页作者 -->
+    <meta name="author" content="name, email@gmail.com"/>
+    <!-- 搜索引擎抓取 -->
+    <meta name="robots" content="index,follow"/>
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+    <!-- `width=device-width` 会导致 iPhone 5 添加到主屏后以 WebApp 全屏模式打开页面时出现黑边 http://bigc.at/ios-webapp-viewport-meta.orz -->
+
+    <!-- iOS 设备 begin -->
+    <meta name="apple-mobile-web-app-title" content="标题">
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <!-- 启用360浏览器的极速模式(webkit) -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 不让百度转码 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+    <meta name="HandheldFriendly" content="true">
+    <!-- 微软的老式浏览器 -->
+    <meta name="MobileOptimized" content="320">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!-- UC强制全屏 -->
+    <meta name="full-screen" content="yes">
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="true">
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app">
+    <!-- windows phone 点击无高光 -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <link rel="stylesheet" type="text/css" href="../../lib/ui/element-ui/element-ui-2.4.3.min.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../../lib/animate/animate.css">
+
+    <!-- icons -->
+    <link rel="stylesheet" type="text/css" href="../../lib/icon/Font-Awesome-3.2.1/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/icon/feather/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/icon/brands/style.css"/>
+
+    <title>用户登录</title>
+
+    <style type="text/css">
+        html,body{width:100%; height:100%; padding:0; margin:0;}
+        #page-login-wrapper *{box-sizing:border-box;}
+        .icon-color-white:before{color:#fff!important;}
+        .border-radius-2px input,
+        .border-radius-2px button{border-radius:2px!important;}
+    </style>
+    
+</head>
+<body>
+<div id="page-login-wrapper" style="width:100%; height:100%; position:relative; background-color:#f0f6fe;">
+    <div style="height:70px; width:100%; box-shadow:0 3px 4px rgba(0,0,0,0.1); background-color:rgb(55, 64, 79);">
+        <div style="width:1024px; height:70px; margin:auto;">
+            <img style="height:60px; position:relative; top:5px;" src="../../app/icons/logo/logo.png"/>
+            <img style="height:30px; float:right; position:relative; top:20px; left:100px;" src="../../app/icons/logo/title.png"/>
+        </div>
+    </div>
+    <div style="width:1024px; margin:auto;">
+        <img style="float:left; margin-top:80px; width:600px; transform:rotate(-3deg);" src="images/login-img.png"/>
+        <div style="width:337px; float:right; margin-top:130px;">
+            <div style="box-shadow:0 0 6px rgba(0,0,0,.08); background-color:#fff; position:relative;">
+                <div style="padding:10px; position:absolute; right:0; top:0;">
+                    <div style="position:relative;">
+                        <img src="images/wxLogin01.png"/>
+                        <div style="position:absolute; top:0; right:70px;">
+                            <div style="position:relative; border:1px solid #dddfe3; border-radius:2px; padding-left:10px; padding-right:10px;">
+	                                <span style="color:#738299; font-size:12px; position:relative; bottom:2px; white-space:nowrap;">
+	                                    <span class="brands-icon-wechat" style="position:absolute; font-size:16px; top:1px;"></span>
+	                                    <span style="padding-left:20px;">微信扫码登录</span>
+	                                </span>
+                                <div style="position:absolute; right:-8px; top:4px; width:0; height:0; border-width:4px; border-style:solid dashed dashed; border-color:transparent transparent #dddfe3 transparent; transform: rotate(90deg);"></div>
+                                <div style="position:absolute; right:-7px; top:4px; width:0; height:0; border-width:4px; border-style:solid dashed dashed; border-color:transparent transparent #fff transparent; transform: rotate(90deg);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:42px 32px 23px 32px;">
+                    <div style="height:45px; border-bottom:1px solid #eef1f4;">
+                        <div @click="tabClick('password')" :style="passwordModeTabStyle()">密码登录</div>
+                        <div @click="tabClick('phone')" :style="phoneModeTabStyle()">短信码登录</div>
+                    </div>
+                    <form @submit.navite="doPasswordLogin" v-if="mode==='password'" style="margin-top:20px;" action="/do/password/login" method="POST">
+                        <el-input name="username" class="border-radius-2px" placeholder="账号/邮箱/手机号">
+                            <span slot="prefix" class="feather-icon-user" style="font-size:20px; position:relative; top:9px;"></span>
+                        </el-input>
+                        <el-input name="password" type="password" class="border-radius-2px" placeholder="密码" style="margin-top:20px;">
+                            <span slot="prefix" class="feather-icon-lock" style="font-size:20px; position:relative; top:9px;"></span>
+                        </el-input>
+                        <div style="margin-top:20px;">
+                            <el-button type="text" style="padding:0; float:right;">忘记密码？</el-button>
+                            <hr style="border:0; clear:both; padding:0; margin:0;"/>
+                        </div>
+                        <!--<el-button type="primary" style="margin-top:20px; width:100%; border-radius:2px;">登录</el-button>-->
+                        <button type="submit" class="el-button el-button--primary" style="margin-top:20px; width:100%; border-radius:2px;">登录</button>
+                    </form>
+                    <form @submit.navite="doPhoneLogin" v-if="mode==='phone'" style="margin-top:20px;">
+                        <el-input name="mobile" class="border-radius-2px" placeholder="手机号码">
+                            <span slot="prefix" class="feather-icon-smartphone" style="font-size:20px; position:relative; top:9px;"></span>
+                        </el-input>
+                        <el-input name="phoneVerifyCode" class="border-radius-2px" placeholder="验证码" style="margin-top:20px; width:156px; float:left;">
+                            <span slot="prefix" class="feather-icon-lock" style="font-size:20px; position:relative; top:9px;"></span>
+                        </el-input>
+                        <el-button style="border-radius:2px; float:right; width:110px; margin-top:20px;" disabled>获取短信码</el-button>
+                        <hr style="border:0; clear:both; padding:0; margin:0;"/>
+                        <el-button type="primary" style="margin-top:20px; width:100%; border-radius:2px;">登录</el-button>
+                    </form>
+                </div>
+                <div style="height:61px; background-color:#fafbfc; border-top:solid 1px #f4f6f7; padding:10px 32px;">
+                    <el-button type="text">
+                        <span>其他账号登录</span>
+	                        <span style="position:relative;">
+	                            <span style="position:absolute; left:10px; top:-2px; display:inline-block; width:20px; height:20px; line-height:20px; border-radius:100%; background:#409EFF;">
+	                                <span class="brands-icon-tencentqq icon-color-white"></span>
+	                            </span>
+	                        </span>
+                    </el-button>
+                    <el-button type="text" style="float:right;">立即注册</el-button>
+                </div>
+            </div>
+            <div style="margin-top:20px; font-size:12px; text-align:center;">Copyright © 2019-2030 北京市数码视讯科技股份有限公司</div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../../lib/frame/jQuery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../../lib/frame/jQuery/jquery.json.js"></script>
+<script type="text/javascript" src="../../lib/frame/vue/vue-2.5.16.js"></script>
+<script type="text/javascript" src="../../lib/ui/element-ui/element-ui-2.4.3.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        new Vue({
+            el: '#page-login-wrapper',
+            data: {
+                mode:'password' //password|phone|wechat|qq
+            },
+            computed:{
+
+            },
+            watch:{
+
+            },
+            methods:{
+                passwordModeTabStyle:function(){
+                    var self = this;
+                    if(self.mode === 'password'){
+                        return 'border-bottom:2px solid #2f82ff; display:inline; float:left; padding-left:2px; padding-right:2px; line-height:44px; font-size:16px; color:#1b2f4d;';
+                    }else{
+                        return 'display:inline; float:left; padding-left:2px; padding-right:2px; line-height:44px; font-size:16px; color:#afbcd3;';
+                    }
+                },
+                phoneModeTabStyle:function(){
+                    var self = this;
+                    if(self.mode === 'phone'){
+                        return 'border-bottom:2px solid #2f82ff; display:inline; float:left; padding-left:2px; padding-right:2px; line-height:44px; margin-left:25px; font-size:16px; color:#1b2f4d;';
+                    }else{
+                        return 'display:inline; float:left; padding-left:2px; padding-right:2px; line-height:44px; margin-left:25px; font-size:16px; color:#afbcd3;';
+                    }
+                },
+                tabClick:function(mode){
+                    var self = this;
+                    self.mode = mode;
+                },
+                doPasswordLogin:function(e){
+                    console.log(e.target);
+                },
+                doPhoneLogin:function(e){
+
+                }
+            },
+            created:function(){
+                var self = this;
+                var hash = window.location.hash;
+                if(hash){
+                    hash = hash.replace('#', '');
+                    hash = decodeURIComponent(decodeURIComponent(hash));
+                    hash = hash.split('&&');
+                    var message = hash[1];
+                    self.$message({
+                        type:'error',
+                        message:message
+                    });
+                }
+            }
+        });
+    });
+</script>
+</html>

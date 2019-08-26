@@ -1,0 +1,89 @@
+<mi-frame id="page-personal-wrapper" :menus="menus" :user="user" :groups="groups">
+
+    <template slot="title">个人中心</template>
+
+    <template slot="links">
+        <el-breadcrumb-item><a href="#/page-home">首页</a></el-breadcrumb-item>
+        <el-breadcrumb-item>个人中心</el-breadcrumb-item>
+    </template>
+
+    <template>
+
+        <el-card class="box-card" shadow="hover" style="width:100%; height:100%;" v-loading="loading">
+            <template>
+                <el-tabs @tab-click="handleTabClick">
+                    <el-tab-pane label="个人信息"></el-tab-pane>
+                    <el-tab-pane label="修改密码"></el-tab-pane>
+                </el-tabs>
+            </template>
+
+            <div v-show="tab.current=='个人信息'">
+                <div>
+                    <el-scrollbar style="height:100%;">
+                        <el-form label-width="80px">
+                            <el-form-item label="昵称:">
+                                <el-input v-model="userInfo.nickname"></el-input>
+                            </el-form-item>
+                            <el-form-item label="手机:">
+                                <el-input v-model="userInfo.mobile"></el-input>
+                            </el-form-item>
+                            <el-form-item label="邮箱:">
+                                <el-input v-model="userInfo.mail"></el-input>
+                            </el-form-item>
+                            <el-form-item label="标签">
+                                <el-tag
+                                        :key="simple"
+                                        v-for="simple in userInfo.tags"
+                                        style="margin-right:10px;"
+                                        closable
+                                        :disable-transitions="false"
+                                        @close="handleTagRemove(userInfo.tags, simple)">
+                                    {{simple}}
+                                </el-tag>
+                                <el-button class="button-tag" size="small" @click="handleTagEdit" icon="el-icon-edit"> 贴标签</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-scrollbar>
+                </div>
+
+                <span slot="footer" class="dialog-footer">
+                    <div class="div-button">
+                        <el-button size="medium" @click="handleResetInfo">重置</el-button>
+                        <el-button size="medium" type="primary" @click="handleEditInfo">保存</el-button>
+                    </div>
+                </span>
+            </div>
+
+            <div v-show="tab.current=='修改密码'">
+                <div>
+                    <el-scrollbar style="height:100%;">
+                        <el-form label-width="80px">
+                            <el-form-item label="旧密码:">
+                                <el-input type="password" v-model="password.oldPassword"></el-input>
+                            </el-form-item>
+                            <el-form-item label="新密码:">
+                                <el-input type="password" v-model="password.newPassword"></el-input>
+                            </el-form-item>
+                            <el-form-item label="确认:">
+                                <el-input type="password" v-model="password.repeat" placeholder="再次输入新密码！"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </el-scrollbar>
+                </div>
+
+                <span slot="footer" class="dialog-footer">
+                    <div class="div-button">
+                        <el-button size="medium" @click="handleClearPassword">清空</el-button>
+                        <el-button size="medium" type="primary" @click="handleEditPassword">确定</el-button>
+                    </div>
+                </span>
+            </div>
+
+        </el-card>
+
+        <!-- 选择标签对话框 -->
+        <mi-tag-dialog ref="tagDialog" @on-tag-dialog-close="selectedTags"></mi-tag-dialog>
+
+    </template>
+
+</mi-frame>

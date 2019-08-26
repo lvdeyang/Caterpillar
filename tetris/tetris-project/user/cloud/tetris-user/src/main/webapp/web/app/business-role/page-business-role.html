@@ -1,0 +1,100 @@
+<mi-frame id="page-business-role-wrapper" :menus="menus" :user="user" :groups="groups" :active-id="activeId">
+
+    <template slot="title">企业角色管理</template>
+
+    <template slot="links">
+        <el-breadcrumb-item><a href="#/page-home">首页</a></el-breadcrumb-item>
+        <el-breadcrumb-item>企业角色管理</el-breadcrumb-item>
+    </template>
+
+    <template>
+        <el-card class="box-card" shadow="hover" style="width:100%; height:100%; position:relative;">
+
+            <el-button type="primary" size="small" @click="handleCreate"><span class="icon-plus sp_title"></span>&nbsp;添加角色</el-button>
+            <el-button type="warning" size="small" @click="handelDelete"><span class="icon-trash sp_title"></span>&nbsp;删除角色</el-button>
+
+            <div style="position:absolute; top:86px; bottom:50px; left:0; right:0; padding:0 20px;">
+                <el-scrollbar style="height:100%;">
+                    <el-table
+                            :data="table.rows"
+                            :row-key="rowKey"
+                            style="width:100%">
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
+                        <el-table-column
+                                label="角色名称"
+                                prop="name">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                width="250">
+                            <template slot-scope="scope">
+                                <el-tooltip class="item" effect="dark" content="修改角色" placement="bottom-end">
+                                    <el-button type="text" icon="el-icon-edit" style="font-size:20px; padding:0;" class="bt_list_handle" @click="handleRowEdit(scope)"></el-button>
+                                </el-tooltip>
+                                <el-tooltip class="item" effect="dark" content="授权用户" placement="bottom-end">
+                                    <el-button type="text" icon="feather-icon-user" style="font-size:20px; padding:0; margin-left:20px;" class="bt_list_handle" @click="gotoBindUser(scope)"></el-button>
+                                </el-tooltip>
+                                <el-tooltip class="item" effect="dark" content="删除角色" placement="bottom-end">
+                                    <el-button type="text" icon="el-icon-delete" style="font-size:20px; padding:0; margin-left:20px;" class="bt_list_handle bt_list_center_handle" @click="handleRowDelete(scope)"></el-button>
+                                </el-tooltip>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-scrollbar>
+            </div>
+
+            <div style="height:50px; width:100%; position:absolute; left:0; bottom:0; box-sizing:border-box; padding-right:20px;">
+                <el-pagination
+                        style="float:right;"
+                        background
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="table.currentPage"
+                        :page-sizes="table.pageSizes"
+                        :page-size="table.pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="table.total">
+                </el-pagination>
+            </div>
+
+        </el-card>
+
+
+        <!-- 新建企业角色对话框 -->
+        <el-dialog
+                title="新建企业角色"
+                :visible.sync="dialog.createBusinessRole.visible"
+                width="500px"
+                :before-close="handleCreateBusinessRoleClose">
+
+            <el-input v-model="dialog.createBusinessRole.name" placeholder="起个名吧！"></el-input>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="medium" @click="handleCreateBusinessRoleClose">取消</el-button>
+                <el-button size="medium" type="primary" @click="handleCreateBusinessRoleSubmit" :loading="dialog.createBusinessRole.loading">确定</el-button>
+            </span>
+
+        </el-dialog>
+
+        <!-- 修改企业角色对话框 -->
+        <el-dialog
+                title="修改企业角色"
+                :visible.sync="dialog.editBusinessRole.visible"
+                width="500px"
+                :before-close="handleEditBusinessRoleClose">
+
+            <el-input v-model="dialog.editBusinessRole.name" placeholder="起个名吧！"></el-input>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="medium" @click="handleEditBusinessRoleClose">取消</el-button>
+                <el-button size="medium" type="primary" @click="handleEditBusinessRoleSubmit" :loading="dialog.editBusinessRole.loading">确定</el-button>
+            </span>
+
+        </el-dialog>
+
+    </template>
+
+</mi-frame>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue的模板示例—表单值绑定</title>
+</head>
+<body>
+    <!-- 绑定输入框 【|绑定文本域】-->
+    <div id="demo01">
+        <input type="text" v-model="value" /><br/>
+        <textarea cols="20" rows="1" v-model="value"></textarea><br/>
+        <span>{{value}}</span>
+    </div>
+
+    <!-- 绑定单选按钮 -->
+    <div id="demo02">
+        <label><input type="radio" name="sex" v-model="sex" value="男"/>&nbsp;男</label><br/>
+        <label><input type="radio" name="sex" v-model="sex" value="女"/>&nbsp;女</label><br/>
+        <span>{{sex}}</span>
+    </div>
+
+    <!-- 绑定复选框 -->
+    <div id="demo03">
+        <label><input type="checkbox" name="name" v-model="nameCache" value="员工2"/>&nbsp;员工2</label><br/>
+        <label><input type="checkbox" name="name" v-model="nameCache" value="员工3"/>&nbsp;员工3</label><br/>
+        <label><input type="checkbox" name="name" v-model="nameCache" value="员工1"/>&nbsp;员工1</label><br/>
+        <span>{{name}}</span>
+    </div>
+
+    <!-- 绑定下拉菜单 -->
+    <div id="demo04">
+        <select v-model="result">
+            <option v-for="option in options" :value="option.value">{{option.text}}</option>
+        </select><br/>
+        <span>{{result}}</span>
+    </div>
+
+</body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+
+    var vm01 = new Vue({
+        el:'#demo01',
+        data:{
+            value:'初始化的值'
+        }
+    });
+
+    var vm02 = new Vue({
+        el:'#demo02',
+        data:{
+            sex:''
+        }
+    });
+
+    var vm03 = new Vue({
+        el:'#demo03',
+        data:{
+            nameCache:[]
+        },
+        computed:{
+            name:function(){
+                var str = '';
+                for(var i in this.nameCache){
+                    str += (this.nameCache[i] + ', ');
+                }
+                return str.substring(0, str.length-2);
+            }
+        }
+    });
+
+    var vm04 = new Vue({
+        el:'#demo04',
+        data:{
+            options:[
+                {
+                    value:0,
+                    text:'选项1'
+                },{
+                    value:1,
+                    text:'选项2'
+                },{
+                    value:2,
+                    text:'选项3'
+                }
+            ],
+            result:''
+        }
+    });
+
+</script>
+</html>

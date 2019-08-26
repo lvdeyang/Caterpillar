@@ -1,0 +1,27 @@
+<el-dialog
+        class="mi-folder-dialog"
+        title="选择文件夹"
+        width="600px"
+        :visible.sync="dialog.visible"
+        @closed="closed">
+
+    <div style="height:240px;">
+        <el-scrollbar style="height:100%;">
+            <el-tree
+                    ref="folderTree"
+                    :props = "tree.props"
+                    :data = "tree.data"
+                    check-strictly
+                    :render-content = "render"
+                    :expand-on-click-node="false"
+                    highlight-current>
+            </el-tree>
+        </el-scrollbar>
+    </div>
+
+    <span slot="footer" class="dialog.footer">
+        <el-button size="medium" @click="dialog.visible = false">取 消</el-button>
+        <el-button size="medium" type="primary" :loading="dialog.loading" @click="handleOkButton">确 定</el-button>
+    </span>
+
+</el-dialog>

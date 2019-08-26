@@ -1,0 +1,42 @@
+<el-dialog
+        class="mi-video-dialog"
+        title="选择媒资视频"
+        width="1000px"
+        :visible.sync="dialog.visible"
+        @closed="closed">
+
+    <div class="dialog-body" v-loading="dialog.loading">
+        <el-scrollbar style="height:100%;">
+            <div class="breadcrumb-container">
+                <el-breadcrumb separator="/">
+                    <el-breadcrumb-item v-for="item in breadCrumb" :key="'breadcrumb-' + item.uuid">
+                        <a v-if="item.next" @click="load(item.id)">{{item.name}}</a>
+                        <template v-else>{{item.name}}</template>
+                    </el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
+            <div :class="videoItemClass(item, index)" v-for="item, index in data">
+                <div class="folder-scope" v-if="item.type === 'FOLDER'" @click="load(item.id)">
+                    <span :class="item.icon"></span>
+                    <br/>
+                    <span class="text">{{item.name}}</span>
+                </div>
+                <div class="video-scope" v-if="item.type === 'VIDEO'" @click="videoSelect(item)">
+                    <span :class="item.icon"></span>
+                    <br/>
+                    <span class="text">{{item.name}}</span>
+                </div>
+                <div v-if="item.type==='VIDEO' && item.__select" class="success-icon">
+                    <span class="feather-icon-check" style="color:#fff; position:relative; bottom:1px;"></span>
+                </div>
+            </div>
+            <hr style="border:0; clear:both;"/>
+        </el-scrollbar>
+    </div>
+
+    <span slot="footer" class="dialog.footer">
+        <el-button size="medium" @click="dialog.visible = false">取 消</el-button>
+        <el-button size="medium" type="primary" @click="handleOkButton">确 定</el-button>
+    </span>
+
+</el-dialog>

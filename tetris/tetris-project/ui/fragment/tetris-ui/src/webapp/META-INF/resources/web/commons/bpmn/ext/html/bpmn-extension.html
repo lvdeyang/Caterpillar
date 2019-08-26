@@ -1,0 +1,324 @@
+<div class="bpmn-editor-wrapper">
+    <div class="editor-tools">
+        <div class="entry">
+            <span class="editor-save feather-icon-save" style="top:4px;"></span>
+            </div>
+        <span class="separator"></span>
+        </div>
+    <div class="editor-prop-panel">
+        <div class="editor-prop-panel-wrapper">
+            <div class="prop-panel-tabs">
+                <div class="prop-panel-tab is-active" data-ref="0">流程变量</div>
+                <div class="prop-panel-tab" data-ref="1">属性列表</div>
+            </div>
+            <hr class="prop-panel-tab-separator"/>
+            <div class="prop-panel-contents">
+                <div class="prop-panel-content" data-id="0" style="display:block;">
+                    <div class="prop-process-id"></div>
+                    <hr class="prop-panel-content-separator"/>
+                    <div class="prop-panel-content-var-action">
+                        <!--<button class="pop-panel-variable-add el-button el-button&#45;&#45;default el-button&#45;&#45;mini" style="padding:3px 6px;"><span class="feather-icon-plus"></span>添加变量</button>-->
+                        <div class="v-modal" style="z-index:2002; display:none;" tabindex="0"></div>
+                        <div class="el-dialog__wrapper" style="z-index:2007; display:none;">
+                            <div class="el-dialog" style="width:500px; margin-top:15vh;">
+                                <div class="el-dialog__header">
+                                    <span class="el-dialog__title">新建变量</span>
+                                    <button type="button" aria-label="Close" class="el-dialog__headerbtn"><i class="prop-panel-dialog-close el-dialog__close el-icon el-icon-close"></i></button>
+                                </div>
+                                <div class="el-dialog__body">
+                                    <form class="el-form">
+                                        <div class="el-form-item">
+                                            <label class="el-form-item__label" style="width:80px">变量key:</label>
+                                            <div class="el-form-item__content" style="margin-left:80px;">
+                                                <div class="el-input">
+                                                    <input type="text" class="node-id el-input__inner"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-form-item">
+                                            <label class="el-form-item__label" style="width:80px">变量名称:</label>
+                                            <div class="el-form-item__content" style="margin-left:80px;">
+                                                <div class="el-input">
+                                                    <input type="text" class="node-label el-input__inner"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="el-form-item">
+                                            <label class="el-form-item__label" style="width:80px">默认值:</label>
+                                            <div class="el-form-item__content" style="margin-left:80px;">
+                                                <div class="el-input">
+                                                    <input type="text" class="node-label el-input__inner"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="el-dialog__footer">
+                                    <span class="dialog-footer">
+                                        <button type="button" class="prop-panel-dialog-close el-button el-button--default el-button--medium"><span>取消</span></button>
+                                        <button type="button" class="el-button el-button--primary el-button--medium prop-panel-variable-submit"><span>确定</span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prop-panel-content-var">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>变量</th>
+                                    <!--<th style="width:30px;"></th>-->
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="prop-panel-content" data-id="1">
+                    <div class="prop-scope prop-scope-sequence-flow">
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">节点id</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-id el-input__inner" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">表达式</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <div class="el-textarea"><textarea autocomplete="off" class="node-expression el-textarea__inner" style="height:100px;"></textarea></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="prop-expression-actions">
+                            <button class="prop-expression-insert-variable el-button el-button--default el-button--mini" style="padding:5px 10px;">插入变量</button>
+                            <div class="v-modal" style="z-index:2002; display:none;" tabindex="0"></div>
+                            <div class="el-dialog__wrapper" style="z-index:2007; display:none;">
+                                <div class="el-dialog" style="width:500px; margin-top:15vh;">
+                                    <div class="el-dialog__header">
+                                        <span class="el-dialog__title">插入变量</span>
+                                        <button type="button" aria-label="Close" class="el-dialog__headerbtn"><i class="prop-panel-dialog-close el-dialog__close el-icon el-icon-close"></i></button>
+                                    </div>
+                                    <div class="el-dialog__body">
+                                        <div style="width:100%; height:200px; position:relative;">
+                                            <div style="width:100%; height:260px; position:absolute; top:-30px; overflow-y:auto;">
+                                                <table class="prop-expression-variable-table" style="width:100%;">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>变量</th>
+                                                        <th style="width:50%;">注释</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-dialog__footer">
+                                    <span class="dialog-footer">
+                                        <button type="button" class="prop-panel-dialog-close el-button el-button--default el-button--medium"><span>取消</span></button>
+                                        <button type="button" class="el-button el-button--primary el-button--medium prop-expression-insert-variable-submit"><span>确定</span></button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="prop-expression-actions">
+                            <button data-value="<" class="prop-expression-condition el-button el-button--default el-button--mini" style="padding:5px 10px;">&lt;</button>
+                            <button data-value="<=" class="prop-expression-condition el-button el-button--default el-button--mini" style="padding:5px 10px;">&le;</button>
+                            <button data-value=">" class="prop-expression-condition el-button el-button--default el-button--mini" style="padding:5px 10px;">&gt;</button>
+                            <button data-value=">=" class="prop-expression-condition el-button el-button--default el-button--mini" style="padding:5px 10px;">&ge;</button>
+                            <button data-value="==" class="prop-expression-condition el-button el-button--default el-button--mini" style="padding:5px 10px;">==</button>
+                        </div>
+                        <div class="prop-expression-actions">
+                            <button data-value="&&" class="prop-expression-condition el-button el-button--default el-button--mini" style="padding:5px 10px;">且</button>
+                            <button data-value="||" class="prop-expression-condition el-button el-button--default el-button--mini" style="padding:5px 10px;">或</button>
+                        </div>
+                    </div>
+                    <div class="prop-scope prop-scope-user-task">
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">节点id</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-id el-input__inner" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">标签</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-label el-input__inner"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="prop-bindings">
+                            <!-- 绑定用户 -->
+                            <div class="prop-user-binding">
+                                <div class="prop-binding-action">
+                                    <button title="将当前任务分配给指定的用户" class="el-button el-button--default el-button--mini prop-user-binding-add" style="padding:3px 6px;"><span class="feather-icon-plus"></span>绑定用户</button>
+                                </div>
+                                <div class="prop-binding-content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>用户</th>
+                                                <th style="width:30px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!--<tr>
+                                                <td></td>
+                                                <td><button class="el-button el-button--text prop-user-binding-delete"><span class="el-icon-delete"></span></button></td>
+                                            </tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- 绑定角色 -->
+                            <div class="prop-role-binding">
+                                <div class="prop-binding-action">
+                                    <button title="将当前任务分配给指定的角色" class="el-button el-button--default el-button--mini prop-role-binding-add" style="padding:3px 6px;"><span class="feather-icon-plus"></span>绑定角色</button>
+                                </div>
+                                <div class="prop-binding-content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>角色</th>
+                                                <th style="width:30px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!--<tr>
+                                                <td></td>
+                                                <td><button class="el-button el-button--text prop-role-binding-delete"><span class="el-icon-delete"></span></button></td>
+                                            </tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- 变量展示 -->
+                            <div class="prop-variable-show-binding">
+                                <div class="prop-binding-action">
+                                    <button title="绑定的变量将作为用户审核页面的展示项" class="el-button el-button--default el-button--mini prop-variable-show-binding-add" style="padding:3px 6px;"><span class="feather-icon-plus"></span>变量展示</button>
+                                </div>
+                                <div class="prop-binding-content">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>变量</th>
+                                            <th style="width:60px;">类型</th>
+                                            <th style="width:60px;"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--<tr>
+                                            <td></td>
+                                            <td>
+                                                <button class="el-button el-button&#45;&#45;text prop-variable-show-binding-edit"><span class="el-icon-edit"></span></button>
+                                                <button class="el-button el-button--text prop-variable-show-binding-delete"><span class="el-icon-delete"></span></button>
+                                            </td>
+                                        </tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- 变量设置 -->
+                            <div class="prop-variable-set-binding">
+                                <div class="prop-binding-action">
+                                    <button title="绑定的变量将作为用户审核页面的设置项" class="el-button el-button--default el-button--mini prop-variable-set-binding-add" style="padding:3px 6px;"><span class="feather-icon-plus"></span>变量设置</button>
+                                </div>
+                                <div class="prop-binding-content">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>变量</th>
+                                            <th style="width:60px;">类型</th>
+                                            <th style="width:60px;"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--<tr>
+                                            <td></td>
+                                            <td>
+                                                <button class="el-button el-button&#45;&#45;text prop-variable-set-binding-edit"><span class="el-icon-edit"></span></button>
+                                                <button class="el-button el-button&#45;&#45;text prop-variable-set-binding-delete"><span class="el-icon-delete"></span></button>
+                                            </td>
+                                        </tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prop-scope prop-scope-service-task-synchronous">
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">节点id</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-id el-input__inner" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">标签</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-label el-input__inner"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="prop-scope prop-scope-service-task-asynchronous">
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">节点id</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-id el-input__inner" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">标签</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-label el-input__inner"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="prop-scope prop-scope-service-task-internal">
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">节点id</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-id el-input__inner" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width:60px">标签</label>
+                                <div class="el-form-item__content" style="margin-left:60px;">
+                                    <div class="el-input el-input--small">
+                                        <input type="text" class="node-label el-input__inner"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

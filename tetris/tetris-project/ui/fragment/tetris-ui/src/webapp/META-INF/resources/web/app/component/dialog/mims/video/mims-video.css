@@ -1,0 +1,17 @@
+.mi-video-dialog .icon-folder-close{color:#ffd659;font-size:16px; position:relative; top:1px; margin-right:7px;}
+.mi-video-dialog .el-dialog__body{padding:0 20px;}
+.mi-video-dialog .el-dialog{margin-top:50px!important;}
+
+.mi-video-dialog .dialog-body{height:560px; position:relative;}
+.mi-video-dialog .breadcrumb-container{margin-top:10px; margin-bottom:15px;}
+.mi-video-dialog .video-item{width:96px; height:96px; float:left; position:relative; box-sizing:border-box; margin-right:12px;}
+.mi-video-dialog .video-item.last{margin-right:0;}
+.mi-video-dialog .video-item:hover{border:2px solid #eaeaea;}
+.mi-video-dialog .video-item.select{border:2px solid #67c23a;}
+.mi-video-dialog .folder-scope{height:80px; position:relative; top:3px; text-align:center;}
+.mi-video-dialog .folder-scope>span:first-child{font-size:63px; margin-right:0px; color:#ffd659;}
+.mi-video-dialog .folder-scope>span:last-child{display:inline-block; height:16px; width:80px; font-size:12px; overflow:visible; word-wrap:break-word;}
+.mi-video-dialog .video-scope{height:80px; position: relative; top:3px; text-align:center;}
+.mi-video-dialog .video-scope>span:first-child{font-size:63px; position:relative; left:3px; top:1px;}
+.mi-video-dialog .video-scope>span:last-child{display:inline-block; height:16px; width:80px; font-size:12px; position:relative; left:1px; word-wrap:break-word; text-align:center;}
+.mi-video-dialog .success-icon{width:14px; height:14px; position:absolute; right:0; bottom:0; background-color:#67c23a; border:1px solid #67c23a;}

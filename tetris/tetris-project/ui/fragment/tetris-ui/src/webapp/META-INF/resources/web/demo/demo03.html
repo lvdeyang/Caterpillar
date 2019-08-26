@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue的模板示例—组件</title>
+</head>
+<body>
+
+    <div id="blog-posts-events-demo">
+        <div :style="{ fontSize: postFontSize + 'em' }">
+            <blog-post v-for="post in posts" v-bind:key="post.id" v-bind:post="post" v-on:show-text="showText">
+                <template slot="p">
+                    <p>插入了一个段落</p>
+                </template>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>dom</td>
+                            <td>dom</td>
+                            <td>dom</td>
+                        </tr>
+                        <tr>
+                            <td>dom</td>
+                            <td>dom</td>
+                            <td>dom</td>
+                        </tr>
+                        <tr>
+                            <td>dom</td>
+                            <td>dom</td>
+                            <td>dom</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <template slot="ul">
+                    <ul>
+                        <li>11111</li>
+                        <li>11111</li>
+                        <li>11111</li>
+                    </ul>
+                </template>
+            </blog-post>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+
+    Vue.component('blog-post', {
+        props: ['post'],
+        template: '<div class="blog-post">' +
+                        '<h3>{{ post.title }}</h3>' +
+                        '<button v-on:click="buttonClick">点击我</button>' +
+                        '<div v-html="post.content"></div>' +
+                        '<slot name="p"></slot>'+
+                        '<slot></slot>'+
+                        '<slot name="ul"></slot>'+
+                    '</div>',
+        methods:{
+            buttonClick:function(e){
+                this.$emit('show-text', e, {id:1111});
+            }
+        }
+    });
+
+    new Vue({
+        el: '#blog-posts-events-demo',
+        data: function(){
+            return {
+                posts: [{
+                    id:1,
+                    title:'传递数据1',
+                    content:'微博内容'
+                }],
+                postFontSize: 1
+            }
+        },
+        methods:{
+            showText:function(e, data){
+                console.log(e);
+                console.log(data);
+                console.log(this);
+                alert('自定义了事件');
+            }
+        }
+    });
+</script>
+</html>

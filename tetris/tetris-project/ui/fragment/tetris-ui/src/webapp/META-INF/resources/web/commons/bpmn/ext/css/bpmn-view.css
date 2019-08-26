@@ -1,0 +1,11 @@
+.editor-tools{display:none!important;}
+.djs-popup{display:none!important;}
+.djs-palette{display:none!important;}
+.djs-overlay.djs-overlay-context-pad{display:none!important;}
+.prop-panel-content-var{display:none!important;}
+.prop-user-binding-add,
+.prop-role-binding-add,
+.prop-variable-show-binding,
+.prop-variable-set-binding{display:none!important;}
+.prop-scope-sequence-flow button,
+.prop-binding-content td button{display:none!important;}

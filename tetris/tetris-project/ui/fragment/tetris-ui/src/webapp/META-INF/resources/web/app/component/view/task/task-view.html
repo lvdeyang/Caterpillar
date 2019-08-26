@@ -1,0 +1,48 @@
+<transition
+        enter-active-class="animated bounceInUp"
+        leave-active-class="animated bounceOutDown">
+    <div v-if="visible" :class="'mi-task-view ' + size + (minimize?' minimize':'')">
+        <div class="mi-task-view-wrapper">
+            <div class="view-header">
+                <div class="view-title">任务列表</div>
+                <el-button-group>
+                    <el-tooltip class="item" effect="dark" content="最小化" placement="bottom">
+                        <el-button class="view-header-button" size="mini" @click="goIntoMinimizeState"><span class="feather-icon-minus"></span></el-button>
+                    </el-tooltip>
+                    <el-tooltip class="item" effect="dark" :content="size==='maximize'?'悬浮':'全屏'" placement="bottom" >
+                        <el-button class="view-header-button" size="mini" @click="size==='maximize'?size='':size='maximize'"><span :class="size==='maximize'?'feather-icon-minimize':'feather-icon-maximize'"></span></el-button>
+                    </el-tooltip>
+                    <el-tooltip class="item" effect="dark" content="关闭" placement="bottom-end">
+                        <el-button class="view-header-button" size="mini" type="danger" @click="close"><span class="feather-icon-x"></span></el-button>
+                    </el-tooltip>
+                </el-button-group>
+            </div>
+            <div class="view-body">
+                <el-table :data="tasks" style="width:100%" height="100%">
+                    <el-table-column label="文件" width="50">
+                        <template slot-scope="scope"><span :class="scope.row.icon" :style="scope.row.style"></span></template>
+                    </el-table-column>
+                    <el-table-column prop="name"></el-table-column>
+                    <el-table-column label="进度" width="210">
+                        <template slot-scope="scope">
+                            <el-progress :percentage="fixedProgress(scope.row.progress)" :status="scope.row.uploadStatus==='ERROR'?'exception':scope.row.progress===100?'success':''"></el-progress>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="80">
+                        <template slot-scope="scope">
+                            <el-button v-if="!scope.row.restart" type="text" size="mini" style="margin:0; padding:0; font-size:19px; position:relative; top:2px;" @click="handlePause(scope.row)">
+                                <span class="feather-icon-pause"></span>
+                            </el-button>
+                            <el-button v-if="scope.row.restart" type="text" size="mini" style="margin:0; padding:0; font-size:19px; position:relative; top:2px;" @click="handleRestart(scope.row)">
+                                <span class="feather-icon-play"></span>
+                            </el-button>
+                            <el-button type="text" size="mini" style="margin:0; padding:0; font-size:18px; position:relative; top:1px;" @click="handleDelete(scope.row)" :loading="scope.row.loading && scope.row.loading.__delete">
+                                <span class="el-icon-delete" v-if="!scope.row.loading || !scope.row.loading.__delete"></span>
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+    </div>
+</transition>

@@ -1,0 +1,34 @@
+<el-dialog
+        class="mi-tag-dialog"
+        title="选择标签"
+        :visible.sync="visible"
+        width="640px"
+        :before-close="handleTagClose">
+
+    <div class="content">
+        <div class="content-wrapper">
+            <el-input placeholder="搜索标签" size="small" suffix-icon="el-icon-search"></el-input>
+            <div class="tree-wrapper">
+                <el-tree
+                        v-loading="loading"
+                        ref="tagTree"
+                        :props = "props"
+                        :data = "data"
+                        node-key="name"
+                        :check-strictly = "checkStrictly"
+                        show-checkbox
+                        :default-checked-keys="checked"
+                        :expand-on-click-node="false"
+                        default-expand-all
+                        highlight-current>
+                </el-tree>
+            </div>
+        </div>
+    </div>
+
+    <span slot="footer" class="dialog-footer">
+        <div class="footer">
+            <el-button size="small" type="primary" @click="handleTagBindingOk" :loading="loading" style="float:right;">确 定</el-button>
+        </div>
+    </span>
+</el-dialog>

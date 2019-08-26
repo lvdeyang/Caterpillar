@@ -1,0 +1,54 @@
+@CHARSET "UTF-8";
+.sp_title {
+    position: relative;
+    right: 1px;
+}
+
+.div_user_list {
+    position: absolute;
+    top: 86px;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    padding: 0 20px;
+}
+
+.bt_list_handle {
+    font-size: 20px;
+    padding: 0;
+    margin-left: 20px !important;
+}
+
+.bt_list_handle:first-child {
+    margin-left: 0 !important;
+}
+
+.bt_list_center_handle {
+    position: relative;
+    top: 1px;
+    left: 1px;
+}
+
+.div_table_foot {
+    height: 50px;
+    width: 100%;
+    position: absolute;
+    padding-right: 20px;
+    left: 0;
+    bottom: 0;
+    box-sizing: border-box;
+}
+
+.div_create {
+    height: 412px;
+}
+
+.div_change_pw {
+    text-align: right;
+    margin-bottom: 22px;
+}
+
+.bt_change_pw {
+    padding: 0;
+    margin: 0;
+}
