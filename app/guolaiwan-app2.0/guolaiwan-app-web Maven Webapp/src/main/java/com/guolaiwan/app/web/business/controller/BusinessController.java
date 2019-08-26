@@ -1128,12 +1128,47 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getallroom")
 	public Map<String,Object> getAllRoom(HttpServletRequest request) throws Exception {
-		Map<String, Object> map = new HashMap<String,Object>();
-		//存储房间状态
-		List<String> roomState = new ArrayList<String>();
 		//获取查询信息
 		String tier = request.getParameter("tier");
 		String merchantId = request.getParameter("merchantId");
+		
+		String[] orderlines = {"shopId","orderState"};
+		Object[] datelines = {Long.parseLong(merchantId),OrderStateType.NOTPAY};
+		//查询商户对应的订单  
+		List<OrderInfoPO> orderingOrderpos = orderInfoDao.findByFields(orderlines, datelines);
+		//查询出未支付的订单转成Vo				
+		List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
+				OrderInfoVO.class);
+		//封装数据 筛选后的数据
+		List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
+		for (OrderInfoVO orderInfoVO : orderingOrders) {
+			
+			//订单预订时间判断
+			if (!orderInfoVO.getOrderBookDate().equals("")) {
+				Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");	
+			    String nowTime = DateUtil.format(new Date(), "yyyy年MM月dd日");							
+				Date nowdate = DateUtil.parse(nowTime+" 00:00:00", "yyyy年MM月dd日 HH:mm:ss");								
+				if (bookDate.getTime() < nowdate.getTime()) {
+					//修改订单过期状态
+					if(orderInfoVO.getRoomId() != 0){
+					String[] inRoomDate = orderInfoVO.getOrderBookDate().split(" ");
+					String[] outRoomDate = 	orderInfoVO.getEndBookDate().split(" ");
+					String[] fields ={"roomId","inRoomDate","outRoomDate"};
+					Object[] values = {orderInfoVO.getRoomId(),inRoomDate[0],outRoomDate[0]}; 
+					List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
+					if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
+					     cRoomSatePO.get(0).setRoomState("0");
+						conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+					 }
+					}
+					continue;
+				}
+			}
+		}	
+		Map<String, Object> map = new HashMap<String,Object>();
+		//存储房间状态
+		List<String> roomState = new ArrayList<String>();
+		
 		//检索房间的时间
 		String inRoomDate = request.getParameter("inRoomDate");
 		String outRoomDate = request.getParameter("outRoomDate");
@@ -1637,6 +1672,18 @@ public class BusinessController extends WebBaseControll {
 						    String nowTime = DateUtil.format(new Date(), "yyyy年MM月dd日");							
 							Date nowdate = DateUtil.parse(nowTime+" 00:00:00", "yyyy年MM月dd日 HH:mm:ss");								
 							if (bookDate.getTime() < nowdate.getTime()) {
+								//修改订单过期状态
+								if(orderInfoVO.getRoomId() != 0){
+								String[] inRoomDate = orderInfoVO.getOrderBookDate().split(" ");
+								String[] outRoomDate = 	orderInfoVO.getEndBookDate().split(" ");
+								String[] fields ={"roomId","inRoomDate","outRoomDate"};
+								Object[] values = {orderInfoVO.getRoomId(),inRoomDate[0],outRoomDate[0]}; 
+								List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
+								if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
+								     cRoomSatePO.get(0).setRoomState("0");
+									conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+								 }
+								}
 								continue;
 							}
 						}
@@ -2024,7 +2071,6 @@ public class BusinessController extends WebBaseControll {
 					 boolean event1 = false;
 					 Map<String, Object> tablesMap1 = null;					
 					  for(int i= 0; i<merchList.size();i++){
-						  System.out.println("123:"+merchList.get(i));
 						  for(int j =0;j<table_order1.size();j++){								  
 							if((long)merchList.get(i) == table_order1.get(j).getMerchantId()){
 								
@@ -2199,7 +2245,6 @@ public class BusinessController extends WebBaseControll {
 					 boolean event1 = false;
 					 Map<String, Object> tablesMap1 = null;					
 					  for(int i= 0; i<merchList.size();i++){
-						  System.out.println("123:"+merchList.get(i));
 						  for(int j =0;j<table_order1.size();j++){								  
 							if((long)merchList.get(i) == table_order1.get(j).getMerchantId()){
 								
