@@ -230,7 +230,7 @@ html, body {
        html.push('<li><p style="font-size:18px;">'+prouctMessage[0].productName+'</p></li>');
        html.push('<li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
        html.push('<li><p>开放时间：'+msg.beginDate+'至'+msg.endDate+'</p></li>');
-       html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：'+merchantMessage[0].shopAddress+'</p></li>');
+       html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+merchantMessage[0].shopAddress+'&tocoord='+merchantMessage.shopLongitude+','+merchantMessage[0].shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+merchantMessage[0].shopAddress+'</a></p></li>');
        html.push('<ul>');
        $(".jieshao").append(html.join(""));
               
@@ -266,7 +266,7 @@ html, body {
         $(".productlist").append(htm.join(""));
        }      
 	 });
-}
+    }
 	function getComment(){	
 	var _uri = window.BASEPATH + 'product/package/comment?proId=${proId}';	
 	$.get(_uri,null,function(msg){
