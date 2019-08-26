@@ -63,13 +63,10 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>店铺详情</title>
+<title>商品介绍</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
-a {
-	cursor: pointer !important;
-}
 
 a, a:link, a:active, a:visited, a:hover {
 	color: inherit;
@@ -79,19 +76,19 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	min-height:auto;
-	background:#E0E0E0 !important; 
+	background:#fff !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
 }
 
- 
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
+
 }
+
 /* 页面样式 */
 .header {
 	height: 40px;
@@ -109,7 +106,7 @@ html, body {
 }
 
 .header-content {
-	height: auto;
+	height:auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -135,28 +132,8 @@ html, body {
 .weui-navbar{
  display: none !important;
 }
-  .inp::-webkit-input-placeholder{
-        text-align: center;
-}  
-.xiangqing ul li{
-   height:30px;
-   line-height: 30px;
-   font-weight:bold;
-}
-.xiangqing ul li p{
- margin:0;
-}
-.homes p{
- margin:0;
-}
-.facilities li{
-float:left;
-width:18%;
-margin:0 1%;
-text-align: center;
-background: #fff;
-padding:10px 5px;
-}
+
+
 </style>
 
 </head>
@@ -167,72 +144,23 @@ padding:10px 5px;
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"charset="utf-8"></script>
-<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
+ <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script>
+ 
+$(function(){
+    var src = $('embed').prop('src');
+    alert(src)
+   $('embed').replaceWith('<video src=""></video>') ;
+    $("video").attr('src',src);
+    $("video").css({"height":"auto","width":"100%"})
+     $("video").attr('autoplay', "true");
+}) 
+ 
 
 </script>
-<script type="text/javascript">
-  $(function() {
-	getRecomment();
-
-	var pingfen=${pingfen}+46/10;
-	if(pingfen>5)pingfen=5;
-    $('.pingfen').html(pingfen+"分") ; 
-	});
-
-
-	function getRecomment(){
-	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
-		
-		$.get(_uriMerchantInfo, null, function(data){
-			data = parseAjaxResult(data);
-			merchantName = data.shopName + '-过来玩';
-			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
-			merchantUrl = window.location.href;
-			if(data === -1) return;
-			if(data){
-			    var html=[];
-			    var pics=data.shopMpic.split(',');
-				for(var i=0; i<pics.length; i++){
-					var str = pics[i].split('.');
-					if(str[3]!="mp4"&&str[3]!="MP4"){ 
-					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
-					}else{
-					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
-					}
-				}
-			    $('.header-content').html(data.shopName);
-				$('.swiper-wrapper').append(html.join(''));
-				$(".swiper-container").swiper({
-			        loop: true,
-			        autoplay: 3000
-			    });
-			    }
-			    });
-	  }
-
-		 
-	function buyproduct(id){
-		location.href=window.BASEPATH + 'business/buyproduct?productId='+id;
-	} 
-	//选房
-	function gotolect(){
-		location.href=window.BASEPATH + 'business/gotolect?merchantId=${merchant.id}';	
-	}
-	//订桌
-	function gototable(){
-		location.href=window.BASEPATH + 'reservetable/tables/home?merchantId=${merchant.id}';	
-	}
-	//就餐
-	function gotomeal(){
-		location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId=${merchant.id}';	
-	}
-</script>
-
-
 <body>
 			<!-- 主页 -->
 		<div class="header">
@@ -242,39 +170,12 @@ padding:10px 5px;
 				<div class="header-content">商户</div>
 			</div>
 		</div>
-		<div class="content" id="content" >
-			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
-			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
-			  </div>
-			</div>
+		
+		<div class="main" id="main" style="width:100%;height:auto;padding:5px 3%;">
+		${productdetail}
 		</div>
-	</div>
-
-	  <div class="xiangqing" style="width:94%;height:auto;background:#fff;margin:10px auto;border-radius:10px;overflow: hidden;position: relative;top:-30px;z-index:111;">
-	   <ul style="margin:0 0 0px 6%;">
-	    <li><p>${merchant.shopName}</p></li>
-	    <li><p><span class="pingfen" style="color:#EB6E1E;font-size:16px;"></span><span style="font-size:12px;margin-left:10px;">超棒</span></p></li>
-	    <li><p>距离您<span>1000</span>千米</p></li>
-	    <li><p>联系电话：<span>${merchant.shopTel}</span></p></li>
-	   </ul> 
-	  </div>
-	  <div class="homes" style="width:100%;height:auto;border-radius:10px;margin-top:-20px;">
-	    <ul class="facilities" style="width:100%;padding:0 4%;overflow: hidden;list-style: none;font-size: 12px;font-weight: bold;">
-             <li onclick="gotolect()"><img style="width:60%;" src="lib/images/roomType.png"><p>房型选择</p></li>
-             <li onclick="gototable()"><img style="width:60%;" src="lib/images/bookingTable.png"><p>订桌</p></li>
-             <li onclick="gotomeal()"><img style="width:60%;" src="lib/images/order.png"><p>点餐</p></li>
-             <li><img style="width:60%;" src="lib/images/serve.png"><p>服务</p></li>
-             <li><img style="width:60%;" src="lib/images/parkingSpace.png"><p>停车位</p></li>
-        </ul>
-	
-	  </div> 
-	
-	  <div style="width: 90%;margin-left: 5%;margin-top: 5%;background-color: #fff;border-radius:10px;padding: 2% 2% 2% 2%;text-indent: 2em;">
-	  	${merchant.shopIntroduction}
-	  </div>
-
 </body>
- 
+
 
 
 

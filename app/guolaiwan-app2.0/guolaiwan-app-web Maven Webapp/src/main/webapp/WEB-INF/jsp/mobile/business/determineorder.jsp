@@ -138,6 +138,8 @@ html, body {
 }  
 
 .liebiao li input{
+z-index:11111111;
+
     width: 100%;
     height: 60px;
     margin: 10px auto 0;
@@ -168,7 +170,12 @@ html, body {
 <script type="text/javascript">
 	$(function() {
 	    affirmorder();
+	    //禁止软键盘弹出
+	   $("#test1").focus(function(){
+        document.activeElement.blur();
+    });
 	});
+	
 	function affirmorder(){
 	 var url = window.BASEPATH + 'business/affirmorder?productid='+${productid};
 	 $.get(url, null, function(data){
@@ -255,18 +262,18 @@ html, body {
   	<div id="order"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">
     </div>
       <div class="layui-inline" style="width:96%;height:auto;position: relative;"> <!-- 注意：这一层元素并不是必须的 -->
-  			<ul class="liebiao" style="color:black;">
+  			<ul class="liebiao" style="color:black;cursor:pointer;">
   			<li>
-  			<input type="text" readonly="readonly" placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="test1">
+  			<input id="test1" type="text" name="qrCode" placeholder="请您选择游玩日期"   style="cursor:pointer;width:100%;height:60px;text-align: right;margin-left:2%;padding:0 10%;"  >
 	        <p style="position: absolute;top:30px;left:10%;">游玩日期</p>
 	        <p style="position: absolute;top:30px;right:5%;">❯</p>
 		    </li>
 		    <li>
 		    <input type="button">
 		    <p style="position: absolute;top:100px;left:10%;">数量</p>
-		    <p class="p1" style="position: absolute;top:100px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
+		    <p class="p1" style="cursor: pointer !important;position: absolute;top:100px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
 		    <input type="text" readonly="true"  class="zhi" id="shuliang" value="1"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:104px;font-size:14px;font-weight:bold;text-align: center;">
-		    <p class="p2" style="position: absolute;top:100px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
+		    <p class="p2" style="cursor: pointer !important;position: absolute;top:100px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
 		    </li>
 		    <li>
 		    <input class="pid"  type="text" placeholder="请输入身份证号码" minlength="18" maxlength="18" style="padding:0 7%" >

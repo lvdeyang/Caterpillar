@@ -7,6 +7,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Component;
 
 import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
+import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.distribute.po.DistributorOrder;
 import com.guolaiwan.bussiness.distribute.po.MealListPo;
 import com.guolaiwan.bussiness.distribute.po.RegionPo;
@@ -42,6 +43,16 @@ public class MealListDao extends AbstractBaseDao<MealListPo> {
 		
 	}
 	
+	public  List<MealListPo>  getMealList(long id,long userId,long merchantId,int pageNum,int pageSize){
+		QueryHql hql=this.newQueryHql();
+		hql.andBy("tableId",Condition.eq,id);
+		hql.andBy("userId",Condition.eq,userId);
+		hql.andBy("merchantId",Condition.eq,merchantId);
+		List<MealListPo> findByHql = findByHql(hql, pageNum, pageSize);
+		return findByHql;
+		
+	}
+	
 	public List<MealListPo> findByDistributor(long userId,long merchantId){
 		QueryHql hql=this.newQueryHql();
 		hql.andBy("userId",Condition.eq,userId);
@@ -50,5 +61,14 @@ public class MealListDao extends AbstractBaseDao<MealListPo> {
 		List<MealListPo> findByHql = findByHql(hql);
 		return findByHql;
 		
+	}
+	
+	public int countByTidUidMid(long id,long userId,long merchantId) {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("tableId", Condition.eq, id);
+		cHql.andBy("userId", Condition.eq, userId);
+		cHql.andBy("merchantId", Condition.eq, merchantId);
+		int count = countByHql(cHql);
+		return count;
 	}
 }

@@ -209,7 +209,7 @@ html, body {
 	  
 	  function getAllProduct(){
 		var url="<%=basePath%>business/getallproduct";
-            $.post(url,{"merchantId":${merchantId},"type":"006"},function(data){
+            $.post(url,{"merchantId":${merchantId},"type":"2084"},function(data){
             	var html=[];
             	if(data.length==0){
             			html.push('<p style="text-align: center;bottom:5px;left:50%;color:#858585;">暂无推荐商品</p>');
@@ -296,8 +296,8 @@ html, body {
 		</div>
 		<!-- 搜索  -->
 		  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;">
-		   <input placeholder="搜索" class="search" style="padding:0 15%;width:80%;height:30px;border-radius:18px;outline: none;border:none;background:#E0E0E0;text-align: center; " type="text">
-		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="searchproduct()" src="lib/images/sousuo.png"/>
+		   <input placeholder="搜索" class="search" style="position: absolute;line-height: 30px;top:5px;margin-left:-40%;padding:0 15%;width:80%;height:30px;border-radius:18px;outline: none;border:none;background:#E0E0E0;text-align: center; " type="text">
+		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="getAllMerchant()" src="lib/images/sousuo.png"/>
 		  </div>
 		<div class="content" id="content" >
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">

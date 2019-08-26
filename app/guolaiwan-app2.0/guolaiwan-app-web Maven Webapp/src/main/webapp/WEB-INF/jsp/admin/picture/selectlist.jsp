@@ -46,9 +46,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <tr>
                       	
 					
-						<td>
-                            <img  src={{ item.webUrl }} width="90" height="90">	
-                        </td>
+						{{#  if(item.type!="mp4"){	 }}
+							<td>
+                            	<img  src={{ item.webUrl }} width="90" height="90">	
+                        	</td>
+						{{# }else{ }}
+							<td>
+                            	<video  src={{ item.webUrl }} width="90" height="90">	
+                        	</td>
+						{{# } }}
                         <td>
                             {{ item.oldName }}
                         </td>

@@ -591,10 +591,10 @@ html, body {
 .right-con li .btn button.minus{margin-right:-10px;display:none;}  
 .right-con li .btn button{width:40px;height:40px;border:none;background:transparent;padding:0;outline:none;}  
 .right-con li .btn button strong{padding:5px 10px;font-size:15px;display:inline-block;text-indent:-100px;padding:5px 11px;height:22px;}  
-.right-con li .btn button.minus strong{background:url(lib/images/down.png) no-repeat;background-size:22px 22px;cursor:pointer;}  
+.right-con li .btn button.minus strong{background:url(lib/images/jian.png) no-repeat;background-size:22px 22px;cursor:pointer;}  
 .right-con li .btn i{display:none;width:22px;text-align:center;font-style:normal;vertical-align:top;margin-top:11px;line-height:18px;}
 .right-con li .btn button.add{margin-left:-10px;}  
-.right-con li .btn button.add strong{background:url(lib/images/up.png) no-repeat;background-size:22px 22px;cursor:pointer;}  
+.right-con li .btn button.add strong{background:url(lib/images/jia.png) no-repeat;background-size:22px 22px;cursor:pointer;}  
 .right-con li .btn .price{display:none;} 
 .footer{display:block;position:fixed;width:100%;z-index:3;height:50px;font-weight:bold;bottom:0px;color:#f03c03;background:#fff;line-height:40px;font-size:15px;border-top:1px solid #e2e2e2;}  
 .footer .left{float:left;margin:5px 10px;}  
@@ -636,6 +636,10 @@ appearance:none;
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">  --%>
 <script type="text/javascript">
       layui.use('laydate', function(){
+      	  //禁止软键盘弹出
+	   $("#useDate").focus(function(){
+        document.activeElement.blur();
+    });
 	  var laydate = layui.laydate;
 	  
 	  //执行一个laydate实例
