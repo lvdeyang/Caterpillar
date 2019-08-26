@@ -262,7 +262,7 @@ html, body {
 			    $('#startspan').html(data.order.orderBookDate);
 			    $('#endspan').html(data.order.endBookDate);
 			    $('#caddress').html(data.address.consigneeAddress);
-			
+			    
 			    
 			    
  			    if(data.order.bkCode=='0002'){
@@ -374,9 +374,9 @@ html, body {
 		       <li id="endDate" hidden="hidden"><p>离店日期</p><span id="endspan"></span></li>
 		        <li><p>套餐</p><span id="combo"></span></li>
 		         <li><p>快递</p><span id="logistics"></span></li>
-		          <li ><p>联系人</p><span id="cuserName">xxx</span></li>
-		           <li ><p>手机号</p><span id="cphone">xxx</span></li>
-		            <li ><p>详细地址</p><span id="caddress">xxx</span></li>
+		          <li ><p>联系人</p><span id="cuserName"></span></li>
+		           <li ><p>手机号</p><span id="cphone"></span></li>
+		            <li ><p>详细地址</p><span id="caddress"></span></li>
 		             <li id="paytime"><p>支付日期</p><span id="orderDate"></span></li>
 		  </ul>
 		  <div style="width:100%;height:auto;margin:10px auto;text-align: center;">

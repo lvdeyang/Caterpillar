@@ -28,6 +28,7 @@ import com.guolaiwan.app.web.admin.vo.BundleOrderVo;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.app.web.admin.vo.TableOrderVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.LogisticsDao;
@@ -35,6 +36,8 @@ import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
+import com.guolaiwan.bussiness.admin.dao.TableDAO;
+import com.guolaiwan.bussiness.admin.dao.TableStatusDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dto.CountGroupDTO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
@@ -50,8 +53,11 @@ import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.RoomStatusPO;
+import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
+import com.guolaiwan.bussiness.distribute.dao.MealListDao;
+import com.guolaiwan.bussiness.distribute.po.MealListPo;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
@@ -73,7 +79,12 @@ public class OrderInfoController extends BaseController {
 	private MerchantDAO conn_merchant;
 	@Autowired
 	private AddressDAO conn_address;
-
+	@Autowired
+	private TableStatusDAO conn_tablestatus;
+	@Autowired
+	private TableDAO conn_table;
+	@Autowired
+	private MealListDao conn_meallist;
 	// 显示列表
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView getOrderInfos(HttpServletRequest request) {
@@ -813,5 +824,98 @@ public class OrderInfoController extends BaseController {
 			return "success";
 		}
 	
+		// 桌子订单列表
+		@RequestMapping(value = "/tableorderlist", method = RequestMethod.GET)
+		public ModelAndView tableOrderList(HttpServletRequest request) {
+			ModelAndView mv = new ModelAndView("admin/orderinfo/tableorderlist");
+			return mv;
+		}
+		
+		//获取所有的餐桌订单
+		@ResponseBody
+		@RequestMapping("/alltableorder")
+		public Map<String, Object> allTableOrder(HttpServletRequest request,int page,int limit ) throws Exception{
+			Map<String, Object> strMap = new HashMap<String, Object>();
+			List<TableStatusPO> allorders = conn_tablestatus.findAll(page, limit);
+			int count = conn_tablestatus.countAll();
+			String type="";
+			List<TableOrderVO> all=new ArrayList<TableOrderVO>();
+			for (TableStatusPO tableStatusPO : allorders) {
+				TableOrderVO vo=new TableOrderVO();
+				vo.setMerchantId(tableStatusPO.getMerchantId());
+				vo.setUserId(tableStatusPO.getUserId());
+				vo.setOrderid(tableStatusPO.getId()+"");
+				vo.setMerchantName(conn_merchant.get(tableStatusPO.getMerchantId()).getShopName()+"");
+				vo.setTableId(tableStatusPO.getTableId()+"");
+				vo.setUserName(tableStatusPO.getUserName()+"");
+				vo.setUserPhone(tableStatusPO.getUserPhone()+"");
+				vo.setType(tableStatusPO.getType().getFiled()+"");
+				vo.setTableDate(tableStatusPO.getTableDate()+"");
+				if(tableStatusPO.getTableState()==null){
+					vo.setTableState("未预定");
+				}else if(tableStatusPO.getTableState().equals("PAYSUCCESS")){
+					vo.setTableState("已预订");
+				}else if(tableStatusPO.getTableState().equals("PAST")){
+					vo.setTableState("已过期");
+				}else if(tableStatusPO.getTableState().equals("NOTPAY")){
+					vo.setTableState("未支付");
+				}
+				if(tableStatusPO.getTableId()!=0){
+					vo.setBookPrice(conn_table.get(tableStatusPO.getTableId()).getBookprice()/100+"");
+				}else{
+					vo.setBookPrice("0");
+				}
+				if(tableStatusPO.getDishState()==null){
+					vo.setDishState("未订餐");
+				}else if(tableStatusPO.getDishState().equals("PAYSUCCESS")){
+					vo.setDishState("已预订");
+				}else if(tableStatusPO.getDishState().equals("PAST")){
+					vo.setDishState("已过期");
+				}else if(tableStatusPO.getDishState().equals("NOTPAY")){
+					vo.setDishState("未支付");
+				}
+				vo.setDishPrice(tableStatusPO.getDishMoney()/100+"");
+				all.add(vo);
+			}
+			strMap.put("data", all);
+			strMap.put("code", "0");
+			strMap.put("count", count);
+			strMap.put("msg", "");
+			return strMap;
+		}
 
+		
+		// 桌子订单列表
+		@RequestMapping(value = "/getdishlist")
+		public ModelAndView getDishList(HttpServletRequest request,Long tableId,Long userId,Long merchantId) {
+			ModelAndView mv = new ModelAndView("admin/orderinfo/dishlist");
+			mv.addObject("tableId", tableId);
+			mv.addObject("userId", userId);
+			mv.addObject("merchantId", merchantId);
+			return mv;
+		}
+		
+		//获取所有的餐桌订单
+		@JsonBody
+		@ResponseBody
+		@RequestMapping("/getdishorder")
+		public Map<String, Object> getDishOrder(HttpServletRequest request,Long tableId,Long userId,Long merchantId,int page,int limit ) throws Exception{
+			System.out.println("我进来啦啦啦啦啦");
+			Map<String, Object> strMap = new HashMap<String, Object>();
+			List<ProductPO> product=new ArrayList<ProductPO>();
+			List<MealListPo> mealList = conn_meallist.getMealList(tableId, userId, merchantId,page,limit);
+			if(mealList!=null){
+				for (MealListPo mealListPo : mealList) {
+					product.add(conn_product.get(mealListPo.getProductId()));
+				}
+			}
+			List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(product, ProductVO.class);
+			int count = conn_meallist.countByTidUidMid(tableId, userId, merchantId);
+			strMap.put("data", listvo);
+			strMap.put("code", "0");
+			strMap.put("count", count );
+			strMap.put("msg", "");
+			return strMap;
+		}
+		
 }

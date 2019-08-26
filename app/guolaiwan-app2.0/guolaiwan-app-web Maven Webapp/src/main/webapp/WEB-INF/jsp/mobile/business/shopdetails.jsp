@@ -243,7 +243,7 @@ padding:10px 5px;
 	</div>
 
 	  <div class="xiangqing" style="width:94%;height:auto;background:#fff;margin:10px auto;border-radius:10px;overflow: hidden;position: relative;top:-30px;z-index:111;">
-	   <ul style="margin:0 0 20px 6%;">
+	   <ul style="margin:0 0 0px 6%;">
 	    <li><p>${merchant.shopName}</p></li>
 	    <li><p><span class="pingfen" style="color:#EB6E1E;font-size:16px;"></span><span style="font-size:12px;margin-left:10px;">超棒</span></p></li>
 	    <li><p>距离您<span>1000</span>千米</p></li>
@@ -261,7 +261,7 @@ padding:10px 5px;
 	
 	  </div> 
 	
-	  <div style="width: 90%;margin-left: 5%;margin-top: 5%;background-color: #fff;border-radius:10px;padding: 2% 2% 2% 2%">
+	  <div style="width: 90%;margin-left: 5%;margin-top: 5%;background-color: #fff;border-radius:10px;padding: 2% 2% 2% 2%;text-indent: 2em;">
 	  	${merchant.shopIntroduction}
 	  </div>
 

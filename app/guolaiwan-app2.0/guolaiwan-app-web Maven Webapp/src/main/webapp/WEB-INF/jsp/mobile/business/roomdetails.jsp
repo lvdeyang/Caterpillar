@@ -182,27 +182,52 @@ text-align: center;
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 <script type="text/javascript">
+    var dayNumber;
 	$(function() {
+	getUserInfo();
 	getroomdetails();
       $(".goshopping").click(function(){
-      $(".zong").fadeOut();  
-      $(".window-1").fadeIn();     
-	});
-	 $(".modDiv").click(function(){
-	 $(".window-1").fadeOut();  
-      $(".zong").fadeIn(); 
-      $(".shopping").fadeIn();    
-   	 setTimeout(function () {  
-        $(".shopping").fadeOut();  
-    	}, 2000);   
-        });
-        
+      //判断房间是否被购买
+      var url = window.BASEPATH + 'business/search.do?roomId=${roomId}&inRoomDate=${inRoomDate}&outRoomDate=${outRoomDate}';
+      $.get(url,null,function(msg){
+      if(msg == "success"){
+	         $(".zong").fadeOut();  
+             $(".window-1").fadeIn();
+	       }else{
+	         $.toast("该房间已被购买,加入购物车失败!", "forbidden");	       
+	       }      
+      })
+          
+	});	       
      $(document).on('click', '.close-window-1', function(){ 
 		    $(".window-1").fadeOut();
 		     $(".zong").fadeIn();
-		}); 	   
+		}); 
+		
+	    var inroomdate =formatDate(new Date("${inRoomDate}"));
+		var outroomdate =formatDate(new Date("${outRoomDate}"));
+		 dayNumber = calculateDate(inroomdate,outroomdate);		   
 	});
 	
+	 //用时间算天数
+	 function  calculateDate(sDate1,  sDate2){	    
+	   var  oDate1,  oDate2,  iDays;  
+       oDate1  =  new  Date(sDate1.substring(4,6)  +  '/'  + sDate1.substring(6)  +  '/'  +  sDate1.substring(0,4));     
+       oDate2  =  new  Date(sDate2.substring(4,6)  +  '/'  + sDate2.substring(6)  +  '/'  +  sDate2.substring(0,4));  
+       iDays  =  parseInt(Math.abs(oDate1  -  oDate2) / 1000 / 60 / 60 /24);     
+       return  iDays;
+	 }
+		
+	 //设置时间转换格式
+	  function formatDate(date){
+	   var y = date.getFullYear();//获取年
+	   var m = date.getMonth()+1;//获取月
+	   m = m < 10?'0'+m:m; //判断月是否大于10
+	   var d = date.getDate();//获取日
+	   d=d<10?('0'+d):d;//判断日期是否大于10
+	   return y+m+d;//返回时间格式 
+	  }
+	  
 	 //跳转用户添加详情页面
     function addInfo(){
 	
@@ -221,10 +246,11 @@ text-align: center;
       $(".window-1").fadeIn();  
     }        
 	
-	
+	var room;
 	function getroomdetails(){
 	      var url = window.BASEPATH + 'business/gettheroom?roomId=${roomId}';
 		$.get(url, null, function(data){
+		        room = data;
 			    $('.roomimg').attr( "src" , "http://www.guolaiwan.net/file"+data.roomimg);
 			    $('.roomname').html(data.name+"——"),
 			    $('.roomidentity').html("("+data.identity+")");
@@ -352,6 +378,7 @@ text-align: center;
         
       //人脸识别保存方法
       var state ="";
+      var clientNumber = []; //所选的用户ID
       function  save(){
         if($('#_phone').val()==''){
 			   $.toast("请输入手机号", "forbidden");
@@ -376,13 +403,13 @@ text-align: center;
 		       return false;  		    
 		    }	
 		    
-		      if(base==""){
+		     /*  if(base==""){
               $.toast("照片获取失败", "forbidden");
 			  return false;
-             }    	     
+             }   */  	     
                 $(".window-2").fadeOut();
-                $(".window-1").fadeOut();
-			    $(".homepage").fadeIn();s
+                $(".window-1").fadeIn();
+			   
 			                 
               var url = window.BASEPATH + 'product/package/add/info';
               if(state == ""){           
@@ -402,7 +429,6 @@ text-align: center;
               }            
 	          $.post(url, date,function(msg){ 
 	          	if(msg == 'success') {
-	          	    $(".homepage_add").children().remove();
 	          	    $("#window-1-message").children().remove();          	    
 	          	    clientNumber.splice(0,clientNumber.length);	          	   
 	           		getUserInfo();	           			           		
@@ -415,7 +441,7 @@ text-align: center;
 	  	 function  getUserInfo(){
 	  	  var url_ = window.BASEPATH + 'product/package/user/list';
 	  	  $.get(url_,null,function(msg){
-	  	  var mesage = msg.message;
+	  	  var mesage = msg.message;	  	 
 	  	  clientInfo = msg.message; 	  
 	  	  if(mesage.length==0){return;}
 	   
@@ -434,7 +460,118 @@ text-align: center;
 	  	  }
 	  	  	})  	 	  	 
 	  	 }
+	  	 	  	 
+	  function clientMessage(id){
+      var i = id.split("-");
+      if(clientInfo != " "){
+			//多选框要用prop 来获取判断
+            if($("#"+id).prop("checked")){
+            //添加勾选的信息
+             clientNumber[i[1]] = clientInfo[i[1]].id;	      
+            } 
+            //取消勾选删除
+            if(!($("#"+id).prop("checked"))){
+               $("#homepage-"+i[1]).remove();               
+               clientNumber.splice(i[1],1);
+            }                           
+     }         
+  }         
+	 
+	 //删除用户  	 
+	 function deleteClientMessage(id){
+	     var merssageId = id.split("-");
+	      var url =  window.BASEPATH + 'product/package/deleteClientMessage?merssageId='+merssageId[1]; 
+	     $.get(url,null,function(msg){   
+	        if(msg=="success"){
+	          	    $("#window-1-message").children().remove();          	    
+	          	    clientNumber.splice(0,clientNumber.length);
+	           		getUserInfo();
+	               alert("操作成功")
+	        }
+	     })	 	 	    
+	 }  
+	 
+	  //更新用户信息 	 	  	 	
+ 	function update(id){       
+	  	state = id;
+	  	 var url = window.BASEPATH + 'product/package/update/message?id='+id;
+	  	 $.get(url,null,function(msg){
+	  	  var mesage = msg.mes;	  	  
+	  	  $("#_name").val(mesage.name),
+          $("#_phone").val(mesage.phone),
+          $("#_idcard").val(mesage.number),
+          $(".homepage").fadeOut();
+          $(".window-1").fadeOut();
+          $(".window-2").fadeIn();  	
+	  	}) 
+   }  
    
+   
+    function confirm(){  
+    var len = clientNumber.length;
+    if(len == 0){
+         alert("请选择入住人信息");
+         return false;
+    }else{
+    joinBasket();
+    }   
+   }
+     //添加购物车
+    function joinBasket(){
+            var payMoney = ((room.price/100)*dayNumber).toFixed(2);
+		    var param={};
+			param.roomId=${roomId};			
+			param.productNum=dayNumber;				
+			param.userId=${userId}; 
+			param.payMoney=payMoney;
+			param.roomName=room.name; 														
+			param.paytype='WEICHAT';
+			param.source="PUBLICADDRESS";
+			param.startDate="${inRoomDate}";			
+			param.endDate="${outRoomDate}";			
+			param.source="PUBLICADDRESS";
+		   var chkStockUrl= window.BASEPATH + 'business/search.do?roomId=${roomId}&inRoomDate=${inRoomDate}&outRoomDate=${outRoomDate}';   
+			$.get(chkStockUrl, null, function(data){
+				if(data == "success"){
+					var _uriPay = window.BASEPATH + 'business/joinBasket';
+				    $.post(_uriPay, $.toJSON(param), function(data){						
+						if(data.length === 0) return;
+						addMessageOrderId(data.orderId);
+						$(".shopping").fadeIn();            
+						setTimeout(function () {  
+						$(".shopping").fadeOut();  
+						  }, 2000); 
+						  
+					});	       
+	               }else{
+	             $.toast("该房间已被购买,请重新选择!", "forbidden");	       
+	             } 						
+				});
+		} 
+		
+	//添加下单客户 orderID 
+	  function addMessageOrderId(orderId){
+	  alert(orderId)
+	    if(clientNumber.length > 0){	   
+	        var gather = {};
+	        gather.oderId= orderId;
+	        gather.clientList = clientNumber;
+	        gather.proId =${roomId};
+	        gather.userId = ${userId};
+	        gather.merchantId =${merchantId};
+	        gather.bookstartDate = "${inRoomDate}";
+	        gather.bookendDate = "${outRoomDate}";
+		     var addMessage_url = window.BASEPATH+'business/addMessage';		    
+		     $.post(addMessage_url,$.toJSON(gather),function(msg){
+		      if(msg == 'success'){
+    	         $(".window-1").fadeOut();
+		         $(".zong").fadeIn();	     		    	    
+		    }else{
+		    $.toast("住房人信息为空", "forbidden");
+		    }		    		     		    		    				  	  
+	  });  
+   }
+  }
 </script>
 
 
@@ -500,7 +637,7 @@ text-align: center;
        <div  class="window-1" style="z-index:11111;width:100%;display: none;height:500px;padding:0 0 50px 0;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0; ">
 	   <p style="text-align:center;width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">添加/修改信息<span class="close-window-1" style="float:right;color:#fff;margin-right:5%;font-weight:bold;">关闭</span></p>
 	   <button onclick="addInfo()" style="width:30%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 3%;">添加信息</button>	
-	   <button class="modDiv" onclick="" style="width:30%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 3%;">确认</button>	  
+	   <button class="modDiv" onclick="confirm()" style="width:30%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 3%;">确认</button>	  
 	  <div id="window-1-message"></div>
 	  </div>
 	  

@@ -335,6 +335,7 @@ public class JudgesController {
 	public String sortproduct(HttpServletRequest request) {
 		String id=request.getParameter("id");
 		String optionId=request.getParameter("optionId");
+		int i=1;
 		//按照模块id获取投票的商品
 		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproduct(Long.parseLong(id));
 		if(getvoteproduct==null){
@@ -362,6 +363,9 @@ public class JudgesController {
 			}
 			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
 			voteProductPO.setAllvotes(allcount);
+			voteProductPO.setRanking(i);
+			voteProductDao.update(voteProductPO);
+			i+=1;
 		}
 		return "success";
 	}
@@ -412,6 +416,7 @@ public class JudgesController {
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
 			hashMap.put("manvotes", manvotes+"");
+			hashMap.put("ranking", voteProductPO.getRanking()+"");
 			hashMap.put("productvotes", allcount+"");
 			hashMap.put("hotel", productPO.getProductMerchantName());
 			hashMap.put("image", productPO.getProductShowPic());
@@ -520,6 +525,7 @@ public class JudgesController {
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
 			hashMap.put("manvotes", manvotes+"");
+			hashMap.put("ranking", voteProductPO.getRanking()+"");
 			hashMap.put("productvotes", allcount+"");
 			hashMap.put("hotel", productPO.getProductMerchantName());
 			hashMap.put("image", productPO.getProductShowPic());

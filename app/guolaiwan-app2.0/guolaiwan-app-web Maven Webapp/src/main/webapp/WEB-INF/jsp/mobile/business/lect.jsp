@@ -171,6 +171,13 @@ margin:0 1%;
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script type="text/javascript">
 		layui.use('laydate', function(){ 
+			  //禁止软键盘弹出
+	   $("#useDate1").focus(function(){
+        document.activeElement.blur();
+    });
+       $("#uscDate2").focus(function(){
+        document.activeElement.blur();
+    });
 		var laydate = layui.laydate; 
 		//执行一个laydate实例
 		
@@ -331,8 +338,8 @@ margin:0 1%;
 	      </select> 
 	      </div>
 	      <div style="height:50px;line-height:50px;text-align: center;width:100%;">
-	        <p style="display: inline-block;width:40%"><span>入住时间：</span><input type="text" readonly="readonly" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;text-align:center;" class="layui-input" id="useDate1"></p>
-	        <p style="display: inline-block;width:40%"><span>离店时间：</span><input type="text" readonly="readonly" placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;text-align:center;" class="layui-input" id="uscDate2"></p>
+	        <p style="display: inline-block;width:40%"><span>入住时间：</span><input type="text"  placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;text-align:center;" class="layui-input" id="useDate1"></p>
+	        <p style="display: inline-block;width:40%"><span>离店时间：</span><input type="text"  placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;text-align:center;" class="layui-input" id="uscDate2"></p>
 	      </div>
 	      
 	      <!-- 房间选择 -->

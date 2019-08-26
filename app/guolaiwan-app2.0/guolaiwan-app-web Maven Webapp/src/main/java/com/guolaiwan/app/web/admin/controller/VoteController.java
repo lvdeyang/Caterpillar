@@ -757,4 +757,41 @@ public class VoteController extends BaseController {
 		voteproductDAO.save(voteProduct);
 		return "success";
 	}
+	
+	// 商品介绍页面
+	@RequestMapping(value = "/gotoproductdetails")
+	public ModelAndView goToProductDetails(HttpServletRequest request) {
+		String productId=request.getParameter("productId");
+		VoteProductPO voteProduct = voteproductDAO.get(Long.parseLong(productId));
+		ModelAndView mv = new ModelAndView("admin/vote/addproductdetails");
+		mv.addObject("productId", productId);
+		mv.addObject("productdetail", voteProduct.getProductdetails());
+		return mv;
+	}
+	
+	//添加商品介绍
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/addproductdetails", method = RequestMethod.POST)
+	public String addProductDetails(HttpServletRequest request) throws Exception {
+		String productId = request.getParameter("productId");
+		String productdetail = request.getParameter("productdetail");
+		VoteProductPO voteProduct = voteproductDAO.get(Long.parseLong(productId));
+		voteProduct.setProductdetails(productdetail);
+		voteproductDAO.update(voteProduct);
+		return "success";
+	}
+	
+	// 商品介绍页面
+	@JsonBody
+	@ResponseBody
+	@RequestMapping("/getoproductdetails")
+	public ModelAndView getoProductDetails(HttpServletRequest request) {
+		String productId=request.getParameter("productId");
+		VoteProductPO voteProduct = voteproductDAO.getVoteProduct(Long.parseLong(productId));
+		String productdetails=voteProduct.getProductdetails();
+		ModelAndView mv = new ModelAndView("mobile/vote/productdetails");
+		mv.addObject("productdetail", productdetails);
+		return mv;
+	}
 }

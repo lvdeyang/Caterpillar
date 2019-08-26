@@ -30,10 +30,19 @@ public class PictureVO extends AbstractBaseVO<PictureVO, PicturePO> {
 	private long comId;
 	//更新日期
 	private String comName;
+	//类型
+	private String type;
 	
 	
 	
-	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String getOldName() {
 		return oldName;
 	}

@@ -114,6 +114,15 @@ public class PictureController extends BaseController{
 	public Map<String, Object> getList(int pagecurr,int ilimit) throws Exception {
 		List<PicturePO> listpo = conn_picture.getPictureByPage(pagecurr,ilimit);
 		List<PictureVO> listvo = PictureVO.getConverter(PictureVO.class).convert(listpo, PictureVO.class);
+		for (PictureVO pictureVO : listvo) {
+			String webUrl = pictureVO.getWebUrl();
+			String[] splits = webUrl.split("\\.");
+			if(splits[3].equals("MP4")||splits[3].equals("mp4")){
+				pictureVO.setType("mp4");
+			}else{
+				pictureVO.setType("jgp");
+			}
+		}
 		Map<String, Object> map= new HashMap<String, Object>();
 		map.put("list", listvo);
 		return map;

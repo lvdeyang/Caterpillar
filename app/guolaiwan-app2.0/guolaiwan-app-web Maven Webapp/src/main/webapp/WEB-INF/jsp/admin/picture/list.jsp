@@ -49,14 +49,20 @@
 		<div id="page"></div>
 	
 		<script id="alist" type="text/html">
-{{#  layui.each(d.list, function(index, item){ }}
+{{#  layui.each(d.list, function(index, item){  }}
                         <tr>
                         <td>
                             <input type="checkbox" value="{{ item.uuid }}" name="selected">
                         </td>
+					{{#  if(item.type!="mp4"){	 }}
 						<td>
                             <img  src={{ item.webUrl }} width="90" height="90">	
                         </td>
+					{{# }else{ }}
+						<td>
+                            <video  src={{ item.webUrl }} width="90" height="90">	
+                        </td>
+					{{# } }}
                         <td>
                             {{ item.oldName }}
                         </td>
