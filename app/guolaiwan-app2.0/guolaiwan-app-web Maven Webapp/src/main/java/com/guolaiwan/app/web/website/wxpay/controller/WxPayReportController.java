@@ -446,17 +446,17 @@ public class WxPayReportController extends WebBaseControll {
 				//if(order.getOrderState().toString().equals("NOTPAY")){
 				
 				//	}	
-				//    修改 总 车位 剩余车位
-			    AttractionsParkingPO att = Attra_ctions.getUid(attactionsId);
-			    int remain =  att.getUsedParking();
-			    att.setUsedParking(remain-1);
-			    Attra_ctions.saveOrUpdate(att);
-			    
-			    // 生成 二维码 修改订单状态
-			    
 				OrderPO userByid = Order.getform(orderId);
-				if(userByid != null){
-					    String ydNO = ydNoCode(userByid.getId()+"");
+				if ("NOTPAY".equals(userByid.getOrderStatus() )) {
+					//    修改 总 车位 剩余车位
+					AttractionsParkingPO att = Attra_ctions.getUid(attactionsId);
+					int remain =  att.getUsedParking();
+					att.setUsedParking(remain-1);
+					Attra_ctions.saveOrUpdate(att);
+
+					// 生成 二维码 修改订单状态
+					if(userByid != null){
+						String ydNO = ydNoCode(userByid.getId()+"");
 						userByid.setOrderStatus("PAYSUCCESS");
 						userByid.setPath(ydNO);
 						Order.saveOrUpdate(userByid);
@@ -464,14 +464,14 @@ public class WxPayReportController extends WebBaseControll {
 						int	parkingNumber = userByid.getParkingNumber();
 						String	parkingLayer = 	userByid.getParkingLayer();
 						String	district = 	userByid.getParkingDistrict();
-						
+
 						CarPositionPO userName =  Car_Position.getAmend(attactionsId,parkingLayer,district);
 						long id = userName.getId();
-						
-					    ParkingPositionPO getTruck  =  Parking_Position.getNumber(id,parkingNumber);
-					    getTruck.setUseCondition(1);
+
+						ParkingPositionPO getTruck  =  Parking_Position.getNumber(id,parkingNumber);
+						getTruck.setUseCondition(1);
 						Parking_Position.saveOrUpdate(getTruck);
-						
+
 						stringBuffer.append("<xml><return_code><![CDATA[");
 						stringBuffer.append("SUCCESS");
 						stringBuffer.append("]]></return_code>");
@@ -479,7 +479,8 @@ public class WxPayReportController extends WebBaseControll {
 						stringBuffer.append("OK");
 						stringBuffer.append("]]></return_msg>");
 						System.out.println("微信支付付款成功!订单号："+tradeNum);
-				}
+					}
+				}	
 			}else{
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("FAIL");

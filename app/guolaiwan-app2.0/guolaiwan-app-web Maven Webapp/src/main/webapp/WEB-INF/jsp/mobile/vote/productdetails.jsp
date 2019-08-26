@@ -148,8 +148,18 @@ html, body {
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
-<script type="text/javascript">
+<script>
  
+$(function(){
+    var src = $('embed').prop('src');
+    alert(src)
+   $('embed').replaceWith('<video src=""></video>') ;
+    $("video").attr('src',src);
+    $("video").css({"height":"auto","width":"100%"})
+     $("video").attr('autoplay', "true");
+}) 
+ 
+
 </script>
 <body>
 			<!-- 主页 -->
@@ -161,7 +171,7 @@ html, body {
 			</div>
 		</div>
 		
-		<div clas="main" style="width:100%;height:auto;padding:5px 3%;">
+		<div class="main" id="main" style="width:100%;height:auto;padding:5px 3%;">
 		${productdetail}
 		</div>
 </body>
