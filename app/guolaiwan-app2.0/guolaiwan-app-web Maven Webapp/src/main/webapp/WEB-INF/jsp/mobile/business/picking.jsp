@@ -209,7 +209,7 @@ html, body {
 	  
 	  function getAllProduct(){
 		var url="<%=basePath%>business/getallproduct";
-            $.post(url,{"merchantId":${merchantId},"type":"006"},function(data){
+            $.post(url,{"merchantId":${merchantId},"type":"2084"},function(data){
             	var html=[];
             	if(data.length==0){
             			html.push('<p style="text-align: center;bottom:5px;left:50%;color:#858585;">暂无推荐商品</p>');
