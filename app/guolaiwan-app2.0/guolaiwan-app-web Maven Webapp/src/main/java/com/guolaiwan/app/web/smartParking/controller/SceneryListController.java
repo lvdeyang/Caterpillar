@@ -1315,6 +1315,23 @@ public class SceneryListController  extends WebBaseControll{
 		List<OrderPO> order = Order.getOrderform(userId,list,vehicle);
 		List<OrderVo>   _merchants = OrderVo.getConverter(OrderVo.class).convert(order,
 				OrderVo.class);
+		for (OrderVo orderVo : _merchants) {
+			if ("PAYSUCCESS".equals(orderVo.getOrderStatus())) {
+				orderVo.setOrderStatus("已支付");
+			}
+			if ("PARKING".equals(orderVo.getOrderStatus())) {
+				orderVo.setOrderStatus("正在停车");
+			}
+			if ("PAST".equals(orderVo.getOrderStatus())) {
+				orderVo.setOrderStatus("已结束");
+			}
+			if ("REFUNDING".equals(orderVo.getOrderStatus())) {
+				orderVo.setOrderStatus("申请退款");
+			}
+			if ("REFUNDED".equals(orderVo.getOrderStatus())) {
+				orderVo.setOrderStatus("退款成功");
+			}
+		}
 		return success( _merchants);
 	}
 	
