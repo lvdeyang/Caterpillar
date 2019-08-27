@@ -115,12 +115,32 @@ margin-right:5px;
 }
 .layui-laypage span{
 padding:0 5px !important;
+ border-radius:4px !important;
+ color:#fff;
+  border:none !important;
+   margin:0 2px !important;
+   
 }
 .layui-laypage a{
+color:#fff;
  padding:0 10px !important;
-
+ border-radius:4px !important;
+ border:none !important;
+ margin:0 2px !important;
+ height:23px !important;
+ line-height: 23px !important;
 }
 .layui-laypage .layui-laypage-curr .layui-laypage-em{
+background: #4BB259 !important;
+height:20px !important;
+width:20px !important;
+border-radius:50% !important;
+text-align: center !important;
+top:4px !important;
+left:-2px !important;
+}
+.layui-laypage-last,.layui-laypage-next,.layui-laypage-prev,.layui-laypage-first{
+color:#fff !important;
 background: #4BB259 !important;
 }
 </style>
