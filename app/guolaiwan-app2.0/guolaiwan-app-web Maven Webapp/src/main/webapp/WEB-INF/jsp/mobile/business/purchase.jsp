@@ -471,7 +471,7 @@ $(function(){
           html.push('</p></li>');
           html.push(' <li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
           html.push('<li><p>开放时间：'+msg.beginTime+'-'+msg.endTime+'</p></li>');
-          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：'+merpo.shopAddress+'</p></li>');
+          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+merpo.shopAddress+'&tocoord='+merpo.shopLongitude+','+merpo.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+merpo.shopAddress+'</a></p></li>');
           html.push('</ul>');
           $(".jieshao").append(html.join(''));  
           for(var i = 0 ;i <proinfo.length;i++){           

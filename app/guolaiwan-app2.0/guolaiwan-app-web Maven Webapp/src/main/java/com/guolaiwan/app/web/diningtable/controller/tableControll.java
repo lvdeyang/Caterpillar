@@ -3,6 +3,7 @@ package com.guolaiwan.app.web.diningtable.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,15 +29,24 @@ import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.TableVo;
 import com.guolaiwan.app.web.business.vo.MealListVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
+import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
+import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
+import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.TableDAO;
 import com.guolaiwan.bussiness.admin.dao.TableStatusDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.BookType;
+import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
+import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
+import com.guolaiwan.bussiness.admin.po.MerchantUser;
+import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.TablePO;
 import com.guolaiwan.bussiness.admin.po.TableStatusPO;
@@ -184,8 +194,8 @@ public class tableControll extends WebBaseControll  {
 					tableVo.setTableMenu(TableStatus.getTableMenu());
 					tableVo.setMenuTime(TableStatus.getTableDate()); //时间
 					tableVo.setType(TableStatus.getType().toString()); //中午晚上
-					tableVo.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
-					tableVo.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
+					tableVo.setUserName(TableStatus.getUserName()); ////////////////////////////////////////////////////////////////用户名称
+					tableVo.setUserPhone(TableStatus.getUserPhone()); //////////////////////////////////////////////////// 手机
 					tableVo.setTableStatusId(TableStatus.getId());
 				}
 			}
@@ -253,8 +263,8 @@ public class tableControll extends WebBaseControll  {
 				tableVo.setTableMenu(TableStatus.getTableMenu());
 				tableVo.setMenuTime(TableStatus.getTableDate()); //时间
 				tableVo.setType(TableStatus.getType().toString()); //中午晚上
-				tableVo.setUserName("刘"); ////////////////////////////////////////////////////////////////用户名称
-				tableVo.setUserPhone("18731560959"); //////////////////////////////////////////////////// 手机
+				tableVo.setUserName(TableStatus.getUserName()); ////////////////////////////////////////////////////////////////用户名称
+				tableVo.setUserPhone(TableStatus.getUserPhone()); //////////////////////////////////////////////////// 手机
 				tableVo.setTableStatusId(TableStatus.getId());
 			}
 		}
@@ -376,6 +386,12 @@ public class tableControll extends WebBaseControll  {
 	}
 
 
+	
+	@Autowired
+	private OrderInfoDAO conn_order;
+	@Autowired
+	private InvestWalletDAO conn_investwallet;
+	@Autowired MerchantUserDao conn_merchantUser;
 	
 	
 	

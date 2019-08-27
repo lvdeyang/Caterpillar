@@ -63,10 +63,13 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>商品介绍</title>
+<title>常见问题列表</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
+a {
+	cursor: pointer !important;
+}
 
 a, a:link, a:active, a:visited, a:hover {
 	color: inherit;
@@ -75,70 +78,71 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
+	font-family: "微软雅黑" !important;
+	height:auto;
 	background:#fff !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
+	
 }
-
-* {
+*{
 	box-sizing: border-box;
 	list-style: none;
-	text-decoration: none;
-
+	text-decoration: none;	
 }
-
-/* 页面样式 */
-.header {
-	height: 40px;
-	line-height: 40px;
-	background-color: #18b4ed;
-	color: #fff;
-	border-bottom: 1px solid #bababa;
+.main li{
+width:100%;
+height:40px;
+line-height: 40px;
+border-bottom:1.5px solid #CFCFCF;
 }
-
-.header .link-left {
-	margin-left: 10px;
-	margin-right: 10px;
-	position: relative;
-	z-index: 1;
+.main li p{
+padding:0 5px;
+display: inline-block;
+width:80%;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
 }
-
-.header-content {
-	height:auto;
-	width: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	padding-left: 40px;
-	padding-right: 40px;
-	text-align: center;
-	z-index: 0;
+.main li span{
+float:right;
+font-weight: bold;
+margin-right:5px;
 }
-
-  .swiper-container {
-    width: 100%;
-    padding:0;
-    margin:0;
-    height:200px;
-  } 
-
-  .swiper-container img {
-    display: block;
-    width: 100%;
-  }
-    
-.weui-navbar{
- display: none !important;
+.layui-laypage-next em, .layui-laypage-prev em{
+  font-size:12px !important;
 }
-.main img{
-  width:100%;height:auto;
+.layui-laypage span{
+padding:0 5px !important;
+ border-radius:4px !important;
+ color:#fff;
+  border:none !important;
+   margin:0 2px !important;
+   
 }
-
-
-
-
+.layui-laypage a{
+color:#fff;
+ padding:0 10px !important;
+ border-radius:4px !important;
+ border:none !important;
+ margin:0 2px !important;
+ height:23px !important;
+ line-height: 23px !important;
+}
+.layui-laypage .layui-laypage-curr .layui-laypage-em{
+background: #4BB259 !important;
+height:20px !important;
+width:20px !important;
+border-radius:50% !important;
+text-align: center !important;
+top:4px !important;
+left:-2px !important;
+}
+.layui-laypage-last,.layui-laypage-next,.layui-laypage-prev,.layui-laypage-first{
+color:#fff !important;
+background: #4BB259 !important;
+}
 </style>
 
 </head>
@@ -154,35 +158,49 @@ html, body {
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script>
- 
 $(function(){
-    var src = $('embed').prop('src');
-/*     alert(src) */
-   $('embed').replaceWith('<video src=""></video>') ;
-    $("video").attr('src',src);
-    $("video").css({"height":"auto","width":"100%"})
-     $("video").attr('autoplay', "true");
-}) 
+ var html=[];
+ for(var i=0;i<5;i++){
+	    html.push('<li><p>问题1</p><span>></span></li>');
  
-
+ }
+ $('.main').append(html.join(''));
+})
+layui.use(['laypage', 'layer'], function(){
+  var laypage = layui.laypage
+  ,layer = layui.layer;
+  laypage.render({
+    elem: 'footer'
+    ,count: 100
+    ,groups:3
+    ,first: '首页'
+    ,last: '尾页'
+    ,prev: '<em>上一页</em>'
+    ,next: '<em>下一页</em>'
+     ,jump: function(obj, first){
+    //obj包含了当前分页的所有参数，比如：
+    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+    console.log(obj.limit); //得到每页显示的条数
+    
+    //首次不执行
+    if(!first){
+      //do something
+       layer.msg('第'+ obj.curr +'页', {offset: 'b'});
+    }
+  }
+  });
+  
+  });
 </script>
 <body>
-			<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div>
-		
-		<div class="main" id="main" style="width:100%;height:auto;padding:5px 3%;">
-		${productdetail}
-		</div>
+ <div style="width:100%;height:auto;padding:0 4%;">
+  <ul class="main" style="width:100%;">
+   <li><p>问题1</p><span>></span></li>
+  </ul>
+ </div>
+ <!-- 分页 -->
+  <div id="footer" style="width:100%;margin:0 auto;text-align: center;position: fixed;bottom:0;"></div>  
+  <div style="height:55px;"></div>
 </body>
-
-
-
-
 
 </html>

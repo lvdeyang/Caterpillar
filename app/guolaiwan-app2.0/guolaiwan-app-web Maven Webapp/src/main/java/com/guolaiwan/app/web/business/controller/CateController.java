@@ -32,26 +32,34 @@ import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.CommentVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.app.web.website.controller.WebBaseControll;
+import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
+import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantChildrenDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
+import com.guolaiwan.bussiness.admin.dao.TableDAO;
 import com.guolaiwan.bussiness.admin.dao.TableStatusDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.BookType;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
+import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.MerchantChildrenPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
+import com.guolaiwan.bussiness.admin.po.MerchantUser;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.guolaiwan.bussiness.admin.po.TablePO;
 import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.distribute.dao.MealListDao;
@@ -66,7 +74,7 @@ import pub.caterpillar.weixin.constants.WXContants;
  */
 @RestController
 @RequestMapping("/cate")
-public class CateController extends BaseController {
+public class CateController extends WebBaseControll {
 	private final int recommendSize = 6;
 	@Autowired
 	private MerchantDAO conn_merchant;
@@ -252,9 +260,20 @@ public class CateController extends BaseController {
 	public Object buyDish(@PathVariable String id, @PathVariable Integer money, HttpServletRequest request) throws Exception {
 		String	orderNo = "buydish-" + id;
 		TableStatusPO TableStatus  =  Table_Status.getByField("id",Long.parseLong(id));
+		int payMoney = 10;
+		if (TableStatus.getTableId() > 0) {
+			TablePO  addpo  = Table.getByField("id",TableStatus.getTableId());
+			if (addpo != null && "PAYSUCCESS".equals(TableStatus.getTableState()+"")) {
+				payMoney = (int) (money - Long.parseLong(addpo.getBookprice()+""));
+				if(payMoney <= 0 ){
+					return 0;
+				}
+			}
+		}else{
+			payMoney = money;
+		}
 		TableStatus.setDishMoney(money);
 		Table_Status.saveOrUpdate(TableStatus);
-		int payMoney = 1;
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user = conn_user.get(userId);
 		YuebaWxPayConstants.set("http://" + WXContants.Website + "/website/wxreport/buyDishPayment", WxConfig.appId,
@@ -268,7 +287,198 @@ public class CateController extends BaseController {
 		map.put("orderNo", orderNo);
 		return map;
 	}
+	@Autowired
+	private InvestWalletDAO conn_investwallet;
+	@Autowired
+	private  TableDAO Table;
+	// 余额购买成功修改用户余额并推送消息 
+	
 
+	
+	@ResponseBody
+	@RequestMapping(value = "/wallet/walletbuy")
+	public Object walletbuy(HttpServletRequest request) throws Exception {
+		String orderId = request.getParameter("orderId");
+		long meony = Long.parseLong(request.getParameter("meony"));
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		UserInfoPO user = conn_user.get(userId);
+		TableStatusPO TableStatus = Table_Status.getByField("id",Long.parseLong(orderId));
+		MerchantPO merchantPO = conn_merchant.getByField("id",TableStatus.getMerchantId());
+		long userMoney = user.getWallet();
+		long payMoney = 0;
+		TablePO addpo  = null;
+		if (userMoney >= meony/100) {
+			user.setWallet(userMoney - meony/100);
+			if (TableStatus.getTableId() > 0) {
+				 addpo  = Table.getByField("id",TableStatus.getTableId());
+				if (addpo != null && "PAYSUCCESS".equals(TableStatus.getTableState()+"")) {
+					payMoney = meony - Long.parseLong(addpo.getBookprice()+"");
+					if(payMoney <= 0 ){
+						return success(3);
+					}
+				}
+			}else{
+				payMoney = meony;
+			}
+			if (TableStatus.getYdNO() == null || TableStatus.getYdNO() == "") {
+				String ydNO = ydNoCode(orderId+"");
+				TableStatus.setYdNO(ydNO);
+			}
+			TableStatus.setDishMoney(payMoney);
+			TableStatus.setDishState("PAYSUCCESS");
+			// 推送购买商品成功信息给用户 商家 李姐
+			Table_Status.saveOrUpdate(TableStatus);
+			sendPayMessage(TableStatus);
+			InvestWalletPO o =new InvestWalletPO();
+			o.setMoney(payMoney);
+			o.setUserid(user.getId());
+			o.setUsername(user.getUserNickname());
+			o.setProductname(merchantPO.getShopName());
+			conn_investwallet.save(o);
+			conn_user.saveOrUpdate(user);
+		} else {
+			// 余额不足 不允许购买
+			return success(2);
+		}
+		return success(1);
+	}
+	
+	
+	
+	@Autowired MerchantUserDao conn_merchantUser;
+	
+	@Autowired
+	private ProductDAO conn_product;
+	
+	/**
+	 * 余额购买商品成功消息推送
+	 * 
+	 * @param orderInfoPO
+	 */
+	private void sendPayMessage(TableStatusPO TableStatus) {
+		String table ="";
+		if(TableStatus != null  && "PAYSUCCESS".equals(TableStatus.getDishState())){
+			TableStatus.setDishState("PAYSUCCESS");
+			List<MealListPo> MealListPo = MealList.findByDistributor(Long.parseLong(TableStatus.getUserId()),TableStatus.getMerchantId());
+			String meal = null;
+			for (MealListPo mealListPo2 : MealListPo) {
+				mealListPo2.setTableId(TableStatus.getId());
+				MealList.saveOrUpdate(mealListPo2);
+			    List<ProductPO> product = 	 conn_product.findByField("id", mealListPo2.getProductId());
+			    if(meal == null){
+			    	meal = product.get(0).getProductName()+"X"+mealListPo2.getMealAmount();
+			    }else{
+			    	meal += ","+product.get(0).getProductName()+"X"+mealListPo2.getMealAmount();
+			    }
+			}
+			if(!"0".equals(TableStatus.getTableId()+"")){
+				List<TablePO> addpo = null;
+				addpo =  Table.findByField("id",TableStatus.getTableId());
+				table = "用户已订桌 订桌号:"+addpo.get(0).getTableNo()+" 房间名称 : "+addpo.get(0).getTablename()+" ,用户姓名:"+TableStatus.getUserName()+" ,用户手机号:" +TableStatus.getUserPhone();
+			}else{
+				table = "用户未订桌,请留好桌位 用户姓名:"+TableStatus.getUserName()+" ,用户手机号:" +TableStatus.getUserPhone();
+			}
+			//用户推送消息
+	    	Double amount=Double.parseDouble(TableStatus.getDishMoney()+"")/100;
+	    	DecimalFormat df=new DecimalFormat("0.00");  
+	    	UserInfoPO buyUser=conn_user.get(Long.parseLong(TableStatus.getUserId()));
+	    	if(buyUser!=null){
+	    		JSONObject obj=new JSONObject();
+	    		obj.put("touser", buyUser.getUserOpenID());
+	        	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+	        	obj.put("url", "");
+	        	JSONObject microProObj=new JSONObject();
+	        	microProObj.put("appid", "");
+	        	microProObj.put("pagepath", "");
+	        	obj.put("miniprogram", microProObj);
+	        	JSONObject dataObject=new JSONObject();
+	        	JSONObject firstObj=new JSONObject();
+	        	firstObj.put("value", "您的订单支付成功");
+	        	firstObj.put("color", "");
+	        	dataObject.put("first", firstObj);
+	        	
+	        	
+	        	JSONObject nameObj=new JSONObject();
+	        	nameObj.put("value", buyUser.getUserNickname());
+	        	nameObj.put("color", "");
+	        	dataObject.put("keyword1", nameObj);
+	        	
+	        	JSONObject accountTypeObj=new JSONObject();
+	        	accountTypeObj.put("value", TableStatus.getId());
+	        	accountTypeObj.put("color", "");
+	        	dataObject.put("keyword2", accountTypeObj);
+
+	        	JSONObject accountObj=new JSONObject();
+	        	accountObj.put("value", df.format(amount));
+	        	accountObj.put("color", "");
+	        	dataObject.put("keyword3", accountObj);
+	        	JSONObject timeObj=new JSONObject();
+	        	timeObj.put("color", "");
+	        	dataObject.put("keyword4", timeObj);
+	        	JSONObject remarkObj=new JSONObject();
+	        	remarkObj.put("value", "感谢使用过来玩服务");
+	        	remarkObj.put("color", "");
+	        	dataObject.put("remark", remarkObj);
+	        	obj.put("data", dataObject);
+	        	SendMsgUtil.sendTemplate(obj.toJSONString());
+	    	}
+	    	
+	    	//商户推送消息
+	    	//UserInfoPO userInfoPO=merchantPO.getUser();
+	    	List<MerchantUser> merchantUsers=conn_merchantUser.findByField("merchantId", TableStatus.getMerchantId());
+	    	try {
+	    		for (MerchantUser merchantUser : merchantUsers) {
+	        		UserInfoPO userInfoPO=conn_user.get(merchantUser.getUserId());
+	        		if(userInfoPO==null){
+	        			continue;
+	        		}
+	        		JSONObject obj=new JSONObject();
+	        		obj.put("touser",userInfoPO.getUserOpenID() );
+	            	obj.put("template_id", "FqlDkv8NKzKkDaWDYpY8V3t5krEXB86AeGkkJRbbws0");
+	            	obj.put("url", "");
+	            	JSONObject microProObj=new JSONObject();
+	            	microProObj.put("appid", "");
+	            	microProObj.put("pagepath", "");
+	            	obj.put("miniprogram", microProObj);
+	            	JSONObject dataObject=new JSONObject();
+	            	JSONObject firstObj=new JSONObject();
+	            	firstObj.put("value", "新的过来玩订单");
+	            	firstObj.put("color", "");
+	            	dataObject.put("first", firstObj);
+	            	
+	            	
+	            	JSONObject nameObj=new JSONObject();
+	            	nameObj.put("value", buyUser.getUserNickname());
+	            	nameObj.put("color", "");
+	            	dataObject.put("keyword1", TableStatus.getDishMoney());
+	            	
+	            	JSONObject accountTypeObj=new JSONObject();
+	            	accountTypeObj.put("value", TableStatus.getId());
+	            	accountTypeObj.put("color", "");
+	            	dataObject.put("keyword2", meal);
+	            	
+	            	JSONObject accountObj=new JSONObject();
+	            	accountObj.put("value", df.format(amount));
+	            	accountObj.put("color", "");
+	            	dataObject.put("keyword3", TableStatus.getTableDate() +" , "+TableStatus.getType());
+	            	JSONObject timeObj=new JSONObject();
+	            	timeObj.put("color", "");
+	            	dataObject.put("keyword4", table);
+	            	JSONObject remarkObj=new JSONObject();
+	            	remarkObj.put("value", "预订");
+	            	remarkObj.put("color", "");
+	            	dataObject.put("remark", remarkObj);
+	            	obj.put("data", dataObject);
+	            	SendMsgUtil.sendTemplate(obj.toJSONString());
+	    		}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+	};
+	
+	
+	
 	
 	
 	

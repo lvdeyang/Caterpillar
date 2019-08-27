@@ -63,10 +63,13 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>商品介绍</title>
+<title>常见问题详情</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
+a {
+	cursor: pointer !important;
+}
 
 a, a:link, a:active, a:visited, a:hover {
 	color: inherit;
@@ -75,69 +78,19 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
+	font-family: "微软雅黑" !important;
+	height:auto;
 	background:#fff !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
+	
 }
-
-* {
+*{
 	box-sizing: border-box;
 	list-style: none;
-	text-decoration: none;
-
+	text-decoration: none;	
 }
-
-/* 页面样式 */
-.header {
-	height: 40px;
-	line-height: 40px;
-	background-color: #18b4ed;
-	color: #fff;
-	border-bottom: 1px solid #bababa;
-}
-
-.header .link-left {
-	margin-left: 10px;
-	margin-right: 10px;
-	position: relative;
-	z-index: 1;
-}
-
-.header-content {
-	height:auto;
-	width: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	padding-left: 40px;
-	padding-right: 40px;
-	text-align: center;
-	z-index: 0;
-}
-
-  .swiper-container {
-    width: 100%;
-    padding:0;
-    margin:0;
-    height:200px;
-  } 
-
-  .swiper-container img {
-    display: block;
-    width: 100%;
-  }
-    
-.weui-navbar{
- display: none !important;
-}
-.main img{
-  width:100%;height:auto;
-}
-
-
-
 
 </style>
 
@@ -154,35 +107,26 @@ html, body {
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script>
- 
-$(function(){
-    var src = $('embed').prop('src');
-/*     alert(src) */
-   $('embed').replaceWith('<video src=""></video>') ;
-    $("video").attr('src',src);
-    $("video").css({"height":"auto","width":"100%"})
-     $("video").attr('autoplay', "true");
-}) 
- 
+
 
 </script>
 <body>
-			<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div>
-		
-		<div class="main" id="main" style="width:100%;height:auto;padding:5px 3%;">
-		${productdetail}
-		</div>
+ <div style="width:100%;height:auto;padding:0 4%;">
+   <h4 style="height:40px;line-height: 40px;border-bottom:1.5px solid #E4E4E4;width:100%;overflow: hidden;text-indent: 1em;">查询不到订单怎么半</h4>
+   <h4 style="height:40px;line-height: 40px;width:100%;overflow: hidden;text-indent: 1em;">常见问题：</h4>
+   <p style="height:auto;line-height: 30px;width:100%;overflow: hidden;text-indent: 1em;">查询不到订单怎么半查询不到订单怎么半查询不到订单怎么半查询不到订单怎么半</p>
+   <p style="height:auto;width:100%;overflow: hidden;">
+   <img style="width:100%;margin:5px 0;" src="lib/images/1.jpg">
+   </p>
+ </div>
+ <div style="width:100%;height:100px;position: fixed;bottom:0;font-size:16px;text-decoration: none;">
+ <p style="height:50px;width:100%;overflow: hidden;line-height: 50px;background: #E4E4E4;padding:0 4%;">未解决还需要</p>
+  <p style="height:50px;width:100%;overflow: hidden;background:#fff;padding:0 4%;">
+  <span style="line-height: 35px;">电话咨询</span>
+  <span style="line-height: 30px;position: absolute;right:2%;"><a href="tel://0315-6681288">0315-6681288</a> ></span>
+  <span style="line-height: 30px;position: absolute;right:2%;bottom:0px;"><a href="tel://0315-6686299">0315-6686299</a> ></span>
+  </p>
+ </div>   
 </body>
-
-
-
-
 
 </html>

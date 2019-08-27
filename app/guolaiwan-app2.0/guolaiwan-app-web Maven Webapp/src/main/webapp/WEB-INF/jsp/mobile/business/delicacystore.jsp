@@ -839,13 +839,45 @@ appearance:none;
 	patam.tableDate = $("#useDate").val(); //时间
 	patam.type = $("#sele").val(); //就餐时间
 	$.post(_uri, $.toJSON(patam), function(data) {
-	   payPublic(data.orderId,$("#totalpriceshow").html());
-	    $(".olderss").hide();
-	  	$(".nav").show();
+	$.modal({
+		  title: "付款方式",
+		  buttons: [
+		    { text: "余额支付", onClick: function(){ 
+		    	$.confirm("确定支付？", function() {
+				    payByWallet(data.orderId,$("#totalpriceshow").html()*100);
+				  }, function() {});
+		    } },
+		    { text: "微信支付", onClick: function(){ 
+			    $.confirm("确定支付？", function() {
+				        payPublic(data.orderId,$("#totalpriceshow").html());
+	  					$(".olderss").hide();
+	  	                $(".nav").show();
+				  }, function() {});
+		    } },
+		    { text: "取消", className: "default", onClick: function(){ } },
+		  ]
+	  });
 	  	window.orderId = data.orderId;
         /*  */
     });
   }
+	    
+	    
+	function payByWallet(orderId,meony){
+			var url=window.BASEPATH+'/cate/wallet/walletbuy';
+			var isvote="${isvote}";
+			$.post(url,{'orderId':orderId,'meony':meony},function(data){
+				data = parseAjaxResult(data);
+				if(data==1){
+					window.location.href = "reservetable/diningtable/tableSuccess?orderId="+window.orderId+"&merchantId=${merchantId}"; 
+				}else if(data == 2){
+					$.alert('您的余额不足！');
+				}else {
+				   $.alert('订桌钱数大于菜钱!请重新选择');
+				}
+			})
+	}    
+	    
 	    
     var share={};
     function initSharewx(){
@@ -894,6 +926,7 @@ appearance:none;
 		function payPublic(orderId,text){
 			text =  (text*100).toFixed(0);	
 		$.get(window.BASEPATH +"cate/buydish/port/"+orderId+"/"+text, null, function(data){
+		        if(data == 0) alert("您买菜的金额小于订桌金额");
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;
@@ -918,6 +951,7 @@ appearance:none;
 		           "paySign"   : paySign    //微信签名
 		        },
 		        function(res){
+		       
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 		             alert("交易成功");  
 		             window.location.href = "reservetable/diningtable/tableSuccess?orderId="+window.orderId+"&merchantId=${merchantId}"; 
@@ -949,7 +983,9 @@ appearance:none;
 	     var url = window.BASEPATH + 'product/delicacystore/info.do?merchantId='+${merchantId};
 	  	 $.get(url,null,function(msg){
 		  	 var ht=[];
-		  	 ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">'+msg.merch.shopName+'</p>'); //顶部商户名称
+		  	 ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">名称:'+msg.merch.shopName+'</p>'); //顶部商户名称
+		  	 ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">地址: <a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+msg.merch.shopAddress+'&tocoord='+msg.merch.shopLongitude+','+msg.merch.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+msg.merch.shopAddress+'欢迎您 </a></p>'); //顶部商户名称
+		  	 ht.push('<span id = "addressphone1" style="font-weight: bold;color:black;margin:10px 10%;" class="icon-mobile-phone">&nbsp;&nbsp;&nbsp;&nbsp;'+msg.merch.shopTel+'</span>');
 		     $("#merInfo1").append(ht.join(''));
 		  	 var mpi = msg.mpic;
 		  	 var shopNam = msg.shopName;
@@ -979,7 +1015,10 @@ appearance:none;
    	 });
 	}
 	
-	
+	 $(document).on('click','#addressphone1',function(){
+	       var phones=$('#addressphone1').text();
+	       location.href = 'tel://' + phones;
+	 });
 	
 	
 	
