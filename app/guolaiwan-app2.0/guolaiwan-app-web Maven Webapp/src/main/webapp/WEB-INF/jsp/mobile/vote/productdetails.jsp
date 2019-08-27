@@ -132,6 +132,11 @@ html, body {
 .weui-navbar{
  display: none !important;
 }
+.main img{
+  width:100%;height:auto;
+}
+
+
 
 
 </style>
@@ -152,7 +157,7 @@ html, body {
  
 $(function(){
     var src = $('embed').prop('src');
-    alert(src)
+/*     alert(src) */
    $('embed').replaceWith('<video src=""></video>') ;
     $("video").attr('src',src);
     $("video").css({"height":"auto","width":"100%"})
