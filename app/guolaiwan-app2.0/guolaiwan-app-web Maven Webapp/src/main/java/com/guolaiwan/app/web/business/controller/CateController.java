@@ -212,6 +212,25 @@ public class CateController extends WebBaseControll {
 		return hashMap ;	  
 	}
 	
+	//TODO
+	//获取上次用户信息
+	@ResponseBody
+	@RequestMapping(value="/getUserMessage", method = RequestMethod.POST)
+	public Map<String, Object> getUserMessage(HttpServletRequest request) throws Exception{
+		Map<String, Object> hashMap = new HashMap<String, Object>();
+		String userId =  request.getSession().getAttribute("userId").toString();
+		List<TableStatusPO>    TableStatusPO =  Table_Status.getUserMessage(userId);
+		if (TableStatusPO != null) {
+			hashMap.put("state", "1");
+			hashMap.put("userName", TableStatusPO.get(0).getUserName());
+			hashMap.put("userPhone", TableStatusPO.get(0).getUserPhone());
+			return hashMap;
+		}
+		hashMap.put("state", "0");
+		return hashMap;	  
+	}
+	
+	
 	
 	//整减 菜存入数据库
 	@ResponseBody
@@ -272,7 +291,7 @@ public class CateController extends WebBaseControll {
 		}else{
 			payMoney = money;
 		}
-		TableStatus.setDishMoney(money);
+		TableStatus.setDishMoney(payMoney);
 		Table_Status.saveOrUpdate(TableStatus);
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		UserInfoPO user = conn_user.get(userId);

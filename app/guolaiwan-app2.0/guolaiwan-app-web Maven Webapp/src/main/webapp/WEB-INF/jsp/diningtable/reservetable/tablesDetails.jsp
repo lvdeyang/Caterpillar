@@ -161,8 +161,15 @@ text-align: center;
 <script type="text/javascript">
 	$(function() {
 		$(".goshopping").click(function() {
-			$(".zong").fadeOut();
-			$(".modDiv").fadeIn();
+		  var _uri = window.BASEPATH + 'cate/getUserMessage'; //获取上次订单的用户人信息
+	  	     $.post(_uri,null, function(data) {
+	  	            if(data.state == 1){
+	  	              $('#name').val(data.userName);
+	  	              $('#addressphone').val(data.userPhone);
+	  	            }
+	  	          $(".zong").fadeOut();
+			      $(".modDiv").fadeIn();
+	  	     });
 		});
 		$(".weui-btn_primary").click(function() {
 			$(".modDiv").fadeOut();
@@ -224,14 +231,37 @@ text-align: center;
 			}
 			patam.tablesId = '${param.tablesId}' ;
 			$.post(_uri, $.toJSON(patam), function(data) {
-		         payPublic(data.code, $("#meony").text());  
+								     payPublic(data.code, $("#meony").text());
 		         window.orderId = data.code;
 			});
 	});
 	
 	
 	
-	
+	function payByWallet(orderId,meony){
+			var url=window.BASEPATH+'reservetable/wallet/walletbuy';
+			var isvote="${isvote}";
+			$.post(url,{'orderId':orderId,'meony':meony},function(data){
+						data = parseAjaxResult(data);
+				if(data==1){
+						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
+						    if(data.data=="PAYSUCCESS"){				
+						       	if(ifFace==1){
+					                updatemessage(orderId);
+					            }	
+					            if(isvote=="YES"){
+					           		 addvoteorder(orderId);	
+					            }
+								location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
+						    }
+						});
+				}else if(data==2){
+					$.alert('您的余额不足！');
+				}else {
+				   $.alert('订桌钱数大于菜钱!请重新选择');
+				}
+			})
+		}
 	
 	
 	

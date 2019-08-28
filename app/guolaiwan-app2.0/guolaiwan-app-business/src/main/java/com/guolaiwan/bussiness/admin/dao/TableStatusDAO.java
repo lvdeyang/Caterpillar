@@ -26,4 +26,13 @@ public class TableStatusDAO extends AbstractBaseDao<TableStatusPO>{
 		TableStatusPO tableStatusPO = tableStatuList.get(0);
 		return tableStatusPO;
 	}
+	
+	public List<TableStatusPO> getUserMessage(String userId) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("userId", Condition.eq, userId);
+		hql.orderBy("updateTime", false);
+		List<TableStatusPO> tableStatuList = findByHql(hql);
+		if(tableStatuList==null || tableStatuList.size()<=0) return null;
+		return tableStatuList;
+	}
 }
