@@ -34,6 +34,7 @@ import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
+import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
@@ -427,6 +428,156 @@ public class tableControll extends WebBaseControll  {
 	}
 
 	
+	
+	@Autowired
+	private MerchantDAO conn_merchant;
+
+	@ResponseBody
+	@RequestMapping(value = "/wallet/walletbuy")
+	public Object walletbuy(HttpServletRequest request) throws Exception {
+		String orderId = request.getParameter("orderId");
+		long meony = Long.parseLong(request.getParameter("meony"));
+		Long userId = 	(Long) request.getSession().getAttribute("userId");
+		UserInfoPO user = conn_user.get(userId);
+		TableStatusPO TableStatus = Table_Status.getByField("id",Long.parseLong(orderId));
+		MerchantPO merchantPO = conn_merchant.getByField("id",TableStatus.getMerchantId());
+		long userMoney = user.getWallet();
+		if (userMoney >= meony/100) {
+			user.setWallet(userMoney - meony/100);
+			TableStatus.setOderNo(meony+"");
+			TablePO  addpo  = Table.getByField("id",TableStatus.getTableId());
+			// 推送购买商品成功信息给用户 商家 李姐
+			TableStatus.setTableState("PAYSUCCESS");
+			//生成验单码,和二维码图片
+			String ydNO = ydNoCode(orderId+"");
+			TableStatus.setYdNO(ydNO);
+			System.out.println( TableStatus.getUserId() +" -----------------");
+			sendPayMessage(addpo,TableStatus);
+			Table_Status.saveOrUpdate(TableStatus);
+			InvestWalletPO o =new InvestWalletPO();
+			o.setMoney(meony);
+			o.setUserid(user.getId());
+			o.setUsername(user.getUserNickname());
+			o.setProductname(merchantPO.getShopName());
+			conn_investwallet.save(o);
+			conn_user.saveOrUpdate(user);
+		} else {
+			// 余额不足 不允许购买
+			return success(2);
+		}
+		return success(1);
+	}
+	
+	
+	
+	
+	@Autowired
+	private ProductDAO conn_product;
+	
+	/**
+	 * 余额购买商品成功消息推送
+	 * 
+	 * @param orderInfoPO
+	 */
+	private void sendPayMessage(TablePO addpo,TableStatusPO TableStatus) {
+		//用户推送消息
+    	Double amount=Double.parseDouble(addpo.getBookprice()+"")/100;
+    	DecimalFormat df=new DecimalFormat("0.00");  
+    	UserInfoPO buyUser=conn_user.get(Long.parseLong(TableStatus.getUserId()));
+    	if(buyUser!=null){
+    		JSONObject obj=new JSONObject();
+    		obj.put("touser", buyUser.getUserOpenID());
+        	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+        	obj.put("url", "");
+        	JSONObject microProObj=new JSONObject();
+        	microProObj.put("appid", "");
+        	microProObj.put("pagepath", "");
+        	obj.put("miniprogram", microProObj);
+        	JSONObject dataObject=new JSONObject();
+        	JSONObject firstObj=new JSONObject();
+        	firstObj.put("value", "您的订单支付成功");
+        	firstObj.put("color", "");
+        	dataObject.put("first", firstObj);
+        	
+        	
+        	JSONObject nameObj=new JSONObject();
+        	nameObj.put("value", buyUser.getUserNickname());
+        	nameObj.put("color", "");
+        	dataObject.put("keyword1", nameObj);
+        	
+        	JSONObject accountTypeObj=new JSONObject();
+        	accountTypeObj.put("value", TableStatus.getId());
+        	accountTypeObj.put("color", "");
+        	dataObject.put("keyword2", accountTypeObj);
+
+        	JSONObject accountObj=new JSONObject();
+        	accountObj.put("value", df.format(amount));
+        	accountObj.put("color", "");
+        	dataObject.put("keyword3", accountObj);
+        	JSONObject timeObj=new JSONObject();
+        	timeObj.put("color", "");
+        	dataObject.put("keyword4", timeObj);
+        	JSONObject remarkObj=new JSONObject();
+        	remarkObj.put("value", "感谢使用过来玩服务");
+        	remarkObj.put("color", "");
+        	dataObject.put("remark", remarkObj);
+        	obj.put("data", dataObject);
+        	SendMsgUtil.sendTemplate(obj.toJSONString());
+    	}
+    	
+    	//商户推送消息
+    	//UserInfoPO userInfoPO=merchantPO.getUser();
+    	List<MerchantUser> merchantUsers=conn_merchantUser.findByField("merchantId", TableStatus.getMerchantId());
+    	try {
+    		for (MerchantUser merchantUser : merchantUsers) {
+        		UserInfoPO userInfoPO=conn_user.get(merchantUser.getUserId());
+        		if(userInfoPO==null){
+        			continue;
+        		}
+        		JSONObject obj=new JSONObject();
+        		obj.put("touser",userInfoPO.getUserOpenID() );
+            	obj.put("template_id", "Av9VDHMyVJLuphngV9ZndeHPNMOE3JYkm2W3-OrJDfs");
+            	obj.put("url", "");
+            	JSONObject microProObj=new JSONObject();
+            	microProObj.put("appid", "");
+            	microProObj.put("pagepath", "");
+            	obj.put("miniprogram", microProObj);
+            	JSONObject dataObject=new JSONObject();
+            	JSONObject firstObj=new JSONObject();
+            	firstObj.put("value", "新的过来玩订单");
+            	firstObj.put("color", "");
+            	dataObject.put("first", firstObj);
+            	
+            	
+            	JSONObject nameObj=new JSONObject();
+            	nameObj.put("value", buyUser.getUserNickname());
+            	nameObj.put("color", "");
+            	dataObject.put("keyword1", TableStatus.getUserName());
+            	
+            	JSONObject accountTypeObj=new JSONObject();
+            	accountTypeObj.put("value", TableStatus.getId());
+            	accountTypeObj.put("color", "");
+            	dataObject.put("keyword2", TableStatus.getUserPhone());
+            	
+            	JSONObject accountObj=new JSONObject();
+            	accountObj.put("value", df.format(amount));
+            	accountObj.put("color", "");
+            	dataObject.put("keyword3", addpo.getTablename());
+            	JSONObject timeObj=new JSONObject();
+            	timeObj.put("color", "");
+            	dataObject.put("keyword4", TableStatus.getTableDate() +" , "+TableStatus.getType());
+            	JSONObject remarkObj=new JSONObject();
+            	remarkObj.put("value", "预订");
+            	remarkObj.put("color", "");
+            	dataObject.put("remark", remarkObj);
+            	obj.put("data", dataObject);
+            	SendMsgUtil.sendTemplate(obj.toJSONString());
+    		}
+		} catch (Exception e) {
+			// TODO: handle exception
+			
+		}
+	};
 	
 	
 	

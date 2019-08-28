@@ -231,37 +231,41 @@ text-align: center;
 			}
 			patam.tablesId = '${param.tablesId}' ;
 			$.post(_uri, $.toJSON(patam), function(data) {
-								     payPublic(data.code, $("#meony").text());
+			      	$.modal({
+						  title: "付款方式",
+						  buttons: [
+						    { text: "余额支付", onClick: function(){ 
+						    	$.confirm("确定支付？", function() {
+								    payByWallet(data.code,$("#meony").text()*100);
+								  }, function() {});
+						    } },
+						    { text: "微信支付", onClick: function(){ 
+							    $.confirm("确定支付？", function() {
+								        payPublic(data.code, $("#meony").text());
+								  }, function() {});
+						    } },
+						    { text: "取消", className: "default", onClick: function(){ } },
+						  ]
+					  });
+			    
 		         window.orderId = data.code;
 			});
 	});
 	
 	
 	
+		    
 	function payByWallet(orderId,meony){
 			var url=window.BASEPATH+'reservetable/wallet/walletbuy';
-			var isvote="${isvote}";
 			$.post(url,{'orderId':orderId,'meony':meony},function(data){
-						data = parseAjaxResult(data);
+				data = parseAjaxResult(data);
 				if(data==1){
-						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
-						    if(data.data=="PAYSUCCESS"){				
-						       	if(ifFace==1){
-					                updatemessage(orderId);
-					            }	
-					            if(isvote=="YES"){
-					           		 addvoteorder(orderId);	
-					            }
-								location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderId;
-						    }
-						});
-				}else if(data==2){
+					window.location.href = "reservetable/diningtable/tableSuccess?orderId="+window.orderId+"&merchantId=${merchantId}"; 
+				}else if(data == 2){
 					$.alert('您的余额不足！');
-				}else {
-				   $.alert('订桌钱数大于菜钱!请重新选择');
 				}
 			})
-		}
+	}  
 	
 	
 	
