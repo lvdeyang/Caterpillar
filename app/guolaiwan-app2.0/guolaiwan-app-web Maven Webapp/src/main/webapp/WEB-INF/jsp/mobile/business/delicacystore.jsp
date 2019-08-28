@@ -6,7 +6,7 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	String weburl=WXContants.Website;
-%>
+%> 
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
 <head>
@@ -822,8 +822,15 @@ appearance:none;
 	  	     if(window.orderId !=null && window.orderId!=""){ //已订房
 	  	         newTableStatus();
 	  	     }else{ //未定
-	  	     $(".nav").hide();
-	  	     $(".olderss").show();
+	  	       var _uri = window.BASEPATH + 'cate/getUserMessage'; //获取上次订单的用户人信息
+	  	       $.post(_uri,null, function(data) {
+	  	            if(data.state == 1){
+	  	              $('#username').val(data.userName);
+	  	              $('#userPhone').val(data.userPhone);
+	  	            }
+	  	            $(".nav").hide();
+	  	            $(".olderss").show();
+	  	       });
 	  	     } 
   	     }
     });
@@ -849,7 +856,7 @@ appearance:none;
 		    } },
 		    { text: "微信支付", onClick: function(){ 
 			    $.confirm("确定支付？", function() {
-				        payPublic(data.orderId,$("#totalpriceshow").html());
+				        payPublic(data.orderId,0.2);
 	  					$(".olderss").hide();
 	  	                $(".nav").show();
 				  }, function() {});
