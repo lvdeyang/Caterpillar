@@ -616,8 +616,7 @@ html, body {
 				//订桌订单 			   			    
 			    html.push('<div class="weui-panel__bd">');
 				for(var i=0; i<tableslist.length; i++){					      					     				      						 
-					 for(var j = 0; j<tableslist[i].table_order.length; j++ ){	
-					 			          					   
+					 for(var j = 0; j<tableslist[i].table_order.length; j++ ){						 			       					   
 				        var  table_order = tableslist[i].table_order;
 				        var  table = tableslist[i].table;
 				        html.push('<div class="weui-cells__title">'+tableslist[i].merchant.shopName);	
@@ -629,10 +628,10 @@ html, body {
 					    html.push('</div>');
 				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg table" id="pro-'+table_order[j].id+'-'+table_order[j].merchantId+'">');
 					    html.push('<div class="weui-media-box__hd">');
-					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+table[j].detailsImg+'">');
+					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="http://www.guolaiwan.net/file/'+table[j].detailsImg+'">');
 					    html.push('</div>');
 					    html.push('<div class="weui-media-box__bd">');
-					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+table[j].tablename+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+table_order[j].dishMoney+'</h4>');
+					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+table[j].tablename+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+parseInt(table_order[j].dishMoney)/100+'</h4>');
 					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+table_order[j].tableDate.replace('-','年').replace('-','月')+"日"+'</p>');
 					    html.push('</div>');				  
 					    html.push('</a>');				    
