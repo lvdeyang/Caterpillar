@@ -216,9 +216,8 @@
                           "merchantId":${merchantId}                        
                     },
                     success:function(msg){
-                    if(msg == "success"){                                   
-                    layer.msg("添加成功！");
-                    window.parent.location.reload();
+                    if(msg == "success"){                                 
+                    layer.alert("添加成功！");
                     }
                    if(msg == "false"){
                     

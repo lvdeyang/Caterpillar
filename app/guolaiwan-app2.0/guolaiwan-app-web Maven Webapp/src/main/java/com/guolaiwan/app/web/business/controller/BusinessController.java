@@ -2085,7 +2085,7 @@ public class BusinessController extends WebBaseControll {
 								}	
 							    TablePO tPo = conn_table.get(table_order1.get(j).getTableId());
 							    String img = tPo.getDetailsImg();
-							    tPo.setDetailsImg(sysConfig.getWebUrl()+img);
+							    tPo.setDetailsImg(img);
 							    tablePOs1.add(tPo);
 								tableStatusPOs1.add(table_order1.get(j));
 								tablesMap1.put("table_order", tableStatusPOs1);	
@@ -2166,7 +2166,7 @@ public class BusinessController extends WebBaseControll {
 								}
 							    TablePO tPo = conn_table.get(table_order2.get(j).getTableId());
 							    String img = tPo.getDetailsImg();
-							    tPo.setDetailsImg(sysConfig.getWebUrl()+img);
+							    tPo.setDetailsImg(img);
 							    tablePOs2.add(tPo);
 							    tableStatusPOs2.add(table_order2.get(j));
 							    tablesMap2.put("table_order", tableStatusPOs2);	
@@ -2259,7 +2259,7 @@ public class BusinessController extends WebBaseControll {
 								}	
 							    TablePO tPo = conn_table.get(table_order1.get(j).getTableId());
 							    String img = tPo.getDetailsImg();
-							    tPo.setDetailsImg(sysConfig.getWebUrl()+img);
+							    tPo.setDetailsImg(img);
 							    tablePOs1.add(tPo);
 								tableStatusPOs1.add(table_order1.get(j));
 								tablesMap1.put("table_order", tableStatusPOs1);	
@@ -2340,7 +2340,7 @@ public class BusinessController extends WebBaseControll {
 								}
 							    TablePO tPo = conn_table.get(table_order2.get(j).getTableId());
 							    String img = tPo.getDetailsImg();
-							    tPo.setDetailsImg(sysConfig.getWebUrl()+img);
+							    tPo.setDetailsImg(img);
 							    tablePOs2.add(tPo);
 							    tableStatusPOs2.add(table_order2.get(j));
 							    tablesMap2.put("table_order", tableStatusPOs2);	
