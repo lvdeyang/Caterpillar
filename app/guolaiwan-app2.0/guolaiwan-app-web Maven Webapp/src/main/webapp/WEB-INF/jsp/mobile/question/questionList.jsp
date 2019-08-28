@@ -137,7 +137,7 @@ width:20px !important;
 border-radius:50% !important;
 text-align: center !important;
 top:4px !important;
-left:-2px !important;
+left:-3px !important;
 }
 .layui-laypage-last,.layui-laypage-next,.layui-laypage-prev,.layui-laypage-first{
 color:#fff !important;
@@ -171,7 +171,7 @@ layui.use(['laypage', 'layer'], function(){
   ,layer = layui.layer;
   laypage.render({
     elem: 'footer'
-    ,count: 100
+    ,count: 90
     ,groups:3
     ,first: '首页'
     ,last: '尾页'
