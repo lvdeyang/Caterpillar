@@ -132,62 +132,132 @@ text-indent: 1em;
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script>
-layui.use('element', function(){
-  var $ = layui.jquery
-  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
-
-});
-$(function(){
-  $(".footer").click(function(){
-    $(".footer_in").fadeIn();
-    $(".footer_on").fadeIn();
-  });
-   $(".footer_in").click(function(){
-    $(".footer_in").fadeOut();
-    $(".footer_on").fadeOut();
-  });
-})
-
-
+	layui.use('element', function(){
+	  var $ = layui.jquery
+	  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+	
+	});
+	$(function(){
+      window.BASEPATH = '<%=basePath%>';	
+	  getModularInfo();
+	  $(".footer").click(function(){
+	    $(".footer_in").fadeIn();
+	    $(".footer_on").fadeIn();
+	  });
+	   $(".footer_in").click(function(){
+	    $(".footer_in").fadeOut();
+	    $(".footer_on").fadeOut();
+	  });
+	})
+	//标题模块全局
+	var ModularInfo = "";
+	
+	//大模块信息
+	function getModularInfo(){
+	var url = window.BASEPATH + 'questionbase/list.do';
+	$.get(url,null,function(msg){
+	  var msg = msg.questionModular;
+	  ModularInfo= msg;
+	 if(msg.length == 0)return;
+	 for(var i =0;i<msg.length;i++ ){
+	   var html = [];
+	   if(i == 0){
+	    html.push('<li class="layui-this">'+msg[i].modularName+'</li>');
+	   }
+	   if(i > 0){
+	    html.push('<li >'+msg[i].modularName+'</li>');
+	   }
+	    $(".layui-tab-title").append(html.join(""));  	   	   	 	 
+	 }	
+	  getModelarClass();      		
+	})		
+  }  
+  
+   //查询小模块信息
+   function getModelarClass(){
+     var path = window.BASEPATH + 'questionbase/list2.do';
+     $.get(path,null,function(msg){
+       var cProblem = msg.cProblem;
+       var msg = msg.questionSonModulaor;    
+       if(msg.length ==0)return;
+         if(ModularInfo != ""){
+          for(var j = 0 ;j<ModularInfo.length; j++){
+		    var html = [];
+		    if(j == 0){	    
+		     html.push(' <div class="layui-tab-item layui-show">');
+		     for(var i = 0 ;i<msg.length;i++){
+	           if(msg[i].classmodularCode == ModularInfo[j].modularCode){
+	           html.push('<div  class="header" style="margin:10px 0;height:120px;width:100%;overflow: hidden;background: #fff;border-radius:8px;">');
+	           html.push('<div class="header_in"  style="height:100%;width:30%;float:left;text-align: center;">');
+	           html.push('<img style="width:50px;height:50px;display:inline-block;margin-top:25px;"src="'+msg[i].modularPic+'">');
+	           html.push('<p id='+msg[i].id +' onclick="nextModularClass(this.id)" style="height:25px;line-height: 25px;">'+msg[i].className+'<span style="color:#4BB259;">  ▶</span></p>');
+	           html.push('</div> ');
+	           html.push('<div class="header_on" style="height:100%;width:70%;float:right;overflow: hidden;">');
+	           html.push('<ul>');
+	           for(var s = 0;s<cProblem.length;s++){
+	           if(s<3){
+	           if(msg[i].classCode == cProblem[s].modularClassCode ){
+	           html.push('<li id="'+cProblem[s].id+'" onclick="getProblemPage(this.id)"><p>'+cProblem[s].problemName+'</p></li>');
+	            }
+	            }	          	          
+	          }
+	           html.push('</ul>');
+	           html.push('</div> ');
+	           html.push('</div> ');         
+	           }
+		     }  
+		     html.push(' </div>');		    
+		    }else{
+		    html.push('<div class="layui-tab-item " >');
+		    for(var i = 0 ;i<msg.length;i++){
+	           if(msg[i].classmodularCode == ModularInfo[j].modularCode){
+	           html.push('<div  class="header" style="margin:10px 0;height:120px;width:100%;overflow: hidden;background: #fff;border-radius:8px;">');
+	           html.push('<div class="header_in"  style="height:100%;width:30%;float:left;text-align: center;">');
+	           html.push('<img style="width:50px;height:50px;display:inline-block;margin-top:25px;"src="'+msg[i].modularPic+'">');
+	           html.push('<p id='+msg[i].id +' onclick="nextModularClass(this.id)" style="height:25px;line-height: 25px;">'+msg[i].className+'<span style="color:#4BB259;">  ▶</span></p>');
+	           html.push('</div> ');
+	           html.push('<div class="header_on" style="height:100%;width:70%;float:right;overflow: hidden;">');
+	           html.push('<ul>');
+	           for(var s = 0;s<cProblem.length;s++){
+	           if(s<3){
+	           if(msg[i].classCode == cProblem[s].modularClassCode ){
+	           html.push('<li id="'+cProblem[s].id+'" onclick="getProblemPage(this.id)"><p>'+cProblem[s].problemName+'</p></li>');
+	            }
+	            }	          	          
+	          }
+	           html.push('</ul>');
+	           html.push('</div> ');
+	           html.push('</div> ');         
+	           }
+		     }  
+		    html.push('</div>');
+		    } 
+		    $(".layui-tab-content").append(html.join(""));
+		   } 
+		  }  
+     })   
+    } 
+    
+    //跳转子模块详情页面
+    function nextModularClass(id){
+      location.href = window.BASEPATH +'questionbase/nextModularClass?id='+id;    
+    }
+    //跳转问题详情页
+    function getProblemPage(id){		  
+      location.href = window.BASEPATH +'questionbase/nextComProMessage?id='+id;
+	}
+    
 </script>
 <body>
  <div class="nav" style="height:130px;width:100%;background: #4BB259;line-height:130px;">
-     <img style="height:75px;width:75px;display: inline-block; border-radius:8px;vertical-align: middle;margin-left:7%;" src="lib/images/logo.png">
-     <h3 style="color:#fff;display: inline-block;margin:0 0 -5px 6%;width:50%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">H i, <span>念</span></h3>
+     <img style="height:75px;width:75px;display: inline-block; border-radius:8px;vertical-align: middle;margin-left:7%;" src="${userInfo.userHeadimg}">
+     <h3 style="color:#fff;display: inline-block;margin:0 0 -5px 6%;width:50%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">H i, <span>${userInfo.userNickname}</span></h3>
  </div>
 	<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
 		  <ul class="layui-tab-title">
-		    <li class="layui-this">商户</li>
-		    <li>用户</li>
-		    <li>交易</li> 
-		  </ul>
-		  <div class="layui-tab-content" style="height:auto;margin:5px 10px">
 		  
-		    <div class="layui-tab-item layui-show" >
-		    <!--商户循环体 -->
-			   <div class="header" style="margin:10px 0;height:120px;width:100%;overflow: hidden;background: #fff;border-radius:8px;">
-				        <div class="header_in"  style="height:100%;width:30%;float:left;text-align: center;">
-				         <img style="width:50px;height:50px;display:inline-block;margin-top:25px;"src="lib/images/logo.png">
-				         <p style="height:25px;line-height: 25px;">订单查询<span style="color:#4BB259;">  ▶</span></p>
-				        </div> 
-				        <div class="header_on" style="height:100%;width:70%;float:right;overflow: hidden;">
-				          <ul>
-				           <li><p>查询不到订单怎么半</p></li>
-				            <li><p>查询不到订单怎么半</p></li>
-				             <li><p>查询不到订单怎么半</p></li>
-				          </ul>
-				        </div> 
-			    </div>
-			      
-		    </div>
-			    <!--用户循环体 -->
-			    <div class="layui-tab-item">
-			                内容2
-			    </div>
-			    <!--交易循环体 -->
-			    <div class="layui-tab-item">
-			              内容3
-			    </div>
+		  </ul>
+		  <div class="layui-tab-content" style="height:auto;margin:5px 10px">		
 		  </div>
      </div>
      
@@ -200,9 +270,9 @@ $(function(){
 	</div>  
   <div class="footer_on" style="display:none;z-index:111111111;height:120px;width:170px;padding:5px 5px;background: #fff;border-radius:4px;position: fixed;top:50%;left:50%;margin:-60px 0 0 -85px;">
   <p style="height:40px;width:100%;line-height: 40px;text-align: center;">电话咨询</p>
-   <p style="color:#fff;width:75%;margin:5px 0;height:25px;border-radius:18px;background: #4BB259;line-height:25px;text-align: center;display: inline-block;"><a href="tel://0315-6681288">0315-6681288</a></p>
+   <p style="color:#fff;width:75%;margin:5px 0;height:25px;border-radius:18px;background: #4BB259;line-height:25px;text-align: center;display: inline-block;"><a href="tell://0315-6681288">0315-6681288</a></p>
    <img style="width:10%;margin-left:5%;" src="lib/images/telephonelv.png">
-   <p style="color:#fff;width:75%;margin:5px 0;height:25px;border-radius:18px;background: #4BB259;line-height:25px;text-align: center;display: inline-block;"><a href="tel://0315-6686299">0315-6686299</a></p>
+   <p style="color:#fff;width:75%;margin:5px 0;height:25px;border-radius:18px;background: #4BB259;line-height:25px;text-align: center;display: inline-block;"><a href="tell://0315-6686299">0315-6686299</a></p>
    <img style="width:10%;margin-left:5%;" src="lib/images/telephonelv.png">
   </div>  
     
