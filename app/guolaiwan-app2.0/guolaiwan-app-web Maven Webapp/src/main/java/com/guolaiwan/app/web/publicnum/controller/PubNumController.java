@@ -335,6 +335,7 @@ public class PubNumController extends WebBaseControll {
 
 	@RequestMapping(value = "/product/index")
 	public ModelAndView productIndex(HttpServletRequest request, long id, String activityproId,String vote) throws Exception {
+		
 		ModelAndView mv = null;
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		String userHeadimg = conn_user.get(userId).getUserHeadimg();
@@ -349,7 +350,27 @@ public class PubNumController extends WebBaseControll {
 			mv.addObject("userHeadimg", userHeadimg);
 		} else {
 			mv = new ModelAndView("mobile/pubnum/product");
-			long productLimitNum = conn_product.get(id).getProductLimitNum();
+			List<ProductPO>  _products = conn_product.findByField("id", id);
+			List<ProductVO>  productVOs =  new ProductVO().getConverter(ProductVO.class)
+			                 .convert(_products, ProductVO.class);
+			long productLimitNum = productVOs.get(0).getProductLimitNum();
+			   
+			//对采摘商品时间进行处理
+			for(ProductVO productVO: productVOs){
+			if("006".equals(productVO.getProductClassCode())){
+			 String startTimeStr =	productVO.getProductBeginDate();
+			 String endTimeStr =	productVO.getProductEnddate();
+			 //剔除"年"
+			 String startSubTimeStr =  startTimeStr.substring(4, startTimeStr.length());
+			 String endSubTimeStr =  endTimeStr.substring(4, endTimeStr.length());
+			 //获取当前年份
+			 Date nowDate = new Date();
+			 String nowDateStr  =   DateUtil.format(nowDate, "yyyy-MM-dd");
+			 String  nowSubTimeStr =  nowDateStr.substring(0, 4);
+			 productVO.setProductBeginDate(nowSubTimeStr.concat(startSubTimeStr));
+			 productVO.setProductEnddate(nowSubTimeStr.concat(endSubTimeStr));			 
+			}								  
+		}								
 			if(vote!=null&&vote!=""&&vote.equals("YES")){
 				mv.addObject("isvote", vote);
 			}
@@ -358,6 +379,7 @@ public class PubNumController extends WebBaseControll {
 			mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
 			mv.addObject("id", id);
 			mv.addObject("userHeadimg", userHeadimg);
+			mv.addObject("products", productVOs.get(0));
 		}
 		mv.addObject("userId", userId);
 		return mv;

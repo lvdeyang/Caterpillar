@@ -157,45 +157,55 @@ background: #4BB259 !important;
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
-<script>
-$(function(){
- var html=[];
- for(var i=0;i<5;i++){
-	    html.push('<li><p>问题1</p><span>></span></li>');
- 
- }
- $('.main').append(html.join(''));
-})
-layui.use(['laypage', 'layer'], function(){
-  var laypage = layui.laypage
-  ,layer = layui.layer;
-  laypage.render({
-    elem: 'footer'
-    ,count: 90
-    ,groups:3
-    ,first: '首页'
-    ,last: '尾页'
-    ,prev: '<em>上一页</em>'
-    ,next: '<em>下一页</em>'
-     ,jump: function(obj, first){
-    //obj包含了当前分页的所有参数，比如：
-    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-    console.log(obj.limit); //得到每页显示的条数
-    
-    //首次不执行
-    if(!first){
-      //do something
-       layer.msg('第'+ obj.curr +'页', {offset: 'b'});
-    }
-  }
-  });
-  
-  });
+<script>       	
+		layui.use(['laypage', 'layer'], function(){
+		  var laypage = layui.laypage
+		  ,layer = layui.layer;
+		   window.BASEPATH = '<%=basePath%>';
+		  laypage.render({
+		    elem: 'footer'
+		    ,count: ${count}
+		    ,groups:3
+		    ,first: '首页'
+		    ,last: '尾页'
+		    ,prev: '<em>上一页</em>'
+		    ,next: '<em>下一页</em>'
+		     ,jump: function(obj, first){
+		    //obj包含了当前分页的所有参数，比如：
+		    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+		    console.log(obj.limit); //得到每页显示的条数
+		    getModularClassInfo(obj.curr,obj.limit);
+		    //首次不执行
+		    if(!first){
+		       layer.msg('第'+ obj.curr +'页', {offset: 'b'});
+		    }
+		  }
+		  }); 
+		  //分页查询问题列表
+	       function getModularClassInfo(page,limit){
+	         var url =  window.BASEPATH + 'questionbase/getProblemMessage?page='+page+'&limit='+limit+'&id=${classModularId}';
+	         $.get(url,null,function(msg){
+	           var msgs = msg.cProblemPOs;
+	           if(msgs.length == 0)return;
+	            var html=[];
+		        for(var i=0;i<msgs.length;i++){
+			    html.push('<li id="'+msgs[i].id+'" onclick="getProblemPage(this.id)"><p>问题'+(i+1)+'</p><span>'+msgs[i].problemName+'</span></li>');		 
+		         }
+		         $('.main').children().remove();
+		         $('.main').append(html.join(''));	         
+	         })
+	       } 		  		 		  
+		  });
+		  //跳转问题详情页
+		  function getProblemPage(id){		  
+		   location.href = window.BASEPATH +'questionbase/nextComProMessage?id='+id;
+		  }
+		  			  
 </script>
 <body>
+   <div style=" text-align: center"><h4 style=>${className}</h4></div>
  <div style="width:100%;height:auto;padding:0 4%;">
   <ul class="main" style="width:100%;">
-   <li><p>问题1</p><span>></span></li>
   </ul>
  </div>
  <!-- 分页 -->

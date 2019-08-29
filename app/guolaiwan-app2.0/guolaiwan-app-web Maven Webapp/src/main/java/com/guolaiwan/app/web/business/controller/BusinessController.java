@@ -42,6 +42,7 @@ import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.app.web.coupleback.vo.CoupleBackVo;
 import com.guolaiwan.app.web.publicnum.vo.BundleOrderVo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
@@ -190,10 +191,16 @@ public class BusinessController extends WebBaseControll {
 	}
    // 南山项目跳转攻略详情
 	@RequestMapping(value = "/merchant/strategy")
-	public ModelAndView Strategy(HttpServletRequest request, long merchantId) throws Exception {
+	public ModelAndView Strategy(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
-		mv = new ModelAndView("mobile/business/strategy");
-		mv.addObject("merchantId", merchantId);
+		//获取用户id
+		HttpSession session = request.getSession();		
+		 long userId  = (long)session.getAttribute("userId");
+		 List<UserInfoPO> uInfo = userDao.findByField("id", userId);
+		 List<UserInfoVO> uList = new UserInfoVO().getConverter(UserInfoVO.class)
+		       .convert(uInfo, UserInfoVO.class);
+		mv = new ModelAndView("mobile/question/question");
+		mv.addObject("userInfo", uList.get(0));
 		return mv;
 	}
 	// 南山项目跳转攻略详情发布

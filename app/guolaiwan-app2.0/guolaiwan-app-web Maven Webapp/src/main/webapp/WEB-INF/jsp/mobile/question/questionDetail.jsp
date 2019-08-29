@@ -107,16 +107,14 @@ html, body {
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <script>
-
-
 </script>
 <body>
  <div style="width:100%;height:auto;padding:0 4%;">
-   <h4 style="height:40px;line-height: 40px;border-bottom:1.5px solid #E4E4E4;width:100%;overflow: hidden;text-indent: 1em;">查询不到订单怎么半</h4>
+   <h4 style="height:40px;line-height: 40px;border-bottom:1.5px solid #E4E4E4;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemName}</h4>
    <h4 style="height:40px;line-height: 40px;width:100%;overflow: hidden;text-indent: 1em;">常见问题：</h4>
-   <p style="height:auto;line-height: 30px;width:100%;overflow: hidden;text-indent: 1em;">查询不到订单怎么半查询不到订单怎么半查询不到订单怎么半查询不到订单怎么半</p>
+   <div  style="height:40px;line-height: 30px;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemdescribe}</div>
    <p style="height:auto;width:100%;overflow: hidden;">
-   <img style="width:100%;margin:5px 0;" src="lib/images/1.jpg">
+   <img style="width:100%;margin:5px 0;" src="${ComProName.problemImg}">
    </p>
  </div>
  <div style="width:100%;height:100px;position: fixed;bottom:0;font-size:16px;text-decoration: none;">
