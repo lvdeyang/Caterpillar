@@ -590,7 +590,19 @@ html, body {
 	 $(document).on('click','.weui-check',function(){
 	      //$('.weui-check').prop('checked',false);
 	      //$(this).prop('checked',true);
-	      initTotal();
+	        var boole = true;
+            var chks=$('.weui-check');
+	   	    for(var i=0;i<chks.length;i++){
+		        if($(chks[i]).prop('checked') == false){
+		          boole = false;
+		          continue;
+	        	}
+	        }
+	       if(boole == true)
+	       {$('#cancel').html('取消')}else{
+	        $('#cancel').html('');
+	       };
+	       initTotal();
 	   });
 	   
 	   $(document).on('click','#selectAll',function(){
@@ -609,7 +621,6 @@ html, body {
 	        $('#cancel').html('');
 	        $('.weui-check').prop('checked',false);  
 	        initTotal();
-	   
 	   });
 	   
 	   
@@ -844,6 +855,9 @@ html, body {
 	       
 	       $('#total').html(total);
 	   }
+	   
+	   
+	   
 	   function initTotal1(){
 	   
 	       var total=0;

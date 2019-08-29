@@ -1913,7 +1913,7 @@ input[type="datetime-local"]:before{
 			   $.toast("请输入手机号", "forbidden");
 			   return false;
 			}
-			if(!(/^1[34578]\d{9}$/.test($('#addressphone').val()))){ 
+			if(!(/^1[3456789]\d{9}$/.test($('#addressphone').val()))){ 
 		       $.toast("手机号码有误，请重填", "forbidden");  
 		       return false; 
 		    } 
