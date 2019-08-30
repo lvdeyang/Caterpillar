@@ -189,7 +189,7 @@ background: #4BB259 !important;
 	           if(msgs.length == 0)return;
 	            var html=[];
 		        for(var i=0;i<msgs.length;i++){
-			    html.push('<li id="'+msgs[i].id+'" onclick="getProblemPage(this.id)"><p>问题'+(i+1)+'</p><span>'+msgs[i].problemName+'</span></li>');		 
+			    html.push('<li id="'+msgs[i].id+'" onclick="getProblemPage(this.id)"><p>'+msgs[i].problemName+'</p><span>></span></li>');		 
 		         }
 		         $('.main').children().remove();
 		         $('.main').append(html.join(''));	         
