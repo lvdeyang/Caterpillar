@@ -916,8 +916,8 @@ input[type="datetime-local"]:before{
 		$(document).on('click','#selRoom',function(){
 		    
 				var startdiv =document.getElementById("startdiv").style.display;  
-				var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/")).getTime();
-		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/")).getTime();		
+				var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
+		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();		
 		   		if(sDate >= eDate)
 			    {
 				     $.toast("离店时间不能小于开始时间", "forbidden");
@@ -1064,7 +1064,7 @@ input[type="datetime-local"]:before{
 		      var number = parseInt($('#proCount').val());
 			  /* var startDate=$('#startDate').val(); */
 			  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-			  var endDate=$('#endDate').val();
+			  var endDate=$('#endDate').val().replace(/-/g, '/');
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
@@ -1160,7 +1160,7 @@ input[type="datetime-local"]:before{
 		  $input.val(number);
 		      /* var startDate=$('#startDate').val(); */
 		      var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-			  var endDate=$('#endDate').val();
+			  var endDate=$('#endDate').val().val().replace(/-/g, '/');
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
@@ -1189,7 +1189,7 @@ input[type="datetime-local"]:before{
 		  /* var startDate=$('#startDate').val(); */
 		   //获取第二天十二点的时间 
 		  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-		  var endDate=$('#endDate').val();
+		  var endDate=$('#endDate').val().val().replace(/-/g, '/');
 		  var daycount=1;
 		  if(startDate&&endDate){
 		        startDate = Date.parse(startDate);
@@ -1252,12 +1252,12 @@ input[type="datetime-local"]:before{
                 $.toast("该商品未到采摘时间","forbidden");
                 return false;
             }            
-           }	 
+           }	
 				var bookdiv =document.getElementById("bookdiv").style.display;       
 				var startdiv =document.getElementById("startdiv").style.display;  
-				var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "/")).getTime();
-				var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/")).getTime();
-		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/")).getTime();		
+				var bDate = new Date(document.getElementById("bookDate").value.replace(/-/g, '/')).getTime();
+				var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
+		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();		
 		   		if(sDate >= eDate)
 			    {
 				     $.toast("离店时间不能小于开始时间", "forbidden");
@@ -1523,9 +1523,9 @@ input[type="datetime-local"]:before{
 			var bookdiv =document.getElementById("bookdiv").style.display;       
 			var startdiv =document.getElementById("startdiv").style.display;  
 			
-			var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "/")).getTime();
-			var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/")).getTime();
-    		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/")).getTime();
+			var bDate = new Date(document.getElementById("bookDate").value.replace(/-/g, '/')).getTime();
+			var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
+    		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();
     		if(sDate >= eDate)
 		    {
 			     $.toast("离店时间不能小于开始时间", "forbidden");
