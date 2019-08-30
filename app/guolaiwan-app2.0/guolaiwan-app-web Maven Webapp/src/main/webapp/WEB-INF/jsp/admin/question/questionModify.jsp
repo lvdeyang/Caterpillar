@@ -51,7 +51,7 @@
 					</div>				
 				</div> 
                                                                           
-                <div class="layui-form-item">
+                <%-- <div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 操作图片 </label>
 				<div class="layui-input-inline" style="width: 100px">
 				    <img alt="" src="${Problem.problemImg}" id="shopImg" style=" height:100px;width:100px ">
@@ -62,7 +62,7 @@
 					<a href="javascript:openMap('上传图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=shopPic&img=shopImg','600','400')" class="layui-btn layui-btn-xs" style="width:90px;margin-left:5px;margin-right:5px" >更换图片</a>
 					<button class="layui-btn layui-btn-xs" type="button" style="width:90px;margin-left:5px;margin-right:5px" onclick="delpic('#shopImg','#shopPic')">删除图片</button>					
 				</div>
-			</div>		
+			</div>	 --%>	
                  <!-- <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                                             是否显示

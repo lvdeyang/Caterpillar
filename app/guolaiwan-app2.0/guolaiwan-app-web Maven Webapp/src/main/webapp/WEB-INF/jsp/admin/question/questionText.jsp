@@ -179,8 +179,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         {type:'checkbox'}  
                         ,{field: 'id',title: 'id',align:'center',templet:'#mktpTpl'}
                         ,{field: 'problemName',title: '问题名称',align:'center',templet:'#mktpTpl3'}
-                        ,{field: 'modularClassName', title: '绑定模块',align:'center',sort: true,} 
-                        , { title : '步骤图片',align : 'center',templet : '#mktpTpl2'}                                                                  																			 
+                        ,{field: 'modularClassName', title: '绑定模块',align:'center',sort: true,}                                                                                          																			 
                         ,{field:'isView', title:'显示',align:'center', templet: '#switchTpl', unresize: true}
                         ,{field:'sort', title:'排序',align:'center'}
                         ,{field:'updateTime', title:'上传时间',align:'center'}
@@ -197,9 +196,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
           </script>
-         <script type="text/html" id="mktpTpl2">
-         <div><img width="50px" height="50px" alt="" src= "{{ d.problemImg}}"></div>    
-         </script>
+        
 <script type="text/html" id="zsgc">
     <div style="cursor: pointer;">
     <a title="编辑" lay-event ="edit"><i class="layui-icon">&#xe642;</i></a> 
