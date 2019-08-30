@@ -1241,7 +1241,7 @@ input[type="datetime-local"]:before{
 		var buyOrbasketFlg=0;//0:buy,1:basket;
 		
 		$(document).on('click','#addOrder',function(){
-		  /* if(${products.productClassCode} == '006'){
+		/*   if(${products.productClassCode} == '006'){
             var begindate = new Date("${products.productBeginDate}").getTime();
             var enddate = new Date("${products.productEnddate}").getTime();
             var nowdate = new Date().getTime();           
@@ -1249,7 +1249,7 @@ input[type="datetime-local"]:before{
                 $.toast("该商品未到采摘时间","forbidden");
                 return false;
             }            
-           }		 */
+           }	 */	
 				var bookdiv =document.getElementById("bookdiv").style.display;       
 				var startdiv =document.getElementById("startdiv").style.display;  
 				var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "/")).getTime();
@@ -1505,7 +1505,7 @@ input[type="datetime-local"]:before{
 		$(document).on('click','#buy',function(){
 			/* mizhu.alert('', '这是alert效果');  */   
 			
-		/* 	if(${products.productClassCode} == '006'){
+			/* if(${products.productClassCode} == '006'){
             var begindate = new Date("${products.productBeginDate}").getTime();
             var enddate = new Date("${products.productEnddate}").getTime();
             var nowdate = new Date().getTime();           
@@ -1513,7 +1513,7 @@ input[type="datetime-local"]:before{
                 $.toast("该商品未到采摘时间","forbidden");
                 return false;
             }            
-           }	 */
+           } */	
 					
 			var bookdiv =document.getElementById("bookdiv").style.display;       
 			var startdiv =document.getElementById("startdiv").style.display;  
