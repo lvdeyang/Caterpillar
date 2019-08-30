@@ -1099,12 +1099,13 @@ appearance:none;
 		       	  html.push('</p>');
 		       	  html.push('</div> ');
 		       	  html.push('</li>');
-		       	  html.push('<p style="height:50px;">');	
-		       	  html.push('</p>');
+		       	  
 		        }
 		    }
 		    	
 		}
+		html.push('<p style="height:50px;">');	
+		html.push('</p>');
 		html.push('</ul>');   	
 		html.push('</div>');
 	
