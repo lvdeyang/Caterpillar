@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>美食大赛</title>
+<title>唐山周末 · 長城鄉村美食文化節</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -259,8 +259,19 @@ margin:0 5px;
 			display: none;
 			z-index:11111;
 			}
-			
-</style>
+		.logo-p{
+		 color: #C3181E;
+	    font-weight: bold;
+	    font-size:18px;
+	    font-family: "Just Another Hand",cursive;
+	    text-transform: uppercase;
+	    width:40%;
+	    position: absolute;
+	    z-index:11;
+	    top:5px;
+	    left:10%;
+		}	
+</style> 
 
 </head>
 
@@ -279,7 +290,11 @@ var base;
 var votenum=${pollnum};
 var buynum=${buynum};
 var productId;
+var ShareUrl=window.location.href;
+var SharePic;
 $(function() {
+
+initShare();
    
 	<!--选项卡  -->
 	$(".tab-btn li").click(function(){
@@ -339,6 +354,8 @@ function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH+'admin/vote/allpics?optionId=${optionId}';
 		$.get(_uriMerchantInfo, null, function(data){
 			    	var html=[];
+//这是分享出去的图片
+			    	SharePic="http://www.guolaiwan.net/file"+data[0].slidepic;
 				for(var i=0; i<data.length; i++){
 					html.push('<div onclick="gotopicdetails(this.id)" id="'+data[i].id+'" class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="http://www.guolaiwan.net/file'+data[i].slidepic+'" alt=""></div>');
 				}
@@ -518,9 +535,63 @@ $("#b"+base).css("color","black");
 	    html.push('</div>');
            html.push('</div>');         
      }
-      $('.contentt-box').children().remove();
-      $('.contentt-box').append(html.join(''));
+       html.push('<img style="width:100%;margin:10px 0px;" src="lib/images/gongsi.jpg">');   
+      /*  $('.contentt-box').children().remove();
+       $('.contentt-box').append(html.join(''));  */
 	}
+
+
+var share={};
+		
+	    function initShare(){
+	        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+	    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			    $.get(_uri, null, function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					if(data){
+					    
+						share=data;
+						doScanShare();
+					}
+					
+				});
+	    }
+	
+	
+	function doScanShare(){
+            wx.config({
+	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            appId : share.appId, // 必填，公众号的唯一标识
+	            timestamp : share.timestamp, // 必填，生成签名的时间戳
+	            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+	            signature : share.signature,// 必填，签名，见附录1
+	            jsApiList : ['checkJsApi', 'onMenuShareTimeline' , 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        	});
+	        wx.ready(function() {
+	
+	               
+	            wx.onMenuShareTimeline({
+                            title: '唐山周末 · 長城鄉村美食文化節', // 分享标题
+                            link: ShareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: SharePic, // 分享图标
+                            success: function () {
+                                
+                            }
+                        });
+	            wx.onMenuShareAppMessage({
+					title : '唐山周末 · 長城鄉村美食文化節', // 分享标题
+					desc: '  ', // 分享描述
+					link: ShareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: SharePic, // 分享图标
+					success : function() {
+						
+					}
+				});
+	            
+	       });
+        }
 	
 	function gotoproductdetails(id){
 		location.href=window.BASEPATH + 'admin/vote/getoproductdetails?productId='+id;
@@ -536,7 +607,8 @@ $("#b"+base).css("color","black");
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-			 <img style="width:40%;position: absolute;z-index:11;top:10px;left:10%;" src="${logo}">
+			  <p class="logo-p" style="display: none;">恋乡小镇</p>
+			 <img style="width:40%;position: absolute;z-index:11;top:10px;left:10%;display: none;" src="${logo}">
 			<!--  <img style="width:10%;position: absolute;z-index:111111111111;top:10px;left:55%;" src="lib/images/logoss.png"> -->
 		    </div>
 		    
@@ -556,7 +628,9 @@ $("#b"+base).css("color","black");
 					<ul class="tab-btn active" id="menu" style="">
 					</ul>
 					<div class="contentt-box" style="">
+					<p style="text-align: center;font-szie:18px;">投票尚未开始，敬请期待</p>
 							<div class="contentt active" style="text-align: center;width:100%;overflow-y:auto; -webkit-overflow-scrolling: touch">
+							 
 							</div>
 							<div class="contentt" style="text-align: center;">
 							</div>
