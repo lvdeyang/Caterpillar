@@ -91,7 +91,10 @@ html, body {
 	list-style: none;
 	text-decoration: none;	
 }
+.nav img{
+width:100%;margin:5px 0;
 
+}
 </style>
 
 </head>
@@ -109,7 +112,7 @@ html, body {
 <script>
 </script>
 <body>
- <div style="width:100%;height:auto;padding:0 4%;">
+ <div class="nav" style="width:100%;height:auto;padding:0 4%;">
    <h4 style="height:40px;line-height: 40px;border-bottom:1.5px solid #E4E4E4;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemName}</h4>
    <h4 style="height:40px;line-height: 40px;width:100%;overflow: hidden;text-indent: 1em;">问题解答：</h4>
   <%--  <div  style="height:40px;line-height: 30px;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemdescribe}</div>
