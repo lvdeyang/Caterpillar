@@ -79,7 +79,7 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	font-family: "微软雅黑" !important;
-	height:auto;
+	height:100%;
 	background:#fff !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
@@ -93,8 +93,10 @@ html, body {
 }
 .main li{
 width:100%;
-height:40px;
-line-height: 40px;
+height:9%;
+display:flex;
+justify-content:center;
+align-items:center;
 border-bottom:1.5px solid #CFCFCF;
 }
 .main li p{
@@ -203,9 +205,9 @@ background: #4BB259 !important;
 		  			  
 </script>
 <body>
-   <div style=" text-align: center"><h4 style=>${className}</h4></div>
- <div style="width:100%;height:auto;padding:0 4%;">
-  <ul class="main" style="width:100%;">
+<%--    <div style=" text-align: center"><h4 style=>${className}</h4></div> --%>
+ <div style="width:100%;height:90%;padding:0 4%;">
+  <ul class="main" style="width:100%;height:90%;">
   </ul>
  </div>
  <!-- 分页 -->
