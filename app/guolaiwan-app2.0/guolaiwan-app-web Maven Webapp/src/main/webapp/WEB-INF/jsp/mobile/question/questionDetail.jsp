@@ -111,11 +111,12 @@ html, body {
 <body>
  <div style="width:100%;height:auto;padding:0 4%;">
    <h4 style="height:40px;line-height: 40px;border-bottom:1.5px solid #E4E4E4;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemName}</h4>
-   <h4 style="height:40px;line-height: 40px;width:100%;overflow: hidden;text-indent: 1em;">常见问题：</h4>
-   <div  style="height:40px;line-height: 30px;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemdescribe}</div>
+   <h4 style="height:40px;line-height: 40px;width:100%;overflow: hidden;text-indent: 1em;">问题解答：</h4>
+  <%--  <div  style="height:40px;line-height: 30px;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemdescribe}</div>
    <p style="height:auto;width:100%;overflow: hidden;">
    <img style="width:100%;margin:5px 0;" src="${ComProName.problemImg}">
-   </p>
+   </p> --%>
+   ${ComProName.problemdescribe}
  </div>
  <div style="width:100%;height:100px;position: fixed;bottom:0;font-size:16px;text-decoration: none;">
  <p style="height:50px;width:100%;overflow: hidden;line-height: 50px;background: #E4E4E4;padding:0 4%;">未解决还需要</p>
