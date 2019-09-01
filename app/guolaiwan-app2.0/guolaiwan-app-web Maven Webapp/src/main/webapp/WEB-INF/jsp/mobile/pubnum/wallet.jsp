@@ -766,7 +766,7 @@ $(function(){
 		<p class="lingqian">我的零钱</p>
 		<h1 class="money"></h1>
 		<a href="javascript:;" onclick="invest()" class="weui-btn weui-btn_primary" style="width: 60%"><input class="btns" style="z-index:111;height:100%;width:100%;left:0;border:none;outline: none;position: absolute;background: rgba(0,0,0,0);">充值</a>
-		<a href="javascript:;" onclick="Withdraw()" class="weui-btn weui-btn_warn" style="width: 60%">提现</a>
+		<a href="javascript:;" onclick="Withdraw()" class="weui-btn weui-btn_warn" style="width: 60%"><input class="btns" style="z-index:111;height:100%;width:100%;left:0;border:none;outline: none;position: absolute;background: rgba(0,0,0,0);">提现</a>
 		
 		
 	</div>
