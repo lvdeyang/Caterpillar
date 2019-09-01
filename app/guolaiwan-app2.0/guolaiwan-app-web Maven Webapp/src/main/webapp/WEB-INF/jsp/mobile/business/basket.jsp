@@ -952,11 +952,11 @@ color: #EC6D1E!important;
 	       var ids=this.id.split('-');
 	       //景点  普通票
 	       if(ids[4]== "0001" && ids[3] == "0"){
-	        location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+id+'&choice=0';
+	        location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+ids[2]+'&choice=0';
 	       }
 	       //景点  活动票
 	       if(ids[4]== "0001" && ids[2] == "0"){
-	       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+id+'&choice=1';	       
+	       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+ids[3]+'&choice=1';	       
 	       }
 	       //住宿
 	       if(ids[4]== "0002"){
