@@ -194,10 +194,12 @@ text-indent: 1em;
 	           html.push('</div> ');
 	           html.push('<div class="header_on" style="height:100%;width:70%;float:right;overflow: hidden;">');
 	           html.push('<ul>');
+	           var count = 0;
 	           for(var s = 0;s<cProblem.length;s++){
-	           if(s<3){
+	           if(count<3){
 	           if(msg[i].classCode == cProblem[s].modularClassCode ){
 	           html.push('<li id="'+cProblem[s].id+'" onclick="getProblemPage(this.id)"><p>'+cProblem[s].problemName+'</p></li>');
+	            count+=1;
 	            }
 	            }	          	          
 	          }
@@ -218,10 +220,12 @@ text-indent: 1em;
 	           html.push('</div> ');
 	           html.push('<div class="header_on" style="height:100%;width:68%;float:right;overflow: hidden;">');
 	           html.push('<ul>');
+	           var count = 0;
 	           for(var s = 0;s<cProblem.length;s++){
-	           if(s<3){
+	           if(count<3){
 	           if(msg[i].classCode == cProblem[s].modularClassCode ){
 	           html.push('<li id="'+cProblem[s].id+'" onclick="getProblemPage(this.id)"><p>'+cProblem[s].problemName+'</p></li>');
+	           count+=1;
 	            }
 	            }	          	          
 	          }
