@@ -1189,7 +1189,7 @@ input[type="datetime-local"]:before{
 		  /* var startDate=$('#startDate').val(); */
 		   //获取第二天十二点的时间 
 		  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-		  var endDate=$('#endDate').val().val().replace(/-/g, '/');
+		  var endDate=$('#endDate');
 		  var daycount=1;
 		  if(startDate&&endDate){
 		        startDate = Date.parse(startDate);
