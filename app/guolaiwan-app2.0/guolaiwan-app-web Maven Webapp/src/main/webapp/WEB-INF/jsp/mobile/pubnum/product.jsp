@@ -1160,7 +1160,7 @@ input[type="datetime-local"]:before{
 		  $input.val(number);
 		      /* var startDate=$('#startDate').val(); */
 		      var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-			  var endDate=$('#endDate').val().val().replace(/-/g, '/');
+			  var endDate=$('#endDate');
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
