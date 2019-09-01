@@ -529,10 +529,11 @@ background: #fff;
 	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">沙发<input class="ischange" name='key' value="sofa" style="margin:0;vertical-align:middle;" type="checkbox"></p>
 	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">空调<input class="ischange" name='key' value="airConditioner" style="margin:0;vertical-align:middle;" type="checkbox"></p>
 	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">唱歌<input class="ischange" name='key' value="karaoke" style="margin:0;vertical-align:middle;" type="checkbox"></p>
+	       <p style="height:50px;line-height: 50px;display: inline-block;margin:0 2%;">电视<input class="ischange" name='key' value="television" style="margin:0;vertical-align:middle;" type="checkbox"></p>
 	    </div> 
 	     <!-- 搜索 -->
 	     <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;margin: 20px 0;">
-		   <input placeholder="输入沙发/WIFI/电视/空调等关键字" class="search" style="padding:0 10%;width:80%;height:40px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;text-align: center; " type="text">
+		   <input placeholder="输入房间名称" class="search" style="padding:0 10%;width:80%;height:40px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;text-align: center; " type="text">
 		   <img class="pic" style="width:20px;height:20px;position: absolute;right:15%;top:10px;" src="lib/images/sousuo.png"/>
 		 </div>
 	     
@@ -541,7 +542,7 @@ background: #fff;
 <div class="main" style="width:100%;height:auto;overflow: hidden;">
 	      <!-- 左包间 -->
 	      <div class="Room-left" style="width:20%;height:auto;float:left;overflow: hidden;margin-left:3%;">
-	          
+	           
 	      </div>
 	      
 	        <!-- 右包间 -->
