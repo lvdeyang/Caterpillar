@@ -128,7 +128,8 @@ width:100%;margin:5px 0;
   <span style="line-height: 30px;position: absolute;right:2%;"><a href="tel://0315-6681288">0315-6681288</a> ></span>
   <span style="line-height: 30px;position: absolute;right:2%;bottom:0px;"><a href="tel://0315-6686299">0315-6686299</a> ></span>
   </p>
- </div>   
+ </div> 
+ <P style="height:100px;"></P>  
 </body>
 
 </html>
