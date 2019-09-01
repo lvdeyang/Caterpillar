@@ -916,8 +916,8 @@ input[type="datetime-local"]:before{
 		$(document).on('click','#selRoom',function(){
 		    
 				var startdiv =document.getElementById("startdiv").style.display;  
-				var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/")).getTime();
-		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/")).getTime();		
+				var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
+		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();		
 		   		if(sDate >= eDate)
 			    {
 				     $.toast("离店时间不能小于开始时间", "forbidden");
@@ -1064,7 +1064,7 @@ input[type="datetime-local"]:before{
 		      var number = parseInt($('#proCount').val());
 			  /* var startDate=$('#startDate').val(); */
 			  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-			  var endDate=$('#endDate').val();
+			  var endDate=$('#endDate').val().replace(/-/g, '/');
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
@@ -1151,6 +1151,7 @@ input[type="datetime-local"]:before{
 	    });
 	
 	
+	
 	    var MAX = ${productLimitNum eq "0"? "99":productLimitNum}, MIN = ${productRestrictNumber};
 		$('.weui-count__decrease').click(function (e) {
 		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
@@ -1159,7 +1160,7 @@ input[type="datetime-local"]:before{
 		  $input.val(number);
 		      /* var startDate=$('#startDate').val(); */
 		      var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-			  var endDate=$('#endDate').val();
+			  var endDate=$('#endDate').val().val().replace(/-/g, '/');
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
@@ -1188,7 +1189,7 @@ input[type="datetime-local"]:before{
 		  /* var startDate=$('#startDate').val(); */
 		   //获取第二天十二点的时间 
 		  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-		  var endDate=$('#endDate').val();
+		  var endDate=$('#endDate');
 		  var daycount=1;
 		  if(startDate&&endDate){
 		        startDate = Date.parse(startDate);
@@ -1241,20 +1242,22 @@ input[type="datetime-local"]:before{
 		var buyOrbasketFlg=0;//0:buy,1:basket;
 		
 		$(document).on('click','#addOrder',function(){
-		  if(${products.productClassCode} == '006'){
-            var begindate = new Date("${products.productBeginDate}").getTime();
-            var enddate = new Date("${products.productEnddate}").getTime();
-            var nowdate = new Date().getTime();           
+		   if("${products.productClassCode}" == '006'){
+		   var beginDate = "${products.productBeginDate}";
+		   var endDate = "${products.productEnddate}";
+            var begindate = new Date(beginDate.replace("-","/").replace("-","/"));
+            var enddate = new Date(endDate.replace("-","/").replace("-","/"));
+            var nowdate = new Date();          
             if(nowdate < begindate || nowdate > enddate ){
                 $.toast("该商品未到采摘时间","forbidden");
                 return false;
             }            
-           }		
+           }	
 				var bookdiv =document.getElementById("bookdiv").style.display;       
 				var startdiv =document.getElementById("startdiv").style.display;  
-				var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "/")).getTime();
-				var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/")).getTime();
-		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/")).getTime();		
+				var bDate = new Date(document.getElementById("bookDate").value.replace(/-/g, '/')).getTime();
+				var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
+		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();		
 		   		if(sDate >= eDate)
 			    {
 				     $.toast("离店时间不能小于开始时间", "forbidden");
@@ -1505,22 +1508,24 @@ input[type="datetime-local"]:before{
 		$(document).on('click','#buy',function(){
 			/* mizhu.alert('', '这是alert效果');  */   
 			
-			if(${products.productClassCode} == '006'){
-            var begindate = new Date("${products.productBeginDate}").getTime();
-            var enddate = new Date("${products.productEnddate}").getTime();
-            var nowdate = new Date().getTime();           
+          if("${products.productClassCode}" == '006'){
+		   var beginDate = "${products.productBeginDate}";
+		   var endDate = "${products.productEnddate}";
+            var begindate = new Date(beginDate.replace("-","/").replace("-","/"));
+            var enddate = new Date(endDate.replace("-","/").replace("-","/"));
+            var nowdate = new Date();          
             if(nowdate < begindate || nowdate > enddate ){
                 $.toast("该商品未到采摘时间","forbidden");
                 return false;
             }            
-           }	
+           }		
 					
 			var bookdiv =document.getElementById("bookdiv").style.display;       
 			var startdiv =document.getElementById("startdiv").style.display;  
 			
-			var bDate = new Date(document.getElementById("bookDate").value.replace(/-T/g, "/")).getTime();
-			var sDate = new Date(document.getElementById("startDate").value.replace(/-T/g, "/")).getTime();
-    		var eDate = new Date(document.getElementById("endDate").value.replace(/-T/g, "/")).getTime();
+			var bDate = new Date(document.getElementById("bookDate").value.replace(/-/g, '/')).getTime();
+			var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
+    		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();
     		if(sDate >= eDate)
 		    {
 			     $.toast("离店时间不能小于开始时间", "forbidden");

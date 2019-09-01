@@ -1098,11 +1098,14 @@ appearance:none;
 		          html.push(' </div> ');
 		       	  html.push('</p>');
 		       	  html.push('</div> ');
-		       	  html.push('</li>');	
+		       	  html.push('</li>');
+		       	  
 		        }
 		    }
 		    	
 		}
+		html.push('<p style="height:50px;">');	
+		html.push('</p>');
 		html.push('</ul>');   	
 		html.push('</div>');
 	
@@ -1316,8 +1319,9 @@ appearance:none;
 						</div>
 						<!-- 商家信息 -->
 						<div class="contentt" style="height:auto;width:100%;">
-							<div id="merInfo1" style="width:100%;height:auto;border-bottom:10px solid #F4F4F4;border-top:10px solid #F4F4F4;display: inline-block;margin:20px 0 0 0; ">
+							<div id="merInfo1" style="width:100%;height:auto;border-bottom:10px solid #F4F4F4;border-top:10px solid #F4F4F4;display: inline-block;margin:20px 0 0 0;position: relative; ">
 								<!-- <p style="font-weight: bold;color:black;margin:10px 10%;">临街小馆</p> -->
+								<img style="height:50px;width:50px;position: absolute;top:60px;right:170px;" src="lib/images/click.png">
 		        		    </div>    
 						    <div id="merInfo2">
 						   <p style="font-weight: bold;color:#757575;margin:10px 10%;">订单有效期使用日期：7天内有效</p>

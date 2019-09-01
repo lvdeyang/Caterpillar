@@ -189,15 +189,17 @@ text-indent: 1em;
 	           if(msg[i].classmodularCode == ModularInfo[j].modularCode){
 	           html.push('<div  class="header" style="margin:10px 0;height:120px;width:100%;overflow: hidden;background: #fff;border-radius:8px;">');
 	           html.push('<div class="header_in"  style="height:100%;width:30%;float:left;text-align: center;">');
-	           html.push('<img style="width:50px;height:50px;display:inline-block;margin-top:25px;"src="'+msg[i].modularPic+'">');
+	           html.push('<img style="width:40px;height:40px;display:inline-block;margin-top:25px;"src="'+msg[i].modularPic+'">');
 	           html.push('<p id='+msg[i].id +' onclick="nextModularClass(this.id)" style="height:25px;line-height: 25px;">'+msg[i].className+'<span style="color:#4BB259;">  ▶</span></p>');
 	           html.push('</div> ');
 	           html.push('<div class="header_on" style="height:100%;width:70%;float:right;overflow: hidden;">');
 	           html.push('<ul>');
+	           var count = 0;
 	           for(var s = 0;s<cProblem.length;s++){
-	           if(s<3){
+	           if(count<3){
 	           if(msg[i].classCode == cProblem[s].modularClassCode ){
 	           html.push('<li id="'+cProblem[s].id+'" onclick="getProblemPage(this.id)"><p>'+cProblem[s].problemName+'</p></li>');
+	            count+=1;
 	            }
 	            }	          	          
 	          }
@@ -213,15 +215,17 @@ text-indent: 1em;
 	           if(msg[i].classmodularCode == ModularInfo[j].modularCode){
 	           html.push('<div  class="header" style="margin:10px 0;height:120px;width:100%;overflow: hidden;background: #fff;border-radius:8px;">');
 	           html.push('<div class="header_in"  style="height:100%;width:30%;float:left;text-align: center;">');
-	           html.push('<img style="width:50px;height:50px;display:inline-block;margin-top:25px;"src="'+msg[i].modularPic+'">');
+	           html.push('<img style="width:40px;height:40px;display:inline-block;margin-top:25px;"src="'+msg[i].modularPic+'">');
 	           html.push('<p id='+msg[i].id +' onclick="nextModularClass(this.id)" style="height:25px;line-height: 25px;">'+msg[i].className+'<span style="color:#4BB259;">  ▶</span></p>');
 	           html.push('</div> ');
-	           html.push('<div class="header_on" style="height:100%;width:70%;float:right;overflow: hidden;">');
+	           html.push('<div class="header_on" style="height:100%;width:68%;float:right;overflow: hidden;">');
 	           html.push('<ul>');
+	           var count = 0;
 	           for(var s = 0;s<cProblem.length;s++){
-	           if(s<3){
+	           if(count<3){
 	           if(msg[i].classCode == cProblem[s].modularClassCode ){
 	           html.push('<li id="'+cProblem[s].id+'" onclick="getProblemPage(this.id)"><p>'+cProblem[s].problemName+'</p></li>');
+	           count+=1;
 	            }
 	            }	          	          
 	          }
@@ -270,9 +274,9 @@ text-indent: 1em;
 	</div>  
   <div class="footer_on" style="display:none;z-index:111111111;height:120px;width:170px;padding:5px 5px;background: #fff;border-radius:4px;position: fixed;top:50%;left:50%;margin:-60px 0 0 -85px;">
   <p style="height:40px;width:100%;line-height: 40px;text-align: center;">电话咨询</p>
-   <p style="color:#fff;width:75%;margin:5px 0;height:25px;border-radius:18px;background: #4BB259;line-height:25px;text-align: center;display: inline-block;"><a href="tell://0315-6681288">0315-6681288</a></p>
+   <p style="color:#fff;width:75%;margin:5px 0;height:25px;border-radius:18px;background: #4BB259;line-height:25px;text-align: center;display: inline-block;"><a href="tel://0315-6681288" style="text-decoration:none;">0315-6681288</a></p>
    <img style="width:10%;margin-left:5%;" src="lib/images/telephonelv.png">
-   <p style="color:#fff;width:75%;margin:5px 0;height:25px;border-radius:18px;background: #4BB259;line-height:25px;text-align: center;display: inline-block;"><a href="tell://0315-6686299">0315-6686299</a></p>
+   <p style="color:#fff;width:75%;margin:5px 0;height:25px;border-radius:18px;background: #4BB259;line-height:25px;text-align: center;display: inline-block;"><a href="tel://0315-6686299" style="text-decoration:none;">0315-6686299</a></p>
    <img style="width:10%;margin-left:5%;" src="lib/images/telephonelv.png">
   </div>  
     

@@ -497,8 +497,16 @@ html, body {
 .weui-prompt-input .weui-input{
 cursor:pointer !important;
 }
-.mingxi p span{
-
+.weui-prompt-input{
+height:2.5em !important;
+cursor:pointer !important;
+padding:4px 10% !important;
+}
+.weui-dialog__bd{
+ line-height: 0 !important;
+}
+.default,.primary{
+z-index:11111 !important;
 }
 </style>
 
@@ -506,8 +514,8 @@ cursor:pointer !important;
 
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
-
 <script type="text/javascript">
+
 	var page=1;
 	$(function() {
 	  window.BASEPATH = '<%=basePath%>';
@@ -519,6 +527,7 @@ cursor:pointer !important;
 				return data.data;		
 			}
 	  };
+    
 		
 		getMoney();
 	getreckoning();
@@ -605,7 +614,7 @@ cursor:pointer !important;
 				    		mmpay(orderNo);
 				    		}
 						});
-				    		
+				  
 				    }else{
 				    	$.alert('您的输入有误！')
 						return;		    	
@@ -756,7 +765,7 @@ $(function(){
 		<img class="jinbi" alt="" src="lib/images/jinbi.png">
 		<p class="lingqian">我的零钱</p>
 		<h1 class="money"></h1>
-		<a href="javascript:;" onclick="invest()" class="weui-btn weui-btn_primary" style="width: 60%">充值</a>
+		<a href="javascript:;" onclick="invest()" class="weui-btn weui-btn_primary" style="width: 60%"><input class="btns" style="z-index:111;height:100%;width:100%;left:0;border:none;outline: none;position: absolute;background: rgba(0,0,0,0);">充值</a>
 		<a href="javascript:;" onclick="Withdraw()" class="weui-btn weui-btn_warn" style="width: 60%">提现</a>
 		
 		
