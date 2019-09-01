@@ -125,8 +125,8 @@ width:100%;margin:5px 0;
  <p style="height:50px;width:100%;overflow: hidden;line-height: 50px;background: #E4E4E4;padding:0 4%;">未解决还需要</p>
   <p style="height:50px;width:100%;overflow: hidden;background:#fff;padding:0 4%;">
   <span style="line-height: 35px;">电话咨询</span>
-  <span style="line-height: 30px;position: absolute;right:2%;font-size:14px;width:30%;display: inline-block;"><a style="width:100%;" href="tel://0315-6681288">0315-6681288</a> ></span>
-  <span style="line-height: 30px;position: absolute;right:2%;bottom:0px;font-size:14px;width:30%;display: inline-block;"><a style="width:100%;" href="tel://0315-6686299">0315-6686299</a> ></span>
+  <span style="line-height: 30px;position: absolute;right:2%;font-size:14px;width:33%;display: inline-block;"><a style="text-align: left;" href="tel://0315-6681288">0315-6681288</a><span style="float:right;">></span></span>
+  <span style="line-height: 30px;position: absolute;right:2%;bottom:0px;font-size:14px;width:33%;display: inline-block;"><a style="text-align: left;" href="tel://0315-6686299">0315-6686299</a><span style="float:right;">></span></span>
   </p>
  </div> 
  <P style="height:100px;"></P>  
