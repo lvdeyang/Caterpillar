@@ -364,7 +364,13 @@ public class BusinessController extends WebBaseControll {
 		List<ProductPO> productlist = productDAO.findByMerchantId(id);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		DecimalFormat df = new DecimalFormat("0.00");
-		int[] arr = new int[4];
+		int[] arr;
+		System.out.println(productlist.size() +" ---------");
+		if(productlist.size() < 4){
+			 arr = new int[productlist.size()];
+		}else {
+			 arr = new int[4];
+		}
 		for (int i = 0; i < arr.length; i++) { // 生成4个无重复的随机数
 			arr[i] = (int) (productlist.size() * Math.random());
 			for (int j = 0; j < i; j++) {
@@ -752,10 +758,10 @@ public class BusinessController extends WebBaseControll {
 	// 搜索住宿的店家
 	@ResponseBody
 	@RequestMapping(value = "/gotohotel")
-	public ModelAndView goToHotel(HttpServletRequest request) throws Exception {
+	public ModelAndView goToHotel(HttpServletRequest request,String name ) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		String name=new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");
+		/*String name=new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");*/
 		mv = new ModelAndView("mobile/business/hotel");
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("name", name);
