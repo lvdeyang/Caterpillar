@@ -65,7 +65,7 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 		}
 		hql.orderBy("allvotes", true);
 		hql.orderBy("updateTime", true);
-		hql.orderBy("updateTime", true);
+		/*hql.orderBy("updateTime", true);*/
 		List<VoteProductPO> findByHql = findByHql(hql);
 		if (findByHql.size() == 0) {
 			return null;
@@ -80,8 +80,8 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 		hql.andBy("modularcode", Condition.eq, moId);
 		}
 		hql.orderBy("ranking", false);
-		hql.orderBy("allvotes", true);
-		hql.orderBy("updateTime", true);
+		/*hql.orderBy("allvotes", true);*/
+	/*	hql.orderBy("updateTime", true);*/
 		List<VoteProductPO> findByHql = findByHql(hql);
 		if (findByHql.size() == 0) {
 			return null;

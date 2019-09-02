@@ -382,7 +382,7 @@ public class JudgesController {
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		//按照模块id获取投票的商品
-		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproduct(Long.parseLong(id));
+		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproducts(Long.parseLong(id));
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		if(getvoteproduct==null){
 			return list;
