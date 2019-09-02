@@ -85,6 +85,7 @@ public class OrderInfoController extends BaseController {
 	private TableDAO conn_table;
 	@Autowired
 	private MealListDao conn_meallist;
+
 	// 显示列表
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView getOrderInfos(HttpServletRequest request) {
@@ -101,17 +102,19 @@ public class OrderInfoController extends BaseController {
 		return mv;
 	}
 
-	@Autowired LogisticsDao conn_logistics;
+	@Autowired
+	LogisticsDao conn_logistics;
+
 	// 切换tab
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	public Map<String, Object> GetList(HttpServletRequest request, int page, int limit, int type) throws Exception {
 		// 检索条件
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		//添加获取comId   4/26
+		// 添加获取comId 4/26
 		String comId = Long.toString(getLoginInfo().getComId());
 		dataMap.put("comId", comId);
-		
+
 		String mName = request.getParameter("mName");
 		if (mName != null && mName.length() != 0) {
 			dataMap.put("shopName", mName);
@@ -140,6 +143,8 @@ public class OrderInfoController extends BaseController {
 			orderinfopo = conn_OrderInfo.findOrdersByState(OrderStateType.NOTPAY, dataMap, page, limit);
 			count = conn_OrderInfo.countOrdersByState(OrderStateType.NOTPAY, dataMap);
 			for (OrderInfoPO oipo : orderinfopo) {
+				oipo.setUpdateTime(null);
+
 				AddressPO address = conn_address.get(oipo.getMailAddress());
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
@@ -156,6 +161,7 @@ public class OrderInfoController extends BaseController {
 			int count1 = conn_OrderInfo.countOrdersByState(OrderStateType.PAYFINISH, dataMap);
 			count = count + count1;
 			for (OrderInfoPO oipo : orderinfopo) {
+				oipo.setUpdateTime(null);
 				AddressPO address = conn_address.get(oipo.getMailAddress());
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
@@ -167,6 +173,7 @@ public class OrderInfoController extends BaseController {
 			orderinfopo = conn_OrderInfo.findOrdersByState(OrderStateType.DELIVER, dataMap, page, limit);
 			count = conn_OrderInfo.countOrdersByState(OrderStateType.DELIVER, dataMap);
 			for (OrderInfoPO oipo : orderinfopo) {
+				oipo.setUpdateTime(null);
 				AddressPO address = conn_address.get(oipo.getMailAddress());
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
@@ -178,6 +185,7 @@ public class OrderInfoController extends BaseController {
 			orderinfopo = conn_OrderInfo.findOrdersByState(OrderStateType.RECEIPT, dataMap, page, limit);
 			count = conn_OrderInfo.countOrdersByState(OrderStateType.RECEIPT, dataMap);
 			for (OrderInfoPO oipo : orderinfopo) {
+				oipo.setUpdateTime(null);
 				AddressPO address = conn_address.get(oipo.getMailAddress());
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
@@ -189,6 +197,7 @@ public class OrderInfoController extends BaseController {
 			orderinfopo = conn_OrderInfo.findOrdersByState(OrderStateType.CONFIRMED, dataMap, page, limit);
 			count = conn_OrderInfo.countOrdersByState(OrderStateType.CONFIRMED, dataMap);
 			for (OrderInfoPO oipo : orderinfopo) {
+				oipo.setUpdateTime(null);
 				AddressPO address = conn_address.get(oipo.getMailAddress());
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
@@ -200,6 +209,7 @@ public class OrderInfoController extends BaseController {
 			orderinfopo = conn_OrderInfo.findOrdersByState(OrderStateType.TESTED, dataMap, page, limit);
 			count = conn_OrderInfo.countOrdersByState(OrderStateType.TESTED, dataMap);
 			for (OrderInfoPO oipo : orderinfopo) {
+				oipo.setUpdateTime(null);
 				AddressPO address = conn_address.get(oipo.getMailAddress());
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
@@ -222,6 +232,7 @@ public class OrderInfoController extends BaseController {
 			orderinfopo = conn_OrderInfo.findOrdersByState(OrderStateType.REFUNDING, dataMap, page, limit);
 			count = conn_OrderInfo.countOrdersByState(OrderStateType.REFUNDING, dataMap);
 			for (OrderInfoPO oipo : orderinfopo) {
+				oipo.setUpdateTime(null);
 				AddressPO address = conn_address.get(oipo.getMailAddress());
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
@@ -246,6 +257,7 @@ public class OrderInfoController extends BaseController {
 			orderinfopo = conn_OrderInfo.findOrdersByState(OrderStateType.REFUNDFAIL, dataMap, page, limit);
 			count = conn_OrderInfo.countOrdersByState(OrderStateType.REFUNDFAIL, dataMap);
 			for (OrderInfoPO oipo : orderinfopo) {
+				oipo.setUpdateTime(null);
 				AddressPO address = conn_address.get(oipo.getMailAddress());
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
@@ -263,9 +275,9 @@ public class OrderInfoController extends BaseController {
 			long mailAddress = _orderInfo.getMailAddress();
 			_orderInfo.setMailAddressPO(conn_address.get(mailAddress));
 			ProductComboPO comboPO = conn_combo.get(_orderInfo.getComboId());
-			_orderInfo.setComboName(comboPO==null?"标准":comboPO.getCombo());
-			LogisticsPo logisticsPo=conn_logistics.get(_orderInfo.getLogisticsId());
-			_orderInfo.setLogisticsName(logisticsPo==null?"过来玩物流":logisticsPo.getName());
+			_orderInfo.setComboName(comboPO == null ? "标准" : comboPO.getCombo());
+			LogisticsPo logisticsPo = conn_logistics.get(_orderInfo.getLogisticsId());
+			_orderInfo.setLogisticsName(logisticsPo == null ? "过来玩物流" : logisticsPo.getName());
 		}
 		request.getSession().setAttribute("orderinfovo", orderinfovo);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -537,44 +549,45 @@ public class OrderInfoController extends BaseController {
 	@JsonBody
 	@RequestMapping(value = "/changeOrderStatus", method = RequestMethod.GET)
 	public Object changeOrderStatus(HttpServletRequest request, String orderId, String status) throws Exception {
-		if(orderId.indexOf("bundle") != -1){
-			Long bundleOrderId=Long.parseLong(orderId.split("-")[1]);
-			BundleOrder bOrder=conn_bundleOrder.get(bundleOrderId);
-			String[] orderIds=bOrder.getOrderStr().split("A");
+		if (orderId.indexOf("bundle") != -1) {
+			Long bundleOrderId = Long.parseLong(orderId.split("-")[1]);
+			BundleOrder bOrder = conn_bundleOrder.get(bundleOrderId);
+			String[] orderIds = bOrder.getOrderStr().split("A");
 			for (String orderidStr : orderIds) {
 				OrderInfoPO orderInfoPO = conn_OrderInfo.get(Long.parseLong(orderidStr));
 				orderInfoPO.setOrderState(OrderStateType.REFUNDED);
 				conn_OrderInfo.update(orderInfoPO);
 			}
-			
-		}else{
+
+		} else {
 			OrderInfoPO orderInfoPO = conn_OrderInfo.get(Long.parseLong(orderId));
 			orderInfoPO.setOrderState(OrderStateType.REFUNDED);
 			conn_OrderInfo.update(orderInfoPO);
 		}
-		
+
 		return success();
 	}
+
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/rejectOrderStatus", method = RequestMethod.GET)
 	public Object rejectOrderStatus(HttpServletRequest request, String orderId, String status) throws Exception {
-		if(orderId.indexOf("bundle") != -1){
-			Long bundleOrderId=Long.parseLong(orderId.split("-")[1]);
-			BundleOrder bOrder=conn_bundleOrder.get(bundleOrderId);
-			String[] orderIds=bOrder.getOrderStr().split("A");
+		if (orderId.indexOf("bundle") != -1) {
+			Long bundleOrderId = Long.parseLong(orderId.split("-")[1]);
+			BundleOrder bOrder = conn_bundleOrder.get(bundleOrderId);
+			String[] orderIds = bOrder.getOrderStr().split("A");
 			for (String orderidStr : orderIds) {
 				OrderInfoPO orderInfoPO = conn_OrderInfo.get(Long.parseLong(orderidStr));
 				orderInfoPO.setOrderState(OrderStateType.REFUNDED);
 				conn_OrderInfo.update(orderInfoPO);
 			}
-			
-		}else{
+
+		} else {
 			OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
 			orderInfoPO.setOrderState(OrderStateType.PAYSUCCESS);
 			conn_OrderInfo.update(orderInfoPO);
 		}
-		
+
 		return success();
 	}
 
@@ -594,7 +607,7 @@ public class OrderInfoController extends BaseController {
 				}
 				vo.setReason(orderInfoPO.getRefundReason());
 				vo.setProductName(orderInfoPO.getProductName() + "*" + orderInfoPO.getProductNum());
-				vo.setOrderAllMoney(new DecimalFormat("0.00").format((double)orderInfoPO.getPayMoney() / 100));
+				vo.setOrderAllMoney(new DecimalFormat("0.00").format((double) orderInfoPO.getPayMoney() / 100));
 				bundleOrderVos.add(vo);
 			} else {
 				if (!bundleMap.containsKey(bOder.getId())) {
@@ -607,14 +620,14 @@ public class OrderInfoController extends BaseController {
 					}
 					vo.setReason(orderInfoPO.getRefundReason());
 					vo.setProductName(orderInfoPO.getProductName() + "*" + orderInfoPO.getProductNum());
-					vo.setOrderAllMoney(new DecimalFormat("0.00").format((double)orderInfoPO.getPayMoney() / 100));
+					vo.setOrderAllMoney(new DecimalFormat("0.00").format((double) orderInfoPO.getPayMoney() / 100));
 					bundleOrderVos.add(vo);
 				} else {
 					BundleOrderVo vo = bundleMap.get(bOder.getId());
 					vo.setProductName(vo.getProductName() + "<br>" + orderInfoPO.getProductName() + "*"
 							+ orderInfoPO.getProductNum());
-					vo.setOrderAllMoney(
-							(new DecimalFormat("0.00").format(Double.parseDouble(vo.getOrderAllMoney()) + (double)orderInfoPO.getPayMoney() / 100)));
+					vo.setOrderAllMoney((new DecimalFormat("0.00").format(
+							Double.parseDouble(vo.getOrderAllMoney()) + (double) orderInfoPO.getPayMoney() / 100)));
 				}
 			}
 		}
@@ -646,32 +659,31 @@ public class OrderInfoController extends BaseController {
 					if (orderInfoVOs.get(i).getActivityId() != 0) {
 						obj[9] = "0.00";
 					} else if (productPO.getProductCommissionCode() == 1) {
-						accured = productPO.getProductCommissionPrice() * orderInfoVOs.get(i).getProductNum()
-								/ 100;
-						obj[9] = df.format(productPO.getProductCommissionPrice()/100);
+						accured = productPO.getProductCommissionPrice() * orderInfoVOs.get(i).getProductNum() / 100;
+						obj[9] = df.format(productPO.getProductCommissionPrice() / 100);
 					} else {
-						accured =productPO.getProductCommissionPrice()
+						accured = productPO.getProductCommissionPrice()
 								* Double.parseDouble(orderInfoVOs.get(i).getPayMoney()) / 100;
-						obj[9] = df.format(Double.parseDouble(productPO.getProductCommissionPrice()+"") / 100);
+						obj[9] = df.format(Double.parseDouble(productPO.getProductCommissionPrice() + "") / 100);
 					}
-					
+
 				} else {
-					List<ProductPO> productPOs=conn_product.findByMerchantId(orderInfoVOs.get(i).getShopId());
-					if(!productPOs.isEmpty()){
+					List<ProductPO> productPOs = conn_product.findByMerchantId(orderInfoVOs.get(i).getShopId());
+					if (!productPOs.isEmpty()) {
 						if (productPOs.get(0).getProductCommissionCode() == 1) {
-							accured = productPOs.get(0).getProductCommissionPrice() 
-									/ 100;
-							obj[9] = df.format(productPOs.get(0).getProductCommissionPrice()/100);
+							accured = productPOs.get(0).getProductCommissionPrice() / 100;
+							obj[9] = df.format(productPOs.get(0).getProductCommissionPrice() / 100);
 						} else {
-							accured =productPOs.get(0).getProductCommissionPrice()
+							accured = productPOs.get(0).getProductCommissionPrice()
 									* Double.parseDouble(orderInfoVOs.get(i).getPayMoney()) / 100;
-							obj[9] = df.format(Double.parseDouble(productPOs.get(0).getProductCommissionPrice()+"") / 100);
+							obj[9] = df.format(
+									Double.parseDouble(productPOs.get(0).getProductCommissionPrice() + "") / 100);
 						}
 					}
-					
+
 				}
 
-				obj[10] =  df.format(accured);
+				obj[10] = df.format(accured);
 				obj[11] = orderInfoVOs.get(i).getPayMode();
 				obj[12] = orderInfoVOs.get(i).getPayDate();
 				obj[13] = orderInfoVOs.get(i).getOrderState();
@@ -698,224 +710,227 @@ public class OrderInfoController extends BaseController {
 		ExportExcelSeedBack ex = new ExportExcelSeedBack(title, headers, dataList);// 没有标题
 		ex.export(out);
 	}
-	
-	
+
 	// 显示列表
-		@RequestMapping(value = "/sell", method = RequestMethod.GET)
-		public ModelAndView toSell(HttpServletRequest request) {
-			Map<String, Object> strMap = new HashMap<String, Object>();
-			ModelAndView mv = new ModelAndView("admin/orderinfo/sell", strMap);
-			return mv;
-		}
-        @Autowired ProductComboDAO conn_combo;
-        @Autowired OrderInfoDAO conn_order;
-		// 售票
-		@ResponseBody
-		@RequestMapping(value = "/sell.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-		public Map<String, Object> sell(HttpServletRequest request) throws Exception {
-			Map<String, Object> strMap = new HashMap<String, Object>();
-            String productNum=request.getParameter("productNum");
-            if(productNum!=null){
-            	String[] pNums=productNum.split("-");
-            	//productNum格式为merchantId-productId-comboId的形式。
-            	if(!pNums[0].equals(getMerchantInfo().getMerchantId()+"")){
-            		strMap.put("code", "404");
-        			strMap.put("msg", "不是该商户商品");
-        			return strMap;
-            	}
-            	ProductPO productPO=conn_product.get(Long.parseLong(pNums[1]));
-            	MerchantPO merchant=conn_merchant.get(Long.parseLong(pNums[0]));
+	@RequestMapping(value = "/sell", method = RequestMethod.GET)
+	public ModelAndView toSell(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		ModelAndView mv = new ModelAndView("admin/orderinfo/sell", strMap);
+		return mv;
+	}
 
-            	OrderInfoPO order = new OrderInfoPO();
-        		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-        		Date date = new Date();
-        		long productprice = productPO.getProductPrice();
-        		// 支付金额
-        		long payMoney = productprice;
-        		// 订单总金额
-        		long orderAllMoney = payMoney;
-        		// 下单时间
-        		order.setCreateDate(date);
-        		order.setUpdateTime(date);
-        		// 验单时间
+	@Autowired
+	ProductComboDAO conn_combo;
+	@Autowired
+	OrderInfoDAO conn_order;
 
-        		// 供应商ID
-        		order.setShopId(merchant.getId());
-        		// 供应商名称
-        		order.setShopName(merchant.getShopName());
-        		// 站点ID
-        		// 站点名称
-        		// 商品ID
-        		order.setProductId(productPO.getId());
-        		// 商品图片
-        		order.setProductPic(productPO.getProductShowPic());
-        		// 商品名称
-        		order.setProductName(productPO.getProductName());
-        		// 商品数量
-        		order.setProductNum(1);
-        		// 商品单价
-        		order.setProductPrice(productprice);
-        		// 所属板块DI
-        		order.setBkCode(productPO.getProductModularCode());
-        		// 所属板块名称
-        		order.setBkName(productPO.getProductModularCodeName());
-
-        		// 提成方式（0：佣金1：比例）
-        		order.setRoyaltyName(productPO.getProductCommissionCode());
-        		// 积分数
-        		long integralNum = productPO.getProductntegral();
-        		order.setIntegralNum(integralNum);
-        		// 订单佣金金额(分)
-        		long proportionMoney=0;
-        		
-        		order.setProportionMoney(proportionMoney);
-        		// 支付金额
-        		order.setPayMoney(payMoney);
-        		// 订单总金额
-        		order.setOrderAllMoney(orderAllMoney);
-        		// 订单状态
-        		order.setOrderState(OrderStateType.PAYSUCCESS);
-        		// 订单支付类型 //ALIPAY WEICHAT
-        		order.setPayMode(PayType.WEICHAT);
-        		// 是否评价
-        		order.setCommentIs(0);
-        			// 订单来源
-        		order.setSource(OrderSource.UNLINE);
-        		
-        		order.setOrderType(OrderType.MERCHANT);
-        		productPO.setProductSaleNum(productPO.getProductSaleNum() + 1);
-        		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
-        		conn_product.save(productPO);
-        		conn_order.save(order);
-            }
-        	strMap.put("code", "0");
-			strMap.put("msg", "success");
-			return strMap;
-		}
-
-		// 售票列表
-		@ResponseBody
-		@RequestMapping(value = "/sellList.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-		public Map<String, Object> sellList(int page, int limit) throws Exception {
-			Map<String, Object> strMap = new HashMap<String, Object>();
-			Long merchantId = getMerchantInfo().getMerchantId();
-			int count = conn_OrderInfo.countBySell(merchantId);
-			List<OrderInfoPO> orders = conn_OrderInfo.findBySell(page, limit,merchantId);
-			List<OrderInfoVO> orderVos = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orders, OrderInfoVO.class);
-			for (OrderInfoVO orderInfoVO : orderVos) {
-				ProductComboPO comboPO=conn_combo.get(orderInfoVO.getComboId());
-				orderInfoVO.setComboName(comboPO==null?"标准":comboPO.getCombo());
+	// 售票
+	@ResponseBody
+	@RequestMapping(value = "/sell.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> sell(HttpServletRequest request) throws Exception {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		String productNum = request.getParameter("productNum");
+		if (productNum != null) {
+			String[] pNums = productNum.split("-");
+			// productNum格式为merchantId-productId-comboId的形式。
+			if (!pNums[0].equals(getMerchantInfo().getMerchantId() + "")) {
+				strMap.put("code", "404");
+				strMap.put("msg", "不是该商户商品");
+				return strMap;
 			}
-			strMap.put("data", orderVos);
-			strMap.put("code", "0");
+			ProductPO productPO = conn_product.get(Long.parseLong(pNums[1]));
+			MerchantPO merchant = conn_merchant.get(Long.parseLong(pNums[0]));
 
-			strMap.put("count", count);
-			strMap.put("msg", "");
-			return strMap;
-		}
-		
-		//4/23 新增的方法 将拒绝退款理由存入数据库
-		@ResponseBody
-		@RequestMapping(value = "/updateJustification.do", method = RequestMethod.POST)
-		public String updateJustification(Long orderId,String justification) throws Exception {
-			OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
-			orderInfoPO.setJustification(justification);
-			conn_OrderInfo.save(orderInfoPO);
-			return "success";
-		}
-	
-		// 桌子订单列表
-		@RequestMapping(value = "/tableorderlist", method = RequestMethod.GET)
-		public ModelAndView tableOrderList(HttpServletRequest request) {
-			ModelAndView mv = new ModelAndView("admin/orderinfo/tableorderlist");
-			return mv;
-		}
-		
-		//获取所有的餐桌订单
-		@ResponseBody
-		@RequestMapping("/alltableorder")
-		public Map<String, Object> allTableOrder(HttpServletRequest request,int page,int limit ) throws Exception{
-			Map<String, Object> strMap = new HashMap<String, Object>();
-			List<TableStatusPO> allorders = conn_tablestatus.findAll(page, limit);
-			int count = conn_tablestatus.countAll();
-			String type="";
-			List<TableOrderVO> all=new ArrayList<TableOrderVO>();
-			for (TableStatusPO tableStatusPO : allorders) {
-				TableOrderVO vo=new TableOrderVO();
-				vo.setMerchantId(tableStatusPO.getMerchantId());
-				vo.setUserId(tableStatusPO.getUserId());
-				vo.setOrderid(tableStatusPO.getId()+"");
-				vo.setMerchantName(conn_merchant.get(tableStatusPO.getMerchantId()).getShopName()+"");
-				vo.setTableId(tableStatusPO.getTableId()+"");
-				vo.setUserName(tableStatusPO.getUserName()+"");
-				vo.setUserPhone(tableStatusPO.getUserPhone()+"");
-				vo.setType(tableStatusPO.getType().getFiled()+"");
-				vo.setTableDate(tableStatusPO.getTableDate()+"");
-				if(tableStatusPO.getTableState()==null){
-					vo.setTableState("未预定");
-				}else if(tableStatusPO.getTableState().equals("PAYSUCCESS")){
-					vo.setTableState("已预订");
-				}else if(tableStatusPO.getTableState().equals("PAST")){
-					vo.setTableState("已过期");
-				}else if(tableStatusPO.getTableState().equals("NOTPAY")){
-					vo.setTableState("未支付");
-				}
-				if(tableStatusPO.getTableId()!=0){
-					vo.setBookPrice(conn_table.get(tableStatusPO.getTableId()).getBookprice()/100+"");
-				}else{
-					vo.setBookPrice("0");
-				}
-				if(tableStatusPO.getDishState()==null){
-					vo.setDishState("未订餐");
-				}else if(tableStatusPO.getDishState().equals("PAYSUCCESS")){
-					vo.setDishState("已预订");
-				}else if(tableStatusPO.getDishState().equals("PAST")){
-					vo.setDishState("已过期");
-				}else if(tableStatusPO.getDishState().equals("NOTPAY")){
-					vo.setDishState("未支付");
-				}
-				vo.setDishPrice(tableStatusPO.getDishMoney()/100+"");
-				all.add(vo);
-			}
-			strMap.put("data", all);
-			strMap.put("code", "0");
-			strMap.put("count", count);
-			strMap.put("msg", "");
-			return strMap;
-		}
+			OrderInfoPO order = new OrderInfoPO();
+			DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+			Date date = new Date();
+			long productprice = productPO.getProductPrice();
+			// 支付金额
+			long payMoney = productprice;
+			// 订单总金额
+			long orderAllMoney = payMoney;
+			// 下单时间
+			order.setCreateDate(date);
+			order.setUpdateTime(date);
+			// 验单时间
 
-		
-		// 桌子订单列表
-		@RequestMapping(value = "/getdishlist")
-		public ModelAndView getDishList(HttpServletRequest request,Long tableId,Long userId,Long merchantId) {
-			ModelAndView mv = new ModelAndView("admin/orderinfo/dishlist");
-			mv.addObject("tableId", tableId);
-			mv.addObject("userId", userId);
-			mv.addObject("merchantId", merchantId);
-			return mv;
+			// 供应商ID
+			order.setShopId(merchant.getId());
+			// 供应商名称
+			order.setShopName(merchant.getShopName());
+			// 站点ID
+			// 站点名称
+			// 商品ID
+			order.setProductId(productPO.getId());
+			// 商品图片
+			order.setProductPic(productPO.getProductShowPic());
+			// 商品名称
+			order.setProductName(productPO.getProductName());
+			// 商品数量
+			order.setProductNum(1);
+			// 商品单价
+			order.setProductPrice(productprice);
+			// 所属板块DI
+			order.setBkCode(productPO.getProductModularCode());
+			// 所属板块名称
+			order.setBkName(productPO.getProductModularCodeName());
+
+			// 提成方式（0：佣金1：比例）
+			order.setRoyaltyName(productPO.getProductCommissionCode());
+			// 积分数
+			long integralNum = productPO.getProductntegral();
+			order.setIntegralNum(integralNum);
+			// 订单佣金金额(分)
+			long proportionMoney = 0;
+
+			order.setProportionMoney(proportionMoney);
+			// 支付金额
+			order.setPayMoney(payMoney);
+			// 订单总金额
+			order.setOrderAllMoney(orderAllMoney);
+			// 订单状态
+			order.setOrderState(OrderStateType.PAYSUCCESS);
+			// 订单支付类型 //ALIPAY WEICHAT
+			order.setPayMode(PayType.WEICHAT);
+			// 是否评价
+			order.setCommentIs(0);
+			// 订单来源
+			order.setSource(OrderSource.UNLINE);
+
+			order.setOrderType(OrderType.MERCHANT);
+			productPO.setProductSaleNum(productPO.getProductSaleNum() + 1);
+			productPO.setProductShowNum(productPO.getProductShowNum() + 1);
+			conn_product.save(productPO);
+			conn_order.save(order);
 		}
-		
-		//获取所有的餐桌订单
-		@JsonBody
-		@ResponseBody
-		@RequestMapping("/getdishorder")
-		public Map<String, Object> getDishOrder(HttpServletRequest request,Long tableId,Long userId,Long merchantId,int page,int limit ) throws Exception{
-			System.out.println("我进来啦啦啦啦啦");
-			Map<String, Object> strMap = new HashMap<String, Object>();
-			List<ProductPO> product=new ArrayList<ProductPO>();
-			List<MealListPo> mealList = conn_meallist.getMealList(tableId, userId, merchantId,page,limit);
-			if(mealList!=null){
-				for (MealListPo mealListPo : mealList) {
-					product.add(conn_product.get(mealListPo.getProductId()));
-				}
+		strMap.put("code", "0");
+		strMap.put("msg", "success");
+		return strMap;
+	}
+
+	// 售票列表
+	@ResponseBody
+	@RequestMapping(value = "/sellList.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> sellList(int page, int limit) throws Exception {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		Long merchantId = getMerchantInfo().getMerchantId();
+		int count = conn_OrderInfo.countBySell(merchantId);
+		List<OrderInfoPO> orders = conn_OrderInfo.findBySell(page, limit, merchantId);
+		List<OrderInfoVO> orderVos = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orders, OrderInfoVO.class);
+		for (OrderInfoVO orderInfoVO : orderVos) {
+			ProductComboPO comboPO = conn_combo.get(orderInfoVO.getComboId());
+			orderInfoVO.setComboName(comboPO == null ? "标准" : comboPO.getCombo());
+		}
+		strMap.put("data", orderVos);
+		strMap.put("code", "0");
+
+		strMap.put("count", count);
+		strMap.put("msg", "");
+		return strMap;
+	}
+
+	// 4/23 新增的方法 将拒绝退款理由存入数据库
+	@ResponseBody
+	@RequestMapping(value = "/updateJustification.do", method = RequestMethod.POST)
+	public String updateJustification(Long orderId, String justification) throws Exception {
+		OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
+		orderInfoPO.setJustification(justification);
+		conn_OrderInfo.save(orderInfoPO);
+		return "success";
+	}
+
+	// 桌子订单列表
+	@RequestMapping(value = "/tableorderlist", method = RequestMethod.GET)
+	public ModelAndView tableOrderList(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("admin/orderinfo/tableorderlist");
+		return mv;
+	}
+
+	// 获取所有的餐桌订单
+	@ResponseBody
+	@RequestMapping("/alltableorder")
+	public Map<String, Object> allTableOrder(HttpServletRequest request, int page, int limit) throws Exception {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		List<TableStatusPO> allorders = conn_tablestatus.findAll(page, limit);
+		int count = conn_tablestatus.countAll();
+		String type = "";
+		List<TableOrderVO> all = new ArrayList<TableOrderVO>();
+		for (TableStatusPO tableStatusPO : allorders) {
+			TableOrderVO vo = new TableOrderVO();
+			vo.setMerchantId(tableStatusPO.getMerchantId());
+			vo.setUserId(tableStatusPO.getUserId());
+			vo.setOrderid(tableStatusPO.getId() + "");
+			vo.setMerchantName(conn_merchant.get(tableStatusPO.getMerchantId()).getShopName() + "");
+			vo.setTableId(tableStatusPO.getTableId() + "");
+			vo.setUserName(tableStatusPO.getUserName() + "");
+			vo.setUserPhone(tableStatusPO.getUserPhone() + "");
+			vo.setType(tableStatusPO.getType().getFiled() + "");
+			vo.setTableDate(tableStatusPO.getTableDate() + "");
+			if (tableStatusPO.getTableState() == null) {
+				vo.setTableState("未预定");
+			} else if (tableStatusPO.getTableState().equals("PAYSUCCESS")) {
+				vo.setTableState("已预订");
+			} else if (tableStatusPO.getTableState().equals("PAST")) {
+				vo.setTableState("已过期");
+			} else if (tableStatusPO.getTableState().equals("NOTPAY")) {
+				vo.setTableState("未支付");
 			}
-			List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(product, ProductVO.class);
-			int count = conn_meallist.countByTidUidMid(tableId, userId, merchantId);
-			strMap.put("data", listvo);
-			strMap.put("code", "0");
-			strMap.put("count", count );
-			strMap.put("msg", "");
-			return strMap;
+			if (tableStatusPO.getTableId() != 0) {
+				vo.setBookPrice(conn_table.get(tableStatusPO.getTableId()).getBookprice() / 100 + "");
+			} else {
+				vo.setBookPrice("0");
+			}
+			if (tableStatusPO.getDishState() == null) {
+				vo.setDishState("未订餐");
+			} else if (tableStatusPO.getDishState().equals("PAYSUCCESS")) {
+				vo.setDishState("已预订");
+			} else if (tableStatusPO.getDishState().equals("PAST")) {
+				vo.setDishState("已过期");
+			} else if (tableStatusPO.getDishState().equals("NOTPAY")) {
+				vo.setDishState("未支付");
+			}
+			vo.setDishPrice(tableStatusPO.getDishMoney() / 100 + "");
+			all.add(vo);
 		}
-		
+		strMap.put("data", all);
+		strMap.put("code", "0");
+		strMap.put("count", count);
+		strMap.put("msg", "");
+		return strMap;
+	}
+
+	// 桌子订单列表
+	@RequestMapping(value = "/getdishlist")
+	public ModelAndView getDishList(HttpServletRequest request, Long tableId, Long userId, Long merchantId) {
+		ModelAndView mv = new ModelAndView("admin/orderinfo/dishlist");
+		mv.addObject("tableId", tableId);
+		mv.addObject("userId", userId);
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
+
+	// 获取所有的餐桌订单
+	@JsonBody
+	@ResponseBody
+	@RequestMapping("/getdishorder")
+	public Map<String, Object> getDishOrder(HttpServletRequest request, Long tableId, Long userId, Long merchantId,
+			int page, int limit) throws Exception {
+		System.out.println("我进来啦啦啦啦啦");
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		List<ProductPO> product = new ArrayList<ProductPO>();
+		List<MealListPo> mealList = conn_meallist.getMealList(tableId, userId, merchantId, page, limit);
+		if (mealList != null) {
+			for (MealListPo mealListPo : mealList) {
+				product.add(conn_product.get(mealListPo.getProductId()));
+			}
+		}
+		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(product, ProductVO.class);
+		int count = conn_meallist.countByTidUidMid(tableId, userId, merchantId);
+		strMap.put("data", listvo);
+		strMap.put("code", "0");
+		strMap.put("count", count);
+		strMap.put("msg", "");
+		return strMap;
+	}
+
 }

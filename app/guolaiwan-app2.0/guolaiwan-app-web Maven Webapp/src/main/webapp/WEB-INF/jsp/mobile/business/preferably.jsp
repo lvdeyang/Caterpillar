@@ -186,7 +186,7 @@ html, body {
 					for(var i=0; i<data.length; i++){
 						 var pingfen=(${pingfen}+46)/10;
 						 if(pingfen>5)pingfen=5;
-						 html.push('<a onclick="getorderinfo('+data[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
+						 html.push('<a onclick="getorderinfo('+data[i].id+','+data[i].productModularCode+','+data[i].productMerchantID+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
 				         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
 						 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
 						 html.push('<div class="zhifu-in">');
@@ -200,8 +200,20 @@ html, body {
 	            })
 	}
 	
-function getorderinfo(id){
-	    location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
+     function getorderinfo(id,code,merchantId){
+
+	  //景点
+	  if( code == "0001" ){
+	    location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+merchantId+'&proId='+id+'&choice=0';
+	   }
+	   //采摘
+	   if(code == "2126"){
+	   location.href=window.BASEPATH +'business/gotopickingpurchase?productId='+id;
+	   } 
+	   //美食
+	   if(code == "0003"){
+	   location.href=window.BASEPATH +'business/cate?modularCode='+code+'&merchantId='+merchantId;
+	   } 
 	}
   
 </script>

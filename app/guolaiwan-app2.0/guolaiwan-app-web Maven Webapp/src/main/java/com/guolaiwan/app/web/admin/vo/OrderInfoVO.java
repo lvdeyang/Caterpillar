@@ -1,5 +1,6 @@
 package com.guolaiwan.app.web.admin.vo;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -12,8 +13,12 @@ import com.guolaiwan.bussiness.website.po.AddressPO;
 
 import pub.caterpillar.mvc.converter.AbstractBaseVO;
 
-public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO>{
+public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO> implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6537853455398153083L;
 	//订单号
 	private String orderNO;
 	//验单码

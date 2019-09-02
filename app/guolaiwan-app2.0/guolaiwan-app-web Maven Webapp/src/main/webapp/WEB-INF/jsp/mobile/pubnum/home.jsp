@@ -761,7 +761,7 @@ return $.cookie(str);
 			    //按照心意改变 "直播模块位置"
 			    var starp;
 			    for(var i = 0; i<modals.length;i++){
-			      if(modals[i].modularCode == '2021'){
+			      if(modals[i].modularCode == '2022'){
 			        starp =modals[i];
 			        modals[i] = liveModal;
 			      }			    
