@@ -621,6 +621,19 @@ color: #EC6D1E!important;
 	 $(document).on('click','.weui-check',function(){
 	      //$('.weui-check').prop('checked',false);
 	      //$(this).prop('checked',true);
+	       var boole = true;
+            var chks=$('.weui-check');
+	   	    for(var i=0;i<chks.length;i++){
+		        if($(chks[i]).prop('checked') == false){
+		          boole = false;
+		          continue;
+	        	}
+	        }
+	       if(boole == true){
+	         $('#cancel').html('取消')
+	       }else{
+	         $('#cancel').html('');
+	       };
 	      initTotal();
 	   });
 	   
@@ -952,11 +965,11 @@ color: #EC6D1E!important;
 	       var ids=this.id.split('-');
 	       //景点  普通票
 	       if(ids[4]== "0001" && ids[3] == "0"){
-	        location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+id+'&choice=0';
+	        location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+ids[2]+'&choice=0';
 	       }
 	       //景点  活动票
 	       if(ids[4]== "0001" && ids[2] == "0"){
-	       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+id+'&choice=1';	       
+	       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+ids[3]+'&choice=1';	       
 	       }
 	       //住宿
 	       if(ids[4]== "0002"){
