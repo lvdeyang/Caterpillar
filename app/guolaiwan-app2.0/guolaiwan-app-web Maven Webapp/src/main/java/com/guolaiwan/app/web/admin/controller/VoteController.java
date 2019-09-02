@@ -256,6 +256,11 @@ public class VoteController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/delAll.do", method = RequestMethod.POST)
 	public String delAll(long moId) {
+		List<VoteProductPO> products = voteproductDAO.getvoteproduct(moId);
+		
+		for (VoteProductPO voteProductPO : products) {
+			voteimposeDAO.deleteByProduct(voteProductPO.getProductId()+"");
+		}
 		voteproductDAO.deleteByMoId(moId);
 		return "success";
 	}
@@ -308,6 +313,19 @@ public class VoteController extends BaseController {
 		return "success";
 	}
 	
+	// 选择logo图片
+	@ResponseBody
+	@RequestMapping(value = "/votedownpic", method = RequestMethod.POST)
+	public String voteDownPic(HttpServletRequest request) {
+		String pic = request.getParameter("pic");
+		long picId = Long.parseLong(request.getParameter("picId"));
+		long id = Long.parseLong(request.getParameter("id"));
+		VoteOptionsPo voteOptionsPo = voteoptionsDAO.get(id);
+		voteOptionsPo.setDownpic(pic);
+		voteoptionsDAO.saveOrUpdate(voteOptionsPo);
+		return "success";
+	}
+	
 	//查询所有投票活动
 	@ResponseBody
 	@RequestMapping(value = "/alloptions", method = RequestMethod.POST)
@@ -349,6 +367,8 @@ public class VoteController extends BaseController {
 		options.setOrdernum(Integer.parseInt(ordernum));
 		options.setPollnum(Integer.parseInt(pollnum));
 		options.setVotestatustype("STOP");
+		options.setTitleshow("SHOW");
+		options.setLogoshow("SHOW");
 		voteoptionsDAO.save(options);
 		return "success";
 	}
@@ -416,9 +436,18 @@ public class VoteController extends BaseController {
 	@RequestMapping(value = "/optionstatus", method = RequestMethod.POST)
 	public String optionStatus(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
+		String type = request.getParameter("type");
 		String value = request.getParameter("value");
 		VoteOptionsPo voteOptions = voteoptionsDAO.get(id);
-		voteOptions.setVotestatustype(value);
+		if("status".equals(type)){
+			voteOptions.setVotestatustype(value);
+		}else if("logoshow".equals(type)){
+			voteOptions.setLogoshow(value);
+		}else if("titleshow".equals(type)){
+			voteOptions.setTitleshow(value);
+		}else if("downpicshow".equals(type)){
+			voteOptions.setDownpicshow(value);
+		}
 		voteoptionsDAO.saveOrUpdate(voteOptions);
 		return "success";
 	}
@@ -448,6 +477,33 @@ public class VoteController extends BaseController {
 		voteOptions.setVoterule(voterule);
 		voteoptionsDAO.saveOrUpdate(voteOptions);
 		
+		return "success";
+	}
+	
+	// 投票标题页面
+	@RequestMapping(value = "/gototitle")
+	public ModelAndView goToTitle(HttpServletRequest request) {
+		String optionId=request.getParameter("optionId");
+		VoteOptionsPo voteOption = voteoptionsDAO.get(Long.parseLong(optionId));
+		String title = voteOption.getTitle();
+		ModelAndView mv = new ModelAndView("admin/vote/addtitle");
+		if(title!=null&&title!=""){
+			mv.addObject("title", title);
+		}
+		mv.addObject("optionId", optionId);
+		return mv;
+	}
+	
+	//添加投票标题
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/addtitle", method = RequestMethod.POST)
+	public String addTitle(HttpServletRequest request) throws Exception {
+		String optionId = request.getParameter("optionId");
+		String title = request.getParameter("title");
+		VoteOptionsPo voteOptions = voteoptionsDAO.get(Long.parseLong(optionId));
+		voteOptions.setTitle(title);
+		voteoptionsDAO.saveOrUpdate(voteOptions);
 		return "success";
 	}
 	

@@ -31,9 +31,49 @@ public class VoteOptionsPo extends AbstractBasePO {
 	private int ordernum;
 	//投票的规则
 	private String voterule;
+	//logo的显示
+	private String logoshow;
+	//标题的显示
+	private String titleshow;
+	//标题
+	private String title;
+	//页脚图片的显示
+	private String downpicshow;
+	//页脚图片
+	private String downpic;
 	
 	
 	
+	public String getDownpicshow() {
+		return downpicshow;
+	}
+	public void setDownpicshow(String downpicshow) {
+		this.downpicshow = downpicshow;
+	}
+	public String getDownpic() {
+		return downpic;
+	}
+	public void setDownpic(String downpic) {
+		this.downpic = downpic;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getTitleshow() {
+		return titleshow;
+	}
+	public void setTitleshow(String titleshow) {
+		this.titleshow = titleshow;
+	}
+	public String getLogoshow() {
+		return logoshow;
+	}
+	public void setLogoshow(String logoshow) {
+		this.logoshow = logoshow;
+	}
 	public String getVoterule() {
 		return voterule;
 	}

@@ -106,11 +106,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 $.ajax({
                     type:'post',
                     url:'optionstatus',
-                    data:{'id':this.id,'value':val},
+                    data:{'id':this.id,'value':val,'type':'status'},
                     success:function(msg){
                         layer.closeAll("loading"); 
                         if(msg=='success'){
-                           getLiveList();
+                           getvoteList();
                         }else{
                            layer.msg("系统错误！",{icon:5,time:1000}); 
                         }
@@ -119,9 +119,95 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 layer.tips(this.value+' : '+str,obj.othis);
               });
               
+             form.on('switch(enable1)', function(obj){
+                layer.load();
+                var str;
+                var bl = obj.elem.checked;
+                var val;
+                if(bl){
+                    str = "显示";
+                    val = 'SHOW';
+                }else{
+                    str = "隐藏";
+                    val = 'HIDE';
+                }
+                console.log(str)
+                $.ajax({
+                    type:'post',
+                    url:'optionstatus',
+                    data:{'id':this.id,'value':val,'type':'logoshow'},
+                    success:function(msg){
+                        layer.closeAll("loading"); 
+                        if(msg=='success'){
+                           getvoteList();
+                        }else{
+                           layer.msg("系统错误！",{icon:5,time:1000}); 
+                        }
+                    }
+                })
+                layer.tips(str,obj.othis);
+              });
+              
+	         
+	         form.on('switch(enable2)', function(obj){
+                layer.load();
+                var str;
+                var bl = obj.elem.checked;
+                var val;
+                if(bl){
+                    str = "显示";
+                    val = 'SHOW';
+                }else{
+                    str = "隐藏";
+                    val = 'HIDE';
+                }
+                console.log(str)
+                $.ajax({
+                    type:'post',
+                    url:'optionstatus',
+                    data:{'id':this.id,'value':val,'type':'titleshow'},
+                    success:function(msg){
+                        layer.closeAll("loading"); 
+                        if(msg=='success'){
+                           getvoteList();
+                        }else{
+                           layer.msg("系统错误！",{icon:5,time:1000}); 
+                        }
+                    }
+                })
+                layer.tips(str,obj.othis);
+              }); 
+              
+              form.on('switch(enable3)', function(obj){
+                layer.load();
+                var str;
+                var bl = obj.elem.checked;
+                var val;
+                if(bl){
+                    str = "显示";
+                    val = 'SHOW';
+                }else{
+                    str = "隐藏";
+                    val = 'HIDE';
+                }
+                console.log(str)
+                $.ajax({
+                    type:'post',
+                    url:'optionstatus',
+                    data:{'id':this.id,'value':val,'type':'downpicshow'},
+                    success:function(msg){
+                        layer.closeAll("loading"); 
+                        if(msg=='success'){
+                           getvoteList();
+                        }else{
+                           layer.msg("系统错误！",{icon:5,time:1000}); 
+                        }
+                    }
+                })
+                layer.tips(str,obj.othis);
+              });
+              
             });
-	         
-	         
 	         
 	         
 	         function getvoteList(){
@@ -136,12 +222,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						{type:"checkbox"}
    						,{field:"votename",title:"投票名称",edit:"text",align:'center',width:150}
    						,{field:"judgesvote",title:"评委票权重（%）",edit:"text",align:'center',width:150}
-   						,{field:"ordervote",title:"销量等同票数（票）",edit:"text",align:'center',width:170}
+   						,{field:"ordervote",title:"销量等同票数（票）",edit:"text",align:'center',width:160}
    						,{field:"pepolevote",title:"群众票等同票数（票）",edit:"text",align:'center',width:170}
-   						,{field:"pollnum",title:"票/商品/天/人",edit:"text",align:'center',width:150}
-   						,{field:"ordernum",title:"单/商品/人/活动",edit:"text",align:'center',width:150}
-   						,{field: 'votestatustype',title: '开启/结束',align:'center',width:150,templet:'#startandstop'}
+   						,{field:"pollnum",title:"票/商品/天/人",edit:"text",align:'center',width:120}
+   						,{field:"ordernum",title:"单/商品/人/活动",edit:"text",align:'center',width:130}
+   						,{field: 'votestatustype',title: '活动状态',align:'center',width:90,templet:'#startandstop'}
+   						,{field: 'logoshow',title: 'logo状态',align:'center',width:90,templet:'#logoshow'}
+   						,{field: 'downpicshow',title: '页脚图状态',align:'center',width:90,templet:'#downpicshow'}
+   						,{field: 'titleshow',title: '标题状态',align:'center',width:90,templet:'#titleshow'}
    						,{title: 'logo缩略图',templet:"#picTpl",align:'center',width:100} 
+   						,{title: '页脚图',templet:"#downpicTpl",align:'center',width:100} 
    						,{title:"操作",templet:"#zsgc",width:428}
    						]]
    					,done:function(res, curr, count){
@@ -205,6 +295,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
 <script type="text/html" id="zsgc">
 <a class='layui-btn layui-btn-xs' href="javascript:open_win('选择logo','<%=path%>/admin/picture/addlist?sImg=caImg{{d.id}}&sId={{ d.id }}&source=option','800','600')">选择logo</a>
+<a class='layui-btn layui-btn-xs' href="javascript:open_win('选择页脚图(选择后请刷新页面)','<%=path%>/admin/picture/addlist?sImg=caImg{{d.id}}&sId={{ d.id }}&source=downpic','800','600')">选择页脚图</a>
+<a class="layui-btn layui-btn-xs" onclick="open_win('标题','gototitle?optionId={{d.id}}','600','350')" >活动标题</a>	
 <a class="layui-btn layui-btn-xs" href="list?optionId={{d.id}}">标签列表</a>	
 <a class="layui-btn layui-btn-xs" href="<%=path%>/judges/getjudges?optionId={{d.id}}">评委列表</a>
 <a class="layui-btn layui-btn-xs" href="gotovotepics?optionId={{d.id}}">轮播图管理</a>	
@@ -214,8 +306,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/html" id="startandstop">
  <input type="checkbox" name="votestatustype" id='{{d.id}}' value='{{ d.votestatustype }}'   lay-skin="switch" lay-text="开启|结束" lay-filter="enable" {{ d.votestatustype == 'STOP' ? '' : 'checked' }} >
 </script>
+<script type="text/html" id="logoshow">
+ <input type="checkbox" name="logoshow" id='{{d.id}}' value='{{ d.logoshow }}'   lay-skin="switch" lay-text="显示|隐藏" lay-filter="enable1" {{ d.logoshow == 'HIDE' ? '' : 'checked' }} >
+</script>
+<script type="text/html" id="titleshow">
+ <input type="checkbox" name="titleshow" id='{{d.id}}' value='{{ d.titleshow }}'   lay-skin="switch" lay-text="显示|隐藏" lay-filter="enable2" {{ d.titleshow == 'HIDE' ? '' : 'checked' }} >
+</script>
+<script type="text/html" id="downpicshow">
+ <input type="checkbox" name="downpicshow" id='{{d.id}}' value='{{ d.downpicshow }}'   lay-skin="switch" lay-text="显示|隐藏" lay-filter="enable3" {{ d.downpicshow == 'HIDE' ? '' : 'checked' }} >
+</script>
 <script type="text/html" id="picTpl">
  <a href="javascript:show_pic('caImg{{d.id}}')"><img id="caImg{{d.id}}"  src= "http://www.guolaiwan.net/file/{{ d.slidepic}}" alt="" style="width:35px;height:35px"></a>
+</script>
+<script type="text/html" id="downpicTpl">
+ <a href="javascript:show_pic('caImg{{d.id}}')"><img id="caImg{{d.id}}"  src= "http://www.guolaiwan.net/file/{{ d.downpic}}" alt="" style="width:35px;height:35px"></a>
 </script>
     </body>
 </html>

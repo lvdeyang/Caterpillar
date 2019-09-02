@@ -259,16 +259,16 @@ margin:0 5px;
 			display: none;
 			z-index:11111;
 			}
-		.logo-p{
-		 color: #C3181E;
+		#votetitle{
+		/*  color: #C3181E;
 	    font-weight: bold;
 	    font-size:18px;
 	    font-family: "Just Another Hand",cursive;
-	    text-transform: uppercase;
-	    width:40%;
+	    text-transform: uppercase; */
+	    width:60%;
 	    position: absolute;
 	    z-index:11;
-	    top:5px;
+	    top:25px;
 	    left:10%;
 		}	
 </style> 
@@ -296,6 +296,16 @@ $(function() {
 
 initShare();
    
+   if(${logoshow=='SHOW'}){
+		$('#logo').show();
+	}
+   
+   if(${titleshow=='SHOW'}){
+		$('#votetitle').show();
+	}
+  
+	
+   
 	<!--选项卡  -->
 	$(".tab-btn li").click(function(){
 	//为按钮添加样式
@@ -311,6 +321,9 @@ initShare();
 	.addClass("active").siblings().removeClass("active")
 			})
 	getvotemodular();
+	
+	
+	
 	});
 	
 	   
@@ -535,9 +548,13 @@ $("#b"+base).css("color","black");
 	    html.push('</div>');
            html.push('</div>');         
      }
-       html.push('<img style="width:100%;margin:10px 0px;" src="lib/images/gongsi.jpg">');   
-      /*  $('.contentt-box').children().remove();
-       $('.contentt-box').append(html.join(''));  */
+       html.push('<img id="downpic" style="width:100%;margin:10px 0px;display:none;" src="${downpic}">');   
+       $('.contentt-box').children().remove();
+       $('.contentt-box').append(html.join('')); 
+        if(${downpicshow=='SHOW'}){
+   alert(1)
+		$('#downpic').show();
+	}
 	}
 
 
@@ -607,8 +624,8 @@ var share={};
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-			  <p class="logo-p" style="display: none;">恋乡小镇</p>
-			 <img style="width:40%;position: absolute;z-index:11;top:10px;left:10%;display: none;" src="${logo}">
+			  <div id="votetitle" style="display: none;">${title}</div>
+			 <img id="logo" style="width:40%;position: absolute;z-index:11;top:10px;left:10%;display: none;" src="${logo}">
 			<!--  <img style="width:10%;position: absolute;z-index:111111111111;top:10px;left:55%;" src="lib/images/logoss.png"> -->
 		    </div>
 		    
@@ -628,7 +645,7 @@ var share={};
 					<ul class="tab-btn active" id="menu" style="">
 					</ul>
 					<div class="contentt-box" style="">
-					<p style="text-align: center;font-szie:18px;">投票尚未开始，敬请期待</p>
+					<!-- <p style="text-align: center;font-szie:18px;">投票尚未开始，敬请期待</p> -->
 							<div class="contentt active" style="text-align: center;width:100%;overflow-y:auto; -webkit-overflow-scrolling: touch">
 							 
 							</div>
@@ -655,7 +672,7 @@ var share={};
 
 	 
 	    <!-- 置顶 -->
-		<div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
+		<div><a href="javascript:;" class="gotop" style="display:none;"><img  style="width:100%;height:100%;" alt="" src=""></a></div>
 </body>
  
 

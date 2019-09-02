@@ -313,8 +313,13 @@ public class JudgesController {
 		mView.addObject("voterule", voteOption.getVoterule());
 		mView.addObject("pollnum", voteOption.getPollnum());
 		mView.addObject("buynum", voteOption.getOrdernum());
+		mView.addObject("titleshow", voteOption.getTitleshow());
+		mView.addObject("logoshow", voteOption.getLogoshow());
+		mView.addObject("downpicshow", voteOption.getDownpicshow());
+		mView.addObject("title", voteOption.getTitle());
 		//此活动的logo
 		mView.addObject("logo", "http://"+WXContants.Website+"/file"+voteOption.getSlidepic().toString());
+		mView.addObject("downpic", "http://"+WXContants.Website+"/file"+voteOption.getDownpic().toString());
 		return mView;
 	}
 
