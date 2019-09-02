@@ -296,15 +296,13 @@ $(function() {
 
 initShare();
    
-   if(${logoshow=='SHOW'}){
+    if(${logoshow=='SHOW'}){
 		$('#logo').show();
 	}
    
-   if(${titleshow=='SHOW'}){
+    if(${titleshow=='SHOW'}){
 		$('#votetitle').show();
 	}
-  
-	
    
 	<!--选项卡  -->
 	$(".tab-btn li").click(function(){
@@ -548,11 +546,12 @@ $("#b"+base).css("color","black");
 	    html.push('</div>');
            html.push('</div>');         
      }
-       html.push('<img id="downpic" style="width:100%;margin:10px 0px;display:none;" src="${downpic}">');   
+     	if(${downpic!=""}){
+       	html.push('<img id="downpic" style="width:100%;margin:10px 0px;display:none;" src="${downpic}">');
+         }   
        $('.contentt-box').children().remove();
        $('.contentt-box').append(html.join('')); 
         if(${downpicshow=='SHOW'}){
-   alert(1)
 		$('#downpic').show();
 	}
 	}
