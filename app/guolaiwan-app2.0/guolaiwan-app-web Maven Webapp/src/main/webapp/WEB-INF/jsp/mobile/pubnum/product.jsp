@@ -2167,7 +2167,7 @@ input[type="datetime-local"]:before{
 			<div
 				style="font-size:12px;margin-left:14px;margin-top:15px;width:50%;float:left;height:50px;line-height:50px;">购买数量</div>
 			<div
-				style="font-size:12px;margin-right:14px;margin-top:15px;width:30%;float:right;">
+				style="font-size:12px;margin-right:14px;margin-top:15px;float:right;">
 				<div class="weui-cell">
 					<div class="weui-cell__ft">
 						<div class="weui-count">
