@@ -265,16 +265,12 @@ margin:0 5px;
 	    font-size:18px;
 	    font-family: "Just Another Hand",cursive;
 	    text-transform: uppercase; */
-	    float:left;
-	    width:55%;
-	    margin-top:20px;
-		}
-	    .nav{
-	    width:100%;
+	    width:60%;
 	    position: absolute;
-	    z-index:11111;
-	    top:10px;
-	    }
+	    z-index:11;
+	    top:25px;
+	    left:10%;
+		}	
 </style> 
 
 </head>
@@ -290,14 +286,14 @@ margin:0 5px;
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
-var base,page;
+var base,page=1,nodata=0;
 var votenum=${pollnum};
 var buynum=${buynum};
 var productId;
 var ShareUrl=window.location.href;
 var SharePic;
 $(function() {
-	page=1;
+
 initShare();
    
     if(${logoshow=='SHOW'}){
@@ -387,26 +383,23 @@ function getvotemodular(){
  var _uriRecomment = window.BASEPATH + 'judges/getvotemodular';
    $.post(_uriRecomment,{"optionId":${optionId}},function(data){
      
-     getvoteproduct(data[0].id,1);
+     getvoteproduct(data[0].id,page)
       var html=[];
       for(var i=0;i<data.length;i++){
           if(i==0){
-              html.push('<li class="clickmodular"  onclick="getvoteproduct('+data[0].id+',1)"><img src="http://www.guolaiwan.net/file'+data[0].slidepic+'"><p id="b'+data[0].id+'">'+data[0].modularName+'</p></li>');
+              html.push('<li class="clickmodular" onclick="getvoteproduct('+data[0].id+',1)"><img src="http://www.guolaiwan.net/file'+data[0].slidepic+'"><p id="b'+data[0].id+'">'+data[0].modularName+'</p></li>');
           }else{
               html.push('<li class="clickmodular" onclick="getvoteproduct('+data[i].id+',1)"><img src="http://www.guolaiwan.net/file'+data[i].slidepic+'"><p id="b'+data[i].id+'">'+data[i].modularName+'</p></li>');
           }          
       }   
-      
          $('#menu').append(html.join(''));
            if($("#menu").find("li").length < 2){
 		      $("#menu").css("display", "none");
 		    }
          $("#b"+data[0].id).css("color","#F92828");
          base=data[0].id;
-         
    });
 }
-
 
 $(document).on('click','.clickmodular',function(){
 	page=1;
@@ -415,10 +408,7 @@ $(document).on('click','.clickmodular',function(){
 //获取对应的商品
 function getvoteproduct(id,page){
 $("#b"+base).css("color","black");
-if(base!=id||page==0){
  base=id;
- $('.contentt-box').children().remove();
-}
  $("#b"+id).css("color","#F92828");
  	//计算总票数 用于排序
  	var url=window.BASEPATH + 'judges/sortproduct?id='+id+'&userId=${userId}&optionId=${optionId}'
@@ -440,7 +430,6 @@ if(base!=id||page==0){
     	var url = window.BASEPATH + 'judges/getproductbyname';
     	$.post(url,{"userId":${userId},"name":name,"optionId":"${optionId}"},function(data){
     				$("#b"+base).css("color","black");
-    				$('.contentt-box').children().remove();
     				list(data);
     	})
     }
@@ -457,12 +446,12 @@ if(base!=id||page==0){
 				$('#pollnum'+id).html(pollnum);
 				$('#votes'+id).html(votes);
 				  setTimeout(function(){
-				  getvoteproduct(base,0);	
+				  getvoteproduct(base,page);	
 				    },1000);
 	
 			}else if(data.msg=="0"){
 				$.toast(votenum+'票/商品/人/天', 'text');
-				getvoteproduct(base,0);
+				getvoteproduct(base,page);
 			}
 		})
 	}
@@ -497,7 +486,7 @@ if(base!=id||page==0){
     		if(data=="success"){
     			$(".Judges").fadeOut();
     			$.toast('感谢您，评分成功！', 'text');
-    			getvoteproduct(base,0);
+    			getvoteproduct(base,page);
     		}
     	})
     }
@@ -514,10 +503,12 @@ if(base!=id||page==0){
 	function list(data){
 		var html=[];
 		if(data.length==0){
+			nodata=1;
 			html.push('<p style="height:100px;line-height:70px;text-align:center;width:100%;color:#DADADA;">没有搜索到相关的商品</p>');
 			 //开始的时候这里放开 
-			 $('.contentt-box').children().remove();
-   			 $('.contentt-box').append(html.join(''));
+			  $('.contentt-box').children().remove();
+   			 $('.contentt-box').append(html.join('')); 
+   			 return;
 		}
 		if(data.length>0){
 		  $(".weui-loadmore").hide();
@@ -565,31 +556,32 @@ if(base!=id||page==0){
      	if(${downpic!=""}){
        	html.push('<img id="downpic" style="width:100%;margin:10px 0px;display:none;" src="${downpic}">');
          }  
-           
          //开始的时候这里放开 
-         
-      $('.contentt-box').append(html.join('')); 
+         nodata=0;
+        $('.contentt-box').children().remove();
+        $('.contentt-box').append(html.join(''));  
         if(${downpicshow=='SHOW'}){
 		$('#downpic').show();
 	}
 	}
-	
-	
+
 
 var share={};
 		
-    function initShare(){
-        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
-		    $.get(_uri, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data){
-					share=data;
-					doScanShare();
-				}
-			});
-    }
+	    function initShare(){
+	        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+	    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			    $.get(_uri, null, function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					if(data){
+					    
+						share=data;
+						doScanShare();
+					}
+					
+				});
+	    }
 	
 	
 	function doScanShare(){
@@ -630,16 +622,27 @@ var share={};
 		location.href=window.BASEPATH + 'admin/vote/getoproductdetails?productId='+id;
 	}
 
-	$(window).scroll(function(){
-　　var scrollTop = $(this).scrollTop();
-　　var scrollHeight = $(document).height();
-　　var windowHeight = $(this).height();
-　　if(scrollTop + windowHeight == scrollHeight){
-		if(page==50000||page==0)return;
-           page+=1; 
-　　　　 getvoteproduct(base,page); 
-　　}
-	});
+	function changepage(srt){
+		if(srt=="1"){
+			page=1;
+			getvoteproduct(base,page);
+		}else if(srt=="2"){
+			if(page==1){
+				getvoteproduct(base,page);
+			}else{
+				page-=1;
+				getvoteproduct(base,page);
+			}
+		}else if(srt=="3"){
+			if(nodata==0){
+				page+=1;
+				getvoteproduct(base,page);
+			}else{
+				$.toast('没有下一页了~', 'text');
+			}
+		}
+	}
+	
 </script>
 
 
@@ -659,7 +662,7 @@ var share={};
 		    <div id="votetitle" style="margin-left:3%;display: none;">${title}</div>
 			</div> 
 			<!--  <img style="width:10%;position: absolute;z-index:111111111111;top:10px;left:55%;" src="lib/images/logoss.png"> -->
-		    </div>
+		    </div> 
 		    
 		<%--  <div style="width:85%;height:auto;border:1px solid #C3181E;border-radius:12px;margin:10px auto;padding:0 3%;">
 		    <P style="height:50px;line-height: 50px;color:#C3181E;font-weight: bold;font-size:26px;text-align: center;">评分规则</P>
@@ -706,10 +709,15 @@ var share={};
 
 	 
 	    <!-- 置顶 -->
-		<div><a href="javascript:;" class="gotop" style="display:none;"><img  style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
-</body>
+		<div><a href="javascript:;" class="gotop" style="display:none;"><img  style="width:100%;height:100%;" alt="" src=""></a></div>
  
-
+<div style="text-align:center;">
+<button type="button"  onclick="changepage('1')" class="weui_btn weui_btn_mini weui_btn_default">首页</button>
+<button type="button"  onclick="changepage('2')" class="weui_btn weui_btn_mini weui_btn_default">上一页</button>
+<button type="button"  onclick="changepage('3')" class="weui_btn weui_btn_mini weui_btn_default">下一页</button>
+</div>
+<div style="height: 20px"></div>
+</body>
 
 
 

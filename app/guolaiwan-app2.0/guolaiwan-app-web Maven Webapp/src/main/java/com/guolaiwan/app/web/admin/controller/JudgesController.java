@@ -384,15 +384,11 @@ public class JudgesController {
 		Date endTime = getEndTime();
 		List<VoteProductPO> getvoteproduct=new ArrayList<VoteProductPO>();
 		//按照模块id获取投票的商品
-		if(page==0){
-			getvoteproduct = voteProductDao.getvoteproducts1(Long.parseLong(id));
-		}else{
-			getvoteproduct = voteProductDao.getvoteproducts(Long.parseLong(id),page,pageSize);
-		}
+		getvoteproduct = voteProductDao.getvoteproducts(Long.parseLong(id),page,pageSize);
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		if(getvoteproduct==null){
 			return list;
-		}
+		} 
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		for (VoteProductPO voteProductPO : getvoteproduct) {
 			HashMap<String, String> hashMap = new HashMap<String, String>();
