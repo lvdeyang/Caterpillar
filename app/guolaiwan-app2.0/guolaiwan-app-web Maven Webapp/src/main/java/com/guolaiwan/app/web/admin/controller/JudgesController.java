@@ -43,6 +43,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 @RequestMapping("/judges")
 public class JudgesController {
 
+	private static int pageSize=10;
 	@Autowired
 	private UserInfoDAO conn_UserInfo;
 
@@ -378,11 +379,16 @@ public class JudgesController {
 	//获得投票的商品
 	@ResponseBody
 	@RequestMapping(value = "/getvoteproduct", method = RequestMethod.GET)
-	public List<Map<String, String>> getvoteproduct(String id,String userId,String optionId) {
+	public List<Map<String, String>> getvoteproduct(String id,String userId,String optionId,Integer page) {
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
+		List<VoteProductPO> getvoteproduct=new ArrayList<VoteProductPO>();
 		//按照模块id获取投票的商品
-		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproducts(Long.parseLong(id));
+		if(page==0){
+			getvoteproduct = voteProductDao.getvoteproducts1(Long.parseLong(id));
+		}else{
+			getvoteproduct = voteProductDao.getvoteproducts(Long.parseLong(id),page,pageSize);
+		}
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		if(getvoteproduct==null){
 			return list;
