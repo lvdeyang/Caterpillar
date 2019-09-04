@@ -128,6 +128,18 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 		}
 	}
 	
+	public List<VoteProductPO> getVoteProduct() {
+		QueryHql hql = this.newQueryHql();
+		hql.orderBy("modularcode", false);
+		hql.orderBy("ranking", false);
+		List<VoteProductPO> findByHql = findByHql(hql);
+		if (findByHql.size() == 0) {
+			return null;
+		} else {
+			return findByHql;
+		}
+	}
+	
 	public List<VoteProductPO> findShowOnPC(long optionId) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("optionId", Condition.eq, optionId);
