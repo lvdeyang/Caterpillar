@@ -412,13 +412,13 @@ $("#b"+base).css("color","black");
  $("#b"+id).css("color","#F92828");
  	//计算总票数 用于排序
  	var url=window.BASEPATH + 'judges/sortproduct?id='+id+'&userId=${userId}&optionId=${optionId}'
- 	$.post(url,{"id":id,"optionId":"${optionId}"},function(data){
+   /* 	$.post(url,{"id":id,"optionId":"${optionId}"},function(data){   */
  		//按照总票数查询投票商品
 	    var _uriRecomment = window.BASEPATH + 'judges/getvoteproduct?id='+id+'&userId=${userId}&optionId=${optionId}&page='+page;
 	    $.get(_uriRecomment,null,function(data){
 	      list(data);   
 	    });
- 	})
+ 	/*   })   */
 } 
 	//搜索商品
  	function search(){
@@ -536,7 +536,7 @@ $("#b"+base).css("color","black");
            html.push('<div class="xia" style="width:100%;height:auto;position: relative;padding:5px 7.5% 3px 7.5%;color:black;text-align: center;">');
            html.push('<P style="height:20px;line-height: 20px;width:100%;color:black;text-align:left;"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:95%;display: inline-block;">'+data[i].productname+'</span></P>');
             //html.push('<P style="height:20px;line-height: 20px;width:100%;"><span style="float:left;">投票数：<span id="votes'+data[i].productId+'">'+data[i].manvotes+'</span></span></P>');
-           html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span class="add">'+productvotes+'</span></p>');
+           html.push('<p style="text-align: left;height:20px;line-height: 20px;">总投票量：<span class="add">'+data[i].allvotes+'</span></p>');
            html.push('<p style="text-align: left;height:20px;line-height: 20px;">排名：<span>'+data[i].ranking+'</span></p>');
            //html.push('<P style="height:20px;line-height: 20px;width:100%;text-align:left;">评委评分：<span>'+data[i].avg+'</span></p>');
           /*  if(${isjudges==1}){
