@@ -286,7 +286,7 @@ margin:0 5px;
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
-var base;
+var base,page=1,nodata=0;
 var votenum=${pollnum};
 var buynum=${buynum};
 var productId;
@@ -383,29 +383,30 @@ function getvotemodular(){
  var _uriRecomment = window.BASEPATH + 'judges/getvotemodular';
    $.post(_uriRecomment,{"optionId":${optionId}},function(data){
      
-     getvoteproduct(data[0].id)
+     getvoteproduct(data[0].id,page)
       var html=[];
       for(var i=0;i<data.length;i++){
           if(i==0){
-              html.push('<li  onclick="getvoteproduct('+data[0].id+')"><img src="http://www.guolaiwan.net/file'+data[0].slidepic+'"><p id="b'+data[0].id+'">'+data[0].modularName+'</p></li>');
+              html.push('<li class="clickmodular" onclick="getvoteproduct('+data[0].id+',1)"><img src="http://www.guolaiwan.net/file'+data[0].slidepic+'"><p id="b'+data[0].id+'">'+data[0].modularName+'</p></li>');
           }else{
-              html.push('<li  onclick="getvoteproduct('+data[i].id+')"><img src="http://www.guolaiwan.net/file'+data[i].slidepic+'"><p id="b'+data[i].id+'">'+data[i].modularName+'</p></li>');
+              html.push('<li class="clickmodular" onclick="getvoteproduct('+data[i].id+',1)"><img src="http://www.guolaiwan.net/file'+data[i].slidepic+'"><p id="b'+data[i].id+'">'+data[i].modularName+'</p></li>');
           }          
       }   
-      
          $('#menu').append(html.join(''));
            if($("#menu").find("li").length < 2){
 		      $("#menu").css("display", "none");
 		    }
          $("#b"+data[0].id).css("color","#F92828");
          base=data[0].id;
-         
    });
-         
 }
 
+$(document).on('click','.clickmodular',function(){
+	page=1;
+});
+
 //获取对应的商品
-function getvoteproduct(id){
+function getvoteproduct(id,page){
 $("#b"+base).css("color","black");
  base=id;
  $("#b"+id).css("color","#F92828");
@@ -413,7 +414,7 @@ $("#b"+base).css("color","black");
  	var url=window.BASEPATH + 'judges/sortproduct?id='+id+'&userId=${userId}&optionId=${optionId}'
  	$.post(url,{"id":id,"optionId":"${optionId}"},function(data){
  		//按照总票数查询投票商品
-	    var _uriRecomment = window.BASEPATH + 'judges/getvoteproduct?id='+id+'&userId=${userId}&optionId=${optionId}';
+	    var _uriRecomment = window.BASEPATH + 'judges/getvoteproduct?id='+id+'&userId=${userId}&optionId=${optionId}&page='+page;
 	    $.get(_uriRecomment,null,function(data){
 	      list(data);   
 	    });
@@ -445,12 +446,12 @@ $("#b"+base).css("color","black");
 				$('#pollnum'+id).html(pollnum);
 				$('#votes'+id).html(votes);
 				  setTimeout(function(){
-				  getvoteproduct(base);	
+				  getvoteproduct(base,page);	
 				    },1000);
 	
 			}else if(data.msg=="0"){
 				$.toast(votenum+'票/商品/人/天', 'text');
-				getvoteproduct(base);
+				getvoteproduct(base,page);
 			}
 		})
 	}
@@ -485,7 +486,7 @@ $("#b"+base).css("color","black");
     		if(data=="success"){
     			$(".Judges").fadeOut();
     			$.toast('感谢您，评分成功！', 'text');
-    			getvoteproduct(base);
+    			getvoteproduct(base,page);
     		}
     	})
     }
@@ -502,9 +503,15 @@ $("#b"+base).css("color","black");
 	function list(data){
 		var html=[];
 		if(data.length==0){
+			nodata=1;
 			html.push('<p style="height:100px;line-height:70px;text-align:center;width:100%;color:#DADADA;">没有搜索到相关的商品</p>');
-			 $('.contentt-box').children().remove();
-   			 $('.contentt-box').append(html.join(''));
+			 //开始的时候这里放开 
+			  $('.contentt-box').children().remove();
+   			 $('.contentt-box').append(html.join('')); 
+   			 return;
+		}
+		if(data.length>0){
+		  $(".weui-loadmore").hide();
 		}
      for(var i=0;i<data.length;i++){
      var productvotes=parseInt(data[i].productvotes);
@@ -548,9 +555,11 @@ $("#b"+base).css("color","black");
      }
      	if(${downpic!=""}){
        	html.push('<img id="downpic" style="width:100%;margin:10px 0px;display:none;" src="${downpic}">');
-         }   
-       $('.contentt-box').children().remove();
-       $('.contentt-box').append(html.join('')); 
+         }  
+         //开始的时候这里放开 
+         nodata=0;
+        $('.contentt-box').children().remove();
+        $('.contentt-box').append(html.join(''));  
         if(${downpicshow=='SHOW'}){
 		$('#downpic').show();
 	}
@@ -613,6 +622,26 @@ var share={};
 		location.href=window.BASEPATH + 'admin/vote/getoproductdetails?productId='+id;
 	}
 
+	function changepage(srt){
+		if(srt=="1"){
+			page=1;
+			getvoteproduct(base,page);
+		}else if(srt=="2"){
+			if(page==1){
+				getvoteproduct(base,page);
+			}else{
+				page-=1;
+				getvoteproduct(base,page);
+			}
+		}else if(srt=="3"){
+			if(nodata==0){
+				page+=1;
+				getvoteproduct(base,page);
+			}else{
+				$.toast('没有下一页了~', 'text');
+			}
+		}
+	}
 	
 </script>
 
@@ -623,10 +652,17 @@ var share={};
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-			  <div id="votetitle" style="display: none;">${title}</div>
-			 <img id="logo" style="width:40%;position: absolute;z-index:11;top:10px;left:10%;display: none;" src="${logo}">
+			<div class="weui-loadmore" style="position: fixed;top:50%;left:50%;margin-left:-30%;">
+			  <i class="weui-loading"></i>
+			  <span class="weui-loadmore__tips">正在加载</span>
+			</div>
+			<!-- 标题 -->
+			<div class="nav">
+			<img id="logo" style="width:25%;float:left;margin-left:3%;display: none;" src="${logo}">
+		    <div id="votetitle" style="margin-left:3%;display: none;">${title}</div>
+			</div> 
 			<!--  <img style="width:10%;position: absolute;z-index:111111111111;top:10px;left:55%;" src="lib/images/logoss.png"> -->
-		    </div>
+		    </div> 
 		    
 		<%--  <div style="width:85%;height:auto;border:1px solid #C3181E;border-radius:12px;margin:10px auto;padding:0 3%;">
 		    <P style="height:50px;line-height: 50px;color:#C3181E;font-weight: bold;font-size:26px;text-align: center;">评分规则</P>
@@ -646,7 +682,9 @@ var share={};
 					<div class="contentt-box" style="">
 					<!-- <p style="text-align: center;font-szie:18px;">投票尚未开始，敬请期待</p> -->
 							<div class="contentt active" style="text-align: center;width:100%;overflow-y:auto; -webkit-overflow-scrolling: touch">
-							 
+							<!-- 开始的时候这里去掉 -->
+							<!-- <p style="text-align: center;">活动尚未开始，敬请期待！~</p>  -->
+							
 							</div>
 							<div class="contentt" style="text-align: center;">
 							</div>
@@ -672,9 +710,14 @@ var share={};
 	 
 	    <!-- 置顶 -->
 		<div><a href="javascript:;" class="gotop" style="display:none;"><img  style="width:100%;height:100%;" alt="" src=""></a></div>
-</body>
  
-
+<div style="text-align:center;">
+<button type="button"  onclick="changepage('1')" class="weui_btn weui_btn_mini weui_btn_default">首页</button>
+<button type="button"  onclick="changepage('2')" class="weui_btn weui_btn_mini weui_btn_default">上一页</button>
+<button type="button"  onclick="changepage('3')" class="weui_btn weui_btn_mini weui_btn_default">下一页</button>
+</div>
+<div style="height: 20px"></div>
+</body>
 
 
 

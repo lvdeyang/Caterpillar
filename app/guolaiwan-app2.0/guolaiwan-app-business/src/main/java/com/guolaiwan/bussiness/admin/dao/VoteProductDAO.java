@@ -65,7 +65,7 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 		}
 		hql.orderBy("allvotes", true);
 		hql.orderBy("updateTime", true);
-		/*hql.orderBy("updateTime", true);*/
+		hql.orderBy("updateTime", true);
 		List<VoteProductPO> findByHql = findByHql(hql);
 		if (findByHql.size() == 0) {
 			return null;
@@ -74,14 +74,30 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 		}
 	}
 	
-	public List<VoteProductPO> getvoteproducts(long moId) { //增加排序
+	public List<VoteProductPO> getvoteproducts(long moId, int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
 		if(moId!=0){
 		hql.andBy("modularcode", Condition.eq, moId);
 		}
 		hql.orderBy("ranking", false);
-		/*hql.orderBy("allvotes", true);*/
-	/*	hql.orderBy("updateTime", true);*/
+		hql.orderBy("allvotes", true);
+		hql.orderBy("updateTime", true);
+		List<VoteProductPO> findByHql = findByHqlPage(hql, pageNum, pageSize);
+		if (findByHql.size() == 0) {
+			return null;
+		} else {
+			return findByHql;
+		}
+	}
+	
+	public List<VoteProductPO> getvoteproducts1(long moId) {
+		QueryHql hql = this.newQueryHql();
+		if(moId!=0){
+		hql.andBy("modularcode", Condition.eq, moId);
+		}
+		hql.orderBy("ranking", false);
+		hql.orderBy("allvotes", true);
+		hql.orderBy("updateTime", true);
 		List<VoteProductPO> findByHql = findByHql(hql);
 		if (findByHql.size() == 0) {
 			return null;
