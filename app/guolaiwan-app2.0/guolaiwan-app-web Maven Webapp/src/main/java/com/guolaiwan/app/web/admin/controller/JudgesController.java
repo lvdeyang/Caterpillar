@@ -219,6 +219,26 @@ public class JudgesController {
 				voteImposeDao.save(voteImposePo1);
 				//将票数封装到后台展示的po中
 				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
+				//订单数量
+				int ordercount = voteImposeDao.buyCountByPid(voteProduct.getProductId()+"");
+				//此商品的所有群众投票数
+				int manvotes = voteImposeDao.countByPid(voteProduct.getProductId()+"");
+				List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProduct.getId());
+				long score=0;
+				long avg=0;
+				if(all!=null){
+					for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
+						score+=judgesVoteMsgPO.getScore();
+					}
+					score=score/all.size();
+				}
+				if(score<=10){
+					avg=score*10;
+				}else{
+					avg=score;
+				}
+				double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
+				voteProduct.setAllvotes(allcount);
 				voteProduct.setPeoplevotenum(count+1);
 				voteProductDao.saveOrUpdate(voteProduct);
 				hashMap.put("msg", "1");
@@ -335,7 +355,7 @@ public class JudgesController {
 	}
 	
 	
-	// 排序商品
+	/*// 排序商品      这方法有大问题 不用
 	@ResponseBody
 	@RequestMapping(value = "/sortproduct", method = RequestMethod.POST)
 	public String sortproduct(HttpServletRequest request) {
@@ -349,32 +369,13 @@ public class JudgesController {
 		}
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		for (VoteProductPO voteProductPO : getvoteproduct) {
-			//订单数量
-			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
-			//此商品的所有群众投票数
-			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
-			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
-			long score=0;
-			long avg=0;
-			if(all!=null){
-				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
-					score+=judgesVoteMsgPO.getScore();
-				}
-				score=score/all.size();
-			}
-			if(score<=10){
-				avg=score*10;
-			}else{
-				avg=score;
-			}
-			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
-			voteProductPO.setAllvotes(allcount);
+			
 			voteProductPO.setRanking(i);
 			voteProductDao.update(voteProductPO);
 			i+=1;
 		}
 		return "success";
-	}
+	}*/
 
 	//获得投票的商品
 	@ResponseBody
@@ -422,6 +423,7 @@ public class JudgesController {
 			hashMap.put("productname", voteProductPO.getProductName());
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
+			hashMap.put("allvotes", (int)voteProductPO.getAllvotes()+"");
 			hashMap.put("manvotes", manvotes+"");
 			hashMap.put("ranking", voteProductPO.getRanking()+"");
 			hashMap.put("productvotes", allcount+"");
@@ -531,6 +533,7 @@ public class JudgesController {
 			hashMap.put("productname", voteProductPO.getProductName());
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
+			hashMap.put("allvotes", (int)voteProductPO.getAllvotes()+"");
 			hashMap.put("manvotes", manvotes+"");
 			hashMap.put("ranking", voteProductPO.getRanking()+"");
 			hashMap.put("productvotes", allcount+"");
