@@ -204,7 +204,7 @@ public class JudgesController {
 			//当天的记录数量
 			int count = voteImposeDao.countByUidPid(userId, productId,startTime,endTime);
 			//当有记录但是已经满足当天投票总量时
-			if (count != 0 && count == voteOption.getPollnum()) {
+			if (count >= 0 && count == voteOption.getPollnum()) {
 				hashMap.put("msg", "0");
 				hashMap.put("count", count+"");
 				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
