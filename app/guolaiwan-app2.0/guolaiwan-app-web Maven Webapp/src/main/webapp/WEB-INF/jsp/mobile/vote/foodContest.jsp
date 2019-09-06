@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>唐山周末 · 国庆长城乡村美食节</title>
+<title>匠心非遗  寻味遵化  赶快为喜欢的遵化美食投票吧！</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -278,7 +278,7 @@ margin:0 5px;
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
-var base,page=1,nodata=0;
+var base,page=1,nodata=0,isclick=true;
 var votenum=${pollnum};
 var buynum=${buynum};
 var productId;
@@ -401,6 +401,8 @@ $("#b"+base).css("color","black");
     }
 	//投票方法
 	function votepoll(id){
+		if(isclick==false)return;
+		if(isclick==true)isclick=false;
 		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id+'&optionId=${optionId}';
 		$.get(url,null,function(data){
 			var count=parseInt(data.count)+1;
@@ -412,11 +414,13 @@ $("#b"+base).css("color","black");
 				$('#pollnum'+id).html(pollnum);
 				$('#votes'+id).html(votes);
 				  setTimeout(function(){
+				  isclick=true;
 				  getvoteproduct(base,page);	
 				    },1000);
-	
+	           	
 			}else if(data.msg=="0"){
 				$.toast(votenum+'票/商品/人/天', 'text');
+				isclick=true;
 				getvoteproduct(base,page);
 			}
 		})
@@ -551,14 +555,14 @@ var share={};
         	});
 	        wx.ready(function() {
 	            wx.onMenuShareTimeline({
-                            title: '唐山周末 · 国庆长城乡村美食节', // 分享标题
+                            title: '匠心非遗  寻味遵化  赶快为喜欢的遵化美食投票吧！', // 分享标题
                             link: ShareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                             imgUrl: SharePic, // 分享图标
                             success: function () {
                             }
                         });
 	            wx.onMenuShareAppMessage({
-					title : '唐山周末 · 国庆长城乡村美食节', // 分享标题
+					title : '匠心非遗  寻味遵化  赶快为喜欢的遵化美食投票吧！', // 分享标题
 					desc: '  ', // 分享描述
 					link: ShareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: SharePic, // 分享图标
