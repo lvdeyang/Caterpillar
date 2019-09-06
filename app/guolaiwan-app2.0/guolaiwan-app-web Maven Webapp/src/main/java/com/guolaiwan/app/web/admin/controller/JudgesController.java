@@ -211,7 +211,7 @@ public class JudgesController {
 				return hashMap;
 			}
 			//当天的记录数量为0时 或者当有记录但是没有满足当天投票总量时
-			if (count==0||(count != 0 && count != voteOption.getPollnum())) {
+			if (count==0||(count != 0 && count <= voteOption.getPollnum())) {
 				VoteImposePo voteImposePo1 = new VoteImposePo();
 				voteImposePo1.setUserId(userId);
 				voteImposePo1.setPoll(1);
