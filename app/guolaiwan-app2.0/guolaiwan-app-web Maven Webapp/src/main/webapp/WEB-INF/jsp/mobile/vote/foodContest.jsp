@@ -403,8 +403,8 @@ $("#b"+base).css("color","black");
 	function votepoll(id){
 		if(isclick==false)return;
 		if(isclick==true)isclick=false;
-		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id+'&optionId=${optionId}';
-		$.get(url,null,function(data){
+		var url=window.BASEPATH + 'judges/votepoll';
+		$.post(url,{"userId":"${userId}","productId":id,"optionId":"${optionId}"},function(data){
 			var count=parseInt(data.count)+1;
 			var pollnum=parseInt(data.pollnum)-1;
 			var votes=parseInt($('#votes'+id).html())+1;
@@ -422,6 +422,8 @@ $("#b"+base).css("color","black");
 				$.toast(votenum+'票/商品/人/天', 'text');
 				isclick=true;
 				getvoteproduct(base,page);
+			}else if(data.msg=="err"){
+				$.toast('请刷新页面', 'text');
 			}
 		})
 	}

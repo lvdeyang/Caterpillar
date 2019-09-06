@@ -194,8 +194,14 @@ public class JudgesController {
 
 
 	// 限制票数的方法 返回值为0的时候次数已达到5次，为1的时候可以投票，为2的时候服务器出现异常
-	@RequestMapping(value = "/votepoll", method = RequestMethod.GET)
-	public Map<String, String> VotePoll(String userId, String productId,String optionId) {
+	@RequestMapping(value = "/votepoll", method = RequestMethod.POST)
+	public Map<String, String> VotePoll(HttpServletRequest request,String userId, String productId,String optionId) {
+		boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+		if(!isAjax){
+			Map<String, String> hashMap = new HashMap<String, String>();
+			hashMap.put("msg", "err");
+			return hashMap;
+		}
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
