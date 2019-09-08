@@ -10,6 +10,7 @@ import com.guolaiwan.bussiness.admin.po.VoteImposePo;
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
 import pub.caterpillar.orm.hql.CountHql;
+import pub.caterpillar.orm.hql.DeleteHql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 @Component
@@ -100,5 +101,16 @@ public class VoteImposeDao extends AbstractBaseDao<VoteImposePo> {
 		cHql.andBy("isjudges", Condition.eq, 1);
 		int count = this.countByHql(cHql);
 		return count;
+	}
+	
+	/**
+	 * 按照productId删除投票记录
+	 * @param productId
+	 * @return
+	 */
+	public void deleteByProduct(String productId) {
+		DeleteHql cHql = this.newDeleteHql();
+		cHql.andBy("productId", Condition.eq, productId);
+		this.deleteByHql(cHql);
 	}
 }

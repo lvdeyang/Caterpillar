@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>常见问题详情</title>
+<title>答题首页</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -78,23 +78,58 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	font-family: "微软雅黑" !important;
-	height:auto;
-	background:#fff !important; 
+	height:100%;
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
-	
+	background: #fff;
 }
-*{
+* {
 	box-sizing: border-box;
 	list-style: none;
-	text-decoration: none;	
+	text-decoration: none;
 }
-.nav img{
-width:100%;margin:5px 0;
+/* 页面样式 */
+.header {
+	height: 120px;
+	line-height:50px;
+	background:url("lib/images/navs.png") !important;
+}
 
+.header .link-left {
+	margin-left: 20px;
+	margin-right: 10px;
+	position: relative;
+	z-index: 1;
+	font-size:20px;
 }
+.main ul{
+width:100%;
+}
+.main ul li{
+box-shadow:2px 2px 5px #DBDBDB;
+margin:10px auto;
+width:100%;
+height:50px;
+text-align: left;
+border:none;
+outline: none;
+background: #fff;
+border-radius:8px;
+border-bottom:1px solid #DBDBDB;
+border-right:1px solid #DBDBDB;
+border-left:1px solid #DBDBDB;
+position: relative;
+overflow: hidden;
+}
+.main ul li img{
+height:30px;
+position: absolute;
+left:20px;
+top:10px;
+}
+
+
 </style>
 
 </head>
@@ -109,27 +144,31 @@ width:100%;margin:5px 0;
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
-<script>
-</script>
 <body>
- <div class="nav" style="width:100%;height:auto;padding:0 4%;">
-   <h4 style="height:40px;line-height: 40px;border-bottom:1.5px solid #E4E4E4;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemName}</h4>
-   <h4 style="height:40px;line-height: 40px;width:100%;overflow: hidden;text-indent: 1em;">问题解答：</h4>
-  <%--  <div  style="height:40px;line-height: 30px;width:100%;overflow: hidden;text-indent: 1em;">${ComProName.problemdescribe}</div>
-   <p style="height:auto;width:100%;overflow: hidden;">
-   <img style="width:100%;margin:5px 0;" src="${ComProName.problemImg}">
-   </p> --%>
-   ${ComProName.problemdescribe}
- </div>
- <div style="width:100%;height:100px;position: fixed;bottom:0;font-size:16px;text-decoration: none;">
- <p style="height:50px;width:100%;overflow: hidden;line-height: 50px;background: #E4E4E4;padding:0 4%;">未解决还需要</p>
-  <p style="height:50px;width:100%;overflow: hidden;background:#fff;padding:0 4%;">
-  <span style="line-height: 35px;">电话咨询</span>
-  <span style="line-height: 30px;position: absolute;right:2%;font-size:14px;width:33%;display: inline-block;"><a style="text-align: left;" href="tel://0315-6681288">0315-6681288</a><span style="float:right;">></span></span>
-  <span style="line-height: 30px;position: absolute;right:2%;bottom:0px;font-size:14px;width:33%;display: inline-block;"><a style="text-align: left;" href="tel://0315-6686299">0315-6686299</a><span style="float:right;">></span></span>
-  </p>
- </div> 
- <P style="height:100px;"></P>  
-</body>
+			<!-- 主页 -->
+		<div class="header">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
+		</div>
+	<div style="width:100%;height:auto;margin-top:-50px;">
+		<div style="height:0;padding:12%;text-align: center;width:12%;background: #F21819;border-radius:50%;line-height: 10%;margin:0 auto;overflow: hidden;position: relative;">
+		 <p style="width:50%;position: absolute;left:50%;margin-left:-25%;font-size:30px;color:#fff;">xxx</p>
+		</div>
+	</div>
+	<div class="main" style="width:100%;height:auto;padding:0 5%;">
+	  <ul>
+	   <li>
+	   <img src="lib/images/responsess.png">
+	   <p style="position: absolute;left:60px;top:5px;font-size: 16px;">每日答题</p>
+	   <p style="position: absolute;left:60px;top:27px;font-size: 12px;color:#A4A4A4;">每天惊喜不断</p>
+	   </li>
+	   
+	  </ul>
+	</div>		
+ </body>
+
+
+
+
 
 </html>

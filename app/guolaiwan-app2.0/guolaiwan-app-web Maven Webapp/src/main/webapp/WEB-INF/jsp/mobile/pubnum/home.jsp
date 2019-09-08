@@ -761,7 +761,7 @@ return $.cookie(str);
 			    //按照心意改变 "直播模块位置"
 			    var starp;
 			    for(var i = 0; i<modals.length;i++){
-			      if(modals[i].modularCode == '2021'){
+			      if(modals[i].modularCode == '2022'){
 			        starp =modals[i];
 			        modals[i] = liveModal;
 			      }			    
@@ -1006,10 +1006,14 @@ return $.cookie(str);
 	   
 	   });
 	   $(document).on('click','#bundle',function(){
-	   
+	   if(bundletitle=="美食大赛"){
+	   	   location.href=window.BASEPATH + 'judges/votepage';
+	   }else{
 	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0&comCode='+comCode;
-	   
+	   }
 	   });
+	
+	var bundletitle;
 	
 	
 	   function getActivityBundle(){
@@ -1023,6 +1027,7 @@ return $.cookie(str);
 			    if(data.bundles.length>0){
 			       $('#bundle').show();
 			       $('#actTitle').html(data.bundles[0].title);
+			       bundletitle=data.bundles[0].title;
 			       $('#activityBunlde').attr('src',data.url+data.bundles[0].pic)
 			    }
 				

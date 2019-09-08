@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -13,6 +15,9 @@ import java.util.TimerTask;
 import javax.persistence.criteria.CriteriaBuilder.Case;
 
 import org.bytedeco.javacpp.RealSense.intrinsics;
+import org.dom4j.Branch;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
 
 import com.guolaiwan.app.web.admin.vo.CommercialSettlementVO;
 import com.guolaiwan.bussiness.admin.dao.AdminDAO;
@@ -26,6 +31,7 @@ import com.guolaiwan.bussiness.admin.dao.RoleDAO;
 import com.guolaiwan.bussiness.admin.dao.RoleMenuDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
 import com.guolaiwan.bussiness.admin.enumeration.CompanyType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.AdminPO;
@@ -38,6 +44,7 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.RoleMenuPO;
 import com.guolaiwan.bussiness.admin.po.RolePO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.guolaiwan.bussiness.admin.po.VoteProductPO;
 import com.guolaiwan.bussiness.gateway.GateWayTcpManager;
 
 import pub.caterpillar.commons.context.SpringContext;
@@ -52,32 +59,33 @@ public class ContextListener extends InitLoader {
 	private ProductDAO conn_Product;
 	private OrderInfoDAO conn_OrderInfo;
 	private BalanceDAO conn_Balance;
+	private VoteProductDAO voteProductDao;
 
 	@Override
 	public void customInitialize() {
 
-		
-		initOrderThread();
 
+		initOrderThread();
+		foodCompetition();
 		try {
 			//initGateSocket();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
-		
+
+
 		System.out.println("context 初始化!");
 
 	}
-	
+
 	private void initGateSocket(){
-		
+
 		GateWayTcpManager gmanager=new GateWayTcpManager();
 	}
-	
-	
+
+
 	private void initOrderThread(){
-		
+
 		conn_Merchant = SpringContext.getBean("com.guolaiwan.bussiness.merchant.dao.MerchantDAO");
 		conn_Product = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.ProductDAO");
 		conn_OrderInfo = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.OrderInfoDAO");
@@ -96,9 +104,9 @@ public class ContextListener extends InitLoader {
 						conn_OrderInfo.update(orderInfoPO);
 					}				
 				}
-				
-				
-				
+
+
+
 				SimpleDateFormat sdy = new SimpleDateFormat("yyyy");
 				SimpleDateFormat sdm = new SimpleDateFormat("MM");
 				SimpleDateFormat sdd = new SimpleDateFormat("dd");
@@ -170,7 +178,7 @@ public class ContextListener extends InitLoader {
 										accured += order.getPayMoney() * productPO.getProductCommissionPrice() / 100;
 									}
 								}
-								
+
 							}
 							order.setBalance(1);
 							order.setSettleDate(new Date());
@@ -195,9 +203,70 @@ public class ContextListener extends InitLoader {
 		long delay = 0;
 		long intevalPeriod = 3600 * 1000;
 		timer.scheduleAtFixedRate(task, delay, intevalPeriod);
-		
-		
+
+
 	}
-	
+
+
+
+	private void foodCompetition(){ // 美食大赛
+		voteProductDao = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.VoteProductDAO");
+		// 定时排序
+		TimerTask timrTask = new TimerTask() {
+			@Override
+			public void run() {
+				// 定时排序
+				List<VoteProductPO> voteProduct = 	voteProductDao.getVoteProduct();
+				if(voteProduct != null){
+					List<VoteProductPO>  listProduct =  new ArrayList<VoteProductPO>();
+					/*System.out.println(voteProduct.size() +	" :::");*/
+
+					for(int i = 0; i < voteProduct.size(); i++){
+						listProduct.add(voteProduct.get(i));
+					}
+
+					Collections.sort(voteProduct, new Comparator<VoteProductPO>(){
+
+						@Override
+						public int compare(VoteProductPO o1, VoteProductPO o2){
+							if(o1.getModularcode() == o2.getModularcode()){
+								return (int) ((o2.getAllvotes()) - (o1.getAllvotes()));
+							}else{
+								return 1;
+							}
+						};
+
+					});
+
+					/*for(int i = 0; i < 4; i++){
+						System.out.println(voteProduct.get(i).getId() + "---" + voteProduct.get(i).getProductName() );
+					}
+					for(int i = 0; i < 4; i++){
+						System.out.println(listProduct.get(i).getId() + "---" + listProduct.get(i).getProductName() +"  ------");
+					}*/
+					int index = 0;
+					for(int i = 0; i < voteProduct.size(); i++){
+						if (!voteProduct.get(i).getId() .equals( listProduct.get(i).getId() )) {
+							index = i;
+							System.out.println(voteProduct.get(i).getProductName());
+							voteProduct.get(i).setRanking(index+1);
+							voteProductDao.saveOrUpdate(voteProduct.get(i));
+						}else{
+							index = i;
+						}
+					}
+				}
+			};
+		};
+
+		Timer timer = new Timer();
+		long delay = 0;
+		long intevalPeriod = 10 * 1000;
+		timer.scheduleAtFixedRate(timrTask, delay, intevalPeriod);
+	}
+
+
+
+
 
 }

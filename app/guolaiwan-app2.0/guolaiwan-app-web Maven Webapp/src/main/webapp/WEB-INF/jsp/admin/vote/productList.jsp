@@ -36,7 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div class="x-body">
 	<xblock>
 		<button class="layui-btn" onclick="show_win('添加商品','bdPro?moId=${voteModular.id}','1000','700')"><i class="layui-icon">&#xe608;</i>添加</button>
-		<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>清空</button>
+		<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>清空全部</button>
 	    <div class="layui-inline">
   			商品Id：
   			<div class="layui-inline">
@@ -194,8 +194,7 @@ function getProductList(){
     ,limits: [10,30,50,100]
     ,limit: 10
     ,cols: [[
-    {type:'checkbox'}
-    ,{field: 'productId', title: '商品Id',sort: true,width:80} 
+     {field: 'productId', title: '商品Id',sort: true,width:80} 
     ,{field: 'productName', title: '商品名称',sort: true,width:180} 
     ,{field: 'peoplevotenum', title: '群众投票',sort: true,width:180} 
     ,{field: 'judgesvotenum', title: '评委投票',sort: true,width:180} 

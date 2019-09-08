@@ -1160,7 +1160,7 @@ input[type="datetime-local"]:before{
 		  $input.val(number);
 		      /* var startDate=$('#startDate').val(); */
 		      var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-			  var endDate=$('#endDate').val().val().replace(/-/g, '/');
+			  var endDate=$('#endDate');
 			  var daycount=1;
 			  if(startDate&&endDate){
 			        startDate = Date.parse(startDate);
@@ -1189,7 +1189,7 @@ input[type="datetime-local"]:before{
 		  /* var startDate=$('#startDate').val(); */
 		   //获取第二天十二点的时间 
 		  var startDate = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
-		  var endDate=$('#endDate').val().val().replace(/-/g, '/');
+		  var endDate=$('#endDate');
 		  var daycount=1;
 		  if(startDate&&endDate){
 		        startDate = Date.parse(startDate);
@@ -2167,7 +2167,7 @@ input[type="datetime-local"]:before{
 			<div
 				style="font-size:12px;margin-left:14px;margin-top:15px;width:50%;float:left;height:50px;line-height:50px;">购买数量</div>
 			<div
-				style="font-size:12px;margin-right:14px;margin-top:15px;width:30%;float:right;">
+				style="font-size:12px;margin-right:14px;margin-top:15px;float:right;">
 				<div class="weui-cell">
 					<div class="weui-cell__ft">
 						<div class="weui-count">

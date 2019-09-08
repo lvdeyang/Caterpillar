@@ -904,6 +904,7 @@ public class ProductPackageController extends BaseController {
 		// 商品数量
 		order.setProductNum(Long.parseLong(num));
 		
+		order.setComId(1L);
 		// 商品单价
 		order.setProductPrice(productprice);
 		// 所属板块DI

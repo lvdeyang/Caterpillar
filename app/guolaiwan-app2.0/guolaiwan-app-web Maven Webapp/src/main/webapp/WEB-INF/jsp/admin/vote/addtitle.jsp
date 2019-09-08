@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            投票规则
+            投票标题
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -29,24 +29,25 @@
 			   <span class="layui-breadcrumb">
 			    <a><cite>首页</cite></a>
 			    <a><cite>投票大赛</cite></a>
-			    <a><cite>投票规则</cite></a>
+			    <a><cite>投票标题</cite></a>
 			   </span> 
+			    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;margin-left:0" href="javascript:history.go(-1)" title="返回"><i class="layui-icon" style="line-height:38px">&#xe65c;</i></a>
 		</div>
         <div class="x-body" style="height:1500px">
             <form class="layui-form layui-form-pane">
  				  <div class="layui-form-item">
-                    <label for="voterule" class="layui-form-label">
- 						投票规则：
+                    <label for="title" class="layui-form-label">
+ 						投票标题：
                     </label>
                     <div class="layui-input-block">
-                        <textarea name="voterule"  placeholder="请输入内容" class="layui-input" id="voterule" style="height:300px">${voterule}</textarea>
+                        <textarea name="title"  placeholder="请输入内容" class="layui-input" id="title" style="height:100px">${title}</textarea>
                     </div>
                 </div>
                 
             	<input type="hidden" name="optionId" value="${optionId}" class="layui-input">
                 <div class="layui-form-item">
                     <button class="layui-btn" lay-filter="add2" lay-submit >
-						提交规则
+						提交标题
                     </button>
                 </div>
             </form>
@@ -58,7 +59,7 @@
         <script>
         
          //实例化编辑器
-    		var um = UM.getEditor('voterule');
+    		var um = UM.getEditor('title');
     		
             
         
@@ -84,7 +85,7 @@
 				console.log(data.field);
                 $.ajax({
                 	  type:"post",
-           			  url:"<%=request.getContextPath() %>/admin/vote/addvoterule",
+           			  url:"<%=request.getContextPath() %>/admin/vote/addtitle",
                       data:data.field,
                       success:function(msg){
                         if(msg=="success"){
