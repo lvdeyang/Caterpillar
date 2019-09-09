@@ -1,5 +1,7 @@
 package com.chenxi.web.stock.po;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -7,12 +9,14 @@ import javax.persistence.Transient;
 import pub.caterpillar.orm.po.AbstractBasePO;
 
 @Entity
-@Table(name = "finance")
+@Table(name = "stock_finance")
 public class FinancePo extends AbstractBasePO {
+	private long stockId;
+	private int year;
 	//营业收入
 	private double allget;
 	//营业利润
-	private double left;
+	private double fleft;
 	//纯利润
 	private double realLeft;
 	//净资产收益率
@@ -29,11 +33,12 @@ public class FinancePo extends AbstractBasePO {
 	public void setAllget(double allget) {
 		this.allget = allget;
 	}
-	public double getLeft() {
-		return left;
+	
+	public double getFleft() {
+		return fleft;
 	}
-	public void setLeft(double left) {
-		this.left = left;
+	public void setFleft(double fleft) {
+		this.fleft = fleft;
 	}
 	public double getRealLeft() {
 		return realLeft;
@@ -64,6 +69,18 @@ public class FinancePo extends AbstractBasePO {
 	}
 	public void setGetcash(double getcash) {
 		this.getcash = getcash;
+	}
+	public long getStockId() {
+		return stockId;
+	}
+	public void setStockId(long stockId) {
+		this.stockId = stockId;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 	
