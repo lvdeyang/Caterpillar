@@ -618,7 +618,7 @@ input[type="radio"] {
 					'title': '孝经'
 				}
 	];
-	 MP3(song,44); //初始播放 孝经
+	 MP3(song,0); //初始播放 孝经
 	/* ref = setInterval(function(){// 循环
 		 consoleLog();
 	 },5000); */
@@ -1030,7 +1030,7 @@ input[type="radio"] {
 		     }); 
 	    }}, */
 	      { text: "播放此景点", onClick: function(){ 
-	       clearInterval(ref);  //停止循环 定位
+	       /* clearInterval(ref);  //停止循环 定位 */
 		     for (var i = 0; i < json.length; i++){
 		       if(id ==  json[i].id){
 		           $('#pid').html(json[i].chineseContent);

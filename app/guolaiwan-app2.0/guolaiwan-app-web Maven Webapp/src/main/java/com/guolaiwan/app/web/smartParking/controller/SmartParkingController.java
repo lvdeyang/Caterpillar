@@ -72,10 +72,10 @@ public class SmartParkingController  extends WebBaseControll{
 	public Map<String, Object> AddInformation(HttpServletRequest request) throws Exception {
 		Long userId = 	(Long) request.getSession().getAttribute("userId");
 		Map<String, Object> dataMap = new HashMap<String, Object>(); 
-		List<VehiclePO>  userByid = par_king.getNumber(userId);
-		for (VehiclePO vehiclePO : userByid) {
-			dataMap.put("userHeadimg", vehiclePO.getNumber());
-			dataMap.put("userNickname", vehiclePO.getType());
+		VehiclePO  userByid = par_king.getNumber(userId).get(0);
+		if( userByid != null){
+			dataMap.put("userHeadimg", userByid.getNumber());
+			dataMap.put("userNickname", userByid.getType());
 		}
 		return success(dataMap);
 	}
