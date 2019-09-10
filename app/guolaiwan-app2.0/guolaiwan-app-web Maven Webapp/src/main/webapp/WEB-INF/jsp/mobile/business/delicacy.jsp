@@ -200,7 +200,7 @@ function getCate(){
 		         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].ShopName+'</p>');
 		         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data[i].ModularClass+'</span></p>');
 		         if(data[i].Date != null)html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">'+data[i].Date+'</p>'); 
-		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>38</span>元</p>'); 
+		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>'+data[i].average+'</span>元</p>'); 
 		         var feature = data[i].feature;
 		         if(feature !=null && feature!=""){
 		            var split  =   feature.split(',');
@@ -225,20 +225,22 @@ function getCate(){
 			var url="<%=basePath%>cate/search";
 	            $.post(url,{"merchantId":${merchantId},"name":name,"type":"0003"},function(data){
 	            	$('.youxuan').empty();
+	            	var average = data.average;
+	            	var merlist = data.merlist;
 	            	var html=[];
-	            	if(data.merlist.length==0){
+	            	if(merlist.length==0){
 	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
 	            	}else{
-						for(var i=0; i<data.merlist.length; i++){
-							 html.push('<a onclick="gotodelicacystore('+data.merlist[i].id+')"><div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
-					         html.push('<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');  
+						for(var i=0; i<merlist.length; i++){
+							 html.push('<a onclick="gotodelicacystore('+merlist[i].id+')"><div class="goupiao" style="position: relative;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;">');
+					         html.push('<img style="height:130px;width:45%;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+merlist[i].shopHeading+'"/>');  
 					         html.push('<div class="youxuan-in" style="display: inline-block;">');  
-					         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>');
-					         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data.merlist[i].modularClass+'</span></p>');
+					         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+merlist[i].shopName+'</p>');
+					         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+merlist[i].modularClass+'</span></p>');
 					         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>');
 					         html.push('<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>');
-					         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>38</span>元</p>');
-					         var feature = data.merlist[i].feature;
+					         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span></span>'+average[i]+'元</p>');
+					         var feature = merlist[i].feature;
 					         if(feature !=null && feature!=""){ //商家特色
 					            var split  =   feature.split(',');
 					            html.push('<div style="position: absolute;top:55px;width:auto;height:auto;">');

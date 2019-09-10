@@ -3,6 +3,7 @@ package com.guolaiwan.app.web.business.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -49,6 +50,7 @@ import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
+import com.guolaiwan.bussiness.admin.dao.ActivityDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
@@ -68,10 +70,12 @@ import com.guolaiwan.bussiness.admin.dao.UserOnedayBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.VPCommentDAO;
 import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
 import com.guolaiwan.bussiness.admin.dao.VideoPicDAO;
+import com.guolaiwan.bussiness.admin.enumeration.ActivityType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
+import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
 import com.guolaiwan.bussiness.admin.po.BundleOrder;
@@ -174,6 +178,10 @@ public class BusinessController extends WebBaseControll {
 	
 	 @Autowired
 	 private MessageMiddleClientDao conn_mesMidleClien;
+	 @Autowired
+     private ActivityDAO conn_activity;
+	 @Autowired
+	 private TableStatusDAO table_order;
 	 
 	// 南山项目单独跳转的南山首页
 	@RequestMapping(value = "/merchant/nsAndView")
@@ -203,6 +211,18 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("userInfo", uList.get(0));
 		return mv;
 	}
+	
+	//南山常见问题跳转详情页面
+	@RequestMapping(value = "/merchant/strategys")
+	public ModelAndView Strategys(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		String merchantId = request.getParameter("merchantId");		
+		mv = new ModelAndView("mobile/business/strategy");
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
+	
+	
 	// 南山项目跳转攻略详情发布
 	@RequestMapping(value = "/merchant/announce")
 	public ModelAndView announce(HttpServletRequest request,long merchantId) throws Exception {
@@ -610,14 +630,40 @@ public class BusinessController extends WebBaseControll {
 				Merchantlist.add(po);
 			}
 		}
-		for (int i = 0; i < Merchantlist.size(); i++) {
+		
+	    DecimalFormat dlf  =  new DecimalFormat("0.0");
+		Double allMany = 0.0;
+		
+		for (int i = 0; i < Merchantlist.size(); i++) {			
 			Map<String, Object> hashMap = new HashMap<String, Object>();
 			hashMap.put("merchantId", Merchantlist.get(i).getId());
 			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
 			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
 			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
-			hashMap.put("feature", Merchantlist.get(i).getFeature());
-			list.add(hashMap);
+			hashMap.put("feature", Merchantlist.get(i).getFeature());		
+			//获取订单总价
+			long merchant_id = Merchantlist.get(i).getId();
+			String[] fields = {"merchantId"};
+			Object[] values= {merchant_id};
+			List<TableStatusPO> tStatusPOs =  table_order.findByFields(fields, values);
+			for(TableStatusPO po : tStatusPOs){	
+               if(null == po.getYdNO()){
+            	   continue;
+               }
+			   String _gold = dlf.format(Double.parseDouble((po.getDishMoney()/100)+""));			
+			   allMany += Double.parseDouble(_gold);				   
+			}
+			//求均价
+			BigDecimal allgol = new BigDecimal(allMany);
+			BigDecimal num = new BigDecimal(tStatusPOs.size());
+			double avgMoney = 0.0;
+			if(tStatusPOs.size() != 0){
+		     avgMoney = allgol.divide(num,2,BigDecimal.ROUND_HALF_DOWN).doubleValue();
+			}else{
+				avgMoney = 28.0;
+			}
+		    hashMap.put("average",avgMoney);
+		    list.add(hashMap);
 		}
 		return list;
 	}
@@ -2551,6 +2597,198 @@ public class BusinessController extends WebBaseControll {
 			orderInfoDao.saveOrUpdate(order);	
 			data.put("orderId", order.getId());		
 			return data;
+		}
+		
+		@RequestMapping(value = "/searchAllMesage")
+		public ModelAndView search(HttpServletRequest request, String content,long merchantId) throws Exception {
+			
+			ModelAndView mv = null;
+			mv = new ModelAndView("mobile/business/search");
+			byte bb[];
+			bb = content.getBytes("ISO-8859-1"); // 以"ISO-8859-1"方式解析name字符串
+			content = new String(bb, "UTF-8");
+			mv.addObject("content", content);
+			mv.addObject("merchantId",merchantId);
+		
+			return mv;
+		}
+		
+		@RequestMapping(value = "/search/post")
+		public ModelAndView retrieval(HttpServletRequest request) throws Exception {
+			ModelAndView mv = null;
+			mv = new ModelAndView("mobile/business/search");
+			String content = request.getParameter("searchContent");
+			String merchantId = request.getParameter("merchantId");
+			String type = request.getParameter("type");
+			mv.addObject("content", content);
+			mv.addObject("type", type);
+			mv.addObject("merchantId",merchantId);
+			return mv;
+		}
+		
+		/**
+		 * 新版微官网首页搜索
+		 * 
+		 * @param productId
+		 * @param page
+		 * @param request
+		 * @param response
+		 * @return
+		 * @throws Exception
+		 */
+		@ResponseBody
+		@RequestMapping(value = "/retrieval", method = RequestMethod.POST)
+		public Map<String, Object> search(HttpServletRequest request, HttpServletResponse response) throws Exception {
+			// 解析json
+			String param = getRequestJson(request);
+			if (param.indexOf("\\") >= 0) {
+				param = param.replaceAll("\\\\", "");
+				param = param.substring(1, param.length() - 1);
+			}
+			JSONObject pageObject = JSON.parseObject(param);
+			String comId = pageObject.getString("comId");
+			String type = pageObject.getString("type");
+			String name = pageObject.getString("name");
+			Integer page = pageObject.getInteger("page");
+			//获取商户Id
+			Long merchantId = pageObject.getLong("merchantId");
+			//查询商户下的子商户
+			List<Long> merchList = new ArrayList<Long>();
+			merchList.add(merchantId);
+			List<MerchantChildrenPO> mChildrenPOs = merchant_Children.findByField("merchantId",merchantId);
+			if(mChildrenPOs != null){
+				for(MerchantChildrenPO po : mChildrenPOs){
+					merchList.add(po.getChildrenId());
+				}					
+			}
+			//封装数据Map
+			Map<String, Object> dataMap = new HashMap<String, Object>();
+			//图片访问地址
+			SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+			
+			DecimalFormat df = new DecimalFormat("0.00");
+			Long comIdL = null;
+			if (comId == null || comId.length() == 0) {
+				comIdL = 1L;
+			} else {
+				comIdL = Long.parseLong(comId);
+			}
+            
+			//分页查询数量
+			int pageSize = 100;
+			switch (type) {
+			case "MERCHANT":
+				// 修改平谷搜索功能 4/21
+				List<MerchantPO> merchants = Mer_chant.appfindByComNew(name, page, pageSize);
+
+				List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants,
+						MerchantVO.class);
+
+				for (int i = 0; i<_merchants.size();i++) {
+							
+					MerchantVO  merchantVO =  _merchants.get(i);
+					//指定该商户下的子商户
+					if(!(merchList.contains(merchantVO.getId()))){
+						_merchants.remove(i);
+						continue;						
+					}
+					// 图片
+					merchantVO.setShopHeading(sysConfig.getWebUrl() + merchantVO.getShopHeading());
+					merchantVO.setShopQualifications(sysConfig.getWebUrl() + merchantVO.getShopQualifications());
+					merchantVO.setShopPic(sysConfig.getWebUrl() + merchantVO.getShopPic());
+
+					// 多图
+					String morePicStr = split(merchantVO.getShopMpic(), sysConfig.getWebUrl());
+					merchantVO.setShopMpic(morePicStr);
+
+					// 最小价格
+					long minPrice = conn_product.getMinPriceByMer(merchantVO.getId());
+					if (minPrice == 0l) {
+						merchantVO.setAveragePrice("无数据");
+					} else {
+						merchantVO.setAveragePrice(df.format((double) minPrice / 100));
+					}
+					/*
+					 * //简介
+					 * merchantVO.setShopIntroduction(ReduceHtml2Text.removeHtmlTag(
+					 * merchantVO.getShopIntroduction()));
+					 */
+				}
+				// 修改平谷搜索功能 4/21
+				int count = Mer_chant.appCount(name);
+				dataMap.put("count", count);
+				dataMap.put("merchants", _merchants);
+				break;
+			case "PRODUCT":
+				// 修改平谷搜索功能 4/21
+				List<ProductPO> products = conn_product.appfindByComNew(name, page, pageSize);
+				List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
+				List<ProductVO> retProductVOs = new ArrayList<ProductVO>();
+				for (int j = 0 ; j<_products.size(); j++) {					
+					ProductVO  productVO = _products.get(j);
+                    //指定该商户下的商品					
+					if(!(merchList.contains(productVO.getProductMerchantID()))){
+						_products.remove(j);
+						continue;						
+					}
+					JSONObject shopJson = JSON.parseObject(productVO.getProductMerchantJson());
+					ActivityRelPO relPO = conn_activityRel.getActivityRelByProductId(productVO.getId());
+					if (relPO != null) {
+						ProductVO origProductVO = (ProductVO) productVO.clone();
+						origProductVO.setProductShowPic(sysConfig.getWebUrl() + origProductVO.getProductShowPic());
+						origProductVO.setProductMorePic(split(origProductVO.getProductMorePic(), sysConfig.getWebUrl()));
+						if (shopJson != null && !shopJson.equals("")) {
+							origProductVO.setShopLatitude(shopJson.getString("shopLatitude"));
+							origProductVO.setShopLongitude(shopJson.getString("shopLongitude"));
+						}
+						retProductVOs.add(origProductVO);
+						ActivityPO activityPO = conn_activity.get(relPO.getActivityId());
+						String price = productVO.getProductPrice();
+						if (activityPO.getType().equals(ActivityType.FIXEDPRICE)) {
+							if (relPO.getPrice() > 0) {
+								productVO.setProductPrice(df.format(Double.parseDouble(relPO.getPrice() + "") / 100));
+							} else {
+								if (activityPO.getFixedPrice() > 0) {
+									productVO.setProductPrice(
+											df.format(Double.parseDouble(activityPO.getFixedPrice() + "") / 100));
+								}
+							}
+						} else if (activityPO.getType().equals(ActivityType.DAZHE)) {
+							if (relPO.getPrice() > 0) {
+								productVO.setProductPrice(df.format(Double.parseDouble(relPO.getPrice() + "") / 100));
+							} else {
+								productVO.setProductPrice(df.format(Double.parseDouble(
+										Long.parseLong(productVO.getProductPrice()) * activityPO.getDiscount() / 10 + "")
+										/ 100));
+							}
+						}
+						productVO.setActivityReId(relPO.getId());
+						productVO.setIsSurpport(relPO.getSurpportBuy());
+
+					} else {
+						productVO.setActivityReId(0);
+						productVO.setIsSurpport(0);
+					}
+
+					productVO.setProductShowPic(sysConfig.getWebUrl() + productVO.getProductShowPic());
+					productVO.setProductMorePic(split(productVO.getProductMorePic(), sysConfig.getWebUrl()));
+					if (shopJson != null && !shopJson.equals("")) {
+						productVO.setShopLatitude(shopJson.getString("shopLatitude"));
+						productVO.setShopLongitude(shopJson.getString("shopLongitude"));
+					}
+					retProductVOs.add(productVO);
+				}
+				// 修改平谷搜索功能 4/21
+				int count1 = conn_product.appCountByComNew(name);
+				dataMap.put("count", count1);
+				dataMap.put("products", retProductVOs);
+				break;
+
+			default:
+				return FORBIDDEN("错误的搜索类型！");
+			}
+
+			return success(dataMap);
 		}
 		
 }
