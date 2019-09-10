@@ -342,16 +342,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margitop:3px;float:right"  href="javascript:location.replace(location.href);" id="sty"title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
-            <xblock>  <a href="javascript:openMap('选择商家','<%=request.getContextPath() %>/admin/merchant/sellist?mcname=MerchantName&mcuuid=MerchantID&mchref=merclass','600','500')" class="layui-btn " >选择商家</a> 
+              <xblock><a href="javascript:openMap('选择商家','<%=request.getContextPath() %>/admin/merchant/sellist?mcname=MerchantName&mcuuid=MerchantID&mchref=merclass','600','500')" class="layui-btn " >选择商家</a> 
              <button class="layui-btn" onclick="open_win('添加房间','addv','600','600')"><i class="layui-icon">&#xe608;</i>添加房间</button><span class="x-right" s
-            ght:40px">
-             <input type="text" style="float:left;width:auto;margin-left:-1380px;" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
-             <select id="times" style="width:auto;height:38px;margin-left:-1190px;">
+            ght:40px"></span>
+             <input type="text" style="width:auto;display: inline-block;margin-left: 10px;" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
+             <select id="times" style="width:auto;height:38px;margin-left: 10px;border-radius: 2px;">
               <option>午餐</option>
               <option>晚餐</option>
              </select>
-             <button id="btns" style="width:auto;height:38px;padding:0 10px;border:none;outline: none; background-color: #009688;color:#fff;">搜索</button>
+             <button id="btns" style="border-radius: 2px;margin-left: 10px;height:38px;padding:0 10px;border:none;outline: none; background-color: #009688;color:#fff;">搜索</button>
             </xblock>
+           
          	<table id="activityList" lay-filter="activityList" ></table>
         </div>
        <span style="font-size: 18px;margin-left:5%;">商家名称:</span>

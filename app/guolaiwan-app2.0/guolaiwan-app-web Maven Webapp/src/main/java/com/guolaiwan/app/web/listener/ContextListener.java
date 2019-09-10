@@ -261,7 +261,7 @@ public class ContextListener extends InitLoader {
 
 		Timer timer = new Timer();
 		long delay = 0;
-		long intevalPeriod = 10 * 1000;
+		long intevalPeriod = 60 * 1000;
 		timer.scheduleAtFixedRate(timrTask, delay, intevalPeriod);
 	}
 
