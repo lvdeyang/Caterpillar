@@ -183,7 +183,7 @@ html, body {
 			    para.merchantId = '${merchantId}';
 				$.post(uri, $.toJSON(para), function(data){
                 $.showLoading("反馈成功!");
-				  window.location.href="business/merchant/strategy?merchantId="+'${merchantId}';
+				  window.location.href="business/merchant/strategys?merchantId="+'${merchantId}';
 				});  
 		    }else{
 	 		   $.toast("请输入反馈信息!", "cancel");

@@ -230,6 +230,10 @@ padding:10px 5px;
 	function gotomeal(){
 		location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId=${merchant.id}';	
 	}
+	//停车 
+	function gotoparking(){
+	   location.href=window.BASEPATH + 'quit/merchant/smartparking?merchantId=${merchant.id}';	
+	}
 </script>
 
 
@@ -264,7 +268,7 @@ padding:10px 5px;
              <li onclick="gototable()"><img style="width:60%;" src="lib/images/bookingTable.png"><p>订桌</p></li>
              <li onclick="gotomeal()"><img style="width:60%;" src="lib/images/order.png"><p>点餐</p></li>
              <li><img style="width:60%;" src="lib/images/serve.png"><p>服务</p></li>
-             <li><img style="width:60%;" src="lib/images/parkingSpace.png"><p>停车位</p></li>
+             <li onclick="gotoparking()"><img style="width:60%;" src="lib/images/parkingSpace.png"><p>停车位</p></li>
         </ul>
 	
 	  </div> 
