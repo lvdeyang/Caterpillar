@@ -302,8 +302,11 @@ none
       location.href=window.BASEPATH + 'admin/questionnaire/sendRedPacket?questionnaireId=${questionnaireId}';
     });
     
-    
+    if($('.lists li').attr("class") != "add"){
+                $(".btn-next").attr("disabled",true);
+		  }
      $(".lists").on("click","li",function(){
+       $('.btn-next').attr("disabled",false);
         if(type==1||type==3){
 	        $(".lists li").removeClass("add");
 	        $(this).addClass("add");
@@ -311,12 +314,13 @@ none
         	$(this).toggleClass("add");
         }
     });
-  
+  		
 	var li=document.getElementById('homes').getElementsByClassName("homes-on");
     var num=0;
     var len=li.length;
 
   $(document).on('click','.btn-next',function(){
+
   		var answers="";
   		index+=1;
   		$('.lists').find('li').each(function() {
@@ -326,6 +330,10 @@ none
                 }
             })
   		var str=answer.replace("A","0").replace("B","1").replace("C","2").replace("D","3").replace("E","4").replace("对","0").replace("错","1");
+  		if(answers !=str){
+  		
+  		}
+  		
   		if(answers==str){
   			$('.lists li').css({"color":"#fff","background":"#F21819"});
   			$('.add').css("background","#37AD3B");
@@ -345,7 +353,8 @@ none
   			
   		}
   		 if(index==${questionnum}){
-  			$('.fu').fadeIn();
+  		 
+  			if(answers==str)$('.fu').fadeIn();
   			 retn = false;
   			 gameTime = 100000;
   			clearInterval(s);
@@ -499,6 +508,10 @@ none
 		var options = questions[index].options.split("#");
 		type=questions[index].questiontype;
 		answer = questions[index].answer;
+		$('.btn-next').attr("disabled",true);
+		if(questions[index].questiontype==1)$('.type').text('单选');
+		if(questions[index].questiontype==2)$('.type').text('多选');
+		if(questions[index].questiontype==3)$('.type').text('判断');
 		$('.questiontitle').html(questions[index].topic);
 		var html = [];
 		for (var i = 0; i < options.length; i++) {
@@ -520,6 +533,7 @@ none
 		<ul id="homes-in">
 			<li class="homes-on">
 				<div class="main" style="">
+				 <p class="type" style="float:right;margin-top:-35px;font-size: 16px"></p>
 					<div
 						style="height:60px;width: 60px;border-radius: 50%;background:#fff;position:absolute;top:75px;left:50%;margin-left:-30px;">
 						<div class="game_time">
@@ -537,7 +551,7 @@ none
 						style="width:100%;height:auto;word-break:break-all;line-height: 30px;"></p>
 					<ul class="lists">
 					</ul>
-						<button class="btn-next"
+						<button  class="btn-next"
 		style="width:20%;height:35px;border-radius:6px;line-height:35px;background:#F61C1D;text-align: center;color:#fff;font-size:14px;border:none;outline:none;float:right;margin-top:30px;">下一题
 		></button>
 				</div>
