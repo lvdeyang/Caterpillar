@@ -104,11 +104,15 @@ background:#EEEEEE;
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
 <script type="text/javascript">
+function black(){
+  window.history.back();
+}
 </script>
   <body>
+  
      <div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
 
-     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a> 
+     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="javascript:black()" title="返回"> <返回 </a> 
 	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">更多支付</span>
 	</div> 
    <div class="header" style="background:#EEEEEE;">
