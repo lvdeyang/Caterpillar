@@ -207,6 +207,10 @@ public class PictureController extends BaseController{
 			strMap.put("source", "vote");
 			strMap.put("picdo", "votepics");
 		}
+		else if(source.equals("questionnaire")){
+			strMap.put("source", "questionnaire");
+			strMap.put("picdo", "backgroundpic");
+		}
 		else {
 			strMap.put("source", source);
 			strMap.put("picdo", "pic.do");

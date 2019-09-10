@@ -194,8 +194,14 @@ public class JudgesController {
 
 
 	// 限制票数的方法 返回值为0的时候次数已达到5次，为1的时候可以投票，为2的时候服务器出现异常
-	@RequestMapping(value = "/votepoll", method = RequestMethod.GET)
-	public Map<String, String> VotePoll(String userId, String productId,String optionId) {
+	@RequestMapping(value = "/votepoll", method = RequestMethod.POST)
+	public Map<String, String> VotePoll(HttpServletRequest request,String userId, String productId,String optionId) {
+		boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+		if(!isAjax){
+			Map<String, String> hashMap = new HashMap<String, String>();
+			hashMap.put("msg", "err");
+			return hashMap;
+		}
 		Date startTime = getStartTime();
 		Date endTime = getEndTime();
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
@@ -211,7 +217,7 @@ public class JudgesController {
 				return hashMap;
 			}
 			//当天的记录数量为0时 或者当有记录但是没有满足当天投票总量时
-			if (count==0||(count != 0 && count != voteOption.getPollnum())) {
+			if (count==0||(count > 0 && count <= voteOption.getPollnum())) {
 				VoteImposePo voteImposePo1 = new VoteImposePo();
 				voteImposePo1.setUserId(userId);
 				voteImposePo1.setPoll(1);
@@ -219,6 +225,26 @@ public class JudgesController {
 				voteImposeDao.save(voteImposePo1);
 				//将票数封装到后台展示的po中
 				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
+				//订单数量
+				int ordercount = voteImposeDao.buyCountByPid(voteProduct.getProductId()+"");
+				//此商品的所有群众投票数
+				int manvotes = voteImposeDao.countByPid(voteProduct.getProductId()+"");
+				List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProduct.getId());
+				long score=0;
+				long avg=0;
+				if(all!=null){
+					for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
+						score+=judgesVoteMsgPO.getScore();
+					}
+					score=score/all.size();
+				}
+				if(score<=10){
+					avg=score*10;
+				}else{
+					avg=score;
+				}
+				double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
+				voteProduct.setAllvotes(allcount);
 				voteProduct.setPeoplevotenum(count+1);
 				voteProductDao.saveOrUpdate(voteProduct);
 				hashMap.put("msg", "1");
@@ -335,7 +361,7 @@ public class JudgesController {
 	}
 	
 	
-	// 排序商品
+	/*// 排序商品      这方法有大问题 不用
 	@ResponseBody
 	@RequestMapping(value = "/sortproduct", method = RequestMethod.POST)
 	public String sortproduct(HttpServletRequest request) {
@@ -349,32 +375,13 @@ public class JudgesController {
 		}
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		for (VoteProductPO voteProductPO : getvoteproduct) {
-			//订单数量
-			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
-			//此商品的所有群众投票数
-			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
-			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
-			long score=0;
-			long avg=0;
-			if(all!=null){
-				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
-					score+=judgesVoteMsgPO.getScore();
-				}
-				score=score/all.size();
-			}
-			if(score<=10){
-				avg=score*10;
-			}else{
-				avg=score;
-			}
-			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
-			voteProductPO.setAllvotes(allcount);
+			
 			voteProductPO.setRanking(i);
 			voteProductDao.update(voteProductPO);
 			i+=1;
 		}
 		return "success";
-	}
+	}*/
 
 	//获得投票的商品
 	@ResponseBody
@@ -422,6 +429,7 @@ public class JudgesController {
 			hashMap.put("productname", voteProductPO.getProductName());
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
+			hashMap.put("allvotes", (int)voteProductPO.getAllvotes()+"");
 			hashMap.put("manvotes", manvotes+"");
 			hashMap.put("ranking", voteProductPO.getRanking()+"");
 			hashMap.put("productvotes", allcount+"");
@@ -531,6 +539,7 @@ public class JudgesController {
 			hashMap.put("productname", voteProductPO.getProductName());
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
+			hashMap.put("allvotes", (int)voteProductPO.getAllvotes()+"");
 			hashMap.put("manvotes", manvotes+"");
 			hashMap.put("ranking", voteProductPO.getRanking()+"");
 			hashMap.put("productvotes", allcount+"");

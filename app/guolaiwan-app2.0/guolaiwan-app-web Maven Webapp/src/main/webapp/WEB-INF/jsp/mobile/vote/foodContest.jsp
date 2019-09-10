@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>唐山周末 · 長城鄉村美食文化節</title>
+<title>匠心非遗  寻味遵化  赶快为喜欢的遵化美食投票吧！</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -153,9 +153,7 @@ font-size:12px;
 line-height:24px;
 height:24px;
 margin:5px 4% 5px 0;
-
 }
-
 .di::before{
   content:"";
   position:absolute;
@@ -177,14 +175,12 @@ margin:5px 4% 5px 0;
     top: 0;
     background-color:rgba(0,0,0,0.6);
     z-index: 10000;
-
 }
 .lists img{
 width:30px;
 height:30px;
 margin:0 5px;
 }
-
 .gotop {
     position: fixed;
     right: 20px;
@@ -217,8 +213,6 @@ margin:0 5px;
 				text-align: center;
 				margin:0 0 20px 2.5%;
 				color:black;
-				
-				
 			}
 			.tab-btn li img{
 			height:25px;
@@ -272,9 +266,7 @@ margin:0 5px;
 	    left:10%;
 		}	
 </style> 
-
 </head>
-
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
@@ -286,65 +278,45 @@ margin:0 5px;
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <script>
-var base,page=1,nodata=0;
+var base,page=1,nodata=0,isclick=true;
 var votenum=${pollnum};
 var buynum=${buynum};
 var productId;
 var ShareUrl=window.location.href;
 var SharePic;
 $(function() {
-
 initShare();
-   
     if(${logoshow=='SHOW'}){
 		$('#logo').show();
 	}
-   
     if(${titleshow=='SHOW'}){
 		$('#votetitle').show();
 	}
-   
 	<!--选项卡  -->
 	$(".tab-btn li").click(function(){
 	//为按钮添加样式
 	$(this).addClass("btn-active")
 	.siblings()
 	.removeClass("btn-active");
-				
 	//获取点击按钮的索引
 	var index = $(this).index();
-				
 	/*通过索引找到对应的content,并显示:其他content隐藏*/
 	var jq = $(".contentt-box .contentt").eq(index)
 	.addClass("active").siblings().removeClass("active")
 			})
 	getvotemodular();
-	
-	
-	
 	});
-	
-	   
   /*返回顶部  */
 $(function(){
-
-	
 	$(document).on('click', '.flase', function() {
  		$(".Judges").fadeOut();
- 	
  	});
- 	
  	$(".Judgess").keyup(function(){
     $(this).val($(this).val().replace( /[^0-9]/g,''));
 	}).bind("paste",function(){
 	    $(this).val($(this).val().replace( /[^0-9]/g,''));
 	})
-	
-
-
-
 	getRecomment();
-	
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -359,8 +331,6 @@ $(function(){
         return false;
 	});
 });
-
-
 function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH+'admin/vote/allpics?optionId=${optionId}';
 		$.get(_uriMerchantInfo, null, function(data){
@@ -377,12 +347,10 @@ function getRecomment(){
 			    });
 		    });
 }
-
 //获取选项卡标签
 function getvotemodular(){
  var _uriRecomment = window.BASEPATH + 'judges/getvotemodular';
    $.post(_uriRecomment,{"optionId":${optionId}},function(data){
-     
      getvoteproduct(data[0].id,page)
       var html=[];
       for(var i=0;i<data.length;i++){
@@ -400,11 +368,9 @@ function getvotemodular(){
          base=data[0].id;
    });
 }
-
 $(document).on('click','.clickmodular',function(){
 	page=1;
 });
-
 //获取对应的商品
 function getvoteproduct(id,page){
 $("#b"+base).css("color","black");
@@ -412,13 +378,13 @@ $("#b"+base).css("color","black");
  $("#b"+id).css("color","#F92828");
  	//计算总票数 用于排序
  	var url=window.BASEPATH + 'judges/sortproduct?id='+id+'&userId=${userId}&optionId=${optionId}'
-   /* 	$.post(url,{"id":id,"optionId":"${optionId}"},function(data){   */
+/*  	$.post(url,{"id":id,"optionId":"${optionId}"},function(data){ */
  		//按照总票数查询投票商品
 	    var _uriRecomment = window.BASEPATH + 'judges/getvoteproduct?id='+id+'&userId=${userId}&optionId=${optionId}&page='+page;
 	    $.get(_uriRecomment,null,function(data){
 	      list(data);   
 	    });
- 	/*   })   */
+ 	/* }) */
 } 
 	//搜索商品
  	function search(){
@@ -435,8 +401,10 @@ $("#b"+base).css("color","black");
     }
 	//投票方法
 	function votepoll(id){
-		var url=window.BASEPATH + 'judges/votepoll?userId=${userId}&productId='+id+'&optionId=${optionId}';
-		$.get(url,null,function(data){
+		if(isclick==false)return;
+		if(isclick==true)isclick=false;
+		var url=window.BASEPATH + 'judges/votepoll';
+		$.post(url,{"userId":"${userId}","productId":id,"optionId":"${optionId}"},function(data){
 			var count=parseInt(data.count)+1;
 			var pollnum=parseInt(data.pollnum)-1;
 			var votes=parseInt($('#votes'+id).html())+1;
@@ -446,19 +414,22 @@ $("#b"+base).css("color","black");
 				$('#pollnum'+id).html(pollnum);
 				$('#votes'+id).html(votes);
 				  setTimeout(function(){
+				  isclick=true;
 				  getvoteproduct(base,page);	
 				    },1000);
-	
+	           	
 			}else if(data.msg=="0"){
 				$.toast(votenum+'票/商品/人/天', 'text');
+				isclick=true;
 				getvoteproduct(base,page);
+			}else if(data.msg=="err"){
+				$.toast('请刷新页面', 'text');
 			}
 		})
 	}
 	//购买方法
 	function gotobuy(id){
 		var url=window.BASEPATH + 'judges/buypoll';
-		
 		$.post(url,{"usreId":${userId},"productId":id,"optionId":"${optionId}"},function(data){
 			if(data.msg=="1"){
 	   			location.href=window.BASEPATH + 'pubnum/product/index?id='+id+'&vote=YES';
@@ -490,15 +461,12 @@ $("#b"+base).css("color","black");
     		}
     	})
     }
-    
     function gotopicdetails(id){
     	location.href=window.BASEPATH + 'admin/vote/gotovotepicdetails?picId='+id;
     }
-    
     function productdetails(id){
     	location.href=window.BASEPATH + 'admin/vote/gotovoteproductdetails?productId='+id;
     }
-    
 	//展开数据
 	function list(data){
 		var html=[];
@@ -564,10 +532,7 @@ $("#b"+base).css("color","black");
 		$('#downpic').show();
 	}
 	}
-
-
 var share={};
-		
 	    function initShare(){
 	        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
 	    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
@@ -575,15 +540,11 @@ var share={};
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					if(data){
-					    
 						share=data;
 						doScanShare();
 					}
-					
 				});
 	    }
-	
-	
 	function doScanShare(){
             wx.config({
 	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -595,18 +556,15 @@ var share={};
 	            jsApiList : ['checkJsApi', 'onMenuShareTimeline' , 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         	});
 	        wx.ready(function() {
-	
-	               
 	            wx.onMenuShareTimeline({
-                            title: '唐山周末 · 長城鄉村美食文化節', // 分享标题
+                            title: '匠心非遗  寻味遵化  赶快为喜欢的遵化美食投票吧！', // 分享标题
                             link: ShareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                             imgUrl: SharePic, // 分享图标
                             success: function () {
-                                
                             }
                         });
 	            wx.onMenuShareAppMessage({
-					title : '唐山周末 · 長城鄉村美食文化節', // 分享标题
+					title : '匠心非遗  寻味遵化  赶快为喜欢的遵化美食投票吧！', // 分享标题
 					desc: '  ', // 分享描述
 					link: ShareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: SharePic, // 分享图标
@@ -614,15 +572,14 @@ var share={};
 						
 					}
 				});
-	            
 	       });
         }
-	
 	function gotoproductdetails(id){
 		location.href=window.BASEPATH + 'admin/vote/getoproductdetails?productId='+id;
 	}
-
 	function changepage(srt){
+	 $(".weui-loadmore").show();
+	 $(".weui-loadmore").css("bottom","-10px");
 		if(srt=="1"){
 			page=1;
 			getvoteproduct(base,page);
@@ -642,17 +599,14 @@ var share={};
 			}
 		}
 	}
-	
 </script>
-
-
 <body>
 		    <div class="content" id="content"  style="position: relative;">
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-			<div class="weui-loadmore" style="position: fixed;top:50%;left:50%;margin-left:-30%;">
+			<div class="weui-loadmore" style="position: fixed;bottom:40%;left:50%;margin-left:-30%;">
 			  <i class="weui-loading"></i>
 			  <span class="weui-loadmore__tips">正在加载</span>
 			</div>
@@ -663,7 +617,6 @@ var share={};
 			</div> 
 			<!--  <img style="width:10%;position: absolute;z-index:111111111111;top:10px;left:55%;" src="lib/images/logoss.png"> -->
 		    </div> 
-		    
 		<%--  <div style="width:85%;height:auto;border:1px solid #C3181E;border-radius:12px;margin:10px auto;padding:0 3%;">
 		    <P style="height:50px;line-height: 50px;color:#C3181E;font-weight: bold;font-size:26px;text-align: center;">评分规则</P>
 		    ${voterule}
@@ -673,8 +626,6 @@ var share={};
 		   <input placeholder="搜索" class="search" style="padding:0 15%;width:70%;line-height:30px;position: absolute;top:5px;margin-left:-35%;height:30px;border-radius:18px;outline: none;border:none;border:1px solid #E0E0E0;background:#fff;text-align: center; " type="text">
 		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="search()" src="lib/images/sousuo.png"/>
 		  </div>
-		 
-		   
 			<div class="zong" style="width:100%;height:auto;margin:0 auto;position: relative;padding:0 5%;">
 			  	<div class="tab"  style="">
 					<ul class="tab-btn active" id="menu" style="">
@@ -684,7 +635,6 @@ var share={};
 							<div class="contentt active" style="text-align: center;width:100%;overflow-y:auto; -webkit-overflow-scrolling: touch">
 							<!-- 开始的时候这里去掉 -->
 							<!-- <p style="text-align: center;">活动尚未开始，敬请期待！~</p>  -->
-							
 							</div>
 							<div class="contentt" style="text-align: center;">
 							</div>
@@ -693,9 +643,6 @@ var share={};
 			</div>
 		</div>
  </div>
-		 
-	 
-		 
 	 		<div class="Judges" style="">
 	         <p style="height:50px;line-height: 50px;"><span style="color:#C4191F;">妈妈私厨-鸡肉</span>评委评分</p>
 	         <p style="height:50px;line-height: 50px;color:#C4191F;">
@@ -706,19 +653,13 @@ var share={};
 	         <button class="true" onclick="score()" style="">确定</button>
 	         </p>
 	      </div>	 
-
-	 
 	    <!-- 置顶 -->
-		<div><a href="javascript:;" class="gotop" style="display:none;"><img  style="width:100%;height:100%;" alt="" src=""></a></div>
- 
-<div style="text-align:center;">
+		<div><a href="javascript:;" class="gotop" style="display:none;"><img  style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
+<div style="text-align:center;width:100%;overflow: hidden;">
 <button type="button"  onclick="changepage('1')" class="weui_btn weui_btn_mini weui_btn_default">首页</button>
 <button type="button"  onclick="changepage('2')" class="weui_btn weui_btn_mini weui_btn_default">上一页</button>
 <button type="button"  onclick="changepage('3')" class="weui_btn weui_btn_mini weui_btn_default">下一页</button>
 </div>
-<div style="height: 20px"></div>
+<div style="height: 40px"></div>
 </body>
-
-
-
 </html>
