@@ -625,7 +625,8 @@ input[type="datetime-local"]:before{
 <link href="../../../../layui/lib/alert/css/alertstyle.css"
 	rel="stylesheet" />
 <script type="text/javascript">
-
+   //设置时间的全局变量
+    var isUseDate = "";
     var base;	
 	$(function() {
 	    var id = '${id}';
@@ -758,6 +759,7 @@ input[type="datetime-local"]:before{
 				var t_s = t.getTime();
 				t.setTime(t_s + 2000 * 60);
 				
+			
 				 //获取第二天十二点的时间  4/25修改 为了让离店时间变成第二天12点
 			    const start = new Date(new Date(new Date().toLocaleDateString()).getTime()+36*60*60*1000);
 				/* var t1 = new Date();
@@ -765,10 +767,19 @@ input[type="datetime-local"]:before{
 				t1.setTime(t1_s + 2000 * 60+60*60*1000*24); */
 				var bookdiv =document.getElementById("bookdiv").style.display;       
 				var startdiv =document.getElementById("startdiv").style.display;  
+				
+				
+				if(startdiv != "none"){
+				  isUseDate = 1;
+				}else{
+				  isUseDate = 0;
+				}
+					
 				if(bookdiv!='none'){
 				    $("#bookDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
-	  			    
+	  			  
 				}else{
+				 
 				    $("#startDate").val(dateFtt('yyyy-MM-dd hh:mm',t));
 	  			    $("#endDate").val(dateFtt('yyyy-MM-dd hh:mm',start));
 				}
@@ -1262,6 +1273,7 @@ input[type="datetime-local"]:before{
 				var bDate = new Date(document.getElementById("bookDate").value.replace(/-/g, '/')).getTime();
 				var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
 		   		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();		
+		   		if(isUseDate == 1){
 		   		if(sDate >= eDate)
 			    {
 				     $.toast("离店时间不能小于开始时间", "forbidden");
@@ -1277,6 +1289,7 @@ input[type="datetime-local"]:before{
 			    	$.toast("预定时间不能早于当前时间", "forbidden");
 				     return false;
 			    }
+			     }
 			  if(bookdiv!="none")  
 			  {
 				  if($("#bookDate").val()==''){
@@ -1530,6 +1543,7 @@ input[type="datetime-local"]:before{
 			var bDate = new Date(document.getElementById("bookDate").value.replace(/-/g, '/')).getTime();
 			var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
     		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();
+    		if(isUseDate == 1){    		
     		if(sDate >= eDate)
 		    {
 			     $.toast("离店时间不能小于开始时间", "forbidden");
@@ -1544,6 +1558,7 @@ input[type="datetime-local"]:before{
 		    {
 		    	$.toast("预定时间不能早于当前时间", "forbidden");
 			     return false;
+		    }
 		    }
 			  if(bookdiv!="none")  
 			  {
