@@ -208,6 +208,7 @@ public class QuestionnaireController extends BaseController {
     	HttpSession session = request.getSession();
     	long questionnaireId=Long.parseLong(request.getParameter("questionnaireId"));
     	long userId = Long.parseLong(session.getAttribute("userId").toString());
+    	System.out.println(userId);
     	UserInfoPO userInfoPO = conn_userinfo.get(userId);
         int count = conn_redpacketrecord.countByUId(userId,questionnaireId);
     	if(count>=2){

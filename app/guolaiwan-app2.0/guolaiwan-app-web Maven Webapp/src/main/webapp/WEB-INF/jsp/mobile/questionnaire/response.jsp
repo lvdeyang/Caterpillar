@@ -276,6 +276,7 @@ none
 	  $(".btn-next").hide();
 	  retn = false;
      }	
+          
      /* 回答正确 */
   function trues(){
     $(".time").css({"color":"#fff","background":"#37AD3B","font-size":"30px"});
@@ -298,7 +299,7 @@ none
   $(function() {
   	//领红包
  	$(document).on('click','.open',function(){
-      /* $(".fu").fadeOut() */
+       $(".fu").fadeOut()
       location.href=window.BASEPATH + 'admin/questionnaire/sendRedPacket?questionnaireId=${questionnaireId}';
     });
     
@@ -320,7 +321,7 @@ none
     var len=li.length;
 
   $(document).on('click','.btn-next',function(){
-
+     $(".time").css("color","#FFF");
   		var answers="";
   		index+=1;
   		$('.lists').find('li').each(function() {
@@ -552,7 +553,7 @@ none
 					<ul class="lists">
 					</ul>
 						<button  class="btn-next"
-		style="width:20%;height:35px;border-radius:6px;line-height:35px;background:#F61C1D;text-align: center;color:#fff;font-size:14px;border:none;outline:none;float:right;margin-top:30px;">下一题
+		style="width:20%;height:35px;padding:0 2px;border-radius:6px;line-height:35px;background:#F61C1D;text-align: center;color:#fff;font-size:14px;border:none;outline:none;float:right;margin-top:30px;">下一题
 		></button>
 				</div>
 			</li>
