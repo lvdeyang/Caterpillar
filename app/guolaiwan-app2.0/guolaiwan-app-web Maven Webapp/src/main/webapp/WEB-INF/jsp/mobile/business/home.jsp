@@ -335,7 +335,7 @@ $(function() {
 	   location.href=window.BASEPATH +'business/buyproduct?productId='+id;
 	   }
 	   //采摘
-	   if(ModularCode == "2123"){
+	   if(ModularCode == "2126"){
 	   location.href=window.BASEPATH +'business/gotopickingpurchase?productId='+id;
 	   } 
 	   //美食
@@ -423,7 +423,7 @@ $(function() {
    		location.href=window.BASEPATH + 'pubnum/wallet';
    }
    function search(){
-   		location.href=window.BASEPATH + 'pubnum/search?content=';
+   		location.href=window.BASEPATH + 'business/searchAllMesage?merchantId=${merchantId}&content=';
    }
    function preferably(){
    		location.href=window.BASEPATH + 'business/gotopreferably?merchantId=${merchantId}';
@@ -438,7 +438,7 @@ $(function() {
    		location.href=window.BASEPATH + 'business/gotopicking?merchantId=${merchantId}';
    }
    function question(){
-   		location.href=window.BASEPATH + 'business/merchant/strategy?merchantId=${merchantId}';
+   	  location.href=window.BASEPATH + 'business/merchant/strategys?merchantId=${merchantId}';
    }
    function ticket(){     
       location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId=${merchantId}';   

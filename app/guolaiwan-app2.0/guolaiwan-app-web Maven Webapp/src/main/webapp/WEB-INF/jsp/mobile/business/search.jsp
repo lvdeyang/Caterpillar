@@ -64,10 +64,10 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>关注领红包</title>
+<title>搜索主页</title>
 
 <!-- 公共样式引用 -->
-
+<jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 
 <style type="text/css">
 a {
@@ -81,12 +81,11 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	height: 100%;
+	min-height: 100%;
 	background-color: #fff;
 	position: relative;
 	-webkit-text-size-adjust: none;
 	background-color: #fbfbfb;
-	margin:0;
 }
 
 * {
@@ -440,86 +439,259 @@ html, body {
 	top: 0;
 	text-align: center;
 }
-
-
-      .swiper-container {
-        width: 100%;
-        padding:0;
-        margin:0;
-        height:200px;
-      } 
-
-      .swiper-container img {
-        display: block;
-        width: 100%;
-      }
-    
-    #distributeList{
-       margin-top:10px;
-       padding-left:10px;
-       border-bottom:solid 2px #18b4ed;
-       width:100%;height:35px;
-       
-    }
-    
-    #distributeList a{
-       text-decoration:none;
-       color:#CCC;
-       font-size:12px;
-    }
-    #distributeList a.current{
-       text-decoration:none;
-       color:#18b4ed;
-       font-size:20px;
-    }
-    #columnTable{
-    
-        width:100%;
-        margin-top:10px;
-        
-    }
-    #columnTable td{
-	    width:20%;
-	    text-align:center;
-	    font-size:12px;
-    }
-    body {
-		background-image: -webkit-linear-gradient(top, #F01917, #fff);
-	}
-    
-
+.weui-navbar__item.weui-bar__item--on{
+ color:red;
+ background:#f1f1f1;
+}
 </style>
 
 </head>
 
+<!-- 公共脚本引入 -->
+<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 
 <script type="text/javascript">
 
+	$(function() {
+	  window.BASEPATH = '<%=basePath%>';
+	  var parseAjaxResult = function(data){
+			if(data.status !== 200){
+				$.toptip('data.message', 'error');
+				return -1;
+			}else{
+				return data.data;		
+			}
+	  };
+	  
+ 		if($("#searchInput").val()!=''){
+        	   getMerchant(1); 
+        	  getProduct(1);   
+        	
+        }
+        if($('#selType').val()==2){
+        
+            $('#tab-2').click();
+        }else{
+            $('#tab-1').click();
+        }
+		//获取所有一级推荐
+	    $(document).on('click','#tab-1',function(){
+	        $('#selType').val(1);
+		});	 	
+ 		$(document).on('click','#tab-2',function(){
+ 		    $('#selType').val(2);
+		});	 	
+        
 	
+		function getProduct(page){
+		    var _uriproduct = window.BASEPATH + 'business/retrieval';
+		    var params={};
+		    params.page=page;
+		    params.comId="001";
+		    params.type="PRODUCT";
+		    params.merchantId = "${merchantId}";
+		    params.name=$('#searchInput').val();
+			$.post(_uriproduct, $.toJSON(params), function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				   $('#product_table').children().remove();
+				   var pros=data.products;
+				   var html=[];
+				   for(var i=0;i<pros.length;i++){
+				     if(pros[i].merMId == '134'){return};
+				       if(i%2==0){
+				          html.push('<tr>');
+				       }
+	                     html.push('<td style="padding:10px;width:50%">');
+		                 html.push('<image style=" width:100%;height:100px;"  relData="'+pros[i].activityReId+"-"+
+	                     pros[i].isSurpport+'" data="'+pros[i].productClassCode+'"  src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'-'+pros[i].productMerchantID+'"/>');
+		                 html.push('<p style="font-size:12px">'+pros[i].productName+'￥'+pros[i].productPrice+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+pros[i].productOldPrice+'</span></p>');
+		                 html.push('</td>');
+	                     if(pros.length==1){
+	                       html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
+	                     }
+	                  if(i%2==1){
+				          html.push('</tr>');
+				      }
+				   
+				   }
+				   if(pros.length==0){
+				     	html.push("<tr style='width:100%'><td style='width:100%;font-size:12px;text-align:center'>暂无数据</td></tr>");
+				   }
+				   $('#product_table').append(html.join(''));
+				   
+				   
+				}
+			});
+
+		}
+		
+		
+		function getMerchant(page){
+		    var _uriproduct = window.BASEPATH + 'business/retrieval';
+		
+		    var params={};
+		    params.page=page;
+		    params.merchantId = "${merchantId}";
+		    params.type="MERCHANT";
+		    params.name=$('#searchInput').val();
+			$.post(_uriproduct, $.toJSON(params), function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				   $('#merchant_table').children().remove()
+				   var pros=data.merchants;
+				   var html=[];
+				   for(var i=0;i<pros.length;i++){
+				       if(i%2==0){
+				          html.push('<tr>');
+				       }
+	                     html.push('<td style="padding:10px;width:50%">');
+		                 html.push('<image style=" width:100%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" id="pro-'+pros[i].id+'-'+pros[i].modularCode+'"/>');
+		                 html.push('<p style="font-size:12px">'+pros[i].shopName+'</p>');
+		                 html.push('</td>');
+	                     if(pros.length==1){
+	                       html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
+	                     }
+	                  if(i%2==1){
+				          html.push('</tr>');
+				      }
+				   
+				   }
+				   if(pros.length==0){
+				     	html.push("<tr style='width:100%'><td style='width:100%;font-size:12px;text-align:center'>暂无数据</td></tr>");
+				   }
+				   $('#merchant_table').append(html.join(''));
+				   
+				   
+				}
+			});
+
+		}
+		
+	
+	
+	   $(document).on('click','.product',function(){
+	       var codes=this.id.split('-'); //商品id
+	       var data = $(this).attr('data');//productClassCode
+	       var relData=$(this).attr('relData');//是否活动商品
+	       var relDatas=relData.split('-');
+	       //普通商品
+	       if(relDatas[0] != 0){	       
+	        if(data == '0012'){
+	         location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=1';
+	       }	       
+	      }
+	       //活动商品
+	       else{
+	       	   //景点普通票页面
+		     if(data == '0012'){
+	         location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=0';
+	        }	       
+	       //采摘
+	       if(data == "2126"){
+	        location.href=window.BASEPATH +'/business/gotodetailspage?productId='+codes[1];
+	       }
+	       //家常菜
+	       if(data == "0016"){
+	        location.href=window.BASEPATH +'/business/gotodelicacystore?merchantId='+codes[2];
+	       }     
+	       } 
+	   });
+	   $(document).on('click','.merchant',function(){
+	      var ids=this.id.split('-');
+	      if(ids[1]==387){
+	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	      }else{
+	        //美食
+	        if(ids[2] == '0003'){
+	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+ids[1];
+	        }
+	        //住宿
+	        if(ids[2] == '0002'){
+		    location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+ids[1];	
+	        }
+	        //景点
+	        if(ids[2] == '0001'){
+		    location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId='+ids[1];	
+	        }
+	      }
+	      
+	   });
+	
+	});
 </script>
 
 
 
 <body>
-	<%-- <div id="page">
+	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">关注领红包</div>
+				<div class="header-content">商户</div>
 			</div>
 		</div>
 		<div class="content">
-	
-			<div style="color:red;margin-top:10px;margin-left:15px;" id="result">${status}</div>
-			<a style="margin-left:15px;font-size:12px;color:red" href="http://www.guolaiwan.net/guolaiwan/pubnum/index">>>进入微官网</a>
+			
+			<div style="height:60px;" class="weui-search-bar" id="searchBar">
+			  <form class="weui-search-bar__form" action="business/search/post" method="post">
+			  <input type="hidden" name="merchantId" value="${merchantId}">
+			    <input type="hidden" name="type" id="selType" value="${type}"/>
+			    <div class="weui-search-bar__box">
+			      <i  id="search" class="weui-icon-search" style="line-height:50px;"></i>
+			      <input style="height:40px" type="search" name="searchContent" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="" value="${content }">
+			      <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+			    </div>
+			    <label class="weui-search-bar__label" id="searchText">
+			      <i class="weui-icon-search"></i>
+			      <span style="line-height: 45px;font-weight: bold;">搜索</span>
+			    </label>
+			  </form>
+			  <a style="line-height:40px;" href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+			</div>
+			
+			
+			<div class="weui-tab">
+			  <div class="weui-navbar">
+			    <a id="tab-1" onclick="return false" class="weui-navbar__item weui-bar__item--on" href="#tab1">
+			      商品
+			    </a>
+			    <a id="tab-2" onclick="return false"  class="weui-navbar__item" href="#tab2">
+			      商家
+			    </a>
+
+			  </div>
+
+             <div class="weui-tab__bd" style="padding-bottom:50px">
+			    <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+			       <table id="product_table" style="margin-top:15px;width:100%">
+                  
+                    </table>
+				   
+			    </div>
+			    <div id="tab2" class="weui-tab__bd-item">
+			       <table id="merchant_table" style="margin-top:15px;width:100%">
+                  
+                    </table>
+				   
+			    </div>			
+		
+			  </div>
+		   
+		    
+		    
+		   
+		    
+		    
+		    
+		   
+		    
 		</div>
-	</div> --%>
-<div class="nav" style="width:100%;height:auto;text-align: center;position: fixed;top:30%;">
-	<p style="font-family:SimSun;color:#fff;">${status}</p>
-	<a style="font-size:12px;color:#fff;" href="http://gh.guolaiwan.net/News/index.html">>>进入公会</a>
-</div>
+	</div>
 </body>
 
 

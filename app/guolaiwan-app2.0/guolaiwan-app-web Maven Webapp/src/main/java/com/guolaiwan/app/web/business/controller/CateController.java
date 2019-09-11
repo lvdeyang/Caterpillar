@@ -3,6 +3,7 @@ package com.guolaiwan.app.web.business.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +38,7 @@ import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
+import com.guolaiwan.bussiness.Parking.dao.OrderDao;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
@@ -95,6 +97,9 @@ public class CateController extends WebBaseControll {
 	
 	@Autowired
 	private UserInfoDAO conn_user;
+	
+	@Autowired
+	private TableStatusDAO table_order;
 	/**
 	 * 二级页面 轮播图（模块）
 	 * 美食轮播图
@@ -132,6 +137,10 @@ public class CateController extends WebBaseControll {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
+		//人均数据封装
+		List<Double> average = new ArrayList<Double>();
+	    DecimalFormat dlf  =  new DecimalFormat("0.0");
+		Double allMany = 0.0;
 		Map<String, Object> hashMap = new HashMap<String, Object>();
 		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
 		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
@@ -141,11 +150,33 @@ public class CateController extends WebBaseControll {
 				Boolean status  =   merchantPO.getShopName().contains(name);
 			if (status  && merchantPO.getModularCode().equals(type)) {
 				merchantlist.add(merchantPO);
+				//获取订单总价
+				String[] fields = {"merchantId","tableState"};
+				Object[] values= {merchantPO.getId(),"PAYSUCCESS"};
+				List<TableStatusPO> tStatusPOs =  table_order.findByFields(fields, values);
+				for(TableStatusPO po : tStatusPOs){
+				   if(null == po.getYdNO()){
+		            	 continue;
+		             }
+				   String _gold = dlf.format(Double.parseDouble((po.getDishMoney()/100)+""));			
+				   allMany += Double.parseDouble(_gold);				   
+				}
+				//求均价
+				BigDecimal allgol = new BigDecimal(allMany);
+				BigDecimal num = new BigDecimal(tStatusPOs.size());
+				double avgMoney = 0.0;
+				if(tStatusPOs.size() != 0){
+			     avgMoney = allgol.divide(num,2,BigDecimal.ROUND_HALF_DOWN).doubleValue();
+				}else{
+					avgMoney = 28.0;
+				}
+			    average.add(avgMoney);
 			}
 		  }	
 		}
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
 		hashMap.put("merlist", merlist);
+		hashMap.put("average", average);
 		return hashMap;
 	}
 	

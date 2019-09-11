@@ -510,8 +510,16 @@ public class ProductController extends BaseController {
 			isgroup=Integer.parseInt(request.getParameter("group"));
 		}
 		// 原价、现价、库存
-		long productOldPrice = (long) (Double.parseDouble(request.getParameter("productOldPrice")) * 100);
-		long productPrice = (long) (Double.parseDouble(request.getParameter("productPrice")) * 100);
+		BigDecimal _OldPrice = new BigDecimal(request.getParameter("productOldPrice"));
+		BigDecimal _nowPrice = new BigDecimal(request.getParameter("productPrice"));
+		BigDecimal  tenNumber = new BigDecimal(100);
+		BigDecimal orderPrice = _OldPrice.multiply(tenNumber);
+		BigDecimal nowPrice = _nowPrice.multiply(tenNumber);
+		
+		long productOldPrice = orderPrice.longValue();
+		long productPrice = nowPrice.longValue();
+		
+
 		long productStock = Long.parseLong(request.getParameter("productStock"));
 		
 		//最低购买数量 张羽 5/1

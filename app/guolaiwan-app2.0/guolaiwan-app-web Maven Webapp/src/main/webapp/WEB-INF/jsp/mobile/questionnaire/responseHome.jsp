@@ -152,21 +152,36 @@ top:10px;
 		</div>
 	<div style="width:100%;height:auto;margin-top:-50px;">
 		<div style="height:0;padding:12%;text-align: center;width:12%;background: #F21819;border-radius:50%;line-height: 10%;margin:0 auto;overflow: hidden;position: relative;">
-		 <p style="width:50%;position: absolute;left:50%;margin-left:-25%;font-size:30px;color:#fff;">xxx</p>
+		 <p style="width:100%;position: absolute;left:50%;margin-left:-50%;font-size:20px;color:#fff;">有奖问答</p >
 		</div>
 	</div>
 	<div class="main" style="width:100%;height:auto;padding:0 5%;">
-	  <ul>
-	   <li>
-	   <img src="lib/images/responsess.png">
-	   <p style="position: absolute;left:60px;top:5px;font-size: 16px;">每日答题</p>
-	   <p style="position: absolute;left:60px;top:27px;font-size: 12px;color:#A4A4A4;">每天惊喜不断</p>
-	   </li>
+	  <ul class="alllist">
+	   
 	   
 	  </ul>
 	</div>		
  </body>
+<script>
+$(function(){
+	var url=window.BASEPATH+'admin/questionnaire/findallquestionnaire';
+	$.post(url,null,function(data){
+		 var html=[];
+      for(var i=0;i<data.length;i++){
+      	   html.push('<li id="'+data[i].id+'" onclick="gotoanswer(this.id)">');
+		   html.push('<img src="lib/images/responsess.png">');
+		   html.push('<p style="position: absolute;left:60px;top:5px;font-size: 16px;">有奖答题</p>');
+		   html.push('<p style="position: absolute;left:60px;top:27px;font-size: 12px;color:#A4A4A4;">'+data[i].title+'</p>');
+		   html.push('</li>');
+      }   
+         $('.alllist').append(html.join(''));
+	})
+})
 
+	function gotoanswer(id){
+		location.href=window.BASEPATH + 'admin/questionnaire/gotoanswer?id='+id;
+	}
+</script>
 
 
 
