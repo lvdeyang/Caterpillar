@@ -1,6 +1,11 @@
 package com.chenxi.web.stock.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +22,7 @@ import com.chenxi.web.stock.dao.StockDao;
 import com.chenxi.web.stock.po.FinancePo;
 import com.chenxi.web.stock.po.StockPo;
 import com.chenxi.web.yueba.admin.po.ComboPo;
+import com.sun.tools.hat.internal.util.Comparer;
 
 @Controller
 @RequestMapping("/stock")
@@ -148,6 +154,51 @@ public class StockController {
 			financeDao.delete(Long.parseLong(request.getParameter("id")));
 		}
 		return "success";
+	}
+	
+	//report相关
+	@RequestMapping(value = "/report/index", method = RequestMethod.GET)
+	public ModelAndView rindex(HttpServletRequest request,long stockId) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+        List<FinancePo> financePos=financeDao.findAll();
+        Collections.sort(financePos,new Comparator<FinancePo>() {
+			@Override
+			public int compare(FinancePo o1, FinancePo o2) {
+				// TODO Auto-generated method stub
+				return o2.getYear()-o1.getYear();
+			}
+		});
+        
+        
+		List<Integer> baselabels=new ArrayList<Integer>();
+		List<Double> allget=new ArrayList<Double>();
+		List<Double> fleft=new ArrayList<Double>();
+		List<Double> realleft=new ArrayList<Double>();
+		List<Double> returnassets=new ArrayList<Double>();
+		List<Double> realcash=new ArrayList<Double>();
+		List<Double> postcash=new ArrayList<Double>();
+		List<Double> getcash=new ArrayList<Double>();
+		for (FinancePo financePo : financePos) {
+			baselabels.add(financePo.getYear());
+			allget.add(financePo.getAllget());
+			fleft.add(financePo.getFleft());
+			realleft.add(financePo.getRealLeft());
+			returnassets.add(financePo.getReturnassets());
+			realcash.add(financePo.getRealcash());
+			postcash.add(financePo.getPostcash());
+			getcash.add(financePo.getGetcash());
+		}
+		strMap.put("baselabels", baselabels);
+		strMap.put("allget", allget);
+		strMap.put("fleft", fleft);
+		strMap.put("realleft", realleft);
+		strMap.put("returnassets", returnassets);
+		strMap.put("realcash", realcash);
+		strMap.put("postcash", postcash);
+		strMap.put("getcash", getcash);
+		
+		ModelAndView mv = new ModelAndView("stock/allreport", strMap);
+		return mv;
 	}
 	
 }
