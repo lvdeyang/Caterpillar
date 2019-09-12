@@ -19,6 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        <script type="text/html" id="bar">
               <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
               <a class="layui-btn layui-btn-xs" lay-event="finance">FINANCE MANAGE</a>
+              <a class="layui-btn layui-btn-xs" lay-event="report">REPORT</a>
 	   </script>
 	    <div>
 
@@ -109,6 +110,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			          layer.setTop(layero); //
 			        }
 			      });
+			    } 
+			    else if(obj.event === 'report'){
+			      /*layer.open({
+			        type: 2 //此处以iframe举例
+			        ,title: 'REPORT'
+			        ,area: ['98%', '98%']
+			        ,shade: 0
+			        ,maxmin: true
+			        ,offset: [ 
+			         0,0
+			          
+			        ] 
+			        ,content: 'stock/report/index?stockId='+data.id
+			        ,zIndex: layer.zIndex //
+			        ,success: function(layero){
+			          layer.setTop(layero); //
+			        }
+			      });*/
+			      window.open('stock/report/index?stockId='+data.id);
 			    } 
 			    
 			  });  
