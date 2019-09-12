@@ -94,6 +94,7 @@ html, body {
 	height: 120px;
 	line-height:50px;
 	background:url("lib/images/navs.png") !important;
+	background-size: 100% 120px!important;
 }
 
 .header .link-left {
@@ -110,7 +111,7 @@ width:100%;
 box-shadow:2px 2px 5px #DBDBDB;
 margin:10px auto;
 width:100%;
-height:50px;
+height:80px;
 text-align: left;
 border:none;
 outline: none;
@@ -126,7 +127,7 @@ overflow: hidden;
 height:30px;
 position: absolute;
 left:20px;
-top:10px;
+top:25px;
 }
 
 
@@ -151,8 +152,8 @@ top:10px;
 					class="icon-reorder icon-large"></span></a>
 		</div>
 	<div style="width:100%;height:auto;margin-top:-50px;">
-		<div style="height:0;padding:12%;text-align: center;width:12%;background: #F21819;border-radius:50%;line-height: 10%;margin:0 auto;overflow: hidden;position: relative;">
-		 <p style="width:100%;position: absolute;left:50%;margin-left:-50%;font-size:20px;color:#fff;">有奖问答</p >
+		<div style="height:0;padding:7%;text-align: center;width:12%;line-height: 10%;margin:0 auto;overflow: hidden;position: relative;">
+		 <!-- <p style="width:100%;position: absolute;left:50%;margin-left:-50%;font-size:20px;color:#000000;font-family:STKaiti;margin-top: 4px"><b>有奖问答</b></p > -->
 		</div>
 	</div>
 	<div class="main" style="width:100%;height:auto;padding:0 5%;">
@@ -160,26 +161,62 @@ top:10px;
 	   
 	   
 	  </ul>
-	</div>		
+	</div>	
+	
+	<div id="ruleshow" class="weui-popup__container popup-bottom">
+		<div class="weui-popup__overlay"></div>
+		<div class="weui-popup__modal" >
+			<div id="rules" style="padding: 20px 17px 20px 20px">
+			
+			</div>
+			<div  style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);
+			border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;" >
+			<p  style="background:#F56938;height:100%;float:left;text-align:center;width:50%;
+			line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;"  onclick="closewin()">
+			<span style="font-size:14px;margin-left:5%;">取消答题</span>
+			</p>
+			<p  style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;
+			color:#fff;font-size:20px;font-weight:bold;display: inline-block;" onclick="gotoanswer()">
+			<span style="font-size:14px;margin-left:5%;">开始答题</span>
+			</p>
+			</div>
+		</div>
+	</div>	
  </body>
 <script>
+var id;
 $(function(){
 	var url=window.BASEPATH+'admin/questionnaire/findallquestionnaire';
 	$.post(url,null,function(data){
 		 var html=[];
       for(var i=0;i<data.length;i++){
-      	   html.push('<li id="'+data[i].id+'" onclick="gotoanswer(this.id)">');
+      	   html.push('<li id="'+data[i].id+'" onclick="getrole(this.id)">');
 		   html.push('<img src="lib/images/responsess.png">');
-		   html.push('<p style="position: absolute;left:60px;top:5px;font-size: 16px;">有奖答题</p>');
-		   html.push('<p style="position: absolute;left:60px;top:27px;font-size: 12px;color:#A4A4A4;">'+data[i].title+'</p>');
+		   html.push('<p style="position: absolute;left:60px;top:17px;font-size: 14px;">'+data[i].title+'</p>');
+		   html.push('<p style="position: absolute;left:60px;top:42px;font-size: 12px;color:#A4A4A4;">'+data[i].onthertitle+'</p>');
 		   html.push('</li>');
       }   
          $('.alllist').append(html.join(''));
 	})
 })
 
-	function gotoanswer(id){
+	function getrole(questionnaireId){
+		id=questionnaireId;
+		var url=window.BASEPATH+'admin/questionnaire/getquestionrole';
+		$.post(url,{"questionnaireId":questionnaireId},function(data){
+			$('#rules').html(data.questionnairerole);
+			
+			$("#ruleshow").popup();
+		})
+	}
+
+	function gotoanswer(){
+		$.closePopup();
 		location.href=window.BASEPATH + 'admin/questionnaire/gotoanswer?id='+id;
+	}
+	
+	function closewin(){
+		$.closePopup();	
 	}
 </script>
 

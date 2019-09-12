@@ -107,6 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					,cols: [[
    						{type:"checkbox"}
    						,{field:"title",title:"问卷标题",edit:"text",align:'center',width:350}
+   						,{field:"onthertitle",title:"问卷副标题",edit:"text",align:'center',width:350}
    						,{field:"questionnum",title:"答题数量",edit:"text",align:'center',width:150}
    						,{field:"questiontime",title:"答题时限/题（秒）",edit:"text",align:'center',width:150}
    						/* ,{title: '问卷背景图',templet:"#picTpl",align:'center',width:100}  */
@@ -173,7 +174,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
 <script type="text/html" id="zsgc">
 <%-- <a class='layui-btn layui-btn-xs' href="javascript:open_win('选择背景图','<%=path%>/admin/picture/addlist?sImg=caImg{{d.id}}&sId={{ d.id }}&source=questionnaire','800','600')">选择背景图</a> --%>
-<a class="layui-btn layui-btn-xs" href="<%=path%>/questionbank/questionbanklist?questionnaireId={{d.id}}">题库管理</a>	
+<a class="layui-btn layui-btn-xs" href="<%=path%>/questionbank/questionbanklist?questionnaireId={{d.id}}">题库管理</a>
+<a class="layui-btn layui-btn-xs" onclick="open_win('添加规则','<%=path%>/admin/questionnaire/gotoquestionrule?questionnaireId={{d.id}}','900','600')" >答题规则</a>		
 <a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
 </script>
 <script type="text/html" id="picTpl">

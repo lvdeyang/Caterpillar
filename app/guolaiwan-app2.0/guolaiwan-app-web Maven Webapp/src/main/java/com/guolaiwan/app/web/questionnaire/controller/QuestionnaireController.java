@@ -109,7 +109,13 @@ public class QuestionnaireController extends BaseController {
 			questionnairePO.setTitle(title);
 			conn_questionnaire.save(questionnairePO);
 			return "success";
-		}	
+		}
+		else if(field.equals("onthertitle")) {
+			String onthertitle = request.getParameter("value");
+			questionnairePO.setOnthertitle(onthertitle);
+			conn_questionnaire.save(questionnairePO);
+			return "success";
+		}
 		else if(field.equals("questionnum")){
 			String questionnum = request.getParameter("value");
 			questionnairePO.setQuestionnum(Integer.parseInt(questionnum));
@@ -142,6 +148,8 @@ public class QuestionnaireController extends BaseController {
 	@RequestMapping(value = "/apendquestionnaire", method = RequestMethod.POST)
 	public String apendQuestionnaire(HttpServletRequest request) throws Exception {
 		QuestionnairePO PO=new QuestionnairePO();
+		PO.setTitle("请修改此处");
+		PO.setOnthertitle("请修改此处");
 		conn_questionnaire.save(PO);
 		return "success";
 	}
@@ -190,6 +198,43 @@ public class QuestionnaireController extends BaseController {
 		int page=(int) (Math.random()*(count/limit));
 		List<QuestionBankPO> question = conn_questionbankdao.findByQId(questionnaireId,page,limit);
 		return question;
+	}
+	
+	// 投票规则页面
+	@RequestMapping(value = "/gotoquestionrule")
+	public ModelAndView goToQuestionRule(HttpServletRequest request) {
+		String questionnaireId=request.getParameter("questionnaireId");
+		QuestionnairePO questionnairePO = conn_questionnaire.get(Long.parseLong(questionnaireId));
+		String questionnairerole = questionnairePO.getQuestionnairerole();
+		ModelAndView mv = new ModelAndView("admin/questionnaire/addquestionrule");
+		if(questionnairerole!=null&&questionnairerole!=""){
+			mv.addObject("questionnairerole", questionnairerole);
+		}
+		mv.addObject("questionnaireId", questionnaireId);
+		return mv;
+	}
+	
+	//添加投票规则
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/addquestionrule", method = RequestMethod.POST)
+	public String addVoteRule(HttpServletRequest request) throws Exception {
+		String questionnaireId = request.getParameter("questionnaireId");
+		String questionrule = request.getParameter("questionrule");
+		QuestionnairePO questionnairePO = conn_questionnaire.get(Long.parseLong(questionnaireId));
+		questionnairePO.setQuestionnairerole(questionrule);
+		conn_questionnaire.saveOrUpdate(questionnairePO);
+		return "success";
+	}
+	
+	//获得规则（页面）
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/getquestionrole", method = RequestMethod.POST)
+	public QuestionnairePO getQuestionRole(HttpServletRequest request){
+		long questionnaireId=Long.parseLong(request.getParameter("questionnaireId"));
+		QuestionnairePO questionnaire = conn_questionnaire.get(questionnaireId);
+		return questionnaire;
 	}
 	
 	
