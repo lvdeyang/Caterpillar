@@ -15,55 +15,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body class="layui-layout-body" style="overflow:auto">
 
-   <section class="panel" style="width:30%;float:left">
+   <section class="panel" style="width:10%;float:left;">
        <div class="panel-heading">营业总收入</div>
        <div class="panel-body">
-           <div class="echarts" id="allget" style="height:300px; height:350px"></div>
+           <div class="echarts" id="allget" style="height:200px;"></div>
        </div>
    </section>
    
-   <section class="panel" style="width:30%;float:left">
+   <section class="panel" style="width:10%;float:left;margin-left:2%">
        <div class="panel-heading">营业利润</div>
        <div class="panel-body">
-           <div class="echarts" id="fleft" style="height:300px; height:350px"></div>
+           <div class="echarts" id="fleft" style="height:200px;"></div>
        </div>
    </section>
    
    
-   <section class="panel" style="width:30%;float:left">
+   <section class="panel" style="width:10%;float:left;margin-left:2%">
        <div class="panel-heading">净利润</div>
        <div class="panel-body">
-           <div class="echarts" id="realleft" style="height:300px; height:350px"></div>
+           <div class="echarts" id="realleft" style="height:200px;"></div>
        </div>
    </section>
    
-   <section class="panel" style="width:30%;float:left">
+   <section class="panel" style="width:10%;float:left;margin-left:2%">
        <div class="panel-heading">净资产收益率</div>
        <div class="panel-body">
-           <div class="echarts" id="returnassets" style="height:300px; height:350px"></div>
+           <div class="echarts" id="returnassets" style="height:200px;"></div>
        </div>
    </section>
    
    
-   <section class="panel" style="width:30%;float:left">
+   <section class="panel" style="width:10%;float:left;margin-left:2%">
        <div class="panel-heading">营业现金流</div>
        <div class="panel-body">
-           <div class="echarts" id="realcash" style="height:300px; height:350px"></div>
+           <div class="echarts" id="realcash" style="height:200px;"></div>
        </div>
    </section>
    
    
-   <section class="panel" style="width:30%;float:left">
+   <section class="panel" style="width:10%;float:left;margin-left:2%">
        <div class="panel-heading">投资现金流</div>
        <div class="panel-body">
-           <div class="echarts" id="postcash" style="height:300px; height:350px"></div>
+           <div class="echarts" id="postcash" style="height:200px;"></div>
        </div>
    </section>
    
-   <section class="panel" style="width:30%;float:left">
+   <section class="panel" style="width:10%;float:left;margin-left:2%">
        <div class="panel-heading">融资现金流</div>
        <div class="panel-body">
-           <div class="echarts" id="getcash" style="height:300px; height:350px"></div>
+           <div class="echarts" id="getcash" style="height:200px;"></div>
        </div>
    </section>
     
