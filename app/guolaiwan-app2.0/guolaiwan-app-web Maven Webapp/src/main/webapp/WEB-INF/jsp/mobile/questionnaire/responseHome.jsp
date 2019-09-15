@@ -111,7 +111,7 @@ width:100%;
 box-shadow:2px 2px 5px #DBDBDB;
 margin:10px auto;
 width:100%;
-height:80px;
+height:auto;
 text-align: left;
 border:none;
 outline: none;
@@ -120,14 +120,13 @@ border-radius:8px;
 border-bottom:1px solid #DBDBDB;
 border-right:1px solid #DBDBDB;
 border-left:1px solid #DBDBDB;
-position: relative;
 overflow: hidden;
+padding:20px 5%;
+line-height: 20px;
 }
 .main ul li img{
-height:30px;
-position: absolute;
-left:20px;
-top:25px;
+width:15%;
+display: inline-block;
 }
 
 
@@ -165,8 +164,8 @@ top:25px;
 	
 	<div id="ruleshow" class="weui-popup__container popup-bottom">
 		<div class="weui-popup__overlay"></div>
-		<div class="weui-popup__modal" >
-			<div id="rules" style="padding: 20px 17px 20px 20px">
+		<div  class="weui-popup__modal" >
+			<div id="rules" style="padding: 20px;overflow-y:auto;text-indent: 2em;height:400px;">
 			
 			</div>
 			<div  style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);
@@ -180,8 +179,10 @@ top:25px;
 			<span style="font-size:14px;margin-left:5%;">开始答题</span>
 			</p>
 			</div>
+			<p style="height:65px;"></p>
 		</div>
 	</div>	
+	<p style="height:65px;"></p>
  </body>
 <script>
 var id;
@@ -192,8 +193,10 @@ $(function(){
       for(var i=0;i<data.length;i++){
       	   html.push('<li id="'+data[i].id+'" onclick="getrole(this.id)">');
 		   html.push('<img src="lib/images/responsess.png">');
-		   html.push('<p style="position: absolute;left:60px;top:17px;font-size: 14px;">'+data[i].title+'</p>');
-		   html.push('<p style="position: absolute;left:60px;top:42px;font-size: 12px;color:#A4A4A4;">'+data[i].onthertitle+'</p>');
+		   html.push('<div style="display: inline-block;width:80%;vertical-align:middle;margin-left:5%;">');
+		   html.push('<p style="word-break:break-word;font-size: 14px;">'+data[i].title+'asdlkashkd</p>');
+		   html.push('<p style="word-break:break-word;font-size: 12px;color:#A4A4A4;">'+data[i].onthertitle+'</p>');
+		   html.push('</div>');
 		   html.push('</li>');
       }   
          $('.alllist').append(html.join(''));
