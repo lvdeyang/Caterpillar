@@ -151,8 +151,14 @@ html, body {
 
 }
 .nav p{
-margin:0 1%;
+margin:0 0 0 2%;
 
+}
+select{
+appearance:none;
+-moz-appearance:none;
+-webkit-appearance:none;
+background: #fff;
 }
 
 </style>
@@ -318,7 +324,7 @@ margin:0 1%;
 	       <p style="display: inline-block;"><span style="color:#A4A2A0;">灰色</span>下架</p>
 	       <p style="display: inline-block;"><span style="color:#D13035;">红色</span>已预定</p>
 	       <span>楼层：</span>
-	       <select class="tier" id="tier" onchange="changetier()"  style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
+	       <select class="tier" id="tier" onchange="changetier()"  style="touch-action: none;width:auto;height:100%;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
 		       <option value="1">1层</option>
 		       <option value="2">2层</option>
 		       <option value="3">3层</option>
@@ -328,14 +334,16 @@ margin:0 1%;
 		       <option value="7">7层</option>
 		       <option value="8">8层</option>
 	       </select> 
+	       <span>▼</span>
 	       <span>房型：</span>
-	       <select class="identity" id="identity" onchange="changeidentity()" style="touch-action: none;width:auto;height:30px;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
+	       <select class="identity" id="identity" onchange="changeidentity()" style="touch-action: none;width:auto;height:100%;padding: 0 1%;border:none;outline:none;text-align: center;margin: 0; text-align-last: center;">
 		        <option value="全部">全部</option>
 		       <option value="标准间">标准间</option>
 		       <option value="豪华间">豪华间</option>
 		       <option value="三人间">三人间</option>
 		       <option value="五人间">五人间</option>
 	      </select> 
+	      <span>▼</span>
 	      </div>
 	      <div style="height:50px;line-height:50px;text-align: center;width:100%;">
 	        <p style="display: inline-block;width:40%"><span>入住时间：</span><input type="text"  placeholder=""   style="cursor: pointer;width:50%;height:25px;padding:0 2%;display: inline-block;border-radius:12px;border:1px solid #A2A2A2;background:#E0E0E0;text-align:center;" class="layui-input" id="useDate1"></p>
