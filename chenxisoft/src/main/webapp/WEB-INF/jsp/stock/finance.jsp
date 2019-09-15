@@ -60,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		      var table = layui.table;
 			  table.render({
 			    elem: '#dataTable'
-			    ,url:'/chenxisoft/stock/finance/list?stockId=${socketId}'
+			    ,url:'/chenxisoft/stock/finance/list?stockId=${stockId}'
 			    ,title: 'STOCK'
 			    ,cols: [[
 			       {type: 'checkbox', fixed: 'left'}

@@ -160,7 +160,7 @@ public class StockController {
 	@RequestMapping(value = "/report/index", method = RequestMethod.GET)
 	public ModelAndView rindex(HttpServletRequest request,long stockId) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-        List<FinancePo> financePos=financeDao.findAll();
+        List<FinancePo> financePos=financeDao.findByField("stockId", stockId);
         Collections.sort(financePos,new Comparator<FinancePo>() {
 			@Override
 			public int compare(FinancePo o1, FinancePo o2) {
