@@ -497,9 +497,9 @@ background: #fff;
 	       <span><span style="width:18px;height:18px;border-radius:50%;background:#7EBE34;display: inline-block;vertical-align: middle;"></span>大厅</span>
 	      </p>
 	    <div class="nav_in" style="line-height:50px;border-bottom: 2px solid #CECACB;width:100%;height:auto;position: relative;font-weight: bold;overflow: hidden;height:50px;padding:0 0 0 5px;">
-	     <p style="float:left;line-height: 50px;width:36%;">
+	     <p style="float:left;line-height: 50px;width:37%;height:50px;overflow: hidden;">
 	      <span style="float:left;">就餐日期:</span>
-	      <input type="text"  placeholder="选择日期"   style="line-height: 50px;height:50px;margin:0;padding:0;float:left;cursor: pointer;width:49%;border:none;outline:none;" class="layui-input" id="test2" onchange="myFunction()">
+	      <input type="text"  placeholder="选择日期"   style="height:50px;margin:0;padding:1px 0;cursor: pointer;width:51%;border:none;outline:none;display: inline-block;" class="layui-input" id="test2" onchange="myFunction()">
 	      <span>▼</span>
 	     </p> 
 	      <p style="float:left;line-height: 50px;width:33%;margin-left:2%;text-align: center;">
