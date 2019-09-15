@@ -165,7 +165,7 @@ public class StockController {
 			@Override
 			public int compare(FinancePo o1, FinancePo o2) {
 				// TODO Auto-generated method stub
-				return o2.getYear()-o1.getYear();
+				return o1.getYear()-o2.getYear();
 			}
 		});
         
