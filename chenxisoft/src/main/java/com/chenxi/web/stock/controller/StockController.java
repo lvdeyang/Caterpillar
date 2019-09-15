@@ -137,7 +137,7 @@ public class StockController {
 		financePo.setYear(Integer.parseInt(year));
 		financePo.setAllget(Double.parseDouble(allget));
 		financePo.setFleft(Double.parseDouble(fleft));
-		financePo.setRealLeft(Long.parseLong(realLeft));
+		financePo.setRealLeft(Double.parseDouble(realLeft));
 		financePo.setReturnassets(Double.parseDouble(returnassets));
 		financePo.setRealcash(Double.parseDouble(realcash));
 		financePo.setPostcash(Double.parseDouble(postcash));
