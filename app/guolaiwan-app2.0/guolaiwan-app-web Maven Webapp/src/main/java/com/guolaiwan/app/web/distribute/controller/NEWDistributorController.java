@@ -216,6 +216,7 @@ public class NEWDistributorController {
 		String region=request.getParameter("region");
 		String city=request.getParameter("city");
 		String contry=request.getParameter("contry");
+		String password = request.getParameter("password");
 
 		HttpSession session = request.getSession();
 		Long userId=Long.parseLong(session.getAttribute("userId").toString());
@@ -226,6 +227,7 @@ public class NEWDistributorController {
 			distributorPo=conn_distributor.get(id);
 		}
 		distributorPo.setAddress(address);
+		distributorPo.setPassword(password);
 		distributorPo.setBankNo(bankNo);
 		distributorPo.setContractUrl(contractUrl);
 		distributorPo.setLegalPerson(legalPerson);
@@ -1006,7 +1008,8 @@ public class NEWDistributorController {
 		   if( distributorPoss.get(0).getStatus().equals(DistributorApplyStatus.PASSED)){
 			if (password != null && password.equals(distributorPoss.get(0).getPassword())) {
 				//登录成功  获的分销商 id 
-				   long distributorId =  distributorPoss.get(0).getId();				   				 
+				   long distributorId =  distributorPoss.get(0).getId();
+				   try{
 				   // 根据 分销商id 查询出中间表 用户id
 				   if(conn_distributorUser.getDistrUserByIds(distributorId).size()>0){
 				   List<DistributorUser> distributorUsers= conn_distributorUser.getDistrUserByIds(distributorId);
@@ -1023,6 +1026,8 @@ public class NEWDistributorController {
 							   conn_distributorUser.save(str);
 							   session.setAttribute("userId", distributorPoss.get(0).getUserId());
 							   state = "success";	}
+				   
+				   }catch(Exception e){ state = "success";}
 						}else{state ="1";}
 						}else{state = "2";}		 						 					      	 
 						}else{state ="0";}						
