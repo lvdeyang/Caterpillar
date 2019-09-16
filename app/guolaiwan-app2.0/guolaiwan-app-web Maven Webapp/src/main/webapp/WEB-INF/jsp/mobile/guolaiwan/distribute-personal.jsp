@@ -468,7 +468,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-
+        
 		$(document).on('click','#applyDistributor',function(){
 		   location.href=window.BASEPATH + 'distributor/apply/index?disId=0';
 		});
@@ -481,10 +481,10 @@ html, body {
         $(document).on('click','#a1',function(){
            location.href=window.BASEPATH + 'distributor/off/sell?disId=${distributorId}';
         });
-	
-	  
-	
-	
+        
+	   if(${status} == null){	        
+	    status = 1;
+	   }	  		
 	});
 </script>
 
@@ -503,7 +503,7 @@ html, body {
 		<div class="content">
 		    
 		
-		
+		     
 		   <c:if test="${status=='null'}">
 		    <c:if test="${distributorId=='0'}"> 
 		    	<a id="applyDistributor" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">

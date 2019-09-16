@@ -151,6 +151,7 @@ public class ProductPackageController extends BaseController {
 		int pageSize =5 ; 
 		Map<String, Object> mapp = new HashMap<String, Object>();
 		mapp.put("productMerchantID", Long.parseLong(merhcantId));
+		mapp.put("productClassCode", "0012");
 		//过滤 不符合日期及审核未通过的商品 
 		long nowDate = new Date().getTime();
 		List<ProductPO> productPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);

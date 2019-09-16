@@ -183,7 +183,6 @@ line-height: 50px;
 		var patam = {};
 		patam.orderId = '${orderId}' ; //'${merchantId}'
 		$.post(_uri, $.toJSON(patam), function(data) {
-		alert(data.state);
 		if(data.state != 0){
 			$("#pic").attr("src",'http://www.guolaiwan.net/file/'+data.table.detailsImg+'');
 			$("#name").append('<span>'+data.table.tablename+'</span>'); //名称

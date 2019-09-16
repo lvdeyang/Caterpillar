@@ -185,7 +185,7 @@ html, body {
 }); 
  		function getMerchant(){
 			var url="<%=basePath%>business/search";
-	            $.post(url,{"merchantId":${merchantId},"name":"${name}","type":"0002"},function(data){
+	            $.post(url,{"merchantId":${merchantId},"name":"${name}","type":"0002","latitude":"${latitude}","longitude":"${longitude}"},function(data){
 	            	var html=[];
 	            	if(data.merlist.length==0){
 	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
