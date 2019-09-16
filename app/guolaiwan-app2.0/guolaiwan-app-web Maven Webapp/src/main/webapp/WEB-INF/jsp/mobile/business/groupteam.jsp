@@ -327,10 +327,12 @@ getAllAddr();
 </script>
 <script>
 function timer() {
-	var begintime=new Date("${team.opentime}").getTime();
+    var opentime = "${team.opentime}".split(".");
+    var time = opentime[0].replace(/\-/g, "/");
+    var begintime=new Date(time).getTime();
 	var grouptime=${groupBuyPO.grouptime}*60*60*1000-1000;
 	var newtime=new Date().getTime();
-	var intDiff =parseInt((grouptime-(newtime-begintime))/1000);
+	var intDiff =parseInt((grouptime-(newtime-begintime))/1000); 
    /*倒计时  */
   window.setInterval(function () {
     var day = 0,
