@@ -259,8 +259,8 @@ html, body {
 				wx.error(function(res) {});
 			});
 		} 
-		var latitude=40.197173;
-		var longitude=117.948431 ;
+		var latitude=null;
+		var longitude=null ;
 		  function getCity(latitude, longitude) { //通过经纬度   获取高德位置
 			latitude = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
 			longitude = (parseFloat(longitude)).toFixed(5);
