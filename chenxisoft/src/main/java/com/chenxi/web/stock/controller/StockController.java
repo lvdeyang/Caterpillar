@@ -137,7 +137,7 @@ public class StockController {
 		financePo.setYear(Integer.parseInt(year));
 		financePo.setAllget(Double.parseDouble(allget));
 		financePo.setFleft(Double.parseDouble(fleft));
-		financePo.setRealLeft(Long.parseLong(realLeft));
+		financePo.setRealLeft(Double.parseDouble(realLeft));
 		financePo.setReturnassets(Double.parseDouble(returnassets));
 		financePo.setRealcash(Double.parseDouble(realcash));
 		financePo.setPostcash(Double.parseDouble(postcash));
@@ -160,12 +160,12 @@ public class StockController {
 	@RequestMapping(value = "/report/index", method = RequestMethod.GET)
 	public ModelAndView rindex(HttpServletRequest request,long stockId) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-        List<FinancePo> financePos=financeDao.findAll();
+        List<FinancePo> financePos=financeDao.findByField("stockId", stockId);
         Collections.sort(financePos,new Comparator<FinancePo>() {
 			@Override
 			public int compare(FinancePo o1, FinancePo o2) {
 				// TODO Auto-generated method stub
-				return o2.getYear()-o1.getYear();
+				return o1.getYear()-o2.getYear();
 			}
 		});
         
