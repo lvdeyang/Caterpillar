@@ -998,7 +998,8 @@ public class NEWDistributorController {
 			String phone = request.getParameter("phone");		
 			//获取 用户的 密码
 			String password = request.getParameter("password");		
-			//根据手机号 获取 分销商 信息		  
+			//根据手机号 获取 分销商 信息		
+	
 		    if(conn_distributor.findByField("phone", phone).size()>0){ 
 		    	  List<DistributorPo> distributorPoss = conn_distributor.findByField("phone", phone);
 			//判断分销商属于什么状态
@@ -1049,13 +1050,11 @@ public class NEWDistributorController {
 	@JsonBody
 	@RequestMapping(value = "/admin/exitPage")
 	public ModelAndView exitPage(HttpServletRequest request){		
-		Map<String, Object> stre = new HashMap<String, Object>();
+		ModelAndView mView = new ModelAndView("redirect:/distributor/app/login/0");
 		HttpSession session = request.getSession();
-		String str = session.getAttribute("userId").toString();		
-		stre.put("userId", str);
-		stre.put("msg", "0");
+		String str = session.getAttribute("userId").toString();			
 		session.setAttribute("userId", "-1");
-		return new ModelAndView("mobile/guolaiwan/distribute-personal", stre);
+		return mView;
 	}
 
 }

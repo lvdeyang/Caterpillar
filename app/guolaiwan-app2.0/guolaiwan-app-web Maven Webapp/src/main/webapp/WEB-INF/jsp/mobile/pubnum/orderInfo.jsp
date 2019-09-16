@@ -514,7 +514,6 @@ html, body {
 			if(data === -1) return;
 			
 			if("积分"==data.order.payMode){ //判断是否是积分订单
-			alert(114111);
 			    if(data.order.productPic.indexOf('null')==-1){
 			       $('#proPic').attr('src',data.order.productPic);
 			    }
