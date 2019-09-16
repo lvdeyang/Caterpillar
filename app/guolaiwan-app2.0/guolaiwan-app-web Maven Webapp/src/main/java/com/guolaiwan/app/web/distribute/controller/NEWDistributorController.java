@@ -1009,6 +1009,7 @@ public class NEWDistributorController {
 			if (password != null && password.equals(distributorPoss.get(0).getPassword())) {
 				//登录成功  获的分销商 id 
 				   long distributorId =  distributorPoss.get(0).getId();
+				   session.setAttribute("userId", distributorPoss.get(0).getUserId());
 				   try{
 				   // 根据 分销商id 查询出中间表 用户id
 				   if(conn_distributorUser.getDistrUserByIds(distributorId).size()>0){
@@ -1027,7 +1028,9 @@ public class NEWDistributorController {
 							   session.setAttribute("userId", distributorPoss.get(0).getUserId());
 							   state = "success";	}
 				   
-				   }catch(Exception e){ state = "success";}
+				   }catch(Exception e){
+					   
+					   state = "success";}
 						}else{state ="1";}
 						}else{state = "2";}		 						 					      	 
 						}else{state ="0";}						
