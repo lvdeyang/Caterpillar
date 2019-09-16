@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -195,9 +196,14 @@ public class QuestionnaireController extends BaseController {
 		QuestionnairePO questionnaire = conn_questionnaire.get(questionnaireId);
 		int limit=questionnaire.getQuestionnum();
 		int count = conn_questionbankdao.countByQId(questionnaireId);
-		int page=(int) (Math.random()*(count/limit));
-		List<QuestionBankPO> question = conn_questionbankdao.findByQId(questionnaireId,page,limit);
-		return question;
+		int temp =0;
+		List<QuestionBankPO> question = conn_questionbankdao.findByQId(questionnaireId);
+		List<QuestionBankPO> list= new ArrayList<QuestionBankPO>();
+		for (int i = 0; i < limit; i++) {
+			temp = (int) (count * Math.random());
+			list.add(question.get(temp));
+		}
+		return list;
 	}
 	
 	// 投票规则页面
@@ -257,10 +263,10 @@ public class QuestionnaireController extends BaseController {
     	UserInfoPO userInfoPO = conn_userinfo.get(userId);
         int count = conn_redpacketrecord.countByUId(userId,questionnaireId);
     	if(count>=2){
-    		mv.addObject("status","感谢参与,老用户不要太贪心哦~");
+    		mv.addObject("status","您的红包太多了，不要太贪心哦，再来学学吧~");
     		return mv;
     	}
-    	mv.addObject("status","感谢您的参与，收下大红包~");
+    	mv.addObject("status","恭喜您中奖了，到微信首页领取红包");
     	RedPacketRecordPO po=new RedPacketRecordPO();
     	po.setQuestionnaireId(questionnaireId);
     	po.setUserId(userId);

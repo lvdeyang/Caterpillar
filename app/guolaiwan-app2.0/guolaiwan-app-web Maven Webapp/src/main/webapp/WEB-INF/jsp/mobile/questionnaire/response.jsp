@@ -82,16 +82,13 @@ html, body {
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
-	background: #fff;
 	font-family: "微软雅黑" !important;
 	
 }
-
-body {
-	height: 80%;
-	background-image: -webkit-linear-gradient(top, #F01917, #fff);
+body{
+background:url("lib/images/htnlbei.jpg");
+background-size: 100%;
 }
-
 * {
 	box-sizing: border-box;
 	list-style: none;
@@ -116,7 +113,7 @@ body {
 .main {
 	height: 100%;
 	width: 80%;
-	background: #fff;
+	background: #FFFFF5;
 	border-radius: 6px;
 	margin: 0 auto;
 	padding: 50px 5% 20px 5%;
@@ -351,7 +348,7 @@ none
   			 falses();
   			 setTimeout(function(){
   			  $(".main-in").slideDown();
-			}, 500);
+			}, 1500);
   			
   		}
   		 if(index==${questionnum}){
@@ -371,7 +368,7 @@ none
   			pushquestion();
   			retn = true;
   			retns()
-  		}, 1000);
+  		}, 2000);
   		} 
   
         /* li[num].style.display="none";
@@ -511,9 +508,9 @@ none
 		type=questions[index].questiontype;
 		answer = questions[index].answer;
 		$('.btn-next').attr("disabled",true);
-		if(questions[index].questiontype==1)$('.type').text('单选');
-		if(questions[index].questiontype==2)$('.type').text('多选');
-		if(questions[index].questiontype==3)$('.type').text('判断');
+		if(questions[index].questiontype==1)$('.type').text('单选题');
+		if(questions[index].questiontype==2)$('.type').text('多选题');
+		if(questions[index].questiontype==3)$('.type').text('判断题');
 		$('.questiontitle').html(questions[index].topic);
 		var html = [];
 		for (var i = 0; i < options.length; i++) {
@@ -535,7 +532,7 @@ none
 		<ul id="homes-in">
 			<li class="homes-on">
 				<div class="main" style="">
-				 <p class="type" style="float:right;margin-top:-35px;font-size: 16px"></p>
+				 <p class="type" style="float:left;margin-top:-35px;font-size: 16px"></p>
 					<div
 						style="height:60px;width: 60px;border-radius: 50%;background:#fff;position:absolute;top:75px;left:50%;margin-left:-30px;">
 						<div class="game_time">

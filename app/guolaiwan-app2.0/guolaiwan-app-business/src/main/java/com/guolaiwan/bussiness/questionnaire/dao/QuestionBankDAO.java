@@ -29,6 +29,13 @@ public class QuestionBankDAO extends AbstractBaseDao<QuestionBankPO> {
 		return VoteProducts;
 	}
 	
+	public List<QuestionBankPO> findByQId(Long questionnaireId) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("questionnaireId", Condition.eq, questionnaireId);
+		List<QuestionBankPO> VoteProducts = this.findByHql(hql);
+		return VoteProducts;
+	}
+	
 	public void deleteByQuestionnaireId(Long questionnaireId){
 		DeleteHql hql=this.newDeleteHql();
 		hql.andBy("questionnaireId", Condition.eq, questionnaireId);

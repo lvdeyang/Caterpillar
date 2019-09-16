@@ -121,7 +121,7 @@ border-bottom:1px solid #DBDBDB;
 border-right:1px solid #DBDBDB;
 border-left:1px solid #DBDBDB;
 overflow: hidden;
-padding:20px 5%;
+padding:10px 5%;
 line-height: 20px;
 }
 .main ul li img{
