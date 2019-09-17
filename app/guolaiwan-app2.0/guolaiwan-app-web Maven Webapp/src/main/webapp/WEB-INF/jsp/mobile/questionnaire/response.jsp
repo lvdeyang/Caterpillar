@@ -567,9 +567,9 @@ none
 
 <div class="main-in" style="">
 	<img style="width:50%;" src="lib/images/wrong.png">
-	<p style="font-size:30px;font-weight:400;letter-spacing:1px; ">很遗憾，请再接再厉！</p>
+	<p style="width:100%;font-size:24px;font-weight:400;margin-top:10%;text-align: center; ">很遗憾，请再接再厉!</p>
 	<button
-		style="font-weight:500;font-size:18px;margin-top:20%;color:#fff;background: #F61C1D;width:60%;border-radius:16px;padding:4px 0;border:none;outline:none;"
+		style="font-weight:500;font-size:18px;margin-top:10%;color:#fff;background: #F61C1D;width:60%;border-radius:16px;padding:4px 0;border:none;outline:none;"
 		onclick="javascript:location.reload();">再答一次</button>
 </div>
 
