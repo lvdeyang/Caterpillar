@@ -275,7 +275,7 @@ $(document).on('click', '.quxiao', function(){
 				<div class="header-content">商户</div>
 			</div>
 		</div>
-		<p class="dizhi" style="height:50px;margin:5px 0;line-height: 50px;padding:0 5%;background: #fff;font-size:18px;font-weight: bold;"><span>添加新地址</span><span style="float:right;">></span></p>
+		<p class="dizhi" style="height:50px;margin:5px 0;line-height: 50px;padding:0 5%;background: #fff;font-size:18px;font-weight: bold;"><span>添加新地址</span><span style="float:right;font-size:32px;">›</span></p>
 		
 		<div class="addressList">
 		</div>
