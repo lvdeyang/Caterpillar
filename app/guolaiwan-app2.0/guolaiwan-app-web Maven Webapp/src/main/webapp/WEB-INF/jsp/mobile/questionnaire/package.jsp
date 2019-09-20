@@ -502,7 +502,7 @@ background:url("../../lib/images/htnlbei.jpg");
 
 
 <body>
-	<div id="page">
+	<%-- <div id="page">
 		<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
@@ -516,8 +516,11 @@ background:url("../../lib/images/htnlbei.jpg");
 			<div style="color:red;margin-top:10px;margin-left:15px;" id="result">${status}</div>
 			<a style="margin-left:15px;font-size:12px;color:red" href="http://www.guolaiwan.net/guolaiwan/pubnum/index">>>进入微官网</a>
 		</div>
-	</div> 
-
+	</div> --%>
+<div class="nav" style="width:100%;height:auto;text-align: center;position: fixed;top:30%;color:red;font-weight:bold;left:0;">
+	<p style="font-family:SimSun;">${status}</p>
+	<a style="font-size:12px;" href="http://www.guolaiwan.net/guolaiwan/admin/questionnaire/gotoquestionnaire">>>返回答题</a>
+</div>
 </body>
 
 

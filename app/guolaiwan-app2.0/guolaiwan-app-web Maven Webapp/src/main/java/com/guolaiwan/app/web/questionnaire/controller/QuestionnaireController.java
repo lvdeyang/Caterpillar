@@ -3,8 +3,11 @@ package com.guolaiwan.app.web.questionnaire.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.KeyStore;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.publicnum.util.CommonUtil;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
@@ -65,6 +69,7 @@ public class QuestionnaireController extends BaseController {
 	private RedPacketRecordDAO conn_redpacketrecord;
 	@Autowired
 	private UserInfoDAO conn_userinfo;
+	
 	
 	// 答题问卷列表页面
 	@ResponseBody
@@ -123,6 +128,12 @@ public class QuestionnaireController extends BaseController {
 			conn_questionnaire.save(questionnairePO);
 			return "success";
 		}
+		else if(field.equals("redpacketnum")){
+			String redpacketnum = request.getParameter("value");
+			questionnairePO.setRedpacketnum(Integer.parseInt(redpacketnum));
+			conn_questionnaire.save(questionnairePO);
+			return "success";
+		}
 		else if(field.equals("questiontime")){
 			String questiontime = request.getParameter("value");
 			questionnairePO.setQuestiontime(Integer.parseInt(questiontime));
@@ -151,16 +162,26 @@ public class QuestionnaireController extends BaseController {
 		QuestionnairePO PO=new QuestionnairePO();
 		PO.setTitle("请修改此处");
 		PO.setOnthertitle("请修改此处");
+		PO.setRedpacketnum(0);
 		conn_questionnaire.save(PO);
 		return "success";
 	}
 	
-	// 前台问答首页
+	// 前台问答首页 工会的
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/gotoquestionnaire")
 	public ModelAndView getoQuestionnaire(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("mobile/questionnaire/responseHome");
+		return mv;
+	}
+	
+	// 前台问答首页 过来玩
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/gotoquestionnairemyself")
+	public ModelAndView getoQuestionnaireMyself(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("mobile/questionnaire/responseMyself");
 		return mv;
 	}
 	
@@ -233,39 +254,43 @@ public class QuestionnaireController extends BaseController {
 		return "success";
 	}
 	
-	//获得规则（页面）
-	@JsonBody
-	@ResponseBody
-	@RequestMapping(value = "/getquestionrole", method = RequestMethod.POST)
-	public QuestionnairePO getQuestionRole(HttpServletRequest request){
-		long questionnaireId=Long.parseLong(request.getParameter("questionnaireId"));
-		QuestionnairePO questionnaire = conn_questionnaire.get(questionnaireId);
-		return questionnaire;
-	}
 	
-	
-	
-	/*private long amount=1;*/
     @RequestMapping("/sendRedPacket")
     public ModelAndView sendRedPacket(HttpServletRequest request){
-    	ModelAndView mv = new ModelAndView("luckdraw/package");
-    	/*if(amount<=0){
-    		mv.addObject("status","感谢参与,红包已经被抢完~");
-    		return mv;
-    	}*/
-    	Random random=new Random();
-		int thisturn=random.nextInt(490)+10;
-		/*amount-=thisturn;*/
-    	HttpSession session = request.getSession();
     	long questionnaireId=Long.parseLong(request.getParameter("questionnaireId"));
+    	QuestionnairePO questionnaire= conn_questionnaire.get(questionnaireId);
+    	int rednumber=questionnaire.getRedpacketnum();
+    	ModelAndView mv = new ModelAndView("mobile/questionnaire/package");
+    	if(rednumber==0){
+    		mv.addObject("status","活动尚未开始，敬请期待~");
+    		return mv;
+    	}else if(rednumber==-1){ 
+    		mv.addObject("status","感谢参与,活动已经结束了哦~");
+    		return mv;
+    	}
+    	HttpSession session = request.getSession();
     	long userId = Long.parseLong(session.getAttribute("userId").toString());
-    	System.out.println(userId);
     	UserInfoPO userInfoPO = conn_userinfo.get(userId);
-        int count = conn_redpacketrecord.countByUId(userId,questionnaireId);
-    	if(count>=2){
+    	int count = conn_redpacketrecord.countByUId(userId,questionnaireId);
+    	if(count>=rednumber&&rednumber!=-2){
     		mv.addObject("status","您的红包太多了，不要太贪心哦，再来学学吧~");
     		return mv;
     	}
+    	Random random=new Random();
+		int thisturn=0;
+		int probability=random.nextInt(100);
+		if(probability>=0&&probability<=60){
+			thisturn=random.nextInt(10)+100;
+		}
+		else if(probability>=61&&probability<=80){
+			thisturn=random.nextInt(100)+100;
+		}
+		else if(probability>=81&&probability<=95){
+			thisturn=random.nextInt(100)+200;
+		}
+		else if(probability>=95&&probability<=100){
+			thisturn=random.nextInt(200)+300;
+		}
     	mv.addObject("status","恭喜您中奖了，到微信首页领取红包");
     	RedPacketRecordPO po=new RedPacketRecordPO();
     	po.setQuestionnaireId(questionnaireId);
@@ -304,7 +329,7 @@ public class QuestionnaireController extends BaseController {
             /** 公众号APPID */
             parameters.put("wxappid", appid);
             /** 商户名称 */
-            String mch_name = "过来玩";
+            String mch_name = "答题";
             parameters.put("send_name",mch_name);
             /** 用户openid */
             parameters.put("re_openid",openid);
@@ -323,7 +348,7 @@ public class QuestionnaireController extends BaseController {
             parameters.put("remark","江山父老能容我，不使人间造孽钱。");
             /** 场景id  发放红包使用场景，红包金额大于200时必传
              * PRODUCT_1:商品促销 PRODUCT_2:抽奖 PRODUCT_4:企业内部福利  PRODUCT_5:渠道分润 */
-            //parameters.put("scene_id","PRODUCT_2");
+            /*parameters.put("scene_id","PRODUCT_2");*/
             /** 资金授权商户号 */
             //parameters.put("consume_mch_id","");
             /** 活动信息  资金授权商户号，服务商替特约商户发放时使用*/

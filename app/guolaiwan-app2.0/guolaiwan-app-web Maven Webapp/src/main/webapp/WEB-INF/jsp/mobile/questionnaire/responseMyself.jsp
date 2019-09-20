@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>首页</title>
+<title>答题首页</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -78,45 +78,62 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:100%;
+	height:100%;
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
-	
-}
-body{
-background:url("lib/images/htnlbei.jpg");
-background-size: 100% 100%;
+	background: #fff;
 }
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
-	font-size:14px;
-	font-family: "宋体" !important;
+}
+/* 页面样式 */
+.header {
+	height: 120px;
+	line-height:50px;
+	background:url("lib/images/navs.png") !important;
+	background-size: 100% 120px!important;
 }
 
-    .nav{
-     text-align: center;
-     margin:100px 0 20px 0 !important;
-    }
-    .nav p{
-    line-height: 35px;
-    font-weight: bold;
-    font-size:18px !important;
-    }
-   .ones,.twos{
-   font-weight: bold;
-    font-size:18px !important;
-   }
-    .main p{
-     line-height: 35px;
-     letter-spacing: 1px;
-     font-size:14px;
-    }
-    
+.header .link-left {
+	margin-left: 20px;
+	margin-right: 10px;
+	position: relative;
+	z-index: 1;
+	font-size:20px;
+}
+.main ul{
+width:100%;
+}
+.main ul li{
+box-shadow:2px 2px 5px #DBDBDB;
+margin:10px auto;
+width:100%;
+height:auto;
+text-align: left;
+border:none;
+outline: none;
+background: #fff;
+border-radius:8px;
+border-bottom:1px solid #DBDBDB;
+border-right:1px solid #DBDBDB;
+border-left:1px solid #DBDBDB;
+overflow: hidden;
+padding:10px 5%;
+line-height: 20px;
+}
+.main ul li img{
+width:15%;
+display: inline-block;
+}
+
+
 </style>
+
 </head>
+
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
@@ -127,30 +144,86 @@ background-size: 100% 100%;
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
-<script type="text/javascript">
-
-</script>
 <body>
-<div class="nav">
-<p>网络安全为人民  网络安全靠人民</p>
-<p>2019年国家网络安全宣传周有奖知识答题</p>
-</div>
-<p style="line-height:25px;width:100%;padding:0 7%;text-indent: 2em;letter-spacing: 1px;font-size:14px;font-family: "微软雅黑" !important; ">为加强职工群众网络安全知识学习，提高个人信息保护意识，市总工会与市妇联联合举办网络安全宣传周有奖知识答题。</p>
-<div class="main" style="width:100%;padding:0 9%;margin-top:10px;">
-<p class="ones">一、答题时间</p>
-<p>9月20日（周五）9：00至21：00。</p>
-<p class="twos">二、答题规则</p>
-<p>1、每轮5道题目，答对继续，答错离场；</p>
-<p>2、连续答对5道题目即有得奖机会；</p>
-</div>
-<div style="width:100%;margin: 0 auto;text-align: center;margin-top:10%;"> 
-<button style="padding:4px 4px;background:#F61C1D;font-size:16px;border: none;outline:none;font-weight: bold;color:#fff;border-radius:4px;" onclick="gotoanswer()">开始答题</button>
-</div>
-
-</body>
+			<!-- 主页 -->
+		<div class="header">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
+		</div>
+	<div style="width:100%;height:auto;margin-top:-50px;">
+		<div style="height:0;padding:7%;text-align: center;width:12%;line-height: 10%;margin:0 auto;overflow: hidden;position: relative;">
+		 <!-- <p style="width:100%;position: absolute;left:50%;margin-left:-50%;font-size:20px;color:#000000;font-family:STKaiti;margin-top: 4px"><b>有奖问答</b></p > -->
+		</div>
+	</div>
+	<div class="main" style="width:100%;height:auto;padding:0 5%;">
+	  <ul class="alllist">
+	   
+	   
+	  </ul>
+	</div>	
+	
+	<div id="ruleshow" class="weui-popup__container popup-bottom">
+		<div class="weui-popup__overlay"></div>
+		<div  class="weui-popup__modal" >
+			<div id="rules" style="padding: 20px;overflow-y:auto;text-indent: 2em;height:400px;">
+			
+			</div>
+			<div  style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);
+			border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;" >
+			<p  style="background:#F56938;height:100%;float:left;text-align:center;width:50%;
+			line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;"  onclick="closewin()">
+			<span style="font-size:14px;margin-left:5%;">取消答题</span>
+			</p>
+			<p  style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;
+			color:#fff;font-size:20px;font-weight:bold;display: inline-block;" onclick="gotoanswer()">
+			<span style="font-size:14px;margin-left:5%;">开始答题</span>
+			</p>
+			</div>
+			<p style="height:65px;"></p>
+		</div>
+	</div>	
+	<p style="height:65px;"></p>
+ </body>
 <script>
-function gotoanswer(){
-	location.href=window.BASEPATH + 'admin/questionnaire/gotoanswer?id=1';
-}
+var id;
+$(function(){
+	var url=window.BASEPATH+'admin/questionnaire/findallquestionnaire';
+	$.post(url,null,function(data){
+		 var html=[];
+      for(var i=0;i<data.length;i++){
+      	   html.push('<li id="'+data[i].id+'" onclick="getrole(this.id)">');
+		   html.push('<img src="lib/images/responsess.png">');
+		   html.push('<div style="display: inline-block;width:80%;vertical-align:middle;margin-left:5%;">');
+		   html.push('<p style="word-break:break-word;font-size: 14px;">'+data[i].title+'</p>');
+		   html.push('<p style="word-break:break-word;font-size: 12px;color:#A4A4A4;">'+data[i].onthertitle+'</p>');
+		   html.push('</div>');
+		   html.push('</li>');
+      }   
+         $('.alllist').append(html.join(''));
+	})
+})
+
+	function getrole(questionnaireId){
+		id=questionnaireId;
+		var url=window.BASEPATH+'admin/questionnaire/getquestionrole';
+		$.post(url,{"questionnaireId":questionnaireId},function(data){
+			$('#rules').html(data.questionnairerole);
+			
+			$("#ruleshow").popup();
+		})
+	}
+
+	function gotoanswer(){
+		$.closePopup();
+		location.href=window.BASEPATH + 'admin/questionnaire/gotoanswer?id='+id;
+	}
+	
+	function closewin(){
+		$.closePopup();	
+	}
 </script>
+
+
+
+
 </html>
