@@ -170,10 +170,29 @@ html, body {
 
 <script type="text/javascript">
 	$(function() {
+	consoleLog();
 	  getRecomment();
 	  getAllProduct();
 	  window.BASEPATH = '<%=basePath%>';
-	  //获取手机当前的经纬度
+	   
+	});
+	 //获取手机当前的经纬度
+     function consoleLog(){
+	    getloca();
+	    var loca = {};
+		function getloca() {
+			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				if (data === -1) return;
+				if (data) {
+					loca = data;
+					getLoation();
+				}
+			});
+		}
+    
  	function getLoation() {
 			wx.config({
 				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -193,6 +212,7 @@ html, body {
 						var speed = res.speed; // 速度，以米/每秒计  
 						var accuracy = res.accuracy; // 位置精度  
 						getCity(latitude, longitude);
+						
 					},
 					cancel : function(e) {
 						//这个地方是用户拒绝获取地理位置  
@@ -202,20 +222,20 @@ html, body {
 				wx.error(function(res) {});
 			});
 		}
-		var latitude= null;
-		var longitude= null;
-		function getCity(latitude, longitude) { //通过经纬度   获取高德位置
-			latitude = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
-			longitude = (parseFloat(longitude)).toFixed(5);
-		}  
 		
-	    var url =  window.BASEPATH + 'business/gotodistance?merchantId=${merchantId}&latitude='+latitude+'&longitude='+longitude;
-	    $.get(url,null,function(msg){
+		  function getCity(latitude, longitude) { //通过经纬度   获取高德位置
+			latitudes = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
+			longitudes = (parseFloat(longitude)).toFixed(5);
+			getInfo();
+		}    
+
+} 
+		function getInfo(){
+	    var url_s =  window.BASEPATH + 'business/gotodistance?merchantId=${merchantId}&latitude='+latitudes+'&longitude='+longitudes;
+	    $.get(url_s,null,function(msg){
 	    $("#dintance").text("距离"+msg+"km");
 	    })
-	});
-	
-	
+	}
 	function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
 		$.get(_uriMerchantInfo, null, function(data){
