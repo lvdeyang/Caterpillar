@@ -1,6 +1,7 @@
 package com.guolaiwan.app.web.publicnum.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -174,6 +175,36 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 
+	
+	public boolean judgeIsFollow(String token,String openid){
+	    Integer subscribe = null;
+	    String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+token+"&openid="+openid+"&lang=zh_CN";
+	    try {
+	        URL urlGet = new URL(url);
+	        HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
+	        http.setRequestMethod("GET"); // 必须是get方式请求  
+	        http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+	        http.setDoOutput(true);
+	        http.setDoInput(true);
+	        http.connect();
+	        InputStream is = http.getInputStream();
+	        int size = is.available();
+	        byte[] jsonBytes = new byte[size];
+	        is.read(jsonBytes);
+	        String message = new String(jsonBytes, "UTF-8");
+	        JSONObject demoJson = JSON.parseObject(message);
+	        //System.out.println("JSON字符串："+demoJson);  
+	        subscribe = demoJson.getInteger("subscribe");
+	        is.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return 1==subscribe?true:false;
+	}
+	
+	
+	
+	
 	@Autowired
 	private UserInfoDAO conn_user;
 
@@ -201,6 +232,16 @@ public class PubNumController extends WebBaseControll {
 			JSONObject accessTokenInfo = JSON.parseObject(result);
 			String access_token = accessTokenInfo.getString("access_token");
 			openid = accessTokenInfo.getString("openid");
+			//判断用户是否关注
+	     	String uu = "https://api.weixin.qq.com/cgi-bin/token?appid=" + WxConfig.appId + "&secret=" + WxConfig.appsrcret  + "&grant_type=client_credential";
+            String dd = HttpClient.get(uu);
+            JSONObject jj = JSON.parseObject(dd);
+            String token = String.valueOf(jj.get("access_token"));
+            if(judgeIsFollow(token,openid) == false){ //未关注
+            	System.out.println( " -------------------------------------------------------------------------------------");
+        		mv = new ModelAndView("mobile/business/focuson");
+        		return mv;
+            }
 			// 拉取用户详细信息
 			params = new JSONObject();
 			params.put("access_token", access_token);
