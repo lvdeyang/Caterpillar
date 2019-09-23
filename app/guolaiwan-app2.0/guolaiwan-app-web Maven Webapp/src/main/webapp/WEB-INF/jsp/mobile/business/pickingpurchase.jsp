@@ -298,10 +298,10 @@ $(function(){
 						html.push('<div class="contentt active" style="">');
 						html.push('<div style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative; ">');
 						html.push('<p style="width:100%;height:30px;line-height:30px;padding:0 4% 0 15%;margin:0 auto;"><span style="text-align: left;">收件人：<span>'+data[i].consigneeName+'</span></span>');
-						html.push('<span style="float:right;">联系电话：<span>'+data[i].consigneePhone+'</span></span></p>');
+						html.push('<span style="float:right;margin-right:10%;">联系电话：<span>'+data[i].consigneePhone+'</span></span></p>');
 						html.push('<p style="width:100%;height:auto;padding:0 7% 0 15%;margin:0 auto;">收货地址：<span>'+data[i].consigneeAddress+'</span></p>');
 						html.push('<img style="height:30px;width:30px;position: absolute;top:15px;left:5%;" src="lib/images/zidongdaolan.png">');
-						html.push('<span onclick="gotologistics()" style="position: absolute;right:5%;font-size:16px;font-weight: bold;top:25px;">></span>');
+						html.push('<span onclick="gotologistics()" style="position: absolute;right:3%;font-size:22px;font-weight: bold;top:12px;">＞</span>');
 				        html.push('<input type="text" hidden="hidden" class="addressId" value="'+data[i].id+'">');
 				        html.push('</div>');
 				        }

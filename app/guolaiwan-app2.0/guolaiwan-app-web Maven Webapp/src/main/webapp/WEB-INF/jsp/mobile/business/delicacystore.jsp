@@ -1297,19 +1297,9 @@ appearance:none;
 						</div>
 						<!-- 评价 -->
 						<div class="contentt" style="text-align: center;">
-						 <p style="height:50px;line-height:50px;margin:0 0 0 5%;font-size:20px;font-weight:bold;float:left;">网友点评<span style="font-size:16px;color:#DCDCDC;">(324)</span></p>
+						 <p style="height:50px;line-height:50px;margin:0 0 0 5%;font-size:20px;font-weight:bold;float:left;">网友点评<span style="font-size:16px;color:#DCDCDC;">(0)</span></p>
 						 <div class="ping" style="border-bottom:10px solid #F4F4F4;width:100%;display: inline-block;margin:5px 0 0 0; ">
 						 <ul style="">
-						  <li>全部</li>
-						  <li>好评</li>
-						  <li>差评</li>
-						  <li>最新点评</li>
-						  <li>味道赞（189）</li>
-						  <li>服务热情（189）</li>
-						  <li>分量足（189）</li>
-						  <li>性价比高（189）</li>
-						  <li>优雅环境（189）</li>
-						  <li>回头客（189）</li>
 						 </ul>
 						 </div>
 						 

@@ -129,6 +129,39 @@ public class CateController extends WebBaseControll {
 		return list;
 	}
 	
+	
+	
+	private  double rad(double d) {
+		return d * Math.PI / 180.0;
+	}
+	private  double EARTH_RADIUS = 6378.137;
+	
+	/**
+	 * 通过经纬度获取距离(单位：米)
+	 * 
+	 * @param lat1
+	 * @param lng1
+	 * @param lat2
+	 * @param lng2
+	 * @return 距离
+      **/
+	public double getDistance(double lat1, double lng1, double lat2,
+			double lng2) {
+		double radLat1 = rad(lat1);
+		double radLat2 = rad(lat2);
+		double a = radLat1 - radLat2;
+		double b = rad(lng1) - rad(lng2);
+		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+				+ Math.cos(radLat1) * Math.cos(radLat2)
+				* Math.pow(Math.sin(b / 2), 2)));
+		s = s * EARTH_RADIUS;
+		s = Math.round(s * 10000d) / 10000d;
+		DecimalFormat dlf = new DecimalFormat("0.00");
+		double ss = Double.parseDouble(dlf.format(s));
+		
+		return ss;
+	}
+	
 	//按照商品类型所有的商户
 	@JsonBody
 	@ResponseBody
@@ -137,6 +170,10 @@ public class CateController extends WebBaseControll {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
+		String latitude=request.getParameter("latitude");
+		String longitude=request.getParameter("longitude");
+		//商户距离存储
+		List<Double> distance = new ArrayList<Double>();
 		//人均数据封装
 		List<Double> average = new ArrayList<Double>();
 	    DecimalFormat dlf  =  new DecimalFormat("0.0");
@@ -151,8 +188,8 @@ public class CateController extends WebBaseControll {
 			if (status  && merchantPO.getModularCode().equals(type)) {
 				merchantlist.add(merchantPO);
 				//获取订单总价
-				String[] fields = {"merchantId","tableState"};
-				Object[] values= {merchantPO.getId(),"PAYSUCCESS"};
+				String[] fields = {"merchantId"};
+				Object[] values= {merchantPO.getId()};
 				List<TableStatusPO> tStatusPOs =  table_order.findByFields(fields, values);
 				for(TableStatusPO po : tStatusPOs){
 				   if(null == po.getYdNO()){
@@ -171,12 +208,16 @@ public class CateController extends WebBaseControll {
 					avgMoney = 28.0;
 				}
 			    average.add(avgMoney);
+			    //获取商户距离
+			   double dist = getDistance(Double.parseDouble(merchantPO.getShopLatitude()),Double.parseDouble(merchantPO.getShopLongitude()),Double.parseDouble(latitude),Double.parseDouble(longitude));
+			   distance.add(dist);
 			}
 		  }	
 		}
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
 		hashMap.put("merlist", merlist);
 		hashMap.put("average", average);
+		hashMap.put("distance", distance);
 		return hashMap;
 	}
 	

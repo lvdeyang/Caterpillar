@@ -63,7 +63,7 @@
 <meta name="x5-page-mode" content="app">
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
-<title>住宿</title>
+<title>答题首页</title>
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
 <style type="text/css">
@@ -78,14 +78,12 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
-	background:#E1E1E1 !important; 
+	height:100%;
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
+	background: #fff;
 }
-
 * {
 	box-sizing: border-box;
 	list-style: none;
@@ -93,68 +91,49 @@ html, body {
 }
 /* 页面样式 */
 .header {
-	height: 40px;
-	line-height: 40px;
-	background-color: #18b4ed;
-	color: #fff;
-	border-bottom: 1px solid #bababa;
+	height: 120px;
+	line-height:50px;
+	background:url("lib/images/navs.png") !important;
+	background-size: 100% 120px!important;
 }
 
 .header .link-left {
-	margin-left: 10px;
+	margin-left: 20px;
 	margin-right: 10px;
 	position: relative;
 	z-index: 1;
+	font-size:20px;
+}
+.main ul{
+width:100%;
+}
+.main ul li{
+box-shadow:2px 2px 5px #DBDBDB;
+margin:10px auto;
+width:100%;
+height:auto;
+text-align: left;
+border:none;
+outline: none;
+background: #fff;
+border-radius:8px;
+border-bottom:1px solid #DBDBDB;
+border-right:1px solid #DBDBDB;
+border-left:1px solid #DBDBDB;
+overflow: hidden;
+padding:10px 5%;
+line-height: 20px;
+}
+.main ul li img{
+width:15%;
+display: inline-block;
 }
 
-.header-content {
-	height:auto;
-	width: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	padding-left: 40px;
-	padding-right: 40px;
-	text-align: center;
-	z-index: 0;
-}
-
-  .swiper-container {
-    width: 100%;
-    padding:0;
-    margin:0;
-    height:200px;
-  } 
-
-  .swiper-container img {
-    display: block;
-    width: 100%;
-  }
-    
-.weui-navbar{
- display: none !important;
-}
-  .inp::-webkit-input-placeholder{
-        text-align: center;
-}  
-
- .youxuan-in p{
-  margin-left:3%;
- }
-.gotop {
-   position: fixed;
-   right: 20px;
-   bottom: 50px;
-   display: block;
-   width: 50px;
-   height: 50px;
-   opacity: 0.8;
-   z-index:111111;
-	}
 
 </style>
 
 </head>
+
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
@@ -164,71 +143,87 @@ html, body {
 <script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-<script>
-	var page=1;
-  $(function(){
-	$(window).scroll(function(){
-		if($(window).scrollTop()>100){
-			$(".gotop").fadeIn(400);	
-		}
-		else{
-			$(".gotop").fadeOut(400);
-		}
-	});
-	$(".gotop").click(function(event){
-        event.preventDefault();
-		$('html,body').animate({'scrollTop':0},500);
-        return false;
-	});
-	getMerchant();
-}); 
- 		function getMerchant(){
-			var url="<%=basePath%>business/search";
-	            $.post(url,{"merchantId":${merchantId},"name":"${name}","type":"0002","latitude":"${latitude}","longitude":"${longitude}"},function(data){
-	            	var html=[];
-	            	if(data.merlist.length==0){
-	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
-	            	}else{
-						for(var i=0; i<data.merlist.length; i++){
-				 			 var pingfen=(data.pingfens[i]+46)/10;
-					  		 if(pingfen>5)pingfen=5;
-							 html.push('<a onclick="accommodation('+data.merlist[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
-					         html.push('<div class="chenggong" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
-							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');
-							 html.push('<div class="zhifu-in">');
-							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>'); 
-							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+(23+data.pingfens[i])+'人来过</span></p>');
-							 html.push('</div></div></div></a>');
-							}
-					}
-			    	$('.huodong').append(html.join(''));
-	            	page++;
-	            })
-			}
-	function accommodation(id){
-   		location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+id;
-    }
-</script>
+<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
 <body>
 			<!-- 主页 -->
 		<div class="header">
-			<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
 		</div>
-	  <select style="width:100%;background:#E1E1E1;margin:1px auto;font-weight: bold;padding:0 5%;height:30px;border:none;outline:none;appearance:none; -moz-appearance:none;  -webkit-appearance:none;">
-	    <option>智能排序▼</option>
-	    <option>低价优先▼</option>
-	    <option>高价优先▼</option>
-	  </select>
-	 <div class="huodong"></div>
-   </div>    	
-   <!-- 置顶 -->
-    <div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/tophome.png"></a></div>
-</body>
+	<div style="width:100%;height:auto;margin-top:-50px;">
+		<div style="height:0;padding:7%;text-align: center;width:12%;line-height: 10%;margin:0 auto;overflow: hidden;position: relative;">
+		 <!-- <p style="width:100%;position: absolute;left:50%;margin-left:-50%;font-size:20px;color:#000000;font-family:STKaiti;margin-top: 4px"><b>有奖问答</b></p > -->
+		</div>
+	</div>
+	<div class="main" style="width:100%;height:auto;padding:0 5%;">
+	  <ul class="alllist">
+	   
+	   
+	  </ul>
+	</div>	
+	
+	<div id="ruleshow" class="weui-popup__container popup-bottom">
+		<div class="weui-popup__overlay"></div>
+		<div  class="weui-popup__modal" >
+			<div id="rules" style="padding: 20px;overflow-y:auto;text-indent: 2em;height:400px;">
+			
+			</div>
+			<div  style="background:#FF3D00;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);
+			border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;" >
+			<p  style="background:#F56938;height:100%;float:left;text-align:center;width:50%;
+			line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;"  onclick="closewin()">
+			<span style="font-size:14px;margin-left:5%;">取消答题</span>
+			</p>
+			<p  style="height:100%;float:right;text-align:center;width:50%;line-height: 60px;
+			color:#fff;font-size:20px;font-weight:bold;display: inline-block;" onclick="gotoanswer()">
+			<span style="font-size:14px;margin-left:5%;">开始答题</span>
+			</p>
+			</div>
+			<p style="height:65px;"></p>
+		</div>
+	</div>	
+	<p style="height:65px;"></p>
+ </body>
+<script>
+var id;
+$(function(){
+	var url=window.BASEPATH+'admin/questionnaire/findallquestionnaire';
+	$.post(url,null,function(data){
+		 var html=[];
+      for(var i=0;i<data.length;i++){
+      	   html.push('<li id="'+data[i].id+'" onclick="getrole(this.id)">');
+		   html.push('<img src="lib/images/responsess.png">');
+		   html.push('<div style="display: inline-block;width:80%;vertical-align:middle;margin-left:5%;">');
+		   html.push('<p style="word-break:break-word;font-size: 14px;">'+data[i].title+'</p>');
+		   html.push('<p style="word-break:break-word;font-size: 12px;color:#A4A4A4;">'+data[i].onthertitle+'</p>');
+		   html.push('</div>');
+		   html.push('</li>');
+      }   
+         $('.alllist').append(html.join(''));
+	})
+})
+
+	function getrole(questionnaireId){
+		id=questionnaireId;
+		var url=window.BASEPATH+'admin/questionnaire/getquestionrole';
+		$.post(url,{"questionnaireId":questionnaireId},function(data){
+			$('#rules').html(data.questionnairerole);
+			
+			$("#ruleshow").popup();
+		})
+	}
+
+	function gotoanswer(){
+		$.closePopup();
+		location.href=window.BASEPATH + 'admin/questionnaire/gotoanswer?id='+id;
+	}
+	
+	function closewin(){
+		$.closePopup();	
+	}
+</script>
 
 
+
+
+</html>

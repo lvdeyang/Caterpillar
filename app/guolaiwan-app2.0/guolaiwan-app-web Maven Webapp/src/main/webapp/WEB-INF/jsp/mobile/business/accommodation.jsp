@@ -82,14 +82,15 @@ html, body {
 	background:#E1E1E1 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
+	
 }
 
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
+	font-family: "微软雅黑" !important;
 }
 /* 页面样式 */
 .header {
@@ -194,9 +195,9 @@ html, body {
 				return data.data;		
 			}
 			}
-	
+	   consoleLog();
 	   getRecomment();
-	   getAllMerchant();
+	    getLoation(); 
 	});
 	
 	
@@ -229,10 +230,67 @@ html, body {
 			    }
 			    });
 	  }
-	  
+	  var latitudes= null;
+	  var longitudes= null;
+	   //获取手机当前的经纬度
+     function consoleLog(){
+	    getloca();
+	    var loca = {};
+		function getloca() {
+			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				if (data === -1) return;
+				if (data) {
+					loca = data;
+					getLoation();
+				}
+			});
+		}
+    
+ 	function getLoation() {
+			wx.config({
+				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				//                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId : loca.appId, // 必填，公众号的唯一标识
+				timestamp : loca.timestamp, // 必填，生成签名的时间戳
+				nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+				signature : loca.signature, // 必填，签名，见附录1
+				jsApiList : [ 'checkJsApi', 'getLocation' ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+			wx.ready(function() {
+				wx.getLocation({
+					type : 'gcj02',
+					success : function(res) {
+						var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+						var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+						var speed = res.speed; // 速度，以米/每秒计  
+						var accuracy = res.accuracy; // 位置精度  
+						getCity(latitude, longitude);
+						
+					},
+					cancel : function(e) {
+						//这个地方是用户拒绝获取地理位置  
+						alert("请打开GPS定位,");
+					}
+				});
+				wx.error(function(res) {});
+			});
+		}
+		
+		  function getCity(latitude, longitude) { //通过经纬度   获取高德位置
+			latitudes = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
+			longitudes = (parseFloat(longitude)).toFixed(5);
+		  getAllMerchant();
+		}    
+
+}
 	  function getAllMerchant(){
 			var url="<%=basePath%>business/getmerchant";
-	            $.post(url,{"merchantId":${merchantId},"code":"0002"},function(data){
+	            $.post(url,{"merchantId":${merchantId},"code":"0002","latitude":latitudes,"longitude":longitudes},function(data){
+	              var distance = data.distance;
+	              var shownum = data.showNum;
 	            	var html=[];
 	            	if(data.merlist.length==0){
 	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
@@ -245,8 +303,8 @@ html, body {
 							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');
 							 html.push('<div class="zhifu-in">');
 							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>'); 
-							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">23人来过</span></p>');
+							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>'+distance[i]+'</span>km</p>');
+							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:14px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+shownum[i]+'人来过</span></p>');
 							 html.push('</div></div></div></a>');
 							}
 					}
@@ -290,7 +348,7 @@ layui.use('laydate', function(){
 
 	function search(){
 		var name=$('.hotelname').val();
-   		location.href=window.BASEPATH + 'business/gotohotel?merchantId=${merchantId}&name='+name+'&type=0002';
+   		location.href=window.BASEPATH + 'business/gotohotel?merchantId=${merchantId}&name='+name+'&type=0002&latitude='+latitudes+'&longitude='+longitudes;
    }
 
     

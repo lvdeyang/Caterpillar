@@ -608,7 +608,7 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		QueryHql hql = this.newQueryHql();
 
 		hql.andBy("productMerchantID", Condition.eq, merchantId);
-
+        hql.andBy("productAuditstatus",Condition.eq, ShopAuditStateType.T);
 		List<ProductPO> products = findByHql(hql);
 		return products;
 	}

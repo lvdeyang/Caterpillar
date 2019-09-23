@@ -492,15 +492,17 @@ html, body {
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+
 <script type="text/javascript"> 
      
      function regist(){
-      var re=/^(13[0-9]{9})|(15[89][0-9]{8})$/;       
+      var re= /^1[34578]\d{9}$/; 
+            
           if($("#password").val() == ""){
              $.toast("请输入密码","forbidden");      
-              return false;
+              return false;	
          }
-         if(!re.test(  $("#addressphone").val())){  
+         if(!(re.test($("#addressphone").val()))){  
             $.toast("手机号有误", "forbidden");            		
             return false;	
             }

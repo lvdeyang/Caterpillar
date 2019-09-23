@@ -106,12 +106,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             		,limit: 10
    					,cols: [[
    						{type:"checkbox"}
-   						,{field:"title",title:"问卷标题",edit:"text",align:'center',width:350}
-   						,{field:"onthertitle",title:"问卷副标题",edit:"text",align:'center',width:350}
-   						,{field:"questionnum",title:"答题数量",edit:"text",align:'center',width:150}
+   						,{field:"title",title:"问卷标题",edit:"text",align:'center',width:330}
+   						,{field:"onthertitle",title:"问卷副标题",edit:"text",align:'center',width:330}
+   						,{field:"questionnum",title:"答题数量",edit:"text",align:'center',width:100}
+   						,{field:"redpacketnum",title:"红包数量/人（0未开始~-1已结束~-2无限制）",edit:"text",align:'center',width:350}
    						,{field:"questiontime",title:"答题时限/题（秒）",edit:"text",align:'center',width:150}
    						/* ,{title: '问卷背景图',templet:"#picTpl",align:'center',width:100}  */
-   						,{title:"操作",templet:"#zsgc",width:428}
+   						,{title:"操作",templet:"#zsgc",width:250}
    						]]
    					,done:function(res, curr, count){
    						$("#allcount").text(count);

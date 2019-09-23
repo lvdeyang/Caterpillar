@@ -216,6 +216,7 @@ public class NEWDistributorController {
 		String region=request.getParameter("region");
 		String city=request.getParameter("city");
 		String contry=request.getParameter("contry");
+		String password = request.getParameter("password");
 
 		HttpSession session = request.getSession();
 		Long userId=Long.parseLong(session.getAttribute("userId").toString());
@@ -226,6 +227,7 @@ public class NEWDistributorController {
 			distributorPo=conn_distributor.get(id);
 		}
 		distributorPo.setAddress(address);
+		distributorPo.setPassword(password);
 		distributorPo.setBankNo(bankNo);
 		distributorPo.setContractUrl(contractUrl);
 		distributorPo.setLegalPerson(legalPerson);
@@ -998,14 +1000,17 @@ public class NEWDistributorController {
 			String phone = request.getParameter("phone");		
 			//获取 用户的 密码
 			String password = request.getParameter("password");		
-			//根据手机号 获取 分销商 信息		  
+			//根据手机号 获取 分销商 信息		
+	
 		    if(conn_distributor.findByField("phone", phone).size()>0){ 
 		    	  List<DistributorPo> distributorPoss = conn_distributor.findByField("phone", phone);
 			//判断分销商属于什么状态
 		   if( distributorPoss.get(0).getStatus().equals(DistributorApplyStatus.PASSED)){
 			if (password != null && password.equals(distributorPoss.get(0).getPassword())) {
 				//登录成功  获的分销商 id 
-				   long distributorId =  distributorPoss.get(0).getId();				   				 
+				   long distributorId =  distributorPoss.get(0).getId();
+				   session.setAttribute("userId", distributorPoss.get(0).getUserId());
+				   try{
 				   // 根据 分销商id 查询出中间表 用户id
 				   if(conn_distributorUser.getDistrUserByIds(distributorId).size()>0){
 				   List<DistributorUser> distributorUsers= conn_distributorUser.getDistrUserByIds(distributorId);
@@ -1022,6 +1027,10 @@ public class NEWDistributorController {
 							   conn_distributorUser.save(str);
 							   session.setAttribute("userId", distributorPoss.get(0).getUserId());
 							   state = "success";	}
+				   
+				   }catch(Exception e){
+					   
+					   state = "success";}
 						}else{state ="1";}
 						}else{state = "2";}		 						 					      	 
 						}else{state ="0";}						
@@ -1049,13 +1058,11 @@ public class NEWDistributorController {
 	@JsonBody
 	@RequestMapping(value = "/admin/exitPage")
 	public ModelAndView exitPage(HttpServletRequest request){		
-		Map<String, Object> stre = new HashMap<String, Object>();
+		ModelAndView mView = new ModelAndView("redirect:/distributor/app/login/0");
 		HttpSession session = request.getSession();
-		String str = session.getAttribute("userId").toString();		
-		stre.put("userId", str);
-		stre.put("msg", "0");
+		String str = session.getAttribute("userId").toString();			
 		session.setAttribute("userId", "-1");
-		return new ModelAndView("mobile/guolaiwan/distribute-personal", stre);
+		return mView;
 	}
 
 }

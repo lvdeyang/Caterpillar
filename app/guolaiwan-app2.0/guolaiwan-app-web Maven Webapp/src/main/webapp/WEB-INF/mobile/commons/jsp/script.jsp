@@ -6,6 +6,7 @@
 <script type="text/javascript" src="<%=basePath %>mobile/lib/jQuery-weui-v1.2.0/lib/jquery-2.1.4.js"></script>
 <script type="text/javascript" src="<%=basePath %>mobile/lib/jQuery-weui-v1.2.0/lib/fastclick.js"></script>
 <script type="text/javascript">
+     var status = 0;
     $(function() {
     	FastClick.attach(document.body);
     	function initMenu(){
@@ -24,15 +25,17 @@
     	
     	}
     	
-    	$(document).on('click','.bottomMenu',function(){
-    	  if(this.id=='index'){
-    	     location.href=window.BASEPATH + 'distributor/distribute/index/0/0';
+    	 $(document).on('click','.bottomMenu',function(){
+    	  if(this.id=='index'){  
+    	  if(status == 0){  	    	  
+    	   location.href=window.BASEPATH + 'distributor/distribute/index/0/0';
+    	   }
     	  }else if(this.id=="person"){
     	     location.href=window.BASEPATH + 'distributor/app/login/0';
     	  }
     	  
     	
-    	});
+    	}); 
     	
     	
 		var href=location.href;

@@ -170,11 +170,72 @@ html, body {
 
 <script type="text/javascript">
 	$(function() {
+	consoleLog();
 	  getRecomment();
 	  getAllProduct();
+	  window.BASEPATH = '<%=basePath%>';
+	   
 	});
-	
-	
+	 //获取手机当前的经纬度
+     function consoleLog(){
+	    getloca();
+	    var loca = {};
+		function getloca() {
+			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				if (data === -1) return;
+				if (data) {
+					loca = data;
+					getLoation();
+				}
+			});
+		}
+    
+ 	function getLoation() {
+			wx.config({
+				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				//                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId : loca.appId, // 必填，公众号的唯一标识
+				timestamp : loca.timestamp, // 必填，生成签名的时间戳
+				nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+				signature : loca.signature, // 必填，签名，见附录1
+				jsApiList : [ 'checkJsApi', 'getLocation' ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+			wx.ready(function() {
+				wx.getLocation({
+					type : 'gcj02',
+					success : function(res) {
+						var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+						var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+						var speed = res.speed; // 速度，以米/每秒计  
+						var accuracy = res.accuracy; // 位置精度  
+						getCity(latitude, longitude);
+						
+					},
+					cancel : function(e) {
+						//这个地方是用户拒绝获取地理位置  
+						alert("请打开GPS定位,");
+					}
+				});
+				wx.error(function(res) {});
+			});
+		}
+		
+		  function getCity(latitude, longitude) { //通过经纬度   获取高德位置
+			latitudes = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
+			longitudes = (parseFloat(longitude)).toFixed(5);
+			getInfo();
+		}    
+
+} 
+		function getInfo(){
+	    var url_s =  window.BASEPATH + 'business/gotodistance?merchantId=${merchantId}&latitude='+latitudes+'&longitude='+longitudes;
+	    $.get(url_s,null,function(msg){
+	    $("#dintance").text("距离"+msg+"km");
+	    })
+	}
 	function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
 		$.get(_uriMerchantInfo, null, function(data){
@@ -281,7 +342,7 @@ $(document).on('click', '#zhifu', function(){
 
 <script>
 $(function() {
-	  window.BASEPATH = '<%=basePath%>';
+	  
 	  var parseAjaxResult = function(data){
 	  
 			if(data.status !== 200){
@@ -449,8 +510,9 @@ $(function() {
 		    }else{
 		        onBridgeReady(orderId);
 		    }
-		}
+		}				
 		})
+				
 </script>
 
 
@@ -478,11 +540,11 @@ $(function() {
 	 <p style="height:30px;line-height: 30px;font-size:12px;margin:0;text-align:left;">
 	 <span style="font-size:16px;font-weight:bold;">${merchant.shopName}</span>
 	 <span style="float:right;"><span class="pingfen" style="color:#E65903;"></span>超棒</span>
-	 <p style="text-align: left;margin:0;height:25px;line-height:25px;">联系电话：<span>${merchant.shopTel}</span></p>
+	 <p style="text-align: left;margin:0;height:25px;line-height:25px;">联系电话：<a href="tel://${merchant.shopTel}" style="text-decoration:none;">${merchant.shopTel}</a>
 	 </p>
 	 <p style="height:30px;line-height: 30px;font-size:12px;margin:0;text-align:left;">
 	 <img style="height:20px;width:20px;" src="lib/images/dingweis.png;"/>
-	 <span>距离您1000km</span>
+	 <span id="dintance"></span>
 	 <span onclick="gotobusinessdetails()" style="color:#E65903;float:right;">商家详情</span>
 	 </p>
 	 <button id="zhifu"  style="color:#fff;background: #E65903;width:85%;height:40px;border:none;outline:none;border-radius:10px; font-size:12px;">到店支付</button>

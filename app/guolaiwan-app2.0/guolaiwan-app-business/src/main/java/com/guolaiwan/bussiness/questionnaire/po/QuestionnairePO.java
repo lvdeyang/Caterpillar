@@ -27,8 +27,16 @@ public class QuestionnairePO extends AbstractBasePO {
 	private String questionnairePic;
 	//问卷规则
 	private String questionnairerole;
+	//红包数量
+	private int redpacketnum;
 	
 	
+	public int getRedpacketnum() {
+		return redpacketnum;
+	}
+	public void setRedpacketnum(int redpacketnum) {
+		this.redpacketnum = redpacketnum;
+	}
 	public String getOnthertitle() {
 		return onthertitle;
 	}
