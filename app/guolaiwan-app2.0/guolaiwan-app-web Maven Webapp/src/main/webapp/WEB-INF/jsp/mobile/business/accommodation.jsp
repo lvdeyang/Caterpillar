@@ -82,14 +82,15 @@ html, body {
 	background:#E1E1E1 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
+	
 }
 
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
+	font-family: "微软雅黑" !important;
 }
 /* 页面样式 */
 .header {
@@ -303,7 +304,7 @@ html, body {
 							 html.push('<div class="zhifu-in">');
 							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>'); 
 							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>'+distance[i]+'</span>km</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+shownum[i]+'人来过</span></p>');
+							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:14px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+shownum[i]+'人来过</span></p>');
 							 html.push('</div></div></div></a>');
 							}
 					}
