@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,6 +32,7 @@ import com.guolaiwan.bussiness.admin.dao.RoleDAO;
 import com.guolaiwan.bussiness.admin.dao.RoleMenuDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
+import com.guolaiwan.bussiness.admin.dao.VoteImposeDao;
 import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
 import com.guolaiwan.bussiness.admin.enumeration.CompanyType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
@@ -60,6 +62,7 @@ public class ContextListener extends InitLoader {
 	private OrderInfoDAO conn_OrderInfo;
 	private BalanceDAO conn_Balance;
 	private VoteProductDAO voteProductDao;
+	private VoteImposeDao voteImposeDao;
 
 	@Override
 	public void customInitialize() {
@@ -211,10 +214,15 @@ public class ContextListener extends InitLoader {
 
 	private void foodCompetition(){ // 美食大赛
 		voteProductDao = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.VoteProductDAO");
+		voteImposeDao = SpringContext.getBean("com.guolaiwan.bussiness.admin.dao.VoteImposeDao");
 		// 定时排序
 		TimerTask timrTask = new TimerTask() {
 			@Override
 			public void run() {
+				long current=System.currentTimeMillis();//当前时间毫秒数
+		        long zero=current/(1000*3600*24)*(1000*3600*24)-TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+		        long twelve=zero+24*60*60*1000-1;
+		        long time = new Date().getTime();
 				// 定时排序
 				List<VoteProductPO> voteProduct = 	voteProductDao.getVoteProduct();
 				if(voteProduct != null){
@@ -235,7 +243,6 @@ public class ContextListener extends InitLoader {
 								return 1;
 							}
 						};
-
 					});
 
 					/*for(int i = 0; i < 4; i++){
@@ -246,6 +253,16 @@ public class ContextListener extends InitLoader {
 					}*/
 					int index = 0;
 					for(int i = 0; i < voteProduct.size(); i++){
+						
+						if(time >= twelve-65000 && time <= twelve) {
+							int manvotes = voteImposeDao.countByPid(voteProduct.get(i).getProductId()+"");
+							long peoplevotenum = voteProduct.get(i).getPeoplevotenum();
+							voteProduct.get(i).setAllvotes(manvotes+peoplevotenum);
+							voteProduct.get(i).setPeoplevotenum(manvotes+peoplevotenum);
+							voteProductDao.saveOrUpdate(voteProduct.get(i));
+							voteImposeDao.delByProduct(voteProduct.get(i).getProductId()+"");
+						}
+						
 						if (!voteProduct.get(i).getId() .equals( listProduct.get(i).getId() )) {
 							index = i;
 							System.out.println(voteProduct.get(i).getProductName());

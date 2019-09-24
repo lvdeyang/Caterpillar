@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.guolaiwan.bussiness.admin.po.VoteImposePo;
 
@@ -14,6 +15,7 @@ import pub.caterpillar.orm.hql.DeleteHql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 @Component
+@Repository("com.guolaiwan.bussiness.admin.dao.VoteImposeDao")
 public class VoteImposeDao extends AbstractBaseDao<VoteImposePo> {
 	public VoteImposePo getVoteImposePo(String userId, String productId) {
 		QueryHql hql = this.newQueryHql();
@@ -111,6 +113,18 @@ public class VoteImposeDao extends AbstractBaseDao<VoteImposePo> {
 	public void deleteByProduct(String productId) {
 		DeleteHql cHql = this.newDeleteHql();
 		cHql.andBy("productId", Condition.eq, productId);
+		this.deleteByHql(cHql);
+	}
+	
+	/**
+	 * 按照productId删除投票记录
+	 * @param productId
+	 * @return
+	 */
+	public void delByProduct(String productId) {
+		DeleteHql cHql = this.newDeleteHql();
+		cHql.andBy("productId", Condition.eq, productId);
+		cHql.andBy("poll", Condition.eq, 1);
 		this.deleteByHql(cHql);
 	}
 }

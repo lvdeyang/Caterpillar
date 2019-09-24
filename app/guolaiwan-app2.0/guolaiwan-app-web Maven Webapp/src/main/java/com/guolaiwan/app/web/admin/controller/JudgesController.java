@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -202,8 +203,12 @@ public class JudgesController {
 			hashMap.put("msg", "err");
 			return hashMap;
 		}
-		Date startTime = getStartTime();
-		Date endTime = getEndTime();
+		VoteProductPO voteProductPO = voteProductDao.getVoteProduct(Long.parseLong(productId));
+		long current=System.currentTimeMillis();//当前时间毫秒数
+        long zero=current/(1000*3600*24)*(1000*3600*24)-TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+        long twelve=zero+24*60*60*1000-1;
+		Date startTime = new Date(zero);
+		Date endTime = new Date(twelve);
 		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong(optionId));
 		try {
 			Map<String, String> hashMap = new HashMap<String, String>();
@@ -223,30 +228,8 @@ public class JudgesController {
 				voteImposePo1.setPoll(1);
 				voteImposePo1.setProductId(productId);
 				voteImposeDao.save(voteImposePo1);
-				//将票数封装到后台展示的po中
-				VoteProductPO voteProduct = voteProductDao.getVoteProduct(Long.parseLong(productId));
-				//订单数量
-				int ordercount = voteImposeDao.buyCountByPid(voteProduct.getProductId()+"");
-				//此商品的所有群众投票数
-				int manvotes = voteImposeDao.countByPid(voteProduct.getProductId()+"");
-				List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProduct.getId());
-				long score=0;
-				long avg=0;
-				if(all!=null){
-					for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
-						score+=judgesVoteMsgPO.getScore();
-					}
-					score=score/all.size();
-				}
-				if(score<=10){
-					avg=score*10;
-				}else{
-					avg=score;
-				}
-				double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
-				voteProduct.setAllvotes(allcount);
-				voteProduct.setPeoplevotenum(count+1);
-				voteProductDao.saveOrUpdate(voteProduct);
+				voteProductPO.setAllvotes(voteProductPO.getAllvotes()+1);
+				voteProductDao.saveOrUpdate(voteProductPO);
 				hashMap.put("msg", "1");
 				hashMap.put("count", count+"");
 				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
@@ -263,31 +246,7 @@ public class JudgesController {
 	}
 	
 	
-	/**
-	 * 获得当天的0点
-	 * @return 当天的0点
-	 */
-	private static Date getStartTime() {
-		Calendar todayStart = Calendar.getInstance();
-		todayStart.set(Calendar.HOUR, 0);
-		todayStart.set(Calendar.MINUTE, 0);
-		todayStart.set(Calendar.SECOND, 0);
-		todayStart.set(Calendar.MILLISECOND, 0);
-		return todayStart.getTime();
-	}
- 
-	/**
-	 * 获得当天的23.59.59
-	 * @return 当天的23.59.59
-	 */
-	private static Date getEndTime() {
-		Calendar todayEnd = Calendar.getInstance();
-		todayEnd.set(Calendar.HOUR, 23);
-		todayEnd.set(Calendar.MINUTE, 59);
-		todayEnd.set(Calendar.SECOND, 59);
-		todayEnd.set(Calendar.MILLISECOND, 999);
-		return todayEnd.getTime();
-	}
+	
 
 	// 限制购买的方法
 	// 返回值为0的时候次数已达到5次，为1的时候可以投票，为2的时候服务器出现异常--------------------有点问题后面再改
@@ -387,8 +346,11 @@ public class JudgesController {
 	@ResponseBody
 	@RequestMapping(value = "/getvoteproduct", method = RequestMethod.GET)
 	public List<Map<String, String>> getvoteproduct(String id,String userId,String optionId,Integer page) {
-		Date startTime = getStartTime();
-		Date endTime = getEndTime();
+		long current=System.currentTimeMillis();//当前时间毫秒数
+        long zero=current/(1000*3600*24)*(1000*3600*24)-TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+        long twelve=zero+24*60*60*1000-1;
+		Date startTime = new Date(zero);
+		Date endTime = new Date(twelve);
 		List<VoteProductPO> getvoteproduct=new ArrayList<VoteProductPO>();
 		//按照模块id获取投票的商品
 		getvoteproduct = voteProductDao.getvoteproducts(Long.parseLong(id),page,pageSize);
@@ -407,6 +369,7 @@ public class JudgesController {
 			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
 			//此商品的所有群众投票数
 			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			int allvotes = (int) voteProductPO.getAllvotes();
 			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
 			long score=0;
 			long avg=0;
@@ -422,6 +385,7 @@ public class JudgesController {
 				avg=score;
 			}
 			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
+			double allcount1=(allvotes*voteOption.getPepolevote())+(((allvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
 			//封装所有的数据
 			hashMap.put("avg", score+"");
 			hashMap.put("count", count+"");
@@ -429,10 +393,10 @@ public class JudgesController {
 			hashMap.put("productname", voteProductPO.getProductName());
 			hashMap.put("productId", productPO.getId()+"");
 			hashMap.put("OutOfPrint", ordercount+"");
-			hashMap.put("allvotes", (int)voteProductPO.getAllvotes()+"");
+			hashMap.put("allvotes", (int)allcount1+"");
 			hashMap.put("manvotes", manvotes+"");
 			hashMap.put("ranking", voteProductPO.getRanking()+"");
-			hashMap.put("productvotes", allcount+"");
+			hashMap.put("productvotes", allcount+allcount1+"");
 			hashMap.put("hotel", productPO.getProductMerchantName());
 			hashMap.put("image", productPO.getProductShowPic());
 			list.add(hashMap);
@@ -496,8 +460,11 @@ public class JudgesController {
 		String userId=request.getParameter("userId");
 		String name=request.getParameter("name");
 		String optionId=request.getParameter("optionId");
-		Date startTime = getStartTime();
-		Date endTime = getEndTime();
+		long current=System.currentTimeMillis();//当前时间毫秒数
+        long zero=current/(1000*3600*24)*(1000*3600*24)-TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+        long twelve=zero+24*60*60*1000-1;
+		Date startTime = new Date(zero);
+		Date endTime = new Date(twelve);
 		//按照模块id获取投票的商品
 		List<VoteProductPO> getvoteproduct = voteProductDao.getvoteproduct(name);
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();

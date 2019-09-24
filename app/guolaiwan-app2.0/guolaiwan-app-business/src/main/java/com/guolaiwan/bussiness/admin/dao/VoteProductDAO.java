@@ -39,6 +39,13 @@ public class VoteProductDAO extends AbstractBaseDao<VoteProductPO> {
 		int count = this.countByHql(cHql);
 		return count;
 	}
+	
+	public int countByPIdMId(long mId) {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("modularcode", Condition.eq, mId);
+		int count = this.countByHql(cHql);
+		return count;
+	}
 
 	public void deleteByMoId(long moId) {
 		DeleteHql dHql = this.newDeleteHql();
