@@ -105,21 +105,12 @@ p{
 </style>
 </head>
 <!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
-<script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
-<script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
- <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
-<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"> 
+
 <script type="text/javascript">
 $(function(){
 })
 </script>
 <body>
-<img style="width:45%;position: absolute;top:18.5%;left:50%;margin-left:-22.5%;" src="lib/images/guanzhu.png">
-<p style="width:90%;position: absolute;top:55%;left:50%;margin-left:-45%;text-align: center;">扫码关注，服务、优惠都不少~</p>
+   关注公众号页面
 </body>
 </html>
