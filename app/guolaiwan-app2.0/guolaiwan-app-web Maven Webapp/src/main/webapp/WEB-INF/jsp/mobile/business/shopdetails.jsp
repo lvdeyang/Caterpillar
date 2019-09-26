@@ -177,12 +177,76 @@ padding:10px 5px;
 <script type="text/javascript">
   $(function() {
 	getRecomment();
-
+    consoleLog();
+    getDistance();
 	var pingfen=${pingfen}+46/10;
 	if(pingfen>5)pingfen=5;
     $('.pingfen').html(pingfen+"分") ; 
 	});
+	
+	 var latitudes= 40.197173;
+	 var longitudes= 117.948431;
+	   //获取手机当前的经纬度
+     function consoleLog(){
+	    getloca();
+	    var loca = {};
+		function getloca() {
+			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				if (data === -1) return;
+				if (data) {
+					loca = data;
+					getLoation();
+				}
+			});
+		}
+   
+ 	function getLoation() {
+			wx.config({
+				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				//                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId : loca.appId, // 必填，公众号的唯一标识
+				timestamp : loca.timestamp, // 必填，生成签名的时间戳
+				nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+				signature : loca.signature, // 必填，签名，见附录1
+				jsApiList : [ 'checkJsApi', 'getLocation' ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+			wx.ready(function() {
+				wx.getLocation({
+					type : 'gcj02',
+					success : function(res) {
+						var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+						var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+						var speed = res.speed; // 速度，以米/每秒计  
+						var accuracy = res.accuracy; // 位置精度  
+						getCitys(latitude, longitude);
+						
+					},
+					cancel : function(e) {
+						//这个地方是用户拒绝获取地理位置  
+						alert("请打开GPS定位,");
+					}
+				});
+				wx.error(function(res) {});
+			});
+		}
+		
+		  function getCitys(latitude, longitude) { //通过经纬度   获取高德位置
+			latitudes = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
+			longitudes = (parseFloat(longitude)).toFixed(5);			
+			getDistance();
+		}    
 
+}   
+   //查询商户距离 
+   function getDistance(){
+       var url = window.BASEPATH + 'business/getRoomDist?latitude='+latitudes+'&merchantId=${merchantId}&longitude='+longitudes; 
+      $.get(url,null,function(msg){ 
+         $("#distance").text(msg);     
+      })         
+   }
 
 	function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH+'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
@@ -258,7 +322,7 @@ padding:10px 5px;
 	   <ul style="margin:0 0 0px 6%;">
 	    <li><p>${merchant.shopName}</p></li>
 	    <li><p><span class="pingfen" style="color:#EB6E1E;font-size:16px;"></span><span style="font-size:12px;margin-left:10px;">超棒</span></p></li>
-	    <li><p>距离您<span>1000</span>千米</p></li>
+	    <li><p>距离您<span id="distance"></span>千米</p></li>
 	    <li><p>联系电话：<span>${merchant.shopTel}</span></p></li>
 	   </ul> 
 	  </div>

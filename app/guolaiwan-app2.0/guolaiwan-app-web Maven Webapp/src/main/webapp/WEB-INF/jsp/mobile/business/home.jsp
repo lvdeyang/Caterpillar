@@ -345,12 +345,12 @@ $(function() {
 	}
 	
 	// 南山攻略需要的数据
-	  function getVideoPics(){       
+	  function getVideoPics(){	  	  	  	  	         
 		var url = window.BASEPATH + 'business/getVideoPics?merchantId='+${merchantId};
 		$.get(url, null, function(data){
 		    var html=[];
 		   	for(var i=0;i<data.length;i++){
-		   	      html.push("<div style='float:left;display:inline-block;width:30%;height:150px;margin-left:10px;margin-top:20px;border-top-left-radius: 6px;border-top-right-radius: 6px;overflow: hidden;'>");
+		   	      html.push("<div id="+data[i].id+" onclick='getStrategy(this.id)' style='float:left;display:inline-block;width:30%;height:150px;margin-left:10px;margin-top:20px;border-top-left-radius: 6px;border-top-right-radius: 6px;overflow: hidden;'>");
 		   	      html.push("<img style='width:100%;height:50%;border-radius: 6px;' src='"+data[i].textimg+"'/>");
 		   	      html.push("<img style='border-radius:50%;width:25px;height:25px;float:left;margin:5px 5%;' src='"+data[i].userimg+"'/>");
 		   	      html.push("<p style='color:#EC6D1E;margin:5px 5px;height:25px;line-height:25px;font-size:12px;'>"+data[i].username+"</p>");
@@ -378,6 +378,10 @@ $(function() {
 		   });
 		}
 		
+	//攻略详情跳转	
+	function getStrategy(id){
+    location.href=window.BASEPATH + 'business/gotoraidersdetails?id='+id; 
+	}	
 	function guessyoulive(){       		 
 		var url = window.BASEPATH + 'business/guessyoulive?id='+${merchantId};
 		$.get(url, null, function(data){
@@ -531,6 +535,7 @@ $(function() {
 	   <!-- 攻略  -->
 	  	<div  style="width:96%;padding:0 0 10px 0;text-align:center;margin:0 auto;background:#fff;position: relative;top:36px;overflow: hidden;" id="gl">
             <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/gongluess.png"/>攻略  </span> <span onclick="raiders()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>  
+         
         </div>
          <!-- 常见问题  -->
 	  	<div class="wenti"  style="width:96%;height:260px;margin:0 auto;background:#fff;position: relative;top:48px;overflow: hidden;">

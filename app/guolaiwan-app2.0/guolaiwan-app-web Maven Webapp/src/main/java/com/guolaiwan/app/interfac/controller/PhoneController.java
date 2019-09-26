@@ -7402,7 +7402,8 @@ public class PhoneController extends WebBaseControll {
 			orderBookDate = orderBookDate.replace("T", " ");
 			order.setOrderBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
 		}
-
+		//订单说明
+		order.setOrderRemark("9418");
 		// 会员ID
 		order.setUserId(userId);
 		if (user.getUserPhone() != null) {

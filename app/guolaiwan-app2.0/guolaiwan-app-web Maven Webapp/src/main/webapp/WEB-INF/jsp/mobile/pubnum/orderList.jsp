@@ -510,7 +510,7 @@ html, body {
 	       location.href=window.BASEPATH + 'pubnum/order/info?orderId='+codes[1];
 	    
 	  });
-	  getOrder(2);
+	  getOrder(2);	 
       function getOrder(type){
           var _uriorder = window.BASEPATH + 'pubnum/order/get?userId=${userId}&type='+type+'&uType=USER&ifpay=true';
           $.get(_uriorder, null, function(data){
@@ -593,8 +593,80 @@ html, body {
 			$('#tab'+type).children().remove();
 			$('#tab'+type).append(html.join(''));
 			
-		});
+		});	
+		 getTableOrder(2);	
       }
+      
+        // 美食订单
+	    function getTableOrder(type){	
+          var _uriorder = window.BASEPATH + 'business/tableOrder/get?userId=${userId}&type='+type+'&uType=USER&ifpay=true';
+          $.get(_uriorder, null, function(data){
+		    var tableslist = data.tableslist;
+					
+			if(tableslist.length>0){
+			     var html=[];
+				//订桌订单 			   			    
+			    html.push('<div class="weui-panel__bd">');
+				for(var i=0; i<tableslist.length; i++){					      					     				      						 
+					 for(var j = 0; j<tableslist[i].table_order.length; j++ ){						 			       					   
+				        var  table_order = tableslist[i].table_order;
+				        var  table = tableslist[i].table;
+				        html.push('<div class="weui-cells__title">'+tableslist[i].merchant.shopName);	
+				      		    
+	                    if(type==2){
+						html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+table_order[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
+						html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')							    
+						 } 
+					    html.push('</div>');
+				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg table" id="pro-'+table_order[j].id+'-'+table_order[j].merchantId+'">');
+					    html.push('<div class="weui-media-box__hd">');
+					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="http://www.guolaiwan.net/file/'+table[j].detailsImg+'">');
+					    html.push('</div>');
+					    html.push('<div class="weui-media-box__bd">');
+					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+table[j].tablename+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+parseInt(table_order[j].dishMoney)/100+'</h4>');
+					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+table_order[j].tableDate.replace('-','年').replace('-','月')+"日"+'</p>');
+					    html.push('</div>');				  
+					    html.push('</a>');				    
+				    }
+				}				
+				html.push('</div>');	
+					   
+			   $('#tab'+type).append(html.join(''));
+			}			
+			//未订桌订单展示
+			var disList = data.disList;
+	
+		   if(disList.length>0){
+			     var html=[];
+					   			    
+			    html.push('<div class="weui-panel__bd">');
+				for(var i=0; i<disList.length; i++){					      					     				      						 					 			          					   
+				        var  table_orders = disList[i].table_orders;				     
+				        html.push('<div class="weui-cells__title">'+disList[i].merchant.shopName);	
+	                    if(type==2){
+						html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+table_orders[0].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
+						html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')							    
+						 } 
+					    html.push('</div>');
+				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg table" id="pro-'+table_orders[0].id+'-'+table_orders[0].merchantId+'">');
+					    html.push('<div class="weui-media-box__hd">');
+					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="http://www.guolaiwan.net/file/'+tableslist[i].merchant.shopPic+'">');
+					    html.push('</div>');
+					    html.push('<div class="weui-media-box__bd">');
+					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">未订桌</h4>');
+					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+table_orders[0].tableDate.replace('-','年').replace('-','月')+"日"+'</p>');
+					    html.push('</div>');				  
+					    html.push('</a>');				    
+				    
+				}
+				html.push('</div>');
+			   
+			   $('#tab'+type).append(html.join(''));
+			} 		
+		});
+		   
+	   }
+      
       
       
       $(document).on('click','.icon-reply',function(){

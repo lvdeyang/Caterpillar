@@ -2223,7 +2223,7 @@ input[type="datetime-local"]:before{
 			  <div class="weui-cell" >
 			    <div class="weui-cell__hd" style="width:20%;float:left;"><label class="weui-label">入住日期</label></div>
 			    <div class="weui-cell__bd" style="width:80%;border:1px solid #CCC">
-			    	<input id="startDate" readonly  class="weui-input mydate" type="text" placeholder="请选择" disabled> 
+			    	<input id="startDate" readonly  class="weui-input mydate" type="text" placeholder="请选择"> 
 			      
 			    </div>
 			    <div class="weui-cell__bd"></div>

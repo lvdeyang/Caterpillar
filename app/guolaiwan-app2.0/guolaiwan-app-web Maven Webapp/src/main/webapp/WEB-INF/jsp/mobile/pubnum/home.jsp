@@ -857,7 +857,6 @@ return $.cookie(str);
 	    
 	      var codes=this.id.split('-');
 	      location.href=window.BASEPATH + 'pubnum/column/index?modularCode='+codes[1];
-	    
 	       
 	    });
 	    
@@ -885,17 +884,55 @@ return $.cookie(str);
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
-	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	        //景点模块	       
+	       if(codes[2] == 0001){	      
+	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=${modularCode}';
+	          }
+	      /*  //住宿模块
+	      else if(codes[2] == 0002){
+	         location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+codes[1];
+	       }  */
+	       //美食模块  
+	      else if(codes[2] == 0003){
+	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
+	       }
+	       //采摘板块
+	      else if(codes[2] == 2128){
+	      
+	        location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
+	      } 
+	       else{
+	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       }	       	       		     	         	         
 	       }
 	       
 	    
 	    });
 	    $(document).on('click','.merchant1',function(){
-	       var codes=this.id.split('-');
+	       var codes=this.id.split('-');	  
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
-	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	        //景点模块	       
+	       if(codes[2] == 0001){	      
+	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=0001';
+	          }
+	       /* //住宿模块
+	      else if(codes[2] == 0002){
+	         location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+codes[1];
+	       }  */
+	       //美食模块  
+	      else if(codes[2] == 0003){
+	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
+	       }
+	       //采摘板块
+	      else if(codes[2] == 2128){
+	      
+	        location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
+	      } 
+	       else{
+	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       }	       	       		     	         	         
 	       }
 	       
 	    
@@ -931,7 +968,7 @@ return $.cookie(str);
 	           html.push('<br />');
 	           html.push('<div class="zong" style="width:100%;position: relative;">');
 	              html.push('<button id="fav"class="collect" value="'+merchants[0].id+'" style="position: absolute;top:30%;left:80%;float:right;width:17%;height:35px;font-size:14px;border-radius: 25px;color:#F6A2A2;background:#ffffff;border:1px solid #F6A2A2 ;outline:none;margin-right:5%;z-index:10;">+ 收藏</button>');
-	           html.push('<div style="width:100%;margin-top:10px;float:left;" class="merchant1" id="merchant1-'+merchants[0].id+'">');
+	           html.push('<div style="width:100%;margin-top:10px;float:left;" class="merchant1" id="merchant1-'+merchants[0].id+'-'+merchants[0].modularCode+'">');
 		       html.push('<image style="width:60px;height:60px;float:left;margin-left:12px;" src="'+merchants[0].shopHeading+'"/>');
 		       html.push('<div style="width:50%;float:left;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;font-weight:bold;padding-left:12px;height:40px;">'+merchants[0].shopName+'</div>');
 		    
@@ -954,7 +991,7 @@ return $.cookie(str);
 		       html.push('<div style="margin-top:50px;'+addStyle+'" class="weui-panel__bd" class="columnRecomments">');
 			   html.push('<div class="weui-panel__bd">'); 
 			   for(var j=1;j<merchants.length;j++){
-				   html.push('<a  href="javascript:void(0);"  class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'">');
+				   html.push('<a  href="javascript:void(0);"  class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'-'+merchants[j].modularCode+'">');
 				   html.push('<div class="weui-media-box__hd">');
 				   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].shopHeading+'">');
 				   html.push('</div>');

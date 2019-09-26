@@ -334,7 +334,7 @@ function getRecomment(){
 	   
 	   <div style="width:100%;height:auto;padding:0 5%;background: #fff;margin:5px 0;">
 	     <p style="line-height: 40px;height:40px;margin:0;"><span style="font-size:18px;color:#EF8C52;">￥${product.productPrice}</span><span style="text-decoration:line-through;">￥${product.productOldPrice}</span></p>
-	     <p style="line-height: 40px;height:40px;margin:0;"><span>${product.productName}</span><span style="float:right;">已售100+</span></p>
+	     <p style="line-height: 40px;height:40px;margin:0;"><span>${product.productName}</span><span style="float:right;">已售${numOrder}+</span></p>
 	   </div>
 	   <!-- 优惠卷 -->
 	   <!--  <div style="width:100%;height:auto;padding:0 5%;background: #fff;margin:5px 0;">
