@@ -1619,23 +1619,6 @@ html, body {
 
 			  </a>
 
-			  
-
-			  <a class="weui-cell weui-cell_access">
-
-			    <div class="weui-cell__bd">
-
-			      <p id="closeadmin">退出登录</p>
-
-			    </div>
-
-			    <div class="weui-cell__ft">
-
-			    </div>
-
-			  </a>
-
-			  
 
 			  <a class="weui-cell weui-cell_access" href="distributor/selladminorder/index">
 
@@ -1667,7 +1650,19 @@ html, body {
 
 			  </a>
 
-			  
+			   <a class="weui-cell weui-cell_access">
+
+			    <div class="weui-cell__bd">
+
+			      <p id="closeadmin">退出登录</p>
+
+			    </div>
+
+			    <div class="weui-cell__ft">
+
+			    </div>
+
+			  </a> 
 
 			</div>
 
