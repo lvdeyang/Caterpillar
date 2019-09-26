@@ -175,36 +175,6 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 
-	
-	public boolean judgeIsFollow(String token,String openid){
-	    Integer subscribe = null;
-	    String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+token+"&openid="+openid+"&lang=zh_CN";
-	    try {
-	        URL urlGet = new URL(url);
-	        HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
-	        http.setRequestMethod("GET"); // 必须是get方式请求  
-	        http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-	        http.setDoOutput(true);
-	        http.setDoInput(true);
-	        http.connect();
-	        InputStream is = http.getInputStream();
-	        int size = is.available();
-	        byte[] jsonBytes = new byte[size];
-	        is.read(jsonBytes);
-	        String message = new String(jsonBytes, "UTF-8");
-	        JSONObject demoJson = JSON.parseObject(message);
-	        //System.out.println("JSON字符串："+demoJson);  
-	        subscribe = demoJson.getInteger("subscribe");
-	        is.close();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return 1==subscribe?true:false;
-	}
-	
-	
-	
-	
 	@Autowired
 	private UserInfoDAO conn_user;
 
@@ -221,6 +191,9 @@ public class PubNumController extends WebBaseControll {
 		String openid = "";
 		String nickname = "";
 		String headimgurl = "";
+		JSONObject userInfo = null;
+		boolean isfans =false;
+		HttpSession session = request.getSession();
 		// 获取授权access_token
 		if (!istest) {
 			JSONObject params = new JSONObject();
@@ -233,22 +206,36 @@ public class PubNumController extends WebBaseControll {
 			String access_token = accessTokenInfo.getString("access_token");
 			openid = accessTokenInfo.getString("openid");
 			//判断用户是否关注
-	     	String uu = "https://api.weixin.qq.com/cgi-bin/token?appid=" + WxConfig.appId + "&secret=" + WxConfig.appsrcret  + "&grant_type=client_credential";
+            if(openid==null){
+            	openid=session.getAttribute("openid").toString();
+            }
+			String uu = "https://api.weixin.qq.com/cgi-bin/token?appid=" + WxConfig.appId + "&secret=" + WxConfig.appsrcret  + "&grant_type=client_credential";
             String dd = HttpClient.get(uu);
             JSONObject jj = JSON.parseObject(dd);
             String token = String.valueOf(jj.get("access_token"));
-            if(judgeIsFollow(token,openid) == false){ //未关注
-            	System.out.println( " -------------------------------------------------------------------------------------");
-        		mv = new ModelAndView("mobile/business/focuson");
-        		return mv;
+			System.out.println("token:"+token);
+            String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+token+"&openid="+openid+"&lang=zh_CN";
+            params = new JSONObject();
+            result = HttpClient.get(url, params);
+			userInfo = JSON.parseObject(result);
+            System.out.println(result);
+            
+            
+            if(userInfo.getInteger("subscribe").equals(1)){ //未关注
+            	isfans=true;
+            	
             }
-			// 拉取用户详细信息
-			params = new JSONObject();
-			params.put("access_token", access_token);
-			params.put("openid", openid);
-			params.put("lang", "zh_CN");
-			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
-			JSONObject userInfo = JSON.parseObject(result);
+            if(isfans){
+            	session.setAttribute("type", "PHONENUM");
+            }else{
+            	session.setAttribute("type", null);
+            	params = new JSONObject();
+    			params.put("access_token", access_token);
+    			params.put("openid", openid);
+    			params.put("lang", "zh_CN");
+    			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
+    			userInfo = JSON.parseObject(result);
+            }
 			try {
 				nickname = EmojiFilter.emoji(userInfo.getString("nickname"));
 			} catch (Exception e) {
@@ -260,8 +247,6 @@ public class PubNumController extends WebBaseControll {
 		} else {
 			openid = "opVUYv7wr-zPKl92ilFpqB8yS82I";
 		}
-		/**/
-		// 测试
 
 		UserInfoPO userInfoPO = null;
 		List<UserInfoPO> users = conn_user.getUsersByOpenId(openid);
@@ -273,7 +258,6 @@ public class PubNumController extends WebBaseControll {
 				}
 			}
 		}
-
 		if (userInfoPO == null) {
 			userInfoPO = new UserInfoPO();
 			userInfoPO.setUpdateTime(new Date());
@@ -285,11 +269,15 @@ public class PubNumController extends WebBaseControll {
 			}
 			conn_user.save(userInfoPO);
 		}
-		HttpSession session = request.getSession();
-		session.setAttribute("type", "PHONENUM");
+
 		session.setAttribute("userId", userInfoPO.getId());
 		session.setAttribute("openid", openid);
-		mv = new ModelAndView("redirect:" + rUrl);
+		if(isfans){
+			mv = new ModelAndView("redirect:" + rUrl);
+		}else{
+			mv = new ModelAndView("mobile/business/focuson");
+		}
+		
 		return mv;
 	}
 
