@@ -18,7 +18,11 @@
         <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
         <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
     </head>
-    
+    <style>
+    .layui-layer-btn0{
+    display: none !important;
+    }
+    </style>
     <body>
         <div class="x-body" style="height:1500px">
         	<form class="layui-form layui-form-pane">
@@ -496,7 +500,6 @@
         <script src="<%=request.getContextPath() %>/layui/js/x-layui.js" charset="utf-8">
         </script>
         <script>
-        
          //实例化编辑器
         	var str = "${product.productMorePic}";
         	var strA = str.split(",");
@@ -618,6 +621,9 @@
           	var uuid = $("#uuid").val();
           	audit(pass,advice,uuid,message); 
           	layer.alert(message);
+          	 	setInterval(function() {
+           		parent.window.location.reload();
+           	}, 2000)
            } 
             
            function nopass(){
@@ -631,6 +637,9 @@
           	var uuid = $("#uuid").val(); 
            	audit(pass,advice,uuid,message);  
            	layer.alert(message);
+           	setInterval(function() {
+           		parent.window.location.reload();
+           	}, 2000)
             } 
            
             function audit(pass,advice,uuid,message){
