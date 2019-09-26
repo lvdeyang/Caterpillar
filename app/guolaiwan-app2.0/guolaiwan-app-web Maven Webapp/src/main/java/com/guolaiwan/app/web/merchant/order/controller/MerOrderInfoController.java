@@ -52,7 +52,12 @@ public class MerOrderInfoController extends BaseController{
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		
 		String orderNo = request.getParameter("orderNo");
-		OrderInfoPO order = conn_OrderInfo.getByRoderNo(orderNo);
+		OrderInfoPO order = null;
+		if(orderNo.length()>6){
+			order = conn_OrderInfo.getByRoderNo(Long.parseLong(orderNo));
+		}else{
+			order = conn_OrderInfo.getByRoderNo(orderNo);
+		}
 		if(order==null){
 			strMap.put("msg", "nothave");
 			return strMap;
