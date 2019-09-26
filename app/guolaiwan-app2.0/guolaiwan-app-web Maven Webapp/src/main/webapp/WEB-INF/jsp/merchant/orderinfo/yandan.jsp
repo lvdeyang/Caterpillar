@@ -17,9 +17,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
-        <link rel="stylesheet" href="<%=path %>/layui/css/x-admin.css" media="all">
+        <link rel="stylesheet" href="<%=path%>/layui/css/x-admin.css" media="all">
     </head>
     <body>
+    <div  style="display: none;">
+		<!--print-->
+    			<div><span style="font-size:20px">订单详情</span></div>
+    			<hr >
+    			<p class="ORDERNO"></p>
+    			<p class="CREATEDATE"></p>
+    			<p class="MERCHANTNAME"></p>
+				<hr >
+    			<p class="PRODUCTNAME"></p>
+    			<p class="PRODUCTPRICE"></p>
+    			<p class="ALLMONEY"></p>
+				<p class="PAYMODE"></p>
+				<hr >
+				<p class="USERNAME"></p>
+				<p class="USERTEL"></p>
+				<hr >
+    			<p style="font-size:20px;">已验单！</p>
+				<p class="YDTIME"></p>
+		<!--end-->
+ 		</div>
         <div class="x-nav">
             <span class="layui-breadcrumb">
               <a><cite>首页</cite></a>
@@ -56,6 +76,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div id="view" hidden="hidden"></div>
         <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
         <script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
+        <script src="<%=path %>/layui/js/jquery.min.js" charset="utf-8">"></script>
+		<script src="<%=path %>/layui/js/jQuery.print.min.js" charset="utf-8">"></script>
         <script>
         
         
@@ -82,13 +104,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              document.activeElement.id   获取焦点元素id
              
               */
+              $(function(){
+               $(".layui-layer-setwin").click(function() { 
+  				alert("111")
+			})
+              })
+              
+              
              $(document).click(function(e) { 
   				var clickId = $(e.target).attr("id")    
   				if(clickId!="wOrderNo"){
   					$("#sOrderNo").focus();
   				}
 			})
-              
+           
               
                table.on('tool(ydList)', function(obj){
     				var data = obj.data;
@@ -135,7 +164,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								getydList();
 								$("#sOrderNo").focus();
 								$("#cn").text(msg.count);
-							
+								$('.ORDERNO').text("订单号："+msg.order.orderNO);
+								$('.CREATEDATE').text("下单时间："+msg.order.createDate)
+								$('.MERCHANTNAME').text("商家名称："+msg.order.shopName)
+								$('.PRODUCTNAME').text("商品："+msg.order.productName+"X"+msg.order.productNum)
+								$('.PRODUCTPRICE').text("单价："+msg.order.productPrice)
+								$('.ALLMONEY').text("总金额："+msg.order.orderAllMoney)
+								$('.PAYMODE').text("支付方式："+msg.order.payMode)
+								$('.USERNAME').text("用户："+msg.order.userName)
+								$('.USERTEL').text("手机号："+msg.order.userTel)
+								$('.YDTIME').text("验单时间："+msg.order.ydDate)
+								doPrint1();
 							})      						
          						
          				//没有订单
@@ -234,8 +273,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 	 		shadeClose: true, //开启遮罩关闭
 		 	 		btn:"确定",
 		 	 		yes:function(index){
-		 	 			layer.close(index);
-		 	 			$("#sOrderNo").focus();
+			 	 			layer.close(index);
+			 	 			$("#sOrderNo").focus();
 		 	 		},
 		  			content: $("#view")
 				});
@@ -251,7 +290,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </script>
         <script	type="text/html" id="orderInfoTpl">
  		<div style="margin:22px">
-    		<div>
+    		<div calss="print">
     			<div><span style="font-size:20px">订单详情</span></div>
     			
     			<hr >
@@ -266,15 +305,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				用户：{{   d.order.userName}}<br>
 				手机号：{{   d.order.userTel}}
 				<br>
-				<br>
 	{{# if( d.order.orderState=="已验单" ){ }}
-    			<span style="font-size:20px;">已验单！</span>验单时间：{{   d.order.ydDate}}
+    			<p style="font-size:20px;">已验单！</p>
+				验单时间：{{   d.order.ydDate}}<br>
 	{{# }else{ }}  
 				<span style="font-size:20px;color:red">{{d.order.orderState}}</span>
 	{{# } }} 
  		</div>
     	</div>
+
+        
+
         </script>
+        <script>
+        
+      function doPrint1() {
+        bdhtml=window.document.body.innerHTML;
+        start="<!--print-->"; //开始打印标识字符串有12个字符
+        end="<!--end-->"; //结束打印标识字符串
+        prnhtml=bdhtml.substr(bdhtml.indexOf(start)+12); //从开始打印标识之后的内容
+        prnhtml=prnhtml.substring(0,prnhtml.indexOf(end)); //截取开始标识和结束标识之间的内容
+        window.document.body.innerHTML=prnhtml; //把需要打印的指定内容赋给body.innerHTML
+        window.print(); //调用浏览器的打印功能打印指定区域
+        window.document.body.innerHTML=bdhtml; // 最后还原页面
+      }
+        
+        </script>
+        
+
        
     </body>
 </html>

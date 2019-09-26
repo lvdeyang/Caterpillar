@@ -203,6 +203,16 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 			return null;
 		return orders.get(0);
 	}
+	
+	// 后台验单
+	public OrderInfoPO getByRoderNo(Long orderNo) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("id", Condition.eq, orderNo);
+		List<OrderInfoPO> orders = findByHql(hql);
+		if (orders == null || orders.size() == 0)
+			return null;
+		return orders.get(0);
+	}
 
 	/**
 	 * app专用
