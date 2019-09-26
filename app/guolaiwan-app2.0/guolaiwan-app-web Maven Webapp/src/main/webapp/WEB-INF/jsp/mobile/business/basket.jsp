@@ -976,7 +976,7 @@ color: #EC6D1E!important;
 	        location.href=window.BASEPATH + '/business/gotoroomdetails?roomId='+roomId+'&inRoomDate='+inRoomDate+'&outRoomDate='+outRoomDate;
 	       }
 	       //采摘
-	       if(ids[4]== "2126"){
+	       if(ids[4]== "2128"){
 	        location.href=window.BASEPATH +'/business/gotodetailspage?productId='+ids[2];
 	       }
 	     

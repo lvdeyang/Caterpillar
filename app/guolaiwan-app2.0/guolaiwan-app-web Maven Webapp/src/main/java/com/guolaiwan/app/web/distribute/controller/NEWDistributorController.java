@@ -795,9 +795,9 @@ public class NEWDistributorController {
 	@RequestMapping(value = "/app/login/{userId}")
 	public ModelAndView appLogin(
 			HttpServletRequest request,@PathVariable long userId) throws Exception{
+				
 		ModelAndView mv = null;
 		HttpSession session = request.getSession();
-
 		if(session.getAttribute("userId")==null){
 			session.setAttribute("type","APP");
 			session.setAttribute("userId", userId);
@@ -808,9 +808,11 @@ public class NEWDistributorController {
 				session.setAttribute("userId", userId);
 			}
 		}
-
+		List<DistributorPo> distributorPos = new ArrayList<DistributorPo>();
 		UserInfoPO user=conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
-		List<DistributorPo> distributorPos = conn_distributor.queryByUserId(Long.parseLong(session.getAttribute("userId").toString()));
+		if(userId != -1){
+		     distributorPos = conn_distributor.queryByUserId(Long.parseLong(session.getAttribute("userId").toString()));
+		}		
 		mv = new ModelAndView("mobile/guolaiwan/distribute-personal");
 		if(!distributorPos.isEmpty()){
 			mv.addObject("distributorId", distributorPos.get(0).getId());
@@ -992,50 +994,48 @@ public class NEWDistributorController {
 	@JsonBody
 	@RequestMapping(value = "/admin/login", method = RequestMethod.POST)
 	public String distributorLogin(HttpServletRequest request) throws Exception {
-	    	//返回页面的状态值
-	    	String state = "0";
-	    	//创建 seession 获取 用户信息
-	    	HttpSession  session =  request.getSession();
-			//获取用户的手机账号
-			String phone = request.getParameter("phone");		
-			//获取 用户的 密码
-			String password = request.getParameter("password");		
-			//根据手机号 获取 分销商 信息		
-	
-		    if(conn_distributor.findByField("phone", phone).size()>0){ 
-		    	  List<DistributorPo> distributorPoss = conn_distributor.findByField("phone", phone);
-			//判断分销商属于什么状态
-		   if( distributorPoss.get(0).getStatus().equals(DistributorApplyStatus.PASSED)){
-			if (password != null && password.equals(distributorPoss.get(0).getPassword())) {
-				//登录成功  获的分销商 id 
-				   long distributorId =  distributorPoss.get(0).getId();
-				   session.setAttribute("userId", distributorPoss.get(0).getUserId());
-				   try{
-				   // 根据 分销商id 查询出中间表 用户id
-				   if(conn_distributorUser.getDistrUserByIds(distributorId).size()>0){
-				   List<DistributorUser> distributorUsers= conn_distributorUser.getDistrUserByIds(distributorId);
-			        long userid=  distributorPoss.get(0).getUserId();
-						for(DistributorUser distributorUser :distributorUsers){						
-							 if(userid == distributorUser.getUserId()) 
-							 { session.setAttribute("userId", distributorUser.getUserId());
-							   state= "success";
-							 }
-						}}else{
-							  DistributorUser str = new DistributorUser();
-							  str.setDistributorId(distributorPoss.get(0).getId());
-							  str.setUserId(distributorPoss.get(0).getUserId());
-							   conn_distributorUser.save(str);
-							   session.setAttribute("userId", distributorPoss.get(0).getUserId());
-							   state = "success";	}
-				   
-				   }catch(Exception e){
-					   
-					   state = "success";}
-						}else{state ="1";}
-						}else{state = "2";}		 						 					      	 
-						}else{state ="0";}						
-				           return state;                	   				
-	              }
+		String phone =  request.getParameter("phone");
+		String password =  request.getParameter("password");
+		if(phone == null || password == null){
+			return "0"; //账号或密码错误
+		}
+		 //根据userId 查询出信息
+		 boolean real = true; 
+		 HttpSession session =  request.getSession();
+		 long userId =(long)session.getAttribute("userId");
+		 List<DistributorPo> dis_list =  conn_distributor.findByField("userId",userId);
+         if(dis_list.size() > 0){
+        	 for(DistributorPo po : dis_list){
+        		 if(phone.equals(po.getPhone()) && password.equals(po.getPassword())){
+        			 if(po.getStatus() != DistributorApplyStatus.PASSED){
+        				 return "2";//正在审核状态中
+        			 }else{
+        				 real = false; 
+        			 }        			 
+        		 }
+        	 }        	        	 
+         }   
+          if(real){
+        	 //查询中间表进行确认登录
+        	List<DistributorUser> dUsers =  conn_distributorUser.findByField("userId", userId);
+        	if(dUsers.size() == 0){
+        		return "3";
+        	}else{
+        	    List<DistributorPo> dist_list  = conn_distributor.findByField("phone", phone);
+        	    //查询出所有用户下的id
+        	    for(DistributorUser user : dUsers){
+        	    	if((user.getDistributorId()+"").equals((dist_list.get(0).getId()+""))){
+        	    		if(dist_list.get(0).getStatus() != DistributorApplyStatus.PASSED){
+        	    			return "2";//正在审核状态中
+        	    		}
+        	    	}else{
+        	    		return "0";
+        	    	}
+        	    }        		      		
+        	}         	        	 
+         } 
+		return "success";
+	}
 
 	/**
 	 * 请求转发
@@ -1051,17 +1051,12 @@ public class NEWDistributorController {
 	/**
 	 * 
 	 *  退出功能
-	 * 
-	 *
 	 * */
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/admin/exitPage")
 	public ModelAndView exitPage(HttpServletRequest request){		
-		ModelAndView mView = new ModelAndView("redirect:/distributor/app/login/0");
-		HttpSession session = request.getSession();
-		String str = session.getAttribute("userId").toString();			
-		session.setAttribute("userId", "-1");
+		ModelAndView mView = new ModelAndView("redirect:/distributor/app/login/-1");		
 		return mView;
 	}
 

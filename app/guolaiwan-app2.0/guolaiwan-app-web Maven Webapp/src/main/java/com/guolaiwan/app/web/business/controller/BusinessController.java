@@ -505,7 +505,6 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("merchantId", merchantId);
 		return mv;
 	}
-
 	// 跳转拼团页面
 	@ResponseBody
 	@RequestMapping(value = "/group", method = RequestMethod.GET)
@@ -525,8 +524,7 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getgroupproduct", method = RequestMethod.GET)
 	public List<ProductVO> getgroupproduct(Long merchantId) throws Exception {
-		List<GroupBuyPO> findAll = groupbuyDao.findAll();
-		
+		List<GroupBuyPO> findAll = groupbuyDao.findAll();	
 		if(merchantId!=null&&merchantId!=0){
 			System.out.println("子级的商品");
 			List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
@@ -639,8 +637,8 @@ public class BusinessController extends WebBaseControll {
 			@Override
 			public int compare(MerchantPO o1, MerchantPO o2) {
 				// TODO Auto-generated method stub
-			int o1distance =(int)getDistance(Double.parseDouble(o1.getShopLatitude()),Double.parseDouble(o1.getShopLongitude()),latitude,longitude)*100;
-			int	o2distance =(int)getDistance(Double.parseDouble(o2.getShopLatitude()),Double.parseDouble(o2.getShopLongitude()),latitude,longitude)*100;
+			double o1distance =getDistance(Double.parseDouble(o1.getShopLatitude()),Double.parseDouble(o1.getShopLongitude()),latitude,longitude)*100;
+			double	o2distance =getDistance(Double.parseDouble(o2.getShopLatitude()),Double.parseDouble(o2.getShopLongitude()),latitude,longitude)*100;
 			if(o1distance > o2distance){
 				return 1;
 			}else{				
@@ -853,16 +851,31 @@ public class BusinessController extends WebBaseControll {
 		return mv; 
 	}
 	
+	//住宿商户距离
+	@ResponseBody
+	@RequestMapping(value = "/getRoomDist")
+	public String getRoomDist(HttpServletRequest request ,Double latitude, Double longitudem) throws Exception {
+		String state ="1.25";
+	   String merchantId = request.getParameter("merchantId");
+	   System.out.println("merchantId:"+merchantId);
+	    MerchantPO _merchant =  Mer_chant.get(Long.parseLong(merchantId));
+	    if(null ==  _merchant.getShopLatitude()  && _merchant.getShopLatitude().length() == 0){
+        Double distance	= getDistance(Double.parseDouble(_merchant.getShopLatitude()), Double.parseDouble(_merchant.getShopLongitude()), latitude, longitudem);
+        state = String.valueOf(distance);
+	    }
+        return state;
+	}
+	
 	// 搜索住宿的店家
 	@ResponseBody
 	@RequestMapping(value = "/gotohotel")
 	public ModelAndView goToHotel(HttpServletRequest request,String name, Double latitude, Double longitude) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		/*String name=new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");*/
+		String names = new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");
 		mv = new ModelAndView("mobile/business/hotel");
 		mv.addObject("merchantId", merchantId);
-		mv.addObject("name", name);
+		mv.addObject("name", names);
 		mv.addObject("latitude", latitude);
 		mv.addObject("longitude", longitude);
 		return mv; 	
@@ -876,7 +889,8 @@ public class BusinessController extends WebBaseControll {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
-	
+		List<Double> disList = new ArrayList<Double>();
+		    
 		Map<String, Object> hashMap = new HashMap<String, Object>();
 		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
 		List<Integer> pingfens=new ArrayList<Integer>(); 
@@ -884,6 +898,11 @@ public class BusinessController extends WebBaseControll {
 		for (MerchantPO merchantPO : allMerchant) {
 			if(merchantPO.getModularCode().equals(type)){
 				merchantlist.add(merchantPO);
+				if(merchantPO.getShopLatitude() == null || merchantPO.getShopLatitude().length() == 0){
+					disList.add(1.35);
+				}else{
+				disList.add(getDistance(Double.parseDouble(merchantPO.getShopLatitude()), Double.parseDouble(merchantPO.getShopLongitude()), latitude, longitude));
+				}
 				pingfens.add(orderInfoDao.GetCountbyPage(merchantPO.getId())/100);
 			}
 		}
@@ -912,7 +931,7 @@ public class BusinessController extends WebBaseControll {
 				}				
 			}
 		});
-		
+		hashMap.put("distance", disList);
 		hashMap.put("pingfens", pingfens);
 		hashMap.put("merlist", merlist);
 		return hashMap;
@@ -964,7 +983,8 @@ public class BusinessController extends WebBaseControll {
 		}
 		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
 			if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularCode().equals(code)){
-			MerchantPO  _merchant = Mer_chant.get(merchantChildrenPO.getChildrenId());	
+			 	
+			  MerchantPO  _merchant = Mer_chant.get(merchantChildrenPO.getChildrenId());	
 		       if(_merchant.getShopLatitude() != null  && _merchant.getShopLatitude().length() > 0 ){ 		    
 				distance.add(getDistance(Double.parseDouble(_merchant.getShopLatitude()), Double.parseDouble(_merchant.getShopLongitude()), latitude, longitude));
 		       }else{
@@ -982,6 +1002,25 @@ public class BusinessController extends WebBaseControll {
 		}
 		  
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(allmerchant, MerchantVO.class);
+		//查询商品的最小价格
+		for(MerchantVO vo : merlist){			
+		List<ProductPO> pro  =	conn_product.findByField("productMerchantID", vo.getId());
+		pro.sort(new Comparator<ProductPO>() {
+			
+			@Override
+			public int compare(ProductPO o1, ProductPO o2) {
+				// TODO Auto-generated method stub
+				if(o1.getProductPrice() > o2.getProductPrice()){
+					return 1;
+				}else{
+					return -1;
+				}
+				
+			}
+		});			
+		vo.setMinPrice(String.valueOf(pro.get(0).getProductPrice()));
+		}
+		
 		hashMap.put("pingfens", pingfens);
 		hashMap.put("merlist", merlist);
 		hashMap.put("distance", distance);
@@ -1164,7 +1203,6 @@ public class BusinessController extends WebBaseControll {
 		return mv;
 	}
 	
-	
 	// 采摘首页页面
 	@ResponseBody
 	@RequestMapping(value = "/gotopicking")
@@ -1260,12 +1298,15 @@ public class BusinessController extends WebBaseControll {
 	public ModelAndView goToDetailsPage(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		long productId=Long.parseLong(request.getParameter("productId"));
+		//查询顶单数量
+	    int numOrder =  orderInfoDao.countByField("productId", productId);		
 		ProductPO product = conn_product.get(productId);
 		List<ProductPO> productPO=new ArrayList<ProductPO>();
 		productPO.add(product);
 		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(productPO, ProductVO.class);
 		mv = new ModelAndView("mobile/business/detailspage");
 		mv.addObject("product", alllist.get(0));
+		mv.addObject("numOrder", numOrder);
 		return mv;
 	}
 	
@@ -1842,7 +1883,9 @@ public class BusinessController extends WebBaseControll {
 					//封装数据 筛选后的数据
 					List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
 					for (OrderInfoVO orderInfoVO : orderingOrders) {
-						
+						if(orderInfoVO.getOrderRemark() != null &&   "9418".equals(orderInfoVO.getOrderRemark())){							
+							  continue;
+						}						
 						//订单预订时间判断
 						if (!orderInfoVO.getOrderBookDate().equals("")) {
 							Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");	
@@ -2215,18 +2258,25 @@ public class BusinessController extends WebBaseControll {
 		@ResponseBody
 		@RequestMapping(value = "/tableOrder/get", method = RequestMethod.GET)
 		public Map<String, Object> getTableOrder(Long userId, int type, // 1.未支付;2.已支付;3.已发货;4.待退款;5.已退款;6.已收货;7.已评价
-				Long merchantId,String uType, HttpServletRequest request, HttpServletResponse response) throws Exception {
+				String uType, HttpServletRequest request, HttpServletResponse response) throws Exception {
 			    Map<String, Object> map = new HashMap<String, Object>();
-				SysConfigPO sysConfig = conn_sys.getSysConfig();						
+				SysConfigPO sysConfig = conn_sys.getSysConfig();
+				String merchantId = request.getParameter("merchantId");
 				//查询商户下的子商户
 				List<Long> merchList = new ArrayList<Long>();
-				merchList.add(merchantId);
-				List<MerchantChildrenPO> mChildrenPOs = merchant_Children.findByField("merchantId",merchantId);
-				if(mChildrenPOs != null){
-					for(MerchantChildrenPO po : mChildrenPOs){
+				if (null == merchantId){
+				List<TableStatusPO> tableStatusPOs = conn_tablestatus.findByField("userId", String.valueOf(userId));
+				for(TableStatusPO po : tableStatusPOs){
+					if(!merchList.contains(po.getMerchantId())){
+					merchList.add(po.getMerchantId());
+					}
+				}}else{
+					merchList.add(Long.parseLong(merchantId));
+				   List<MerchantChildrenPO> _merchant =	merchant_Children.findByField("merchantId", Long.parseLong(merchantId));
+					for(MerchantChildrenPO po : _merchant ){
 						merchList.add(po.getChildrenId());
 					}					
-				}
+				}				
 				if (uType.equals("USER")) {
 					switch (type) {
 					case 1:// 未支付					

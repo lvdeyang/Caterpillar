@@ -448,7 +448,8 @@ html, body {
 </head>
 
 <!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
+<jsp:include page="../../../mobile/commons/jsp/public.jsp"></jsp:include>
+
 
 <script type="text/javascript">
 
@@ -499,7 +500,8 @@ html, body {
 				   var pros=data.products;
 				   var html=[];
 				   for(var i=0;i<pros.length;i++){
-				     if(pros[i].merMId == '134'){return};
+				     if(pros[i].merMId == '134'){return};   
+				     if(pros[i].productClassCode == '0012' || pros[i].productClassCode == '2126' || pros[i].productClassCode == '0016'){
 				       if(i%2==0){
 				          html.push('<tr>');
 				       }
@@ -514,7 +516,7 @@ html, body {
 	                  if(i%2==1){
 				          html.push('</tr>');
 				      }
-				   
+				   }
 				   }
 				   if(pros.length==0){
 				     	html.push("<tr style='width:100%'><td style='width:100%;font-size:12px;text-align:center'>暂无数据</td></tr>");
@@ -543,7 +545,7 @@ html, body {
 				   $('#merchant_table').children().remove()
 				   var pros=data.merchants;
 				   var html=[];
-				   for(var i=0;i<pros.length;i++){
+				   for(var i=0;i<pros.length;i++){				  
 				       if(i%2==0){
 				          html.push('<tr>');
 				       }
@@ -556,15 +558,14 @@ html, body {
 	                     }
 	                  if(i%2==1){
 				          html.push('</tr>');
-				      }
-				   
+				      }				   
 				   }
+				   
 				   if(pros.length==0){
 				     	html.push("<tr style='width:100%'><td style='width:100%;font-size:12px;text-align:center'>暂无数据</td></tr>");
 				   }
 				   $('#merchant_table').append(html.join(''));
-				   
-				   
+				   				   
 				}
 			});
 
@@ -583,7 +584,7 @@ html, body {
 	         location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=1';
 	       }	       
 	      }
-	       //活动商品
+	       //活动商品  
 	       else{
 	       	   //景点普通票页面
 		     if(data == '0012'){
@@ -615,6 +616,10 @@ html, body {
 	        //景点
 	        if(ids[2] == '0001'){
 		    location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId='+ids[1];	
+	        }
+	        //商城
+	        if(ids[2] == '0004'){
+	         location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+ids[1];	
 	        }
 	      }
 	      

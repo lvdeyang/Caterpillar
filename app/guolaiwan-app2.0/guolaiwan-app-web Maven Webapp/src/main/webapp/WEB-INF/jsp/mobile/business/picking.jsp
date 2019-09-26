@@ -295,16 +295,16 @@ html, body {
 			</div>
 		</div>
 		<!-- 搜索  -->
-		  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;">
+		 <!--  <div style="height:40px;width:100%;line-height: 40px;text-align: center;background: #fff;position: relative;">
 		   <input placeholder="搜索" class="search" style="position: absolute;line-height: 30px;top:5px;margin-left:-40%;padding:0 15%;width:80%;height:30px;border-radius:18px;outline: none;border:none;background:#E0E0E0;text-align: center; " type="text">
 		   <img style="width:20px;height:20px;position: absolute;right:20%;top:10px;" onclick="getAllMerchant()" src="lib/images/sousuo.png"/>
-		  </div>
+		  </div> -->
 		<div class="content" id="content" >
 			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			  </div>
 			</div>
-		</div>
+		</div> 
 	</div>
 	
 	<!-- 采摘-->

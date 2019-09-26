@@ -82,15 +82,14 @@ html, body {
 	background:#E1E1E1 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
-	text-decoration: none !important;
 	
+	text-decoration: none !important;
 }
 
 * {
 	box-sizing: border-box;
 	list-style: none;
 	text-decoration: none;
-	font-family: "微软雅黑" !important;
 }
 /* 页面样式 */
 .header {
@@ -194,10 +193,11 @@ html, body {
 			}else{
 				return data.data;		
 			}
-			}
+			}			
 	   consoleLog();
 	   getRecomment();
-	    getLoation(); 
+	   /*  getLoation(); */ 
+	    getAllMerchant();
 	});
 	
 	
@@ -230,8 +230,8 @@ html, body {
 			    }
 			    });
 	  }
-	  var latitudes= null;
-	  var longitudes= null;
+	  var latitudes= 40.197173;
+	  var longitudes= 117.948431;
 	   //获取手机当前的经纬度
      function consoleLog(){
 	    getloca();
@@ -304,7 +304,7 @@ html, body {
 							 html.push('<div class="zhifu-in">');
 							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>'); 
 							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>'+distance[i]+'</span>km</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:14px;float:left;margin:10px 0 0 3%;">￥100元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+shownum[i]+'人来过</span></p>');
+							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+(data.merlist[i].minPrice)/100+'元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+shownum[i]+'人来过</span></p>');
 							 html.push('</div></div></div></a>');
 							}
 					}
@@ -345,11 +345,12 @@ layui.use('laydate', function(){
 	});
 }); 
 
-
 	function search(){
 		var name=$('.hotelname').val();
+		
    		location.href=window.BASEPATH + 'business/gotohotel?merchantId=${merchantId}&name='+name+'&type=0002&latitude='+latitudes+'&longitude='+longitudes;
    }
+
 
     
 </script>
@@ -385,8 +386,6 @@ layui.use('laydate', function(){
            <input class="hotelname" type="text" placeholder="关键字/酒店名" style="cursor: pointer;width:100%;height:50px;"> 
            <button onclick="search()" style="height:30px;width:50%;margin:30px auto;color:#fff;background:#EB6E1E;border:none;outline:none;border-radius:10px;">查询</button>
        </div>
-       
-       
        
        
        

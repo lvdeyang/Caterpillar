@@ -167,7 +167,7 @@ html, body {
 $(function(){
   consoleLog();
    getRecomment();
-  
+   getCate();
 });
  
 //轮播图以及下面的图片   	
@@ -188,9 +188,11 @@ function getRecomment(){
 			      });
 			}
 		});
-} 
-        var latitudes= null;
-		var longitudes= null;
+}
+
+
+        var latitudes= 40.18654;
+		var longitudes= 117.35987;
     //获取手机当前的经纬度
      function consoleLog(){
 	    getloca();
@@ -241,7 +243,7 @@ function getRecomment(){
 		  function getCity(latitude, longitude) { //通过经纬度   获取高德位置
 			latitudes = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
 			longitudes = (parseFloat(longitude)).toFixed(5);
-			getCate();
+			 getCate();
 		}    
 
 }
@@ -256,7 +258,11 @@ function getRecomment(){
 		         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].ShopName+'</p>');
 		         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data[i].ModularClass+'</span></p>');
 		         if(data[i].Date != null)html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">'+data[i].Date+'</p>'); 
+		         if(data[i].average < 100){
 		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>'+data[i].average+'</span>元</p>'); 
+		         }else{
+		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>30</span>元</p>');
+		         }
 		         var feature = data[i].feature;
 		         if(feature !=null && feature!=""){
 		            var split  =   feature.split(',');
@@ -279,7 +285,7 @@ function getRecomment(){
 	function getAllMerchant(){
 			var name=$('.search').val();
 			var url="<%=basePath%>cate/search";
-	            $.post(url,{"merchantId":${merchantId},"name":name,"type":"0003","latitude":latitude,"longitude":longitude},function(data){
+	            $.post(url,{"merchantId":${merchantId},"name":name,"type":"0003","latitude":latitudes,"longitude":longitudes},function(data){
 	            	$('.youxuan').empty();
 	            	var average = data.average;
 	            	var merlist = data.merlist;
@@ -294,7 +300,11 @@ function getRecomment(){
 					         html.push('<div class="youxuan-in" style="display: inline-block;">');  
 					         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+merlist[i].shopName+'</p>');
 					         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+merlist[i].modularClass+'</span></p>');
-					         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span></span>'+average[i]+'元</p>');
+					         if(data[i].average < 100){
+		                     html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>'+data[i].average+'</span>元</p>'); 
+		                     }else{
+		                      html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>30</span>元</p>');
+		                     }
 					         var feature = merlist[i].feature;
 					         if(feature !=null && feature!=""){ //商家特色
 					            var split  =   feature.split(',');
