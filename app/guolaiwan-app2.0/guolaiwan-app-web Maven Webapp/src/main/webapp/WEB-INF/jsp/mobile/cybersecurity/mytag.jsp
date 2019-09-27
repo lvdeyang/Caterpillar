@@ -143,7 +143,7 @@ $(".false").click(function(){
 </script>
 <body>
 <div class="homes">
-<div style="width:100%;border-bottom:1px solid #B6B6B6;overflow: hidden;padding:0 3%;position: fixed;top:0;background: #fff;z-index:1111;">
+<div style="width:100%;border-bottom:1px solid #B6B6B6;z-index:1111111111;overflow: hidden;padding:0 3%;position: fixed;top:0;background: #fff;">
  <p style="width:auto;line-height: 40px;float:right;"><img class="sou" style="width:20px;margin:0 5px;" src="lib/images/sousuo.png"><span class="manage">管理</span></p>
 </div>
 <p style="height:40px;"></p>
@@ -151,7 +151,7 @@ $(".false").click(function(){
  <div class="main_in" style="">
    <p style="text-align: center;line-height: 35px;font-size:150%;">客运公司：<span>遵化汽车站</span></p>
    <div style="width:20%;display: inline-block;float: left;">
-   <img style="width:60px;height:60px;border-radius:6px;margin:0 5%;" src="lib/images/wrong.png">
+   <img style="width:60px;height:60px;border-radius:6px;margin:0 5%;" src="lib/imgs/zhengjian.png">
    </div>
    <div style="width:78%;height:auto;display: inline-block;">
     <ul style="line-height: 25px;">
@@ -165,7 +165,7 @@ $(".false").click(function(){
      <li><p>位置：<span>河北省xxxxx</span></p></li>
     </ul>
    </div>
-   <img style="position: absolute;width:25px;top:5px;right:2%;" src="lib/images/yujing_red.gif">
+   <img style="position: absolute;width:25px;top:5px;right:2%;" src="lib/imgs/yujing_red.gif">
 		  <div  style="position: absolute;left:-8.7%;top:50%;margin-top:-11.2px;background: rgba(0,0,0,0);z-index:1111;"
 		class="weui-cells weui-cells_checkbox">
 		<label class="weui-cell weui-check__label" style="padding:0;margin:0;width:auto;"
@@ -182,7 +182,7 @@ $(".false").click(function(){
 		    <div class="main_in" style="">
    <p style="text-align: center;line-height: 35px;font-size:150%;">客运公司：<span>遵化汽车站</span></p>
    <div style="width:20%;display: inline-block;float: left;">
-   <img style="width:60px;height:60px;border-radius:6px;margin:0 5%;" src="lib/images/wrong.png">
+   <img style="width:60px;height:60px;border-radius:6px;margin:0 5%;" src="lib/imgs/zhengjian.png">
    </div>
    <div style="width:78%;height:auto;display: inline-block;">
     <ul style="line-height: 25px;">
@@ -196,7 +196,7 @@ $(".false").click(function(){
      <li><p>位置：<span>河北省xxxxx</span></p></li>
     </ul>
    </div>
-   <img style="position: absolute;width:25px;top:5px;right:2%;" src="lib/images/yujing_red.gif">
+   <img style="position: absolute;width:25px;top:5px;right:2%;" src="lib/imgs/yujing_red.gif">
 		  <div  style="position: absolute;left:-8.7%;top:50%;margin-top:-11.2px;background: rgba(0,0,0,0);z-index:1111;"
 		class="weui-cells weui-cells_checkbox">
 		<label class="weui-cell weui-check__label" style="padding:0;margin:0;width:auto;"
@@ -213,7 +213,7 @@ $(".false").click(function(){
 		    <div class="main_in" style="">
    <p style="text-align: center;line-height: 35px;font-size:150%;">客运公司：<span>遵化汽车站</span></p>
    <div style="width:20%;display: inline-block;float: left;">
-   <img style="width:60px;height:60px;border-radius:6px;margin:0 5%;" src="lib/images/wrong.png">
+   <img style="width:60px;height:60px;border-radius:6px;margin:0 5%;" src="lib/imgs/zhengjian.png">
    </div>
    <div style="width:78%;height:auto;display: inline-block;">
     <ul style="line-height: 25px;">
@@ -227,7 +227,7 @@ $(".false").click(function(){
      <li><p>位置：<span>河北省xxxxx</span></p></li>
     </ul>
    </div>
-   <img style="position: absolute;width:25px;top:5px;right:2%;" src="lib/images/yujing_red.gif">
+   <img style="position: absolute;width:25px;top:5px;right:2%;" src="lib/imgs/yujing_red.gif">
 		  <div  style="position: absolute;left:-8.7%;top:50%;margin-top:-11.2px;background: rgba(0,0,0,0);z-index:1111;"
 		class="weui-cells weui-cells_checkbox">
 		<label class="weui-cell weui-check__label" style="padding:0;margin:0;width:auto;"
@@ -243,10 +243,12 @@ $(".false").click(function(){
 		   </div>
 		   
 		   
-				   <div class="footer_in" style="height:50px; width:100%;background: #fff;position: fixed;bottom:0;display: none;">
+			
+  </div>
+  	   <div class="footer_in" style="height:50px; width:100%;background: #fff;position: fixed;bottom:0;display: none;">
 		       <div  style="background: rgba(0,0,0,0);z-index:1111;margin-top:13.5px;"
 				class="weui-cells weui-cells_checkbox">
-				<label class="weui-cell weui-check__label" style="padding:0;margin:0;width:40%;"
+				<label class="weui-cell weui-check__label" style="padding:0;margin:0;width:auto;border:none;outline:none;"
 					<div class="weui-cell__hd" >
 						<input type="checkbox" 
 							class="weui-check" > <i
@@ -259,7 +261,6 @@ $(".false").click(function(){
 				</label>
 				<button style="z-index:11111;background-image: -webkit-linear-gradient(left,#0E83E7,#063D8D );float:right;margin:-22px 20px 0 0;color:#fff;font-size:80%;border:none;outline:none;border-radius:18px;padding:2px 20px ">删除</button>   
 			  </div>
-  </div>
 </div> 
   <p style="height:50px;"></p>
   

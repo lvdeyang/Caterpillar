@@ -35,11 +35,11 @@
 <body>
  <div class="navbar" style="position:fixed;bottom:0px;margin:0;width:100%;height:auto;z-index:111111111;background:#fff;text-align: center;">
 		   <div id="index" style="display: inline-block;width:49%;">
-		   <img id="img_a" style="width:30px;height:30px;" src="lib/images/homes.png">
+		   <img id="img_a" style="width:30px;height:30px;" src="lib/imgs/homes.png">
 		   <p style="margin:0;font-size:13px;height:15px;">主页</p>
 		   </div>
 		   <div id="backet" style="display: inline-block;width:49%;">
-		    <img id="img_b" style="width:30px;height:30px;" src="lib/images/mys.png">
+		    <img id="img_b" style="width:30px;height:30px;" src="lib/imgs/mys.png">
 		    <p style="margin:0;font-size:13px;height:15px;">我的</p>
 		   </div>
 		
