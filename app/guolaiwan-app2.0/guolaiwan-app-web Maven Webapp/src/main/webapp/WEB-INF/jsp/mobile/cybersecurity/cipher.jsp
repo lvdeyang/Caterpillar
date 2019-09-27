@@ -97,7 +97,7 @@ html, body {
  overflow: hidden;
  line-height: 35px;
  padding:0 5%;
- font-size:70%;
+ font-size:80%;
  position: relative;
  }
  .nav ul li span{
@@ -105,7 +105,7 @@ html, body {
  font-weight:bold;
  }
   input::-webkit-input-placeholder {
- font-size:70% !important;
+ font-size:80% !important;
 }
 input{
 border:none;

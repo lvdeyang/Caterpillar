@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -854,15 +855,16 @@ public class BusinessController extends WebBaseControll {
 	//住宿商户距离
 	@ResponseBody
 	@RequestMapping(value = "/getRoomDist")
-	public String getRoomDist(HttpServletRequest request ,Double latitude, Double longitudem) throws Exception {
-		String state ="1.25";
+	public String getRoomDist(HttpServletRequest request ,Double latitude) throws Exception {
+	String state ="1.25";
 	   String merchantId = request.getParameter("merchantId");
-	   System.out.println("merchantId:"+merchantId);
+	   Double longitude = Double.parseDouble(request.getParameter("longitude"));
 	    MerchantPO _merchant =  Mer_chant.get(Long.parseLong(merchantId));
-	    if(null ==  _merchant.getShopLatitude()  && _merchant.getShopLatitude().length() == 0){
-        Double distance	= getDistance(Double.parseDouble(_merchant.getShopLatitude()), Double.parseDouble(_merchant.getShopLongitude()), latitude, longitudem);
+	    System.out.println("123:"+latitude+"--:"+longitude);
+	    if(null !=  _merchant.getShopLatitude()  && _merchant.getShopLatitude().length() != 0){
+        Double distance	= getDistance(Double.parseDouble(_merchant.getShopLatitude()), Double.parseDouble(_merchant.getShopLongitude()), latitude, longitude);
         state = String.valueOf(distance);
-	    }
+	    } 
         return state;
 	}
 	
@@ -872,10 +874,10 @@ public class BusinessController extends WebBaseControll {
 	public ModelAndView goToHotel(HttpServletRequest request,String name, Double latitude, Double longitude) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		String names = new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");
+		/*String names = new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");*/
 		mv = new ModelAndView("mobile/business/hotel");
 		mv.addObject("merchantId", merchantId);
-		mv.addObject("name", names);
+		mv.addObject("name", name);
 		mv.addObject("latitude", latitude);
 		mv.addObject("longitude", longitude);
 		return mv; 	

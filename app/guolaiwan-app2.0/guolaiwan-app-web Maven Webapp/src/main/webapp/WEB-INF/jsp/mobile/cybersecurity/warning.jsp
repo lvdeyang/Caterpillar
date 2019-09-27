@@ -245,7 +245,7 @@ layui.use('laydate', function(){
      <li><p>购买票数：<span>2张</span>  <span>位置：河北</span></p></li>
     </ul>
    </div>
-   <img style="height:25px;position: absolute;right:2%;top:5px;" src="lib/images/yujing_red.gif">
+   <img style="height:25px;position: absolute;right:2%;top:5px;" src="lib/imgs/yujing_red.gif">
    <img style="height:20px;position: absolute;right:3%;top:33px;" src="lib/imgs/tag.png">
  </div>
   
@@ -262,7 +262,7 @@ layui.use('laydate', function(){
      <li><p>购买票数：<span>2张</span>  <span>位置：河北</span></p></li>
     </ul>
    </div>
-   <img style="height:25px;position: absolute;right:2%;top:5px;" src="lib/images/yujing_red.gif">
+   <img style="height:25px;position: absolute;right:2%;top:5px;" src="lib/imgs/yujing_red.gif">
    <img style="height:20px;position: absolute;right:3%;top:33px;" src="lib/imgs/tag.png">
  </div>
 </div>

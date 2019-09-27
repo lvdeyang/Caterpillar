@@ -97,7 +97,7 @@ html, body {
  overflow: hidden;
  line-height: 35px;
  padding:0 5%;
- font-size:70%;
+ font-size:80%;
  position: relative;
  }
  .nav ul li span{
