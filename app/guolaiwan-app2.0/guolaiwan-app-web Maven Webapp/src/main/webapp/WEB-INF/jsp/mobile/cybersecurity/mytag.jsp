@@ -245,7 +245,7 @@ $(".false").click(function(){
 		   
 			
   </div>
-  	   <div class="footer_in" style="height:50px; width:100%;background: #fff;position: fixed;bottom:0;display: none;">
+  	   <div class="footer_in" style="height:50px; width:100%;background: #fff;position: fixed;bottom:0;display: none;z-index:1111">
 		       <div  style="background: rgba(0,0,0,0);z-index:1111;margin-top:13.5px;"
 				class="weui-cells weui-cells_checkbox">
 				<label class="weui-cell weui-check__label" style="padding:0;margin:0;width:auto;border:none;outline:none;"
@@ -265,7 +265,7 @@ $(".false").click(function(){
   <p style="height:50px;"></p>
   
   <div class="nav_in" style="width:100%;height:50px;position: fixed;top:0;background: #fff;padding:0 5%;line-height: 50px;display: none;">
-    <input placeholder="人名/景区/住宿/物流/客运/集会" style="float:left;margin-top:10px;width:88%;height:30px;border-radius:8px;outline:none;border:none;border:1px solid #B5B5B7;padding:0 0 0 10%;">
+    <input placeholder="人名/景区/住宿/物流/客运/集会" style="float:left;margin-top:10px;width:88%;height:30px;border-radius:8px;outline:none;border:none;border:1px solid #B5B5B7;padding:0 0 0 10%;line-height: 30px;">
     <span class="false" style="color:#B5B5B7;float:right;">取消</span>
     <img style="height:20px;position: absolute;left:7%;top:15px;" src="lib/images/sousuo.png">
   </div>
