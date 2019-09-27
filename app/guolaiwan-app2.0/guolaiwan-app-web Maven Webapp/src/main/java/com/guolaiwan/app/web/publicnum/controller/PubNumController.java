@@ -245,6 +245,7 @@ public class PubNumController extends WebBaseControll {
             
 			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
 		} else {
+			session.setAttribute("type", "PHONENUM");
 			openid = "opVUYv7wr-zPKl92ilFpqB8yS82I";
 		}
 
