@@ -1150,7 +1150,7 @@ html, body {
                                              支付(￥<span id="total">0</span>)
               </a> -->
 
-			<div style="width:100%;height:40px;position:fixed;bottom:2px">
+			<div style="width:100%;height:40px;position:fixed;bottom:2px;z-index:111111111111111;">
 				<a id="selectAll"
 					style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 					href="javascript:;" class="weui-btn weui-btn_primary"><span
