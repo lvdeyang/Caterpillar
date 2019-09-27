@@ -343,8 +343,7 @@ html, body {
  /*返回顶部  */
   $(function(){
    consoleLog();
-   getMerchantInfo();
-   getallteam(); 		
+   getMerchantInfo(); 		
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -475,7 +474,36 @@ html, body {
 		       
 	    }
     
- function getallteam(){
+  function  getMerchantInfo(){
+     var mer_path = window.BASEPATH +'/product/package/merInfo';
+     var mer_da = {"merchantId":${productMerchantID},"latitude":latitudes,"longitude":longitudes};
+     $.post(mer_path,mer_da,function(msg){       
+          if(msg === undefined) return;          
+          var merpo  =  msg.merpos;
+          var proinfo = msg.prosinfos;  
+              distance = msg.distance;
+               getallteam();
+                   
+          var html = [] ;
+          html.push('<ul>');
+          html.push('<li><p style="font-size:18px;">'+merpo.shopName+'</p></li>');
+          html.push('<li ><p id="_pro_name" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;">');        
+          html.push('</p></li>');
+          html.push(' <li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
+          /* html.push('<li><p>开放时间：'+msg.beginTime+'-'+msg.endTime+'</p></li>'); */
+          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+merpo.shopAddress+'&tocoord='+merpo.shopLongitude+','+merpo.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+merpo.shopAddress+'</a></p></li>');
+          html.push('</ul>');
+          $(".jieshao").append(html.join(''));  
+          for(var i = 0 ;i <proinfo.length;i++){           
+          var htms = [];         
+          
+           htms.push('<span >'+proinfo[i].productName+'</span>,');                         
+          $("#_pro_name").append(htms.join(''));  
+          }             
+     })  
+     
+  }
+   function getallteam(){
      var _uricoms = window.BASEPATH + '/product/package/list?merchantId='+${productMerchantID}+'&pageNum=1';	
      $.get(_uricoms, null, function(data){  
            var list =  data.productPOs;
@@ -504,34 +532,6 @@ html, body {
 	     	}
 	 });
 }
-
-  function  getMerchantInfo(){
-     var mer_path = window.BASEPATH +'/product/package/merInfo';
-     var mer_da = {"merchantId":${productMerchantID},"latitude":latitudes,"longitude":longitudes};
-     $.post(mer_path,mer_da,function(msg){       
-          if(msg === undefined) return;          
-          var merpo  =  msg.merpos;
-          var proinfo = msg.prosinfos;  
-              distance = msg.distance;
-                   
-          var html = [] ;
-          html.push('<ul>');
-          html.push('<li><p style="font-size:18px;">'+merpo.shopName+'</p></li>');
-          html.push('<li ><p id="_pro_name" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;">');        
-          html.push('</p></li>');
-          html.push(' <li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
-          /* html.push('<li><p>开放时间：'+msg.beginTime+'-'+msg.endTime+'</p></li>'); */
-          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+merpo.shopAddress+'&tocoord='+merpo.shopLongitude+','+merpo.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+merpo.shopAddress+'</a></p></li>');
-          html.push('</ul>');
-          $(".jieshao").append(html.join(''));  
-          for(var i = 0 ;i <proinfo.length;i++){           
-          var htms = [];         
-          
-           htms.push('<span >'+proinfo[i].productName+'</span>,');                         
-          $("#_pro_name").append(htms.join(''));  
-          }             
-     })  
-  }
    function commodity(id,state){
    var proId = id.split("-");
    if(state == '0'){   

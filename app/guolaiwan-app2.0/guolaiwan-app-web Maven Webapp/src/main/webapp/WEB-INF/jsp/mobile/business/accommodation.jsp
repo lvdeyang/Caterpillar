@@ -308,6 +308,7 @@ html, body {
 							 html.push('</div></div></div></a>');
 							}
 					}
+					$('.huodong').children().remove();
 			    	$('.huodong').append(html.join(''));
 	            	page++;
 	            })
