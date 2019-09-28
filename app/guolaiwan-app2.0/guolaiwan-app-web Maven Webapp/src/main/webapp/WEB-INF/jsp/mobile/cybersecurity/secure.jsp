@@ -132,6 +132,11 @@ function shebei(){
 }
 </script>
 <body>
+<p style="height:40px;line-height: 40px;margin-left:5%;">
+<a class="link-left" href="#side-menu" >
+<span  class="icon-reorder icon-large"></span>
+</a>
+</p>
  <div class="nav" style="width:100%;height:auto;padding:0px 2%;border-radius:6px;margin:5px 0;">
   <ul>
    <li><p style="width:100%;">警员号<span>xxxxx</span></p></li>

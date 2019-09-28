@@ -143,7 +143,10 @@ $(".false").click(function(){
 </script>
 <body>
 <div class="homes">
-<div style="width:100%;border-bottom:1px solid #B6B6B6;z-index:1111111111;overflow: hidden;padding:0 3%;position: fixed;top:0;background: #fff;">
+<div style="width:100%;line-height: 40px;border-bottom:1px solid #B6B6B6;z-index:1111111111;overflow: hidden;padding:0 3%;position: fixed;top:0;background: #fff;">
+ <a class="link-left" href="#side-menu">
+<span  class="icon-reorder icon-large"></span>
+</a>
  <p style="width:auto;line-height: 40px;float:right;"><img class="sou" style="width:20px;margin:0 5px;" src="lib/images/sousuo.png"><span class="manage">管理</span></p>
 </div>
 <p style="height:40px;"></p>

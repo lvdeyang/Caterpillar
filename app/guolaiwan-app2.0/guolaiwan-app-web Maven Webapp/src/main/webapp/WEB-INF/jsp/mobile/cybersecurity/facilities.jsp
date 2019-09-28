@@ -119,6 +119,9 @@ $(function(){
 </script>
 <body>
 <div style="width:100%;height:40px;line-height: 40px;background: #fff;padding:0 7%;border-bottom: 1px solid #D2D2D2;font-weight: bold;">
+<a class="link-left" href="#side-menu" >
+<span  class="icon-reorder icon-large"></span>
+</a>
 <span style="text-align: left;"></span><span style="float:right;">编辑</span>
 </div>
  <p style="width:100%;line-height: 40px;color:#A7A7A7;font-size:50%;padding:0 2%;">您可以删除列表中的设备，删除后在该设备登录需要进行身份验证。</p>

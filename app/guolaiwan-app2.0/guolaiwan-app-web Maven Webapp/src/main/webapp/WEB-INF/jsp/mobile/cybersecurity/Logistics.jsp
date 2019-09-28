@@ -223,6 +223,9 @@ layui.use('laydate', function(){
   });
 </script>
 <body>
+<a class="link-left" href="#side-menu" style="position: fixed;color:#fff;top:20px;left:5%;">
+<span  class="icon-reorder icon-large"></span>
+</a>
 <div class="nav">
     日期： <input style="background-color: rgba(0,0,0,0.0)" type="text" class="layui-input" id="test2" placeholder="请选择日期">
      物流公司：
