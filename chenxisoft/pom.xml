@@ -82,6 +82,9 @@
   	</dependencies>
   	
   	<build>
+	  	<configuration>
+			<includeSystemScope>true</includeSystemScope>
+		</configuration>
 	    <plugins>
 	        <plugin>
 	        	<groupId>org.apache.maven.plugins</groupId>
