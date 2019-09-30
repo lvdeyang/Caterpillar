@@ -500,6 +500,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	
 	  addProducntSortIndex();
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
@@ -714,7 +715,7 @@ html, body {
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
 	       //景点模块
-	       if('${modularCode}' == 0001){	      
+	       if('${modularCode}' == "0001"){	      
 	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=${modularCode}';
 	          }
 	      /*  //住宿模块
@@ -729,6 +730,10 @@ html, body {
 	      else if('${modularCode}' == 2128){
 	       location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
 	      } 
+	      //特产
+	       else if('${modularCode}' == "01"){
+	         location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	      }
 	       else{
 	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
 	       }	       	       
@@ -742,7 +747,7 @@ html, body {
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
 	          //景点模块
-	       if('${modularCode}' == 0001){	      
+	       if('${modularCode}' == "0001"){	      
 	         location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId='+codes[1];
 	          }
 	       /* //住宿模块
@@ -756,6 +761,10 @@ html, body {
 	       //采摘板块
 	       else if('${modularCode}' == 2128){
 	         location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
+	      } 
+	      //特产
+	       else if('${modularCode}' == "01"){
+	         location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
 	      } 
 	       else{
 	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];

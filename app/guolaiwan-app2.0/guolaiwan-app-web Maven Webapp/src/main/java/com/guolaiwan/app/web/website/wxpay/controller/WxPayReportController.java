@@ -115,6 +115,9 @@ public class WxPayReportController extends WebBaseControll {
 	@Autowired
 	private  MessageDAO messageDAO;
 	
+	@Autowired
+	private  MessageMiddleClientDao messageClientDAO;
+	
 	@ResponseBody
 	@RequestMapping(value = "/payreport", method = RequestMethod.POST)
 	public String pay(HttpServletRequest request,
@@ -268,11 +271,10 @@ public class WxPayReportController extends WebBaseControll {
 			System.out.println("判断此商品是分销商品");
 			String id = order.getId().toString();
 			String userName = "";
-			String consigneeName = conn_address.get(order.getMailAddress()).getConsigneeName();
-			if(consigneeName!=null){
-				userName=consigneeName;
+			if(conn_address.get(order.getMailAddress()).getConsigneeName()!=null){
+				userName=conn_address.get(order.getMailAddress()).getConsigneeName();
 			}else{
-				userName=messageDAO.getByOderId(order.getId()+"").getName();
+				userName=messageDAO.getByUserId(order.getUserId()).getName();
 			}
 			String buynum=String.valueOf(order.getProductNum());
 			String userTel = conn_address.get(order.getMailAddress()).getConsigneePhone();

@@ -202,7 +202,6 @@ html, body {
 							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data[i].productShowPic+'"/>');
 							 html.push('<div class="zhifu-in">');
 							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].productName+'</p>'); 
-							/*  html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>739</span>m</p>'); */
 							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+data[i].productPrice+'</span></p>');
 							 html.push('</div></div></div></a>');
 							}
@@ -256,14 +255,18 @@ html, body {
 			    $('#orderDate').html(data.order.payDate);
 			    $('#combo').html(data.order.comboName);
 			    $('#logistics').html(data.order.logisticsName);
-			    $('#cuserName').html(data.address.consigneeName);
-			    $('#cphone').html(data.address.consigneePhone);
 			    $('#bookspan').html(data.order.orderBookDate);
 			    $('#startspan').html(data.order.orderBookDate);
 			    $('#endspan').html(data.order.endBookDate);
-			    $('#caddress').html(data.address.consigneeAddress);
-			    
-			    
+			    if(data.address==null){
+				    $('#cuserName').html("");
+				    $('#cphone').html("");
+				    $('#caddress').html("");
+			    }else{
+				    $('#cuserName').html(data.address.consigneeName);
+				    $('#cphone').html(data.address.consigneePhone);
+				    $('#caddress').html(data.address.consigneeAddress);
+			    }
 			    
  			    if(data.order.bkCode=='0002'){
 			    	$('#startDate').show();
@@ -298,12 +301,18 @@ html, body {
 			    $('#orderDate').html(data.order.payDate);
 			    $('#combo').html(data.order.comboName);
 			    $('#logistics').html(data.order.logisticsName);
-			    $('#cuserName').html(data.address.consigneeName);
-			    $('#cphone').html(data.address.consigneePhone);
 			    $('#bookspan').html(data.order.orderBookDate);
 			    $('#startspan').html(data.order.orderBookDate);
 			    $('#endspan').html(data.order.endBookDate);
-			    $('#caddress').html(data.address.consigneeAddress);				        
+			    if(data.address==null){
+				    $('#cuserName').html("");
+				    $('#cphone').html("");
+				    $('#caddress').html("");
+			    }else{
+				    $('#cuserName').html(data.address.consigneeName);
+				    $('#cphone').html(data.address.consigneePhone);
+				    $('#caddress').html(data.address.consigneeAddress);
+			    }			        
 			   if( data.order.orderState=="已发货"){
 			   var html="";
 	          
