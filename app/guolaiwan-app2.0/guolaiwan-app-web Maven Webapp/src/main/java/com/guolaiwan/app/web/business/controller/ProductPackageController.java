@@ -815,6 +815,8 @@ public class ProductPackageController extends BaseController {
 		String paytype = pageObject.getString("paytype");		
 		String isCombo = pageObject.getString("isCombo");
 		String choice = pageObject.getString("choice");
+		SimpleDateFormat sf= new SimpleDateFormat("yyyy-MM-dd");
+		Date bookDate =sf.parse(pageObject.getString("bookDate"));
 		
 		OrderInfoPO order = new OrderInfoPO();
 			
@@ -980,7 +982,7 @@ public class ProductPackageController extends BaseController {
 		// 是否评价
 		order.setCommentIs(0);
 		// // 预订日期
-		// order.setOrderBookDate(date);
+		order.setOrderBookDate(bookDate);
 
 		if (pageObject.getString("source") != null) {
 			order.setSource(OrderSource.fromString(pageObject.getString("source")));

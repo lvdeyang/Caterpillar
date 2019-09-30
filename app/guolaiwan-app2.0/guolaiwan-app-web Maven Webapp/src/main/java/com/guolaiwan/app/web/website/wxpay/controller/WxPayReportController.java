@@ -270,14 +270,9 @@ public class WxPayReportController extends WebBaseControll {
 		}else{
 			System.out.println("判断此商品是分销商品");
 			String id = order.getId().toString();
-			String userName = "";
-			if(conn_address.get(order.getMailAddress()).getConsigneeName()!=null){
-				userName=conn_address.get(order.getMailAddress()).getConsigneeName();
-			}else{
-				userName=messageDAO.getByUserId(order.getUserId()).getName();
-			}
+			String userName=messageDAO.getByUserId(order.getUserId()).getName();
 			String buynum=String.valueOf(order.getProductNum());
-			String userTel = conn_address.get(order.getMailAddress()).getConsigneePhone();
+			String userTel = messageDAO.getByUserId(order.getUserId()).getPhone();
 			String startDate = df.format(order.getOrderBookDate());
 			String result="";
 			if(merchatId==358){
