@@ -713,7 +713,25 @@ html, body {
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
-		      location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       //景点模块
+	       if('${modularCode}' == 0001){	      
+	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=${modularCode}';
+	          }
+	      /*  //住宿模块
+	      else if('${modularCode}' == 0002){
+	         location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+codes[1];
+	       } */ 
+	       //美食模块  
+	      else if('${modularCode}' == 0003){
+	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
+	       }
+	       //采摘板块
+	      else if('${modularCode}' == 2128){
+	       location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
+	      } 
+	       else{
+	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       }	       	       
 		      $('.flag').val(1);
 		   }
 	    });
@@ -723,7 +741,25 @@ html, body {
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
-	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	          //景点模块
+	       if('${modularCode}' == 0001){	      
+	         location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId='+codes[1];
+	          }
+	       /* //住宿模块
+	        else if('${modularCode}' == 0002){
+	         location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+codes[1];
+	       }  */
+	       //美食模块  
+	        else if('${modularCode}' == 0003){
+	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
+	       }
+	       //采摘板块
+	       else if('${modularCode}' == 2128){
+	         location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
+	      } 
+	       else{
+	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       }	       	       
 	          $('.flag').val(1);
 	       }
 	       

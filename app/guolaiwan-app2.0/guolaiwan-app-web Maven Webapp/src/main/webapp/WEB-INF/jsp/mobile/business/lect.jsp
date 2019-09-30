@@ -257,10 +257,10 @@ width:7%;
 				var html= [];
 				for(var i =0;i<room.length;i++){
 					html.push('<div onclick="gotoroomdetails(this.id)" id="'+room[i].id+'-'+roomState[i]+'" style="background: #fff;width:30%;height: 0;padding-bottom: 30%;border-radius:50%;position: relative;margin:5px 5px;overflow: hidden;display: inline-block;">');															 
-					if(roomState[i] == "0"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/weixuan.png">');} 					
-					if(roomState[i] == "1"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/lvse.png">');} 					  
-					if(roomState[i] == "2"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;" src="lib/images/xuanzhong.png">');}  																																						
-					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:45%;margin:0 0 0 -40%;"><span>'+room[i].name+'</span>   <span>'+room[i].identity+'</span></p>');
+					if(roomState[i] == "0"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;top:10px;" src="lib/images/weixuan.png">');} 					
+					if(roomState[i] == "1"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;top:10px;" src="lib/images/lvse.png">');} 					  
+					if(roomState[i] == "2"){ html.push('<img style="width:40%;height:40%;position: absolute;left:50%;margin-left:-20%;top:10px;" src="lib/images/xuanzhong.png">');}  																																						
+					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:52%;margin:0 0 0 -40%;"><span>'+room[i].name+'</span>   <span>'+room[i].identity+'</span></p>');
 					html.push('<p style="width:80%;text-align: center;position: absolute;left:50%;top:68%;margin:0 0 0 -40%;color:#FB9361;"><span>￥'+(room[i].price/100)+'</span></p>');    
 				    html.push('</div>');   
 				}

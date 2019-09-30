@@ -64,7 +64,7 @@ public class VehicleDao extends AbstractBaseDao<VehiclePO> {
        public List<VehiclePO>  getNumber(Long userId) throws ParseException{
     	   QueryHql hql =   this.newQueryHql();
     	   hql.andBy("vehicleid", Condition.eq,userId);
-    	   hql.orderBy("updateTime", true);
+    	   hql.orderBy("updateTime", false);
     	   return findByHql(hql);
        }
        

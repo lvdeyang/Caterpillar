@@ -587,7 +587,8 @@ html, body {
 		   
 			<c:if test="${status=='PASSED'}">
 			<c:if test="${distributorId!='0'}"> 
-			<a  href="<%=request.getContextPath()%>/distributor/admin/exitPage" style="float:right;margin-right:5%; " ><button class="btn" style="width:100px;height:30px;background:#18b4ed;border:none;outline: none;border-radius:22px;color:#fff;margin-top:35px;">退出登录</button></a>					    
+
+			<a  href="<%=basePath%>/distributor/admin/exitPage" style="float:right;margin-right:5%; " ><button class="btn" style="width:100px;height:30px;background:#18b4ed;border:none;outline: none;border-radius:22px;color:#fff;margin-top:35px;">退出登录</button></a>					    
 			        <div style="width:100%;height:100px;">
 					    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
 					      <div class="weui-media-box__hd">
