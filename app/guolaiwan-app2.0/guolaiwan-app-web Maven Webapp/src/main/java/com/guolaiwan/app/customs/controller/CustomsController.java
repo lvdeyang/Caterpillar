@@ -73,7 +73,7 @@ public class CustomsController extends WebBaseControll {
 				<ceb:returnTime>20180507153001001</ceb:returnTime>
 				<ceb:returnInfo>新增申报成功[4CDE1CFD-EDED-46B1-946C-B8022E42FC94]</ceb:returnInfo>
 			</ceb:OrderReturn>*/
-			
+			//解析出来订单编号后，然后去数据库查找订单，并设置为报关成功
 			addOrderBack(content);
 			
 		}

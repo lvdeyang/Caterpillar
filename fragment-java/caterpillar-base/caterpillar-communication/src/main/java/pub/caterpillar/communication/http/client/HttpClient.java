@@ -132,19 +132,8 @@ public class HttpClient {
 			httpPost.setHeader("Content-Type", "application/json");
 			httpPost.setHeader("Accept-Charset", "utf-8");
 			httpPost.setHeader("Accept-Language", "en-US,en");
-		         
-			Map<String, String> map = JSON.parseObject(jObject.toJSONString(), Map.class);
-			List<NameValuePair> list = new ArrayList<NameValuePair>();  
-	        Iterator iterator = map.entrySet().iterator();  
-	        while(iterator.hasNext()){  
-	            Entry<String,String> elem = (Entry<String, String>) iterator.next();  
-	            list.add(new BasicNameValuePair(elem.getKey(),elem.getValue()));  
-	        }  
-	        if(list.size() > 0){  
-	            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list,"utf-8");  
-	            httpPost.setEntity(entity);  
-	        }  
-
+            StringEntity stringEntity= new StringEntity(jObject.toJSONString(),"utf-8");  
+            httpPost.setEntity(stringEntity);  
 		    response = httpclient.execute(httpPost);
 		    if(response.getStatusLine().getStatusCode() == 200){
 		    	HttpEntity entity = response.getEntity();

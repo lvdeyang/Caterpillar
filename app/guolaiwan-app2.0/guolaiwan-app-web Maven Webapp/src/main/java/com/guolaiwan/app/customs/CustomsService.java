@@ -1,5 +1,9 @@
 package com.guolaiwan.app.customs;
 
+import java.io.File;
+
+import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
 import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +15,8 @@ import pub.caterpillar.communication.http.client.HttpClient;
 @Component
 public class CustomsService {
 
-	private static final String SendURL="http://47.95.71.154:8089/message/receiveEntMessage";
-	private static final String PUBLICKEY="fdd63960-448c-4048-8e74-596a48c331cd";
+	private static final String SendURL="http://47.95.71.154:8089/pub-cus-core/message/receiveEntMessage";
+	//private static final String 云签名="fdd63960-448c-4048-8e74-596a48c331cd";
 	private static final String entCode="13029609B5";	//企业备案号	
 	private static final String dxpId="DXPENT0000024006";	//企业dxpId	
 	private static final String signed="1";	//企业是否已加签	1-是，0-否
@@ -21,14 +25,15 @@ public class CustomsService {
 	
 	private void sendMessage(CustomBo customBo){
 		try {
-			String content = RSA.encrypt(RSA.getPublicKey(PUBLICKEY), customBo.getContent(), "utf8");
+			String content = RSA.encrypt(RSA.getPublicKey(secret), customBo.getContent(), "utf8");
 			customBo.setContent(content);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			HttpClient.postJson(SendURL,JSON.parseObject(JSONObject.toJSONString(customBo)));
+			String result=HttpClient.postJson(SendURL,JSON.parseObject(JSONObject.toJSONString(customBo)));
+			System.out.println(result);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,9 +110,16 @@ public class CustomsService {
                       单价 price N19,5 是 
                       总价 totalPrice N19,5 是 
                       备注 note C..1000*/
-		
-		
-	    String content="";
+		String content="";//开发人员注意，这里生成xml字符串
+		//		try {
+		//			File f = new File("D:\\yuebacode\\app\\guolaiwan-app2.0\\guolaiwan-app-web Maven Webapp\\src\\main\\resources\\addorder.xml");  
+		//			SAXReader reader = new SAXReader();   
+		//			Document doc = reader.read(f);
+		//			content=doc.getRootElement().asXML();
+		//		} catch (Exception e) {
+		//			// TODO: handle exception
+		//			System.out.println(e.getMessage());
+		//		}
 		customBo.setContent(content);
 		//下发命令
 		sendMessage(customBo);
