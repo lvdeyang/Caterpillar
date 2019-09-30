@@ -324,7 +324,7 @@ color:#fff;
 		    }
 		//票的数量与所选人数是否一样    
           if($('.zhi').val() != number){
-             $.toast("请确认票的数量对应用户信息数量", "forbidden");
+             $.toast("请在填写身份信息处确认用户信息数量", "forbidden");
 		      return false;         
           }    
 		    

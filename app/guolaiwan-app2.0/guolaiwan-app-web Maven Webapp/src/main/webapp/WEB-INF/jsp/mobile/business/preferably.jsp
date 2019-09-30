@@ -196,7 +196,7 @@ html, body {
 						 html.push('</div></div></div></a>');
 						}
 			    	$('.tuijian').append(html.join(''));
-	            	page++;
+	            	page+=1;
 	            })
 	}
 	

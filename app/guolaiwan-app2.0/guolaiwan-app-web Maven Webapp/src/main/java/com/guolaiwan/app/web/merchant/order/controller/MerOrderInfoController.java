@@ -54,9 +54,9 @@ public class MerOrderInfoController extends BaseController{
 		String orderNo = request.getParameter("orderNo");
 		OrderInfoPO order = null;
 		if(orderNo.length()>6){
-			order = conn_OrderInfo.getByRoderNo(Long.parseLong(orderNo));
-		}else{
 			order = conn_OrderInfo.getByRoderNo(orderNo);
+		}else{
+			order = conn_OrderInfo.getByRoderNo(Long.parseLong(orderNo));
 		}
 		if(order==null){
 			strMap.put("msg", "nothave");
