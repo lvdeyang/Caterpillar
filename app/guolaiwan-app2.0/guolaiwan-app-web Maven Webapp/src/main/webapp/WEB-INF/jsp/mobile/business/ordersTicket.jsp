@@ -216,6 +216,16 @@ color:#fff;
 	  laydate.render({
 	    elem: '#useDate' //指定元素
 	  });
+	  
+	  var today = new Date();
+      var tmonth=today.getMonth()+1+'';
+      tmonth=(tmonth.length==1?(0+''+tmonth):tmonth);
+      var tdate=today.getDate()+'';
+      tdate=(tdate.length==1?(0+''+tdate):tdate);
+      var todayStr = today.getFullYear()+"-" +tmonth+ "-" + tdate;
+      $('#useDate').val(todayStr);
+	  
+	  
 	   $(function() {
 	    if(${choice}== 0){
 	     $("title").html("购票确认订单"); 
