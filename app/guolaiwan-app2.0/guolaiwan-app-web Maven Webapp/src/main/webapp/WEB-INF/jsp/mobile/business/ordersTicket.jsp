@@ -929,6 +929,9 @@ color:#fff;
              htm.push('<p style="width:20%;padding:2px 5px;background:#FF9C00;color:#fff;border-radius:12px;margin:2px 5px;display: inline-block;text-align:center;" id="homepage-'+i[1]+'">'+clientInfo[i[1]].name+'</p>');            
              $(".homepage_add").append(htm.join(''));         
             } 
+            if(clientNumber.length==$('#shuliang').val()){
+                $(".window-1").fadeOut();
+            }
             //取消勾选删除
             if(!($("#"+id).prop("checked"))){
                $("#homepage-"+i[1]).remove();               
