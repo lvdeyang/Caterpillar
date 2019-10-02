@@ -42,6 +42,7 @@ import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
+import com.guolaiwan.bussiness.admin.dao.MessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.TableDAO;
@@ -110,6 +111,13 @@ public class WxPayReportController extends WebBaseControll {
 	
 	@Autowired
 	private  TableDAO Table;
+	
+	@Autowired
+	private  MessageDAO messageDAO;
+	
+	@Autowired
+	private  MessageMiddleClientDao messageClientDAO;
+	
 	@ResponseBody
 	@RequestMapping(value = "/payreport", method = RequestMethod.POST)
 	public String pay(HttpServletRequest request,
@@ -262,9 +270,9 @@ public class WxPayReportController extends WebBaseControll {
 		}else{
 			System.out.println("判断此商品是分销商品");
 			String id = order.getId().toString();
-			String userName = conn_address.get(order.getMailAddress()).getConsigneeName();
+			String userName=messageDAO.getByUserId(order.getUserId()).getName();
 			String buynum=String.valueOf(order.getProductNum());
-			String userTel = conn_address.get(order.getMailAddress()).getConsigneePhone();
+			String userTel = messageDAO.getByUserId(order.getUserId()).getPhone();
 			String startDate = df.format(order.getOrderBookDate());
 			String result="";
 			if(merchatId==358){

@@ -501,8 +501,8 @@ html, body {
 				          html.push('<tr>');
 				       }
 	                     html.push('<td style="padding:10px;width:50%">');
-		                 html.push('<image style=" width:100%;height:100px;"  relData="'+pros[i].activityReId+"-"+
-	                     pros[i].isSurpport+'" data="'+pros[i].productModularCode+'"  src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'"/>');
+		                 html.push('<image style=" width:100%;height:100px;"  relData="'+pros[i].activityReId+"-"+ 
+	                     pros[i].isSurpport+'" data="'+pros[i].productClassCode+'"  src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'-'+pros[i].productMerchantID+'"/>');
 		                 html.push('<p style="font-size:12px">'+pros[i].productName+'￥'+pros[i].productPrice+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+pros[i].productOldPrice+'</span></p>');
 		                 html.push('</td>');
 	                     if(pros.length==1){
@@ -544,7 +544,7 @@ html, body {
 				          html.push('<tr>');
 				       }
 	                     html.push('<td style="padding:10px;width:50%">');
-		                 html.push('<image style=" width:100%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" id="pro-'+pros[i].id+'"/>');
+		                 html.push('<image style=" width:100%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" id="pro-'+pros[i].id+'-'+pros[i].modularCode+'"/>');
 		                 html.push('<p style="font-size:12px">'+pros[i].shopName+'</p>');
 		                 html.push('</td>');
 	                     if(pros.length==1){
@@ -567,39 +567,51 @@ html, body {
 		}
 		
 	
-	
+
 	   $(document).on('click','.product',function(){
+	   	   
 	       var codes=this.id.split('-');
 	       var data=$(this).attr('data');
 	       var relData=$(this).attr('relData');
-	       var relDatas=relData.split('-');
-	       if(relDatas[0]==0&&relDatas[1]==0){
+	       var relDatas=relData.split('-');	       
+	       if(relDatas[0]==0&&relDatas[1]==0){	        
 		       if(data=='2021'){
 		          location.href=window.BASEPATH + 'pubnum/product/index/line?id='+codes[1];
-		       }else{
+		       }else if(data =='0012'){		      
+		       //普通票
+		       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=0';
+		       }		       
+		       else{		          	       		           
 		          location.href=window.BASEPATH + 'pubnum/product/index?id='+codes[1];
 		       }
 	       
-	       }else{
-	       
+	       }else{	       	          	          
 	          if(relDatas[1]==0){
-	            location.href=window.BASEPATH + 'pubnum/product/index/'+codes[1];
-	          }else{
-	          
+	           if(data =='0012'){
+		           //普通票
+		           location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=1';
+		       }else{
+		       location.href=window.BASEPATH + 'pubnum/product/index/'+codes[1];
+		       }	            
+	          }else{	          
 	            location.href=window.BASEPATH + 'pubnum/product/index/surpport/'+relDatas[0]+'/0';
 	          }
-	       }
+	       } 
 	   });
 	   $(document).on('click','.merchant',function(){
 	      var ids=this.id.split('-');
-	      if(ids[1]==387){
+     
+	       if(ids[2]=='0001'){
+	        location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+ids[1]+'&comCode=0001';
+	      }else{
+	       if(ids[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	      }else{
 	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+ids[1];
-	      }
-	      
-	   });
-	
+	      } 
+	     }  
+	  
+	});
 	});
 </script>
 

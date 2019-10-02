@@ -151,16 +151,15 @@ public class ProductPackageController extends BaseController {
 		int pageSize =5 ; 
 		Map<String, Object> mapp = new HashMap<String, Object>();
 		mapp.put("productMerchantID", Long.parseLong(merhcantId));
+		mapp.put("productClassCode", "0012");
 		//过滤 不符合日期及审核未通过的商品 
 		long nowDate = new Date().getTime();
 		List<ProductPO> productPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);
-		for(int i= 0 ;i<productPOs.size();i++){
-		   long producntBeginTime  = productPOs.get(i).getProductBeginDate().getTime();
-		   long producntEndTime  =  productPOs.get(i).getProductEnddate().getTime();
+		for(int i= 0 ;i<productPOs.size();i++){		  
 		   //获取审核状态
 		   ShopAuditStateType state  =  productPOs.get(i).getProductAuditstatus();
 		   int isShow  =  productPOs.get(i).getProductIsShow();
-		   if(nowDate<producntBeginTime || nowDate>producntEndTime || state != ShopAuditStateType.T || isShow != 1){
+		   if( state != ShopAuditStateType.T || isShow != 1){
 			   productPOs.remove(i);			   
 		   }			
 		}
@@ -188,7 +187,7 @@ public class ProductPackageController extends BaseController {
 	     //销售量集合
 	     List<Integer> marketList = new ArrayList<Integer>();
 	     //判断商品是否为活动商品	  
-	     boolean isGrade = false;
+	     boolean isGrade = false;	    	     
 	    Set<Long> pro_id = activ_id.keySet();    
 		for(ProductVO pro : pro_vo){
 			//活动票
@@ -240,13 +239,44 @@ public class ProductPackageController extends BaseController {
 	      return map;
 	}	
 	
+	private  double rad(double d) {
+		return d * Math.PI / 180.0;
+	}
+	private  double EARTH_RADIUS = 6378.137;
+	
+	/**
+	 * 通过经纬度获取距离(单位：千米)
+	 * 
+	 * @param lat1
+	 * @param lng1
+	 * @param lat2
+	 * @param lng2
+	 * @return 距离
+      **/
+	public double getDistance(double lat1, double lng1, double lat2,
+			double lng2) {
+		double radLat1 = rad(lat1);
+		double radLat2 = rad(lat2);
+		double a = radLat1 - radLat2;
+		double b = rad(lng1) - rad(lng2);
+		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+				+ Math.cos(radLat1) * Math.cos(radLat2)
+				* Math.pow(Math.sin(b / 2), 2)));
+		s = s * EARTH_RADIUS;
+		s = Math.round(s * 10000d) / 10000d;
+		DecimalFormat dlf = new DecimalFormat("0.00");
+		double ss = Double.parseDouble(dlf.format(s));
+		
+		return ss;
+	}
+				
 	/**
 	 *  商家 信息查询
 	 * @throws Exception 
 	 * 
 	 * */
 	@RequestMapping(value="/merInfo",method=RequestMethod.POST)
-	public Map<String, Object> getMerInfo(HttpServletRequest request) throws Exception{
+	public Map<String, Object> getMerInfo(HttpServletRequest request,Double latitude,Double longitude) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();	
 		String merchantId =  request.getParameter("merchantId");
 		//获取商户信息		
@@ -289,8 +319,9 @@ public class ProductPackageController extends BaseController {
 		 while(feedback<95){
 			 feedback = random.nextInt(100);			 
 		 }
-		map.put("beginTime", merchantPOs.get(0).getBeginTimeDate().split(" ")[1]);
-		map.put("endTime", merchantPOs.get(0).getEndTimeDate().split(" ")[1]);
+		map.put("distance", getDistance(Double.parseDouble(merchantPOs.get(0).getShopLatitude()), Double.parseDouble(merchantPOs.get(0).getShopLongitude()), latitude, longitude));
+	/*	map.put("beginTime", merchantPOs.get(0).getBeginTimeDate().split(" ")[1]);
+		map.put("endTime", merchantPOs.get(0).getEndTimeDate().split(" ")[1]);*/
 		map.put("grade", grade); 
 		map.put("feedback", feedback); 
 		map.put("merpos", mer_vo.get(0));
@@ -784,6 +815,8 @@ public class ProductPackageController extends BaseController {
 		String paytype = pageObject.getString("paytype");		
 		String isCombo = pageObject.getString("isCombo");
 		String choice = pageObject.getString("choice");
+		SimpleDateFormat sf= new SimpleDateFormat("yyyy-MM-dd");
+		Date bookDate =sf.parse(pageObject.getString("bookDate"));
 		
 		OrderInfoPO order = new OrderInfoPO();
 			
@@ -949,7 +982,7 @@ public class ProductPackageController extends BaseController {
 		// 是否评价
 		order.setCommentIs(0);
 		// // 预订日期
-		// order.setOrderBookDate(date);
+		order.setOrderBookDate(bookDate);
 
 		if (pageObject.getString("source") != null) {
 			order.setSource(OrderSource.fromString(pageObject.getString("source")));

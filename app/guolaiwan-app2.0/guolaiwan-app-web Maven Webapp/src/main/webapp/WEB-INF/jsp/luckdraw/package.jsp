@@ -82,13 +82,16 @@ a, a:link, a:active, a:visited, a:hover {
 html, body {
 	width: 100%;
 	height: 100%;
-	background-color: #fff;
 	position: relative;
 	-webkit-text-size-adjust: none;
-	background-color: #fbfbfb;
-	margin:0;
+	text-decoration: none !important;
+	font-family: "微软雅黑" !important;
+	
 }
-
+body{
+background:url("../../lib/images/htnlbei.jpg");
+    background-size: 100%;
+}
 * {
 	box-sizing: border-box;
 }
@@ -483,9 +486,7 @@ html, body {
 	    text-align:center;
 	    font-size:12px;
     }
-    body {
-		background-image: -webkit-linear-gradient(top, #F01917, #fff);
-	}
+
     
 
 </style>
@@ -501,7 +502,7 @@ html, body {
 
 
 <body>
-	<%-- <div id="page">
+	<div id="page">
 		<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
@@ -515,11 +516,8 @@ html, body {
 			<div style="color:red;margin-top:10px;margin-left:15px;" id="result">${status}</div>
 			<a style="margin-left:15px;font-size:12px;color:red" href="http://www.guolaiwan.net/guolaiwan/pubnum/index">>>进入微官网</a>
 		</div>
-	</div> --%>
-<div class="nav" style="width:100%;height:auto;text-align: center;position: fixed;top:30%;">
-	<p style="font-family:SimSun;color:#fff;">${status}</p>
-	<a style="font-size:12px;color:#fff;" href="http://gh.guolaiwan.net/News/index.html">>>进入公会</a>
-</div>
+	</div> 
+
 </body>
 
 

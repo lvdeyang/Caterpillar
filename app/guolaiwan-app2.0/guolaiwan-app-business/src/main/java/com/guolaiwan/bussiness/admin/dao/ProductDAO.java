@@ -531,8 +531,7 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 	public List<ProductPO> findByMerchantId(Long merchantId) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("productMerchantID", Condition.eq, merchantId);
-		hql.andBy("productIsShow", Condition.eq, 1);		
-		hql.andBy("productModularCode", Condition.eq, "0003");		
+		hql.andBy("productIsShow", Condition.eq, 1);				
 		hql.orderBy("productSort", true);
 		List<ProductPO> products = findByHql(hql);
 		return products;
@@ -608,7 +607,7 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		QueryHql hql = this.newQueryHql();
 
 		hql.andBy("productMerchantID", Condition.eq, merchantId);
-
+        hql.andBy("productAuditstatus",Condition.eq, ShopAuditStateType.T);
 		List<ProductPO> products = findByHql(hql);
 		return products;
 	}

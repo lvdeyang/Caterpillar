@@ -235,12 +235,14 @@ public class VoteController extends BaseController {
 		if (count != 0) {
 			return "chongfu";
 		}
+		int size = voteproductDAO.countByPIdMId(acId);
 		long optionId = votemodularDAO.get(acId).getOptionId();
 		VoteProductPO voteproduct=new VoteProductPO();
 		voteproduct.setModularcode(acId);
 		voteproduct.setProductId(pId);
 		voteproduct.setProductName(pName);
 		voteproduct.setOptionId(optionId);
+		voteproduct.setRanking(size+1);
 		voteproductDAO.save(voteproduct);
 		return "success";
 	}

@@ -468,7 +468,7 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-
+        
 		$(document).on('click','#applyDistributor',function(){
 		   location.href=window.BASEPATH + 'distributor/apply/index?disId=0';
 		});
@@ -481,10 +481,10 @@ html, body {
         $(document).on('click','#a1',function(){
            location.href=window.BASEPATH + 'distributor/off/sell?disId=${distributorId}';
         });
-	
-	  
-	
-	
+        
+	   if(${status} == null){	        
+	    status = 1;
+	   }	  		
 	});
 </script>
 
@@ -503,7 +503,7 @@ html, body {
 		<div class="content">
 		    
 		
-		
+		     
 		   <c:if test="${status=='null'}">
 		    <c:if test="${distributorId=='0'}"> 
 		    	<a id="applyDistributor" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">
@@ -587,7 +587,8 @@ html, body {
 		   
 			<c:if test="${status=='PASSED'}">
 			<c:if test="${distributorId!='0'}"> 
-			<a  href="<%=request.getContextPath()%>/distributor/admin/exitPage" style="float:right;margin-right:5%; " ><button class="btn" style="width:100px;height:30px;background:#18b4ed;border:none;outline: none;border-radius:22px;color:#fff;margin-top:35px;">退出登录</button></a>					    
+
+			<a  href="<%=basePath%>/distributor/admin/exitPage" style="float:right;margin-right:5%; " ><button class="btn" style="width:100px;height:30px;background:#18b4ed;border:none;outline: none;border-radius:22px;color:#fff;margin-top:35px;">退出登录</button></a>					    
 			        <div style="width:100%;height:100px;">
 					    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
 					      <div class="weui-media-box__hd">

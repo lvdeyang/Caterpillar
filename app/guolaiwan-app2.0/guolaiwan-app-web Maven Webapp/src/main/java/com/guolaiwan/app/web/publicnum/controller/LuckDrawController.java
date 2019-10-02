@@ -60,7 +60,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 public class LuckDrawController extends WebBaseControll {
 
 	
-	@RequestMapping(value = "/index")
+	@RequestMapping(value = "/index0")
 	public ModelAndView luckdraw(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		HttpSession session = request.getSession();
@@ -144,6 +144,13 @@ public class LuckDrawController extends WebBaseControll {
         	return mv;
 		}
 		mv = new ModelAndView("luckdraw/luckdraw");
+		return mv;
+	}
+	
+	
+	@RequestMapping(value = "/index")
+	public ModelAndView gotoresponsehome(HttpServletRequest request) throws Exception {
+		ModelAndView mv = new ModelAndView("mobile/questionnaire/responseHome");
 		return mv;
 	}
 	

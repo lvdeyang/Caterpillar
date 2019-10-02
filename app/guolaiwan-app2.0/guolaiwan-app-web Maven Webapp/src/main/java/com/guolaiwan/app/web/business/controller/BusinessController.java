@@ -10,6 +10,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,9 +27,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transaction;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.bytedeco.javacpp.RealSense.intrinsics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -502,7 +506,6 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("merchantId", merchantId);
 		return mv;
 	}
-
 	// 跳转拼团页面
 	@ResponseBody
 	@RequestMapping(value = "/group", method = RequestMethod.GET)
@@ -522,8 +525,7 @@ public class BusinessController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/getgroupproduct", method = RequestMethod.GET)
 	public List<ProductVO> getgroupproduct(Long merchantId) throws Exception {
-		List<GroupBuyPO> findAll = groupbuyDao.findAll();
-		
+		List<GroupBuyPO> findAll = groupbuyDao.findAll();	
 		if(merchantId!=null&&merchantId!=0){
 			System.out.println("子级的商品");
 			List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
@@ -531,6 +533,7 @@ public class BusinessController extends WebBaseControll {
 			for (MerchantChildrenPO Children : merchantChildren) {
 				List<ProductPO> getactivity = productDAO.getactivity(Children.getChildrenId());
 				for (ProductPO productPO : getactivity) {
+					
 					productlist.add(productPO);
 				}
 			}
@@ -619,7 +622,7 @@ public class BusinessController extends WebBaseControll {
 
 	@ResponseBody
 	@RequestMapping(value = "/getCate", method = RequestMethod.GET)
-	public List<Map<String, Object>> getCate(long merchantId) throws Exception {
+	public List<Map<String, Object>> getCate(long merchantId,double latitude, double longitude) throws Exception {
 		String modularName = "地方美食";
 		List<MerchantChildrenPO> merchantChildrenList = merchantChildrenDao.getCate(merchantId);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -629,18 +632,33 @@ public class BusinessController extends WebBaseControll {
 			if (po != null&&(po.getModularCode().equals("0003")||po.getModularCode().equals("0003"))) {
 				Merchantlist.add(po);
 			}
-		}
-		
+		}		
+		//商户根据经纬度进行智能排序
+		Merchantlist.sort(new Comparator<MerchantPO>() {
+			@Override
+			public int compare(MerchantPO o1, MerchantPO o2) {
+				// TODO Auto-generated method stub
+			double o1distance =getDistance(Double.parseDouble(o1.getShopLatitude()),Double.parseDouble(o1.getShopLongitude()),latitude,longitude)*100;
+			double	o2distance =getDistance(Double.parseDouble(o2.getShopLatitude()),Double.parseDouble(o2.getShopLongitude()),latitude,longitude)*100;
+			if(o1distance > o2distance){
+				return 1;
+			}else{				
+				return -1;
+			 }												  
+			}
+		});
+					
 	    DecimalFormat dlf  =  new DecimalFormat("0.0");
 		Double allMany = 0.0;
 		
-		for (int i = 0; i < Merchantlist.size(); i++) {			
+		for (int i = 0; i < Merchantlist.size(); i++) {		
 			Map<String, Object> hashMap = new HashMap<String, Object>();
 			hashMap.put("merchantId", Merchantlist.get(i).getId());
 			hashMap.put("ShopName", Merchantlist.get(i).getShopName());
 			hashMap.put("ShopPic", "http://www.guolaiwan.net/file" + Merchantlist.get(i).getShopPic());
 			hashMap.put("ModularClass", Merchantlist.get(i).getModularClass());
-			hashMap.put("feature", Merchantlist.get(i).getFeature());		
+			hashMap.put("feature", Merchantlist.get(i).getFeature());	
+			hashMap.put("distance", getDistance(Double.parseDouble(Merchantlist.get(i).getShopLatitude()),Double.parseDouble(Merchantlist.get(i).getShopLongitude()),latitude,longitude));
 			//获取订单总价
 			long merchant_id = Merchantlist.get(i).getId();
 			String[] fields = {"merchantId"};
@@ -667,6 +685,39 @@ public class BusinessController extends WebBaseControll {
 		}
 		return list;
 	}
+	
+	
+	private  double rad(double d) {
+		return d * Math.PI / 180.0;
+	}
+	private  double EARTH_RADIUS = 6378.137;
+	
+	/**
+	 * 通过经纬度获取距离(单位：千米)
+	 * 
+	 * @param lat1
+	 * @param lng1
+	 * @param lat2
+	 * @param lng2
+	 * @return 距离
+      **/
+	public double getDistance(double lat1, double lng1, double lat2,
+			double lng2) {
+		double radLat1 = rad(lat1);
+		double radLat2 = rad(lat2);
+		double a = radLat1 - radLat2;
+		double b = rad(lng1) - rad(lng2);
+		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+				+ Math.cos(radLat1) * Math.cos(radLat2)
+				* Math.pow(Math.sin(b / 2), 2)));
+		s = s * EARTH_RADIUS;
+		s = Math.round(s * 10000d) / 10000d;
+		DecimalFormat dlf = new DecimalFormat("0.00");
+		double ss = Double.parseDouble(dlf.format(s));
+		
+		return ss;
+	}
+
 	
 	//美食商户子页面
 	@ResponseBody
@@ -801,27 +852,47 @@ public class BusinessController extends WebBaseControll {
 		return mv; 
 	}
 	
+	//住宿商户距离
+	@ResponseBody
+	@RequestMapping(value = "/getRoomDist")
+	public String getRoomDist(HttpServletRequest request ,Double latitude) throws Exception {
+	String state ="1.25";
+	   String merchantId = request.getParameter("merchantId");
+	   Double longitude = Double.parseDouble(request.getParameter("longitude"));
+	    MerchantPO _merchant =  Mer_chant.get(Long.parseLong(merchantId));
+	    System.out.println("123:"+latitude+"--:"+longitude);
+	    if(null !=  _merchant.getShopLatitude()  && _merchant.getShopLatitude().length() != 0){
+        Double distance	= getDistance(Double.parseDouble(_merchant.getShopLatitude()), Double.parseDouble(_merchant.getShopLongitude()), latitude, longitude);
+        state = String.valueOf(distance);
+	    } 
+        return state;
+	}
+	
 	// 搜索住宿的店家
 	@ResponseBody
 	@RequestMapping(value = "/gotohotel")
-	public ModelAndView goToHotel(HttpServletRequest request,String name ) throws Exception {
+	public ModelAndView goToHotel(HttpServletRequest request,String name, Double latitude, Double longitude) throws Exception {
 		ModelAndView mv = null;
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
-		/*String name=new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");*/
+		/*String names = new String(request.getParameter("name").getBytes("ISO8859-1"),"UTF-8");*/
 		mv = new ModelAndView("mobile/business/hotel");
 		mv.addObject("merchantId", merchantId);
 		mv.addObject("name", name);
-		return mv; 
+		mv.addObject("latitude", latitude);
+		mv.addObject("longitude", longitude);
+		return mv; 	
 	}
 	
 	//按照商品类型所有的商户 要求搜索全局的商户
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/search")
-	public Map<String, Object> search(HttpServletRequest request) throws Exception {
+	public Map<String, Object> search(HttpServletRequest request,Double latitude, Double longitude) throws Exception {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String name=request.getParameter("name");
 		String type=request.getParameter("type");
+		List<Double> disList = new ArrayList<Double>();
+		    
 		Map<String, Object> hashMap = new HashMap<String, Object>();
 		List<MerchantPO> merchantlist=new ArrayList<MerchantPO>();
 		List<Integer> pingfens=new ArrayList<Integer>(); 
@@ -829,6 +900,11 @@ public class BusinessController extends WebBaseControll {
 		for (MerchantPO merchantPO : allMerchant) {
 			if(merchantPO.getModularCode().equals(type)){
 				merchantlist.add(merchantPO);
+				if(merchantPO.getShopLatitude() == null || merchantPO.getShopLatitude().length() == 0){
+					disList.add(1.35);
+				}else{
+				disList.add(getDistance(Double.parseDouble(merchantPO.getShopLatitude()), Double.parseDouble(merchantPO.getShopLongitude()), latitude, longitude));
+				}
 				pingfens.add(orderInfoDao.GetCountbyPage(merchantPO.getId())/100);
 			}
 		}
@@ -843,6 +919,21 @@ public class BusinessController extends WebBaseControll {
 			}
 		}*/
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(merchantlist, MerchantVO.class);
+		
+		merlist.sort(new Comparator<MerchantVO>() {
+			@Override
+			public int compare(MerchantVO o1, MerchantVO o2) {
+				// TODO Auto-generated method stub
+				Double  number1 = getDistance(Double.parseDouble(o1.getShopLatitude()), Double.parseDouble(o1.getShopLongitude()), latitude, longitude);
+				Double  number2 = getDistance(Double.parseDouble(o2.getShopLatitude()), Double.parseDouble(o2.getShopLongitude()), latitude, longitude);
+				if(number1 > number2){
+					return 1;
+				}else{
+					return -1;	
+				}				
+			}
+		});
+		hashMap.put("distance", disList);
 		hashMap.put("pingfens", pingfens);
 		hashMap.put("merlist", merlist);
 		return hashMap;
@@ -870,27 +961,72 @@ public class BusinessController extends WebBaseControll {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/getmerchant")
-	public Map<String, Object> getMerchant(HttpServletRequest request) throws Exception {
+	public Map<String, Object> getMerchant(HttpServletRequest request,double latitude,double longitude) throws Exception {
 		long merchantId=Long.parseLong(request.getParameter("merchantId"));
 		String code=request.getParameter("code");
 		List<MerchantPO> allmerchant=new ArrayList<MerchantPO>();
+		List<Object> distance = new ArrayList<Object>();
 		List<Integer> pingfens=new ArrayList<Integer>();
 		Map<String, Object> hashMap = new HashMap<String, Object>();
+		List<Long> showNuber = new ArrayList<Long>();
 		List<MerchantChildrenPO> merchantChildren = merchant_Children.getCate(merchantId);
 		MerchantPO merchantPO = Mer_chant.get(merchantId);
-		if(merchantPO.getModularCode()==code){
+		if(merchantPO.getModularCode().equals(code)){
+			//查询商户下所有商品的浏览量  
+			List<ProductPO> productPO =  conn_product.findByField("productMerchantID", merchantId);
+			long showNum = 0;
+			for(ProductPO po : productPO){				
+				showNum += po.getProductShowNum();			
+			}
+			showNuber.add(showNum);
 			allmerchant.add(merchantPO);
+			distance.add(getDistance(Double.parseDouble(merchantPO.getShopLatitude()), Double.parseDouble(merchantPO.getShopLongitude()), latitude, longitude));
 			pingfens.add(orderInfoDao.GetCountbyPage(merchantId)/100);
 		}
 		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
 			if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularCode().equals(code)){
-				allmerchant.add(Mer_chant.get(merchantChildrenPO.getChildrenId()));
-				pingfens.add(orderInfoDao.GetCountbyPage(merchantChildrenPO.getChildrenId())/100);
+			 	
+			  MerchantPO  _merchant = Mer_chant.get(merchantChildrenPO.getChildrenId());	
+		       if(_merchant.getShopLatitude() != null  && _merchant.getShopLatitude().length() > 0 ){ 		    
+				distance.add(getDistance(Double.parseDouble(_merchant.getShopLatitude()), Double.parseDouble(_merchant.getShopLongitude()), latitude, longitude));
+		       }else{
+		    	 distance.add(1.25);  
+		       }
+		       List<ProductPO> productPO =  conn_product.findByField("productMerchantID", merchantChildrenPO.getChildrenId());
+		       long showNum = 0;
+				for(ProductPO po : productPO){				
+					showNum += po.getProductShowNum();			
+				}
+				showNuber.add(showNum);
+				allmerchant.add(_merchant);				
+				pingfens.add(orderInfoDao.GetCountbyPage(merchantChildrenPO.getChildrenId())/100);		
 			}
 		}
+		  
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(allmerchant, MerchantVO.class);
+		//查询商品的最小价格
+		for(MerchantVO vo : merlist){			
+		List<ProductPO> pro  =	conn_product.findByField("productMerchantID", vo.getId());
+		pro.sort(new Comparator<ProductPO>() {
+			
+			@Override
+			public int compare(ProductPO o1, ProductPO o2) {
+				// TODO Auto-generated method stub
+				if(o1.getProductPrice() > o2.getProductPrice()){
+					return 1;
+				}else{
+					return -1;
+				}
+				
+			}
+		});			
+		vo.setMinPrice(String.valueOf(pro.get(0).getProductPrice()));
+		}
+		
 		hashMap.put("pingfens", pingfens);
 		hashMap.put("merlist", merlist);
+		hashMap.put("distance", distance);
+		hashMap.put("showNum", showNuber);
 		return hashMap;
 	}
 	
@@ -1030,6 +1166,17 @@ public class BusinessController extends WebBaseControll {
 		return mv;
 	}
 	
+	//采摘页面距离判断
+		@ResponseBody
+		@RequestMapping(value = "/gotodistance")
+		public Double goToComdListes(HttpServletRequest request, double latitude,double longitude) throws Exception {
+			long merchantId=Long.parseLong(request.getParameter("merchantId"));
+			MerchantPO merchant = Mer_chant.get(merchantId);			
+		    double distance =	getDistance(Double.parseDouble(merchant.getShopLatitude()),Double.parseDouble(merchant.getShopLongitude()), latitude, longitude);
+			return distance;
+		}
+	
+	
 	
 	// 采摘活动页面
 	@ResponseBody
@@ -1057,7 +1204,6 @@ public class BusinessController extends WebBaseControll {
 		mv.addObject("productRestrictNumber", product.getProductRestrictNumber());
 		return mv;
 	}
-	
 	
 	// 采摘首页页面
 	@ResponseBody
@@ -1154,12 +1300,15 @@ public class BusinessController extends WebBaseControll {
 	public ModelAndView goToDetailsPage(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		long productId=Long.parseLong(request.getParameter("productId"));
+		//查询顶单数量
+	    int numOrder =  orderInfoDao.countByField("productId", productId);		
 		ProductPO product = conn_product.get(productId);
 		List<ProductPO> productPO=new ArrayList<ProductPO>();
 		productPO.add(product);
 		List<ProductVO> alllist = ProductVO.getConverter(ProductVO.class).convert(productPO, ProductVO.class);
 		mv = new ModelAndView("mobile/business/detailspage");
 		mv.addObject("product", alllist.get(0));
+		mv.addObject("numOrder", numOrder);
 		return mv;
 	}
 	
@@ -1401,8 +1550,10 @@ public class BusinessController extends WebBaseControll {
 		 String merchantId = pageObject.getString("merchantId");
 		 String startDate = pageObject.getString("bookstartDate");
 		 String endDate = pageObject.getString("bookendDate");
+		 	
 		 //遍历保存用户信息
 		 for(int i = 0;i<clientList.size();i++){
+			 
 			 long clientMessage = clientList.getLong(i);		 			 
 			 MessageMiddleClientPO mesMidClien = new MessageMiddleClientPO();
 			 mesMidClien.setMerchantId(Long.parseLong(merchantId));
@@ -1472,7 +1623,15 @@ public class BusinessController extends WebBaseControll {
 		if (orderEndDate != null && orderEndDate != "" && orderEndDate.length() != 0) {
 			order.setEndBookDate(DateUtil.parse(orderEndDate, DateUtil.defaultDatePattern));
 		}
-	
+		 //房间状态添加
+		 CurrentRoomSatePO cRoomSatePO = new CurrentRoomSatePO();
+		 cRoomSatePO.setInRoomDate(orderStartDate);
+		 cRoomSatePO.setOutRoomDate(orderEndDate);
+		 cRoomSatePO.setRoomState("1");
+		 cRoomSatePO.setRoomId(Long.parseLong(roomId));
+		 conn_roomSateDao.save(cRoomSatePO);
+		
+		
 		// 会员ID
 		order.setUserId(userId);
 		if (user.getUserPhone() != null) {
@@ -1536,6 +1695,8 @@ public class BusinessController extends WebBaseControll {
 		
 		// 是否评价
 		order.setCommentIs(0);
+		//所属公司
+		order.setComId(1L);
 		// // 预订日期
 		 order.setOrderBookDate(date);
 
@@ -1724,7 +1885,9 @@ public class BusinessController extends WebBaseControll {
 					//封装数据 筛选后的数据
 					List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
 					for (OrderInfoVO orderInfoVO : orderingOrders) {
-						
+						if(orderInfoVO.getOrderRemark() != null &&   "9418".equals(orderInfoVO.getOrderRemark())){							
+							  continue;
+						}						
 						//订单预订时间判断
 						if (!orderInfoVO.getOrderBookDate().equals("")) {
 							Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");	
@@ -2097,18 +2260,25 @@ public class BusinessController extends WebBaseControll {
 		@ResponseBody
 		@RequestMapping(value = "/tableOrder/get", method = RequestMethod.GET)
 		public Map<String, Object> getTableOrder(Long userId, int type, // 1.未支付;2.已支付;3.已发货;4.待退款;5.已退款;6.已收货;7.已评价
-				Long merchantId,String uType, HttpServletRequest request, HttpServletResponse response) throws Exception {
+				String uType, HttpServletRequest request, HttpServletResponse response) throws Exception {
 			    Map<String, Object> map = new HashMap<String, Object>();
-				SysConfigPO sysConfig = conn_sys.getSysConfig();						
+				SysConfigPO sysConfig = conn_sys.getSysConfig();
+				String merchantId = request.getParameter("merchantId");
 				//查询商户下的子商户
 				List<Long> merchList = new ArrayList<Long>();
-				merchList.add(merchantId);
-				List<MerchantChildrenPO> mChildrenPOs = merchant_Children.findByField("merchantId",merchantId);
-				if(mChildrenPOs != null){
-					for(MerchantChildrenPO po : mChildrenPOs){
+				if (null == merchantId){
+				List<TableStatusPO> tableStatusPOs = conn_tablestatus.findByField("userId", String.valueOf(userId));
+				for(TableStatusPO po : tableStatusPOs){
+					if(!merchList.contains(po.getMerchantId())){
+					merchList.add(po.getMerchantId());
+					}
+				}}else{
+					merchList.add(Long.parseLong(merchantId));
+				   List<MerchantChildrenPO> _merchant =	merchant_Children.findByField("merchantId", Long.parseLong(merchantId));
+					for(MerchantChildrenPO po : _merchant ){
 						merchList.add(po.getChildrenId());
 					}					
-				}
+				}				
 				if (uType.equals("USER")) {
 					switch (type) {
 					case 1:// 未支付					

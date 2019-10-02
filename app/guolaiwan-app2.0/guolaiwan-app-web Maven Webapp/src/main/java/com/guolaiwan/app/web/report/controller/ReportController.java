@@ -51,9 +51,7 @@ public class ReportController extends BaseController {
 	@RequestMapping(value = "/index")
 	public ModelAndView index(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
-		// String id = request.getParameter("id");
 		mv = new ModelAndView("merchant/mreport/report");
-		// mv.addObject("userid", id);
 		return mv;
 	}
 

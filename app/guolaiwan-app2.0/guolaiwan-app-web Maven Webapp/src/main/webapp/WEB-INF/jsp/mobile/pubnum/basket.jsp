@@ -533,7 +533,7 @@ html, body {
 					html.push('	    </div>');
 					html.push('	  </label>');
 					html.push('	</div>');
-					html.push('    <a style="" href="javascript:void(0);"  id="pro-'+data[i].id+'-'+data[i].productId+'-'+data[i].activityId+'" class="weui-media-box weui-media-box_appmsg orderproduct">');
+					html.push('    <a style="" href="javascript:void(0);"  id="pro-'+data[i].id+'-'+data[i].productId+'-'+data[i].activityId+'-'+data[i].bkCode+'-'+data[i].shopId+'" class="weui-media-box weui-media-box_appmsg orderproduct">');
 					html.push('      <div class="weui-media-box__hd">');
 					html.push('       <img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].productPic+'">');
 					html.push('      </div>');
@@ -935,7 +935,25 @@ html, body {
 	    $(document).on('click','.orderproduct',function(){
 	    
 	       var ids=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/product/index?id='+ids[2]+'&activityproId='+ids[3];
+	       if(ids[4]== "0001" && ids[3] == "0"){
+	        location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+ids[2]+'&choice=0';
+	       }
+	       //景点  活动票
+	      else if(ids[4]== "0001" && ids[2] == "0"){
+	       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+ids[5]+'&proId='+ids[3]+'&choice=1';	       
+	       }
+/* 	       //住宿
+	      else if(ids[4]== "0002"){
+	        location.href=window.BASEPATH + '/business/gotoroomdetails?roomId='+roomId+'&inRoomDate='+inRoomDate+'&outRoomDate='+outRoomDate;
+	       } */
+	       //采摘
+	       else if(ids[4]== "2128"){
+	       
+	        location.href=window.BASEPATH +'/business/gotodetailspage?productId='+ids[2];
+	       }else{
+	       
+	        location.href=window.BASEPATH + 'pubnum/product/index?id='+ids[2]+'&activityproId='+ids[3];
+	       }	       	       
 	    });
 	    
 	    
@@ -1132,7 +1150,7 @@ html, body {
                                              支付(￥<span id="total">0</span>)
               </a> -->
 
-			<div style="width:100%;height:40px;position:fixed;bottom:2px">
+			<div style="width:100%;height:40px;position:fixed;bottom:2px;z-index:111111111111111;">
 				<a id="selectAll"
 					style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 					href="javascript:;" class="weui-btn weui-btn_primary"><span

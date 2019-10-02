@@ -165,6 +165,7 @@ html, body {
 
 <script type="text/javascript">
 $(function(){
+  consoleLog();
    getRecomment();
    getCate();
 });
@@ -187,10 +188,67 @@ function getRecomment(){
 			      });
 			}
 		});
-} 
+}
 
-function getCate(){
-      var _uriRecomment = window.BASEPATH + 'business/getCate?merchantId=${merchantId}';
+
+        var latitudes= 40.18654;
+		var longitudes= 117.35987;
+    //获取手机当前的经纬度
+     function consoleLog(){
+	    getloca();
+	    var loca = {};
+		function getloca() {
+			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				if (data === -1) return;
+				if (data) {
+					loca = data;
+					getLoation();
+				}
+			});
+		}
+    
+ 	function getLoation() {
+			wx.config({
+				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				//                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId : loca.appId, // 必填，公众号的唯一标识
+				timestamp : loca.timestamp, // 必填，生成签名的时间戳
+				nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+				signature : loca.signature, // 必填，签名，见附录1
+				jsApiList : [ 'checkJsApi', 'getLocation' ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+			wx.ready(function() {
+				wx.getLocation({
+					type : 'gcj02',
+					success : function(res) {
+						var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+						var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+						var speed = res.speed; // 速度，以米/每秒计  
+						var accuracy = res.accuracy; // 位置精度  
+						getCity(latitude, longitude);
+						
+					},
+					cancel : function(e) {
+						//这个地方是用户拒绝获取地理位置  
+						alert("请打开GPS定位,");
+					}
+				});
+				wx.error(function(res) {});
+			});
+		}
+		
+		  function getCity(latitude, longitude) { //通过经纬度   获取高德位置
+			latitudes = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
+			longitudes = (parseFloat(longitude)).toFixed(5);
+			 getCate();
+		}    
+
+}
+   function getCate(){
+      var _uriRecomment = window.BASEPATH + 'business/getCate?merchantId=${merchantId}&latitude='+latitudes+'&longitude='+longitudes;
 		$.get(_uriRecomment, null, function(data){
 		    var html=[];
 		    for(var i=0;i<data.length;i++){
@@ -200,7 +258,11 @@ function getCate(){
 		         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data[i].ShopName+'</p>');
 		         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+data[i].ModularClass+'</span></p>');
 		         if(data[i].Date != null)html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">'+data[i].Date+'</p>'); 
+		         if(data[i].average < 100){
 		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>'+data[i].average+'</span>元</p>'); 
+		         }else{
+		         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>30</span>元</p>');
+		         }
 		         var feature = data[i].feature;
 		         if(feature !=null && feature!=""){
 		            var split  =   feature.split(',');
@@ -211,7 +273,7 @@ function getCate(){
 			        }
 			        html.push('</div>');
 		         }
-		         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>');
+		         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">'+data[i].distance+'km</p>');
 		         html.push('</div>');
 		         html.push('</div></a>');  		        
 		    }
@@ -223,10 +285,11 @@ function getCate(){
 	function getAllMerchant(){
 			var name=$('.search').val();
 			var url="<%=basePath%>cate/search";
-	            $.post(url,{"merchantId":${merchantId},"name":name,"type":"0003"},function(data){
+	            $.post(url,{"merchantId":${merchantId},"name":name,"type":"0003","latitude":latitudes,"longitude":longitudes},function(data){
 	            	$('.youxuan').empty();
 	            	var average = data.average;
 	            	var merlist = data.merlist;
+	            	var distance = data.distance;
 	            	var html=[];
 	            	if(merlist.length==0){
 	            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
@@ -237,9 +300,11 @@ function getCate(){
 					         html.push('<div class="youxuan-in" style="display: inline-block;">');  
 					         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+merlist[i].shopName+'</p>');
 					         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+merlist[i].modularClass+'</span></p>');
-					         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">08:00-12:00</p>');
-					         html.push('<p style="position: absolute;top:25px;font-size:12px;margin-left:80px;color:#757575;">14:00-20:00</p>');
-					         html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span></span>'+average[i]+'元</p>');
+					         if(data[i].average < 100){
+		                     html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>'+data[i].average+'</span>元</p>'); 
+		                     }else{
+		                      html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>30</span>元</p>');
+		                     }
 					         var feature = merlist[i].feature;
 					         if(feature !=null && feature!=""){ //商家特色
 					            var split  =   feature.split(',');
@@ -249,7 +314,7 @@ function getCate(){
 						        }
 						        html.push('</div>');
 					         }
-					         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">600m</p>');
+					         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">'+distance[i]+'km</p>');
 					         html.push('</div>');
 					         html.push('</div></a>');
 							

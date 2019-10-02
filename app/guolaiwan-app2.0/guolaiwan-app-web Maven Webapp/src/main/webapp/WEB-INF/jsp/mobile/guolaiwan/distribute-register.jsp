@@ -492,15 +492,16 @@ html, body {
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+
 <script type="text/javascript"> 
      
      function regist(){
-      var re=/^(13[0-9]{9})|(15[89][0-9]{8})$/;       
+      var re= /^1[345789]\d{9}$/;            
           if($("#password").val() == ""){
              $.toast("请输入密码","forbidden");      
-              return false;
+              return false;	
          }
-         if(!re.test(  $("#addressphone").val())){  
+         if(!(re.test($("#addressphone").val()))){  
             $.toast("手机号有误", "forbidden");            		
             return false;	
             }
@@ -512,19 +513,19 @@ html, body {
 			             };    			                  
               $.post(url,date,function(msg){          
                   if (msg == 0){
-                   $.toast("手机号有误","forbidden");
-                  } 
-                   if (msg == 1){
-                    $.toast("密码错误","forbidden");            
-                   }
+                   $.toast("账号或密码有误","forbidden");
+                  }              
                    if(msg == 2){
                     $.toast("账号正在审核中","forbidden");
                    }
+                   if(msg == 3){
+                    $.toast("您没有登录权限","forbidden");
+                   }
                    if (msg == "success"){
                       $("#addressphone").val(" ");
-	                  $("#password").val(" ");                             
+	                  $("#password").val(" ");   	                                     
                     window.location.href="<%=request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/"%>distributor/app/login/0?'null'="          
+			       + path + "/"%>distributor/app/login/0?'null'="          
                    }
               })    
          }

@@ -172,12 +172,11 @@ html, body {
 <script type="text/javascript">
 
 
-
+     var distance=0;
    
 	$(function() {
-	 getallteam(); 
-	 getRecomment();
-	 getMerchantInfo();
+	 
+	 getRecomment();	
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -198,7 +197,6 @@ html, body {
 			}
 			getCom();
             getRecomment();
-		    getModal();
 			getActivityBundle();
 			initSharewx();
 	  }
@@ -257,7 +255,6 @@ html, body {
 				
 				getCom();
                 getRecomment();
-			    getModal();
 				getActivityBundle();
 				initSharewx();
             }  
@@ -339,19 +336,14 @@ html, body {
 					
 			});
 	    
-	    }
-	    
-	  
-
-	
+	    }	    	  	
 	});
 </script>
 <script>
-$(function(){
- 
-  })
  /*返回顶部  */
   $(function(){
+   consoleLog();
+   getMerchantInfo(); 		
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -366,6 +358,64 @@ $(function(){
         return false;
 	});
 });
+
+   	 var latitudes= 40.197173;
+	 var longitudes= 117.948431;
+	   //获取手机当前的经纬度
+     function consoleLog(){
+	    getloca();
+	    var loca = {};
+		function getloca() {
+			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				if (data === -1) return;
+				if (data) {
+					loca = data;
+					getLoation();
+				}
+			});
+		}
+   
+ 	function getLoation() {
+			wx.config({
+				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				//                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId : loca.appId, // 必填，公众号的唯一标识
+				timestamp : loca.timestamp, // 必填，生成签名的时间戳
+				nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+				signature : loca.signature, // 必填，签名，见附录1
+				jsApiList : [ 'checkJsApi', 'getLocation' ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+			wx.ready(function() {
+				wx.getLocation({
+					type : 'gcj02',
+					success : function(res) {
+						var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+						var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+						var speed = res.speed; // 速度，以米/每秒计  
+						var accuracy = res.accuracy; // 位置精度  
+						getCitys(latitude, longitude);
+						
+					},
+					cancel : function(e) {
+						//这个地方是用户拒绝获取地理位置  
+						alert("请打开GPS定位,");
+					}
+				});
+				wx.error(function(res) {});
+			});
+		}
+		
+		  function getCitys(latitude, longitude) { //通过经纬度   获取高德位置
+			latitudes = (parseFloat(latitude)).toFixed(5); //保留经纬度后5位
+			longitudes = (parseFloat(longitude)).toFixed(5);
+			
+		}    
+
+}
+    
     var page = 2;
     //下拉加载
     $(window).scroll(function(){
@@ -378,12 +428,11 @@ $(function(){
 				var date={ "merchantId":${productMerchantID},"pageNum":pageNumber}				
 				$.post('<%=basePath%>product/package/list', date, function(data){							   			 									
 					if(data.productPOs.length>0){
+					  page+=1;
 					  getLine(data);
 					  $('.weui-loadmores').hide();
-					 $('.weui-loadmore').show();
-					 setTimeout(function(){$('.weui-loadmore').hide()},1000);
-					
-					page+=1;
+					  $('.weui-loadmore').show(); 
+					  setTimeout(function(){$('.weui-loadmore').hide()},1000);										  
 						}
 						else{						
 						$('.weui-loadmore').hide();
@@ -410,12 +459,12 @@ $(function(){
 		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,1)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,1)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
-		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您739m</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
 		           }else{
 		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
-		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您739m</span>');
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span>');
 		           }
 		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+grade[i]+'分</span>   </p>');
 		           html.push('</div></div></div>');
@@ -425,7 +474,36 @@ $(function(){
 		       
 	    }
     
- function getallteam(){
+  function  getMerchantInfo(){
+     var mer_path = window.BASEPATH +'/product/package/merInfo';
+     var mer_da = {"merchantId":${productMerchantID},"latitude":latitudes,"longitude":longitudes};
+     $.post(mer_path,mer_da,function(msg){       
+          if(msg === undefined) return;          
+          var merpo  =  msg.merpos;
+          var proinfo = msg.prosinfos;  
+              distance = msg.distance;
+               getallteam();
+                   
+          var html = [] ;
+          html.push('<ul>');
+          html.push('<li><p style="font-size:18px;">'+merpo.shopName+'</p></li>');
+          html.push('<li ><p id="_pro_name" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;">');        
+          html.push('</p></li>');
+          html.push(' <li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
+          /* html.push('<li><p>开放时间：'+msg.beginTime+'-'+msg.endTime+'</p></li>'); */
+          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+merpo.shopAddress+'&tocoord='+merpo.shopLongitude+','+merpo.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+merpo.shopAddress+'</a></p></li>');
+          html.push('</ul>');
+          $(".jieshao").append(html.join(''));  
+          for(var i = 0 ;i <proinfo.length;i++){           
+          var htms = [];         
+          
+           htms.push('<span >'+proinfo[i].productName+'</span>,');                         
+          $("#_pro_name").append(htms.join(''));  
+          }             
+     })  
+     
+  }
+   function getallteam(){
      var _uricoms = window.BASEPATH + '/product/package/list?merchantId='+${productMerchantID}+'&pageNum=1';	
      $.get(_uricoms, null, function(data){  
            var list =  data.productPOs;
@@ -440,12 +518,12 @@ $(function(){
 		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,1)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,1)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
-		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您739m</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
 		           }else{
 		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>');
-		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您739m</span>'); 
+		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span>'); 
 		           }
 		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+str[i]+'</span><span style="float:right;margin-top:10px">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+grade[i]+'分</span>   </p>');
 		           html.push('</div></div></div>');
@@ -454,34 +532,6 @@ $(function(){
 	     	}
 	 });
 }
-
-  function  getMerchantInfo(){
-     var mer_path = window.BASEPATH +'/product/package/merInfo';
-     var mer_da = {"merchantId":${productMerchantID}};
-     $.post(mer_path,mer_da,function(msg){       
-          if(msg === undefined) return;          
-          var merpo  =  msg.merpos;
-          var proinfo = msg.prosinfos;  
-          
-                   
-          var html = [] ;
-          html.push('<ul>');
-          html.push('<li><p style="font-size:18px;">'+merpo.shopName+'</p></li>');
-          html.push('<li ><p id="_pro_name" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;">');        
-          html.push('</p></li>');
-          html.push(' <li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
-          html.push('<li><p>开放时间：'+msg.beginTime+'-'+msg.endTime+'</p></li>');
-          html.push('<li><p><img style="width:25px;height:25px;" src="lib/images/dingweis.png">地址：<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+merpo.shopAddress+'&tocoord='+merpo.shopLongitude+','+merpo.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+merpo.shopAddress+'</a></p></li>');
-          html.push('</ul>');
-          $(".jieshao").append(html.join(''));  
-          for(var i = 0 ;i <proinfo.length;i++){           
-          var htms = [];         
-          
-           htms.push('<span >'+proinfo[i].productName+'</span>,');                         
-          $("#_pro_name").append(htms.join(''));  
-          }             
-     })  
-  }
    function commodity(id,state){
    var proId = id.split("-");
    if(state == '0'){   

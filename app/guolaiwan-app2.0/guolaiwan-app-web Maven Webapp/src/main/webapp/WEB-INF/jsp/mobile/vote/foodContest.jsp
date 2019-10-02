@@ -473,6 +473,8 @@ $("#b"+base).css("color","black");
 		if(data.length==0){
 			nodata=1;
 			html.push('<p style="height:100px;line-height:70px;text-align:center;width:100%;color:#DADADA;">没有搜索到相关的商品</p>');
+			 $(".weui-loadmore").hide();
+			 $.toast('没有更多产品了~', 'text');
 			 //开始的时候这里放开 
 			  $('.contentt-box').children().remove();
    			 $('.contentt-box').append(html.join('')); 
@@ -480,6 +482,7 @@ $("#b"+base).css("color","black");
 		}
 		if(data.length>0){
 		  $(".weui-loadmore").hide();
+		  $('#uid').removeAttr("disabled");
 		}
      for(var i=0;i<data.length;i++){
      var productvotes=parseInt(data[i].productvotes);
@@ -591,11 +594,13 @@ var share={};
 				getvoteproduct(base,page);
 			}
 		}else if(srt=="3"){
+		 $('#uid').attr("disabled",true);
 			if(nodata==0){
 				page+=1;
 				getvoteproduct(base,page);
 			}else{
 				$.toast('没有下一页了~', 'text');
+				 $(".weui-loadmore").hide();
 			}
 		}
 	}
@@ -658,7 +663,7 @@ var share={};
 <div style="text-align:center;width:100%;overflow: hidden;">
 <button type="button"  onclick="changepage('1')" class="weui_btn weui_btn_mini weui_btn_default">首页</button>
 <button type="button"  onclick="changepage('2')" class="weui_btn weui_btn_mini weui_btn_default">上一页</button>
-<button type="button"  onclick="changepage('3')" class="weui_btn weui_btn_mini weui_btn_default">下一页</button>
+<button id="uid" type="button"  onclick="changepage('3')" class="weui_btn weui_btn_mini weui_btn_default">下一页</button>
 </div>
 <div style="height: 40px"></div>
 </body>

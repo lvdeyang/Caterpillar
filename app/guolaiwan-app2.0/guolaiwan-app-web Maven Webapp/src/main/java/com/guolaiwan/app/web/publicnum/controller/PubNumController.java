@@ -1,6 +1,7 @@
 package com.guolaiwan.app.web.publicnum.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -190,6 +191,9 @@ public class PubNumController extends WebBaseControll {
 		String openid = "";
 		String nickname = "";
 		String headimgurl = "";
+		JSONObject userInfo = null;
+		boolean isfans =false;
+		HttpSession session = request.getSession();
 		// 获取授权access_token
 		if (!istest) {
 			JSONObject params = new JSONObject();
@@ -201,13 +205,37 @@ public class PubNumController extends WebBaseControll {
 			JSONObject accessTokenInfo = JSON.parseObject(result);
 			String access_token = accessTokenInfo.getString("access_token");
 			openid = accessTokenInfo.getString("openid");
-			// 拉取用户详细信息
-			params = new JSONObject();
-			params.put("access_token", access_token);
-			params.put("openid", openid);
-			params.put("lang", "zh_CN");
-			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
-			JSONObject userInfo = JSON.parseObject(result);
+			//判断用户是否关注
+            if(openid==null){
+            	openid=session.getAttribute("openid").toString();
+            }
+			String uu = "https://api.weixin.qq.com/cgi-bin/token?appid=" + WxConfig.appId + "&secret=" + WxConfig.appsrcret  + "&grant_type=client_credential";
+            String dd = HttpClient.get(uu);
+            JSONObject jj = JSON.parseObject(dd);
+            String token = String.valueOf(jj.get("access_token"));
+			System.out.println("token:"+token);
+            String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+token+"&openid="+openid+"&lang=zh_CN";
+            params = new JSONObject();
+            result = HttpClient.get(url, params);
+			userInfo = JSON.parseObject(result);
+            System.out.println(result);
+            
+            
+            if(userInfo.getInteger("subscribe").equals(1)){ //未关注
+            	isfans=true;
+            	
+            }
+            if(isfans){
+            	session.setAttribute("type", "PHONENUM");
+            }else{
+            	session.setAttribute("type", null);
+            	params = new JSONObject();
+    			params.put("access_token", access_token);
+    			params.put("openid", openid);
+    			params.put("lang", "zh_CN");
+    			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
+    			userInfo = JSON.parseObject(result);
+            }
 			try {
 				nickname = EmojiFilter.emoji(userInfo.getString("nickname"));
 			} catch (Exception e) {
@@ -217,10 +245,9 @@ public class PubNumController extends WebBaseControll {
             
 			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
 		} else {
+			session.setAttribute("type", "PHONENUM");
 			openid = "opVUYv7wr-zPKl92ilFpqB8yS82I";
 		}
-		/**/
-		// 测试
 
 		UserInfoPO userInfoPO = null;
 		List<UserInfoPO> users = conn_user.getUsersByOpenId(openid);
@@ -232,7 +259,6 @@ public class PubNumController extends WebBaseControll {
 				}
 			}
 		}
-
 		if (userInfoPO == null) {
 			userInfoPO = new UserInfoPO();
 			userInfoPO.setUpdateTime(new Date());
@@ -244,11 +270,15 @@ public class PubNumController extends WebBaseControll {
 			}
 			conn_user.save(userInfoPO);
 		}
-		HttpSession session = request.getSession();
-		session.setAttribute("type", "PHONENUM");
+
 		session.setAttribute("userId", userInfoPO.getId());
 		session.setAttribute("openid", openid);
-		mv = new ModelAndView("redirect:" + rUrl);
+		if(isfans){
+			mv = new ModelAndView("redirect:" + rUrl);
+		}else{
+			mv = new ModelAndView("mobile/business/focuson");
+		}
+		
 		return mv;
 	}
 

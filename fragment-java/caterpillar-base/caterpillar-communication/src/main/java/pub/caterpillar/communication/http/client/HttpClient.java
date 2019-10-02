@@ -120,6 +120,43 @@ public class HttpClient {
 		return sBuilder==null?null:sBuilder.toString();
 	}
 	
+	
+	public static String postJson(String url, JSONObject jObject) throws Exception{
+		CloseableHttpClient httpclient = null;
+		CloseableHttpResponse response = null;
+		BufferedReader bReader = null;
+		StringBuilder sBuilder = null;
+		try{
+			httpclient = HttpClients.createDefault();
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.setHeader("Content-Type", "application/json");
+			httpPost.setHeader("Accept-Charset", "utf-8");
+			httpPost.setHeader("Accept-Language", "en-US,en");
+            StringEntity stringEntity= new StringEntity(jObject.toJSONString(),"utf-8");  
+            httpPost.setEntity(stringEntity);  
+		    response = httpclient.execute(httpPost);
+		    if(response.getStatusLine().getStatusCode() == 200){
+		    	HttpEntity entity = response.getEntity();
+		 	    InputStream in = entity.getContent();
+		 	    sBuilder = new StringBuilder();
+		 	    String line = "";
+		 	    bReader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+		 	    while ((line=bReader.readLine()) != null) {
+		 	    	sBuilder.append(line);
+		 		}
+		 	    EntityUtils.consume(entity);
+		    }else{
+		    	return response.getStatusLine().getStatusCode()+"@$$@请求失败";
+		    }
+		}finally{
+			if(bReader != null) bReader.close();
+			if(response != null) response.close();
+			if(httpclient != null) httpclient.close();
+		}
+		return sBuilder==null?null:sBuilder.toString();
+	}
+	
+	
 	/****************
 	 *  http GET方法
 	 ****************/
