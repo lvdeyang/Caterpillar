@@ -191,6 +191,9 @@ $(function() {
 	   $(".inp").focus(function(){
         document.activeElement.blur();
     });
+    var shareShopName='';
+    var shareShopImg'';
+    var shareShopDesc='';
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -243,7 +246,11 @@ $(function() {
 				      });
 				   html=[];
 	               html.push('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.shopAddress+'&tocoord='+data.shopLongitude+','+data.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+data.shopName+'欢迎您 </a>');
-				   $("#pname").append(html.join(''));  
+				   $("#pname").append(html.join(''));
+				   shareShopName=data.shopName;
+				   shareShopDesc=data.shopAddress;
+				   shareShopImg=data.shopHeading;
+				   //initSharewx();
 				}
 		 });
 	  }
@@ -276,18 +283,18 @@ $(function() {
 	
 	               
 	            wx.onMenuShareTimeline({
-                            title: '畅游华夏，尽在过来玩', // 分享标题
-                            link: 'http://<%=weburl%>/guolaiwan/pubnum/index', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
+                            title: shareShopName, // 分享标题
+                            link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: 'http://<%=weburl%>/file/'+shareShopImg, // 分享图标
                             success: function () {
                                	
                             }
                         });
 	            wx.onMenuShareAppMessage({
-					title : '畅游华夏，尽在过来玩', // 分享标题
-					desc : '<%=weburl%>，联系电话:0315-6681288/6686299', // 分享描述
-					link : 'http://<%=weburl%>/guolaiwan/pubnum/index', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-					imgUrl : 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
+					title : shareShopName, // 分享标题
+					desc : shareShopDesc, // 分享描述
+					link : location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					imgUrl : 'http://<%=weburl%>/file/'+shareShopImg, // 分享图标
 					success : function() {}
 				});
 	            
