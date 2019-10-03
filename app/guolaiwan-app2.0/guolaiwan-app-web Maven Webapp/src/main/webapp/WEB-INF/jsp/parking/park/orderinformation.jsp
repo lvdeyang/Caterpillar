@@ -74,8 +74,12 @@
        html,body{
        height:100%;
        }
-      a:hover{
-	   color:red;
+     .layui-btn{
+      text-decoration:none !important;
+	  color:#fff !important;
+	  font-size:15px !important;
+	  line-height:40px !important;
+	  font-weight: bold !important;
 }
        
     </style>
@@ -142,7 +146,7 @@ $(function() {
   <body>
      	<div class="nav" style="height:40px;width:100%;background:black;text-align:center;">
 
-     <a class="layui-btn layui-btn-small" style="float:left;height:100%;color:#ffffff;font-size:15px;line-height:40px;font-weight: bold;" href="quit/merchant/smartparking" title="返回"> <返回首页 </a>
+     <a class="layui-btn layui-btn-small" style="height:100%;color:#ffffff;" href="quit/merchant/smartparking" title="返回"> <span style="float:left;"><返回首页</span>  </a>
 	  <span style="color:#ffffff;line-height:40px;font-size:18px;margin-left:-72px;">订单信息</span>
 	</div> 
    <div class="header" style="width:100%;">

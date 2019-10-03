@@ -72,203 +72,128 @@
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
-<title></title>
+<title>折扣专区</title>
 <style type="text/css">
-* {
-	margin: 0px;
-	padding: 0px;
+a {
+	cursor: pointer !important;
 }
 
-.header-pic {
-		
+a, a:link, a:active, a:visited, a:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+html, body {
 	width: 100%;
-	text-align: center;
-	
+	min-height:auto;
+	background-color: #fff !important; 
+	position: relative;
+	-webkit-text-size-adjust: none;
+	text-decoration: none !important;
+	font-size:100%;
 }
 
-.header-pic img {
-	width: 70px;
-	height: 70px;
-	border-radius: 50%;
-	margin: 3% auto 1%;
+* {
+	box-sizing: border-box;
+	list-style: none;
+	text-decoration: none;
+	font-family: "微软雅黑";
 }
 
-.conformity {
+
+
+/* 页面样式 */
+.header {
 	height: 40px;
-	margin: 0 auto;
-	
-}
-
-
-
-.phone p {
-	font-size: 16px;
-	font-weight: bold;
-}
-
-.phone {
-	/* float: right; */
-	
 	line-height: 40px;
+	background-color: #18b4ed;
+	color: #fff;
+	border-bottom: 1px solid #bababa;
+}
+
+.header .link-left {
+	margin-left: 10px;
+	margin-right: 10px;
+	position: relative;
+	z-index: 1;
+}
+
+.header-content {
+	height:auto;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-left: 40px;
+	padding-right: 40px;
 	text-align: center;
-	
-	
+	z-index: 0;
 }
 
-
-.main select {
-	font-weight: bold;
-	border: 1px solid #CDCDCD;
-}
-
-.main input {
-	border: 1px solid #CDCDCD;
-}
-
-/* .banner img {
-   
-} */
-.img-responsive{
- 
-   height: 55%;
+  .swiper-container {
     width: 100%;
-    position:fixed;
-    bottom:0;
-	object-fit:cover;
-}
-.btn {
-	color: white;
-	border-radius: 5px;
-	border:none;
-	outline:none;
-}
+    padding:0;
+    margin:0;
+    height:200px;
+  } 
 
-.main1 {
-	margin: 0 auto;
-	width: 244px;
-	overflow: auto;
+  .swiper-container img {
+    display: block;
+    width: 100%;
+  }
+    
+.weui-navbar{
+ display: none !important;
 }
+  .inp::-webkit-input-placeholder{
+        text-align: center;
+} 
 
-.main2 {
-	margin: 5px auto 0px;
-	width: 244px;
-	overflow: auto;
-}
-
-html,body{
-	height: 100%;
-	background-color:#E6E6E6 ;
-}
 
 </style>
 
 </head>
-
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-
 <script type="text/javascript">
-   
-	$(function() {
-	var _uri = window.BASEPATH + 'quit/query';
-	var sal = ${param.sal}
-		$.post(_uri, null, function(data) {
-			data = parseAjaxResult(data);
-          if(data.userHeadimg != null &&  sal != 1){
-          window.location.href="quit/merchant/smartparking?merchantId=${merchantId}";
-          }
-		});
-	
-		var _uriYd = window.BASEPATH + '/smart/usere';
-		$.post(_uriYd, null, function(data) {
-			data = parseAjaxResult(data);
-			/* data.userNickname  */
-			var htm = [];
-			htm.push('<img src="' + data.userHeadimg + '"/>');
-			$('#img').append(htm.join(''));
-
-			var html = [];
-			html.push('<p id="username">用户名: ' + data.userNickname + '</p>');
-			$('.phone').append(html.join(''));
-		});
-
-
-		$(document).on('click', '.btn', function() {
-			var _uriYd = window.BASEPATH + 'smart/setVehicle';
-			var params = {};
-			params.parking = $(".input1").val();
-			params.parNumber = $(".s").val();
-			var re = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
-			if ($(".input1").val().search(re)) {
-			       alert("请输入正确车牌");
-				return false;
-			} else {
-				$.post(_uriYd, $.toJSON(params), function(data) {
-				  var _uriY = window.BASEPATH + 'smart/setVeh';
-			      var param = {};
-					param.parking = $(".input1").val();
-			      $.post(_uriY, $.toJSON(param), function(data) {
-			      	data = parseAjaxResult(data);
- 			        window.location.href="quit/merchant/smartparking?merchantId=${merchantId}";
- 			      	$(".btn").css("box-shadow","5px 5px 10px #8E8F8F");
- 			      });
-				});
-			}
-		});
-	});
-   var h=$(window).height();
-   $(window).resize(function(){
-      if($(window).height()<h){
-        $(".img-responsive").hide();
-      }
-      if($(window).height()>=h){
-        $(".img-responsive").show();
-      }
-   
-   })
+$(function(){
+var html = [];
+for (var i = 0; i < 8; i++) {
+html.push('<div style="width:40%;height:150px;margin:20px 4.5%;display: inline-block;overflow: hidden;position: relative;">');
+html.push('<img style="width:100%;" src="lib/images/7.jpg">');
+html.push('<p style="line-height: 20px;">遵化市xxxxxxxxxxx/斤￥7.00</p>');
+html.push('<p style="transform:rotate(-45deg);height:25px;background: #2BAD4A;color:#fff;position: absolute;width:100%;left:-55px;top:5px;font-size:110%;line-height:25px;text-align: center;">折扣</p>');
+html.push('</div>');
+}
+$('.main').append(html.join('')); 
+})
 </script>
 
 
 <body>
-
-	<div class='header-pic'>
-		<div id="img" style="height:80px;"></div>
-		<div class="conformity">
-			
-			<div class="phone"></div>
-		</div>
-		<div class="main">
-			<div class="main1" style="border-bottom:1px solid #CCCCCC;">
-				<img class="img4"
-					style="float: left;width: 30px;height: 30px;margin: 0 auto;"
-					src=" lib/images/4.png" /> <input class="input1"
-					style="width:200px;height:30px;line-height: 30px;border:none;outline:none;font-weight: bold;font-size:16px;background-color:#E6E6E6 ;"
-					type="text" name="test" id="" value="" placeholder="请输入车牌号"
-					maxlength="7" />
+	<!-- 主页 -->
+	<div class="header">
+			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
+				<div class="header-content">商户</div>
 			</div>
-
-			<div class="main2" style="border-bottom:1px solid #CCCCCC">
-				<img class="img3"
-					style="float: left;width: 30px;height: 30px;margin: 0 auto;"
-					src="lib/images/che.png" /> <select class="s"
-					style="height:30px;line-height: 30px;width: 202px;border: 0;outline: none;font-weight: bold;font-size:16px;background-color:#E6E6E6 ;">
-					<option style="width:200px ">小型车</option>
-					<option style="width:200px ">中型车</option>
-					<option style="width:200px ">大型车</option>
-                  </select>
-                   
-				</div>
-				 <button class="btn"style="z-index:222;width: 202px;height: 35px;margin: 5% auto;background-color: #02A1E9";>保存
-					</button>
-			</div>
-		</div>
-
-		<!-- <div class="banner img">
-			
-		</div> -->
-		<img class="img-responsive" src="lib/images/chundi.png" />
+	</div>
+	
+	 <div class="nav" style="width:100%;height:auto;margin:0 auto;text-align: center;position: relative;">
+	    <input placeholder="搜索商家或商品"  type="text" style="padding:0 15%;overflow: hidden;text-align:center;border:none;outline:none;width:85%;margin:20px auto;height:35px;border:2px solid #626262;border-radius:8px;line-height: 35px;">
+	    <select style="position: absolute;border:none;outline:none;top:27.5px;left:10%;">
+	    <option>商家</option>
+	    <option>商品</option>
+	    </select>
+	    <div style="height:auto;width:auto;padding:3px 11px;background: #626262;position: absolute;top:22px;right:7.5%;    border-top-right-radius: 7px;border-bottom-right-radius: 7px;">
+	    <img style="height:20px;" src="lib/images/sousuo.png">
+	    </div>
+	 </div>
+	 <div class="main" style="width:100%;height:auto;font-size:80%;">
+	 </div>
 </body>
 
 </html>
