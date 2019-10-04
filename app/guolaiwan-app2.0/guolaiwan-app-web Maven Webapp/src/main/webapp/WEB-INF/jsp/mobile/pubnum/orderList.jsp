@@ -482,7 +482,10 @@ html, body {
 	    text-align:center;
 	    font-size:12px;
     }
+    #saveReject:hover{
+    box-shadow:5px 5px 10px #8E8F8F;
     
+    }
     
 
 </style>
@@ -729,6 +732,7 @@ html, body {
       });
       
 	    $(document).on('click','#save',function(){
+	    
 		    var content=$('#comContent').val();
 		    var params={};
 		    params.userId=${userId};
