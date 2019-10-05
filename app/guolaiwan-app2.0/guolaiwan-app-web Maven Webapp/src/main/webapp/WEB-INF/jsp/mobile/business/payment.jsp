@@ -141,14 +141,15 @@ html, body {
 }
 .dingdan li{
  border-bottom:1px solid #D6D6D6;
-   text-align:center;
-}
-.dingdan li p{
- float:left;
 
 }
+.dingdan li p{
+ /* float:left; */
+display: inline-block;
+ text-align: left;
+ width:50%;
+}
 .dingdan li span{
- text-align:center;
  font-size:12px;
 }
 </style>
@@ -193,7 +194,7 @@ html, body {
 			var url="<%=basePath%>business/getproductbytype";
 	            $.post(url,{"type":"${type}"},function(data){
 	            	var html=[];
-					for(var i=0; i<data.length; i++){
+					for(var i=0; i<4; i++){
 						if(data[i].productAuditstatus=="审核通过"){
 							if(data[i].productClassCode=="006"){
 							 html.push('<a onclick="gotodetailspage('+data[i].id+')"><div class="zhifu"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
@@ -321,9 +322,9 @@ html, body {
 			  	$("#weui-cell-1").html(html);
          
 			}
-				if(data.order.payDate==null||data.order.payDate==""){
+				 if(data.order.payDate==null||data.order.payDate==""){
 					$('#paytime').hide();
-				}
+				} 
  			    if(data.order.bkCode=='0002'){
 			    	$('#startDate').show();
 			    	$('#endDate').show();
@@ -375,7 +376,7 @@ html, body {
 		   <p id="proName" style="position: absolute;top:10px;font-size:12px;left:30%">丛林穿越</p>
 		   <p style="position: absolute;bottom:10px;font-size:12px;left:30%"><span id="proPrice">￥10</span><span id="proCount"></span> </p>
 		  </div>
-		  <ul class="dingdan" style="width:100%;padding:0 5% 0 8%;line-height:50px;">
+		  <ul class="dingdan" style="width:100%;padding:0 5% 20px 8%;line-height:50px;height:auto;">
 		   <li><p>订单总额</p><span id="amount"></span></li>
 		    <li><p>实际总额</p><span id="payAmount"></span></li>
 		     <li><p>订单号</p><span id="orderNo"></span></li>
@@ -383,9 +384,9 @@ html, body {
 		       <li id="endDate" hidden="hidden"><p>离店日期</p><span id="endspan"></span></li>
 		        <li><p>套餐</p><span id="combo"></span></li>
 		         <li><p>快递</p><span id="logistics"></span></li>
-		          <li ><p>联系人</p><span id="cuserName"></span></li>
-		           <li ><p>手机号</p><span id="cphone"></span></li>
-		            <li ><p>详细地址</p><span id="caddress"></span></li>
+		          <li><p>联系人</p><span id="cuserName"></span></li>
+		           <li><p>手机号</p><span id="cphone"></span></li>
+		            <li><p>详细地址</p><span id="caddress"></span></li>
 		             <li id="paytime"><p>支付日期</p><span id="orderDate"></span></li>
 		  </ul>
 		  <div style="width:100%;height:auto;margin:10px auto;text-align: center;">
@@ -394,20 +395,6 @@ html, body {
 		  </div>
 		  
 		 </div>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		<p style="color:#EE7826;font-weight: bold;text-align: center;margin:10px 5px;">——<span style="margin:10px 5px;">您可能还喜欢</span>——</p>
      		<div class="tuijian">
