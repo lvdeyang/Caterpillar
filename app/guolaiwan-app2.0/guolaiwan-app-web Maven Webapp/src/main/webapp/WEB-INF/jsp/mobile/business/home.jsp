@@ -250,7 +250,7 @@ $(function() {
 				   shareShopName=data.shopName;
 				   shareShopDesc=data.shopAddress;
 				   shareShopImg=data.shopHeading;
-				   //initSharewx();
+				   initSharewx();
 				}
 		 });
 	  }
