@@ -1269,7 +1269,7 @@ public class WxPayReportController extends WebBaseControll {
     	
     	
     	JSONObject obj=new JSONObject();
-		obj.put("touser","opVUYv9LtqKAbiaXInBqI01hlpYg");
+		obj.put("touser","opVUYv-uZbDTdwuJDUEPIK3SrUz8");
     	obj.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
     	obj.put("url", "");
     	JSONObject microProObj=new JSONObject();
