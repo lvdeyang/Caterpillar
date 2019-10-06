@@ -173,7 +173,18 @@ padding:0 4px;
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script type="text/javascript">
-
+ function manjian(){
+       location.href=window.BASEPATH + '/product/activity/Public';
+   }
+ function lingquan(){
+     location.href=window.BASEPATH + '/product/activity/Shotgun';
+ }
+ function zhekou(){
+     location.href=window.BASEPATH + '/product/activity/Discount';
+ }
+ function miaosha(){
+     location.href=window.BASEPATH + '/product/activity/Timelimit';
+ }
 </script>
 <body>
 			<!-- 主页 -->
@@ -196,7 +207,7 @@ padding:0 4px;
 	      <div class="main-on">
 	        <p>超值满减</p>
 	        <p>下单满500元减100元，满1000减200元</p>
-	        <p style="color:#FD761F;">立即参与 >></p>
+	        <p onclick="manjian()"style="color:#FD761F;">立即参与 >></p>
 	      </div>
 	    </li>
 	    <li style="background: linear-gradient(to right,#8060FA,#4C76FF);">
@@ -206,7 +217,7 @@ padding:0 4px;
 	      <div class="main-on">
 	        <p>领券专区</p>
 	        <p>超值优惠券等你来拿，下单更优惠</p>
-	        <p style="color:#8060FA;">立即领取 >></p>
+	        <p onclick="lingquan()"style="color:#8060FA;">立即领取 >></p>
 	      </div>
 	    </li>
 	    <li style="background: linear-gradient(to right,#FF43F2,#FD5D20);">
@@ -216,7 +227,7 @@ padding:0 4px;
         <div class="main-on">
         <p>折扣专区</p>
         <p>1件8折，2件7折，最低5折起</p>
-        <p style="color:#FF43F2;">立即参与 >></p>
+        <p onclick="zhekou()"style="color:#FF43F2;">立即参与 >></p>
         </div>
 	    </li>
 	    <li style="background: linear-gradient(to right,#4770FE,#21D2B4);">
@@ -226,7 +237,7 @@ padding:0 4px;
 	       <div class="main-on">
 	       <p>秒杀专区</p>
 	       <p>限时秒杀，优惠享不停</p>
-	       <p style="color:#4770FE;">立即抢购 >></p>
+	       <p onclick="miaosha()"style="color:#4770FE;">立即抢购 >></p>
 	       </div>
 	    </li>
 	  </ul>
