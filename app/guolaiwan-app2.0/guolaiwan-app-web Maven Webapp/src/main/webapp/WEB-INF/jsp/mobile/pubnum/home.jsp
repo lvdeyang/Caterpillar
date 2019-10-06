@@ -885,7 +885,7 @@ return $.cookie(str);
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
 	        //景点模块	       
-	       if(codes[2] == 0001){	      
+	       if(codes[2] == '0001'){	      
 	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=${modularCode}';
 	          }
 	      /*  //住宿模块
@@ -893,13 +893,17 @@ return $.cookie(str);
 	         location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+codes[1];
 	       }  */
 	       //美食模块  
-	      else if(codes[2] == 0003){
+	      else if(codes[2] == '0003'){
 	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
 	       }
 	       //采摘板块
-	      else if(codes[2] == 2128){
+	      else if(codes[2] == '2128'){
 	      
 	        location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
+	      } 
+	      /* 地方特产 */
+	       else if(codes[2] == '01'){
+	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
 	      } 
 	       else{
 	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
@@ -909,12 +913,12 @@ return $.cookie(str);
 	    
 	    });
 	    $(document).on('click','.merchant1',function(){
-	       var codes=this.id.split('-');	  
+	       var codes=this.id.split('-');	
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
 	        //景点模块	       
-	       if(codes[2] == 0001){	      
+	       if(codes[2] == '0001'){	      
 	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=0001';
 	          }
 	       /* //住宿模块
@@ -922,13 +926,17 @@ return $.cookie(str);
 	         location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+codes[1];
 	       }  */
 	       //美食模块  
-	      else if(codes[2] == 0003){
+	      else if(codes[2] == '0003'){
 	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
 	       }
 	       //采摘板块
-	      else if(codes[2] == 2128){
+	      else if(codes[2] == '2128'){
 	      
 	        location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
+	      } 
+	      /* 地方特产 */
+	        else if(codes[2] == '01'){
+	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
 	      } 
 	       else{
 	        location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
