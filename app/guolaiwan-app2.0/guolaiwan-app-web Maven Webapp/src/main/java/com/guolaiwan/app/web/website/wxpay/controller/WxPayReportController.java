@@ -67,6 +67,7 @@ import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
 import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
+import com.guolaiwan.bussiness.website.po.AddressPO;
 
 import pub.caterpillar.weixin.constants.WXContants;
 import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
@@ -1274,7 +1275,8 @@ public class WxPayReportController extends WebBaseControll {
     	}
     	dataObject.put("keyword4", timeObj);
     	JSONObject remarkObj=new JSONObject();
-    	if(conn_address.getAddressByUserId(buyUser.getId()).get(0)!=null){
+    	List<AddressPO> tempAddrs=conn_address.getAddressByUserId(buyUser.getId());
+    	if(tempAddrs!=null&&!tempAddrs.isEmpty()){
     		remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址:"+conn_address.getAddressByUserId(buyUser.getId()).get(0).getConsigneeAddress()+")");
     	}else{
     		remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址: 此用户未填写详细地址)");
@@ -1304,7 +1306,7 @@ public class WxPayReportController extends WebBaseControll {
     	
     	
     	JSONObject nameObj2=new JSONObject();
-    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+    	if(tempAddrs!=null&&!tempAddrs.isEmpty()){
     		nameObj2.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
     	}else{
     		nameObj2.put("value",conn_user.get(orderInfoPO.getUserId()).getUserNickname());
@@ -1330,7 +1332,7 @@ public class WxPayReportController extends WebBaseControll {
     	
     	dataObject2.put("keyword4", timeObj2);
     	JSONObject remarkObj2=new JSONObject();
-    	if(conn_address.getAddressByUserId(buyUser.getId()).get(0)!=null){
+    	if(conn_address.getAddressByUserId(buyUser.getId())!=null){
     		remarkObj2.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址:"+conn_address.getAddressByUserId(buyUser.getId()).get(0).getConsigneeAddress()+")");
     	}else{
     		remarkObj2.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址: 此用户未填写详细地址)");
