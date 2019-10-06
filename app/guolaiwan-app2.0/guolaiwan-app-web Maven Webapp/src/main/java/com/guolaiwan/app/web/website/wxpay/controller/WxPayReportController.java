@@ -55,6 +55,7 @@ import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
+import com.guolaiwan.bussiness.admin.po.MessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.TablePO;
@@ -67,6 +68,7 @@ import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
 import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
+import com.guolaiwan.bussiness.website.po.AddressPO;
 
 import pub.caterpillar.weixin.constants.WXContants;
 import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
@@ -1111,6 +1113,8 @@ public class WxPayReportController extends WebBaseControll {
 	@Autowired UserInfoDAO conn_user;
 	@Autowired MerchantDAO conn_merchant;
 	@Autowired MerchantUserDao conn_merchantUser;
+	@Autowired MessageMiddleClientDao conn_messageclient;
+	@Autowired MessageDAO conn_message;
 	@Autowired
 	private AddressDAO conn_address;
     private void sendMessage(OrderInfoPO orderInfoPO){
@@ -1223,6 +1227,45 @@ public class WxPayReportController extends WebBaseControll {
 			
 		}
     	
+    	//过来玩工作人员
+    	
+    	//用户姓名
+        JSONObject nameObj=new JSONObject();
+        
+        List<MessageMiddleClientPO> clientPOs=conn_messageclient.findByField("orderId", orderInfoPO.getId());
+        MessagePO messagePO=null;
+        if(clientPOs!=null&&!clientPOs.isEmpty()){
+        	messagePO=conn_message.get(clientPOs.get(0).getMessageId());
+        }
+        if(messagePO!=null){
+        	nameObj.put("value", messagePO.getName());
+        }else if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+    		nameObj.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
+    	}else{
+    		nameObj.put("value",conn_user.get(orderInfoPO.getUserId()).getUserNickname());
+    	}
+    	nameObj.put("color", "");
+    	
+    	//remark
+    	String pNum="";
+    	if(messagePO!=null){
+    		pNum=messagePO.getPhone();
+    	}
+    	else if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+    		pNum=conn_address.get(orderInfoPO.getMailAddress()).getConsigneePhone();
+    	}
+    	if(pNum==null||pNum.isEmpty()){
+    		pNum=buyUser.getUserPhone();
+    	}
+    	
+    	JSONObject remarkObj=new JSONObject();
+    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+    		remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址:"+conn_address.get(orderInfoPO.getMailAddress()).getConsigneeAddress()+")");
+    	}else{
+    		remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址: 此用户未填写详细地址)");
+    	}
+    	remarkObj.put("color", "");
+    	
     	
     	
     	JSONObject obj=new JSONObject();
@@ -1240,14 +1283,7 @@ public class WxPayReportController extends WebBaseControll {
     	dataObject.put("first", firstObj);
     	
     	
-    	JSONObject nameObj=new JSONObject();
-    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
-    		nameObj.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
-    	}else{
-    		nameObj.put("value",conn_user.get(orderInfoPO.getUserId()).getUserNickname());
-    	}
-    	
-    	nameObj.put("color", "");
+    	//用户姓名
     	dataObject.put("keyword1", nameObj);
 
     	
@@ -1264,22 +1300,8 @@ public class WxPayReportController extends WebBaseControll {
     	JSONObject timeObj=new JSONObject();
     	timeObj.put("value", productPO==null?"到店支付订单:"+merchantPO.getShopName():productPO.getProductName());
     	timeObj.put("color", "");
-    	
-    	String pNum="";
-    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
-    		pNum=conn_address.get(orderInfoPO.getMailAddress()).getConsigneePhone();
-    	}
-    	if(pNum==null||pNum.isEmpty()){
-    		pNum=buyUser.getUserPhone();
-    	}
     	dataObject.put("keyword4", timeObj);
-    	JSONObject remarkObj=new JSONObject();
-    	if(conn_address.getAddressByUserId(buyUser.getId()).get(0)!=null){
-    		remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址:"+conn_address.getAddressByUserId(buyUser.getId()).get(0).getConsigneeAddress()+")");
-    	}else{
-    		remarkObj.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址: 此用户未填写详细地址)");
-    	}
-    	remarkObj.put("color", "");
+    	//remark
     	dataObject.put("remark", remarkObj);
     	obj.put("data", dataObject);
     	SendMsgUtil.sendTemplate(obj.toJSONString());
@@ -1302,15 +1324,8 @@ public class WxPayReportController extends WebBaseControll {
     	firstObj2.put("color", "");
     	dataObject2.put("first", firstObj2);
     	
-    	
-    	JSONObject nameObj2=new JSONObject();
-    	if(conn_address.get(orderInfoPO.getMailAddress())!=null){
-    		nameObj2.put("value", conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName());
-    	}else{
-    		nameObj2.put("value",conn_user.get(orderInfoPO.getUserId()).getUserNickname());
-    	}
-    	nameObj2.put("color", "");
-    	dataObject2.put("keyword1", nameObj2);
+    	//用户姓名
+    	dataObject2.put("keyword1", nameObj);
 
     	
     	JSONObject accountTypeObj2=new JSONObject();
@@ -1329,14 +1344,8 @@ public class WxPayReportController extends WebBaseControll {
     	
     	
     	dataObject2.put("keyword4", timeObj2);
-    	JSONObject remarkObj2=new JSONObject();
-    	if(conn_address.getAddressByUserId(buyUser.getId()).get(0)!=null){
-    		remarkObj2.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址:"+conn_address.getAddressByUserId(buyUser.getId()).get(0).getConsigneeAddress()+")");
-    	}else{
-    		remarkObj2.put("value", "请做好接待工作(用户电话:"+pNum+"  用户地址: 此用户未填写详细地址)");
-    	}
-    	remarkObj2.put("color", "");
-    	dataObject2.put("remark", remarkObj2);
+    	
+    	dataObject2.put("remark", remarkObj);
     	obj2.put("data", dataObject2);
     	SendMsgUtil.sendTemplate(obj2.toJSONString());
     	

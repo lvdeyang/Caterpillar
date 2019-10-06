@@ -488,7 +488,8 @@ public class ProductPackageController extends BaseController {
    * */	
 	@RequestMapping(value="/orders/info",method=RequestMethod.GET)
 	public Map<String, Object> getOrdersInfo(HttpServletRequest request ,long isCombo) throws NumberFormatException, Exception{
-		Map<String, Object> map = new HashMap<String, Object>();		
+		Map<String, Object> map = new HashMap<String, Object>();	
+		
 		//获取票的价格
 		String ticketPrice =null;
 		if(isCombo == 1){
@@ -497,9 +498,13 @@ public class ProductPackageController extends BaseController {
 			ProductComboPO ComboPOs = conn_combo.get(Long.parseLong(comboId));
 			//套餐票的价格
 			 ticketPrice =  dlf.format(Double.parseDouble(ComboPOs.getComboprice()+"")/100);
+			 ProductPO productPO=productDao.get(ComboPOs.getProductId());
+			  map.put("ifFace", productPO.getIfFace());
 		}else{
 		  String choice = request.getParameter("choice");
 		  String proId = request.getParameter("proId");
+		  ProductPO productPO=productDao.get(Long.parseLong(proId));
+		  map.put("ifFace", productPO.getIfFace());
 		  //普通票价格
 			if("0".equals(choice)){			
 			List<ProductVO> productVO = new ProductVO().getConverter(ProductVO.class)
@@ -514,6 +519,8 @@ public class ProductPackageController extends BaseController {
 			}						 	
 		}
 		map.put("ticketPrice", ticketPrice);
+		
+		
 		return map;
 	}
 	

@@ -204,7 +204,7 @@ color:#fff;
  <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-<script>	 
+<script>	 var ifFace=0;
 	 layui.use('laydate', function(){
 	  //禁止软键盘弹出
 	   $("#useDate").focus(function(){
@@ -216,7 +216,6 @@ color:#fff;
 	  laydate.render({
 	    elem: '#useDate' //指定元素
 	  });
-	  
 	  var today = new Date();
       var tmonth=today.getMonth()+1+'';
       tmonth=(tmonth.length==1?(0+''+tmonth):tmonth);
@@ -232,7 +231,7 @@ color:#fff;
 	   
 	    }
 	   
-	    getUserInfo();	   	   	   	   
+	    getUserInfo(true);	   	   	   	   
 	    getordersInfo();
 	     window.BASEPATH = '<%=basePath%>';
 	     var parseAjaxResult = function(data){
@@ -246,6 +245,7 @@ color:#fff;
 	  };	 
 	    }); 	 	  	 
      var pice = ""; 
+ 
 	 function  getordersInfo(){
 	 if(${isCombo} == 1){	 
 	 var order_path = window.BASEPATH + 'product/package/orders/info?comboId=${comboId}&isCombo=${isCombo}';
@@ -253,7 +253,9 @@ color:#fff;
 	  var order_path = window.BASEPATH + 'product/package/orders/info?proId=${proId}&choice=${choice}&isCombo=${isCombo}';
 	 }	 
 	 $.get(order_path,null,function(msg){
-	   var prc = msg.ticketPrice;		     
+	   var prc = msg.ticketPrice;
+	   ifFace=msg.ifFace;
+		     
 	  $("#zong").text(prc);
 	   pice=prc;
 	 })
@@ -332,11 +334,12 @@ color:#fff;
 		     $.toast("预定时间不能为空", "forbidden");
 		      return false;
 		    }
-		//票的数量与所选人数是否一样    
-          if($('.zhi').val() != number){
+		//票的数量与所选人数是否一样   
+          if((ifFace==1&&$('.zhi').val() != number)||(ifFace==0&&number==0)){
              $.toast("请在填写身份信息处确认用户信息数量", "forbidden");
 		      return false;         
           }    
+
 		    
 		    var buyDate = new Date($("#useDate").val().replace(/-/g,"/"))
 		    var time = new Date();
@@ -848,7 +851,7 @@ color:#fff;
 	          	    $("#window-1-message").children().remove();          	    
 	          	    clientNumber.splice(0,clientNumber.length);
 	          	    number = 0;
-	           		getUserInfo();
+	           		getUserInfo(false);
 	           		
 	           		
 	           	}
@@ -865,7 +868,7 @@ color:#fff;
 	          	    $("#window-1-message").children().remove();          	    
 	          	    clientNumber.splice(0,clientNumber.length);
 	          	     number = 0;
-	           		getUserInfo();
+	           		getUserInfo(false);
 	               alert("操作成功")
 	        }
 	     })	 	 	    
@@ -873,17 +876,23 @@ color:#fff;
        
 	     //查询用户信息
 	     var clientInfo = " "; 	    
-	  	 function  getUserInfo(){
+	  	 function  getUserInfo(first){
 	  	  var url_ = window.BASEPATH + 'product/package/user/list';
 	  	  $.get(url_,null,function(msg){
 	  	  var mesage = msg.message;
 	  	  clientInfo = msg.message; 	  
 	  	  if(mesage.length==0){return;}
-	   
+	      var firstAddr=0;
 	  	  for(var i = 0; i<mesage.length;i++){	  	    	  	     
 	  	     var html = [];  	  	             
              html.push('<div  style="width:100%;height:auto;background: #fff;margin:5px 0;position: relative;border-bottom:1px solid #A6A6A6;text-align: left;padding:10px 10%;">');
-             html.push('<input id="input-'+i+'"  onclick="clientMessage(this.id)"  type="checkbox" name="sex" value="1" style="position: absolute;top:30px;left:5%;" />');
+             if(first&&i==0){
+                html.push('<input checked="checked" id="input-'+i+'"  onclick="clientMessage(this.id)"  type="checkbox" name="sex" value="1" style="position: absolute;top:30px;left:5%;" />');
+                firstAddr='input-'+i;
+                
+             }else{
+                html.push('<input id="input-'+i+'"  onclick="clientMessage(this.id)"  type="checkbox" name="sex" value="1" style="position: absolute;top:30px;left:5%;" />');
+             }
              html.push('<P>姓名：'+mesage[i].name+'</P>');
              html.push('<P>手机号：'+mesage[i].phone+'</P>');
              html.push('<P>身份证号：'+mesage[i].number+'</P>');
@@ -893,6 +902,7 @@ color:#fff;
              $("#window-1-message").append(html.join(''));
 			 
 	  	  }
+clientMessage(firstAddr);
 	  	  	})  	 	  	 
 	  	 }
 	
@@ -919,13 +929,16 @@ color:#fff;
    
   function clientMessage(id){
     var i = id.split("-");
+
    if(clientInfo != " "){
 			//多选框要用prop 来获取判断
             if($("#"+id).prop("checked")){
             //添加勾选的信息
-             number+=1;	
+             number+=1;
+	
              clientNumber[i[1]] = clientInfo[i[1]].id;	
-			 var htm = [];					
+			 var htm = [];	
+			
              htm.push('<p style="width:20%;padding:2px 5px;background:#FF9C00;color:#fff;border-radius:12px;margin:2px 5px;display: inline-block;text-align:center;" id="homepage-'+i[1]+'">'+clientInfo[i[1]].name+'</p>');            
              $(".homepage_add").append(htm.join(''));         
             } 
