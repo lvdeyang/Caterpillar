@@ -2853,13 +2853,13 @@ public class BusinessController extends WebBaseControll {
 
 				List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants,
 						MerchantVO.class);
-
+				List<MerchantVO> retList=new ArrayList<MerchantVO>();
 				for (int i = 0; i<_merchants.size();i++) {
 							
 					MerchantVO  merchantVO =  _merchants.get(i);
 					//指定该商户下的子商户
 					if(!(merchList.contains(merchantVO.getId()))){
-						_merchants.remove(i);
+						//_merchants.remove(i);
 						continue;						
 					}
 					// 图片
@@ -2878,16 +2878,11 @@ public class BusinessController extends WebBaseControll {
 					} else {
 						merchantVO.setAveragePrice(df.format((double) minPrice / 100));
 					}
-					/*
-					 * //简介
-					 * merchantVO.setShopIntroduction(ReduceHtml2Text.removeHtmlTag(
-					 * merchantVO.getShopIntroduction()));
-					 */
+					retList.add(merchantVO);
 				}
-				// 修改平谷搜索功能 4/21
-				int count = Mer_chant.appCount(name);
-				dataMap.put("count", count);
-				dataMap.put("merchants", _merchants);
+				
+				dataMap.put("count", retList.size());
+				dataMap.put("merchants", retList);
 				break;
 			case "PRODUCT":
 				// 修改平谷搜索功能 4/21
@@ -2898,7 +2893,7 @@ public class BusinessController extends WebBaseControll {
 					ProductVO  productVO = _products.get(j);
                     //指定该商户下的商品					
 					if(!(merchList.contains(productVO.getProductMerchantID()))){
-						_products.remove(j);
+						//_products.remove(j);
 						continue;						
 					}
 					JSONObject shopJson = JSON.parseObject(productVO.getProductMerchantJson());
@@ -2948,9 +2943,7 @@ public class BusinessController extends WebBaseControll {
 					}
 					retProductVOs.add(productVO);
 				}
-				// 修改平谷搜索功能 4/21
-				int count1 = conn_product.appCountByComNew(name);
-				dataMap.put("count", count1);
+				dataMap.put("count", retProductVOs.size());
 				dataMap.put("products", retProductVOs);
 				break;
 

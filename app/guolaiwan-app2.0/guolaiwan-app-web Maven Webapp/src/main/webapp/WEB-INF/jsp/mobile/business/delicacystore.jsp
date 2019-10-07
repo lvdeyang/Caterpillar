@@ -856,7 +856,7 @@ appearance:none;
 		    } },
 		    { text: "微信支付", onClick: function(){ 
 			    $.confirm("确定支付？", function() {
-				        payPublic(data.orderId,0.2);
+				        payPublic(data.orderId,$("#totalpriceshow").html());
 	  					$(".olderss").hide();
 	  	                $(".nav").show();
 				  }, function() {});
