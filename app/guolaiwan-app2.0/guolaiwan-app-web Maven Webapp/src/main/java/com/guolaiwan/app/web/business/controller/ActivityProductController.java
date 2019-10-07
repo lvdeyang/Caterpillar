@@ -10,6 +10,7 @@ import java.util.Map;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -73,7 +74,7 @@ public class ActivityProductController {
 	}
 	
 	/*
-	 * 临时跳转
+	 *活动
 	 * 
 	 * **/
 	@RequestMapping(value="/jump")
@@ -82,7 +83,41 @@ public class ActivityProductController {
 	    mView.addObject("productMerchantID", 198);
 		return mView;
 	}
-	
+  //满减
+		@RequestMapping(value = "/Public")
+		public ModelAndView businessPublic(HttpServletRequest request,HttpSession session) throws Exception {
+			ModelAndView mv = null;
+			mv = new ModelAndView("mobile/business/public"); 
+			return mv;
+		} 
+  //折扣
+		@RequestMapping(value = "/Discount")
+		public ModelAndView businessDiscount(HttpServletRequest request,HttpSession session) throws Exception {
+			ModelAndView mv = null;
+			mv = new ModelAndView("mobile/business/discount"); 
+			return mv;
+		}
+  //秒杀
+		@RequestMapping(value = "/Timelimit")
+		public ModelAndView businessTimelimit(HttpServletRequest request,HttpSession session) throws Exception {
+			ModelAndView mv = null;
+			mv = new ModelAndView("mobile/business/timelimit"); 
+			return mv;
+		}
+  //领券
+	@RequestMapping(value = "/Shotgun")
+	public ModelAndView businessShotgun(HttpServletRequest request,HttpSession session) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/Shotgun"); 
+		return mv;
+	}
+  //优惠券
+	@RequestMapping(value = "/Voucher")
+	public ModelAndView businessVoucher(HttpServletRequest request,HttpSession session) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/business/Voucher"); 
+		return mv;
+	} 	
 	/*
 	 *  活动商品详情页面
 	 * 
