@@ -748,8 +748,9 @@ html, body {
 	       }else{
 	          //景点模块
 	       if('${modularCode}' == "0001"){	      
-	         location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId='+codes[1];
-	          }
+	         //location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId='+codes[1];
+	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=0001';
+	       }
 	       /* //住宿模块
 	        else if('${modularCode}' == 0002){
 	         location.href=window.BASEPATH + 'business/gotoshopdetails?merchantId='+codes[1];

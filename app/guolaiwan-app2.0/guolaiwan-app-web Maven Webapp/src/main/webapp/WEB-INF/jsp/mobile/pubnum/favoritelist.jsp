@@ -569,7 +569,7 @@ html, body {
 	                   		html.push('<td  style="padding:10px;width:50%">');
 	                     	html.push('<input class="inputt" type="checkbox" onclick="return false;" name="checkboxs" id="inputt" value="'+pros[i].id+'" style="display:none;float:left;margin-top:50px;background-color:red;width:7%;" />');
 				       if(pros[i].shopAuditState=='审核通过'){
-				       		html.push('<image style=" width:92%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" id="pro-'+pros[i].id+'"/>');
+				       		html.push('<image style=" width:92%;height:100px;" src="'+pros[i].shopPic+'" class="merchant" data="'+pros[i].modularCode+'" id="pro-'+pros[i].id+'"/>');
 		                 	html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+pros[i].shopName+'</p>');
 				       }else{
 				       		html.push('<image style=" width:92%;height:100px;" src="'+pros[i].shopPic+'"/>');
@@ -597,7 +597,16 @@ html, body {
 		getMerchant();
 		$(document).on('click','.merchant',function(){
 	       var codes=this.id.split('-');
-	       location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       var modCode=$(this).attr('data');
+	       if(modCode== "0001"){	      
+	           //location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId='+codes[1];
+	           location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=0001';
+	       }else if(modCode == 0003){
+	           location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
+	       }else{
+	           location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
+	       }
+	       
 	    });
 	    $(document).on('click','.delmer',function(){
 	       var codes=this.id.split('-');
