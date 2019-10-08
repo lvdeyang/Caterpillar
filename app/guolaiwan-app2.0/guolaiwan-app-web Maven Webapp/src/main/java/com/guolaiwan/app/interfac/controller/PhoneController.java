@@ -551,6 +551,73 @@ public class PhoneController extends WebBaseControll {
 	 * @throws Exception
 	 */
 	@ResponseBody
+	@RequestMapping(value = "/getOnlyModulars", method = RequestMethod.GET)
+	public Map<String, Object> getOnlyMenus(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String comCode = request.getParameter("comCode");
+		CompanyPO company = conn_company.appGetByCode(comCode);
+		Map<String, Object> data = new HashMap<String, Object>();
+		if (company == null) {
+			return ERROR("未获取到公司");
+		}
+		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		// 模块
+		List<ModularPO> modulars = conn_modular.appFindBycomId(company.getId());
+		List<ModularVO> _modulars = ModularVO.getConverter(ModularVO.class).convert(modulars, ModularVO.class);
+		for (ModularVO modularVO : _modulars) {
+			// 图片
+			modularVO.setModularPic(sysConfig.getWebUrl() + modularVO.getModularPic());
+		}
+		data.put("modulars", _modulars);
+		return success(data);
+	}
+
+	
+	@ResponseBody
+	@RequestMapping(value = "/getModularMerchants", method = RequestMethod.GET)
+	public Map<String, Object> getModularMerchants(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String modularCode = request.getParameter("modularCode");
+		
+		ModularPO modularPO=conn_modular.getByCode(modularCode);
+		
+		Map<String, Object> data = new HashMap<String, Object>();
+		DecimalFormat df = new DecimalFormat("0.00");
+		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
+		List<ColumnPO> columns = conn_column.getColumnByCode(modularCode);
+		List<MerchantPO> merchants = new ArrayList<MerchantPO>();
+		for (ColumnPO cpo : columns) {
+			List<MerchantPO> mers = conn_merchant.getMerchantById(cpo.getMerchantId());
+			if (mers != null && !mers.isEmpty()) {
+				if (mers.get(0).getShopAuditState().equals(ShopAuditStateType.T)) {
+					merchants.add(mers.get(0));
+				}
+			}
+		}
+		List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants,
+				MerchantVO.class);
+		for (MerchantVO merchantVO : _merchants) {
+			// 图片
+			merchantVO.setShopHeading(sysConfig.getWebUrl() + merchantVO.getShopHeading());
+			merchantVO.setShopQualifications(sysConfig.getWebUrl() + merchantVO.getShopQualifications());
+			merchantVO.setShopPic(sysConfig.getWebUrl() + merchantVO.getShopPic());
+			// 多图
+			String morePicStr = split(merchantVO.getShopMpic(), sysConfig.getWebUrl());
+			merchantVO.setShopMpic(morePicStr);
+			// 最小价格
+			long minPrice = conn_product.getMinPriceByMer(merchantVO.getId());
+
+			if (minPrice == 0l) {
+				merchantVO.setAveragePrice("无数据");
+			} else {
+				merchantVO.setAveragePrice(df.format((double) minPrice / 100));
+			}
+		}
+		data.put("merchants", _merchants);
+		data.put("modular", modularPO);
+		return success(data);
+	}
+	
+	
+	@ResponseBody
 	@RequestMapping(value = "/getModulars", method = RequestMethod.GET)
 	public Map<String, Object> getMenus(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String comCode = request.getParameter("comCode");
@@ -675,7 +742,9 @@ public class PhoneController extends WebBaseControll {
 		ths.setList(list);
 		return success(data);
 	}
-
+	
+	
+	
 	/**
 	 * 二级页面 轮播图（模块）
 	 * 

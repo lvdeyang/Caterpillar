@@ -708,14 +708,14 @@ return $.cookie(str);
 	  
 	  
 	  //test
-	    if(comCode=='0000'){
+	    /*if(comCode=='0000'){
 		    comCode='0001';
 		}
 		getCom();
 	    getRecomment();
 	    getModal();
 		getActivityBundle();
-		initSharewx();
+		initSharewx();*/
 	  
 	  
 	  
@@ -746,7 +746,7 @@ return $.cookie(str);
       
 		
 	  function getModal(){
-	    var _uriModal = window.BASEPATH + 'phoneApp/getModulars?comCode='+comCode;
+	    var _uriModal = window.BASEPATH + 'phoneApp/getOnlyModulars?comCode='+comCode;
 		
 		$.get(_uriModal, null, function(data){
 			data = parseAjaxResult(data);
@@ -811,19 +811,83 @@ return $.cookie(str);
 				     html.push('</table>');
 				     html.push('</div>');
 				   }
+				   
+				   generateModMerchant(modals[index].modularCode);
 				}
 				$('#columnWrapper').append(html.join(''));
 				$("#columnSwiper").swiper({
 			        loop: false,
 			        autoplay: false
 			    });
-				generateProduct(modals);
 			}
 			
 			
 		});
 	  
 	  }
+	  
+	  function generateModMerchant(modularCode){
+	        var _uriModpro = window.BASEPATH + 'phoneApp/getModularMerchants?modularCode='+modularCode;
+		    
+			$.get(_uriModpro, null, function(data){
+			   data = parseAjaxResult(data);
+			   if(data === -1) return;
+			   var merchants=data.merchants;
+	           if(merchants==null||merchants.length==0){
+	              return;
+	           }
+	           var html=[];
+	           
+	            var addStyle='';
+			    if(data.modular.modularCode=='2222'){
+	               addStyle="padding-bottom:70px;";
+	            }
+	           
+	           html.push('<div style="width:100%;height:30px;text-align:center;font-weight:bold;background-color: #f4f4f4;font-size:20px;">'+data.modular.modularName+'<div class="hrefModal" id="hmodal-'+data.modular.modularCode+'" style="font-size:14px;position:absolute;margin-top:-23px;z-index:499;color:#a6a6a6;right:10px">查看全部></div></div>');
+	           html.push('<br />');
+	           html.push('<div class="zong" style="width:100%;position: relative;">');
+	           html.push('<button id="fav"class="collect" value="'+merchants[0].id+'" style="position: absolute;top:30%;left:80%;float:right;width:17%;height:35px;font-size:14px;border-radius: 25px;color:#F6A2A2;background:#ffffff;border:1px solid #F6A2A2 ;outline:none;margin-right:5%;z-index:10;">+ 收藏</button>');
+	           html.push('<div style="width:100%;margin-top:10px;float:left;" class="merchant1" id="merchant1-'+merchants[0].id+'-'+merchants[0].modularCode+'">');
+		       html.push('<image style="width:60px;height:60px;float:left;margin-left:12px;" src="'+merchants[0].shopHeading+'"/>');
+		       html.push('<div style="width:50%;float:left;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;font-weight:bold;padding-left:12px;height:40px;">'+merchants[0].shopName+'</div>');
+		    
+		       html.push('</br>');
+		       html.push('<div style="width:80%;float:left;font-size:12px;padding-left:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+merchants[0].shopAddress+'</div>');
+               html.push('<div style="width;100%;margin-top:15px;height:90px;float:left;margin-left:12px">');
+               var morePics=merchants[0].shopMpic.split(',');
+               html.push('<image style="width:32%;height:90px;display: inline-block;" src="'+morePics[0]+'"/>');
+		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" src="'+morePics[1]+'"/>');
+		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" src="'+morePics[2]+'"/>');
+		       html.push('<div style="width:100%;height:47px;display:block;">');
+	           html.push('</div>');
+		       html.push('</div>');
+		       html.push('</div>');
+		       html.push('<div id="commnetUser-'+merchants[0].id+'" style="height:25px;width:90%;margin-left:12px;margin-top:30px;float:left;">');
+		       html.push('<div style="float:left;width:60px;font-size:12px">评论用户</div>')
+		       html.push('</div>');
+		       html.push('</div>');
+		       //后面的
+		       html.push('<div style="margin-top:50px;'+addStyle+'" class="weui-panel__bd" class="columnRecomments">');
+			   html.push('<div class="weui-panel__bd">'); 
+			   for(var j=1;j<merchants.length;j++){
+				   html.push('<a  href="javascript:void(0);"  class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'-'+merchants[j].modularCode+'">');
+				   html.push('<div class="weui-media-box__hd">');
+				   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].shopHeading+'">');
+				   html.push('</div>');
+				   html.push('<div class="weui-media-box__bd">');
+				   html.push('<h4 class="weui-media-box__title">'+merchants[j].shopName+'</h4>');
+				   html.push('<p class="weui-media-box__desc">'+merchants[j].shopAddress+'</p>');
+				   html.push('<div style="font-size:12px;height:20px"></div>');
+				   html.push('</div>');
+				   html.push('</a>');
+			   
+			   }
+			   html.push('</div></div>');
+			   $('#content').append(html.join(''));
+               getCommentUser(merchants[0].id);
+			});
+	    }
+	  
 		
 		
 	    
@@ -958,68 +1022,7 @@ return $.cookie(str);
 	
 	
 	     
-	    function generateProduct(modals){
-	        
-	        var addStyle='';
-	        for(var i=0;i<modals.length;i++){
-	           var html=[];
-	           if(i==7){
-	               addStyle="padding-bottom:70px;";
-	           }
-	           var merchants=modals[i].merchants;
-	           if(merchants==null||merchants.length==0){
-	              continue;
-	           }
-	         
-	           /* html.push('<p style="height:1px;"></p>'); */
-	           html.push('<div style="width:100%;height:30px;text-align:center;font-weight:bold;background-color: #f4f4f4;font-size:20px;">'+modals[i].modularName+'<div class="hrefModal" id="hmodal-'+modals[i].modularCode+'" style="font-size:14px;position:absolute;margin-top:-23px;z-index:499;color:#a6a6a6;right:10px">查看全部></div></div>');
-	           html.push('<br />');
-	           html.push('<div class="zong" style="width:100%;position: relative;">');
-	              html.push('<button id="fav"class="collect" value="'+merchants[0].id+'" style="position: absolute;top:30%;left:80%;float:right;width:17%;height:35px;font-size:14px;border-radius: 25px;color:#F6A2A2;background:#ffffff;border:1px solid #F6A2A2 ;outline:none;margin-right:5%;z-index:10;">+ 收藏</button>');
-	           html.push('<div style="width:100%;margin-top:10px;float:left;" class="merchant1" id="merchant1-'+merchants[0].id+'-'+merchants[0].modularCode+'">');
-		       html.push('<image style="width:60px;height:60px;float:left;margin-left:12px;" src="'+merchants[0].shopHeading+'"/>');
-		       html.push('<div style="width:50%;float:left;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;font-weight:bold;padding-left:12px;height:40px;">'+merchants[0].shopName+'</div>');
-		    
-		       html.push('</br>');
-		       html.push('<div style="width:80%;float:left;font-size:12px;padding-left:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+merchants[0].shopAddress+'</div>');
-               html.push('<div style="width;100%;margin-top:15px;height:90px;float:left;margin-left:12px">');
-               var morePics=merchants[0].shopMpic.split(',');
-               html.push('<image style="width:32%;height:90px;display: inline-block;" src="'+morePics[0]+'"/>');
-		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" src="'+morePics[1]+'"/>');
-		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" src="'+morePics[2]+'"/>');
-		       html.push('<div style="width:100%;height:47px;display:block;">');
-	           html.push('</div>');
-		       html.push('</div>');
-		       html.push('</div>');
-		       html.push('<div id="commnetUser-'+merchants[0].id+'" style="height:25px;width:90%;margin-left:12px;margin-top:30px;float:left;">');
-		       html.push('<div style="float:left;width:60px;font-size:12px">评论用户</div>')
-		       html.push('</div>');
-		       html.push('</div>');
-		       //后面的
-		       html.push('<div style="margin-top:50px;'+addStyle+'" class="weui-panel__bd" class="columnRecomments">');
-			   html.push('<div class="weui-panel__bd">'); 
-			   for(var j=1;j<merchants.length;j++){
-				   html.push('<a  href="javascript:void(0);"  class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'-'+merchants[j].modularCode+'">');
-				   html.push('<div class="weui-media-box__hd">');
-				   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].shopHeading+'">');
-				   html.push('</div>');
-				   html.push('<div class="weui-media-box__bd">');
-				   html.push('<h4 class="weui-media-box__title">'+merchants[j].shopName+'</h4>');
-				   html.push('<p class="weui-media-box__desc">'+merchants[j].shopAddress+'</p>');
-				   html.push('<div style="font-size:12px;height:20px"></div>');
-				   html.push('</div>');
-				   html.push('</a>');
-			   
-			   }
-			   html.push('</div></div>');
-			  
-			    $('#content').append(html.join(''));
-               getCommentUser(merchants[0].id);
-	        }
-	    
-	       
-	    
-	    }
+	 
 	   
 	   $(document).on('click','#downloadapp',function(){
 	   
