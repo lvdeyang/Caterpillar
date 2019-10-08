@@ -139,8 +139,11 @@
 		 $.post(_uri, $.toJSON(params), function(data) {
 			data = parseAjaxResult(data);
 			var htm = [];
+			if(data.regulations!=null){
 				htm.push('<li style="font-size:16px;">'+data.regulations+'</li>');
-			$('#ol').append(htm.join('')); 
+				$('#ol').append(htm.join('')); 
+			}
+			
 			var html = [];
 				html.push('<p style="font-size: 18px;font-weight: bold; padding: 8% 0px 20px 15px;">'+data.parkingName+'管理条例</p>');
 			$('.header').append(html.join('')); 
