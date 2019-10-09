@@ -29,7 +29,6 @@ import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.distribute.classify.DistributorOrderStatus;
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.dao.DistributorOrderDao;
 import com.guolaiwan.bussiness.distribute.po.DistributeProduct;
 import com.guolaiwan.bussiness.distribute.po.DistributorOrder;

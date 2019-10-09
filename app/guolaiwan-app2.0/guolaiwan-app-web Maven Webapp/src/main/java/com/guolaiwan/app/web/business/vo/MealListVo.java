@@ -1,7 +1,7 @@
 package com.guolaiwan.app.web.business.vo;
 import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.Parking.po.MoneyPO;
-import com.guolaiwan.bussiness.distribute.po.MealListPo;
+import com.guolaiwan.bussiness.admin.po.MealListPo;
 
 import pub.caterpillar.mvc.converter.AbstractBaseVO;
 

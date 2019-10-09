@@ -1,7 +1,6 @@
 package com.guolaiwan.app.web.distribute.vo;
 
 import com.guolaiwan.bussiness.distribute.classify.DistributorApplyStatus;
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 
 import pub.caterpillar.mvc.converter.AbstractBaseVO;
@@ -21,8 +20,7 @@ public class DistributorVo extends AbstractBaseVO<DistributorVo, DistributorPo> 
 		.setLegalPerson(entity.getLegalPerson())
 		.setLicenseUrl(entity.getLicenseUrl())
 		.setPhone(entity.getPhone())
-		.setStatus(entity.getStatus().getName())
-		.setType(entity.getType().getName());
+		.setStatus(entity.getStatus().getName());
 		return this;
 	}
 	
@@ -35,7 +33,6 @@ public class DistributorVo extends AbstractBaseVO<DistributorVo, DistributorPo> 
 	private String contractUrl;
 	private String contractPicUrl;
 	private String contractVideo;
-	private String type;
 	private String status;
 	private String checkReason;
 	private String regionName;
@@ -95,13 +92,7 @@ public class DistributorVo extends AbstractBaseVO<DistributorVo, DistributorPo> 
 		this.contractVideo = contractVideo;
 		return this;
 	}
-	public String getType() {
-		return type;
-	}
-	public DistributorVo setType(String type) {
-		this.type = type;
-		return this;
-	}
+	
 	public String getStatus() {
 		return status;
 	}

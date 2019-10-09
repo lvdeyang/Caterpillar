@@ -1,4 +1,4 @@
-package com.guolaiwan.bussiness.distribute.dao;
+package com.guolaiwan.bussiness.admin.dao;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
+import com.guolaiwan.bussiness.admin.po.MealListPo;
 import com.guolaiwan.bussiness.distribute.po.DistributorOrder;
-import com.guolaiwan.bussiness.distribute.po.MealListPo;
 import com.guolaiwan.bussiness.distribute.po.RegionPo;
 
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;

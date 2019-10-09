@@ -10,7 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 
@@ -20,7 +19,6 @@ public class RetailPolicy extends AbstractBasePO {
 
 	private long productId;
 	private long distributorId;
-	private DistributorType distributorType;
 	private double price;
 	private long regionId;
 	private Set<GroupSell> groupSells;
@@ -36,13 +34,7 @@ public class RetailPolicy extends AbstractBasePO {
 	public void setDistributorId(long distributorId) {
 		this.distributorId = distributorId;
 	}
-	@Enumerated(EnumType.STRING)
-	public DistributorType getDistributorType() {
-		return distributorType;
-	}
-	public void setDistributorType(DistributorType distributorType) {
-		this.distributorType = distributorType;
-	}
+	
 	public double getPrice() {
 		return price;
 	}

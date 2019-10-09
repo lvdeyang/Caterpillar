@@ -8,7 +8,6 @@ import java.util.List;
 import com.alibaba.druid.stat.TableStat.Name;
 import com.guolaiwan.app.web.admin.vo.BalanceVO;
 import com.guolaiwan.bussiness.distribute.classify.DistributorOrderStatus;
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.po.DistributePolicy;
 import com.guolaiwan.bussiness.distribute.po.DistributeProduct;
 import com.guolaiwan.bussiness.distribute.po.DistributorOrder;
@@ -18,7 +17,6 @@ import pub.caterpillar.mvc.converter.AbstractBaseVO;
 public class DistributeOrderVo extends AbstractBaseVO<DistributeOrderVo, DistributorOrder> {
     private String name;
     private String pic;
-	private String type;
 	private double price;
 	private int count;
 	private String status;
@@ -36,7 +34,6 @@ public class DistributeOrderVo extends AbstractBaseVO<DistributeOrderVo, Distrib
 		this.setId(entity.getId())
 		.setCount(entity.getCount())
 		.setStatus(entity.getStatus().toString())
-		.setType(entity.getType()==null?null:entity.getType().toString())
 		.setProductId(entity.getProductId())
 		.setRegionId(entity.getRegion())
 		.setContractPicUrl(entity.getContractPicUrl())
@@ -97,16 +94,6 @@ public class DistributeOrderVo extends AbstractBaseVO<DistributeOrderVo, Distrib
 
 	public DistributeOrderVo setPic(String pic) {
 		this.pic = pic;
-		return this;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-
-	public DistributeOrderVo setType(String type) {
-		this.type = type;
 		return this;
 	}
 

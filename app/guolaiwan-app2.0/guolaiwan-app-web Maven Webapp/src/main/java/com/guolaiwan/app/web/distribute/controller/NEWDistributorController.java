@@ -55,7 +55,6 @@ import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.distribute.classify.DistributorApplyStatus;
 import com.guolaiwan.bussiness.distribute.classify.DistributorOrderStatus;
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.classify.RecommendType;
 import com.guolaiwan.bussiness.distribute.dao.DistributePolicyDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
@@ -135,22 +134,9 @@ public class NEWDistributorController {
 		if(disId!=0){
 			DistributorPo distributorPo=conn_distributor.get(disId);
 			mv.addObject("distributor",distributorPo);
-			if(distributorPo.getType().equals(DistributorType.PROVINCE)){
-				mv.addObject("region",distributorPo.getRegion());
-				mv.addObject("city",0);
-				mv.addObject("country",0);
-			}else if(distributorPo.getType().equals(DistributorType.CITY)){
-				RegionPo parentRegion=conn_region.get(distributorPo.getRegion());
-				mv.addObject("region",parentRegion.getParentId());
-				mv.addObject("city",distributorPo.getRegion());
-				mv.addObject("country",0);
-			}else{
-				RegionPo parentRegion=conn_region.get(distributorPo.getRegion());
-				RegionPo moreParentRegion=conn_region.get(parentRegion.getParentId());
-				mv.addObject("region",moreParentRegion.getParentId());
-				mv.addObject("city",parentRegion.getParentId());
-				mv.addObject("country",distributorPo.getRegion());
-			}
+			mv.addObject("region",0);
+			mv.addObject("city",0);
+			mv.addObject("country",0);
 		}else{
 			DistributorPo distributorPo=new DistributorPo();
 			distributorPo.setId(0l);
@@ -236,21 +222,8 @@ public class NEWDistributorController {
 		distributorPo.setStatus(DistributorApplyStatus.CHECKED);
 		distributorPo.setUserId(userId);
 		distributorPo.setContractPicUrl(contractPicUrl);
-		if(!"0".equals(contry)){
-			distributorPo.setRegion(Long.parseLong(contry));
-			distributorPo.setType(DistributorType.COUNTY);
-
-		}
-		else if(!"0".equals(city)){
-			distributorPo.setRegion(Long.parseLong(city));
-			distributorPo.setType(DistributorType.CITY);
-		}else{
-			distributorPo.setRegion(Long.parseLong(region));
-			distributorPo.setType(DistributorType.PROVINCE);
-		}
-
+		distributorPo.setRegion(Long.parseLong(region));
 		conn_distributor.save(distributorPo);
-
 		mv = new ModelAndView("redirect:/distributor/app/login/0");
 		return mv;
 	}
@@ -359,14 +332,8 @@ public class NEWDistributorController {
 		DistributeProductVo vo=new DistributeProductVo();
 		DistributeProduct po=conn_dispro.get(productId);
 		vo.set(po);
-		if(po.getDistributorType().equals(DistributorType.PROVINCE)){
-			MerchantPO merchantPO=conn_merchant.get(po.getDistributorId());
-			vo.setTel(merchantPO.getShopTel());
-		}else{
-			DistributorPo distributorPo=conn_distributor.get(po.getDistributorId());
-			vo.setTel(distributorPo.getPhone());
-		}
-
+		MerchantPO merchantPO=conn_merchant.get(po.getDistributorId());
+		vo.setTel(merchantPO.getShopTel());
 		SysConfigPO sys=conn_sys.getSysConfig();
 		vo.setPic(sys.getWebUrl()+vo.getPic());
 		mv.addObject("product",vo);
@@ -672,7 +639,6 @@ public class NEWDistributorController {
 		JSONObject params = parser.parseJSON();
 		DistributeProductVo vo= params.toJavaObject(params, DistributeProductVo.class);
 		DistributeProduct distributeProduct =conn_dispro.get(params.getLong("id"));
-		distributeProduct.setSellPrice(vo.getSellPrice());
 		conn_policy.deleteByProduct(distributeProduct.getId());
 		for (DistributePolicyVo policyVo : vo.getPolicys()) {
 			DistributePolicy policy=new DistributePolicy();
@@ -821,7 +787,6 @@ public class NEWDistributorController {
 
 			session.setAttribute("distributorId", distributorPos.get(0).getId());
 			session.setAttribute("region",distributorPos.get(0).getRegion());
-			session.setAttribute("type", distributorPos.get(0).getType().getName());
 			mv.addObject("distributor", distributorPos.get(0));
 			mv.addObject("region",conn_region.get(distributorPos.get(0).getRegion()).getName());
 			mv.addObject("user",user);

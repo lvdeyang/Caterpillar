@@ -1,4 +1,4 @@
-package com.guolaiwan.bussiness.distribute.po;
+package com.guolaiwan.bussiness.admin.po;
 
 import java.util.Set;
 
@@ -9,8 +9,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 

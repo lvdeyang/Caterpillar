@@ -1,6 +1,5 @@
 package com.guolaiwan.app.web.admin.vo;
 
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.po.DistributeProduct;
 
 import pub.caterpillar.mvc.converter.AbstractBaseVO;
@@ -13,9 +12,6 @@ public class DistributeProductVO extends AbstractBaseVO<DistributeProductVO, Dis
 	
 	private String distributorName;
 
-	private DistributorType distributorType;
-
-	private int minAmount;
 
 	private int online;
 
@@ -25,7 +21,6 @@ public class DistributeProductVO extends AbstractBaseVO<DistributeProductVO, Dis
 
 	private long regionId;
 
-	private double sellPrice;
 
 	private int product_id;
 	
@@ -62,23 +57,9 @@ public class DistributeProductVO extends AbstractBaseVO<DistributeProductVO, Dis
 		return this;
 	}
 
-	public DistributorType getDistributorType() {
-		return distributorType;
-	}
+	
 
-	public DistributeProductVO setDistributorType(DistributorType distributorType) {
-		this.distributorType = distributorType;
-		return this;
-	}
-
-	public int getMinAmount() {
-		return minAmount;
-	}
-
-	public DistributeProductVO setMinAmount(int minAmount) {
-		this.minAmount = minAmount;
-		return this;
-	}
+	
 
 	public int getOnline() {
 		return online;
@@ -116,14 +97,7 @@ public class DistributeProductVO extends AbstractBaseVO<DistributeProductVO, Dis
 		return this;
 	}
 
-	public double getSellPrice() {
-		return sellPrice;
-	}
-
-	public DistributeProductVO setSellPrice(double sellPrice) {
-		this.sellPrice = sellPrice;
-		return this;
-	}
+	
 
 	public int getProduct_id() {
 		return product_id;
@@ -138,9 +112,8 @@ public class DistributeProductVO extends AbstractBaseVO<DistributeProductVO, Dis
 	public DistributeProductVO set(DistributeProduct entity) throws Exception {
 		this.setId(entity.getId()).setUuid(entity.getUuid()).setUpdateTime(entity.getUpdateTime())
 				.setDisProId(entity.getProduct().getId()).setDistributorId(entity.getDistributorId())
-				.setDistributorType(entity.getDistributorType()).setMinAmount(entity.getMinAmount())
 				.setOnline(entity.getOnline()).setPrice(entity.getPrice()).setProleft(entity.getProleft())
-				.setRegionId(entity.getRegionId()).setSellPrice(entity.getSellPrice());
+				.setRegionId(entity.getRegionId());
 		return this;
 	}
 

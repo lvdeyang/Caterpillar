@@ -66,7 +66,6 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.ProductPackPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.dao.DistributePolicyDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributorDao;
@@ -715,12 +714,10 @@ public class ProductController extends BaseController {
 		ProductPO productPO = conn_product.get(id);
 		DistributeProduct distributeProduct = new DistributeProduct();
 		distributeProduct.setDistributorId(productPO.getProductMerchantID());
-		distributeProduct.setDistributorType(DistributorType.PROVINCE);
 		distributeProduct.setProduct(productPO);
 		distributeProduct.setProleft(10000);
 		distributeProduct.setPrice(productPO.getProductPrice());
 		distributeProduct.setRegionId(0l);
-		distributeProduct.setProRegionId(productPO.getRegionId());
 		distributeProduct.setOnline(1);
 		conn_distributeProduct.save(distributeProduct);
 		return "success";
@@ -955,6 +952,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "disprodel.do", method = RequestMethod.POST)
 	public String disproDel(HttpServletRequest request) throws Exception {
 		String uuid = request.getParameter("uuid");
+	    DistributeProduct distributeProduct=conn_distributeProduct.get(uuid);
 	    
 		return "success";
 	}
@@ -1236,7 +1234,7 @@ public class ProductController extends BaseController {
 			map.put("Classes", Classes);
 		} else {
 			long merchantId = getMerchantInfo().getMerchantId();
-			int count = conn_distributeProduct.countByMerchant(merchantId);
+			int count = 0;
 			// 获取所有模块和子模块
 			List<ModularPO> modulars = conn_modular.findAll();
 			List<ModularClassPO> Classes = conn_modularClass.findAll();
@@ -1271,26 +1269,6 @@ public class ProductController extends BaseController {
 				distributeProductVO.setProductName(productPO.getProductName());
 				distributeProductVO.setDistributorName(merchantPO.getShopName());
 			}
-
-			map.put("data", listvo);
-			map.put("code", "0");
-			map.put("msg", "");
-			map.put("count", count);
-		} else {
-			int count = conn_distributeProduct.countByMerchant(getMerchantInfo().getMerchantId());
-			List<DistributeProduct> listpo = conn_distributeProduct
-					.queryOnlineByMerchant(getMerchantInfo().getMerchantId());
-			List<DistributeProductVO> listvo = DistributeProductVO.getConverter(DistributeProductVO.class)
-					.convert(listpo, DistributeProductVO.class);
-			for (DistributeProductVO distributeProductVO : listvo) {
-				RegionPo regionPo=conn_region.get(distributeProductVO.getRegionId());
-				ProductPO productPO=conn_product.get(distributeProductVO.getDisProId());
-				MerchantPO merchantPO=conn_merchant.get(distributeProductVO.getDistributorId());
-				distributeProductVO.setRegionName(regionPo==null?"商户":regionPo.getName());
-				distributeProductVO.setProductName(productPO.getProductName());
-				distributeProductVO.setDistributorName(merchantPO.getShopName());
-			}
-
 
 			map.put("data", listvo);
 			map.put("code", "0");

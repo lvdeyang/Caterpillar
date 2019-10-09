@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.guolaiwan.bussiness.distribute.classify.DistributorApplyStatus;
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
+
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 
@@ -30,7 +30,6 @@ public class DistributorPo extends AbstractBasePO{
 	private String contractUrl;
 	private String contractPicUrl;
 	private String contractVideo;
-	private DistributorType type;
 	private long userId;
 	private long region;
 	private DistributorApplyStatus status;
@@ -84,13 +83,7 @@ public class DistributorPo extends AbstractBasePO{
 	public void setContractVideo(String contractVideo) {
 		this.contractVideo = contractVideo;
 	}
-	@Enumerated(EnumType.STRING)
-	public DistributorType getType() {
-		return type;
-	}
-	public void setType(DistributorType type) {
-		this.type = type;
-	}
+	
 	public long getUserId() {
 		return userId;
 	}

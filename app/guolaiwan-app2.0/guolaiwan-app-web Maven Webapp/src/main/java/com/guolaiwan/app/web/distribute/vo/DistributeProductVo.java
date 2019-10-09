@@ -15,7 +15,6 @@ public class DistributeProductVo extends AbstractBaseVO<DistributeProductVo, Dis
     private String pic;
     private double price;
     private long left;
-    private double sellPrice;
     private List<DistributePolicyVo> policys;
     private String address;
     private String openTime;
@@ -176,7 +175,6 @@ public class DistributeProductVo extends AbstractBaseVO<DistributeProductVo, Dis
 		.setName(entity.getProduct().getProductName())
 		.setPic(entity.getProduct().getProductShowPic())
 		.setLeft(entity.getProleft())
-		.setSellPrice(entity.getSellPrice())
 		.setAddress(entity.getProduct().getProductCityName())
 		.setTel("")
 		.setStore(entity.getStore())
@@ -200,16 +198,7 @@ public class DistributeProductVo extends AbstractBaseVO<DistributeProductVo, Dis
 
 
 
-	public double getSellPrice() {
-		return sellPrice;
-	}
-
-
-
-	public DistributeProductVo setSellPrice(double sellPrice) {
-		this.sellPrice = sellPrice;
-		return this;
-	}
+	
 
 
 

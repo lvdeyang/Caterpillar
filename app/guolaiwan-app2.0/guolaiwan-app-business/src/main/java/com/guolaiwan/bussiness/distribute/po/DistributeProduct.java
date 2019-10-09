@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.classify.RecommendType;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
@@ -25,16 +24,12 @@ public class DistributeProduct extends AbstractBasePO {
 
 	private ProductPO product;
 	private long distributorId;
-	private DistributorType distributorType;
 	private int proleft; //库存
-	private int minAmount;
 	private double price;//分
-	private double sellPrice;
 	private Set<DistributePolicy> distributePolicies=new HashSet<DistributePolicy>();
 	private RecommendType recommendType;
 	private int online;
-	private long regionId;
-	private long proRegionId;
+	private long regionId;//如果是0的时候表示商户的分销商品。
 	private long store; // 店铺上下架
 	private double retailPrice; // 零售价钱
 	private long retailRepertory; // 零售库存
@@ -85,13 +80,7 @@ public class DistributeProduct extends AbstractBasePO {
 	public void setDistributorId(long distributorId) {
 		this.distributorId = distributorId;
 	}
-	@Enumerated(EnumType.STRING)
-	public DistributorType getDistributorType() {
-		return distributorType;
-	}
-	public void setDistributorType(DistributorType distributorType) {
-		this.distributorType = distributorType;
-	}
+	
 	
 	@Enumerated(EnumType.STRING)
 	public RecommendType getRecommendType() {
@@ -100,12 +89,7 @@ public class DistributeProduct extends AbstractBasePO {
 	public void setRecommendType(RecommendType recommendType) {
 		this.recommendType = recommendType;
 	}
-	public int getMinAmount() {
-		return minAmount;
-	}
-	public void setMinAmount(int minAmount) {
-		this.minAmount = minAmount;
-	}
+	
 	public double getPrice() {
 		return price;
 	}
@@ -125,17 +109,6 @@ public class DistributeProduct extends AbstractBasePO {
 	public void setOnline(int online) {
 		this.online = online;
 	}
-	public double getSellPrice() {
-		return sellPrice;
-	}
-	public void setSellPrice(double sellPrice) {
-		this.sellPrice = sellPrice;
-	}
-	public long getProRegionId() {
-		return proRegionId;
-	}
-	public void setProRegionId(long proRegionId) {
-		this.proRegionId = proRegionId;
-	}
+	
 	 
 }

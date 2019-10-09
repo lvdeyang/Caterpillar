@@ -9,7 +9,6 @@ import javax.persistence.Table;
 
 import com.alibaba.druid.support.logging.Log;
 import com.guolaiwan.bussiness.distribute.classify.DistributorOrderStatus;
-import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 
@@ -20,7 +19,6 @@ public class DistributorOrder extends AbstractBasePO {
 	private long productId;
 	private long distributorId;
 	private long parentId;
-	private DistributorType type;
 	private double price;
 	private int count;
 	private long region;
@@ -73,13 +71,7 @@ public class DistributorOrder extends AbstractBasePO {
 	public void setParentId(long parentId) {
 		this.parentId = parentId;
 	}
-	@Enumerated(EnumType.STRING)
-	public DistributorType getType() {
-		return type;
-	}
-	public void setType(DistributorType type) {
-		this.type = type;
-	}
+	
 
 	public double getPrice() {
 		return price;
