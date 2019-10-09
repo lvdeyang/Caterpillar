@@ -35,8 +35,6 @@ import com.guolaiwan.bussiness.admin.po.ModularPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.distribute.po.DistributorPo;
-import com.guolaiwan.bussiness.merchant.car.dao.RouteDAO;
-import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
 
 @Controller
 @RequestMapping("/product")
@@ -55,9 +53,6 @@ public class WebProductController extends WebBaseControll{
 
 	@Autowired
 	private SysConfigDAO conn_sysConfig;
-	
-	@Autowired
-	private RouteDAO conn_route;
 	
 	@Autowired
 	private CommentDAO conn_comment;

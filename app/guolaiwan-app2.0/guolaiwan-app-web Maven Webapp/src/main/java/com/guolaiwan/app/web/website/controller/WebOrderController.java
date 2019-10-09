@@ -45,11 +45,6 @@ import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
-import com.guolaiwan.bussiness.merchant.car.dao.DriverDAO;
-import com.guolaiwan.bussiness.merchant.car.dao.FlightDAO;
-import com.guolaiwan.bussiness.merchant.car.po.DriverPO;
-import com.guolaiwan.bussiness.merchant.car.po.FlightPO;
-import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
