@@ -635,6 +635,11 @@ appearance:none;
 <%--  <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">  --%>
 <script type="text/javascript">
+      var shareShopName='';
+      var shareShopImg='';
+      var shareShopDesc='';
+
+
       layui.use('laydate', function(){
       	  //禁止软键盘弹出
 	   $("#useDate").focus(function(){
@@ -648,6 +653,8 @@ appearance:none;
 	  });
 	    });
 	$(function() {
+	
+	 
    	 image(); //顶部图片 营业时间 特色
    	 two();
   
@@ -663,116 +670,49 @@ appearance:none;
 			}
 	  };
 	
-	  if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-		    getloca();
-	  } else {
-		    if(comCode=='0000'){
-			    comCode='0001';
-			}
-			getCom();
-            getRecomment();
-			initSharewx();
-	  }
-	  var loca={};
-	  function getloca(){
-	      
-		  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	
-		  var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
-		    $.get(_uri, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data){
-					loca=data;
-					
-				}
-		  });
-	  }
-	  
-	  
-	 
-	  
-	  function getCity(la,lo){
-	  
-	     $.ajax({  
-            url: 'http://api.map.baidu.com/geocoder/v2/?ak=yPjZB3eElPXn7zXRjcfqGCze6LCPlkmn&callback=renderReverse&location=' + la + ',' + lo + '&output=json&pois=1',  
-            type: "get",  
-            dataType: "jsonp",  
-            jsonp: "callback",  
-            success: function (data) {  
-                console.log(data);  
-                var province = data.result.addressComponent.province;  
-                var cityname = (data.result.addressComponent.city);  
-                var district = data.result.addressComponent.district;  
-                var street = data.result.addressComponent.street;  
-                var street_number = data.result.addressComponent.street_number;  
-                var formatted_address = data.result.formatted_address;  
-                if(comCode=='0000'){
-				    if(district.indexOf('平谷')!=-1){
-					    comCode='1003';
-					    $('#headerName').html('全域休闲');
-					    $('#phone').html('010-89991991');
-					}else{
-					    comCode='0001';
-					}
-				}
-				getCom();
-                getRecomment();
-				initSharewx();
-            }  
-        });  
-	  
-	  }
-	  
-	  function getCom(){
-	     var _uricoms = window.BASEPATH + 'pubnum/getComs';
-		
-		 $.get(_uricoms, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data && data.length>0){
-				    var html=[];
-				   
-					for(var i=0; i<data.length; i++){
-					    if(data[i].comCode==comCode){
-					        $('#selCom').html(data[i].comName);
-					    }
-					    html.push('<li><a data="'+data[i].comCode+'" href="javascript:void(0)" class="comSel">'+data[i].comName+'</a></li>');
-					}
-					$('#com').append(html.join(''));
-				}
-		  });
-	  
-	  }
-	  
 
-      /**/
-		
-	  function getRecomment(){
-	     var _uriRecomment = window.BASEPATH + 'phoneApp/getRecommend?comCode='+comCode;
-		
-		 $.get(_uriRecomment, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data && data.length>0){
-				    var html=[];
-					for(var i=0; i<data.length; i++){
-						html.push('<div style="height:200px;" id="sw-'+data[i].id+'" class="swiper-slide"><img class="topmod" id="top-'+data[i].productId+'-'+data[i].classify+'" style="height:200px;" src="'+data[i].slidepic+'" alt="">');
-						html.push('<div style="font-size:12px;position:absolute;padding-left:5px;bottom:0px;color:#FFF">'+data[i].name+'</div></div>');
-					}
-					$('#headerWrapper').append(html.join(''));
-					$("#headerSwiper").swiper({
-				        loop: true,
-				        autoplay: 3000,
-				        autoplayDisableOnInteraction : false
-				      });
-				}
-		 });
-	  }
-		
-      
-		
-	  
+	function image(){ //商家图片 特色 营业时间
+	     var url = window.BASEPATH + 'product/delicacystore/info.do?merchantId='+${merchantId};
+	  	 $.get(url,null,function(msg){
+		  	 var ht=[];
+		  	 ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">名称:'+msg.merch.shopName+'</p>'); //顶部商户名称
+		  	 ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">地址: <a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+msg.merch.shopAddress+'&tocoord='+msg.merch.shopLongitude+','+msg.merch.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+msg.merch.shopAddress+'欢迎您 </a></p>'); //顶部商户名称
+		  	 ht.push('<span id = "addressphone1" style="font-weight: bold;color:black;margin:10px 10%;" class="icon-mobile-phone">&nbsp;&nbsp;&nbsp;&nbsp;'+msg.merch.shopTel+'</span>');
+		     $("#merInfo1").append(ht.join(''));
+		  	 shareShopName=msg.shopName;
+			 shareShopDesc=msg.merch.shopAddress;
+			 shareShopImg=msg.merch.shopHeading;
+			 initSharewx();
+		  	 var mpi = msg.mpic;
+		  	 var shopNam = msg.shopName;
+		  	 var htm = [];
+		  	 htm.push('<p style="margin:10px 0 0 2%;font-size:16px;font-weight:bold;">'+shopNam+'</p>');
+		  	 $('._name').append(htm.join(''));
+		  	 var html=[]; //首页图片
+		  	 for(var i=0;i<mpi.length;i++){
+		      html.push('<img  style="" alt="" src="http://www.guolaiwan.net/file'+mpi[i]+'">');
+		     }
+	         $('.meishi').append(html.join(''));
+	    
+		    var array = [];  //商户特色 营业时间
+		    var feature = msg.merch.feature;
+		    if(feature != null && feature != "" && msg.merch.businessDate != null){ //商家特色
+		      var split  =   feature.split(',');
+		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> '+msg.merch.businessDate+'</span></p>');
+		      array.push('<div style="position: absolute;top:55px;width:100%;height:auto;">');
+		      for(var j=0;j<split.length ;j++){
+		        array.push('<button style="margin-left:2%;border-radius:6px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">'+split[j]+'</button>');		       	        
+		      }
+		      array.push('</div>');
+		    }else{
+		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> </p>');
+		    }	     
+		    $('#feature').append(array.join(''));	         
+   	 });
+	}
+	
+	
+	
 		
     window.orderId = null;	
 	$(document).on('click','#zhifu',function(){
@@ -897,11 +837,44 @@ appearance:none;
 				if(data){
 				    
 					share=data;
-					
+					doScanShare();
 				}
 		});
     }
 	    
+	function doScanShare(){
+            wx.config({
+	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            appId : share.appId, // 必填，公众号的唯一标识
+	            timestamp : share.timestamp, // 必填，生成签名的时间戳
+	            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+	            signature : share.signature,// 必填，签名，见附录1
+	            jsApiList : ['checkJsApi', 'onMenuShareTimeline' , 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        	});
+	        wx.ready(function() {
+	
+	               
+	            wx.onMenuShareTimeline({
+                            title: shareShopName, // 分享标题
+                            link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: 'http://<%=weburl%>/file/'+shareShopImg, // 分享图标
+                            success: function () {
+                               	
+                            }
+                        });
+	            wx.onMenuShareAppMessage({
+					title : shareShopName, // 分享标题
+					desc : shareShopDesc, // 分享描述
+					link : location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					imgUrl : 'http://<%=weburl%>/file/'+shareShopImg, // 分享图标
+					success : function() {}
+				});
+	            
+	       });
+        }
+	
+	
 	
 <!--选项卡  -->
 	$(".tab-btn li").click(function(){
@@ -986,41 +959,6 @@ appearance:none;
 		}
 		
 		
-	function image(){ //商家图片 特色 营业时间
-	     var url = window.BASEPATH + 'product/delicacystore/info.do?merchantId='+${merchantId};
-	  	 $.get(url,null,function(msg){
-		  	 var ht=[];
-		  	 ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">名称:'+msg.merch.shopName+'</p>'); //顶部商户名称
-		  	 ht.push(' <p style="font-weight: bold;color:black;margin:10px 10%;">地址: <a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+msg.merch.shopAddress+'&tocoord='+msg.merch.shopLongitude+','+msg.merch.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ">'+msg.merch.shopAddress+'欢迎您 </a></p>'); //顶部商户名称
-		  	 ht.push('<span id = "addressphone1" style="font-weight: bold;color:black;margin:10px 10%;" class="icon-mobile-phone">&nbsp;&nbsp;&nbsp;&nbsp;'+msg.merch.shopTel+'</span>');
-		     $("#merInfo1").append(ht.join(''));
-		  	 var mpi = msg.mpic;
-		  	 var shopNam = msg.shopName;
-		  	 var htm = [];
-		  	 htm.push('<p style="margin:10px 0 0 2%;font-size:16px;font-weight:bold;">'+shopNam+'</p>');
-		  	 $('._name').append(htm.join(''));
-		  	 var html=[]; //首页图片
-		  	 for(var i=0;i<mpi.length;i++){
-		      html.push('<img  style="" alt="" src="http://www.guolaiwan.net/file'+mpi[i]+'">');
-		     }
-	         $('.meishi').append(html.join(''));
-	    
-		    var array = [];  //商户特色 营业时间
-		    var feature = msg.merch.feature;
-		    if(feature != null && feature != "" && msg.merch.businessDate != null){ //商家特色
-		      var split  =   feature.split(',');
-		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> <span style="font-size:12px;"> '+msg.merch.businessDate+'</span></p>');
-		      array.push('<div style="position: absolute;top:55px;width:100%;height:auto;">');
-		      for(var j=0;j<split.length ;j++){
-		        array.push('<button style="margin-left:2%;border-radius:6px;padding:0 3px;line-height:25px;font-size:12px;width:auto;outline: none;border:none;border:1px solid #757575;height:25px;color:#757575;background:#fff;">'+split[j]+'</button>');		       	        
-		      }
-		      array.push('</div>');
-		    }else{
-		      array.push('<p style="font-size:18px;height:50px;line-height:50px;font-weight:bold;margin-left:7%;">营业中     <span>|</span> <span style="">周一---周日</span> </p>');
-		    }	     
-		    $('#feature').append(array.join(''));	         
-   	 });
-	}
 	
 	 $(document).on('click','#addressphone1',function(){
 	       var phones=$('#addressphone1').text();

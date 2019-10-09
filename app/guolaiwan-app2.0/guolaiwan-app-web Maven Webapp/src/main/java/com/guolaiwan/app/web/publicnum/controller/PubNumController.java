@@ -2960,6 +2960,7 @@ public class PubNumController extends WebBaseControll {
 			orderInfoPO.setTrackingnumber(kdname);
 			orderInfoPO.setLogisticsId(Long.parseLong(id));
 			orderInfoPO.setOrderState(OrderStateType.DELIVER);
+			orderInfoPO.setUpdateTime(new Date());
 			conn_order.saveOrUpdate(orderInfoPO);
 			return "success";
 		} catch (Exception e) {
