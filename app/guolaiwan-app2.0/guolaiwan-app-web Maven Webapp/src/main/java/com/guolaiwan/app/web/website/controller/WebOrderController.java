@@ -29,9 +29,6 @@ import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
-import com.guolaiwan.app.web.merchant.car.vo.DriverVO;
-import com.guolaiwan.app.web.merchant.car.vo.FlightVO;
-import com.guolaiwan.app.web.merchant.car.vo.RouteVO;
 import com.guolaiwan.app.web.website.order.submit.TokenProcessor;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
@@ -80,54 +77,8 @@ public class WebOrderController extends WebBaseControll{
 	@Autowired
 	private SysConfigDAO conn_sysConfig;
 
-	@Autowired
-	private FlightDAO conn_flight;
+	
 
-	@Autowired
-	private DriverDAO conn_driver;
-
-	//租车订单确认
-	@RequestMapping(value = "/flight/order/{uuid}")
-	public ModelAndView flightOrder(
-			@PathVariable String uuid,
-			HttpServletRequest request) throws Exception{
-		//将唯一的的订单码存到session中
-		TokenProcessor tp = TokenProcessor.getInstance();  
-		String token = tp.generateToken();  
-
-		HttpSession session = request.getSession();
-		session.setAttribute("token",token); 
-
-		UserInfoPO user = (UserInfoPO)session.getAttribute("userInfo");
-		UserInfoVO view_user = new UserInfoVO().set(user);
-
-		ModelAndView mv = new ModelAndView("web/order/add-flight");
-
-		FlightPO flight = conn_flight.get(uuid);
-		FlightVO view_flight = new FlightVO().set(flight);
-
-		DriverPO driver = conn_driver.get(flight.getDriverId());
-		DriverVO view_driver = new DriverVO().set(driver);
-
-		RoutePO route = flight.getRoute();
-		RouteVO view_route = new RouteVO().set(route);
-
-		MerchantPO merchant = route.getMerchant();
-		MerchantVO view_merchant = new MerchantVO().set(merchant);		
-
-
-		String tody = DateUtil.format(new Date(), DateUtil.defaultDatePattern);
-
-		mv.addObject("tody", tody);
-		mv.addObject("flight", view_flight);
-		mv.addObject("driver", view_driver);
-		mv.addObject("route", view_route);
-		mv.addObject("merchant", view_merchant);
-		mv.addObject("user", view_user);
-		mv.addObject("count", 1);
-
-		return mv;
-	}
 
 	//订单页面
 	@RequestMapping(value = "/add", method= RequestMethod.GET)
@@ -200,117 +151,7 @@ public class WebOrderController extends WebBaseControll{
 		}
 	}
 
-	//创建租车订单
-	@RequestMapping(value = "/create/flight/order/{flightUuid}")
-	public ModelAndView createFlightOrder(
-			@PathVariable String flightUuid,
-			String orderBookDate,
-			int pcount,
-			String backPhone,
-			String orderRemark,
-			HttpServletRequest request) throws Exception{
-
-		ModelAndView mv =null;
-		//订单标识码（防止重复提交）
-		boolean b = isTokenValue(request);  
-		if (!b){  
-			Map<String, Object> errorMap = new HashMap<String, Object>();
-			errorMap.put("info", "请不要重复提交订单。");
-			mv = new ModelAndView("web/order/orderError",errorMap);
-			System.out.println("重复提交订单。"); 
-			return mv;
-		}  
-
-		HttpSession session = request.getSession();
-		session.removeAttribute("token");  
-
-		//Session获取用户
-		UserInfoPO user = (UserInfoPO)session.getAttribute("userInfo");
-
-		//获取班次
-		FlightPO flight = conn_flight.get(flightUuid);
-
-		//获取路线
-		RoutePO route = flight.getRoute();
-
-		//获取商家
-		MerchantPO merchant = route.getMerchant();
-
-		Date date = new Date();
-
-		//订单号（城市编码+商家id+板块Code+时间戳+用户ID）
-		String orderNO = getCityCodeByDomain()+"v"+merchant.getId()+"v"+merchant.getModularCode()+"v"+date.getTime()+"v"+user.getId();
-
-		//创建订单信息
-		OrderInfoPO order = new OrderInfoPO();
-		order.setOrderNO(orderNO);
-
-		//下单时间
-		order.setCreateDate(date);
-		order.setUpdateTime(date);
-		//验单时间
-
-		//供应商ID
-		order.setShopId(merchant.getId());
-		//供应商名称
-		order.setShopName(merchant.getShopName());
-
-		//这里是特殊前缀加目标id
-		order.setProductId(-1l);
-		order.setTargetId(new StringBufferWrapper().append(SpecialOrderType.CARRENTAL.getCode()).append(flight.getId()).toString());
-
-		//商品名称
-		order.setProductName(route.getName());
-		//商品数量
-		order.setProductNum(pcount);
-		//商品单价
-		order.setProductPrice(flight.getPrice());
-		//所属板块DI
-		order.setBkCode(merchant.getModularCode());
-		//所属板块名称
-		order.setBkName(merchant.getModularName());
-
-		//会员ID
-		order.setUserId(user.getId());
-
-		//订单佣金金额(分)
-		order.setProportionMoney(0);
-		//支付金额
-		order.setPayMoney(pcount*flight.getPrice());
-		//订单总金额
-		order.setOrderAllMoney(pcount*flight.getPrice());
-
-		//订单说明
-		StringBufferWrapper remark = new StringBufferWrapper();
-		if(backPhone != null){
-			remark.append(SpecialOrderRemarkType.BACKPHONE.getCode()).append(backPhone).append(SpecialOrderRemarkType.SEPARATOR.getCode());
-		}
-		if(orderRemark != null){
-			remark.append(SpecialOrderRemarkType.OTHER.getCode()).append(orderRemark).append(SpecialOrderRemarkType.SEPARATOR.getCode());
-		}
-		order.setOrderRemark(remark.toString());
-
-		//订单状态
-		order.setOrderState(OrderStateType.NOTPAY);
-		order.setSource(OrderSource.WEBPAGE);
-		//有效期
-
-		//是否评价
-		order.setCommentIs(0);
-		//预订日期
-		order.setOrderBookDate(DateUtil.parse(orderBookDate, DateUtil.defaultDatePattern));
-		//收货地址id
-		order.setMailAddress(-1l);
-		order.setUserName(user.getUserNickname());
-		conn_orderInfo.saveOrUpdate(order);
-		String orderUuid = order.getUuid();
-
-		mv = new ModelAndView("redirect:/user/order/submit?order="+orderUuid);
-		return mv;
-
-
-
-	}
+	
 
 	//创建订单
 	@RequestMapping(value = "/createOrder.do", method= RequestMethod.POST)

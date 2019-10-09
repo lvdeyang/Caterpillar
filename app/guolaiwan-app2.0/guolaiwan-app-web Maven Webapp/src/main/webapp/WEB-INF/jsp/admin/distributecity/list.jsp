@@ -51,14 +51,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               table = layui.table;
               form = layui.form;
               
-
               getcityList();
              
              return false;
                
             });
 	         
-
             function getcityList(){
                 table.render({
                     elem:"#cityList"
@@ -77,7 +75,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         ]]
                 })
            }
-
 			/*上一级*/
 			function lastclass(parentId){
 			
@@ -127,7 +124,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             function cityinfo_add(title,url,id,w,h){
                 x_admin_show(title,url,w,h);
             }
-
             //编辑
             function cityinfo_edit (title,url,id,parentId,w,h) {
                 x_admin_show(title,url+"/"+id+"/"+parentId,w,h); 

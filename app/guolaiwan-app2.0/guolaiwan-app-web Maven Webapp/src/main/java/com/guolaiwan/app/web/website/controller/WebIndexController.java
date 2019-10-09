@@ -46,8 +46,7 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.ReSpecialPO;
 import com.guolaiwan.bussiness.admin.po.ReVideoPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
-import com.guolaiwan.bussiness.merchant.car.dao.RouteDAO;
-import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
+
 
 @Controller
 public class WebIndexController extends WebBaseControll {
@@ -66,8 +65,7 @@ public class WebIndexController extends WebBaseControll {
 	@Autowired
 	private SysConfigDAO conn_sysConfig;
 
-	@Autowired
-	private RouteDAO conn_route;
+	
 
 	@Autowired
 	private MerchantDAO conn_merchant;
@@ -181,8 +179,7 @@ public class WebIndexController extends WebBaseControll {
 		List<CarouselVO> carousels=CarouselVO.getConverter(CarouselVO.class).convert(carouselsP, CarouselVO.class);
 		
 
-		//租车
-		List<RoutePO> routes = conn_route.findAll();
+		
 
 		strMap.put("carousels", carousels);
 		strMap.put("activitys", _activitys);
@@ -190,7 +187,7 @@ public class WebIndexController extends WebBaseControll {
 		strMap.put("modulars",modularsVO);
 		strMap.put("getDomain",getCityCodeByDomain());
 		strMap.put("hotProducts",hotProducts);
-		strMap.put("routes",routes);
+		strMap.put("routes",null);
 		
 		//分公司
 		List<CompanyPO> comps = conn_company.findAll();

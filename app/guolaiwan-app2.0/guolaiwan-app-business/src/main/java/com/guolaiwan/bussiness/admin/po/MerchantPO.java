@@ -18,8 +18,7 @@ import org.bytedeco.javacpp.RealSense.intrinsics;
 
 import com.guolaiwan.bussiness.admin.enumeration.MerchantSpecialBusiness;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
-import com.guolaiwan.bussiness.merchant.car.po.DriverPO;
-import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
+
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 
@@ -116,10 +115,7 @@ public class MerchantPO extends AbstractBasePO {
 	private String cityName;
 	//关联用户
 	private UserInfoPO user;
-	//关联司机
-	private List<DriverPO> drivers; 
-	//关联路线
-	private List<RoutePO> routes;
+
 
 	//关联路线
 	private List<MerModularPO> merModulars;
@@ -537,23 +533,6 @@ public class MerchantPO extends AbstractBasePO {
 		this.modularClassId = modularClassId;
 	}
 
-	@OneToMany(mappedBy="merchant", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = false)
-	public List<DriverPO> getDrivers() {
-		return drivers;
-	}
-
-	public void setDrivers(List<DriverPO> drivers) {
-		this.drivers = drivers;
-	}
-
-	@OneToMany(mappedBy="merchant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
-	public List<RoutePO> getRoutes() {
-		return routes;
-	}
-
-	public void setRoutes(List<RoutePO> routes) {
-		this.routes = routes;
-	}
 
 	@OneToMany(mappedBy="merchant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
 	@OrderBy("level ASC")

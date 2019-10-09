@@ -10,7 +10,6 @@ import com.guolaiwan.bussiness.Parking.po.CarPositionPO;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
-import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
 
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
 import pub.caterpillar.orm.dao.AbstractBaseDao;

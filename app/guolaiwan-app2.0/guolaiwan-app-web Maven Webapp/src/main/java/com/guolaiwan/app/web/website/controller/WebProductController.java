@@ -21,7 +21,6 @@ import com.guolaiwan.app.web.admin.vo.CommentVO;
 
 import com.guolaiwan.app.web.admin.vo.ModularVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
-import com.guolaiwan.app.web.merchant.car.vo.RouteVO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
@@ -96,56 +95,6 @@ public class WebProductController extends WebBaseControll{
 		//前台获取参数
 		String modularCode= request.getParameter("m");//模块
 		String classCode= request.getParameter("mc");//类
-		
-		
-		//租车判断
-		if(modularCode.equals("zcpc")){
-			List<ModularPO> modulars = conn_modular.findByField("modularIsv", 1);
-			List<ModularVO> modularsVO=ModularVO.getConverter(ModularVO.class).convert(modulars, ModularVO.class);
-			String[] claFields = {"classmodularCode","classIsv"};
-			for (ModularVO modular : modularsVO) {
-				Object[] claValues={modular.getModularCode(),1};
-				//获取模块下的分类(模块、显示;顺序排序)
-				List<ModularClassPO> classList = conn_modularClass.findByFields(claFields, claValues);
-				modular.setModularClasses(classList);
-			}
-			SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
-			strMap.put("modulars",modularsVO);
-			strMap.put("sysConfig", sysConfig);
-			strMap.put("mc", modularCode);
-			strMap.put("cc", classCode);
-			
-			
-			//路线分页
-			int pageSize=16;  //页
-			int pagecurr=1;  //页码
-			if(request.getParameter("pagecurr")!=null && request.getParameter("pagecurr").length()>0){
-				pagecurr=Integer.parseInt(request.getParameter("pagecurr"));
-			}
-			String url="productList";  //url
-			String params="";  
-			if(modularCode!=null&&modularCode.length()>0){
-				nmap.put("productModularCode",modularCode);
-				params+="&m="+modularCode;
-			}
-			if(classCode!=null&&classCode.length()>0){
-				classCode = encodeStr(classCode);
-				nmap.put("productClassCode",classCode);
-				params+="&mc="+classCode;
-			}
-			
-			int count = conn_route.countAll();
-			List<RoutePO> routePOs = conn_route.findAll(pagecurr,pageSize);
-			List<RouteVO> routeVOs = RouteVO.getConverter(RouteVO.class).convert(routePOs, RouteVO.class);
-			strMap.put("routes", routeVOs);
-			strMap.put("pages", getPages(pagecurr,count,pageSize,url,params));
-			mv =new ModelAndView("web/car/routeList",strMap);
-			return mv;
-		}
-
-
-
-
 		long comId = getComIdSession(); //分公司Id
 		
 		String pcName= request.getParameter("pcName");//关键字

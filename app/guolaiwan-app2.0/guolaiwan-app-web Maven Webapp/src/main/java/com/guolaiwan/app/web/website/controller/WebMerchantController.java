@@ -19,8 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.ModularVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
-import com.guolaiwan.app.web.merchant.car.vo.FlightVO;
-import com.guolaiwan.app.web.merchant.car.vo.RouteVO;
 import com.guolaiwan.bussiness.admin.dao.MerModularDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
@@ -68,101 +66,8 @@ public class WebMerchantController extends WebBaseControll{
 	@Autowired
 	private MerModularDAO conn_merModular;
 	
-	@Autowired
-	private RouteDAO conn_route;
 	
-	@Autowired
-	private FlightDAO conn_flight;
 	
-	//预定前登陆校验
-	@RequestMapping(value = "/flight/order/login/check/{flightUuid}")
-	public ModelAndView flightOrderLoginCheck(
-			@PathVariable String flightUuid,
-			HttpServletRequest request){
-		ModelAndView mv = null;
-		String orderInfoUrl = new StringBufferWrapper().append("/user/order/flight/order/").append(flightUuid).toString();
-		Object ouser = request.getSession().getAttribute("userInfo");
-		if(ouser == null){
-			mv = new ModelAndView("redirect:/user/login");
-			String projectName = PathUtil.getProjectName();
-			mv.addObject("rul", new StringBufferWrapper().append("/").append(projectName).append(orderInfoUrl).toString());
-		}else{
-			mv = new ModelAndView(new StringBufferWrapper().append("redirect:").append(orderInfoUrl).toString());
-		}
-		return mv;
-	}
-	
-	//检索路线下的班次
-	@RequestMapping(value = "/query/flight/{merchantUuid}/{routeUuid}/{flightType}")
-	public ModelAndView queryFlight(
-			@PathVariable String merchantUuid, 
-			@PathVariable String routeUuid,
-			@PathVariable String flightType,
-			int pagecurr) throws Exception{
-		
-		ModelAndView mv = null;
-		
-		FlightType type = FlightType.valueOf(flightType);
-		
-		if(type.equals(FlightType.CARTIME)){
-			mv = new ModelAndView("web/merchant/flight-timing");
-		}else{
-			mv = new ModelAndView("web/merchant/flight-chartered");
-		}
-		
-		int pageSize = 30;
-		int count = 0;
-		
-		count = conn_flight.countByRouteAndType(routeUuid, type);
-		if(count > 0){
-			List<FlightPO> flights = conn_flight.queryByRouteAndType(routeUuid, type, pagecurr, pageSize);
-			List<FlightVO> view_flights = FlightVO.getConverter(FlightVO.class).convert(flights, FlightVO.class);
-			mv.addObject("flights", view_flights);
-		}
-		
-		mv.addObject("pages", getPages(pagecurr, count, pageSize, "", ""));
-		
-		RoutePO route = conn_route.get(routeUuid);
-		RouteVO view_route = new RouteVO().set(route);
-		mv.addObject("route", view_route);
-		
-		MerchantPO merchant = conn_merchant.get(merchantUuid);
-		MerchantVO view_merchant = new MerchantVO().set(merchant);
-		mv.addObject("merchant", view_merchant);
-		return mv;
-	}
-	
-	//检索车队下的路线
-	@RequestMapping(value = "/query/route/{uuid}")
-	public ModelAndView queryRoute(@PathVariable String uuid, int pagecurr) throws Exception{
-		
-		ModelAndView mv = new ModelAndView("web/merchant/routeList");
-		
-		int pageSize = 30;
-		int count = 0;
-		
-		MerchantPO merchant = conn_merchant.get(uuid);
-		List<DriverPO> drivers = merchant.getDrivers();
-		Set<Long> driverIds = new HashSet<Long>();
-		for(DriverPO driver:drivers){
-			driverIds.add(driver.getId());
-		}
-		if(driverIds.size() > 0){
-			count = conn_route.countByMerchant(uuid);
-			if(count > 0){
-				List<RoutePO> routes = conn_route.queryByMerchant(uuid, pagecurr, pageSize);
-				List<RouteVO> view_routes = RouteVO.getConverter(RouteVO.class).convert(routes, RouteVO.class);
-				mv.addObject("routes", view_routes);
-			}
-		}
-		
-		mv.addObject("pages", getPages(pagecurr, count, pageSize, uuid, ""));
-		
-		MerchantVO view_merchant = new MerchantVO().set(merchant);
-		mv.addObject("merchant", view_merchant);
-		
-		return mv;
-	}
 	
 	// 首页搜索
 	@RequestMapping(value = "/productList", method= RequestMethod.GET)
