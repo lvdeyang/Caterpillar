@@ -48,7 +48,7 @@
 	<!-- 操作引擎模板 -->
 	<script type="text/html" id="procaozuoTpl">
  <a title="详情" href="javascript:;" onclick="product_info('产品详情','info','{{d.uuid}}','','510')" style="text-decoration:none;display:none"><i class="layui-icon">&#xe62d;</i></a>
- <a title="删除" href="javascript:;" onclick="pro_del(this,'{{ d.uuid }}')" style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a>
+ <a title="删除" href="javascript:;" onclick="pro_del(this,'{{ d.uuid }}')" style="display:none;text-decoration:none"><i class="layui-icon">&#xe640;</i></a>
  <a title="套餐" href="javascript:;" onclick="full_show('产品套餐','package','{{ d.id }}','','510')" style="text-decoration:none;display:none;"><i class="layui-icon">&#xe857;</i></a>
   
 <a title="分销政策" href="javascript:;" onclick="location.href='toDisProList.do/{{ d.id }}'" class="layui-btn layui-btn-xs">分销政策</a>
@@ -147,17 +147,7 @@
 						title : '商户',
 						sort : true
 					}
-					, {
-						field : 'distributorType',
-						title : '分销类型',
-						sort : true
-					}
-					, {
-						field : 'minAmount',
-						title : '最小数量',
-						width : 100,
-						sort : true
-					}
+					
 					, {
 						field : 'online',
 						title : '在线',
