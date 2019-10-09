@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.guolaiwan.app.web.admin.vo.DistributorVO;
 import com.guolaiwan.app.web.admin.vo.TableVo;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.TableDAO;
@@ -29,7 +28,6 @@ import com.guolaiwan.bussiness.admin.enumeration.TableStatus;
 import com.guolaiwan.bussiness.admin.po.AdminPO;
 import com.guolaiwan.bussiness.admin.po.CityInfoPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
-import com.guolaiwan.bussiness.admin.po.DistributorPO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.RolePO;

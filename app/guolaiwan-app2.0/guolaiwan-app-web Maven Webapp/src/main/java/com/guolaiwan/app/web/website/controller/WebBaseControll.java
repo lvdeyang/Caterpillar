@@ -21,7 +21,6 @@ import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.po.CityInfoPO;
-import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
 import com.guolaiwan.bussiness.admin.po.MerModularPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;

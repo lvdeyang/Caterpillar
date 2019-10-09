@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.guolaiwan.bussiness.admin.po.DistributorPO;
 import com.guolaiwan.bussiness.distribute.classify.DistributorApplyStatus;
 import com.guolaiwan.bussiness.distribute.classify.DistributorType;
 import com.guolaiwan.bussiness.distribute.po.DistributeProduct;

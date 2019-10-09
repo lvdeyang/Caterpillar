@@ -32,25 +32,7 @@ public class ProductPO extends AbstractBasePO {
 	// 绑定模块名称
 	private String productModularCodeName;
 
-	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = false)
-	public List<DistributorProductPO> getDistributorProduct() {
-		return distributorProduct;
-	}
-
-	public void setDistributorProduct(List<DistributorProductPO> distributorProduct) {
-		this.distributorProduct = distributorProduct;
-	}
-
-	private List<DistributeProduct> distributeProduct;
-
-	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = false)
-	public List<DistributeProduct> getDistributeProduct() {
-		return distributeProduct;
-	}
-
-	public void setDistributeProduct(List<DistributeProduct> distributeProduct) {
-		this.distributeProduct = distributeProduct;
-	}
+	
 
 	// 分类标识
 	private String productClassCode;
@@ -182,8 +164,7 @@ public class ProductPO extends AbstractBasePO {
 
 	private boolean distri;
 
-	// 关联分销商商品
-	private List<DistributorProductPO> distributorProduct;
+	
 	
 	private long regionId;
 	

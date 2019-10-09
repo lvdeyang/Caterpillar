@@ -44,8 +44,6 @@ import com.guolaiwan.bussiness.admin.dao.ChildProductDAO;
 import com.guolaiwan.bussiness.admin.dao.CollectionDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
-import com.guolaiwan.bussiness.admin.dao.DistributorDAO;
-import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveAdvertisementDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;

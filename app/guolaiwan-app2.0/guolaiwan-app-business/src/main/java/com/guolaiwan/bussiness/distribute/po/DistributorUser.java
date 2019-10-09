@@ -1,4 +1,4 @@
-package com.guolaiwan.bussiness.admin.po.live;
+package com.guolaiwan.bussiness.distribute.po;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

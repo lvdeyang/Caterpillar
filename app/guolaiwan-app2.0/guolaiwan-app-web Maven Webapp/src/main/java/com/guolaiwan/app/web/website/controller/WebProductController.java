@@ -18,26 +18,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.app.web.admin.vo.CommentVO;
-import com.guolaiwan.app.web.admin.vo.DistributorVO;
+
 import com.guolaiwan.app.web.admin.vo.ModularVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.merchant.car.vo.RouteVO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
-import com.guolaiwan.bussiness.admin.dao.DistributorDAO;
-import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
+
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
-import com.guolaiwan.bussiness.admin.po.DistributorPO;
-import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.ModularClassPO;
 import com.guolaiwan.bussiness.admin.po.ModularPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 import com.guolaiwan.bussiness.merchant.car.dao.RouteDAO;
 import com.guolaiwan.bussiness.merchant.car.po.RoutePO;
 
@@ -65,11 +63,7 @@ public class WebProductController extends WebBaseControll{
 	@Autowired
 	private CommentDAO conn_comment;
 	
-	@Autowired
-	private DistributorDAO conn_distributor;
 
-	@Autowired
-	private DistributorProductDAO conn_distributorProduct;
 	
 
 	// 首页搜索
@@ -242,48 +236,17 @@ public class WebProductController extends WebBaseControll{
 	
 		
 		//经销商Id参数
-		String disId = request.getParameter("distributor");
-		int isDistributor = 0;
-		if(disId!=null){
-			DistributorPO distributor = conn_distributor.get(Long.parseLong(disId));
-			if(distributor!=null){
-				DistributorVO _distributor = new DistributorVO().set(distributor);
-				DistributorProductPO distributorProduct = conn_distributorProduct.getByDisAndPro(Long.parseLong(disId), productp);
-				_distributor.setDistributorPrice(df.format((double)distributorProduct.getDistributorPrice()/100));;
-				strMap.put("distributor", _distributor);
-				isDistributor = 1;
-			}
-		}
 		
-		//经销商
-		List<DistributorVO> _distributors =  new ArrayList<DistributorVO>();
-		List<DistributorProductPO> distributorProducts = productp.getDistributorProduct();
-		for (DistributorProductPO distributorProductPO : distributorProducts) {
-			DistributorPO distributor = conn_distributor.get(distributorProductPO.getDistributorId());
-			DistributorVO _distributor = new DistributorVO().set(distributor);
-			//经销商价格
-			_distributor.setDistributorPrice(df.format((double)distributorProductPO.getDistributorPrice()/100));
-			//单图
-			_distributor.setShopPic(
-					sysConfig.getWebUrl() + _distributor.getShopPic());
-			//多图
-			_distributor.setShopMpic(split(_distributor.getShopMpic(), sysConfig.getWebUrl()));
-			//人均价格
-			_distributor.setAveragePrice("无数据");
-			
-			if(disId!=null&&Long.parseLong(disId)==distributorProductPO.getDistributorId()){
-			}else{
-				_distributors.add(_distributor);
-			}
-			
-		}
+		int isDistributor = 0;
+		
+		
 		strMap.put("isDistributor", isDistributor);
 		strMap.put("product", product);
 		strMap.put("comments", _comments);
 		strMap.put("merchant", merchant);
 		strMap.put("pics", pics);
 		strMap.put("sysConfig", sysConfig);
-		strMap.put("distributors", _distributors);
+		strMap.put("distributors", new ArrayList<DistributorPo>());
 		ModelAndView mv = new ModelAndView("web/product/productInfo",strMap);
 		return mv;
 	}

@@ -36,8 +36,6 @@ public class UserInfoPO extends AbstractBasePO {
     private Integer source;
     //关联商户
     private MerchantPO merchant;
-    // 关联分销商
-    private DistributorPO distributor;
     //评论
     private List<CommentPO> comments;
     //收藏
@@ -79,14 +77,6 @@ public class UserInfoPO extends AbstractBasePO {
 		this.companyName = companyName;
 	}
 	
-    
-    @OneToOne(mappedBy="user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
-    public DistributorPO getDistributor() {
-		return distributor;
-	}
-	public void setDistributor(DistributorPO distributor) {
-		this.distributor = distributor;
-	}
 	@OneToOne(mappedBy="user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
     public MerchantPO getMerchant() {
 		return merchant;

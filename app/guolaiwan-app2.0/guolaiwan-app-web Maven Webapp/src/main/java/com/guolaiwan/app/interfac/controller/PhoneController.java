@@ -54,7 +54,6 @@ import com.guolaiwan.app.web.admin.vo.ChildPicAndContentVO;
 import com.guolaiwan.app.web.admin.vo.ChildProductVO;
 import com.guolaiwan.app.web.admin.vo.CommentVO;
 import com.guolaiwan.app.web.admin.vo.CompanyVO;
-import com.guolaiwan.app.web.admin.vo.DistributorVO;
 import com.guolaiwan.app.web.admin.vo.LanVO;
 import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
 import com.guolaiwan.app.web.admin.vo.LiveGiftVO;
@@ -93,8 +92,7 @@ import com.guolaiwan.bussiness.admin.dao.CollectionDAO;
 import com.guolaiwan.bussiness.admin.dao.ColumnDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
-import com.guolaiwan.bussiness.admin.dao.DistributorDAO;
-import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
+
 import com.guolaiwan.bussiness.admin.dao.ExpressDao;
 import com.guolaiwan.bussiness.admin.dao.GroupBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.GroupTeamDAO;
@@ -158,8 +156,6 @@ import com.guolaiwan.bussiness.admin.po.CollectionPO;
 import com.guolaiwan.bussiness.admin.po.ColumnPO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
-import com.guolaiwan.bussiness.admin.po.DistributorPO;
-import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
 import com.guolaiwan.bussiness.admin.po.ExpressPO;
 import com.guolaiwan.bussiness.admin.po.GroupBuyPO;
 import com.guolaiwan.bussiness.admin.po.GroupTeamPO;
@@ -201,6 +197,7 @@ import com.guolaiwan.bussiness.admin.po.VideoPicPO;
 import com.guolaiwan.bussiness.admin.po.live.LiveOrderPO;
 import com.guolaiwan.bussiness.admin.po.live.LiveRecordPO;
 import com.guolaiwan.bussiness.admin.po.live.SubLivePO;
+import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 import com.guolaiwan.bussiness.javacv.GuoliawanLiveServiceWrapper;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
@@ -263,12 +260,10 @@ public class PhoneController extends WebBaseControll {
 	private ActivityDAO conn_activity;
 	@Autowired
 	private ActivityRelDAO conn_activityRel;
-	@Autowired
-	private DistributorDAO conn_distributor;
+
 	@Autowired
 	private CommentDAO conn_comment;
-	@Autowired
-	private DistributorProductDAO conn_distributorProduct;
+
 	@Autowired
 	private PhoneCodeDAO conn_phoneCode;
 	@Autowired
@@ -710,19 +705,9 @@ public class PhoneController extends WebBaseControll {
 		}
 
 		// 经销商
-		List<DistributorPO> distributors = conn_distributor.findAll();
-		if (distributors != null) {
-			List<DistributorVO> _distributors = DistributorVO.getConverter(DistributorVO.class).convert(distributors,
-					DistributorVO.class);
-			for (DistributorVO distributorVO : _distributors) {
-				distributorVO.setShopPic(sysConfig.getWebUrl() + distributorVO.getShopPic());
-				// 多图
-				distributorVO.setShopMpic(split(distributorVO.getShopMpic(), sysConfig.getWebUrl()));
-				// 人均价格
-				distributorVO.setAveragePrice("无数据");
-			}
-			data.put("distributors", _distributors);
-		}
+		
+		data.put("distributors", new ArrayList<DistributorPo>());
+		
 
 		List<ActiveBundlePo> ablist = conn_activityBundle.findAll();
 		if (ablist != null) {
@@ -941,19 +926,8 @@ public class PhoneController extends WebBaseControll {
 	@RequestMapping(value = "/distributorInfo", method = RequestMethod.GET)
 	public Map<String, Object> distributorInfo(HttpServletRequest request, HttpServletResponse response,
 			long distributorId) throws Exception {
-		DistributorPO distributor = conn_distributor.get(distributorId);
-		if (distributor == null) {
-			return ERROR("未获取到经销商！");
-		}
-		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
-		// 经销商
-		DistributorVO _distributor = new DistributorVO().set(distributor);
-		_distributor.setShopPic(sysConfig.getWebUrl() + _distributor.getShopPic());// 商家显示图片
-		_distributor.setShopMpic(split(_distributor.getShopMpic(), sysConfig.getWebUrl()));// 商家多图
-		// 人均价格
-		_distributor.setAveragePrice("无数据");
-		// 经销商星级?
-		return success(_distributor);
+		
+		return success(new DistributorPo());
 	}
 
 	/**
@@ -969,26 +943,11 @@ public class PhoneController extends WebBaseControll {
 	public Map<String, Object> getProductsByDis(HttpServletRequest request, HttpServletResponse response,
 			long distributorId, int page) throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
-		DecimalFormat df = new DecimalFormat("0.00");
-		// 商品
+		
 		List<ProductVO> _products = new ArrayList<ProductVO>();
-		List<DistributorProductPO> distributorProducts = conn_distributorProduct.findByDisId(distributorId, page,
-				pageSize);
-		for (DistributorProductPO distributorProductPO : distributorProducts) {
-			ProductPO product = distributorProductPO.getProduct();
-
-			ProductVO _product = new ProductVO().set(product);
-			// 经销商价格
-			_product.setDistributorPrice(df.format((double) distributorProductPO.getDistributorPrice() / 100));
-
-			// 商品照片
-			_product.setProductShowPic(sysConfig.getWebUrl() + _product.getProductShowPic());
-			_products.add(_product);
-		}
-		int count = conn_distributorProduct.countByDisId(distributorId);
+		
 		dataMap.put("products", _products);
-		dataMap.put("count", count);
+		dataMap.put("count", _products.size());
 		return success(dataMap);
 	}
 
@@ -1643,29 +1602,8 @@ public class PhoneController extends WebBaseControll {
 			long productId) throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
-		DecimalFormat df = new DecimalFormat("0.00");
-		ProductPO product = conn_product.get(productId);
-		if (product == null) {
-			return ERROR("未获取到产品！");
-		}
-		List<DistributorVO> _distributors = new ArrayList<DistributorVO>();
-
-		List<DistributorProductPO> distributorProducts = product.getDistributorProduct();
-		for (DistributorProductPO distributorProductPO : distributorProducts) {
-			DistributorPO distributor = conn_distributor.get(distributorProductPO.getDistributorId());
-			DistributorVO _distributor = new DistributorVO().set(distributor);
-			// 经销商价格
-			_distributor.setDistributorPrice(df.format((double) distributorProductPO.getDistributorPrice() / 100));
-			// 单图
-			_distributor.setShopPic(sysConfig.getWebUrl() + _distributor.getShopPic());
-			// 多图
-			_distributor.setShopMpic(split(_distributor.getShopMpic(), sysConfig.getWebUrl()));
-			// 人均价格
-			_distributor.setAveragePrice("无数据");
-			_distributors.add(_distributor);
-		}
-
-		dataMap.put("distributors", _distributors);
+		
+		dataMap.put("distributors", new ArrayList<DistributorPo>());
 		return success(dataMap);
 	}
 

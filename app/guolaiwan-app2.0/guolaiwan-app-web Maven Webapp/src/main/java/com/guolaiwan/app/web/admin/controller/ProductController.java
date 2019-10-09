@@ -955,11 +955,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "disprodel.do", method = RequestMethod.POST)
 	public String disproDel(HttpServletRequest request) throws Exception {
 		String uuid = request.getParameter("uuid");
-	    DistributeProduct dispro=conn_distributeProduct.get(uuid);
-	   
-	    dispro.getProduct().getDistributeProduct().remove(dispro);
-	    conn_product.save(dispro.getProduct());
-	    conn_distributeProduct.delete(dispro);
+	    
 		return "success";
 	}
 

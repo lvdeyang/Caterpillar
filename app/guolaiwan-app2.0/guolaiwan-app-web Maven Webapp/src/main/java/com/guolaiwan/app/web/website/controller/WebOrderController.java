@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.guolaiwan.app.web.admin.vo.DistributorProductVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
@@ -34,8 +33,6 @@ import com.guolaiwan.app.web.merchant.car.vo.DriverVO;
 import com.guolaiwan.app.web.merchant.car.vo.FlightVO;
 import com.guolaiwan.app.web.merchant.car.vo.RouteVO;
 import com.guolaiwan.app.web.website.order.submit.TokenProcessor;
-import com.guolaiwan.bussiness.admin.dao.DistributorDAO;
-import com.guolaiwan.bussiness.admin.dao.DistributorProductDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
@@ -46,8 +43,6 @@ import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderType;
 import com.guolaiwan.bussiness.admin.enumeration.SpecialOrderRemarkType;
 import com.guolaiwan.bussiness.admin.enumeration.SpecialOrderType;
-import com.guolaiwan.bussiness.admin.po.DistributorPO;
-import com.guolaiwan.bussiness.admin.po.DistributorProductPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
@@ -90,10 +85,6 @@ public class WebOrderController extends WebBaseControll{
 
 	@Autowired
 	private DriverDAO conn_driver;
-	@Autowired
-	private DistributorProductDAO conn_distributorProduct;
-	@Autowired
-	private DistributorDAO conn_distributor;
 
 	//租车订单确认
 	@RequestMapping(value = "/flight/order/{uuid}")
@@ -201,34 +192,9 @@ public class WebOrderController extends WebBaseControll{
 			strMap.put("type","MERCHANT");//订单类型
 			mv = new ModelAndView("web/order/add",strMap);
 			return mv;
-
 		case "DISTRIBUTOR":
-			DistributorProductPO distributorProduct = conn_distributorProduct.get(puuid);
-			if(distributorProduct==null) return new ModelAndView("web/common/error");//商品不存在
-			DistributorProductVO _distributorProduct = new DistributorProductVO().set(distributorProduct);
-			ProductPO productd = distributorProduct.getProduct();
-			if(productd==null) return new ModelAndView("web/common/error");//商品不存在
-			long orderAllMoneyd = distributorProduct.getSellPrice()*Long.parseLong(count);//总价
-			DistributorPO distributor = conn_distributor.get(distributorProduct.getDistributorId());//经销商
-			long jmoneyd = 0l;
-			long yund = productd.getSent();
-			long payMoneyd = orderAllMoneyd + yund; 
-			strMap.put("sysConfig",sysConfig);
-			strMap.put("product",productd);
-			strMap.put("distributorProduct",_distributorProduct);
-			strMap.put("distributor",distributor);
-			strMap.put("user",user);
-			strMap.put("addressn",addressn);
-			strMap.put("addressd",addressd);
-			strMap.put("count",count);//库存
-			strMap.put("orderAllMoney",deci.format((double)orderAllMoneyd/100));//总价
-			strMap.put("yun",deci.format((double)yund/100));//运费
-			strMap.put("jmoney",deci.format((double)jmoneyd));//减额
-			strMap.put("payMoney",deci.format((double)payMoneyd/100));//应付金额
-			strMap.put("type","DISTRIBUTOR");//订单类型
 			mv = new ModelAndView("web/order/add",strMap);
 			return mv;
-
 		default:
 			throw new Exception("错误的订单类型！");	
 		}
@@ -364,141 +330,7 @@ public class WebOrderController extends WebBaseControll{
 
 		String type = request.getParameter("type");
 		if(type!=null&&type.equals("DISTRIBUTOR")){//经销商订单
-			Map<String, Object> strMap = new HashMap<String, Object>();
-			Date date= new Date();
-			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			DateFormat sdf1 = new SimpleDateFormat("yyyyMMddhhmmss");
 			
-			String dpuuid = request.getParameter("dpuuid");
-			String orderBookDate= request.getParameter("orderBookDate");
-			String pcount1= request.getParameter("pcount");
-			if(pcount1==null||pcount1.length()==0) pcount1="1";
-			int pcount = Integer.parseInt(pcount1);
-			//分销商品
-			DistributorProductPO distributorProduct = conn_distributorProduct.get(dpuuid);
-			//分销商
-			DistributorPO distributor = conn_distributor.get(distributorProduct.getDistributorId());
-			//商品
-			ProductPO product = distributorProduct.getProduct();
-			//商家
-			MerchantPO merchant = conn_merchant.get(product.getProductMerchantID());
-			//进价售价（原价）
-			long distributorPrice = distributorProduct.getDistributorPrice();
-			long sellPrice = distributorProduct.getSellPrice();
-			long productPrice = product.getProductPrice();
-			//订单总金额1
-			long orderAllMoney1 = pcount*distributorPrice;
-			//订单总金额2
-			long orderAllMoney2 = pcount*sellPrice;
-			//支付金额1
-			long payMoney1 =orderAllMoney1;
-			//支付金额2
-			long payMoney2 =orderAllMoney2;
-			
-			//分销商的用户
-			UserInfoPO user1 = distributor.getUser();
-			//购买的用户
-			UserInfoPO user2 = GetUserInfo();
-			
-			OrderInfoPO order1 = new OrderInfoPO();//第一步订单（商家）
-			OrderInfoPO order2 = new OrderInfoPO();//第二步订单（经销商）(显示此订单)
-			order1.setOrderType(OrderType.MERCHANT);
-			order2.setOrderType(OrderType.DISTRIBUTOR);
-			//地址
-			String mailAddress1= request.getParameter("mailAddress");
-			if(mailAddress1!=null&&mailAddress1.length()!=0){
-				AddressPO address = conn_address.get(mailAddress1);
-				long mailAddress =  address.getId();
-				order1.setMailAddress(mailAddress);
-				order2.setMailAddress(mailAddress);
-			}
-			//订单号（城市编码+商家id+板块Code+时间戳+用户ID）
-			String orderNO = getCityCodeByDomain()+"v"+merchant.getId()+"v"+product.getProductModularCode()+"v"+sdf1.format(date)+"v"+user2.getId();
-			order1.setOrderNO(orderNO);
-			order2.setOrderNO(orderNO);
-			//下单时间
-			order1.setCreateDate(date);
-			order1.setUpdateTime(date);
-			order2.setCreateDate(date);
-			order2.setUpdateTime(date);
-			//供应商ID
-			order1.setShopId(merchant.getId());
-			order2.setShopId(distributor.getId());
-			//供应商名称
-			order1.setShopName(merchant.getShopName());//商家Id
-			order2.setShopName(distributor.getShopName());//分销商Id
-			//商品ID
-			order1.setProductId(product.getId());     //商品Id
-			order2.setProductId(distributorProduct.getId());//分销商品Id
-			//商品图片
-			order1.setProductPic(product.getProductShowPic());
-			order2.setProductPic(product.getProductShowPic());
-			//商品名称
-			order1.setProductName(product.getProductName());
-			order2.setProductName(product.getProductName());
-			//商品数量
-			order1.setProductNum(pcount);
-			order2.setProductNum(pcount);
-			//商品单价
-			order1.setProductPrice(distributorPrice);//80
-			order2.setProductPrice(sellPrice);//90
-			//所属板块DI
-			order1.setBkCode(product.getProductModularCode());
-			order2.setBkCode(product.getProductModularCode());
-			//所属板块名称
-			order1.setBkName(product.getProductModularCodeName());
-			order2.setBkName(product.getProductModularCodeName());
-			//会员ID
-//			order1.setUserId(user1.getId());     //经销商用户（没有用户信息？）
-			order2.setUserId(user2.getId());     //购买用户
-			//会员手机号
-//			order1.setUserTel(user1.getUserPhone());
-			order2.setUserTel(user2.getUserPhone());
-			//提成方式比例 **金额**
-			int code = product.getProductCommissionCode();//产品的提成方式
-			order1.setRoyaltyName(code);//方式：1比例0金额
-			order2.setRoyaltyName(1);
-			if(code==1){                //比例long(60就是0.6)
-				order1.setProportion(product.getProductCommissionPrice());
-			}		
-			order2.setProportion(distributor.getProportion());  
-			long proportionMoney;//金额
-			if(code==1){
-				proportionMoney = pcount * distributorPrice*product.getProductCommissionPrice()/100;
-			}else {
-				proportionMoney = pcount * distributorPrice*product.getProductCommissionPrice()/productPrice;
-			}
-			order1.setProportionMoney(proportionMoney);
-			order2.setProportionMoney((sellPrice-distributorPrice)*distributor.getProportion()/100);
-			
-			
-			//支付金额
-			order1.setPayMoney(payMoney1);
-			order2.setPayMoney(payMoney2);
-			//订单总金额
-			order1.setOrderAllMoney(orderAllMoney1);
-			order2.setOrderAllMoney(orderAllMoney2);
-			//订单说明
-			if(request.getParameter("orderRemark")!=null&&request.getParameter("orderRemark").length()>0){
-				order1.setOrderRemark(request.getParameter("orderRemark"));
-				order2.setOrderRemark(request.getParameter("orderRemark"));
-			}
-			//订单状态
-			order1.setOrderState(OrderStateType.NOTPAY);
-			order1.setSource(OrderSource.WEBPAGE);
-			order2.setOrderState(OrderStateType.NOTPAY);
-			order2.setSource(OrderSource.WEBPAGE);
-			//是否评价
-			order1.setCommentIs(0);
-			order2.setCommentIs(0);
-			//预订日期
-			order1.setOrderBookDate(sdf.parse(orderBookDate));
-			order2.setOrderBookDate(sdf.parse(orderBookDate));
-			
-			conn_orderInfo.save(order1);
-			conn_orderInfo.save(order2);
-			
-			orderUuid = order2.getUuid();
 			
 		}else if(type!=null&&type.equals("MERCHANT")){//商家订单
 			String puuid= request.getParameter("puuid");
