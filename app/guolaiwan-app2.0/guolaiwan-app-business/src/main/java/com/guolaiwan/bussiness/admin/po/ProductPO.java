@@ -32,10 +32,23 @@ public class ProductPO extends AbstractBasePO {
 	// 绑定模块名称
 	private String productModularCodeName;
 
+	private List<DistributeProduct> distributeProduct;
 	
+	
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
+	
+	
+	public List<DistributeProduct> getDistributeProduct() {
+		return distributeProduct;
+	}
+
+	public void setDistributeProduct(List<DistributeProduct> distributeProduct) {
+		this.distributeProduct = distributeProduct;
+	}
 
 	// 分类标识
 	private String productClassCode;
+	
 	
 	// 积分商品  0是 1不是
 	private int IntegralGoods;

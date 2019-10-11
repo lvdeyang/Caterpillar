@@ -81,7 +81,15 @@ public class PubnumReportController extends WebBaseControll {
 				DistributeProduct oldDistributeProduct=conn_dispro.get(order.getProductId());
 				oldDistributeProduct.setProleft(oldDistributeProduct.getProleft()-order.getCount());
 				conn_dispro.save(oldDistributeProduct);
-				
+				DistributeProduct product=new DistributeProduct();
+				product.setDistributorId(order.getDistributorId());
+				product.setPrice(order.getPrice());
+				product.setProleft(order.getCount());
+				product.setRegionId(order.getRegion());
+				product.setProduct(oldDistributeProduct.getProduct());
+				oldDistributeProduct.getProduct().getDistributeProduct().add(product);
+				conn_dispro.save(product);
+				conn_pro.save(product.getProduct());
 				
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("SUCCESS");
