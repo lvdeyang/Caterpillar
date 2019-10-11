@@ -524,13 +524,7 @@ html, body {
 				            
 		            	</select>
 		            	
-		            	<select class="weui-select" name="city" id="city">
-				            
-		            	</select>
 		            	
-		            	<select class="weui-select" name="contry" id="contry">
-				            
-		            	</select>
 					</div>
 				</div>
 				
@@ -589,7 +583,7 @@ html, body {
 	$(function() {
 	
 	    function initRegion(){
-	        var _urigetRegion = window.BASEPATH + 'distributor/region/first';
+	        var _urigetRegion = window.BASEPATH + 'distributor/com/list';
 		
 			$.get(_urigetRegion, null, function(data){
 				data = parseAjaxResult(data);
@@ -603,7 +597,7 @@ html, body {
 					       chk='selected';
 					    }
 
-					    html.push('<option '+chk+' value="'+data[i].id+'">'+data[i].name+'</option>');
+					    html.push('<option '+chk+' value="'+data[i].id+'">'+data[i].comName+'</option>');
 					}
 					$('#region').children().remove();
 					$('#region').append(html.join(''));
@@ -613,72 +607,7 @@ html, body {
 	    
 	    }
 	    initRegion();
-	    $(document).on('change','#region',function(){
 	    
-	        initCity($(this).val());
-	        initContry(0);
-	    });
-	    
-	    
-	    function initCity(parentId,init){
-	        parentId=(parentId==0?100000:parentId);
-	        $('#city').children().remove();
-	        $('#city').append('<option value="0">未选择</option>');
-	        var _urigetRegion = window.BASEPATH + 'distributor/region/parent/'+parentId;
-		
-			$.get(_urigetRegion, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data && data.length>0){
-				    var html=[];
-					for(var i=0; i<data.length; i++){
-					    if(parentId==0){
-					      break;
-					    }
-					    var chk='';
-					 
-					    if(init&&data[i].id=='${city}'){
-					       chk='selected'
-					    }
-					    html.push('<option '+chk+' value="'+data[i].id+'">'+data[i].name+'</option>');
-					}
-					$('#city').append(html.join(''));
-				}
-			});
-	    
-	    }
-	    initCity(${region},true);
-	    $(document).on('change','#city',function(){
-	        initContry($(this).val());
-	    });
-	    
-	    function initContry(parentId,init){
-	        parentId=(parentId==0?100000:parentId);
-	        $('#contry').children().remove();
-	        $('#contry').append('<option value="0">未选择</option>');
-	        var _urigetRegion = window.BASEPATH + 'distributor/region/parent/'+parentId;
-		
-			$.get(_urigetRegion, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data && data.length>0){
-				    var html=[];
-					for(var i=0; i<data.length; i++){
-					    if(parentId==0){
-					      break;
-					    }
-					    var chk='';
-					    if(init&&data[i].id=='${country}'){
-					       chk='selected'
-					    }
-					    html.push('<option '+chk+' value="'+data[i].id+'">'+data[i].name+'</option>');
-					}
-					$('#contry').append(html.join(''));
-				}
-			});
-	    
-	    }
-	    initContry(${city},true);
 	
 	    $(document).on('click','#apply',function(){
 	        if($('#legalPerson').val() == ''){
@@ -722,7 +651,7 @@ html, body {
 				 return false; 
 			}
 	        if($('#region').val() == '0'){
-				$.toast("请选择分销地区，至少为省级", "forbidden"); 
+				$.toast("请选择分销地区", "forbidden"); 
 				return false; 
 			}										
 			else{

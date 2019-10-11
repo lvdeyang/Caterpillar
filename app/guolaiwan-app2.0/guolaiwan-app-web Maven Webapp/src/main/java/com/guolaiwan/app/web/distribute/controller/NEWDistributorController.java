@@ -43,6 +43,7 @@ import com.guolaiwan.app.web.weixin.YuebaWxPayConstants;
 import com.guolaiwan.app.web.weixin.YuebaWxUtil;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
+import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
@@ -87,9 +88,9 @@ public class NEWDistributorController {
 	private DistributorDao conn_distributor;
 	@Autowired
 	private RegionDao conn_region;
-	@RequestMapping(value = "/distribute/index/{region}/{proRegion}")
+	@RequestMapping(value = "/distribute/index/{region}")
 	public ModelAndView distributeIndex(
-			HttpServletRequest request,@PathVariable long region,@PathVariable long proRegion) throws Exception{
+			HttpServletRequest request,@PathVariable long region) throws Exception{
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/guolaiwan/distribute");
 		HttpSession session=request.getSession();
@@ -105,17 +106,6 @@ public class NEWDistributorController {
 				mv = new ModelAndView("redirect:/distributor/app/login/0");
 				return mv;
 			}
-		}
-
-
-		if(proRegion==0){
-			RegionPo regionPo=conn_region.get(Long.parseLong(session.getAttribute("region")+""));
-			while(regionPo.getParentId()!=0){
-				regionPo=conn_region.get(regionPo.getParentId());
-			}
-			mv.addObject("proRegion",regionPo.getId());
-		}else{
-			mv.addObject("proRegion",proRegion);
 		}
 		if(region==0l){
 			mv.addObject("region",session.getAttribute("region"));
@@ -135,15 +125,11 @@ public class NEWDistributorController {
 			DistributorPo distributorPo=conn_distributor.get(disId);
 			mv.addObject("distributor",distributorPo);
 			mv.addObject("region",0);
-			mv.addObject("city",0);
-			mv.addObject("country",0);
 		}else{
 			DistributorPo distributorPo=new DistributorPo();
 			distributorPo.setId(0l);
 			mv.addObject("distributor",distributorPo);
 			mv.addObject("region",0);
-			mv.addObject("city",0);
-			mv.addObject("country",0);
 		}
 		mv.addObject("weburl",sys.getWebUrl());
 
@@ -170,7 +156,18 @@ public class NEWDistributorController {
 		return mv;
 	}
 
+    
+	@Autowired
+	CompanyDAO conn_com;
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/com/list", method = RequestMethod.GET)
+	public Object getAllCom(HttpServletRequest request) throws Exception{
 
+		return conn_com.findAll();
+	}
+	
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/region/first", method = RequestMethod.GET)
@@ -1002,27 +999,5 @@ public class NEWDistributorController {
 		return "success";
 	}
 
-	/**
-	 * 请求转发
-	 * 
-	 */
-	@ResponseBody
-	@JsonBody
-	@RequestMapping(value = "/skip/register")
-	public ModelAndView skipRegister() {
-		Map<String, Object> stra = new HashMap<String, Object>();
-		return new ModelAndView("mobile/guolaiwan/distribute-register", stra);
-	}
-	/**
-	 * 
-	 *  退出功能
-	 * */
-	@ResponseBody
-	@JsonBody
-	@RequestMapping(value = "/admin/exitPage")
-	public ModelAndView exitPage(HttpServletRequest request){		
-		ModelAndView mView = new ModelAndView("redirect:/distributor/app/login/-1");		
-		return mView;
-	}
-
+	
 }

@@ -508,8 +508,6 @@ html, body {
 		    <c:if test="${distributorId=='0'}"> 
 		    	<a id="applyDistributor" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">
 		    	申请分销商</a>
-		    	<a id="egisterDistributor" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"  class="weui-btn weui-btn_primary"
-		    	    href='<%=basePath %>distributor/skip/register'>登录</a>
 		     
 			</c:if>
 			</c:if>
@@ -588,7 +586,7 @@ html, body {
 			<c:if test="${status=='PASSED'}">
 			<c:if test="${distributorId!='0'}"> 
 
-			<a  href="<%=basePath%>/distributor/admin/exitPage" style="float:right;margin-right:5%; " ><button class="btn" style="width:100px;height:30px;background:#18b4ed;border:none;outline: none;border-radius:22px;color:#fff;margin-top:35px;">退出登录</button></a>					    
+			<a  href="<%=basePath%>/distributor/admin/exitPage" style="float:right;margin-right:5%; " ></a>					    
 			        <div style="width:100%;height:100px;">
 					    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
 					      <div class="weui-media-box__hd">
