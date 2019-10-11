@@ -15,7 +15,7 @@ public class DistributorVo extends AbstractBaseVO<DistributorVo, DistributorPo> 
 		.setCheckReason(entity.getCheckReason())
 		.setContractPicUrl(entity.getContractPicUrl())
 		.setContractVideo(entity.getContractVideo())
-//		.setContractUrl(entity.getContractUrl())
+		.setContractUrl(entity.getContractUrl())
 		.setId(entity.getId())
 		.setLegalPerson(entity.getLegalPerson())
 		.setLicenseUrl(entity.getLicenseUrl())
