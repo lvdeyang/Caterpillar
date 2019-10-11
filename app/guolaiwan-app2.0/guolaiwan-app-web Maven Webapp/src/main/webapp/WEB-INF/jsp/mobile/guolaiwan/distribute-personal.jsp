@@ -616,12 +616,12 @@ html, body {
 					      采购订单
 					    </p>
 					  </a>
-					  <a href="<%=basePath%>/distributor/sellorder/index" class="weui-grid js_grid">
+					  <a href="javascript:void(0)" class="weui-grid js_grid">
 					    <div class="weui-grid__icon">
 					      <img src="lib/images/icon_nav_msg.png" alt="">
 					    </div>
 					    <p class="weui-grid__label">
-					      卖出订单
+					      零售订单
 					    </p>
 					  </a>
 					    <!-- <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
@@ -640,14 +640,14 @@ html, body {
 					     个人信息
 					    </p>
 					  </a> -->
-					   <a id="a1" href="javascript:void(0)" class="weui-grid js_grid">
+					   <!-- <a id="a1" href="javascript:void(0)" class="weui-grid js_grid">
 					    <div class="weui-grid__icon">
 					      <img src="lib/images/icon_nav_msg.png" alt="">
 					    </div>
 					    <p class="weui-grid__label">
 					      我的店铺
 					    </p>
-					  </a>
+					  </a> -->
 					</div>
 			</c:if>
 			</c:if>

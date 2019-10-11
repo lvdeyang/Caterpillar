@@ -496,10 +496,10 @@ html, body {
                      html.push('<image style=" width:100%;height:100px;" class="proImage" src="'+data[i].pic+'"/>');
                      html.push('<p><'+data[i].name+'></p>');
                      html.push('<div class="operation">');
-                     html.push('<a href="javascript:void(0)" class="modify" id="mod-'+data[i].id+'">修改</a>|'
+                     html.push(''
                      +'<a href="javascript:void(0)" class="online" id="online-'+data[i].id+'">上架</a>|'
-                     +'<a href="javascript:void(0)" class="offline" id="offline-'+data[i].id+'">下架</a>|'
-                     +'<a href="javascript:void(0)" class="offsell" id="offsell-'+data[i].id+'">店铺上架</a>');
+                     +'<a href="javascript:void(0)" class="offline" id="offline-'+data[i].id+'">下架</a>'
+                     +'');
                      html.push('</div>');
                      html.push('</td>');
                      
@@ -535,7 +535,8 @@ html, body {
                      html.push('<image style=" width:100%;height:100px;" class="proImage" src="'+data[i].pic+'"/>');
                      html.push('<p><'+data[i].name+'></p>');
                      html.push('<div class="operation">');
-                     html.push('<a href="javascript:void(0)" class="modify" id="modonline-'+data[i].id+'">修改</a>|'
+                     html.push('<a href="javascript:void(0)" class="modify1" id="modonline1-'+data[i].id+'">设置库存</a>|'
+                     +'<a href="javascript:void(0)" class="modify2" id="modonline2-'+data[i].id+'">设置价格</a>|'
                      +'<a href="javascript:void(0)" class="offline" id="offonline-'+data[i].id+'">下架</a>');
                      html.push('</div>');
                      html.push('</td>');
@@ -551,20 +552,53 @@ html, body {
 			}
 			
 		});
-		
-		
-		
-		
-		$(document).on('click','.modify',function(){
-		     var ids=this.id.split('-');
-		     location.href=window.BASEPATH + "distributor/mod/product/index/"+ids[1];
-		});
-		$(document).on('click','.offsell',function(){
-		     var ids=this.id.split('-');
-		     location.href=window.BASEPATH + "distributor/off/sell?disId="+${distributorId};
-		});
-		
-		
+
+        $(document).on('click','.modify1',function(){
+            var ids=this.id.split('-');
+	        $.prompt({
+			  title: '请您输入上传库存：（个）',
+			  empty: false, // 是否允许为空
+			  onOK: function (input) {
+			    if(/^[0-9]*[1-9][0-9]*$/.test(input)){
+			    	 $.get(window.BASEPATH+'distributor/amendInventory/'+ids[1]+'/'+input+'/'+1,null,function(data){
+			    	  
+					});
+			    }else{
+			    	$.alert('您的输入有误！')
+					return;		    	
+			    }
+			  },
+			  onCancel: function () {
+			    //点击取消
+			    $.alert('您已取消本次操作，感谢您的使用！')
+			    return;
+			  }
+			});
+        
+        })
+        $(document).on('click','.modify2',function(){
+            var ids=this.id.split('-');
+	        $.prompt({
+			  title: '请您输入商品金额：（元）',
+			  empty: false, // 是否允许为空
+			  onOK: function (input) {
+			    if(/^[0-9]+([.]{1}[0-9]+){0,1}$/.test(input)){
+			    	 $.get(window.BASEPATH+'distributor/amendInventory/'+ids[1]+'/'+input+'/'+0,null,function(data){
+			    	  
+					});
+			    }else{
+			    	$.alert('您的输入有误！')
+					return;		    	
+			    }
+			  },
+			  onCancel: function () {
+			    //点击取消
+			    $.alert('您已取消本次操作，感谢您的使用！')
+			    return;
+			  }
+			});
+		})
+
 		$(document).on('click','.online',function(){
 		   var ids=this.id.split('-');
 		   changeStatus(ids[1],1);

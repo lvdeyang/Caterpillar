@@ -490,14 +490,14 @@ html, body {
 	    
 	    $(document).on('click','#applyProduct',function(){
 	    
-	        if($('#selContractPic').val() == ''){
+	        /*if($('#selContractPic').val() == ''){
 				$.toast("请上传合同", "forbidden");
 				return false;
 			}
 	        if($('#selContract').val() == ''){
 				$.toast("请上传合同视频", "forbidden");
 				return false;
-			}else{
+			}else{*/
 		   	    var _uriApplyProduct = window.BASEPATH + 'distributor/apply/product';
 			    var params={};
 			    params.count=$('#policy').val();
@@ -518,7 +518,7 @@ html, body {
 				    }
 				    
 				});				
-			}
+			//}
 				    
 	    });
 	    
@@ -598,7 +598,7 @@ html, body {
 			<div id="regionBar">购买须知</div>
 			<div class="message">
 				
-				    分销地区：${myregion.name}<input type="hidden" id="region" value="${myregion.id }">
+				    分销地区：${myregion.comName}<input type="hidden" id="region" value="${myregion.id }">
 				
  
             </div>

@@ -49,6 +49,7 @@ import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
+import com.guolaiwan.bussiness.admin.po.CompanyPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
@@ -337,7 +338,8 @@ public class NEWDistributorController {
 		List<RegionPo> regionPos=conn_region.findAll();
 		mv.addObject("regions",regionPos);
 
-		RegionPo regionPo=conn_region.get(Long.parseLong(session.getAttribute("region").toString()));
+		//RegionPo regionPo=conn_region.get(Long.parseLong(session.getAttribute("region").toString()));
+		CompanyPO regionPo=conn_com.get(Long.parseLong(session.getAttribute("region").toString()));
 		mv.addObject("orderId","null");
 		mv.addObject("myregion",regionPo);
 		return mv;
@@ -401,17 +403,6 @@ public class NEWDistributorController {
 			distributeOrderVo.setPic(sysConfigPO.getWebUrl()+pro.getProduct().getProductShowPic());
 		}
 		return vos;
-	}
-
-
-	@RequestMapping(value = "/sellorder/index")
-	public ModelAndView sellorderIndex(
-			HttpServletRequest request) throws Exception{
-		ModelAndView mv = null;
-		mv = new ModelAndView("mobile/guolaiwan/sell-order");
-		HttpSession session=request.getSession();
-		mv.addObject("distributorId", session.getAttribute("distributorId"));
-		return mv;
 	}
 
 	@RequestMapping(value = "/selladminorder/index")
@@ -507,10 +498,10 @@ public class NEWDistributorController {
 		SysConfigPO sys=conn_sys.getSysConfig();
 		vo.setPic(sys.getWebUrl()+vo.getPic());
 		mv.addObject("product",vo);
-		List<RegionPo> regionPos=conn_region.findAll();
+		List<CompanyPO> regionPos=conn_com.findAll();
 		mv.addObject("regions",regionPos);
 		HttpSession session=request.getSession();
-		RegionPo regionPo=conn_region.get(Long.parseLong(session.getAttribute("region").toString()));
+		CompanyPO regionPo=conn_com.get(Long.parseLong(session.getAttribute("region").toString()));
 		mv.addObject("orderId",orderId);
 		mv.addObject("myregion",regionPo);
 		return mv;
@@ -614,19 +605,7 @@ public class NEWDistributorController {
 		mv.addObject("distributorId", session.getAttribute("distributorId"));
 		return mv;
 	}
-	@RequestMapping(value = "/mod/product/index/{id}")
-	public ModelAndView modProductIndex(
-			HttpServletRequest request,@PathVariable Long id) throws Exception{
-		ModelAndView mv = null;
-		DistributeProduct product=conn_dispro.get(id);
-		DistributeProductVo vo=new DistributeProductVo();
-		vo.set(product);
-		SysConfigPO sys=conn_sys.getSysConfig();
-		vo.setPic(sys.getWebUrl()+vo.getPic());
-		mv = new ModelAndView("mobile/guolaiwan/modify-product");
-		mv.addObject("product", vo);
-		return mv;
-	}
+	
 
 	@ResponseBody
 	@JsonBody
@@ -785,7 +764,7 @@ public class NEWDistributorController {
 			session.setAttribute("distributorId", distributorPos.get(0).getId());
 			session.setAttribute("region",distributorPos.get(0).getRegion());
 			mv.addObject("distributor", distributorPos.get(0));
-			mv.addObject("region",conn_region.get(distributorPos.get(0).getRegion()).getName());
+			mv.addObject("region",conn_com.get(distributorPos.get(0).getRegion()).getComName());
 			mv.addObject("user",user);
 		}else{
 			mv.addObject("distributorId", 0);
