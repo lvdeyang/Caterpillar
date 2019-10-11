@@ -63,4 +63,13 @@ public class DistributeProductDao extends AbstractBaseDao<DistributeProduct> {
 	}
 	
 
+	
+	//按分公司查询
+	public List<DistributeProduct> queryOnlineByCom(Long regionId,int count){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("regionId", Condition.eq, regionId);
+		return this.findByHqlPage(hql, 1, count);
+	}
+	
+	
 }

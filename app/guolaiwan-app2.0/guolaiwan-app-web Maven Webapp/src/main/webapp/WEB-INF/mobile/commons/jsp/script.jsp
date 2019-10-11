@@ -28,7 +28,7 @@
     	 $(document).on('click','.bottomMenu',function(){
     	  if(this.id=='index'){  
     	  if(status == 0){  	    	  
-    	   location.href=window.BASEPATH + 'distributor/distribute/index/0/0';
+    	   location.href=window.BASEPATH + 'distributor/distribute/index/0';
     	   }
     	  }else if(this.id=="person"){
     	     location.href=window.BASEPATH + 'distributor/app/login/0';

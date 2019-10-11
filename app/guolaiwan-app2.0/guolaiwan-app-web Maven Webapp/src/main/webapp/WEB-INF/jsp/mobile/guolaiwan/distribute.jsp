@@ -511,8 +511,8 @@ html, body {
 	  };
 		
       
-      //获取所有第一级别区域
-      var _uriRegion = window.BASEPATH + 'distributor/query/region';
+      //获取所有分公司
+      var _uriRegion = window.BASEPATH + 'distributor/com/list';
 		
 		$.get(_uriRegion, null, function(data){
 			data = parseAjaxResult(data);
@@ -521,15 +521,15 @@ html, body {
 			    var html=[];
 				for(var i=0; i<data.length; i++){
 				    var cssclass='';
-				    if(data[i].id=='${proRegion}'){
+				    if(data[i].id=='${region}'){
 				    	cssclass='current';
-				    	$('#currentRegion').html(data[i].name);
-				    	$('#currentSecRegion').html(data[i].name);
+				    	$('#currentRegion').html(data[i].comName);
+				    	$('#currentSecRegion').html(data[i].comName);
 				    	$('#currentSecRegionTd').attr('reId',data[i].id);
 				    	
 				    }
 					html.push('<a class="region '+cssclass+'" id="region-'+data[i].id+'" href="'+
-					window.BASEPATH + 'distributor/distribute/index/${region}/'+data[i].id+'">'+data[i].name+'</a> ');
+					window.BASEPATH + 'distributor/distribute/index/'+data[i].id+'">'+data[i].comName+'</a> ');
 				}
 				$('#distributeList').append(html.join(''));
 			}
@@ -542,7 +542,7 @@ html, body {
 		});
 		
 		//获取所有一级推荐
-      var _uriRecomment = window.BASEPATH + 'distributor/query/recoments/${region}/${proRegion}';
+      var _uriRecomment = window.BASEPATH + 'distributor/query/recoments/${region}';
 		
 		$.get(_uriRecomment, null, function(data){
 			data = parseAjaxResult(data);
@@ -562,7 +562,7 @@ html, body {
 		});
 	
 		//获取所有二级推荐
-      var _uriSecRecomment = window.BASEPATH + 'distributor/query/secrecoments/${region}/${proRegion}';
+      var _uriSecRecomment = window.BASEPATH + 'distributor/query/secrecoments/${region}';
 		
 		$.get(_uriSecRecomment, null, function(data){
 			data = parseAjaxResult(data);
@@ -586,7 +586,7 @@ html, body {
 		
 		
 			//获取所有三级推荐
-      var _uriThirdRecomment = window.BASEPATH + 'distributor/query/thirdcoments/${region}/${proRegion}';
+      var _uriThirdRecomment = window.BASEPATH + 'distributor/query/thirdcoments/${region}';
 	  //var _uriThirdRecomment = window.BASEPATH + 'distributor/query/thirdcoments/1';
 		
 		$.get(_uriThirdRecomment, null, function(data){
@@ -650,7 +650,7 @@ html, body {
 		    </div>
 		    
 		    <table id="columnTable">
-		        <tr><td id="currentSecRegionTd" style="border-top-left-radius:10px;" rowspan="2"><span id="currentSecRegion">河北<</span>全部景点</td><td id="col0"></td><td style="border-top-right-radius:10px;" id="col1"></td></tr>
+		        <tr><td id="currentSecRegionTd" style="border-top-left-radius:10px;" rowspan="2"><span id="currentSecRegion"><</span>全部</td><td id="col0"></td><td style="border-top-right-radius:10px;" id="col1"></td></tr>
 		        <tr><td id="col2"></td><td id="col3"></td></tr>
 		        <tr><td id="col4" style="border-bottom-left-radius:10px;"></td><td id="col5"></td><td style="border-bottom-right-radius:10px;" id="col6"></td></tr>
 

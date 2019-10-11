@@ -705,12 +705,12 @@ public class NEWDistributorController {
 
 	@ResponseBody
 	@JsonBody
-	@RequestMapping(value = "/query/recoments/{regionId}/{proRegionId}", method = RequestMethod.GET)
-	public Object queryRecomments(HttpServletRequest request,@PathVariable long regionId,@PathVariable long proRegionId) throws Exception{
+	@RequestMapping(value = "/query/recoments/{regionId}", method = RequestMethod.GET)
+	public Object queryRecomments(HttpServletRequest request,@PathVariable long regionId) throws Exception{
 
 		RegionPo regionPo=conn_region.get(regionId);
 		List<DistributeProduct> products=new ArrayList<DistributeProduct>();
-		products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(),proRegionId,RecommendType.SWIPER);
+		products=conn_dispro.queryOnlineByCom(regionPo.getParentId(),5);
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {
@@ -720,10 +720,10 @@ public class NEWDistributorController {
 	}
 	@ResponseBody
 	@JsonBody
-	@RequestMapping(value = "/query/secrecoments/{regionId}/{proRegionId}", method = RequestMethod.GET)
-	public Object querySecondRecomments(HttpServletRequest request,@PathVariable long regionId,@PathVariable long proRegionId) throws Exception{
+	@RequestMapping(value = "/query/secrecoments/{regionId}", method = RequestMethod.GET)
+	public Object querySecondRecomments(HttpServletRequest request,@PathVariable long regionId) throws Exception{
 		RegionPo regionPo=conn_region.get(regionId);
-		List<DistributeProduct> products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(),proRegionId, RecommendType.DMODEL);
+		List<DistributeProduct> products=conn_dispro.queryOnlineByCom(regionPo.getParentId(),7);
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {
@@ -733,10 +733,10 @@ public class NEWDistributorController {
 	}
 	@ResponseBody
 	@JsonBody
-	@RequestMapping(value = "/query/thirdcoments/{regionId}/{proRegionId}", method = RequestMethod.GET)
-	public Object queryThirdRecomments(HttpServletRequest request,@PathVariable long regionId,@PathVariable long proRegionId) throws Exception{
+	@RequestMapping(value = "/query/thirdcoments/{regionId}", method = RequestMethod.GET)
+	public Object queryThirdRecomments(HttpServletRequest request,@PathVariable long regionId) throws Exception{
 		RegionPo regionPo=conn_region.get(regionId);
-		List<DistributeProduct> products=conn_dispro.queryOnlineByRegionAndRecomm(regionPo.getParentId(),proRegionId, RecommendType.DLIST);
+		List<DistributeProduct> products=conn_dispro.queryOnlineByCom(regionPo.getParentId(),50);
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {
