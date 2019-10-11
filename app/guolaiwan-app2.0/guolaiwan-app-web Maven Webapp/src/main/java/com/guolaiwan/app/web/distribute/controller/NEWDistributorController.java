@@ -306,10 +306,12 @@ public class NEWDistributorController {
 	@RequestMapping(value = "/purchase/list", method = RequestMethod.GET)
 	public Object puchaseIndex(HttpServletRequest request,long proRegion) throws Exception{
 
-		HttpSession session=request.getSession();
-		long regionId=Long.parseLong(session.getAttribute("region").toString());
-		RegionPo regionPo=conn_region.get(regionId);
-		List<DistributeProduct> products=conn_dispro.queryOnlineByRegionAndpregion(regionPo.getParentId(),proRegion);
+
+
+		
+		List<DistributeProduct> products=conn_dispro.queryAllFirstRegionPro(proRegion);
+		
+		
 		List<DistributeProductVo> vos=DistributeProductVo.getConverter(DistributeProductVo.class).convert(products, DistributeProductVo.class);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (DistributeProductVo distributeProductVo : vos) {
