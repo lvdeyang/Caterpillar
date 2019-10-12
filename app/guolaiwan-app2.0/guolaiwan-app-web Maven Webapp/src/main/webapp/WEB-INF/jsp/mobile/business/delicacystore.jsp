@@ -1011,9 +1011,9 @@ appearance:none;
 		 for(var i = 0; i<list.length; i++){
 		    if(list[i].productClassName == storage[j]){
 	            html.push('<li>');           
-		        html.push('<div class="menu-img"><img class="men_img" src=http://www.guolaiwan.net/file'+list[i].productShowPic+' width="55" height="55" /></div>');
+		        html.push('<div class="menu-img"><img class="men_img" style="border-radius:4px;" src=http://www.guolaiwan.net/file'+list[i].productShowPic+' width="55" height="55" /></div>');
 		        html.push('<div class="menu-txt" >');
-		        html.push('<font>'+list[i].productName+'</font>');
+		        html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;font-size:14px;">'+list[i].productName+'</p>');
 		        html.push('<p class="list1"  >月销<span>120</span></p>');
 		        html.push('<p class="list2">');
 		        html.push('<b>￥'+list[i].productPrice+'</b>');
