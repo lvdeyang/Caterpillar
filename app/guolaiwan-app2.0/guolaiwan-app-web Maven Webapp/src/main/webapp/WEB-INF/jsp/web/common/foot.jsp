@@ -22,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	.juzhong{
 		width:100%;
 		height:289px;
-		background:#FFFFFF;
+		background:#E5E5E5;
 		
 	}
 	.four{
@@ -53,7 +53,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		width:330px;
 		height:288px;
 		float:left;
-		background:white;
 		margin-left:35px;
 		text-align:center;
 		padding:0px;
@@ -78,10 +77,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}	
 	
 </style>
+<script type="text/javascript" src="<%=path %>/webtheme/theme/js/jquery.js"></script>
+<script>
+$(document).scroll(function() {
+        var scroH = $(document).scrollTop();  //滚动高度
+        var viewH = $(window).height();  //可见高度 
+        var contentH = $(document).height();  //内容高度
+        if (contentH - (scroH + viewH) <= 10){  //距离底部高度小于10px
+             $(".tishi").slideDown(); 
+        }else{
+             $(".tishi").fadeOut(); 
+        }  
+       
+ 
+    });
 
+</script>
     <div class="aui-footer-bot" style="background:#ffffff;">
         <div style="border-bottom: 1px solid #dedede"></div>
-        <div class="time-lists aui-footer-pd time-lists-ls clearfix">
+        <%-- <div class="time-lists aui-footer-pd time-lists-ls clearfix">
         	<c:forEach items="${classes}" var="c">	
             <div class="aui-footer-list clearfix">
                 <h4>${c.className}</h4>
@@ -94,7 +108,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             </c:forEach> 
           
-        </div>
+        </div> --%>
       </div>
   
      <div class="tow">
@@ -181,6 +195,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</table>
 				
 		</div> --%>
+		<div class="tishi" style="height:80px;width:auto;line-height: 80px;font-size:18px;float: left;margin:100px 0 0 300px;color:#444444;display: none;">
+		  <p style="font-family: "Just Another Hand",cursive;text-transform: uppercase;">没有更多了呦~</p>
+		</div>
 		<div class="four4" style="float:right;right:10%;">
 			<table class="ziti">
 				<tr><td>APP下载</td></tr>

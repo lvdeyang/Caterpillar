@@ -36,6 +36,7 @@ String weburl=WXContants.Website;
         margin:0;
         padding:0;
         border:0;
+        font-family: "微软雅黑" !important;
         }
         .footer_div{
     width:100%;
@@ -68,15 +69,105 @@ String weburl=WXContants.Website;
             width:10%;
             height:100%;        
             float:right;
+            margin-top:80px;
         }
         body {
         height:2000px;
+        background: #E5E5E5;
         }
-         .pic img{
-        	width:100%;
-			height:480px;
-        	
+        .d1 img{
+         background-size:contain;
         }
+       .beijing{
+   		background-position: center;
+		background-repeat: no-repeat;
+   		background: url("lib/images/pchome.jpg") no-repeat;
+   		background-size:100% 100%;
+   		background-attachment: fixed;
+   		}
+   		.brand-tab li a:hover{
+   		  color:#fff !important;
+   		  background: #2BAD4A;
+   		}
+   		 .yScrollListInList ul li img:hover{
+   		    transform: scale(1.3) !important;
+   		    left:0 !important;
+   		}
+   		.yScrollListInList ul li img{
+   		transition: all 1.5s;
+   		margin-top:0;
+   		} 
+   		.brand-poa{
+   		 height:auto !important;
+   		}
+   		 .brand-title{
+   		text-align: center !important;
+   		padding:0 !important;
+   		width:210px !important;
+   		height:170px !important;
+   		position: absolute;
+   		top:10px;
+   		left:10px;
+   		opacity:0;
+   		}
+   	 .brand-title:hover{	
+   		 -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0) !important;
+    filter: alpha(opacity=0) !important;
+    /* opacity: 0; */
+    opacity:1 !important;
+    position: absolute !important;
+    height: 170px !important;
+    width: 220px !important;
+     line-height: 170px !important;
+    top:10px !important;
+    background: rgba(0,0,0,0.55) !important;
+    color: #fff !important;
+    -webkit-transition: all .5s ease !important;
+    -moz-transition: all .5s ease !important;
+    -o-transition: all .5s ease !important;
+    -ms-transition: all .5s ease !important;
+    /* transition: all .5s ease; */
+    -webkit-transition-delay: .5s !important;
+    -moz-transition-delay: .5s !important;
+    -o-transition-delay: .5s !important;
+    -ms-transition-delay: .5s !important;
+    transition-delay: .5s !important;
+    -webkit-transform: rotate(360deg) !important;
+    -moz-transform: rotate(360deg) !important;
+    -o-transform: rotate(360deg) !important;
+    -ms-transform: rotate(360deg) !important;
+    transform: rotate(360deg) !important;
+   
+    }
+   		.brand-imgss a img{
+   		left:0 !important;
+   		width:100% !important;
+   		height:100% !important;
+   		}
+   		.brand-poa ul li{
+   		position: relative;
+   		overflow: hidden;
+   		}
+   		.brand-poa ul li a{
+   		color:#fff !important;
+   		font-weight: bold;
+   		font-size:18px !important;
+   		font-family: "Just Another Hand",cursive;
+	    text-transform: uppercase;
+	    
+   		}
+   		.drop_down{
+   		 border: none !important;
+   		}
+   		.drop_down ul li{
+   		 border-radius:4px !important;
+   		}
+   		.time-lists{
+   		 paddding:40px 0 !important;
+   		}
+   		.time-clear-f h2{
+   		 margin-left:5px;
+   		}
     </style>
   	
     <script type="text/javascript" src="<%=path %>/webtheme/theme/js/jquery.js"></script>
@@ -159,9 +250,8 @@ String weburl=WXContants.Website;
                		hotList = msg.hotProducts;
                		var hotStr="";
                     for(var i=0;i<hotList.length;i++){
-                     
-                    	hotStr = hotStr+"<li><a href='"+path+"product/productInfo?info="+hotList[i].uuid+"'><img  src='"+webUrl+hotList[i].productShowPic+
-                    			 "'><p class='head-name pc-pa10'>"+hotList[i].productName+"<br/><span style='color:#ea4949'>销量："+hotList[i].productSaleNum
+                    	hotStr = hotStr+"<li><a href='"+path+"product/productInfo?info="+hotList[i].uuid+"'><div style='width:210px;height:140px;overflow: hidden;'><img  src='"+webUrl+hotList[i].productShowPic+
+                    			 "'></div><p class='head-name pc-pa10'>"+hotList[i].productName+"<br/><span style='color:#ea4949'>销量："+hotList[i].productSaleNum
                     		  	 +"</span></p><p class='label-default'>预定</p></a></li>";
                     }
                     $("#hotList").html(hotStr);
@@ -191,7 +281,7 @@ String weburl=WXContants.Website;
          i > 0 ? $("#drop_down").show(200) : $("#drop_down").hide(200); 
    /*      i > 0 ? minidemo("#drop_down","slideLeftRetourn") : minidemo("#drop_down","rotateDown"); */
         $(".handler").css("background-color","white").css("color","black");
-      	$($(".handler")[i-1]).css("background-color","green").css("color","white");
+      	$($(".handler")[i-1]).css("background-color","#2BAD4A").css("color","white");
     });
     
     
@@ -323,6 +413,15 @@ $(function(){
     }
     start();
 });
+// 滑动滚动条
+			$(window).scroll(function(){
+			// 滚动条距离顶部的距离 大于 100px时
+			if($(window).scrollTop() >= 100){
+			$(".pullDownList,.yMenuListCon").fadeOut(); // 开始淡入
+			} else{
+			$(".pullDownList,.yMenuListCon").stop(true,true).slideDown(1000); // 如果小于等于100 淡出
+			}
+			});
     </script>
   
 </head>
@@ -334,15 +433,15 @@ $(function(){
  <img src="<%=path %>/webtheme/theme/img/ad/9.png" style="position:absolute;right:5%;top:20%;z-index:110;" >
  </div> --%>
     <div>
-        <div id="moquu_wxin" class="moquu_wxin"><a href="javascript:void(0)">
+        <div id="moquu_wxin" class="moquu_wxin" style="top:784px;right:65px;"><a href="javascript:void(0)">
             <div class="moquu_wxinh"></div>
         </a></div>
-        <div id="moquu_wshare" class="moquu_wshare" style="text-indent: 0;z-index:800"><a href="javascript:void(0)" style="text-indent: 0;">
+        <div id="moquu_wshare" class="moquu_wshare" style="text-indent: 0;z-index:800;top:680px;right:65px;"><a href="javascript:void(0)" style="text-indent: 0;">
             <div class="moquu_wshareh" style="z-index:800">
                 <img onclick="location.href='http://<%=weburl%>/download/guolaiwanV1.0.1.apk'" src="<%=path %>/webtheme/theme/icon/moquu_wshare.png" width="100%" ></div>
         </a></div>
-        <div id="moquu_wmaps"><a  href="http://wpa.qq.com/msgrd?v=3&amp;uin=442161617&amp;site=qq&amp;menu=yes" target="_blank" class='moquu_wmaps'></a></div>
-        <a id="moquu_top" href="javascript:void(0)"></a>
+        <div id="moquu_wmaps" style="top:732px;right:65px;"><a  href="http://wpa.qq.com/msgrd?v=3&amp;uin=442161617&amp;site=qq&amp;menu=yes" target="_blank" class='moquu_wmaps'></a></div>
+        <a id="moquu_top" style="top:628px;right:65px;" href="javascript:void(0)"></a>
     </div>
 
     <!--- header begin-->
@@ -350,7 +449,7 @@ $(function(){
     <!-- header End -->
 
     <!--- banner begin-->
-    <section id="pc-banner" style="position:relative; height:480px;">
+    <section id="pc-banner" style="position:relative; height:480px;background: #E5E5E5;overflow: hidden;">
     	<!-- style="position:absolute; left:260px; right:360px; top:0; bottom:0;" -->
         <div class="yBanner" style="width:1200px; margin:auto; position:relative;">
             <div class="banner" id="banner" style="position:absolute; left:190px; right:252px; top:0; bottom:0;">
@@ -369,7 +468,7 @@ $(function(){
            <ul>
                      <c:forEach items="${carousels}" var="c">
                        <li>
-		             	 <a href="${c.slideurl}" class="d1" style="background: url(${sysconfig.webUrl}${c.slidepic}) center no-repeat; background-color: white;"></a>
+		             	 <a href="${c.slideurl}" class="d1" style="background: url(${sysconfig.webUrl}${c.slidepic}) center no-repeat; background-color: white;background-size:100% 100%"></a>
 		               </li>
 		            </c:forEach>
             </ul>
@@ -399,13 +498,13 @@ $(function(){
 	        		</c:if>
             	</div>
             	<div style="width:100%; height:142px; margin-bottom:4px;">
-            		<div style="padding:5px; color:#fff; background-color:rgb(249, 192, 32); text-align:center;
+            		<div style="padding:5px; color:#fff; background-color:#6CC644; text-align:center;
 	    			float:left; width:100%; box-sizing:border-box; height:28px;">
 	        			<span>热门推荐</span>
 	        		</div>
 	        		<a>
 	        			<img id="company-special" style="width:100%; height:114px;"/>
-	        			<div id="company-special-name" class="coms-title" style="position:absolute;bottom:170px;cursor:pointer;height:0px;padding:0px; border-top:1px solid #e0e0e0; margin-top:0; background-color:#5c5c5c; color:#fff;
+	        			<div id="company-special-name" class="coms-title" style="position:absolute;bottom:170px;cursor:pointer;height:0px;padding:0px; border-top:1px solid #e0e0e0; margin-top:0; background-color:#4078C0; color:#fff;
                              width:100%; box-sizing:border-box;opacity: 0">&nbsp;</div>
                         <c:if test="${specials != null}">
 	        				<c:forEach items="${specials}" var="special">
@@ -415,13 +514,13 @@ $(function(){
 	        		</a>
             	</div>
             	<div style="width:100%; heigth:170px;">
-            		<div style="padding:5px; color:#fff; background-color:rgb(249, 192, 32); text-align:center;
+            		<div style="padding:5px; color:#fff; background-color:#6CC644; text-align:center;
 	    			float:left; width:100%; box-sizing:border-box; height:28px;">
 	        			<span>过来玩公司</span>
 	        		</div>
 	        		<a id="company-link">
 	        			<img id="company-img" style="width:100%; height:113px; float:left;"/>
-	        			<span id="company-name" class="comb-title" style="display:block; padding:5px; border-top:1px solid #e0e0e0; margin-top:0; background-color:#5c5c5c; color:#fff;
+	        			<span id="company-name" class="comb-title" style="display:block; padding:5px; border-top:1px solid #e0e0e0; margin-top:0; background-color:#6CC644; color:#fff;
 		    				float:left; width:100%; box-sizing:border-box;">&nbsp;</span>
 	        			<c:if test="${comps != null}">
 	        				<c:forEach items="${comps}" var="comp">
@@ -478,9 +577,9 @@ $(function(){
     <!-- 限时抢购 End -->
 
     <!-- 卖场推荐 begin -->
-    <div class="drop_down" id="drop_down" style="width: 64px; height:343px; overflow: visible; top: 70px; position: fixed; left: 0px; display: none;
-						border:1px solid #DCDCDC;z-index:960;left: 50%;top: 50%;margin: -320px 0px 0px -665px">
-			<div class="drop_down1" style="width:64px;height:42px;text-align:center;color:#228B22;line-height:45px;">过来玩</div>
+    <div class="drop_down" id="drop_down" style="width: 64px; height:343px; overflow: visible; position: fixed; left: 0px; display: none;
+						border:1px solid #DCDCDC;z-index:960;left: 50%;top: 50%;margin: -270px 0px 0px -800px">
+			<!-- <div class="drop_down1" style="width:64px;height:42px;text-align:center;color:#228B22;line-height:45px;">过来玩</div> -->
 				<ul>
 					<c:forEach items="${modulars}" var="m">
 					    <c:if test="${m.merchants!= null && fn:length(m.merchants) != 0}">
@@ -509,7 +608,9 @@ $(function(){
                             	<c:forEach items="${hotProducts}" var="hpro">
                                 <li>
                                     <a href="<%=basePath%>product/productInfo?info=${hpro.uuid}">
+                                    <div style="width:210px;height:140px;overflow: hidden;">
                                         <img  src="${sysconfig.webUrl}${hpro.productShowPic}">
+                                    </div>   
                                         <p class="head-name pc-pa10">${hpro.productName}<br/><span style="color:#ea4949">销量：${hpro.productSaleNum}</span></p>
                                         <p class="label-default">预定</p>
                                     </a>
@@ -521,6 +622,10 @@ $(function(){
                 </div>
             </div>
         </div>
+    </div>
+    
+    <div class="beijing" style="height:250px">
+    
     </div>
 	<div id="blTop"></div>
 	<c:forEach items="${modulars}" var="m">
@@ -547,7 +652,7 @@ $(function(){
                             <li>
                                 <div class="brand-imgss"><a href="<%=basePath%>product/productInfo?info=${mp.uuid}">
                                     <img width="210px" height="140px" src="${sysconfig.webUrl}${mp.productShowPic}"></a></div>
-                                <div class="brand-title"><a href="<%=basePath%>product/productInfo?info=${mp.uuid}">${mp.productName}</a> </div>
+                                <div class="brand-title" style="text-align: center;"><a href="<%=basePath%>product/productInfo?info=${mp.uuid}">${mp.productName}</a> </div>
                                 <div class="brand-price"><span>${mp.productPrice}</span><del>${mp.productOldPrice}</del></div>
                             </li>
                             </c:forEach>
@@ -579,7 +684,7 @@ $(function(){
                     			<li>
                         			<div class="brand-imgss" style="padding: 10px 0 0 10px;"><a href="<%=basePath%>web/merchant/productList?merchant=${mm.uuid}">
                            	 		<img width="210px" height="140px" src="${sysconfig.webUrl}${mm.shopPic}"></a></div>
-                        			<div class="brand-title" style="padding: 0 15px 16px 15px;"><a href="<%=basePath%>web/merchant/productList?merchant=${mm.uuid}">${mm.shopName}</a> </div>
+                        			<div class="brand-title" style=""><a href="<%=basePath%>web/merchant/productList?merchant=${mm.uuid}">${mm.shopName}</a> </div>
                     			</li>
                     		</c:forEach>	
                         </ul>
@@ -608,10 +713,10 @@ $(function(){
                         <ul>
                         	<c:forEach items="${activity.products}" var="product">
                             <li>
-                                <div class="brand-imgss"><a href="<%=basePath%>product/productInfo?info=${product.uuid}">
+                                <div class="brand-imgss" style="padding: 10px 0 0 10px;"><a href="<%=basePath%>product/productInfo?info=${product.uuid}">
                                     <img width="210px" height="140px" src="${product.productShowPic}"></a></div>
                                 <div class="brand-title"><a href="<%=basePath%>product/productInfo?info=${product.uuid}">${product.productName}</a> </div>
-                                <div class="brand-price"><span>${product.productPricesStr}</span><del>${product.productOldPriceStr}</del></div>
+                                <%-- <div class="brand-price"><span>${product.productPricesStr}</span><del>${product.productOldPriceStr}</del></div> --%>
                             </li>
                             </c:forEach>
                         </ul>
@@ -764,7 +869,7 @@ $(function(){
 
        
         $(function () {
-                $(".footer_div").animate({ "bottom": "10%" });
+                $(".footer_div").animate({ "bottom": "5%" });
       
             $(".footer_con3").click(function () {
                 $(".footer_div").animate({ "left": "-100%" }, function () { $(".footer_con").hide(); $(".footer_block").show(); $(".footer_div").animate({"left":"-90%"}) });

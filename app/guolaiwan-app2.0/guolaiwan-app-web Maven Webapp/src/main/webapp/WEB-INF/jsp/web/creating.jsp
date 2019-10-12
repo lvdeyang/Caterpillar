@@ -34,7 +34,7 @@ String weburl=WXContants.Website;
    		html,body{
    		width:100%;
    		height:auto;
-   		
+   		background: #E5E5E5;
    		}
    		
    		.biao,.biao1{
@@ -96,9 +96,9 @@ String weburl=WXContants.Website;
     <div class="header" style="height:100px;width:100%;background:#fff;color:#30AD00;font-size:24px;line-height: 100px;">
 	  <h2 style="margin-left:14%;font-family: 'Lobster', cursive;font-weight:bold !important;text-shadow: 5px 5px 5px black, 0px 0px 2px #CDCDCD;">过来玩。</h2>
 	</div> -->
-	<div class="beijing" style="width:100%;height:800px;position: relative;top:35px;">
+	<div class="beijing" style="width:100%;height:800px;position: relative;top:0;">
 	 <font class="biao" style="vertical-align: inherit;">关于我们</font>
-	 <div class="button" style="z-index:1111;position:absolute;left:50%; text-align:center;background: 0 0;margin-left:-90px; top:65%;color:#fff;font-size:22px;width:180px;height:60px;line-height:60px;border:2px solid #fff;outline: none;border-radius:30px;">欢迎</div>
+	 <div class="button" style="z-index:11;position:absolute;left:50%; text-align:center;background: 0 0;margin-left:-90px; top:65%;color:#fff;font-size:22px;width:180px;height:60px;line-height:60px;border:2px solid #fff;outline: none;border-radius:30px;">欢迎</div>
 	</div>
 	<div class="main" style="text-align:center;margin:60px 0;position: relative;display:none;">
 	    <p style="font-size:12px;color:black;margin:30px 0">关 于</p>
@@ -125,42 +125,42 @@ String weburl=WXContants.Website;
 	 <div class="hehuo" style="text-align:center;margin:60px 0;">
 	  <p style="font-size:12px;color:black;margin:30px 0">关 于</p>
 	    <p style="color:black;font-size:36px;margin:40px 0;font-family: "Just Another Hand",cursive;">我们的合伙人</p>
-	     <div style="width:18%;height:400px;background:#E9E9E5;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
+	     <div style="width:18%;height:400px;background:#fff;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
 	     <img style="width:100%;height:200px;" src="lib/images/he11.jpg"/>
 	       <h1 style="font-size:20px;color:black;line-height:50px;">“过来玩”多机位直播</h1>
 	       <p style="font-size:14px;line-height:30px;">在线多机位直播，可录制直播，直播回放，直播视频下载</p>
 	     </div>
-	     <div style="width:18%;height:400px;background:#E9E9E5;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
+	     <div style="width:18%;height:400px;background:#fff;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
 	       <img style="width:100%;height:200px;" src="lib/images/he2.jpg"/>
 	       <h1 style="font-size:20px;color:black;line-height:50px;">北京平谷区智慧旅游</h1>
 	       <p style="font-size:14px;line-height:30px;"> 全域休闲，畅游平谷。</p>
 	     </div>
-	      <div style="width:18%;height:400px;background:#E9E9E5;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
+	      <div style="width:18%;height:400px;background:#fff;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
 	       <img style="width:100%;height:200px;" src="lib/images/he3.jpg"/>
 	       <h1 style="font-size:20px;color:black;line-height:50px;">国际饭店</h1>
 	       <p style="font-size:14px;line-height:30px;"> 遵化国际饭店隶属遵化市政府，是集餐饮、住宿、购物、娱乐为一体的三星级旅游涉外饭店。</p>
 	     </div>
-	      <div style="width:18%;height:400px;background:#E9E9E5;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
+	      <div style="width:18%;height:400px;background:#fff;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
 	       <img style="width:100%;height:200px;" src="lib/images/he4.jpg"/>
 	       <h1 style="font-size:20px;color:black;line-height:50px;">花乡果巷景区</h1>
 	       <p style="font-size:14px;line-height:30px;"> 花乡果巷，花海趣圈。</p>
 	     </div>
-	     <div style="width:18%;height:400px;background:#E9E9E5;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
+	     <div style="width:18%;height:400px;background:#fff;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
 	     <img style="width:100%;height:200px;" src="lib/images/he5.jpg"/>
 	       <h1 style="font-size:20px;color:black;line-height:50px;">金融街•汤泉宫温泉旅游度假村</h1>
 	       <p style="font-size:14px;line-height:30px;">以皇家温泉养生文化为核心，深入挖掘皇家温泉养生之道，注重汤泉温泉生态构建，弘扬健康温泉养生理念，精心打造中国皇家温泉养生文化旅游高端品牌</p>
 	     </div>
-	     <div style="width:18%;height:400px;background:#E9E9E5;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
+	     <div style="width:18%;height:400px;background:#fff;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
 	       <img style="width:100%;height:200px;" src="lib/images/he6.jpg"/>
 	       <h1 style="font-size:20px;color:black;line-height:50px;">任记农产品•非物质文化遗产</h1>
 	       <p style="font-size:14px;line-height:30px;"> 非物质文化遗产。</p>
 	     </div>
-	      <div style="width:18%;height:400px;background:#E9E9E5;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
+	      <div style="width:18%;height:400px;background:#fff;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
 	       <img style="width:100%;height:200px;" src="lib/images/he7.png"/>
 	       <h1 style="font-size:20px;color:black;line-height:50px;">万佛园4A级景区智慧导览</h1>
 	       <p style="font-size:14px;line-height:30px;"> 展示手绘地图，集语音、服务、景点介绍、线路一体的智慧化导游功能。</p>
 	     </div>
-	      <div style="width:18%;height:400px;background:#E9E9E5;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
+	      <div style="width:18%;height:400px;background:#fff;margin:20 20px;border-radius:10px;display: inline-block;overflow: hidden;">
 	       <img style="width:100%;height:200px;" src="lib/images/he8.jpg"/>
 	       <h1 style="font-size:20px;color:black;line-height:50px;">兴隆山景区</h1>
 	       <p style="font-size:14px;line-height:30px;"> 完整的自然生态系统、良好的自然生态气候，兴隆山是观光旅游，休闲旅游，生态旅游的极佳场所。</p>

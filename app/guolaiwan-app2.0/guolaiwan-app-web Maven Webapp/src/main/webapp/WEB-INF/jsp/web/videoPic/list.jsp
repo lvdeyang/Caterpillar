@@ -54,9 +54,12 @@ String weburl=WXContants.Website;
             float: left;
             margin: 1% 1% 1% 0;
         }
+        #videoPicsliu div{
+        background: #E5E5E5 !important;
+        }
 	</style>
  </head>
- <body style="background:#F5F5F5;">
+ <body style="background:#E5E5E5;">
  
  
  
