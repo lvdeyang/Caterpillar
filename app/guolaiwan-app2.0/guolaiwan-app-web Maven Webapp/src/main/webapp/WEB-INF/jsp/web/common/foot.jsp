@@ -196,7 +196,7 @@ $(document).scroll(function() {
 				
 		</div> --%>
 		<div class="tishi" style="height:80px;width:auto;line-height: 80px;font-size:18px;float: left;margin:100px 0 0 300px;color:#444444;display: none;">
-		  <p style="font-family: "Just Another Hand",cursive;text-transform: uppercase;">没有更多了呦~</p>
+		  <p style="font-family: "Just Another Hand",cursive;text-transform: uppercase;">已经到底部了呦~</p>
 		</div>
 		<div class="four4" style="float:right;right:10%;">
 			<table class="ziti">

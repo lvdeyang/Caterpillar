@@ -291,9 +291,9 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .shop-fl {width:232px; padding:0 5px; border-right:1px solid #e0e0e0; height:252px;}
 .shop-see a {font-size:12px; color:#ea4949; display:block;}
 .shop-sun {padding-top:10px; padding-left:4px; padding-right:4px;}
-.time-title .pc-spin {background:url("../icon/spin.png") no-repeat; height:18px; padding-right:40px; background-position:40px 5px; display:block;}
-.time-title .pc-spin:hover {background-position:40px -21px;}
-.pc-font {width:249px; height:17px; background:url("../icon/font.png") no-repeat right bottom; padding-top:10px; padding-left:10px;}
+.time-title .pc-spin {background:url("../icon/shuaxin.png") no-repeat 37px 8px; height:18px;background-size:20px 20px; padding-right:40px; display:block;}
+ .time-title .pc-spin:hover {background:url("../icon/shuaxins.png") no-repeat 37px 8px;background-size:20px 20px;} 
+.pc-font {width:249px; height:17px; background:url("../icon/miaoti.png") no-repeat 0 3px; padding-top:10px; padding-left:10px;}
 
 .slider-extra {position:absolute; width:220px; height:20px; background:url("../icon/slider.png") no-repeat center;display:block; right:40%; bottom:12px; padding-top:10px; padding-left:15px; z-index:9999; text-indent:-4000px;}
 .slider-extra ul li {background:url("../icon/li.png") no-repeat; float:left; width:35px;height:9px; padding-left:6px; }
@@ -325,7 +325,7 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .pc-term-dl dd a {color:#005aa0;}
 .pc-search {padding:20px;}
 .pc-search-in input {height:24px; line-height:24px; border:1px solid #e0e0e0; border-radius:2px; padding-left:4px; float:left;}
-.pc-search-a {height:26px; width:55px; padding-left:34px; line-height:26px; color:#fff; display:block; background:url("../icon/s.png") no-repeat; float:right; font-size:14px;}
+.pc-search-a {height:26px; width:55px; padding-left:34px; line-height:26px; color:#fff; display:block; background:url("../icon/s.png") no-repeat -12px 0; float:right; font-size:14px;}
 .pc-search-w {width:178px; margin-right:10px;}
 .pc-search-s {width:50px; margin-right:10px; color:#000;}
 .pc-search-in {height:26px; overflow:hidden;}

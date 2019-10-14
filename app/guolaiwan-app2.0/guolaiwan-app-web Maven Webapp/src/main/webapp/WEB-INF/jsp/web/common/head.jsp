@@ -11,7 +11,7 @@ String weburl=WXContants.Website;
    height:45px !important;
   line-height: 45px !important;
   text-align: center;
-  margin:0 auto;
+  margin:0 5px;
 }
  .yNavIndex .yMenuIndex li a:hover{
 color:#fff;
@@ -123,7 +123,7 @@ background: #fff !important;
                        	 </li>
                     </c:forEach>
                     </ul>  
-                    <div class="yMenuListCon" hidden="hidden" style="height:480px;margin-top:10px;" >
+                    <div class="yMenuListCon" hidden="hidden" style="height:480px;margin-top:10px;text-align: center;" >
 						<c:forEach items="${modulars}" var="m">
 						<div class="yMenuListConin" style="width:760px;height:500px;background: rgba(0,0,0,0.3);opacity: 1;color:#fff;">
            				<%-- 	<div class="yMenuLCinLisi fl">
@@ -152,12 +152,12 @@ background: #fff !important;
                     	</c:forEach>
                     </div>
                 </div>
-                <ul class="yMenuIndex layui-nav" style="line-height: 45px;height:45px;left:15%;">
+                <ul class="yMenuIndex layui-nav" style="line-height: 45px;height:45px;left:35%;margin:0 auto;display:table;text-align: center;">
                 	
                 <li class="layui-nav-item"><a href="<%=path%>/index">首页</a></li>
         		<%-- <li><a href="<%=path%>/web/creating">攻略</a></li> --%>
         		<li class="layui-nav-item"><a href="<%=path%>/web/creating">关于我们</a></li>
-        		<li class="layui-nav-item"><a href="<%=path%>/web/distributor/distributorlist"> 分销商店铺</a></li>
+        		<%-- <li class="layui-nav-item"><a href="<%=path%>/web/distributor/distributorlist"> 分销商店铺</a></li> --%>
         		<li class="layui-nav-item"><a href="<%=path%>/web/videoPic/list">我发布</a></li>
                 </ul>
             </div>

@@ -19,7 +19,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script src="<%=path %>/webtheme/theme/js/jquery-3.1.1.min.js"></script>
     <script src="<%=path %>/webtheme/theme/js/checkcode.js"></script>
 </head>
-<body>
+<style>
+.coagent .regist-link a{
+color:#333;
+
+}
+.login-wrap .login-banner{
+  height:690px;
+ background-size:100%  !important;
+}
+.login-wrap .login-form{
+top:120px;
+margin-right:-60px;
+}
+.login-form{
+background: rgba(157,157,159,0.6);
+}
+.login-form p,a{
+color:#fff !important;
+}
+#logo{
+ height:90px;
+}
+</style>
+<body style="background: #E5E5E5;">
 <div class="w">
 	<div id="logo">
 		<a href="<%=path %>/index">
@@ -36,12 +59,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div id="content">
   <div class="login-wrap">
   	<div class="w">
-  		<div class="login-form">
-  			<div class="login-tab login-tab-l">
+  		<div class="login-form" >
+  			<!-- <div class="login-tab login-tab-l">
   				<a href="javascript:;">扫码登录</a>
-  			</div>
-  			<div class="login-tab login-tab-r">
-  				<a href="javascript:;">账号登录</a>
+  			</div> -->
+  			<div class="login-tab login-tab-r"  style="width:100%;border-bottom: 1px solid #fff4f4;"> 
+  				<a style="border:none;" href="javascript:;">账号登录</a>
   			</div>
   			<div class="login-box" style="visibility: visible; display:block">
   			  <div class="mt tab-h"></div>
@@ -84,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <!-- 登录按钮开始 -->
                         <div class="item item-fore5">
                         	<div class="login-btn">
-                        	<a id="submit" href="javascript:void(0)" class="btn-img btn-entry" lay-filter="add" lay-submit>登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
+                        	<a style="background: #9D9D9F;box-shadow:5px 5px 10px #8E8F8F;" id="submit" href="javascript:void(0)" class="btn-img btn-entry" lay-filter="add" lay-submit>登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
                         		
                         	</div>
                         </div>
@@ -144,7 +167,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			</div>
   		</div>
   	</div>
-  	<div class="login-banner" style="background: url(<%=path %>/webtheme/theme/login/a1.jpg);">
+  	<div class="login-banner" style="background: url(<%=path %>/webtheme/theme/login/pchome.jpg) no-repeat;">
   		<div class="w">
   			<div id="banner-bg" class="i-inner" ></div>
   		</div>
