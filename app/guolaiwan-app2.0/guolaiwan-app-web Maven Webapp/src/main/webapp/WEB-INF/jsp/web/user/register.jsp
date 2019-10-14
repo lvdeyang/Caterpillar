@@ -3,7 +3,19 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-
+<style>
+body{
+width:100%;height:100%;
+background: url("../webtheme/theme/img/1.jpg") no-repeat !important;
+background-size:100% 100%; 
+z-index:11111111;
+}
+#submit:hover{
+ text-decoration:none;
+background:rgba(43,173,74,0.5) !important;
+transition: all .3s;
+}
+</style>
 <!doctype html>
 <html>
  <head>
@@ -22,21 +34,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <body>
 
 <!--- header begin-->
-<header id="pc-header">
+<%-- <header id="pc-header">
     <div class="login-header" style="padding-bottom:0">
         <div><h1><a href="<%=path %>/index"><img src="<%=path %>/webtheme/theme/icon/logo.png"></a></h1></div>
     </div>
-</header>
+</header> --%>
 <!-- header End -->
 
 
 
-<section id="login-content">
+<section id="login-content" style="width:auto;height:auto;">
     <div class="login-centre">
-        <div class="login-switch clearfix">
-            <p class="fr">我已经注册，现在就 <a href="login.html">登录</a></p>
-        </div>
-        <div class="login-back">
+      <div style="padding:20px 120px;text-align:left;line-height: 40px;position: relative;">
+          <h1>欢迎注册我们的网站</h1>
+          <h3>请您完善相关信息进行注册</h3>
+          <img style="position: absolute;top:25px;right:140px;" src="<%=path %>/webtheme/theme/img/anquan.png">
+      </div>    
+        <div class="login-back" style="width:auto;height:auto;">
             <div class="H-over">
                 <form action="" class="layui-form">
                 <div class="login-input">
@@ -55,7 +69,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="login-input">
                         <label><i class="heart">*</i>图形码：</label>
                         <input type="text" class="list-notes" id="code" name="code" lay-verify="required" lay-verType="tips" placeholder="请输入图形码">&nbsp;&nbsp;&nbsp;&nbsp;
-                        <a onclick="changeImg()"><img id="codeImage" src="<%=path %>/verify/code/get/150/38" border:1px solid #DBDBDB;"/></a> 
+                        <a onclick="changeImg()"><img style="margin-left:-105px;" id="codeImage" src="<%=path %>/verify/code/get/150/38" border:1px solid #DBDBDB;"/></a> 
                     </div>
                     <!-- 
                     <div class="login-input">
@@ -69,13 +83,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <label for="protocol">我已阅读并同意<a id="protocol" class="blue" href="#">《过来玩网站用户协议》</a></label>
                         <span class="clr"></span>
                     </div>
-                    <div class="login-button">
-                        <a id="submit" href="javascript:void(0)" lay-filter="add" lay-submit>立即注册</a>
+                    <div class="login-button" >
+                        <a id="submit" style="background: #2BAD4A;" href="javascript:void(0)" lay-filter="add" lay-submit>立即注册</a>
                     </div>
                 </form>
+                       
             </div>
+            	<div class="login-switch clearfix" style="width:auto;color:#333;margin:20px 0;">
+          		 	 <p class="fr">我已经注册，现在就 <a href="login.html">登录</a></p>
+        			</div>	   	
         </div>
+                   
     </div>
+    	
 </section>
 
 <!--- footer begin-->

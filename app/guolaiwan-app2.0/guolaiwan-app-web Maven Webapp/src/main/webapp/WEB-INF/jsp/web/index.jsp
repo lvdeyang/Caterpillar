@@ -40,7 +40,7 @@ String weburl=WXContants.Website;
         }
         .footer_div{
     width:100%;
-    height:200px;
+    height:auto;
     position:fixed; 
   
     }
@@ -54,12 +54,14 @@ String weburl=WXContants.Website;
             .footer_con div {
             float:left;
             }
-            .footer_con .footer_con1 {
+             .footer_con .footer_con1 {
             width:90%;
-            }
+            } 
            
             .footer_con .footer_con3 {
             width:10%;
+            margin-left:-12.5%;
+            z-index:11111;
             }
 
 
@@ -81,9 +83,12 @@ String weburl=WXContants.Website;
        .beijing{
    		background-position: center;
 		background-repeat: no-repeat;
-   		background: url("lib/images/pchome.jpg") no-repeat;
+   		background: url("lib/images/slider_2.jpg") no-repeat;
    		background-size:100% 100%;
    		background-attachment: fixed;
+   		}
+   		.brand-tab li a{
+   		 background: #fff;
    		}
    		.brand-tab li a:hover{
    		  color:#fff !important;
@@ -150,11 +155,9 @@ String weburl=WXContants.Website;
    		}
    		.brand-poa ul li a{
    		color:#fff !important;
-   		font-weight: bold;
    		font-size:18px !important;
-   		font-family: "Just Another Hand",cursive;
-	    text-transform: uppercase;
-	    
+   		font-family: "微软雅黑";
+	    letter-spacing:1px;  
    		}
    		.drop_down{
    		 border: none !important;
@@ -168,6 +171,21 @@ String weburl=WXContants.Website;
    		.time-clear-f h2{
    		 margin-left:5px;
    		}
+   		.time-border{
+   		 padding-bottom:10px;
+   		 border-bottom:1px solid #2BAD4A;
+   		}
+   		.fr{
+   		width:90% !important;
+   		float: left !important;
+   		margin-left:20px;
+   		}
+   		.fr li a{
+   		 margin-bottom:5px;
+   		}
+   		
+   		
+   		
     </style>
   	
     <script type="text/javascript" src="<%=path %>/webtheme/theme/js/jquery.js"></script>
@@ -252,7 +270,7 @@ String weburl=WXContants.Website;
                     for(var i=0;i<hotList.length;i++){
                     	hotStr = hotStr+"<li><a href='"+path+"product/productInfo?info="+hotList[i].uuid+"'><div style='width:210px;height:140px;overflow: hidden;'><img  src='"+webUrl+hotList[i].productShowPic+
                     			 "'></div><p class='head-name pc-pa10'>"+hotList[i].productName+"<br/><span style='color:#ea4949'>销量："+hotList[i].productSaleNum
-                    		  	 +"</span></p><p class='label-default'>预定</p></a></li>";
+                    		  	 +"</span></p><p class='label-default'>预订</p></a></li>";
                     }
                     $("#hotList").html(hotStr);
                     $("#hotList").attr("style","display:none");
@@ -498,7 +516,7 @@ $(function(){
 	        		</c:if>
             	</div>
             	<div style="width:100%; height:142px; margin-bottom:4px;">
-            		<div style="padding:5px; color:#fff; background-color:#6CC644; text-align:center;
+            		<div style="padding:5px; color:#fff; background-color:#2BAD4A; text-align:center;
 	    			float:left; width:100%; box-sizing:border-box; height:28px;">
 	        			<span>热门推荐</span>
 	        		</div>
@@ -514,13 +532,13 @@ $(function(){
 	        		</a>
             	</div>
             	<div style="width:100%; heigth:170px;">
-            		<div style="padding:5px; color:#fff; background-color:#6CC644; text-align:center;
+            		<div style="padding:5px; color:#fff; background-color:#2BAD4A; text-align:center;
 	    			float:left; width:100%; box-sizing:border-box; height:28px;">
 	        			<span>过来玩公司</span>
 	        		</div>
 	        		<a id="company-link">
 	        			<img id="company-img" style="width:100%; height:113px; float:left;"/>
-	        			<span id="company-name" class="comb-title" style="display:block; padding:5px; border-top:1px solid #e0e0e0; margin-top:0; background-color:#6CC644; color:#fff;
+	        			<span id="company-name" class="comb-title" style="display:block; padding:5px; border-top:1px solid #e0e0e0; margin-top:0; background-color:#2BAD4A; color:#fff;
 		    				float:left; width:100%; box-sizing:border-box;">&nbsp;</span>
 	        			<c:if test="${comps != null}">
 	        				<c:forEach items="${comps}" var="comp">
@@ -599,7 +617,7 @@ $(function(){
             <div class="time-title time-clear">
                 <h2>热卖区</h2>
                 <div class="pc-font fl"></div>
-                <a class="pc-spin fr" onclick="changeH()">换一换</a> </div>
+                <a class="pc-spin fr" style="float:right !important;width:auto !important;" onclick="changeH()">换一换</a> </div>
             <div class="time-border">
                 <div class="yScrollList">
                     <div class="yScrollListIn">
@@ -612,7 +630,7 @@ $(function(){
                                         <img  src="${sysconfig.webUrl}${hpro.productShowPic}">
                                     </div>   
                                         <p class="head-name pc-pa10">${hpro.productName}<br/><span style="color:#ea4949">销量：${hpro.productSaleNum}</span></p>
-                                        <p class="label-default">预定</p>
+                                        <p class="label-default">预订</p>
                                     </a>
                                 </li>
                                 </c:forEach>
@@ -624,7 +642,7 @@ $(function(){
         </div>
     </div>
     
-    <div class="beijing" style="height:250px">
+    <div class="beijing" style="height:200px">
     
     </div>
 	<div id="blTop"></div>
@@ -845,8 +863,8 @@ $(function(){
 
         <div class="footer_con">
 
-            <div class="footer_con1"> <img src="<%=path %>/webtheme/theme/img/ditu2.png" width="100%" /> </div>
-            <div class="footer_con3" ><img src="<%=path %>/webtheme/theme/img/close.png" width="30" height="30"/></div>
+            <div class="footer_con1"> <img style="margin-left:-8%;width:100%;" src="<%=path %>/webtheme/theme/img/ditu2.png" /> </div>
+            <div class="footer_con3" ><img  src="<%=path %>/webtheme/theme/img/close.png" width="30" height="30"/></div>
 
 
         </div>

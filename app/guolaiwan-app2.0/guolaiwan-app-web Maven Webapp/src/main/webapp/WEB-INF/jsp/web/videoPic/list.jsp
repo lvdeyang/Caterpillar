@@ -41,7 +41,7 @@ String weburl=WXContants.Website;
      	li.item.add{cursor: pointer;}
      	.one{margin: 10px 10px;}
      	.main {
-            background-color: #fff;
+            background-color: #E5E5E5;
             width:323px;
             margin-left:30px;
             margin-top:10px;
@@ -49,14 +49,21 @@ String weburl=WXContants.Website;
         .main>div {
             width: 31%;
             border: 1% solid #fff;         
-            background-color: #E78326;
+            background-color: #E5E5E5;
             border-radius: 3%;
             float: left;
             margin: 1% 1% 1% 0;
         }
-        #videoPicsliu div{
-        background: #E5E5E5 !important;
+        #videoPicsliu{
+         overflow: hidden;
+          
         }
+         .videoPicsliuin{
+        background: #E5E5E5 !important;
+         overflow: hidden;
+         width:49% !important;
+         display: inline-block;
+        } 
 	</style>
  </head>
  <body style="background:#E5E5E5;">
@@ -67,14 +74,14 @@ String weburl=WXContants.Website;
 <c:import url="${path}/web/top"></c:import>
 
         
-  <div class="pageContent" style="width:1000px;margin:0 auto;">
+  <div class="pageContent" style="width:1200px;margin:0 auto;">
    
         
-            <div class="pc-search clearfix" style="padding:10px 0 0 0">
+            <div class="pc-search clearfix" style="padding:40px 100px 0 100px">
                 <div style="font-size:16px;float:left">大家都在写什么?</div>
-                <div class="fr pc-search-in">
-                   	<input type="text" id="pc-name"" style="width:100px">
-                    <a href="javascript:search()" class="pc-search-a" >搜索</a>
+                <div class="fr pc-search-in" style="overflow: hidden;">
+                   	<input type="text" id="pc-name"" style="height:26px;width:100px;padding-left:10px;border-top-left-radius: 30px;border-bottom-left-radius: 30px;">
+                    <a style="border-top-right-radius: 30px;text-align: center;width:65px;padding:0;border-bottom-right-radius: 30px;" href="javascript:search()" class="pc-search-a" >搜索</a>
                 </div>
             </div>
    
@@ -280,15 +287,14 @@ function zan(obj,vpId){
 {{#  layui.each(d.videoPics, function(index, d){ }}
 
 	
-
-			<div style="background-color:#fff;border-radius:3px">
-	<div class="pageContent1" style="width:800px;position:relative; left:80px;top:30px">
- 			<div style="width:50px;height:50px;float:left;border-radius:50%;margin-left:-53px;margin-top:-3px;background:url({{   d.user.userHeadimg }}) no-repeat;background-size:cover;"></div>
- 			<div style="width:500px;height:20px;flost:left;margin-top:30px;margin-left:10px;font-size:15px;color:#022856">{{   d.user.userNickname }}&nbsp;&nbsp<span style="color:black"> {{   d.updateTime }} <span> </div>
- 			<div style="width:80px;height:20px;flost:left;margin-top:-22px;margin-left:200px;"></div>
- 		</div> 	
- 		<div class="pageContent2" style="position:relative; left:60px;top:30px;width:800px;height:auto !important;height:300px;min-height:0px;margin-top:10px;">
-   		    <div class="pageContent3" style="width:770px;height:auto !important;height:200px;min-height:0px;font-size:16px;text-indent: 2em;font-family:SimHei;color:#111;line-height:23px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+  
+         
+			<div class="videoPicsliuin" style="position: relative;margin:40px 0;padding:0 0 50px 0;border-bottom:1px dashed #2BAD4A;">
+	        <div class="pageContent1" style="width:100%;text-align:center;height:30px;line-height:30px;">
+ 			<div style="font-size:15px;color:#022856">{{   d.user.userNickname }}&nbsp;&nbsp<span style="color:black"> {{   d.updateTime }} <span> </div>
+ 		    </div> 	
+ 		<div class="pageContent2" style="padding:0 20%;height:auto;">
+   		    <div class="pageContent3" style="height:30px !important;line-height:30px;font-size:16px;text-indent: 2em;font-family:SimHei;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
 				<span class="text1">
 					{{# if(d.type ==="图文"){}}
 						{{ d.nlist.title }}
@@ -316,12 +322,12 @@ function zan(obj,vpId){
 
 
 {{# if(d.fUrl==""){ }}
-<div class="main" id="9div" style="height:108px">
-	<div><a href="<%=path%>/web/videoPic/vpInfo/{{   d.id }}"><img src="{{ d.nlist.cover }}" style="width:100px;height:100px;""></a></div>
+<div class="main" id="9div" style="height:150px">
+	<div style="width:100%;height:100%;"><a href="<%=path%>/web/videoPic/vpInfo/{{   d.id }}"><img src="{{ d.nlist.cover }}" style="width:100%;height:100%;"></a></div>
 </div>
 {{#  } }}
   		</div> 
-  		<div class="pageContent3" style="width:800px;margin-left:92px;margin-top:40px;">
+  		<div class="pageContent3" style="padding:0 25%;">
 		{{# if(d.isPraise === 1 ){ }}
 			<div style="width:50px;height:24px;margin-top:20px;"><img onclick="zan(this,{{ d.id }})"  style="cursor: pointer;" width="16px" height="16px" src="<%=path %>/webtheme/theme/img/videoPic/dianzaned.png"><span style="margin-left:8px;"  id="{{ d.id }}praiseCount">{{   d.praiseCount }}</span></div>
 		{{# }else{ }}

@@ -66,7 +66,7 @@ h2, h3 { font-family: "microsoft yahei";font-weight:100;}
 
 .fl {float:left;}
 .fll {float:left;}
-.fr {float:right;}
+/* .fr {float:right;} */
 .words-text .red {color:#ea4949;}
 .red {color:#ea4949;}
 .container {width:1200px; margin:0 auto; position:relative; padding-top:20px; padding-bottom:5px;}

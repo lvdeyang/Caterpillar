@@ -7,28 +7,28 @@
 .BHeader {background:#ffffff; height:30px;}
 .menu .subnav { top:30px;}
 .login-body   { background:#f2f2f2;}
-.login-header { width:990px; margin:0 auto; padding:20px 0;}
-.containers   { width:990px; margin:0 auto; padding:0;}
-.login-centre { width:990px; margin:0 auto;border-color: #eb4a4a #e0e0e0 #e0e0e0;  border-style: solid;  border-width: 3px 1px 1px;background:#f9f9f9}
-.login-back   { width:988px; height:510px; padding-top:80px;}
-.login-switch { width:985px; line-height:32px;}
+.login-header { margin:0 auto; padding:20px 0;}
+.containers   { margin:0 auto; padding:0;}
+.login-centre { width:600px; margin:0 auto;background:#f9f9f9;text-align: center;border-radius:4px;position: fixed;top:50%;left:50%;margin:-265px 0  0 -300px;}
+/* .login-back   { width:988px; height:510px; padding-top:80px;} */
+.login-switch {  line-height:32px;}
 .login-switch ul{padding-left:150px; }
 .login-switch p a { color:#ea4949;}
 .login-switch ul li{ width:224px; height:32px; line-height:32px; float:left; text-align:center; font-size:15px; background:#f7f7f7; border:1px solid #e0e0e0; margin-left:15px;margin-bottom:-1px;}
 .login-switch ul li a{ width:224px; height:32px; line-height:32px;display:block;}
 .login-switch ul .cur{ width:224px; height:33px; line-height:32px; float:left; text-align:center; font-size:15px;  border-top:1px solid #e0e0e0; border-left:1px solid #e0e0e0; border-right:1px solid #e0e0e0; border-bottom:none; margin-left:15px; background:#fff; margin-bottom:-2px;}
-.login-input { margin:0 0 20px; overflow:hidden; }
-.login-input label { width:260px; height:40px; line-height:40px; text-align:right; padding-right:10px; float:left; font-size:15px;}
-.login-input input { width:512px; height:40px; line-height:40px; text-align:left;  padding-left:5px;   float:left; border:1px solid #e0e0e0; font-size:14px; background:#fff}
+.login-input {width:100%; margin:10px auto; overflow:hidden; text-align: center;}
+.login-input label { width:190px; height:40px; line-height:40px; text-align:right; padding-right:10px; float:left; font-size:15px;}
+.login-input input { width:300px; height:40px; line-height:40px; text-align:left;  padding-left:5px;   float:left; border:1px solid #e0e0e0; font-size:14px; background:#fff}
 .login-input .obtain { width:106px; height:40px; line-height:40px; text-align:center;  padding-left:0;   float:left; border:1px solid #e0e0e0; font-size:12px;  display:block; background:#f7f7f7; margin-left:15px;}
-.login-input input:focus { border:1px solid #ea4949;}
+.login-input input:focus { border:1px solid #2BAD4A;}
 .login-input .list-input {background:#fff}
 .login-input .list-iphone { background:#fff; width:388px;}
 .login-input .list-notes  { background:#fff; width:132px;}
-.item-ifo { padding-left:270px; padding-top:20px;}
-.login-button {padding-left:270px; padding-top:30px;}
-.login-button a { width:270px; height:45px; line-height:45px; text-align:center; background:#ea4949; border-radius:2px; display:block; color:#ffffff; font-size:16px;}
-.login-button a:hover { width:270px; height:45px; line-height:45px; text-align:center; background:#f25350; border-radius:2px; display:block; color:#ffffff; font-size:16px;}
+.item-ifo { padding-left:20px; padding-top:20px;}
+.login-button {width:100%; padding-top:30px;text-align:center;margin:0 auto;}
+.login-button a { width:400px;border-radius:4px; height:45px; line-height:45px;margin:0 auto; text-align:center; background:#ea4949; display:block; color:#ffffff; font-size:16px;}
+.login-button a:hover{ width:400px; height:45px; border-radius:4px;line-height:45px;margin:0 auto; text-align:center;  display:block; color:#ffffff; font-size:16px;}
 
 
 
@@ -531,4 +531,4 @@ body .hide {
 
 /* 设置内联, 减少浮动带来的bug */
 .fl{float:left;display:inline;}
-.fr{float:right;display:inline;}
+/* .fr{float:right;display:inline;} */

@@ -59,7 +59,7 @@ String weburl=WXContants.Website;
    		.beijing1{
    		background-position: center;
 		background-repeat: no-repeat;
-   		background: url("lib/images/slider_2.jpg") no-repeat;
+   		background: url("lib/images/pchome.jpg") no-repeat;
    		background-size:100% 100%;
    		background-attachment: fixed;
    		}
@@ -111,7 +111,7 @@ String weburl=WXContants.Website;
 	     </div>
 	</div>
 	
-	 <div class="beijing1" style="width:100%;height:400px;position: relative;overflow: hidden;display:none;">
+	 <div class="beijing1" style="width:100%;height:300px;position: relative;overflow: hidden;display:none;">
 	 <font class="biao1" style="vertical-align: inherit;margin-left:-425px;">我们的荣誉</font>
 	 </div>
 	 <div style="width:100%;margin:40px auto;text-align: center;">
