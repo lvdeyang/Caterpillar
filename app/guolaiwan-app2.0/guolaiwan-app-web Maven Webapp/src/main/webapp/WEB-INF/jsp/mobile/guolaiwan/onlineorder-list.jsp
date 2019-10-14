@@ -4,7 +4,6 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-			String regionCode=request.getParameter("regionCode");
 %>
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
@@ -65,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>个人中心</title>
+<title>我的分销订单</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -442,21 +441,33 @@ html, body {
 }
 
 
-      .swiper-container {
-        width: 100%;
-        padding:0;
-        margin:0;
-        height:120px;
-      } 
+   #product_table tr td{
+      padding:10px;
+   
+   }
+   .proImage{
+      width:100%;
+      height:100px;
+   
+   }
+   #product_table tr td p{
+      font-size:12px;
+   
+   }
+   #product_table_online tr td p{
+      font-size:12px;
+   
+   }
+   .operation{
+      font-size:12px;
 
-      .swiper-container img {
-        display: block;
-        width: 100%;
-      }
-    
- 
-    
-    
+      
+   }
+   .operation a{
+      padding-left:2px;
+      padding-right:2px;
+   }
+
 
 </style>
 
@@ -468,23 +479,58 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-        
-		$(document).on('click','#applyDistributor',function(){
-		   location.href=window.BASEPATH + 'distributor/apply/index?disId=0';
-		});
-		$(document).on('click','#modDis',function(){
-		   location.href=window.BASEPATH + 'distributor/apply/index?disId=${distributorId}';
-		});
-        $(document).on('click','#delDis',function(){
-           location.href=window.BASEPATH + 'distributor/delete?disId=${distributorId}';
-        });
-        $(document).on('click','#a1',function(){
-           location.href=window.BASEPATH + 'distributor/off/sell?disId=${distributorId}';
-        });
-        
-	   if(${status} == null){	        
-	    status = 1;
-	   }	  		
+	    function getList(){
+	        $('#order_table_notpay').children().remove();
+	        $('#order_table_payed').children().remove();
+	        $('#order_table_send').children().remove();
+	        $('#order_table_refunding').children().remove();
+	        $('#order_table_refunded').children().remove();
+	        $('#order_table_test').children().remove();
+	        $('#order_table_received').children().remove();
+	        var _uriQuery = window.BASEPATH + 'distributor/onlineorder/list/${distributorId}';
+				
+			$.get(_uriQuery, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+			    if(data && data.length>0){
+			       
+			       for(var i=0;i<data.length;i++){
+			           var html=[];
+				       html.push('<a href="'+window.BASEPATH + 'distributor//online/orderinfo?orderId='+data[i].id+'"');
+					   html.push('class="weui-media-box weui-media-box_appmsg">');
+					   html.push('<div class="weui-media-box__hd">');
+					   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+data[i].productPic+'" alt="">');
+					   html.push('</div>');
+					   html.push('<div class="weui-media-box__bd">');
+					   html.push('<h4 style="width:50%;float:left;font-size:12px" class="weui-media-box__title">'+data[i].productName+'</h4><h4 style="width:25%;float:right" class="weui-media-box__title"></h4>');
+					   html.push('<p style="width:100%;height:15px;font-size:12px" class="weui-media-box__desc">'+data[i].productNum+'(个)/'+data[i].productPrice+'元</p>');
+					   html.push('<p style="width:100%" class="weui-media-box__desc"><div style="float:right;margin-right:38px;font-size:12px;"></div></p>');
+					   html.push('</div>');
+					   html.push('</a>');
+				       if(data[i].orderState=="未付款"){
+				          $('#order_table_notpay').append(html.join(''));
+				       }else if(data[i].orderState=="支付成功"){
+				       	  $('#order_table_payed').append(html.join('')); 
+				       }else if(data[i].orderState=="已发货"){
+				          $('#order_table_send').append(html.join(''));
+				       }else if(data[i].orderState=="申请退款"){
+				          $('#order_table_refunding').append(html.join(''));
+				       }else if(data[i].orderState=="退款成功"){
+				          $('#order_table_refunded').append(html.join(''));
+				       }else if(data[i].orderState=="已验单"){
+				          $('#order_table_test').append(html.join(''));
+				       }else if(data[i].orderState=="已收货"){
+				          $('#order_table_received').append(html.join(''));
+				       }
+			       }
+			    }
+			    
+			});
+	    
+	    }
+		
+		getList();
+		
 	});
 </script>
 
@@ -497,164 +543,95 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">分销</div>
+				<div class="header-content">零售订单</div>
 			</div>
 		</div>
 		<div class="content">
-		    
-		
-		     
-		   <c:if test="${status=='null'}">
-		    <c:if test="${distributorId=='0'}"> 
-		    	<a id="applyDistributor" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">
-		    	申请分销商</a>
-		     
-			</c:if>
-			</c:if>
-			<c:if test="${status=='CHECKED'||status=='NOTPASSED'}">
-			    <div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">法人</label>
-					</div>
-					<div class="weui-cell__bd">
-						<input name="legalPerson"  disabled="disabled" value="${distributor.legalPerson }"  class="weui-input" type="text" placeholder="">
-					</div>
-				</div>
-				<div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">开户行账号</label>
-					</div>
-					<div class="weui-cell__bd">
-						<input name="bankNo" disabled="disabled" value="${distributor.bankNo }"  class="weui-input" type="number" pattern="[0-9]*"
-							placeholder="">
-					</div>
-				</div>
 
-				<div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">地址</label>
-					</div>
-					<div class="weui-cell__bd">
-						<input name="address" disabled="disabled" value="${distributor.address }" class="weui-input" type="text"
-							placeholder="">
-					</div>
+			<div class="weui-tab">
+				<div class="weui-navbar" style="height:40px;line-height:14px;">
+					<a onclick="return false" class="weui-navbar__item weui-bar__item--on" href="#tab1">
+						未支付 </a> <a onclick="return false" class="weui-navbar__item" href="#tab2">已支付</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab3">已发货</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab4">退款中</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab5">已退款</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab6">已验单</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab7">已收货</a>
 				</div>
+				<div class="weui-tab__bd" style="padding-bottom:50px;">
+					<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+                        
+                          <div id="order_table_notpay" class="weui-panel__bd">
+				
+				
+			            </div>
 
-				<div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">电话</label>
 					</div>
-					<div class="weui-cell__bd">
-						<input name="phone" disabled="disabled" value="${distributor.phone }" class="weui-input" type="number" pattern="[0-9]*"
-							placeholder="">
+					<div id="tab2" class="weui-tab__bd-item">
+					
+                       <div id="order_table_payed" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
 					</div>
-				</div>
-				
-				<div class="weui-cell">
-					<div class="weui-cell__hd">
-						<label class="weui-label">分销地区</label>
-					</div>
-					<div class="weui-cell__bd">
-						${region}
-					</div>
-				</div>
-			
-			
-		    
-		        <div style="margin-top:20px;width:100%;height:100px;background:#18b4ed;color:#FFF;text-align:center">
-				  
-				  <c:if test="${status=='CHECKED'}">
-				         
-				  审核中
-				  </c:if>
-				  <c:if test="${status=='NOTPASSED'}">
-				 审核未通过        
-				  
-				  </c:if>
-	
-				
-				
-				       <br><br><span>${reason}</span>
-	
-				
-				</div>
-				
-				<a id="modDis" style="margin-top:10px;width:46%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
-				<a id="delDis" style="margin-top:10px;width:46%;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">取消申请</a>
-		    </c:if>
-		   
-			<c:if test="${status=='PASSED'}">
-			<c:if test="${distributorId!='0'}"> 
 
-			<a  href="<%=basePath%>/distributor/admin/exitPage" style="float:right;margin-right:5%; " ></a>					    
-			        <div style="width:100%;height:100px;">
-					    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-					      <div class="weui-media-box__hd">
-					        <img style="border-radius:50%;width:60px;height:60px;" class="weui-media-box__thumb" src="${user.userHeadimg}">
-					      </div>
-					      <div class="weui-media-box__bd">
-					        <h4 class="weui-media-box__title" style="font-size:12px;">${user.userNickname}(${region})</h4>
-					        <p class="weui-media-box__desc" style="font-size:12px;">${distributor.address }</p>
-					      </div>
-		    		    </a>
+                    <div id="tab3" class="weui-tab__bd-item">
+					
+					  
+					 	<div id="order_table_send" class="weui-panel__bd">
+				
+				
+			            </div>
+					
 					</div>
-			
-			    	<div class="weui-grids">
-					  <a href="<%=basePath%>/distributor/my/index" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      商品管理
-					    </p>
-					  </a>
-					  <a href="<%=basePath%>/distributor/order/index" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      采购订单
-					    </p>
-					  </a>
-					  <a href="<%=basePath%>/distributor/onlineorder/index" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      线上零售订单
-					    </p>
-					  </a>
-					    <!-- <a href="<%=basePath%>/distributor/distribute/index/0/0" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      分销首页
-					    </p>
-					  </a> -->
-					   <!-- <a href="javascript:void(0)" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					     个人信息
-					    </p>
-					  </a> -->
-					   <!-- <a id="a1" href="javascript:void(0)" class="weui-grid js_grid">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/icon_nav_msg.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      我的店铺
-					    </p>
-					  </a> -->
+					<div id="tab4" class="weui-tab__bd-item">
+					
+                       	<div id="order_table_refunding" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
 					</div>
-			</c:if>
-			</c:if>
-		 
-		    
+					
+					<div id="tab5" class="weui-tab__bd-item">
+					
+                       	<div id="order_table_refunded" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
+					</div>
+					
+					
+					<div id="tab6" class="weui-tab__bd-item">
+					
+                       	<div id="order_table_test" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
+					</div>
+					
+					<div id="tab7" class="weui-tab__bd-item">
+					
+                       	<div id="order_table_received" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
+					</div>
+					
+				</div>
+			</div>
 		</div>
 	</div>
+
 </body>
 
 

@@ -7,6 +7,8 @@ public enum OrderSource {
 	LIVE("LIVE"),
 	// 分销线下
 	DISTRIBUTORUNLINE("DISTRIBUTORUNLINE"),
+	// 分销线上
+    DISTRIBUTORONLINE("DISTRIBUTORONLINE"),
 	// 公众号
 	PUBLICADDRESS("PUBLICADDRESS"),
 	// 线下
@@ -33,6 +35,8 @@ public enum OrderSource {
 			return APP;
 		} else if ("分销线下".equals(name)) {
 			return DISTRIBUTORUNLINE;
+		}else if ("分销线上".equals(name)) {
+			return DISTRIBUTORONLINE;
 		} else if ("线下".equals(name)) {
 			return UNLINE;
 		} else if ("公众号".equals(name)) {
@@ -51,6 +55,10 @@ public enum OrderSource {
 			return APP;
 		} else if ("PUBLICADDRESS".equals(s)) {
 			return PUBLICADDRESS;
+		} else if ("DISTRIBUTORONLINE".equals(s)) {
+			return DISTRIBUTORONLINE;
+		} else if ("DISTRIBUTORONLINE".equals(s)) {
+			return DISTRIBUTORONLINE;
 		} else {
 			throw new Exception("错误的订单来源：" + s);
 		}
@@ -66,7 +74,9 @@ public enum OrderSource {
 		} else if ("PUBLICADDRESS".equals(s)) {
 			return "公众号";
 		} else if ("DISTRIBUTORUNLINE".equals(s)) {
-			return "线下分销";
+			return "分销线下";
+		} else if ("DISTRIBUTORONLINE".equals(s)) {
+			return "分销线上";
 		} else if ("UNLINE".equals(s)) {
 			return "线下";
 		} else {

@@ -2038,12 +2038,7 @@ public class BusinessController extends WebBaseControll {
 
 				case 2:// 已支付
 					List<OrderInfoPO> orderedOrderpos = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.PAYSUCCESS);	
-					List<OrderInfoPO> orderedOrderpo2 = orderInfoDao.findOrdersByMerchantMessage(userId,merchList,OrderStateType.PAYFINISH);
-					
-					if (orderedOrderpo2.size() > 0) {
-						orderedOrderpos.addAll(orderedOrderpo2);
-					}
-
+				
 					List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
 							OrderInfoVO.class);
 					// 张羽 添加退款限制 4/28
@@ -2137,9 +2132,6 @@ public class BusinessController extends WebBaseControll {
 				case 2:// 已支付
 					List<OrderInfoPO> orderedOrderpos = orderInfoDao.getOrdersByMerState(_merchantId,
 							OrderStateType.PAYSUCCESS);
-					List<OrderInfoPO> orderedOrderpo2 = orderInfoDao.getOrdersByMerState(_merchantId,
-							OrderStateType.PAYFINISH);
-					orderedOrderpos.addAll(orderedOrderpo2);
 					List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
 							OrderInfoVO.class);
 					// 张羽 添加退款限制 4/28

@@ -77,7 +77,7 @@ public class AliAppOrderInfo {
 	public static Map<String, String> buildAliOrder(boolean rsa2 ,String num,Long allMoney,String productName,String orderNo){
 
 		Map<String, String> keyValues = new HashMap<String, String>();
-		double allMoneyd = (double)(allMoney/100);
+		double allMoneyd = ((double)allMoney)/100;
 
 		keyValues.put("app_id", APPID);//allMoney
 

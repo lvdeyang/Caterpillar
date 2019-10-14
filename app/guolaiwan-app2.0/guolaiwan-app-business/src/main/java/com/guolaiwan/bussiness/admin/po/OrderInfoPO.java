@@ -162,6 +162,31 @@ public class OrderInfoPO extends AbstractBasePO {
 	//分销上回调二维码
 	private String distributeQcode;
 
+	
+	//本平台分销商商品相关
+	//分销商关联ID
+	private long distributorId = 0;
+	//分销商品关联ID
+	private long distributeProId = 0;
+	
+	
+	
+	public long getDistributorId() {
+		return distributorId;
+	}
+
+	public void setDistributorId(long distributorId) {
+		this.distributorId = distributorId;
+	}
+
+	public long getDistributeProId() {
+		return distributeProId;
+	}
+
+	public void setDistributeProId(long distributeProId) {
+		this.distributeProId = distributeProId;
+	}
+
 	public String getDistributeId() {
 		return distributeId;
 	}
