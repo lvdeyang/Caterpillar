@@ -508,7 +508,8 @@ html, body {
 		    <c:if test="${distributorId=='0'}"> 
 		    	<a id="applyDistributor" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">
 		    	申请分销商</a>
-		     
+		        <a  href="<%=basePath%>/distributor/reallogin/index" style="margin-top:10px;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" class="weui-btn weui-btn_primary">
+		    	登录</a>
 			</c:if>
 			</c:if>
 			<c:if test="${status=='CHECKED'||status=='NOTPASSED'}">

@@ -64,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>分销商品</title>
+<title>商户主页</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -439,26 +439,51 @@ html, body {
 	top: 0;
 	text-align: center;
 }
-.message{
-  font-size:14px;
-  height:30px;
-  line-height:30px;
-  margin-left:20px;
-  margin-top:10px;
-
-}
-#regionBar{
- width:100%;
- height:30px;
- background:#18b4ed;
- color:#FFF;
- line-height:30px;
- padding-left:10px;
- font-size:14px;
-
-}
 
 
+      .swiper-container {
+        width: 100%;
+        padding:0;
+        margin:0;
+        height:200px;
+      } 
+
+      .swiper-container img {
+        display: block;
+        width: 100%;
+      }
+    
+    #distributeList{
+       margin-top:10px;
+       padding-left:10px;
+       border-bottom:solid 2px #18b4ed;
+       width:100%;height:35px;
+       
+    }
+    
+    #distributeList a{
+       text-decoration:none;
+       color:#CCC;
+       font-size:12px;
+    }
+    #distributeList a.current{
+       text-decoration:none;
+       color:#18b4ed;
+       font-size:20px;
+    }
+    #columnTable{
+    
+        width:100%;
+        margin-top:10px;
+        
+    }
+    #columnTable td{
+	    width:20%;
+	    text-align:center;
+	    font-size:12px;
+    }
+    
+    
 
 </style>
 
@@ -466,191 +491,100 @@ html, body {
 
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
-
+<script src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
 <script type="text/javascript">
-    
+
 	$(function() {
-	
-	    var id='${product.id}';
-	
-	    $(document).on('change','#policy',function(){
-	        var count=$(this).val();
-	        var _uriGetpolicyPrice = window.BASEPATH + 'distributor/policy/price/'+id+'/'+count;
-				
-			$.get(_uriGetpolicyPrice, null, function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-			    if(data){
-			       $('#product_price').html(data);
-			    }
-			    
-			});
-	    
-	    });
-	    
-	    $(document).on('click','#applyProduct',function(){
-	    
-	        if($('#selContractPic').val() == ''){
-				$.toast("请上传合同", "forbidden");
-				return false;
-			}
-	        if($('#selContract').val() == ''){
-				$.toast("请上传合同视频", "forbidden");
-				return false;
+	  window.BASEPATH = '<%=basePath%>';
+	  var parseAjaxResult = function(data){
+			if(data.status !== 200){
+				$.toptip('data.message', 'error');
+				return -1;
 			}else{
-		   	    var _uriApplyProduct = window.BASEPATH + 'distributor/apply/product';
-			    var params={};
-			    params.count=$('#policy').val();
-			    params.region=$('#region').val();
-			    params.price=$('#product_price').html();
-			    params.contractPic=$('#selContractPic').val();
-			    params.contractVideo=$('#selContract').val();
-			    params.productId=id;
-			    params.orderId=${orderId};
-				$.post(_uriApplyProduct, $.toJSON(params), function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-				    if(data){
-					$.confirm("确定提交？", function() {
-						location.href=window.BASEPATH + 'distributor/order/info/'+data;
-					  }, function() {
-					  });
-				    }
-				    
-				});				
+				return data.data;		
 			}
-				    
-	    });
-	    
-	    
-	    $(document).on('change','#contract',function(){
-	       
-	       $.showLoading();
-	       setTimeout(function(){
-	           uploadFiles($('#contract')[0],$('#selContract'),$('#showContract'));
-	       
-	       },1000);
-	    });
-	    
-	    $(document).on('change','#contractPic',function(){
-	     
-	       
-	       $.showLoading();
-	       setTimeout(function(){
-	           uploadFiles($('#contractPic')[0],$('#selContractPic'),$('#showContractPic'));
-	       
-	       },1000);
-	    });
-	    
-	    
-	    function uploadFiles(file,submitObj,showObj){  
-	        
-		    var uploadFile = new FormData();
-		    uploadFile.append(file.files[0].name, file.files[0]);
-		    var _upQuery = window.BASEPATH + 'distributor/upload';
-		    if("undefined" != typeof(uploadFile) && uploadFile != null && uploadFile != ""){
-		    		$.ajax({			
-			    		url:_upQuery,		
-			    		type:'POST',	
-			    		data:uploadFile,		
-			    		async: false,  			
-			    		cache: false, 			
-			    		contentType: false, //不设置内容类型			
-			    		processData: false, //不处理数据			
-			    		success:function(data){							
-				    		showObj.attr('src',data.data.webPath);
-				    		submitObj.val(data.data.url);	
-				    		$.hideLoading();	
-			    		},			
-		    			error:function(){
-		    				alert("上传失败！");
-		    									
-		    			}		
-		    		});
-		    	
-              }else {		
-		    		alert("选择的文件无效！请重新选择");
-		      }
-		  }   
-	    
-	    
+	  };
+      $(document).on('click','#login',function(){
+          if($('#addressphone').val()==''){
+              $.toast('请输入手机号',"forbidden");
+              return false;
+          }
+          if($('#password').val()==''){
+              $.toast('请输入密码',"forbidden");
+              return false;
+          }
+          var _urilogin = window.BASEPATH + 'distributor/dologin/index';
+	      var param={};
+	      param.phone=$('#addressphone').val();
+	      param.password=$('#password').val();	
+		  $.post(_urilogin, $.toJSON(param), function(data){
+				
+				if(data.status != 200) {
+				   $.toast(data.message,"forbidden");
+				}else{
+				   location.href=window.BASEPATH + 'distributor/app/login/0?timestamp='+ new Date().getTime()+Math.random();
+				}
+		  });
+      });
+      
+     
 	
 	});
+	
+	
+	
+	
+
 </script>
 
 
 
 <body>
 	<div id="page">
-		<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
-				<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">分销</div>
-			</div>
-		</div>
-		<div class="content">
-		    <image style="width:100%;height:150px;" src="${product.pic}"/>
-			<div class="message">景区地址：${product.address}</div>
-			<div class="message">开放时间：${product.openTime}</div>
-			<div class="message">客服电话：${product.tel}</div>
-			<div id="regionBar">购买须知</div>
-			<div class="message">
-				
-				    分销地区：${myregion.comName}<input type="hidden" id="region" value="${myregion.id }">
-				
- 
-            </div>
-            
-            <div class="message" style="font-size:16px;text-align:left;width:80px;">分销政策</div>
-            <div class="message" style="margin-top:0">
-				<div style="width:120px;float:left;height:44px;line-height:44px;">选择购票数量：👇</div>
-				<div style="width:100px;;float:left;height:30px;">
-					<select class="weui-select" id="policy" name="policy">
-			            <c:forEach var="poli" items="${product.policys}">
-			                <option value="${poli.count}">${poli.count}</option>
-			            </c:forEach>
-		            </select>
-            	</div>
-            	<div style="width:100px;float:left;height:44px;line-height:44px;">单价：
-            	<span id="product_price">${product.policys[0].price}</span>元</div>
-            </div>
-            
-              <div class="weui-cells__title"><br>上传合同:<input type="hidden" name="contractPicUrl" id="selContractPic" /></div>
-				<div style="width:100%;height:100px;">
-					<div style="margin-left:15px;width:100px;height:100px;"
-						class="weui-uploader__input-box">
-						<input name="contractPic" id="contractPic" class="weui-uploader__input" type="file"
-							accept="image/*" multiple>
-					</div>
-					
-					<image id="showContractPic" style="margin-left:15px;width:100px;height:100px;"/>
-						
-					
-					
-				</div>
-				
-				<div class="weui-cells__title">上传合同视频:<input type="hidden" id="selContract" name="contractUrl"/></div>
-				<div style="width:100%;height:100px;">
-					<div style="margin-left:15px;width:100px;height:100px;"
-						class="weui-uploader__input-box">
-						<input name="contract" id="contract" class="weui-uploader__input" type="file"
-							multiple>
-					</div>
-					
-					<video autoplay controls="controls" id="showContract" style="margin-left:15px;width:100px;height:100px;"/>
-				</div>
-            
-            
-            
-		</div>
 		
-	
-		<a id="applyProduct" style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;z-index:1000" href="javascript:;" class="weui-btn weui-btn_primary">申请分销</a>
+		<div class="content">
+			<div class="weui-msg">
+			  <div class="weui-msg__icon-area"><image style="width:100px;height:100px;" src="lib/images/logo.jpg"/></div>
+			  <div class="weui-msg__text-area">
+			    <h2 class="weui-msg__title">分销商登录</h2>
+			    <p class="weui-msg__desc">分销商请登录<a href="javascript:void(0);"></a></p>
+			  </div>
+			  
+			  
+			  <div class="weui-cells weui-cells_form">
+				  <div class="weui-cell">
+				    <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
+				    <div class="weui-cell__bd">
+				      <input id="addressphone" class="weui-input" type="text"/>
+				    </div>
+				  </div>
+				  <div class="weui-cell">
+				    <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
+				    <div class="weui-cell__bd">
+				      <input id="password" class="weui-input" type="password"/>
+				    </div>
+				  </div>
+			  </div>
+			  
+			  
+			  <div class="weui-msg__opr-area">
+			    <p class="weui-btn-area">
+			      <a id="login" href="javascript:void(0);" class="weui-btn weui-btn_primary">登录分销系统</a>
+			     
+			    </p>
+			  </div>
+			  <div class="weui-msg__extra-area">
+			    <div class="weui-footer">
+			      <p class="weui-footer__links">
+			        <a href="javascript:void(0);" class="weui-footer__link"></a>
+			      </p>
+			      <p class="weui-footer__text"></p>
+			    </div>
+			  </div>
+			</div>
+			
+		</div>
 	</div>
-	<!-- 订单提交表单 -->
-	
 </body>
 
 

@@ -77,6 +77,8 @@ import com.guolaiwan.bussiness.distribute.po.RegionPo;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.sun.jna.platform.win32.Netapi32Util.UserInfo;
 
+import pub.caterpillar.commons.exception.BaseException;
+import pub.caterpillar.commons.exception.code.enumeration.StatusCode;
 import pub.caterpillar.commons.util.binary.ByteUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
@@ -150,6 +152,8 @@ public class NEWDistributorController {
 		SysConfigPO sys=conn_sys.getSysConfig();
 		DistributorPo distributorPo=new DistributorPo();
 		distributorPo.setId(0l);
+		HttpSession session = request.getSession();
+		session.removeAttribute("distributorId");
 		mv.addObject("distributor",distributorPo);
 		mv.addObject("region",0);
 		mv.addObject("city",0);
@@ -740,44 +744,55 @@ public class NEWDistributorController {
 	private UserInfoDAO conn_user;
 	@RequestMapping(value = "/app/login/{userId}")
 	public ModelAndView appLogin(
-			HttpServletRequest request,@PathVariable long userId) throws Exception{
-				
+			HttpServletRequest request,@PathVariable long userId) throws Exception{	
 		ModelAndView mv = null;
 		HttpSession session = request.getSession();
-		if(session.getAttribute("userId")==null){
-			session.setAttribute("type","APP");
-			session.setAttribute("userId", userId);
-		}else{
-			String uIdString=session.getAttribute("userId").toString();
-			if("0".equals(uIdString)){
-				session.setAttribute("type","APP");
-				session.setAttribute("userId", userId);
-			}
-		}
-		List<DistributorPo> distributorPos = new ArrayList<DistributorPo>();
-		UserInfoPO user=conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
-		if(userId != -1){
-		     distributorPos = conn_distributor.queryByUserId(Long.parseLong(session.getAttribute("userId").toString()));
-		}		
 		mv = new ModelAndView("mobile/guolaiwan/distribute-personal");
-		if(!distributorPos.isEmpty()){
-			mv.addObject("distributorId", distributorPos.get(0).getId());
-			mv.addObject("status", distributorPos.get(0).getStatus().getName());
-			mv.addObject("reason", distributorPos.get(0).getCheckReason());
-
-			session.setAttribute("distributorId", distributorPos.get(0).getId());
-			session.setAttribute("region",distributorPos.get(0).getRegion());
-			mv.addObject("distributor", distributorPos.get(0));
-			mv.addObject("region",conn_com.get(distributorPos.get(0).getRegion()).getComName());
-			mv.addObject("user",user);
-		}else{
+		if(session.getAttribute("distributorId")==null){
 			mv.addObject("distributorId", 0);
 			mv.addObject("status","null");
+		}else{
+			String distributorIdstr=session.getAttribute("distributorId").toString();	
+			DistributorPo distributorPo=conn_distributor.get(Long.parseLong(distributorIdstr));
+			mv.addObject("distributorId", distributorPo.getId());
+			mv.addObject("status", distributorPo.getStatus().getName());
+			mv.addObject("reason", distributorPo.getCheckReason());
+			mv.addObject("distributor", distributorPo);
+			mv.addObject("region",conn_com.get(distributorPo.getRegion()).getComName());
+			UserInfoPO user=conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
+			mv.addObject("user",user);
 		}
-
 		return mv;
 	}
 
+	
+	@RequestMapping(value = "/reallogin/index")
+	public ModelAndView realLogin(
+			HttpServletRequest request) throws Exception{	
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/guolaiwan/login");
+		return mv;
+	}
+
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/dologin/index", method = RequestMethod.POST)
+	public Object dologin(HttpServletRequest request) throws Exception{
+		HttpServletRequestParser parser = new HttpServletRequestParser(request);
+		JSONObject pageObject = parser.parseJSON();
+		String phone = pageObject.getString("phone");
+		String password = pageObject.getString("password");
+		DistributorPo distributorPo=conn_distributor.getbyphoneAndpassword(phone, password);
+		if(distributorPo==null){
+			throw new BaseException(StatusCode.FORBIDDEN, "用户名密码错误");
+		}
+		HttpSession session = request.getSession();
+		session.setAttribute("distributorId", distributorPo.getId());
+		session.setAttribute("region",distributorPo.getRegion());
+		return "success";
+	}
+	
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/prev/pay/{id}")
