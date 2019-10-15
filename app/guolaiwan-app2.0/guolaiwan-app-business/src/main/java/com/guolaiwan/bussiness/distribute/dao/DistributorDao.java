@@ -71,5 +71,12 @@ public class DistributorDao extends AbstractBaseDao<DistributorPo> {
 		hql.andBy("id", Condition.eq, id);
 		return this.findByHql(hql);
 	}
+	
+	public DistributorPo getbyphoneAndpassword(String phone,String password) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("phone", Condition.eq, phone);
+		hql.andBy("password", Condition.eq, password);
+		return this.getByHql(hql);
+	}
 
 }

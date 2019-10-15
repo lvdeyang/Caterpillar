@@ -8,9 +8,6 @@ public enum OrderStateType {
 	//支付成功
 	PAYSUCCESS("支付成功"),
 
-	//支付完成
-	PAYFINISH("支付完成"),
-
 	//已验单（虚拟）
 	TESTED("已验单"),
 
@@ -52,8 +49,6 @@ public enum OrderStateType {
 			return "NOTPAY";
 		}else if(this.equals(PAYSUCCESS)){
 			return "PAYSUCCESS";
-		}else if(this.equals(PAYFINISH)){
-			return "PAYFINISH";
 		}else if(this.equals(TESTED)){
 			return "TESTED";
 		}else if(this.equals(REFUNDING)){
@@ -80,8 +75,6 @@ public enum OrderStateType {
 			return NOTPAY;
 		}else if("支付成功".equals(name)){
 			return PAYSUCCESS;
-		}else if("支付完成".equals(name)){
-			return PAYFINISH;
 		}else if("已验单".equals(name)){
 			return TESTED;
 		}else if("申请退款".equals(name)){
@@ -108,8 +101,6 @@ public enum OrderStateType {
 			return NOTPAY;
 		}else if("PAYSUCCESS".equals(s)){
 			return PAYSUCCESS;
-		}else if("PAYFINISH".equals(s)){
-			return PAYFINISH;
 		}else if("TESTED".equals(s)){
 			return TESTED;
 		}else if("REFUNDING".equals(s)){

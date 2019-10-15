@@ -237,6 +237,15 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
 		return orders;
 	}
+	
+	public List<OrderInfoPO> findByDistributorAndSource(long distributorId,OrderSource source) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("distributorId", Condition.eq, distributorId);
+		hql.andBy("source",Condition.eq,source);
+		
+		return this.findByHql(hql);
+	}
+	
 
 	// 后台验单列表
 	public int countByYd() {

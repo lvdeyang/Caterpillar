@@ -69,7 +69,7 @@ public class MerOrderInfoController extends BaseController{
 			return strMap;
 		}
 		//只有支付完成的才可以验单
-		if(order.getOrderState().equals(OrderStateType.PAYSUCCESS)||order.getOrderState().equals(OrderStateType.PAYFINISH)){
+		if(order.getOrderState().equals(OrderStateType.PAYSUCCESS)){
 			order.setOrderState(OrderStateType.TESTED);
 			order.setYdDate(new Date());
 			conn_OrderInfo.save(order);

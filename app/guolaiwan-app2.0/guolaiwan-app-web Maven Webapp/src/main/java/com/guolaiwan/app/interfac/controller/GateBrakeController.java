@@ -66,8 +66,7 @@ public class GateBrakeController {
 			//二维码验单 刘岫琳
 			if(orderInfoPO != null && orderInfoPO.getProductId() == productId){
 				// 判断订单状态:支付完成&&支付成功
-				if(!OrderStateType.PAYFINISH.equals(orderInfoPO.getOrderState())
-						&& !OrderStateType.PAYSUCCESS.equals(orderInfoPO.getOrderState())){
+				if(!OrderStateType.PAYSUCCESS.equals(orderInfoPO.getOrderState())){
 					ret.put("Status", 0);
 					ret.put("StatusDesc", "该订单状态是" + orderInfoPO.getOrderState().getName());
 				}else{
@@ -99,8 +98,7 @@ public class GateBrakeController {
 					for (OrderInfoPO orderPO : orderInfoList) {
 						long productIdOrder = orderPO.getProductId();
 						if(productIdOrder == productId){
-							if(!OrderStateType.PAYFINISH.equals(orderPO.getOrderState())
-									&& !OrderStateType.PAYSUCCESS.equals(orderPO.getOrderState())){
+							if(!OrderStateType.PAYSUCCESS.equals(orderPO.getOrderState())){
 								ret.put("Status", 0);
 								ret.put("StatusDesc", "该订单状态是" + orderPO.getOrderState().getName());
 							}else{

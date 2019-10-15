@@ -2850,11 +2850,7 @@ public class AppController extends WebBaseControll {
 
 			case 2:// 已支付
 				List<OrderInfoPO> orderedOrderpos = conn_order.getOrdersByState(userId, OrderStateType.PAYSUCCESS);
-				List<OrderInfoPO> orderedOrderpo2 = conn_order.getOrdersByState(userId, OrderStateType.PAYFINISH);
-
-				if (orderedOrderpo2.size() > 0) {
-					orderedOrderpos.addAll(orderedOrderpo2);
-				}
+				
 
 				List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
 						OrderInfoVO.class);
@@ -2972,9 +2968,7 @@ public class AppController extends WebBaseControll {
 			case 2:// 已支付
 				List<OrderInfoPO> orderedOrderpos = conn_order.getOrdersByMerState(merchantId,
 						OrderStateType.PAYSUCCESS);
-				List<OrderInfoPO> orderedOrderpo2 = conn_order.getOrdersByMerState(merchantId,
-						OrderStateType.PAYFINISH);
-				orderedOrderpos.addAll(orderedOrderpo2);
+			
 				List<OrderInfoVO> orderedOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderedOrderpos,
 						OrderInfoVO.class);
 
@@ -3259,8 +3253,7 @@ public class AppController extends WebBaseControll {
 			}
 
 			// 判断订单状态？？？
-			if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYFINISH)
-					&& !orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
+			if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
 				return FORBIDDEN("订单状态是：" + orderInfoPO.getOrderState());
 			}
 			// 更改订单的状态，验单时间

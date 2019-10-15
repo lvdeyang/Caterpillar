@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.BalanceVO;
+import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.app.web.distribute.vo.DistributeOrderVo;
@@ -45,9 +46,11 @@ import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
+import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
+import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
@@ -62,19 +65,20 @@ import com.guolaiwan.bussiness.distribute.dao.DistributePolicyDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributorDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributorOrderDao;
-import com.guolaiwan.bussiness.distribute.dao.DistributorUserDao;
 import com.guolaiwan.bussiness.distribute.dao.OffOrderDao;
 import com.guolaiwan.bussiness.distribute.dao.RegionDao;
 import com.guolaiwan.bussiness.distribute.po.DistributePolicy;
 import com.guolaiwan.bussiness.distribute.po.DistributeProduct;
 import com.guolaiwan.bussiness.distribute.po.DistributorOrder;
 import com.guolaiwan.bussiness.distribute.po.DistributorPo;
-import com.guolaiwan.bussiness.distribute.po.DistributorUser;
+
 import com.guolaiwan.bussiness.distribute.po.OffOrder;
 import com.guolaiwan.bussiness.distribute.po.RegionPo;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.sun.jna.platform.win32.Netapi32Util.UserInfo;
 
+import pub.caterpillar.commons.exception.BaseException;
+import pub.caterpillar.commons.exception.code.enumeration.StatusCode;
 import pub.caterpillar.commons.util.binary.ByteUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
@@ -148,6 +152,8 @@ public class NEWDistributorController {
 		SysConfigPO sys=conn_sys.getSysConfig();
 		DistributorPo distributorPo=new DistributorPo();
 		distributorPo.setId(0l);
+		HttpSession session = request.getSession();
+		session.removeAttribute("distributorId");
 		mv.addObject("distributor",distributorPo);
 		mv.addObject("region",0);
 		mv.addObject("city",0);
@@ -738,44 +744,55 @@ public class NEWDistributorController {
 	private UserInfoDAO conn_user;
 	@RequestMapping(value = "/app/login/{userId}")
 	public ModelAndView appLogin(
-			HttpServletRequest request,@PathVariable long userId) throws Exception{
-				
+			HttpServletRequest request,@PathVariable long userId) throws Exception{	
 		ModelAndView mv = null;
 		HttpSession session = request.getSession();
-		if(session.getAttribute("userId")==null){
-			session.setAttribute("type","APP");
-			session.setAttribute("userId", userId);
-		}else{
-			String uIdString=session.getAttribute("userId").toString();
-			if("0".equals(uIdString)){
-				session.setAttribute("type","APP");
-				session.setAttribute("userId", userId);
-			}
-		}
-		List<DistributorPo> distributorPos = new ArrayList<DistributorPo>();
-		UserInfoPO user=conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
-		if(userId != -1){
-		     distributorPos = conn_distributor.queryByUserId(Long.parseLong(session.getAttribute("userId").toString()));
-		}		
 		mv = new ModelAndView("mobile/guolaiwan/distribute-personal");
-		if(!distributorPos.isEmpty()){
-			mv.addObject("distributorId", distributorPos.get(0).getId());
-			mv.addObject("status", distributorPos.get(0).getStatus().getName());
-			mv.addObject("reason", distributorPos.get(0).getCheckReason());
-
-			session.setAttribute("distributorId", distributorPos.get(0).getId());
-			session.setAttribute("region",distributorPos.get(0).getRegion());
-			mv.addObject("distributor", distributorPos.get(0));
-			mv.addObject("region",conn_com.get(distributorPos.get(0).getRegion()).getComName());
-			mv.addObject("user",user);
-		}else{
+		if(session.getAttribute("distributorId")==null){
 			mv.addObject("distributorId", 0);
 			mv.addObject("status","null");
+		}else{
+			String distributorIdstr=session.getAttribute("distributorId").toString();	
+			DistributorPo distributorPo=conn_distributor.get(Long.parseLong(distributorIdstr));
+			mv.addObject("distributorId", distributorPo.getId());
+			mv.addObject("status", distributorPo.getStatus().getName());
+			mv.addObject("reason", distributorPo.getCheckReason());
+			mv.addObject("distributor", distributorPo);
+			mv.addObject("region",conn_com.get(distributorPo.getRegion()).getComName());
+			UserInfoPO user=conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
+			mv.addObject("user",user);
 		}
-
 		return mv;
 	}
 
+	
+	@RequestMapping(value = "/reallogin/index")
+	public ModelAndView realLogin(
+			HttpServletRequest request) throws Exception{	
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/guolaiwan/login");
+		return mv;
+	}
+
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/dologin/index", method = RequestMethod.POST)
+	public Object dologin(HttpServletRequest request) throws Exception{
+		HttpServletRequestParser parser = new HttpServletRequestParser(request);
+		JSONObject pageObject = parser.parseJSON();
+		String phone = pageObject.getString("phone");
+		String password = pageObject.getString("password");
+		DistributorPo distributorPo=conn_distributor.getbyphoneAndpassword(phone, password);
+		if(distributorPo==null){
+			throw new BaseException(StatusCode.FORBIDDEN, "用户名密码错误");
+		}
+		HttpSession session = request.getSession();
+		session.setAttribute("distributorId", distributorPo.getId());
+		session.setAttribute("region",distributorPo.getRegion());
+		return "success";
+	}
+	
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/prev/pay/{id}")
@@ -867,7 +884,38 @@ public class NEWDistributorController {
 	private ProductDAO conn_product;
 	@Autowired
 	private OffOrderDao conn_offorder;
+	@Autowired
+	private OrderInfoDAO conn_onlineorder;
 
+	@RequestMapping(value = "/onlineorder/index")
+	public ModelAndView onlineindex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/guolaiwan/onlineorder-list");
+		return mv;
+	}
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/onlineorder/list/{distributorId}")
+	public Object onlineorderList(
+			HttpServletRequest request,@PathVariable long distributorId) throws Exception{
+		List<OrderInfoPO> orderPos=conn_onlineorder.findByDistributorAndSource(distributorId,OrderSource.DISTRIBUTORONLINE);
+		List<OrderInfoVO> vos=DistributeOrderVo.getConverter(OrderInfoVO.class).convert(orderPos, OrderInfoVO.class);
+		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
+		for (OrderInfoVO orderInfoVO : vos) {
+			orderInfoVO.setProductPic(sysConfigPO.getWebUrl()+orderInfoVO.getProductPic());
+		}
+		return vos;
+	}
+	
+	@RequestMapping(value = "/online/orderinfo")
+	public ModelAndView adminOrderInfo(HttpServletRequest request, long orderId) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/guolaiwan/onlineorderInfo");
+		mv.addObject("orderId", orderId);
+		return mv;
+	}
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/getallOfforder", method = RequestMethod.GET)
@@ -926,59 +974,6 @@ public class NEWDistributorController {
 	}
 	
 	
-	@Autowired
-	private DistributorUserDao conn_distributorUser;
-
-	/**
-	 * 分销商登录
-	 * 
-	 */
-	@ResponseBody
-	@JsonBody
-	@RequestMapping(value = "/admin/login", method = RequestMethod.POST)
-	public String distributorLogin(HttpServletRequest request) throws Exception {
-		String phone =  request.getParameter("phone");
-		String password =  request.getParameter("password");
-		if(phone == null || password == null){
-			return "0"; //账号或密码错误
-		}
-		 //根据userId 查询出信息
-		 boolean real = true; 
-		 HttpSession session =  request.getSession();
-		 long userId =(long)session.getAttribute("userId");
-		 List<DistributorPo> dis_list =  conn_distributor.findByField("userId",userId);
-         if(dis_list.size() > 0){
-        	 for(DistributorPo po : dis_list){
-        		 if(phone.equals(po.getPhone()) && password.equals(po.getPassword())){
-        			 if(po.getStatus() != DistributorApplyStatus.PASSED){
-        				 return "2";//正在审核状态中
-        			 }else{
-        				 real = false; 
-        			 }        			 
-        		 }
-        	 }        	        	 
-         }   
-          if(real){
-        	 //查询中间表进行确认登录
-        	List<DistributorUser> dUsers =  conn_distributorUser.findByField("userId", userId);
-        	if(dUsers.size() == 0){
-        		return "3";
-        	}else{
-        	    List<DistributorPo> dist_list  = conn_distributor.findByField("phone", phone);
-        	    //查询出所有用户下的id
-        	    for(DistributorUser user : dUsers){
-        	    	if((user.getDistributorId()+"").equals((dist_list.get(0).getId()+""))){
-        	    		if(dist_list.get(0).getStatus() != DistributorApplyStatus.PASSED){
-        	    			return "2";//正在审核状态中
-        	    		}
-        	    	}else{
-        	    		return "0";
-        	    	}
-        	    }        		      		
-        	}         	        	 
-         } 
-		return "success";
-	}
-
+	
 	
 }

@@ -64,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>分销商品</title>
+<title>我的分销订单</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -439,25 +439,34 @@ html, body {
 	top: 0;
 	text-align: center;
 }
-.message{
-  font-size:14px;
-  height:30px;
-  line-height:30px;
-  margin-left:20px;
-  margin-top:10px;
 
-}
-#regionBar{
- width:100%;
- height:30px;
- background:#18b4ed;
- color:#FFF;
- line-height:30px;
- padding-left:10px;
- font-size:14px;
 
-}
+   #product_table tr td{
+      padding:10px;
+   
+   }
+   .proImage{
+      width:100%;
+      height:100px;
+   
+   }
+   #product_table tr td p{
+      font-size:12px;
+   
+   }
+   #product_table_online tr td p{
+      font-size:12px;
+   
+   }
+   .operation{
+      font-size:12px;
 
+      
+   }
+   .operation a{
+      padding-left:2px;
+      padding-right:2px;
+   }
 
 
 </style>
@@ -468,113 +477,60 @@ html, body {
 <jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
 
 <script type="text/javascript">
-    
+
 	$(function() {
-	
-	    var id='${product.id}';
-	
-	    $(document).on('change','#policy',function(){
-	        var count=$(this).val();
-	        var _uriGetpolicyPrice = window.BASEPATH + 'distributor/policy/price/'+id+'/'+count;
+	    function getList(){
+	        $('#order_table_notpay').children().remove();
+	        $('#order_table_payed').children().remove();
+	        $('#order_table_send').children().remove();
+	        $('#order_table_refunding').children().remove();
+	        $('#order_table_refunded').children().remove();
+	        $('#order_table_test').children().remove();
+	        $('#order_table_received').children().remove();
+	        var _uriQuery = window.BASEPATH + 'distributor/onlineorder/list/${distributorId}';
 				
-			$.get(_uriGetpolicyPrice, null, function(data){
+			$.get(_uriQuery, null, function(data){
 				data = parseAjaxResult(data);
 				if(data === -1) return;
-			    if(data){
-			       $('#product_price').html(data);
+			    if(data && data.length>0){
+			       
+			       for(var i=0;i<data.length;i++){
+			           var html=[];
+				       html.push('<a href="'+window.BASEPATH + 'distributor//online/orderinfo?orderId='+data[i].id+'"');
+					   html.push('class="weui-media-box weui-media-box_appmsg">');
+					   html.push('<div class="weui-media-box__hd">');
+					   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+data[i].productPic+'" alt="">');
+					   html.push('</div>');
+					   html.push('<div class="weui-media-box__bd">');
+					   html.push('<h4 style="width:50%;float:left;font-size:12px" class="weui-media-box__title">'+data[i].productName+'</h4><h4 style="width:25%;float:right" class="weui-media-box__title"></h4>');
+					   html.push('<p style="width:100%;height:15px;font-size:12px" class="weui-media-box__desc">'+data[i].productNum+'(个)/'+data[i].productPrice+'元</p>');
+					   html.push('<p style="width:100%" class="weui-media-box__desc"><div style="float:right;margin-right:38px;font-size:12px;"></div></p>');
+					   html.push('</div>');
+					   html.push('</a>');
+				       if(data[i].orderState=="未付款"){
+				          $('#order_table_notpay').append(html.join(''));
+				       }else if(data[i].orderState=="支付成功"){
+				       	  $('#order_table_payed').append(html.join('')); 
+				       }else if(data[i].orderState=="已发货"){
+				          $('#order_table_send').append(html.join(''));
+				       }else if(data[i].orderState=="申请退款"){
+				          $('#order_table_refunding').append(html.join(''));
+				       }else if(data[i].orderState=="退款成功"){
+				          $('#order_table_refunded').append(html.join(''));
+				       }else if(data[i].orderState=="已验单"){
+				          $('#order_table_test').append(html.join(''));
+				       }else if(data[i].orderState=="已收货"){
+				          $('#order_table_received').append(html.join(''));
+				       }
+			       }
 			    }
 			    
 			});
 	    
-	    });
-	    
-	    $(document).on('click','#applyProduct',function(){
-	    
-	        if($('#selContractPic').val() == ''){
-				$.toast("请上传合同", "forbidden");
-				return false;
-			}
-	        if($('#selContract').val() == ''){
-				$.toast("请上传合同视频", "forbidden");
-				return false;
-			}else{
-		   	    var _uriApplyProduct = window.BASEPATH + 'distributor/apply/product';
-			    var params={};
-			    params.count=$('#policy').val();
-			    params.region=$('#region').val();
-			    params.price=$('#product_price').html();
-			    params.contractPic=$('#selContractPic').val();
-			    params.contractVideo=$('#selContract').val();
-			    params.productId=id;
-			    params.orderId=${orderId};
-				$.post(_uriApplyProduct, $.toJSON(params), function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-				    if(data){
-					$.confirm("确定提交？", function() {
-						location.href=window.BASEPATH + 'distributor/order/info/'+data;
-					  }, function() {
-					  });
-				    }
-				    
-				});				
-			}
-				    
-	    });
-	    
-	    
-	    $(document).on('change','#contract',function(){
-	       
-	       $.showLoading();
-	       setTimeout(function(){
-	           uploadFiles($('#contract')[0],$('#selContract'),$('#showContract'));
-	       
-	       },1000);
-	    });
-	    
-	    $(document).on('change','#contractPic',function(){
-	     
-	       
-	       $.showLoading();
-	       setTimeout(function(){
-	           uploadFiles($('#contractPic')[0],$('#selContractPic'),$('#showContractPic'));
-	       
-	       },1000);
-	    });
-	    
-	    
-	    function uploadFiles(file,submitObj,showObj){  
-	        
-		    var uploadFile = new FormData();
-		    uploadFile.append(file.files[0].name, file.files[0]);
-		    var _upQuery = window.BASEPATH + 'distributor/upload';
-		    if("undefined" != typeof(uploadFile) && uploadFile != null && uploadFile != ""){
-		    		$.ajax({			
-			    		url:_upQuery,		
-			    		type:'POST',	
-			    		data:uploadFile,		
-			    		async: false,  			
-			    		cache: false, 			
-			    		contentType: false, //不设置内容类型			
-			    		processData: false, //不处理数据			
-			    		success:function(data){							
-				    		showObj.attr('src',data.data.webPath);
-				    		submitObj.val(data.data.url);	
-				    		$.hideLoading();	
-			    		},			
-		    			error:function(){
-		    				alert("上传失败！");
-		    									
-		    			}		
-		    		});
-		    	
-              }else {		
-		    		alert("选择的文件无效！请重新选择");
-		      }
-		  }   
-	    
-	    
-	
+	    }
+		
+		getList();
+		
 	});
 </script>
 
@@ -587,70 +543,95 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">分销</div>
+				<div class="header-content">零售订单</div>
 			</div>
 		</div>
 		<div class="content">
-		    <image style="width:100%;height:150px;" src="${product.pic}"/>
-			<div class="message">景区地址：${product.address}</div>
-			<div class="message">开放时间：${product.openTime}</div>
-			<div class="message">客服电话：${product.tel}</div>
-			<div id="regionBar">购买须知</div>
-			<div class="message">
+
+			<div class="weui-tab">
+				<div class="weui-navbar" style="height:40px;line-height:14px;">
+					<a onclick="return false" class="weui-navbar__item weui-bar__item--on" href="#tab1">
+						未支付 </a> <a onclick="return false" class="weui-navbar__item" href="#tab2">已支付</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab3">已发货</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab4">退款中</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab5">已退款</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab6">已验单</a>
+						<a onclick="return false" class="weui-navbar__item" href="#tab7">已收货</a>
+				</div>
+				<div class="weui-tab__bd" style="padding-bottom:50px;">
+					<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+                        
+                          <div id="order_table_notpay" class="weui-panel__bd">
 				
-				    分销地区：${myregion.comName}<input type="hidden" id="region" value="${myregion.id }">
 				
- 
-            </div>
-            
-            <div class="message" style="font-size:16px;text-align:left;width:80px;">分销政策</div>
-            <div class="message" style="margin-top:0">
-				<div style="width:120px;float:left;height:44px;line-height:44px;">选择购票数量：👇</div>
-				<div style="width:100px;;float:left;height:30px;">
-					<select class="weui-select" id="policy" name="policy">
-			            <c:forEach var="poli" items="${product.policys}">
-			                <option value="${poli.count}">${poli.count}</option>
-			            </c:forEach>
-		            </select>
-            	</div>
-            	<div style="width:100px;float:left;height:44px;line-height:44px;">单价：
-            	<span id="product_price">${product.policys[0].price}</span>元</div>
-            </div>
-            
-              <div class="weui-cells__title"><br>上传合同:<input type="hidden" name="contractPicUrl" id="selContractPic" /></div>
-				<div style="width:100%;height:100px;">
-					<div style="margin-left:15px;width:100px;height:100px;"
-						class="weui-uploader__input-box">
-						<input name="contractPic" id="contractPic" class="weui-uploader__input" type="file"
-							accept="image/*" multiple>
+			            </div>
+
+					</div>
+					<div id="tab2" class="weui-tab__bd-item">
+					
+                       <div id="order_table_payed" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
+					</div>
+
+                    <div id="tab3" class="weui-tab__bd-item">
+					
+					  
+					 	<div id="order_table_send" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					</div>
+					<div id="tab4" class="weui-tab__bd-item">
+					
+                       	<div id="order_table_refunding" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
 					</div>
 					
-					<image id="showContractPic" style="margin-left:15px;width:100px;height:100px;"/>
-						
+					<div id="tab5" class="weui-tab__bd-item">
 					
-					
-				</div>
+                       	<div id="order_table_refunded" class="weui-panel__bd">
 				
-				<div class="weui-cells__title">上传合同视频:<input type="hidden" id="selContract" name="contractUrl"/></div>
-				<div style="width:100%;height:100px;">
-					<div style="margin-left:15px;width:100px;height:100px;"
-						class="weui-uploader__input-box">
-						<input name="contract" id="contract" class="weui-uploader__input" type="file"
-							multiple>
+				
+			            </div>
+					
+					
 					</div>
 					
-					<video autoplay controls="controls" id="showContract" style="margin-left:15px;width:100px;height:100px;"/>
+					
+					<div id="tab6" class="weui-tab__bd-item">
+					
+                       	<div id="order_table_test" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
+					</div>
+					
+					<div id="tab7" class="weui-tab__bd-item">
+					
+                       	<div id="order_table_received" class="weui-panel__bd">
+				
+				
+			            </div>
+					
+					
+					</div>
+					
 				</div>
-            
-            
-            
+			</div>
 		</div>
-		
-	
-		<a id="applyProduct" style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;z-index:1000" href="javascript:;" class="weui-btn weui-btn_primary">申请分销</a>
 	</div>
-	<!-- 订单提交表单 -->
-	
+
 </body>
 
 

@@ -154,12 +154,9 @@ public class OrderInfoController extends BaseController {
 			break;
 		case 1:// 已付款
 			orderinfopo = conn_OrderInfo.findOrdersByState(OrderStateType.PAYSUCCESS, dataMap, page, limit);
-			List<OrderInfoPO> orderedOrderpo2 = conn_OrderInfo.findOrdersByState(OrderStateType.PAYFINISH, dataMap,
-					page, limit);
-			orderinfopo.addAll(orderedOrderpo2);
+			
 			count = conn_OrderInfo.countOrdersByState(OrderStateType.PAYSUCCESS, dataMap);
-			int count1 = conn_OrderInfo.countOrdersByState(OrderStateType.PAYFINISH, dataMap);
-			count = count + count1;
+
 			for (OrderInfoPO oipo : orderinfopo) {
 				oipo.setUpdateTime(null);
 				AddressPO address = conn_address.get(oipo.getMailAddress());
@@ -408,8 +405,7 @@ public class OrderInfoController extends BaseController {
 		}
 
 		// 只有支付完成的才可以验单
-		if (order.getOrderState().equals(OrderStateType.PAYSUCCESS)
-				|| order.getOrderState().equals(OrderStateType.PAYFINISH)) {
+		if (order.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
 			order.setOrderState(OrderStateType.TESTED);
 			order.setYdDate(new Date());
 			conn_OrderInfo.save(order);
