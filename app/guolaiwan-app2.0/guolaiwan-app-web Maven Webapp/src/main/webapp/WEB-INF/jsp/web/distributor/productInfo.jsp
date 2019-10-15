@@ -7,7 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 
 <!doctype html>
-<html>
+<html style="background-color: #E5E5E5;">
  <head>
 	<meta charset="UTF-8">
 	<meta name="Generator" content="EditPlus®">
@@ -54,8 +54,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="pc-product-t">
                         <div class="pc-name-info">
                             <h1>${product.productSubtitle}</h1>
-                    			<p class="clearfix pc-rate"><strong>￥${distributorProduct.sellPrice}</strong> <!-- <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span> --></p>
-                            	<p><font size="3px"><strike>￥${product.productPrice}</strike></font></p>
+                    			<p class="clearfix pc-rate"><strong>￥${distributorProduct.sellPrice}</strong><span><font size="3px"><strike>￥${product.productPrice}</strike></font></span> <!-- <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span> --></p>
+                            	
                             	<p>由<a href="#" class="reds">${distributor.shopName}</a> 负责发货，并提供售后服务。</p>
                         </div>
                         <div class="pc-dashed clearfix">
@@ -140,7 +140,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    </c:choose> 
     -->
    
-    <div class="containers clearfix" style="margin-top:20px;">
+    <div class="containers clearfix" style="margin-top:20px;background:#E5E5E5;">
  
         <div class="fl">
         
@@ -168,7 +168,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div> -->
         </div>
         <div class="pc-info fr">
-            <div class="pc-overall">
+            <div class="pc-overall" style="background: fff;">
                 <ul id="H-table1" class="brand-tab H-table1 H-table-shop clearfix ">
                     <li class="cur"><a href="javascript:void(0);">商品介绍</a></li>
                     <li><a href="javascript:void(0);">商品评价<em class="reds">(91)</em></a></li>
@@ -216,12 +216,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
             </div>
             <div class="pc-overall">
-                <ul class="brand-tab H-table H-table-shop clearfix " id="H-table" style="margin-left:0;">
+             <!--    <ul class="brand-tab H-table H-table-shop clearfix " id="H-table" style="margin-left:0;">
                     <li class="cur"><a href="javascript:void(0);">全部评价（199）</a></li>
-                    <!-- <li><a href="javascript:void(0);">好评<em class="reds">（33）</em></a></li>
+                    <li><a href="javascript:void(0);">好评<em class="reds">（33）</em></a></li>
                     <li><a href="javascript:void(0);">中评<em class="reds">（02）</em></a></li>
-                    <li><a href="javascript:void(0);">差评<em class="reds">（01）</em></a></li> -->
-                </ul>
+                    <li><a href="javascript:void(0);">差评<em class="reds">（01）</em></a></li>
+                </ul> -->
                 <!-- <div class="pc-term clearfix">
                     <div class="pc-column">
                         <span class="column1">评价心得</span>
@@ -510,7 +510,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
             </div>
-            <div class="clearfix">
+       <!--      <div class="clearfix" style="display:none">
                 <div class="fr pc-search-g pc-search-gs">
                     <a href="#" class="fl " style="display:none">上一页</a>
                     <a class="current" href="#">1</a>
@@ -524,7 +524,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <a href="javascript:;">1088</a>
                     <a href="javascript:;" class="" title="使用方向键右键也可翻到下一页哦！">下一页</a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>

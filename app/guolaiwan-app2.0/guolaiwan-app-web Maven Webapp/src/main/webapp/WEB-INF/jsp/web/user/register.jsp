@@ -101,9 +101,9 @@ transition: all .3s;
 <!--- footer begin-->
 <footer id="footer">
     <div class="containers">
-        <div class="w" style="padding-top:30px">
+       <!--  <div class="w" style="padding-top:30px">
             <div id="footer-2013">
-                <!-- <div class="links">
+                <div class="links">
                     <a href="">关于我们</a>
                     |
                     <a href="">联系我们</a>
@@ -121,13 +121,13 @@ transition: all .3s;
                     <a href="">销售联盟</a>
                     |
                     <a href="">English site</a>
-                </div> -->
-                <!-- <div style="padding-left:10px">
+                </div>
+                <div style="padding-left:10px">
                     <p style="padding-top:10px; padding-bottom:10px; color:#999">网络文化经营许可证：浙网文[2013]0268-027号| 增值电信业务经营许可证：浙B2-20080224-1</p>
                     <p style="padding-bottom:10px; color:#999">信息网络传播视听节目许可证：1109364号 | 互联网违法和不良信息举报电话:0571-81683755</p>
-                </div> -->
+                </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 </footer>

@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	<p class="head-name"><a href="<%=basePath%>/web/distributor/productList?distributorId=${distributor.id}">${distributor.shopName}</a> </p>
                     	<%-- <p><span class="price">￥${merchant.productPrice}</span></p>
                     	<p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">${merchant.productSaleNum}人购买</span></p>
-                    	 --%><p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
+                    	 --%><!-- <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p> -->
                 	</li>
             	</c:forEach>
             </ul>

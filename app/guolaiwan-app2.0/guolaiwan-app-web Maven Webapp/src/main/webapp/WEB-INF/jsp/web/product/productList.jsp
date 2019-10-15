@@ -5,7 +5,15 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+<style>
+body{
+background: #E5E5E5 !important;
+}
+.feilei{
+display: none !important;
+}
 
+</style>
 <!doctype html>
 <html>
  <head>
@@ -108,8 +116,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	<a href="productInfo?info=${pl.uuid}"> <img width="209px" height="140px" src="${sysConfig.webUrl}${pl.productShowPic}"></a>
                     	<p class="head-name"><a href="productInfo?info=${pl.uuid}">${pl.productName}</a> </p>
                     	<p><span class="price">￥${pl.productPrice}</span></p>
-                    	<p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">${pl.productSaleNum}人购买</span></p>
-                    	<p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
+                    	<p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr" style="float:right;">${pl.productSaleNum}人购买</span></p>
+                    	<!-- <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p> -->
                 	</li>
             	</c:forEach>
             </ul>

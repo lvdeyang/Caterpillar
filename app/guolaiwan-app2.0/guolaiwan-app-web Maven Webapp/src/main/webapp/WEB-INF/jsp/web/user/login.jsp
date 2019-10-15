@@ -34,6 +34,7 @@ margin-right:-60px;
 }
 .login-form{
 background: rgba(157,157,159,0.6);
+border-radius:4px;
 }
 .login-form p,a{
 color:#fff !important;
@@ -94,7 +95,7 @@ color:#fff !important;
                         </div>
                         <!-- 自动登录开始fore4 -->
                         <div class="item item-fore4">
-                        	<div class="safe">
+                        	<div class="safe" style="line-height: 30px;">
                         		<span>
                         			<input type="checkbox" name="chkRememberMe" id="autologin" tabindex="3">
                         			<label for>自动登录</label>

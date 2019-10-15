@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	<p class="head-name"><a href="productInfo?info=${pl.uuid}">${pl.productName}</a> </p>
                     	<p><span class="price">￥${pl.productPrice}</span></p>
                     	<p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">${pl.productSaleNum}人购买</span></p>
-                    	<p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
+                    	<!-- <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p> -->
                 	</li>
             	</c:forEach>
             </ul>
