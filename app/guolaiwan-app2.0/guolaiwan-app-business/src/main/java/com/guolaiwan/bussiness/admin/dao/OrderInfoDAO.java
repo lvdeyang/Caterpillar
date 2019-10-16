@@ -326,7 +326,7 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("userId", Condition.eq, userId);
 		hql.andBy("orderState", Condition.eq, OrderStateType.NOTPAY);
-		hql.orderBy("updateTime", true);
+		hql.orderBy("id", true);
 		List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
 		return orders;
 	}

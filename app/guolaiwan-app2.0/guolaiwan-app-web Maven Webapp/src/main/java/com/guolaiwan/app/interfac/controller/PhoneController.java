@@ -5603,45 +5603,45 @@ public class PhoneController extends WebBaseControll {
 	// 微信支付方法
 	public Map<String, String> weichatPay(long PayMoney, String tradeNum) {
 		Map<String, String> reqData = new HashMap<String, String>();
-		Map<String, String> resData = null;
-		try {
-			GuolaiwanWxPayApp wxPay = GuolaiwanWxPayApp
-					.getInstance("http://" + WXContants.Website + "/website/wxreport/payreport");
-			reqData.put("total_fee", "" + PayMoney); // 总价
-			reqData.put("attach", "test"); // 订单的自定义数据
-			reqData.put("body", "guolaiwan-order"); // 内容
-			reqData.put("out_trade_no", tradeNum); // 订单号
-			reqData.put("spbill_create_ip", "192.165.56.64");
-			reqData.put("trade_type", "APP"); // 支付类型APP
-			reqData.put("device_info", "WEB");
-			resData = wxPay.pay(reqData);
-			System.out.println("7" + resData);
-			String noncestr = resData.get("nonce_str");
-			String partnerid = resData.get("mch_id");
-			String prepay_id = resData.get("prepay_id");
+		Map<String, String> resData = new HashMap<String, String>();
+		//try {
+			//GuolaiwanWxPayApp wxPay = GuolaiwanWxPayApp
+			//		.getInstance("http://" + WXContants.Website + "/website/wxreport/payreport");
+			//reqData.put("total_fee", "" + PayMoney); // 总价
+			//reqData.put("attach", "test"); // 订单的自定义数据
+			//reqData.put("body", "guolaiwan-order"); // 内容
+			//reqData.put("out_trade_no", tradeNum); // 订单号
+			//reqData.put("spbill_create_ip", "192.165.56.64");
+			//reqData.put("trade_type", "APP"); // 支付类型APP
+			//reqData.put("device_info", "WEB");
+			//resData = wxPay.pay(reqData);
+			//System.out.println("7" + resData);
+			//String noncestr = resData.get("nonce_str");
+			//String partnerid = resData.get("mch_id");
+			//String prepay_id = resData.get("prepay_id");
 
-			resData.put("noncestr", noncestr);
-			resData.put("package", "Sign=WXPay");
-			resData.put("partnerid", partnerid);
-			resData.put("prepayid", prepay_id);
-			resData.put("timestamp", "" + new Date().getTime() / 1000);
-			resData.remove("nonce_str");
-			resData.remove("return_msg");
-			resData.remove("mch_id");
-			resData.remove("prepay_id");
-			resData.remove("device_info");
-			resData.remove("trade_type");
-			resData.remove("result_code");
-			resData.remove("return_code");
-			resData.remove("sign");
-			System.out.println(resData);
-			resData.put("sign", WXPayUtil.generateSignature(resData, GuolaiwanWxPayApp.AppKey, SignType.MD5));
+			//resData.put("noncestr", noncestr);
+			//resData.put("package", "Sign=WXPay");
+			//resData.put("partnerid", partnerid);
+			//resData.put("prepayid", prepay_id);
+			//resData.put("timestamp", "" + new Date().getTime() / 1000);
+			//resData.remove("nonce_str");
+			//resData.remove("return_msg");
+			//resData.remove("mch_id");
+			//resData.remove("prepay_id");
+			//resData.remove("device_info");
+			//resData.remove("trade_type");
+			//resData.remove("result_code");
+			//resData.remove("return_code");
+			//resData.remove("sign");
+			//System.out.println(resData);
+			//resData.put("sign", WXPayUtil.generateSignature(resData, GuolaiwanWxPayApp.AppKey, SignType.MD5));
 
-		} catch (Exception e) {
+		//} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println(e.getMessage());
-		}
-		System.out.println(resData.toString());
+		//	System.out.println(e.getMessage());
+		//}
+		//System.out.println(resData.toString());
 		return resData;
 	}
 
