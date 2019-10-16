@@ -60,13 +60,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             
                              <c:choose>
                     		<c:when test="${isDistributor==1}">
-                    			<p class="clearfix pc-rate"><strong>￥${distributor.distributorPrice}</strong> <!-- <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span> --></p>
-                            	<p><font size="3px"><strike>￥${product.productOldPrice}</strike></font></p>
+                    			<p class="clearfix pc-rate"><strong>￥${distributor.distributorPrice}</strong><span><font size="3px"><strike>￥${product.productOldPrice}</strike></font></span> <!-- <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span> --></p>
+                            	
                             	<p>由<a href="#" class="reds">${distributor.shopName}</a> 负责发货，并提供售后服务。</p>
                     		</c:when>
                     		<c:otherwise>
-                    			<p class="clearfix pc-rate"><strong>￥${product.productPrice}</strong> <!-- <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span> --></p>
-                           		<p><font size="3px"><strike>￥${product.productOldPrice}</strike></font></p>
+                    			<p class="clearfix pc-rate"><strong>￥${product.productPrice}</strong><span><font size="3px"><strike>￥${product.productOldPrice}</strike></font></span> <!-- <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span> --></p>
+                           		<%-- <p><font size="3px"><strike>￥${product.productOldPrice}</strike></font></p> --%>
                            	 	<p>由<a href="#" class="reds">${product.productMerchantName}</a> 负责发货，并提供售后服务。</p>
                     		</c:otherwise>
                     		</c:choose>
@@ -249,7 +249,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             <div class="pc-overall">
                 <ul class="brand-tab H-table H-table-shop clearfix " id="H-table" style="margin-left:0;">
-                    <li class="cur"><a href="javascript:void(0);">全部评价（199）</a></li>
+                    <!-- <li class="cur"><a href="javascript:void(0);">全部评价（199）</a></li> -->
                     <!-- <li><a href="javascript:void(0);">好评<em class="reds">（33）</em></a></li>
                     <li><a href="javascript:void(0);">中评<em class="reds">（02）</em></a></li>
                     <li><a href="javascript:void(0);">差评<em class="reds">（01）</em></a></li> -->
@@ -542,7 +542,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
             </div>
-            <div class="clearfix">
+            <!-- <div class="clearfix">
                 <div class="fr pc-search-g pc-search-gs">
                     <a href="#" class="fl " style="display:none">上一页</a>
                     <a class="current" href="#">1</a>
@@ -556,7 +556,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <a href="javascript:;">1088</a>
                     <a href="javascript:;" class="" title="使用方向键右键也可翻到下一页哦！">下一页</a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>

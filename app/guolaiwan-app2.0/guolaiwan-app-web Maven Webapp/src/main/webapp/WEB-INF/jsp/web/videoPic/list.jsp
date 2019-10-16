@@ -80,8 +80,9 @@ String weburl=WXContants.Website;
             <div class="pc-search clearfix" style="padding:40px 100px 0 100px">
                 <div style="font-size:16px;float:left">大家都在写什么?</div>
                 <div class="fr pc-search-in" style="overflow: hidden;">
-                   	<input type="text" id="pc-name"" style="height:26px;width:100px;padding-left:10px;border-top-left-radius: 30px;border-bottom-left-radius: 30px;">
-                    <a style="border-top-right-radius: 30px;text-align: center;width:65px;padding:0;border-bottom-right-radius: 30px;" href="javascript:search()" class="pc-search-a" >搜索</a>
+                <a style="border-top-right-radius: 30px;text-align: center;width:65px;padding:0;border-bottom-right-radius: 30px;float:right" href="javascript:search()" class="pc-search-a" >搜索</a>
+                   	<input type="text" id="pc-name"" style="height:26px;width:100px;margin:0;padding-left:10px;border-top-left-radius: 30px;border-bottom-left-radius: 30px;float:right">
+                    
                 </div>
             </div>
    

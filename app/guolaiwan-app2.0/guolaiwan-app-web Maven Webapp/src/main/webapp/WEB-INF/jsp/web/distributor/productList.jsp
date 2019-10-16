@@ -5,7 +5,14 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-
+<style>
+.wei:hover{background: rgba(0,0,0,0) !important;
+ transition: all 2s !important;
+}
+.search-text{
+height:36px !important;
+}
+</style>
 <!doctype html>
 <html>
  <head>
@@ -46,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
         <div class="pc-term">
             <div class="clearfix pc-search-p">
-                <div class="fl pc-search-e"><a href="#" class="cur">销量</a><a href="#">价格</a><a href="#">评价</a><a href="#">上架时间</a></div>
+                <div class="fl pc-search-e"><!-- <a href="#" class="cur">销量</a> --><a href="#">价格</a><a href="#">评价</a><a href="#">上架时间</a></div>
                 <div class="fr pc-search-v">
                     <ul>
                         <li><input type="checkbox"><a href="#">有货</a> </li>
@@ -60,15 +67,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <ul class="clearfix" id="productList">
             	<c:forEach items="${productList}" var="pl">
             		<li>
-                    	<a href="<%=basePath%>web/distributor/productInfo?info=${pl.distributorProductUUID}"> <img width="209px" height="140px" src="${sysConfig.webUrl}${pl.productShowPic}"></a>
-                    	<p class="head-name"><a href="<%=basePath%>product/productInfo?info=${pl.uuid}&distributor=${distributor.id}">${pl.productName}</a> </p>
-                    	<p><span class="price">￥${pl.sellPriceStr}</span></p>
-                    	<p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">${pl.productSaleNum}人购买</span></p>
-                    	<p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
+                    	<p style="position: relative;"><a class="wei" style="height:140px;width:209px;background:rgba(0,0,0,0.6);display: inline-block;position: absolute;z-index:11;top: 0;left: 0;bottom: 0;right: 0;border-radius:4px;overflow: hidden;" href="<%=basePath%>web/distributor/productInfo?info=${pl.distributorProductUUID}"> </a><img style="border-radius:4px;height:140px;width:209px;z-index:1;" width="209px" height="140px" src="${sysConfig.webUrl}${pl.productShowPic}"></p>
+                    	<p class="head-name" style="width:209px;height:30px;line-height: 30px;padding:0;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><a class="wei" style="height:140px;width:209px;background:rgba(0,0,0,0.6);display: inline-block;position: absolute;z-index:11;top: 0;left: 0;bottom: 0;right: 0;border-radius:4px;overflow: hidden;" href="<%=basePath%>product/productInfo?info=${pl.uuid}&distributor=${distributor.id}">${pl.productName}</a> </p>
+                    	<p><span class="price" style="font-weight:bold;">￥${pl.sellPriceStr}</span></p>
+                    	<p class="head-futi clearfix"><span class="fl" style="color:#2BAD4A;">好评度：90% </span> <span class="fr" style="float: right;color:#E4393C;">${pl.productSaleNum}人购买</span></p>
+                    	<!-- <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p> -->
                 	</li>
             	</c:forEach>
             </ul>
-            
+            	
 
             <div class="clearfix">
             ${pages}
