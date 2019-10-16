@@ -85,6 +85,7 @@ import com.guolaiwan.app.web.admin.vo.TodayHotSearchVO;
 import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.app.web.admin.vo.VPCommentVO;
 import com.guolaiwan.app.web.admin.vo.VideoPicVO;
+import com.guolaiwan.app.web.publicnum.vo.BundleOrderVo;
 import com.guolaiwan.app.web.webScoket.WSManager;
 import com.guolaiwan.app.web.website.alisms.controller.Alisms;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
@@ -96,6 +97,7 @@ import com.guolaiwan.bussiness.admin.dao.ActivityBundleDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
 import com.guolaiwan.bussiness.admin.dao.AuctionDAO;
+import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.CarouselDAO;
 import com.guolaiwan.bussiness.admin.dao.ChildPicAndContentDAO;
 import com.guolaiwan.bussiness.admin.dao.ChildProductDAO;
@@ -149,6 +151,7 @@ import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
 import com.guolaiwan.bussiness.admin.po.AuctionPO;
+import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.CarouselPO;
 import com.guolaiwan.bussiness.admin.po.ChildPicAndContentPO;
 import com.guolaiwan.bussiness.admin.po.ChildProductPO;
@@ -2684,8 +2687,11 @@ public class AppController extends WebBaseControll {
 		return success();
 	}
 
+	
+	@Autowired
+	BundleOrderDAO conn_bundleorder;
 	/**
-	 * 订单：结算
+	 * 
 	 * 
 	 * @param request
 	 * @return
@@ -2708,32 +2714,12 @@ public class AppController extends WebBaseControll {
 		Long[] orderIds = new Long[retrievals.size()];// 订单号
 		String[] nums = new String[retrievals.size()];// 商品数量
 		String[] pNames = new String[retrievals.size()];// 商品名
+
 		long allMoney = 0l;
 		for (int i = 0; i < retrievals.size(); i++) {
 			long orderId = retrievals.getJSONObject(i).getLong("orderId");
-			/*
-			 * long productId =
-			 * retrievals.getJSONObject(i).getLong("productId"); long productNum
-			 * = retrievals.getJSONObject(i).getLong("productNum");
-			 */
 			OrderInfoPO order = conn_order.get(orderId);
-			/*
-			 * ProductPO product = conn_product.get(productId);
-			 * 
-			 * order.setProductNum(productNum); //个数 long payMoney = productNum
-			 * * (product.getProductPrice()); long orderAllMoney = payMoney;
-			 * order.setOrderAllMoney(orderAllMoney); //总金额
-			 * order.setPayMoney(payMoney); //总金额 // 用户获得的积分数 long integralNum =
-			 * productNum * product.getProductntegral();
-			 * order.setIntegralNum(integralNum); // 商家获得的订单佣金金额(分) long
-			 * proportionMoney; long proportion =
-			 * product.getProductCommissionPrice(); if
-			 * (product.getProductCommissionCode() == 1) { proportionMoney =
-			 * productNum * product.getProductPrice() * proportion / 100; } else
-			 * { proportionMoney = productNum * proportion; }
-			 * order.setProportionMoney(proportionMoney);
-			 * conn_order.saveOrUpdate(order);
-			 */
+			
 			if (addressId != null && addressId.length() != 0) {
 				order.setMailAddress(Long.parseLong(addressId));
 			}
@@ -2747,6 +2733,13 @@ public class AppController extends WebBaseControll {
 		String orderIdStr = StringUtils.join(orderIds, "A");
 		String numsStr = StringUtils.join(nums, "A");
 		String pNamesStr = StringUtils.join(pNames, "A");
+		if(orderIds.length>1){
+			BundleOrder order = new BundleOrder();
+			order.setOrderStr(orderIdStr);
+			conn_bundleorder.save(order);
+			orderIdStr = "bundle-" + orderIdStr;
+		}
+
 		System.out.println("numsStr：allMoney：pNamesStr：numsStr--" + numsStr + allMoney + pNamesStr + orderIdStr);
 		// 调微信和支付宝
 		if (paytype.equals("WEICHAT")) { // 微信
@@ -2925,7 +2918,7 @@ public class AppController extends WebBaseControll {
 
 			default:
 				break;
-			}
+			}	
 		} else if (uType.equals("MERCHANT")) {
 			UserInfoPO user = conn_user.get(userId);
 			MerchantPO merchant = user.getMerchant();
@@ -3743,12 +3736,12 @@ public class AppController extends WebBaseControll {
 			Long comId) throws Exception {
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<ProductPO> products = conn_product.findByPsTypeCom(comId, page, pageSize);
+		List<ProductPO> products = conn_product.getPageIntegralGoods(comId, pageSize,page);
 		List<ProductVO> _products = ProductVO.getConverter(ProductVO.class).convert(products, ProductVO.class);
 		for (ProductVO productVO : _products) {
 			productVO.setProductShowPic(sysConfig.getWebUrl() + productVO.getProductShowPic());
 		}
-		int count = conn_product.countByPsTypeCom(comId);
+		int count = conn_product.countIntegralGoods(comId);
 		dataMap.put("products", _products);
 		dataMap.put("count", count);
 		return success(dataMap);

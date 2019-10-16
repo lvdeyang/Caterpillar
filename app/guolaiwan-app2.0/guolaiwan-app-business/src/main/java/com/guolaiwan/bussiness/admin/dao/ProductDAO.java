@@ -135,6 +135,21 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 		hql.andBy("integralGoods", Condition.eq, 1);
 		return findByHql(hql);
 	}
+	
+	public List<ProductPO> getPageIntegralGoods(long comId,int pageSize,int pageNum) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("integralGoods", Condition.eq, 1);
+		hql.andBy("comId",Condition.eq,comId);
+		return findByHql(hql, pageNum, pageSize);
+	}
+	
+	public int countIntegralGoods(long comId) {
+		CountHql hql = this.newCountHql();
+		hql.andBy("integralGoods", Condition.eq, 1);
+		hql.andBy("comId",Condition.eq,comId);
+		return countByHql(hql);
+	}
+	
 
 	/**
 	 * 鑾峰彇鍟嗗鐨勬渶灏忎环閽�
