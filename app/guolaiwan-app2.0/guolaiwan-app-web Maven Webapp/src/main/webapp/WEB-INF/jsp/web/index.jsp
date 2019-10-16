@@ -268,7 +268,7 @@ String weburl=WXContants.Website;
                		hotList = msg.hotProducts;
                		var hotStr="";
                     for(var i=0;i<hotList.length;i++){
-                    	hotStr = hotStr+"<li><a href='"+path+"product/productInfo?info="+hotList[i].uuid+"'><div style='width:210px;height:140px;overflow: hidden;'><img  src='"+webUrl+hotList[i].productShowPic+
+                    	hotStr = hotStr+"<li><a href='"+path+"product/productInfo?info="+hotList[i].uuid+"'><div style='width:210px;height:140px;overflow: hidden;border-radius:2px;'><img  src='"+webUrl+hotList[i].productShowPic+
                     			 "'></div><p class='head-name pc-pa10'>"+hotList[i].productName+"<br/><span style='color:#ea4949'>销量："+hotList[i].productSaleNum
                     		  	 +"</span></p><p class='label-default'>预订</p></a></li>";
                     }
@@ -626,7 +626,7 @@ $(function(){
                             	<c:forEach items="${hotProducts}" var="hpro">
                                 <li>
                                     <a href="<%=basePath%>product/productInfo?info=${hpro.uuid}">
-                                    <div style="width:210px;height:140px;overflow: hidden;">
+                                    <div style="width:210px;height:140px;overflow: hidden;border-radius:2px;">
                                         <img  src="${sysconfig.webUrl}${hpro.productShowPic}">
                                     </div>   
                                         <p class="head-name pc-pa10">${hpro.productName}<br/><span style="color:#ea4949">销量：${hpro.productSaleNum}</span></p>

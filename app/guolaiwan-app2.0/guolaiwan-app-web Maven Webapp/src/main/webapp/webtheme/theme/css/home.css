@@ -184,7 +184,7 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .yScrollListInList ul{width:2238px;height:275px;position:absolute;top:0;left:60px;overflow:hidden;}
 .yScrollListInList ul li{width:200px;height:275px;float:left;margin-right:40px; text-align:left;}
 
-.yScrollListInList ul li img{width:210px;height:140px;display:block;margin-left:10px;margin-top:12px; transition:left 0.3s ease 0s; position:relative; left:0;}
+.yScrollListInList ul li img{width:210px;height:140px;display:block;margin-top:12px; transition:left 0.3s ease 0s; position:relative; left:0;}
 .yScrollListInList ul li img:hover {left:-8px;}
 /*.yScrollListInList ul li img{width:140px;height:140px;display:block;margin-left:10px;margin-top:12px;  position:relative; left:0; transform:scaleY(1); transition:all 0.6s ease-in-out 0s;}*/
 /*.yScrollListInList ul li img:hover {transform:scale(1.2);}*/
@@ -300,7 +300,7 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .slider-extra ul li a {width:35px; height:9px; display:block;}
 .slider-extra ul .cur {background:url("../icon/lii.png") no-repeat;}
 
-.pc-nav-item {font-size:14px; color:#333; padding:14px 0; ;}
+.pc-nav-item {font-size:14px; color:#333; }
 .pc-nav-item .pc-title {font-size:18px; color:#333; font-weight:700;}
 .time-border-list {padding:40px 85px;}
 .time-border-list  .label-default {background: url("../icon/icon-lc.png") no-repeat; color:#fff; font-size:20px; height:36px; line-height:36px; text-align:left; padding:0; padding-left:4px; margin-top:5px; width:108px;}
@@ -334,7 +334,7 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .pc-with em {font-style:normal; color:#8f8f8f; padding:0 5px;}
 .pc-search-e a {background:#f5f5f5; border-radius:3px; border:1px solid #e0e0e0; padding:0.4em 1.5em; display:block; float:left; margin-right:10px;}
 .pc-search-p {padding:20px 105px;}
-.pc-search-e .cur {color:#fff; background:#e4393c; border-radius:3px; border:1px solid #e4393c;}
+.pc-search-e .cur {color:#fff; background:#2BAD4A; border-radius:3px; border:1px solid #2BAD4A;}
 .pc-search-e a:hover {color:#fff; background:#2BAD4A; border-radius:3px; border:1px solid #fff;}
 .pc-search-v {padding-top:6px;}
 .pc-search-v ul li {float:left;margin:0 10px;}
