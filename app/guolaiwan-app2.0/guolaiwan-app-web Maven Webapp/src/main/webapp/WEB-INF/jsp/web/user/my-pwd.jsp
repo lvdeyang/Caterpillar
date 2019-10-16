@@ -4,6 +4,48 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<style> 
+  #submit,.member-head{ 
+       background: -ms-linear-gradient(top, #C40000, #FF4401) !important;       /* IE 10 */  
+       background:-moz-linear-gradient(top,#C40000,#FF4401) !important;/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#C40000), to(#FF4401)) !important;/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#C40000), to(#FF4401)) !important;      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #C40000, #FF4401) !important;  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #C40000, #FF4401) !important; /*Opera 11.10+*/  
+   		}   
+		.member-left{
+   		 margin-top:53px !important;
+   		}
+   		.member-apart{
+   		  padding:0 !important;
+   		  height:50px !important;
+   		  line-height: 25px !important; 
+   		  width:208px !important;
+   		  background: #fff !important;
+   		}
+   		.member-apart img{
+   		  width:35px !important;
+   		  height:35px !important;;
+   		  margin:7.5px 0 0 20px !important;
+   		}
+   		.login-input{
+   		width:auto !important;
+   		padding-left:90px !important;
+   		margin:25px auto !important;
+   		text-align: center;
+   		
+   		}
+   		input[type=password]:focus {
+   		border: 1px solid #C40000 !important;
+   		}
+   		.login-button a{
+   		 width:250px !important;
+   		}
+   		.search-text{
+height:36px !important;
+}
+</style>
 <!doctype html>
 <html>
  <head>

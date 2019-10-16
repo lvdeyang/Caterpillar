@@ -70,18 +70,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      	.member-circle .ci1.with-checkbox{width:370px !important;}
      	
      	/* 结算全部 */
-     	.count-all-info{height:60px; line-height:60px; text-align:right; border:1px solid #e0e0e0; font-size:16px;}
+     	.count-all-info{height:42px; line-height:42px; text-align:right; border:1px solid #e0e0e0; font-size:16px;}
      	.count-all-info label, 
      	.count-all-info #total-price{margin-right:50px;}
      	.count-all-info #count-all{height:100%; width:100px; display:inline-block; background-color:#ea4949; text-align:center; color:#fff; cursor:pointer; border:0;}
     
        #count-all,.member-head{ 
-       background: -ms-linear-gradient(top, #FF5F00, red);       /* IE 10 */  
-       background:-moz-linear-gradient(top,#FF5F00,red);/*火狐*/   
-       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#FF5F00), to(red));/*谷歌*/   
-       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#FF5F00), to(red));      /* Safari 4-5, Chrome 1-9*/
-       background: -webkit-linear-gradient(top, #FF5F00, red);  /*Safari5.1 Chrome 10+*/  
-       background: -o-linear-gradient(top, #FF5F00, red); /*Opera 11.10+*/  
+       background: -ms-linear-gradient(top, #C40000, #FF4401);       /* IE 10 */  
+       background:-moz-linear-gradient(top,#C40000,#FF4401);/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#C40000), to(#FF4401));/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#C40000), to(#FF4401));      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #C40000, #FF4401);  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #C40000, #FF4401); /*Opera 11.10+*/  
    		}   
    		.member-whole ul .cur a{
    		  color:#FF4401;
@@ -94,6 +94,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    		}
    		.member-whole,.member-whole ul li a{
    		background:#DADADA;
+   		}
+   		.member-left{
+   		 margin-top:53px;
+   		}
+   		.member-apart{
+   		  padding:0;
+   		  height:50px;
+   		  line-height: 25px;
+   		  width:208px;
+   		  background: #fff;
+   		}
+   		.member-apart img{
+   		  width:35px;
+   		  height:35px;
+   		  margin:7.5px 0 0 20px;
+   		}
+   		.pc-search-g .pc-search-u:hover{
+   		  background: #C40000 !important;
+   		  border: 1px solid #C40000 !important;
    		}
      </style>
  </head>
