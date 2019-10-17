@@ -300,7 +300,7 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .slider-extra ul li a {width:35px; height:9px; display:block;}
 .slider-extra ul .cur {background:url("../icon/lii.png") no-repeat;}
 
-.pc-nav-item {font-size:14px; color:#333; }
+.pc-nav-item {font-size:14px; color:#333;height:40px;line-height:40px;padding:0 46px; }
 .pc-nav-item .pc-title {font-size:18px; color:#333; font-weight:700;}
 .time-border-list {padding:40px 85px;}
 .time-border-list  .label-default {background: url("../icon/icon-lc.png") no-repeat; color:#fff; font-size:20px; height:36px; line-height:36px; text-align:left; padding:0; padding-left:4px; margin-top:5px; width:108px;}
@@ -655,7 +655,7 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .pc-label { text-align:left; padding-left:40px; margin-top:10px;}
 .pc-select { text-align:left;}
 .pc-label label {width:200px; display:block; padding-bottom:5px; }
-.pc-label input { height:18px;line-height:18px; padding:6px; width:220px;}
+.pc-label input { height:35px;line-height:35px; padding:6px; width:220px;}
 
 
 

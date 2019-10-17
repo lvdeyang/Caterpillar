@@ -4,6 +4,51 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<style> 
+  #submit,.member-head{ 
+       background: -ms-linear-gradient(top, #D6002A, #B40F02) !important;       /* IE 10 */  
+       background:-moz-linear-gradient(top,#D6002A,#B40F02) !important;/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#D6002A), to(#B40F02)) !important;/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#D6002A), to(#B40F02)) !important;      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #D6002A, #B40F02) !important;  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #D6002A, #B40F02) !important; /*Opera 11.10+*/  
+   		}   
+		.member-left{
+   		 margin-top:53px !important;
+   		}
+   		.member-apart{
+   		  padding:0 !important;
+   		  height:50px !important;
+   		  line-height: 25px !important; 
+   		  width:208px !important;
+   		  background: #fff !important;
+   		}
+   		.member-apart img{
+   		  width:35px !important;
+   		  height:35px !important;;
+   		  margin:7.5px 0 0 20px !important;
+   		}
+   		.login-input{
+   		width:auto !important;
+   		padding-left:90px !important;
+   		margin:25px auto !important;
+   		text-align: center;
+   		
+   		}
+   		input[type=password]:focus {
+   		border: 1px solid #C40000 !important;
+   		}
+   		.login-button a{
+   		 width:250px !important;
+   		}
+   		.search-text{
+height:36px !important;
+}
+.pullDownList{
+ display: none !important;
+}
+</style>
 <!doctype html>
 <html>
  <head>
@@ -68,11 +113,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <form action="" class="layui-form">
                     <div class="login-input">
                         <label><i class="heart">*</i>原密码：</label>
-                        <input type="password" class="list-input1" id="userPassword" name="userPassword" placeholder="">
+                        <input type="password" class="list-input1" id="userPassword" name="userPassword" placeholder="请您输入原密码">
                     </div>
                     <div class="login-input">
                         <label><i class="heart">*</i>请设置密码：</label>
-                        <input type="password" class="list-input" id="newPassword" name="newPassword" lay-verType="tips" lay-verify="required|newPassword" placeholder="请设置密码">
+                        <input type="password" class="list-input" id="newPassword" name="newPassword" lay-verType="tips" lay-verify="required|newPassword" placeholder="请设置新密码">
                     </div>
                     <div class="login-input">
                         <label><i class="heart">*</i>请确认密码：</label>

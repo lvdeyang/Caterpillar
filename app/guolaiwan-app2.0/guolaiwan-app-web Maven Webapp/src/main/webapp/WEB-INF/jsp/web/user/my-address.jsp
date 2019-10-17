@@ -4,6 +4,45 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style>
+      .member-left{
+   		 margin-top:53px !important;
+   		}
+      .member-apart{
+   		  padding:0 !important;
+   		  height:50px !important;
+   		  line-height: 25px !important; 
+   		  width:208px !important;
+   		  background: #fff !important;
+   		}
+		.member-apart img{
+   		  width:35px !important;
+   		  height:35px !important;;
+   		  margin:7.5px 0 0 20px !important;
+   		}
+   		.login-input{
+   		width:auto !important;
+   		padding-left:90px !important;
+   		margin:25px auto !important;
+   		text-align: center;
+   		
+   		}
+   		  #submit,.member-head{ 
+       background: -ms-linear-gradient(top, #D6002A, #B40F02) !important;       /* IE 10 */  
+       background:-moz-linear-gradient(top,#D6002A,#B40F02) !important;/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#D6002A), to(#B40F02)) !important;/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#D6002A), to(#B40F02)) !important;      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #D6002A, #B40F02) !important;  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #D6002A, #B40F02) !important; /*Opera 11.10+*/  
+   		} 
+   		   		.search-text{
+height:36px !important;
+}
+  select{
+   height:35px;
+   line-height: 35px;
+  }
+</style>
 <!DOCTYPE html>
 <html>
  <head>
@@ -137,15 +176,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="member-heels fl"><h2>地址管理</h2></div>
             </div>
             
-            <div class="member-border">
-                <div class="member-newly"><a class="fr pc-order-add btn1" href="#"><b>新增收货地址</b></a></div>
-                <div class="member-sites">
+            <div class="member-border" style="width:1200px;">
+                <div class="member-newly" ><a class="fr pc-order-add btn1" href="#"><b>新增收货地址</b></a></div>
+                <div class="member-sites" style="float:right">
                     <ul>
                     
                       <c:forEach items="${addresses}" var="address">
-                        <li class="clearfix">
+                        <li class="clearfix" style="width:937px;">
                         	<input type="hidden" value="${address.id}" name="addressId" >
-                            <div class="user-info1 fl clearfix">
+                            <div class="user-info1 fl clearfix" style="float:left;">
                                 <div class="user-info">
                                     <span class="info1">收货人：</span>
                                     <span class="info2">${address.consigneeName}</span>

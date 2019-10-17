@@ -19,7 +19,7 @@
 .login-switch ul .cur{ width:224px; height:33px; line-height:32px; float:left; text-align:center; font-size:15px;  border-top:1px solid #e0e0e0; border-left:1px solid #e0e0e0; border-right:1px solid #e0e0e0; border-bottom:none; margin-left:15px; background:#fff; margin-bottom:-2px;}
 .login-input {width:100%; margin:10px auto; overflow:hidden; text-align: center;}
 .login-input label { width:190px; height:40px; line-height:40px; text-align:right; padding-right:10px; float:left; font-size:15px;}
-.login-input input { width:300px; height:40px; line-height:40px; text-align:left;  padding-left:5px;   float:left; border:1px solid #e0e0e0; font-size:14px; background:#fff}
+.login-input input { width:300px; height:40px; line-height:40px; text-align:left;  padding-left:5px;   float:left;  font-size:14px; background:#fff}
 .login-input .obtain { width:106px; height:40px; line-height:40px; text-align:center;  padding-left:0;   float:left; border:1px solid #e0e0e0; font-size:12px;  display:block; background:#f7f7f7; margin-left:15px;}
 .login-input input:focus { border:1px solid #2BAD4A;}
 .login-input .list-input {background:#fff}

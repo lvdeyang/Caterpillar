@@ -7,8 +7,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div class="member-left fl" style="border: 1px solid #e4eaee;">
     <div class="member-apart clearfix">
         <div class="fl"><a href="#"><img style="border-radius:50%;" src="<%=path%>/lib/images/logo.png"></a></div>
-        <div class="fl" >
-            <p style="line-height:50px;">手机号：</p>
+        <div class="fl" style="padding-left:20px;">
+            <p>手机号：</p>
             <p><a href="#">${user.userPhone}</a></p>
            <%--  <p>过来玩ID：</p>
             <p>${user.id}</p> --%>
