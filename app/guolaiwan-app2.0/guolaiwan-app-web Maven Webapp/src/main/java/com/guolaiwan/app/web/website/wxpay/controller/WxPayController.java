@@ -295,7 +295,8 @@ public class WxPayController extends BaseController {
 					}
 				}else{
 					//暂时把阿里退款放在这里了
-					AliAppOrderInfo.getInstance().refund(orderId, (double)(amount/100));
+					double allMoney = ((double) amount) / 100;
+					AliAppOrderInfo.getInstance().refund(orderId,allMoney);
 				}
 				return result;
 		}else{
