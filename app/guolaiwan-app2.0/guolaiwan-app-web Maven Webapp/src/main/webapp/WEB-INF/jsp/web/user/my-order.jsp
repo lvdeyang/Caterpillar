@@ -76,12 +76,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      	.count-all-info #count-all{height:100%; width:100px; display:inline-block; background-color:#ea4949; text-align:center; color:#fff; cursor:pointer; border:0;}
     
        #count-all,.member-head{ 
-       background: -ms-linear-gradient(top, #C40000, #FF4401);       /* IE 10 */  
-       background:-moz-linear-gradient(top,#C40000,#FF4401);/*火狐*/   
-       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#C40000), to(#FF4401));/*谷歌*/   
-       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#C40000), to(#FF4401));      /* Safari 4-5, Chrome 1-9*/
-       background: -webkit-linear-gradient(top, #C40000, #FF4401);  /*Safari5.1 Chrome 10+*/  
-       background: -o-linear-gradient(top, #C40000, #FF4401); /*Opera 11.10+*/  
+       background: -ms-linear-gradient(top, #D6002A, #B40F02) !important;       /* IE 10 */  
+       background:-moz-linear-gradient(top,#D6002A,#B40F02) !important;/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#D6002A), to(#B40F02)) !important;/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#D6002A), to(#B40F02)) !important;      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #D6002A, #B40F02) !important;  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #D6002A, #B40F02) !important; /*Opera 11.10+*/  
    		}   
    		.member-whole ul .cur a{
    		  color:#FF4401;

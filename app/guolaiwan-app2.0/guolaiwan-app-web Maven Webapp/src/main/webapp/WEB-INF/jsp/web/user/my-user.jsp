@@ -4,6 +4,35 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+<style>
+
+ .member-left{
+   		 margin-top:53px !important;
+   		}
+      .member-apart{
+   		  padding:0 !important;
+   		  height:50px !important;
+   		  line-height: 25px !important; 
+   		  width:208px !important;
+   		  background: #fff !important;
+   		}
+		.member-apart img{
+   		  width:35px !important;
+   		  height:35px !important;;
+   		  margin:7.5px 0 0 20px !important;
+   		}
+   		  #submit,.member-head{ 
+       background: -ms-linear-gradient(top, #D6002A, #B40F02) !important;       /* IE 10 */  
+       background:-moz-linear-gradient(top,#D6002A,#B40F02) !important;/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#D6002A), to(#B40F02)) !important;/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#D6002A), to(#B40F02)) !important;      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #D6002A, #B40F02) !important;  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #D6002A, #B40F02) !important; /*Opera 11.10+*/  
+   		} 
+   		   		.search-text{
+height:36px !important;
+}
+</style>
 <!doctype html>
 <html>
  <head>
@@ -73,8 +102,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="member-heels fl"><h2>我的账户</h2></div>
             </div>
             <div class="member-border">
-               <div class="member-secure clearfix">
-                   <div class="member-extent fl">
+               <div class="member-secure clearfix" style="width:1200px;">
+                   <div class="member-extent fl" style="margin-left:25px;">
                        <h2 class="fl">安全级别</h2>
                        <ul class="fl">
                            <li class="on"></li>
@@ -91,8 +120,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        <span class="fl">较高</span>
                    </div>
                    <div class="fr reds"><p> * 建议您开启全部安全设置，以保障您的账户及资金安全</p></div>
-               </div>
-               <div class="member-caution clearfix">
+                   <div class="member-caution clearfix" style="float:left;">
                    <ul>
                        
                        <li class="clearfix">
@@ -128,6 +156,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        <p>2. 建议您安装杀毒软件，并定期更新操作系统等软件补丁，确保账户及交易安全。      </p>
                    </div> -->
                </div>
+               </div>
+               
             </div>
         </div>
     </div>

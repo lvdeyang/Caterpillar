@@ -7,12 +7,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <style> 
   #submit,.member-head{ 
-       background: -ms-linear-gradient(top, #C40000, #FF4401) !important;       /* IE 10 */  
-       background:-moz-linear-gradient(top,#C40000,#FF4401) !important;/*火狐*/   
-       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#C40000), to(#FF4401)) !important;/*谷歌*/   
-       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#C40000), to(#FF4401)) !important;      /* Safari 4-5, Chrome 1-9*/
-       background: -webkit-linear-gradient(top, #C40000, #FF4401) !important;  /*Safari5.1 Chrome 10+*/  
-       background: -o-linear-gradient(top, #C40000, #FF4401) !important; /*Opera 11.10+*/  
+       background: -ms-linear-gradient(top, #D6002A, #B40F02) !important;       /* IE 10 */  
+       background:-moz-linear-gradient(top,#D6002A,#B40F02) !important;/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#D6002A), to(#B40F02)) !important;/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#D6002A), to(#B40F02)) !important;      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #D6002A, #B40F02) !important;  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #D6002A, #B40F02) !important; /*Opera 11.10+*/  
    		}   
 		.member-left{
    		 margin-top:53px !important;
@@ -44,6 +44,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    		}
    		.search-text{
 height:36px !important;
+}
+.pullDownList{
+ display: none !important;
 }
 </style>
 <!doctype html>
@@ -110,11 +113,11 @@ height:36px !important;
                 <form action="" class="layui-form">
                     <div class="login-input">
                         <label><i class="heart">*</i>原密码：</label>
-                        <input type="password" class="list-input1" id="userPassword" name="userPassword" placeholder="">
+                        <input type="password" class="list-input1" id="userPassword" name="userPassword" placeholder="请您输入原密码">
                     </div>
                     <div class="login-input">
                         <label><i class="heart">*</i>请设置密码：</label>
-                        <input type="password" class="list-input" id="newPassword" name="newPassword" lay-verType="tips" lay-verify="required|newPassword" placeholder="请设置密码">
+                        <input type="password" class="list-input" id="newPassword" name="newPassword" lay-verType="tips" lay-verify="required|newPassword" placeholder="请设置新密码">
                     </div>
                     <div class="login-input">
                         <label><i class="heart">*</i>请确认密码：</label>

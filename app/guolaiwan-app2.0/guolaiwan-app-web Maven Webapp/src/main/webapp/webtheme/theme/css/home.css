@@ -655,7 +655,7 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .pc-label { text-align:left; padding-left:40px; margin-top:10px;}
 .pc-select { text-align:left;}
 .pc-label label {width:200px; display:block; padding-bottom:5px; }
-.pc-label input { height:18px;line-height:18px; padding:6px; width:220px;}
+.pc-label input { height:35px;line-height:35px; padding:6px; width:220px;}
 
 
 
