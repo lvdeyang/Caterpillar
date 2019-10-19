@@ -2141,7 +2141,7 @@ public class PubNumController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/wallet/addOrder")
 	public Object addWalletOrder(HttpServletRequest request) throws Exception {
-		long money = Long.parseLong(request.getParameter("money"));
+		double money = Double.parseDouble(request.getParameter("money"));
 		long id = Long.parseLong(request.getParameter("userId"));
 		int type = Integer.parseInt(request.getParameter("type"));
 		InvestWalletPO order = new InvestWalletPO();
@@ -2152,7 +2152,7 @@ public class PubNumController extends WebBaseControll {
 			UserInfoPO user = conn_user.get(id);
 			order.setUsername(user.getUserNickname());
 			order.setUserid(id);
-			order.setMoney(money);
+			order.setMoney((long)money);
 			order.setProductname("充值");
 			conn_investwallet.save(order);
 			return success(order);
@@ -2163,7 +2163,7 @@ public class PubNumController extends WebBaseControll {
 				System.out.println(money + "----------------------提现");
 				order.setUsername(user.getUserNickname());
 				order.setUserid(id);
-				order.setMoney(money);
+				order.setMoney((long)money);
 				order.setProductname("提现");
 				conn_investwallet.save(order);
 				return success(order);

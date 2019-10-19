@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
@@ -47,6 +48,7 @@ import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
+import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
@@ -256,6 +258,7 @@ public class WxPayController extends BaseController {
 		
 		if(orderId.indexOf("bundle") != -1||conn_orderInfo.get(Long.parseLong(orderId)).isIswallet()==false){
 				long amount = 0;
+				PayType type=PayType.WEICHAT;
 				Map<String, Object> result = new HashMap<String, Object>();
 				if (orderId.indexOf("bundle") != -1) {
 					String[] bundleidStrs = orderId.split("-");
@@ -263,36 +266,38 @@ public class WxPayController extends BaseController {
 					String[] orderStrs = bOrder.getOrderStr().split("A");
 					for (String orderIdStr : orderStrs) {
 						if (conn_orderInfo.get(Long.parseLong(orderIdStr)).getOrderState() == OrderStateType.REFUNDING) {
-		
+							type=conn_orderInfo.get(Long.parseLong(orderIdStr)).getPayMode();
 							amount += conn_orderInfo.get(Long.parseLong(orderIdStr)).getPayMoney();
 						}
 					}
 				} else {
 					OrderInfoPO orderInfoPO = conn_orderInfo.get(Long.parseLong(orderId));
 					if (orderInfoPO.getOrderState() == OrderStateType.REFUNDING) {
-		
+		                type=orderInfoPO.getPayMode();
 						amount = orderInfoPO.getPayMoney();
 					}
 				}
 				String refundOrderNum = "refund" + orderId;
-				try {
-		
-					GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
-		
-					Map<String, String> reqData = new HashMap<String, String>();
-		
-					reqData.put("out_trade_no", orderId + "");
-					reqData.put("out_refund_no", refundOrderNum);
-					reqData.put("total_fee", amount + "");
-					reqData.put("refund_fee", amount + "");
-		
-					Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据
-		
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println(e.getMessage());
+				
+				if(type.equals(PayType.WEICHAT)){
+				    try {
+						GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+						Map<String, String> reqData = new HashMap<String, String>();
+						reqData.put("out_trade_no", orderId + "");
+						reqData.put("out_refund_no", refundOrderNum);
+						reqData.put("total_fee", amount + "");
+						reqData.put("refund_fee", amount + "");
+						Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据
+			
+					} catch (Exception e) {
+						// TODO: handle exception
+						System.out.println(e.getMessage());
+					}
+				}else{
+					//暂时把阿里退款放在这里了
+					double allMoney = ((double) amount) / 100;
+					AliAppOrderInfo.getInstance().refund(orderId,allMoney);
 				}
-		
 				return result;
 		}else{
 			//钱包退款
