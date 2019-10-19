@@ -635,7 +635,7 @@ html, body {
 			    <div class="weui-search-bar__box">
 			      <i  id="search" class="weui-icon-search" style="line-height:50px;"></i>
 			      <input style="height:40px" type="search" name="searchContent" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="" value="${content }">
-			      <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+			      <a href="javascript:" class="weui-icon-clear" style="line-height: 44px;" id="searchClear"></a>
 			    </div>
 			    <label class="weui-search-bar__label" id="searchText">
 			      <i class="weui-icon-search"></i>

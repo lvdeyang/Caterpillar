@@ -235,7 +235,6 @@ z-index:11111111;
 				       alert("请输入正确的手机号码");
 					return false;
 				}else{
-				alert("通过");
 				}
 		});			
 	 /*身份证号正则  */
@@ -245,7 +244,6 @@ z-index:11111111;
 				       alert("请输入正确的身份证号码");
 					return false;
 				}else{
-				 alert("通过");
 				}
 	});	
 </script>
