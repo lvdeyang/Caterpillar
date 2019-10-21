@@ -792,15 +792,15 @@ html, body {
 			
 			<div style="width:100%;margin-top:40px;">
 			  <div class="weui-cell" >
-			    <div class="weui-cell__hd"><label class="weui-label">支付金额(元)</label></div>
-			    <div class="weui-cell__bd" style="border:1px solid #CCC">
-			      <input type="number" id="paytext" class="weui-input" type="text" placeholder="">
+			    <div class="weui-cell__hd"><label class="weui-label" style="height:40px;line-height:40px;">支付金额(元)</label></div>
+			    <div class="weui-cell__bd" style="width:auto;border:1px solid #CCC;border-radius:4px;">
+			      <input type="number" id="paytext" class="weui-input" style="height:40px;line-height:40px;text-align: center;" type="text" placeholder="">
 			    </div>
 			  </div>
 			</div>
 			
 			<div style="width:100%;height:55px;"></div>
-			<a id="paynow" style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">支付</a>
+			<a id="paynow" style="width:96%;margin:0 auto;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">支付</a>
 			
 			
 		</div>

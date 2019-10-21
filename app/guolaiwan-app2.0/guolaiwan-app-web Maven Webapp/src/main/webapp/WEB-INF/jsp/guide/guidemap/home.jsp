@@ -82,7 +82,10 @@
    margin-left:5%;  
    margin-top : 4%;
    width : 43%;
-   height: 160px;
+   height: auto;
+   overflow: hidden;
+   border-radius:4px;
+   text-align: center;
   }
 </style>
 </head>
@@ -106,8 +109,8 @@ var commodityId; //商品id
 		    for(var i=0; i<produ.length; i++){
 		       html.push('<div class="body1" onclick="clickHandler('+produ[i].productPrice+','+produ[i].id+')">');
 			   html.push('<img style="width:100%;height:100px;" src="'+produ[i].productShowPic+'">');
-			   html.push(' <p style="margin-top: 1%; margin-left: 8%">'+produ[i].productName+'</p>');
-			   html.push('<p style="margin-top: 1%; margin-left: 8%"> <span>'+produ[i].productPrice+'</span> 积分</p>'); 
+			   html.push(' <p style="line-height:30px; ">'+produ[i].productName+'</p>');
+			   html.push('<p style="line-height:30px; "> <span style="color:#D81E06;">'+produ[i].productPrice+'</span> 积分</p>'); 
 			   html.push('</div>'); 
 		    }
 		       $('#body').append(html.join(''));
@@ -275,7 +278,8 @@ var commodityId; //商品id
 
 <body id ="body">
 	<div style="width:100%;height:40px;background:#ffffff;text-align: center;line-height: 40px;position:relative;z-index:10;">
-			<span style="color:black;font-weight: bold;float:left;line-height: 40px;font-size:20px;margin-left:3%;"><a style="color: black;" href="javascript:history.go(-1)">< </a></span> 	
+			<span style="font-weight: bold;float:left;line-height: 40px;margin-left:3%;"><a style="color:#333;" class="link-left" href="#side-menu"><span
+				class="icon-reorder icon-large"></span></a></span> 	
 			<span style="text-align:center;">积分商城</span>
     </div>
 	
