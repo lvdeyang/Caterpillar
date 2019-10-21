@@ -579,7 +579,15 @@ function timer(times,intDiff) {
  }
  
  function gotoproduct(id){
-	    location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
+	    //location.href=window.BASEPATH + 'business/getdetermineorder?id='+id;
+	    var mod='${product.productModularCode}';
+	    var classes='${product.productClassCode}';
+	    if(classes=='006'){
+	       location.href=window.BASEPATH+'business/gotopickingpurchase?productId='+id;
+	    }else if(mod=='0001'){
+	       location.href=window.BASEPATH+'product/package/payment/jump?merchantId=${product.productMerchantID}&proId='+id+'&choice=0&isCombo=0';
+	    }
+	    
 }
 
 function gotoprocess(){

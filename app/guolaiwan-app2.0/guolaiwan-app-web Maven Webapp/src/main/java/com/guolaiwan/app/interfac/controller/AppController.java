@@ -3517,8 +3517,10 @@ public class AppController extends WebBaseControll {
 
 		long userId = pageObject.getLong("userId"); // 用户Id
 		long proId = pageObject.getLong("productId"); // 商品Id
-		long activityproductId = pageObject.getLong("activityproductId");
-
+		long activityproductId =0;
+		if(pageObject.containsKey("activityproductId")){
+			activityproductId=pageObject.getLong("activityproductId");
+		}
 		UserInfoPO user = conn_user.get(userId);
 		if (user == null) {
 			return FORBIDDEN("没获取到用户！");
