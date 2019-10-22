@@ -528,7 +528,8 @@ var oderinfoid;
 				   html.push('     <img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].productPic+'">');
 				   html.push('   </div>');
 				   html.push('   <div class="weui-media-box__bd">');
-				   html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].productName+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+data[i].productPrice+'x'+data[i].productNum+'</h4>');
+				   html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].productName+'&nbsp;&nbsp;&nbsp;&nbsp;'+
+				   (data[i].payMode=='积分'?'积分':'￥')+data[i].productPrice+'x'+data[i].productNum+'</h4>');
 				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+data[i].createDate+'</p>');
 				   html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">验单时间'+data[i].ydDate+'</p>');
 				   html.push('   </div>');

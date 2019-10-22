@@ -550,14 +550,15 @@ html, body {
 							   }
 					        }
 				        }
-				        
+	
 				        html.push('</div>');
 				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg product" id="pro-'+data[i].orderList[j].id+'">');
 					    html.push('<div class="weui-media-box__hd">');
 					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="'+data[i].orderList[j].productPic+'">');
 					    html.push('</div>');
 					    html.push('<div class="weui-media-box__bd">');
-					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].orderList[j].productName+'&nbsp;&nbsp;&nbsp;&nbsp;￥'+data[i].orderList[j].productPrice+'x'+data[i].orderList[j].productNum+'</h4>');
+					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">'+data[i].orderList[j].productName+'&nbsp;&nbsp;&nbsp;&nbsp;'+
+					    (data[i].orderList[j].payMode=='积分'?'积分':'￥')+data[i].orderList[j].productPrice+'x'+data[i].orderList[j].productNum+'</h4>');
 					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+data[i].orderList[j].createDate+'</p>');
 					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">验单时间'+data[i].orderList[j].ydDate+'</p>');
 					    html.push('</div>');

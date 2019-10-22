@@ -1313,6 +1313,10 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)))
 		.setIsgroup(entity.getIsgroup())
 		.setDistributeId(entity.getDistributeId());
+		
+		if(entity.getIntegralGoods()==1){
+			this.setProductPrice(entity.getProductPrice()+"").setProductPricesStr(entity.getProductPrice()+"");
+		}
 		return this;
 	}
 

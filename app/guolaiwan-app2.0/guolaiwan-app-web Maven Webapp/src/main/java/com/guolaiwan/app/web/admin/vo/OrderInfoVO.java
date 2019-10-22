@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.guolaiwan.app.web.publicnum.vo.RoomVo;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
+import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
@@ -778,6 +779,11 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO> impleme
 		.setDistributeId(entity.getDistributeId())
 		.setDistributeQcode(entity.getDistributeQcode())
 		.setTrackingnumber(entity.getTrackingnumber());
+		
+		
+		if(entity.getPayMode().equals(PayType.INTEGRAL)){
+			this.setProductPrice(entity.getProductPrice()+"");
+		}
 		return this;
 
 	}
