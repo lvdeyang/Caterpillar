@@ -107,10 +107,10 @@ var commodityId; //商品id
 	     	var produ = data.product;  
 	     	var html = [];
 		    for(var i=0; i<produ.length; i++){
-		       html.push('<div class="body1" onclick="clickHandler('+produ[i].productPrice+','+produ[i].id+')">');
+		       html.push('<div class="body1" onclick="clickHandler('+produ[i].productPrice*100+','+produ[i].id+')">');
 			   html.push('<img style="width:100%;height:100px;" src="'+produ[i].productShowPic+'">');
 			   html.push(' <p style="line-height:30px; ">'+produ[i].productName+'</p>');
-			   html.push('<p style="line-height:30px; "> <span style="color:#D81E06;">'+produ[i].productPrice+'</span> 积分</p>'); 
+			   html.push('<p style="line-height:30px; "> <span style="color:#D81E06;">'+produ[i].productPrice*100+'</span> 积分</p>'); 
 			   html.push('</div>'); 
 		    }
 		       $('#body').append(html.join(''));

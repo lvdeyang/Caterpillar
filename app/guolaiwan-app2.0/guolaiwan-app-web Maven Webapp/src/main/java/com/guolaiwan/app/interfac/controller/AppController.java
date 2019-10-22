@@ -3779,11 +3779,11 @@ public class AppController extends WebBaseControll {
 		UserInfoPO user = conn_user.get(userId);
 		// 用户积分
 		long userIntegral = user.getUserIntegral();
-		ProductPO product = conn_product.getByGold(productId);
+		ProductPO product = conn_product.get(productId);
 		if (product == null) {
 			return FORBIDDEN("为获取到商品!");
 		}
-		long goldNum = product.getGoldNum();
+		long goldNum = product.getProductPrice();
 		if (goldNum > userIntegral) {
 			return FORBIDDEN("用户积分不足");
 		}
@@ -3795,7 +3795,7 @@ public class AppController extends WebBaseControll {
 		order.setUpdateTime(new Date());
 
 		// 支付金额
-		long payMoney = product.getGoldNum();
+		long payMoney = product.getProductPrice();
 		// 订单总金额
 		long orderAllMoney = payMoney;
 		// 会员ID
@@ -3810,7 +3810,8 @@ public class AppController extends WebBaseControll {
 		}
 
 		// 订单号（城市编码+商家id+板块Code+时间戳+用户ID）
-		String orderNO = getCityCodeByDomain() + "01" + "0000" + df.format(date) + userId;
+		String orderNO = getCityCodeByDomain() + product.getProductMerchantID() + product.getProductModularCode() + df.format(date)
+						+ userId;
 		order.setOrderNO(orderNO);
 		// 验单码
 		// 下单时间
@@ -3827,7 +3828,7 @@ public class AppController extends WebBaseControll {
 		// 商品数量
 		order.setProductNum(1);
 		// 商品单价
-		order.setProductPrice(product.getGoldNum());
+		order.setProductPrice(product.getProductPrice());
 		// 支付金额
 		order.setPayMoney(payMoney);
 		// 订单总金额
@@ -3835,7 +3836,7 @@ public class AppController extends WebBaseControll {
 		// 订单状态
 		order.setOrderState(OrderStateType.PAYSUCCESS);
 		// 订单支付类型 //ALIPAY WEICHAT
-		order.setPayMode(PayType.GOLDPAY);
+		order.setPayMode(PayType.INTEGRAL);
 		order.setOrderType(OrderType.MERCHANT);
 		// 有效期
 		// 配送信息
@@ -3859,6 +3860,9 @@ public class AppController extends WebBaseControll {
 		order.setSource(OrderSource.APP);
 		conn_order.saveOrUpdate(order);
 		conn_user.saveOrUpdate(user);
+		
+		product.setProductStock(product.getProductStock()-1);
+		conn_product.save(product);
 		dataMap.put("order", order);
 		return success(dataMap);
 	}
