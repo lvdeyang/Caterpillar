@@ -536,14 +536,14 @@ html, body {
 				    for(var j=0;j<data[i].orderList.length;j++){
 				        if(j==0){
 				            var bookDate=data[i].orderList[j].orderBookDate.replace('年','/').replace('月','/').replace('日','');
-					        if('2019/04/15 00:00:00'<=bookDate&&bookDate<='2019/04/19 23:59:59'){
+					        if(('2019/04/15 00:00:00'<=bookDate&&bookDate<='2019/04/19 23:59:59')||data[i].orderList[j].payMode=='积分'){
 					            //这里加各种各样的奇葩限制。
 					        }else{
 					           if(type==2){
 								    
 							    //添加退款限制理由 张羽 4/28
 							    if(data[i].orderList[j].productIsRefund!="1"){
-							    html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
+							        html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
 							    }else{
 							    	html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')
 							    }

@@ -781,7 +781,7 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO> impleme
 		.setTrackingnumber(entity.getTrackingnumber());
 		
 		
-		if(entity.getPayMode().equals(PayType.INTEGRAL)){
+		if(PayType.INTEGRAL.equals(entity.getPayMode())){
 			this.setProductPrice(entity.getProductPrice()+"");
 		}
 		return this;
