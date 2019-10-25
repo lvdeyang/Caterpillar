@@ -107,7 +107,7 @@ public class ParkingController  extends WebBaseControll{
 		if (pageObject != null && pageObject.size() > 0) {
 			String number = pageObject.getString("parking");
 			String type = pageObject.getString("parNumber");
-			List<VehiclePO> userByid = par_king.getNumber(number,userId);
+			List<VehiclePO> userByid = par_king.getNumber(userId);
 			if (userByid.size() == 0) {
 				VehiclePO veh = new VehiclePO();
 				veh.setVehicleid(userId);
