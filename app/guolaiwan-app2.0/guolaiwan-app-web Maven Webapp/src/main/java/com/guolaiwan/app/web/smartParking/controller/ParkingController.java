@@ -118,7 +118,7 @@ public class ParkingController  extends WebBaseControll{
 				for (VehiclePO vehiclePO : userByid) {
 					vehiclePO.setNumber(number);
 					vehiclePO.setType(type);
-					par_king.saveOrUpdate(vehiclePO);
+					par_king.update(vehiclePO);
 				}
 			}
 		}

@@ -3096,8 +3096,8 @@ public class AppController extends WebBaseControll {
 		}
 		_order.setYdNO(sysConfig.getWebUrl() + _order.getYdNO());
 		_order.setProductPic(sysConfig.getWebUrl() + _order.getProductPic());
-		_order.setShopLongitude(merchantPO.getShopLongitude());
-		_order.setShopLatitude(merchantPO.getShopLatitude());
+		//_order.setShopLongitude(merchantPO.getShopLongitude());
+		//_order.setShopLatitude(merchantPO.getShopLatitude());
 
 		if (_order.getComboId() != 0) {
 			ProductComboPO comboPO = conn_combo.get(_order.getComboId());
