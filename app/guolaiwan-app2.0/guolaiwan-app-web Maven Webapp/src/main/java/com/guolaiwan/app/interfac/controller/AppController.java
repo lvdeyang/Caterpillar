@@ -3813,6 +3813,8 @@ public class AppController extends WebBaseControll {
 		String orderNO = getCityCodeByDomain() + product.getProductMerchantID() + product.getProductModularCode() + df.format(date)
 						+ userId;
 		order.setOrderNO(orderNO);
+		String ydNO = ydNoCode(order.getId()+"");
+		order.setYdNO(ydNO);
 		// 验单码
 		// 下单时间
 		order.setCreateDate(date);
