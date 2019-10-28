@@ -154,14 +154,16 @@ public class ProductPackageController extends BaseController {
 		//mapp.put("productClassCode", "0012");
 		//过滤 不符合日期及审核未通过的商品 
 		long nowDate = new Date().getTime();
-		List<ProductPO> productPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);
-		for(int i= 0 ;i<productPOs.size();i++){		  
+		List<ProductPO> temproductPOs = productDao.findByPageC(mapp,Integer.valueOf(pageNum), pageSize);
+		List<ProductPO> productPOs = new ArrayList<ProductPO>();
+		for(int i= 0 ;i<temproductPOs.size();i++){		  
 		   //获取审核状态
-		   ShopAuditStateType state  =  productPOs.get(i).getProductAuditstatus();
-		   int isShow  =  productPOs.get(i).getProductIsShow();
+		   ShopAuditStateType state  =  temproductPOs.get(i).getProductAuditstatus();
+		   int isShow  =  temproductPOs.get(i).getProductIsShow();
 		   if( state != ShopAuditStateType.T || isShow != 1){
-			   productPOs.remove(i);			   
-		   }			
+			   continue;			   
+		   }
+		   productPOs.add(temproductPOs.get(i));
 		}
 		//分页获取所有商品
 	    List<ProductVO> pro_vo = new ProductVO().getConverter(ProductVO.class).

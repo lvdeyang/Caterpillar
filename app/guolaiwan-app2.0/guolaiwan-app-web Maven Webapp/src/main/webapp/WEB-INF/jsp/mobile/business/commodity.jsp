@@ -228,7 +228,7 @@ html, body {
        htm.push('<span style="float:left;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:65%;">'+prouctMessage[0].productName+'</span>');
        htm.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+prouctMessage[0].productPrice+'</span>');
        htm.push('</p>');
-       htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前一天订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
+       htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前两小时订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
        htm.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销'+ticketOrderNumber+'+</span>');
        htm.push('<span onclick="reserve('+prouctMessage[0].id+',0)" style="float:right;margin-right:5px;color:#fff;font-size:14px;font-weight:bold;background:#EB6E1E;line-height:30px;border-radius:10px;padding:0px 20px;">立即预订</span></p>');
        htm.push('</div>');
@@ -245,7 +245,7 @@ html, body {
        htm.push('<span style="float:left;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:65%;">'+ticket_type[i].combo+'</span>');
        htm.push('<span style="float:right;margin-right:5px;color:#EB6E1E;font-size:18px;font-weight:bold;">￥'+prc[i]+'</span>');
        htm.push('</p>');
-       htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前一天订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
+       htm.push('<p style="margin-left:5px;font-size:12px;"><span style="color:#81D4FD;">提前两小时订票 </span><span style="color:#EB6E1E;">出票后可立即入园</span></p>');
        htm.push('<p style="height:40px;line-height: 40px;"><span style="float:left;margin-left:5px;">月销'+orNum[i]+'+</span>');
        htm.push('<span onclick="reserve('+ticket_type[i].id+',1)" style="float:right;margin-right:5px;color:#fff;font-size:14px;font-weight:bold;background:#EB6E1E;line-height:30px;border-radius:10px;padding:0px 20px;">立即预订</span></p>');
        htm.push('</div>');
