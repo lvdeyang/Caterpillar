@@ -3050,18 +3050,63 @@ public class AppController extends WebBaseControll {
 					orders.remove(orders.get(i));
 				}
 			}
-		}
-		for (OrderInfoVO orderInfoVO : orders) {
+			for (OrderInfoVO orderInfoVO : orders) {
 
-			if (orderInfoVO.getProductName() == null) {
-				orderInfoVO.setProductName("(到店支付)" + orderInfoVO.getShopName());
-				orderInfoVO.setProductPrice(orderInfoVO.getPayMoney());
-				orderInfoVO.setProductNum(1);
+				if (orderInfoVO.getProductName() == null) {
+					orderInfoVO.setProductName("(到店支付)" + orderInfoVO.getShopName());
+					orderInfoVO.setProductPrice(orderInfoVO.getPayMoney());
+					orderInfoVO.setProductNum(1);
+				}
 			}
+			return success(orders);
+			
+			
+		}else{
+			// 合并订单
+			Map<Long, BundleOrderVo> bundleMap = new HashMap<Long, BundleOrderVo>();
+			List<BundleOrderVo> vos = new ArrayList<BundleOrderVo>();
+			for (OrderInfoVO orderInfoVO : orders) {
+				if (orderInfoVO.getProductName() == null) {
+					orderInfoVO.setProductName("(到店支付)" + orderInfoVO.getShopName());
+					orderInfoVO.setProductPrice(orderInfoVO.getPayMoney());
+					orderInfoVO.setProductNum(1);
+				}
+				orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
+
+				BundleOrder bOrder = conn_bundleorder.getBundleByOrderId(orderInfoVO.getId());
+				if (bOrder != null) {
+					if (bundleMap.containsKey(bOrder.getId())) {
+						bundleMap.get(bOrder.getId()).getOrderList().add(orderInfoVO);
+					} else {
+						BundleOrderVo vo = new BundleOrderVo();
+						vo.setOrderStatus(orderInfoVO.getOrderState());
+						vo.setIsBundle(1);
+						vo.setPayDate(orderInfoVO.getCreateDate());
+						vo.setOrderId(bOrder.getId());
+						vo.setUserName(orderInfoVO.getUserName());
+						vo.getOrderList().add(orderInfoVO);
+						bundleMap.put(bOrder.getId(), vo);
+						vos.add(vo);
+					}
+				} else {
+					BundleOrderVo vo = new BundleOrderVo();
+					vo.setOrderStatus(orderInfoVO.getOrderState());
+					vo.setIsBundle(0);
+					vo.setPayDate(orderInfoVO.getCreateDate());
+					vo.setOrderId(orderInfoVO.getId());
+					vo.setUserName(orderInfoVO.getUserName());
+					vo.getOrderList().add(orderInfoVO);
+					vos.add(vo);
+				}
+
+			}
+			
+			return success(vos);
+			
 		}
-		return success(orders);
 
 	}
+
 
 	/**
 	 * 订单：订单详情
