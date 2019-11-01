@@ -429,6 +429,8 @@ $("#b"+base).css("color","black");
 	}
 	//购买方法
 	function gotobuy(id){
+	 $.toast('敬请期待', 'text');
+	 return;
 		var url=window.BASEPATH + 'judges/buypoll';
 		$.post(url,{"usreId":${userId},"productId":id,"optionId":"${optionId}"},function(data){
 			if(data.msg=="1"){
@@ -513,10 +515,11 @@ $("#b"+base).css("color","black");
           /*  if(${isjudges==1}){
 		    html.push('<button id="'+data[i].productId+'" onclick="mark(this.id)" style="width:42%;float:left;" class="vote">评分</button>');           
            }else{ */
+            html.push('<button style="width:100%;float:left;margin:0 0 5px 0;" onclick="gotobuy('+data[i].productId+')">购买</button>');
            html.push('<button id="'+data[i].productId+'" onclick="votepoll(this.id)" style="width:100%;text-align:center;" class="vote">投票</button>');
           /*  } */
            //html.push('<button id="'+data[i].productId+'" onclick="productdetails(this.id)" style="width:42%;float:left;">查看评分</button>');
-           //html.push('<button style="width:88%;float:left;margin:0 0 10px 0;" onclick="gotobuy('+data[i].productId+')">购买</button>');
+         
            html.push('</div>');
            html.push('</div>');
            html.push('<div class="tanchuang'+data[i].productId+'" style="text-indent:2em;display: none;z-index:111111;width:90%;height:auto;font-weight:bold;background:#fff;bottom:5px;left:5%;border:2px solid #C3181E;border-radius:12px;padding:20px 10%;position: absolute;">');
