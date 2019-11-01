@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.bussiness.admin.dao.AliPayRecordDAO;
+import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 //import com.guolaiwan.app.web.enumeration.LoginCacheName;
 //import com.guolaiwan.app.web.user.vo.UserVO;
 //import com.guolaiwan.app.web.website.order.vo.OrderDetailVO;
@@ -43,6 +44,7 @@ import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.AliPayRecordPO;
+import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 @Controller
@@ -112,6 +114,8 @@ public class AliPayReportController extends WebBaseControll {
 		return mv;
 	}
 
+	@Autowired
+	BundleOrderDAO conn_bundleorder;
 	
 	//post请求
 	@ResponseBody
@@ -154,7 +158,16 @@ public class AliPayReportController extends WebBaseControll {
 			System.out.println("订单号："+out_trade_no);
 			//交易状态
 			String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"),"UTF-8");
+			
+			
 			String[] orderIds =  out_trade_no.split("A");
+			if(out_trade_no.indexOf("bundle")!=-1){
+				Long bundleOrderId=Long.parseLong(out_trade_no.split("-")[1]);
+				BundleOrder bundleOrder=conn_bundleorder.get(bundleOrderId);
+				orderIds=bundleOrder.getOrderStr().split("A");
+			}
+			
+			
 			int i=0;
 			for (String orderId : orderIds) {
 				i=i+1;

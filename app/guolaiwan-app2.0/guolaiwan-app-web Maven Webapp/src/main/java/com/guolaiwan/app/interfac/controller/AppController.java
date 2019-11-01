@@ -2737,7 +2737,7 @@ public class AppController extends WebBaseControll {
 			BundleOrder order = new BundleOrder();
 			order.setOrderStr(orderIdStr);
 			conn_bundleorder.save(order);
-			orderIdStr = "bundle-" + orderIdStr;
+			orderIdStr = "bundle-" + order.getId();
 		}
 
 		System.out.println("numsStr：allMoney：pNamesStr：numsStr--" + numsStr + allMoney + pNamesStr + orderIdStr);
@@ -3071,7 +3071,7 @@ public class AppController extends WebBaseControll {
 					orderInfoVO.setProductPrice(orderInfoVO.getPayMoney());
 					orderInfoVO.setProductNum(1);
 				}
-				orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
+				
 
 				BundleOrder bOrder = conn_bundleorder.getBundleByOrderId(orderInfoVO.getId());
 				if (bOrder != null) {
@@ -3186,13 +3186,30 @@ public class AppController extends WebBaseControll {
 			param = param.substring(1, param.length() - 1);
 		}
 		JSONObject pageObject = JSON.parseObject(param);
-		String orderNO = pageObject.getString("orderNO");
+		String orderId = pageObject.getString("orderId");
 		String orderStatus = pageObject.getString("orderStatus");
 
-		OrderInfoPO orderInfoPO = conn_order.getOrderByNo(orderNO);
-		if (orderInfoPO == null) {
-			return FORBIDDEN("未获取到订单！");
+		
+		
+		String[] orderids = null;
+		if (orderId.indexOf("bundle") != -1) {
+			String[] bundleStrs = orderId.split("-");
+			BundleOrder bundleOrder = conn_bundleorder.get(Long.parseLong(bundleStrs[1]));
+			orderids = bundleOrder.getOrderStr().split("A");
+		} else {
+			orderids = orderId.split("A");
 		}
+		OrderInfoPO orderInfoPO = null;
+		if(orderids.length>1){
+			
+		}else{
+			orderInfoPO = conn_order.get(Long.parseLong(orderId));
+			if (orderInfoPO == null) {
+				return FORBIDDEN("未获取到订单！");
+			}
+		}
+		
+		
 		Date date = new Date();
 		String orderStatuStr = orderInfoPO.getOrderState().getFiled();
 		switch (orderStatus) {
@@ -3207,9 +3224,12 @@ public class AppController extends WebBaseControll {
 			break;
 		case "REFUNDING":// 退款
 			// 条件
-			orderInfoPO.setOrderState(OrderStateType.fromString(orderStatus));
-			orderInfoPO.setRefundReason(pageObject.getString("refundReason")); // 退款原因
-			conn_order.update(orderInfoPO);
+			for (String orderStr : orderids) {
+				OrderInfoPO refundingOrder=conn_order.get(Long.parseLong(orderStr));
+				refundingOrder.setOrderState(OrderStateType.fromString(orderStatus));
+				refundingOrder.setRefundReason(pageObject.getString("refundReason")); // 退款原因
+				conn_order.update(refundingOrder);
+			}
 			break;
 		case "RECEIPT":// 确认收货
 			// 条件
