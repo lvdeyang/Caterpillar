@@ -58,8 +58,17 @@ public class NEWCommercialSettlementController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView getCommer(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-
+		List<BalancePO> balancePO = conn_Balance.findAll();
+		Double cashAmount=0d;
+		Double getAmount=0d;
+		for (BalancePO balancePO2 : balancePO) {
+			cashAmount+=balancePO2.getAmount();
+			getAmount+=balancePO2.getAccrued();
+		}
+        strMap.put("cashAmount", cashAmount/100);
+        strMap.put("getAmount", getAmount/100);
 		ModelAndView mv = new ModelAndView("admin/newcommercialsettlement/list", strMap);
+		
 		return mv;
 	}
 
@@ -98,7 +107,7 @@ public class NEWCommercialSettlementController extends BaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("data", balanceVO);
 		map.put("code", 0);
-		map.put("count", count);
+		map.put("count", count*1000);
 		return map;
 	}
 

@@ -50,6 +50,10 @@
 			</div>
 			<button class="layui-btn" data-type="reload" onclick="search(this)">确定</button>
 		</div>
+		<div class="layui-inline">
+			&nbsp;&nbsp;&nbsp;&nbsp;总流水：${cashAmount}元&nbsp;&nbsp;&nbsp;&nbsp;
+			总提成：${getAmount}元
+		</div>
 		</xblock>
 		<table class="layui-table" id="List" lay-filter="List"></table>
 	</div>
