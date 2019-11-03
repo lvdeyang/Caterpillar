@@ -3211,13 +3211,14 @@ public class AppController extends WebBaseControll {
 		
 		
 		Date date = new Date();
-		String orderStatuStr = orderInfoPO.getOrderState().getFiled();
+		
+		
+		
+		
+		//String orderStatuStr = orderInfoPO.getOrderState().getFiled();
 		switch (orderStatus) {
 		case "DELIVER":// 发货
-			System.out.println("订单状态:" + orderStatuStr);
-			if (!orderStatuStr.equals("PAYSUCCESS") && !orderStatuStr.equals("PAYFINISH")) {
-				return FORBIDDEN("订单状态出错！现在的订单状态是：" + orderStatuStr);
-			}
+			
 			orderInfoPO.setSendDate(date); // 发货时间
 			orderInfoPO.setOrderState(OrderStateType.fromString(orderStatus));
 			conn_order.update(orderInfoPO);
