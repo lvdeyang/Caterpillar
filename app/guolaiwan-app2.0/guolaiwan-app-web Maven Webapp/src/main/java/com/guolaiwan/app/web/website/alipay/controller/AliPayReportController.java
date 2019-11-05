@@ -103,7 +103,7 @@ public class AliPayReportController extends WebBaseControll {
 			
 			info = "trade_no:"+trade_no+"<br/>out_trade_no:"+out_trade_no+"<br/>total_amount:"+total_amount;
 			
-			order = conn_orderInfo.get(out_trade_no);
+			order = conn_orderInfo.get(Long.parseLong(out_trade_no));
 		}else {
 			info = "验签失败";
 		}

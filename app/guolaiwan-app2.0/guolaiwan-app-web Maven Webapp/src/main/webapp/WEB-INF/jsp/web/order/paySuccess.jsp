@@ -34,20 +34,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<header id="pc-header">
 		<div class="BHeader">
 			<div class="yNavIndex">
-				<ul class="BHeaderl">
-					<li><a href="#">登录</a></li>
-					<li class="headerul">|</li>
-					<li><a href="#">订单查询</a></li>
-					<li class="headerul">|</li>
-					<li><a href="#">我的收藏</a></li>
-					<li class="headerul">|</li>
-					<li id="pc-nav" class="menu"><a href="#" class="tit">我的商城</a>
-						<div class="subnav">
-							<a href="#">我的山城</a> <a href="#">我的山城</a> <a href="#">我的山城</a>
-						</div></li>
-					<li class="headerul">|</li>
-					<li><a href="#" class="M-iphone">手机悦商城</a></li>
-				</ul>
+				
 			</div>
 		</div>
 		<div class="container clearfix">
@@ -55,9 +42,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<h1>
 					<a href="#"><img src="<%=path %>/webtheme/theme/icon/logo.png"></a>
 				</h1>
-			</div>
-			<div class="pc-order-titlei fl">
-				<h2>收银台</h2>
 			</div>
 		</div>
 		<hr/>
