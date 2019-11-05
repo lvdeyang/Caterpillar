@@ -72,7 +72,7 @@ public class AliPayController extends BaseController {
 		String orderUuid = request.getParameter("orderUuid");
 		OrderInfoPO order =  conn_orderInfo.get(orderUuid);
 		//商户订单号，商户网站订单系统中唯一订单号，必填
-		String out_trade_no = order.getOrderNO();
+		String out_trade_no = order.getId()+"";
 		//付款金额，必填
 		String total_amount = String.valueOf((double)order.getPayMoney()/100);
 		//订单名称，必填
