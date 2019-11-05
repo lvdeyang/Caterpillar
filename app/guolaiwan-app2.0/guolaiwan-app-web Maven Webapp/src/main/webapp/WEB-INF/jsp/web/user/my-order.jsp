@@ -187,7 +187,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                </div>
                                <div class="member-circle clearfix">
                                	   <c:if test="${state == 1}">
-                                   		<div class="ci0"><input type="checkbox" checked="checked" data-money="${order.orderAllMoney}" data-uuid="${order.uuid}"/></div>
+                                   		<div class="ci0"><input type="checkbox" data-money="${order.orderAllMoney}" data-uuid="${order.uuid}"/></div>
                                    		<div class="ci1 with-checkbox">
                                    </c:if>
                                    <c:if test="${state != 1}">
@@ -228,7 +228,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             <c:if test="${state==1}">
 				<div class="count-all-info">
-					<label for="check-all"><input id="check-all" type="checkbox" /> 全选</label>
+					<label style="display:none;" for="check-all"><input id="check-all" type="checkbox" /> 全选</label>
 					<span>合计：￥</span><span id="total-price"></span>
 					<button id="count-all">去结算</button>
 					<form id="count-all-form" action="<%=path %>/user/order/submit/batch" method="POST"></form>
@@ -306,7 +306,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$('#count-all').on('click', function(){
 			if(!count_result || count_result.length<=0){
 				alert('没有内容可以结算！');
-			}else{
+			}else if(count_result.length>1){
+			    alert('暂时只支持单个订单结算！');
+			}
+			else{
 				$('#count-all-form')[0].submit();
 			}
 		});
