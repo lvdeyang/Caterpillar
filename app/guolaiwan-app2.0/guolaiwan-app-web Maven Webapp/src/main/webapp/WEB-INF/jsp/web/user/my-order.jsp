@@ -209,7 +209,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                         	<p><a href="javascript:delOrder('${order.uuid}')">取消订单</a> </p>
                                         </c:if>
                                         
-                                        <c:if test="${order.orderState == '已付款'}">
+                                        <c:if test="${order.orderState == '支付成功'}">
                                         	<p><a href="javascript:refundOrder('${order.uuid}')">申请退款</a> </p>
                                         </c:if>
                                         <p><a href="<%=path %>/user/order/info?orderNO=${order.orderNO}">订单详情</a></p>
