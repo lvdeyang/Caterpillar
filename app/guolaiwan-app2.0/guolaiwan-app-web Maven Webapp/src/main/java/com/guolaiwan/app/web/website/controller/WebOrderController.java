@@ -507,6 +507,16 @@ public class WebOrderController extends WebBaseControll{
 		conn_orderInfo.deleteByUuid(order);
 		return "success";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/refund", method= RequestMethod.POST)
+	public String orderrefund(HttpServletRequest request) throws Exception {
+		String  order = request.getParameter("order");
+		OrderInfoPO orderInfoPO=conn_orderInfo.get(order);
+		orderInfoPO.setOrderState(OrderStateType.REFUNDING);
+		conn_orderInfo.save(orderInfoPO);
+		return "success";
+	}
 
 
 }

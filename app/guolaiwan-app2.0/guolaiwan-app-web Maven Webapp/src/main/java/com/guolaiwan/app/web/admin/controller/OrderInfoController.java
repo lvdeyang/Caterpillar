@@ -34,6 +34,7 @@ import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.LogisticsDao;
 import com.guolaiwan.bussiness.admin.dao.MealListDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
+import com.guolaiwan.bussiness.admin.dao.MessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
@@ -51,6 +52,7 @@ import com.guolaiwan.bussiness.admin.po.LogisticsPo;
 import com.guolaiwan.bussiness.admin.po.LuckDrawRecord;
 import com.guolaiwan.bussiness.admin.po.MealListPo;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
+import com.guolaiwan.bussiness.admin.po.MessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
@@ -58,6 +60,8 @@ import com.guolaiwan.bussiness.admin.po.RoomStatusPO;
 import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
+import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
+import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
@@ -104,6 +108,10 @@ public class OrderInfoController extends BaseController {
 
 	@Autowired
 	LogisticsDao conn_logistics;
+	@Autowired
+    MessageMiddleClientDao conn_messageClient;
+	@Autowired
+	MessageDAO conn_message;
 
 	// 切换tab
 	@ResponseBody
@@ -149,6 +157,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 			break;
@@ -163,6 +180,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 			break;
@@ -175,6 +201,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 			break;
@@ -187,6 +222,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 			break;
@@ -199,6 +243,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 			break;
@@ -211,6 +264,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 			break;
@@ -222,6 +284,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 			break;
@@ -234,6 +305,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 
@@ -246,6 +326,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 
@@ -259,6 +348,15 @@ public class OrderInfoController extends BaseController {
 				if (address != null) {
 					oipo.setUserTel(address.getConsigneePhone());
 					oipo.setUserName(address.getConsigneeName());
+				}else{
+					List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.getByOderId(oipo.getId());
+					if(messageMiddleClientPOs!=null&&!messageMiddleClientPOs.isEmpty()){
+						MessagePO messagePO=conn_message.get(messageMiddleClientPOs.get(0).getMessageId());
+						if(messagePO!=null){
+							oipo.setUserTel(messagePO.getPhone());
+							oipo.setUserName(messagePO.getName());
+						}
+					}
 				}
 			}
 			break;

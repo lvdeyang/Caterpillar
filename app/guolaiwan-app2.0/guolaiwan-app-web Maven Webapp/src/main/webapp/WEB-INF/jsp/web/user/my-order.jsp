@@ -48,6 +48,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             $("#stab${state}").attr("class","cur")
 
          });
+         
+         function refundOrder(order){
+         	$.ajax({
+         			type:"post",
+         			data:{"order":order},
+         			url:basePath+"user/order/refund",
+         			success:function(msg){
+						if(msg=='success'){
+							alert("申请退款成功，将在一个工作日内处理完毕");
+							window.location.reload();
+						
+						}
+         			}
+         		});
+
+         }
+         
          function delOrder(order){
          	if(confirm("确定要删除此订单吗？")){
          		$.ajax({
@@ -183,324 +200,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                        </div>
                                    </div>
                                    <div class="ci2" >${order.userInfo}</div>
-                                   <div class="ci3"><b>￥${order.orderAllMoney}</b><p>${order.payMode}</p><p class="iphone">手机订单</p></div>
+                                   <div class="ci3"><b>￥${order.orderAllMoney}</b><p>${order.payMode}</p><!--<p class="iphone">手机订单</p>--></div>
                                    <div class="ci4"><p>${order.createDate}</p></div>
                                    <div class="ci5"><p>${order.orderState}</p> <!-- <p><a href="#">物流跟踪</a></p> --> <%-- <p><a href="<%=path %>/user/order/info?orderNO=${order.orderNO}">订单详情</a></p> --%></div>
-                                   <div class="ci5 ci8"><!-- <p>剩余15时20分</p> --> <p><a href="<%=path %>/user/order/submit?order=${order.uuid}" class="member-touch">立即支付</a> </p> <p><a href="javascript:delOrder('${order.uuid}')">取消订单</a> </p></div>
+                                   <div class="ci5 ci8"><!-- <p>剩余15时20分</p> --> 
+                                        <c:if test="${order.orderState == '未付款'}">
+                                            <p><a href="<%=path %>/user/order/submit?order=${order.uuid}" class="member-touch">立即支付</a> </p> 
+                                        	<p><a href="javascript:delOrder('${order.uuid}')">取消订单</a> </p>
+                                        </c:if>
+                                        
+                                        <c:if test="${order.orderState == '已付款'}">
+                                        	<p><a href="javascript:refundOrder('${order.uuid}')">申请退款</a> </p>
+                                        </c:if>
+                                        <p><a href="<%=path %>/user/order/info?orderNO=${order.orderNO}">订单详情</a></p>
+                                   </div>
                                </div>
                            </li>
                           </c:forEach>
                        </ul>
                    </div>
                </div>
-               <%-- <div class="member-return H-over" style="display:none;">
-                   <div class="member-cancel clearfix">
-                       <span class="be1">订单信息</span>
-                       <span class="be2">收货人</span>
-                       <span class="be2">订单金额</span>
-                       <span class="be2">订单时间</span>
-                       <span class="be2">订单状态</span>
-                       <span class="be2">订单操作</span>
-                   </div>
-                   <div class="member-sheet clearfix">
-                       <ul>
-                           <c:forEach items="${orders}" var="order">
-                           <li>
-                               <div class="member-minute clearfix">
-                                   <span>${order.createDate}</span>
-                                   <span>订单号：<em>${order.orderNO}</em></span>
-                                   <span>验单号：<em>${order.ydNO}</em></span>
-                                   <span><a href="#">商家名称:${order.shopName}</a></span>
-                                   <span class="member-custom">支付方式：<em>${order.payMode}</em></span>
-                               </div>
-                               <div class="member-circle clearfix">
-                                   <div class="ci1">
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="${order.productPic}" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">产品名称:${order.productName}</a></span>
-                                           <span class="gr3">X${order.productNum}</span>
-                                       </div>
-                                       
-                                   </div>
-                                   <div class="ci2" >${order.userInfo}</div>
-                                   <div class="ci3"><b>￥${order.orderAllMoney}</b><p>${order.payMode}</p><p class="iphone">手机订单</p></div>
-                                   <div class="ci4"><p>${order.createDate}</p></div>
-                                   <div class="ci5"><p>${order.orderState}</p> <!-- <p><a href="#">物流跟踪</a></p> --> <p><a href="<%=path %>/user/order/info?orderNO=${order.orderNO}">订单详情</a></p></div>
-                                   <div class="ci5 ci8"><!-- <p>剩余15时20分</p> --> <p><a href="<%=path %>/user/order/submit?order=${order.uuid}" class="member-touch">立即支付</a> </p> <p><a href="#">取消订单</a> </p></div>
-                               </div>
-                           </li>
-                          </c:forEach>
-                       </ul>
-                   </div>
-               </div>
-               <div class="H-over member-over" style="display:none;">
-               		
-               		<div class="member-cancel clearfix">
-                       <span class="be1">订单信息</span>
-                       <span class="be2">收货人</span>
-                       <span class="be2">订单金额</span>
-                       <span class="be2">订单时间</span>
-                       <span class="be2">订单状态</span>
-                       <span class="be2">订单操作</span>
-                   </div>
-                   <div class="member-sheet clearfix">
-                       <ul>
-                           <c:forEach items="${orders}" var="order">
-                           <li>
-                               <div class="member-minute clearfix">
-                                   <span>${order.createDate}</span>
-                                   <span>订单号：<em>${order.orderNO}</em></span>
-                                   <span>验单号：<em>${order.ydNO}</em></span>
-                                   <span><a href="#">商家名称:${order.shopName}</a></span>
-                                   <span class="member-custom">支付方式：<em>${order.payMode}</em></span>
-                               </div>
-                               <div class="member-circle clearfix">
-                                   <div class="ci1">
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="${order.productPic}" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">产品名称:${order.productName}</a></span>
-                                           <span class="gr3">X${order.productNum}</span>
-                                       </div>
-                                       
-                                   </div>
-                                   <div class="ci2" >${order.userInfo}</div>
-                                   <div class="ci3"><b>￥${order.orderAllMoney}</b><p>${order.payMode}</p><p class="iphone">手机订单</p></div>
-                                   <div class="ci4"><p>${order.createDate}</p></div>
-                                   <div class="ci5"><p>${order.orderState}</p> <p><a href="#">物流跟踪</a></p> <p><a href="<%=path %>/user/order/info?orderNO=${order.orderNO}">订单详情</a></p></div>
-                                   <div class="ci5 ci8"><p>剩余15时20分</p> <p><a href="<%=path %>/user/order/submit?order=${order.uuid}" class="member-touch">立即支付</a> </p> <p><a href="#">取消订单</a> </p></div>
-                               </div>
-                           </li>
-                          </c:forEach>
-                       </ul>
-                   </div>
-               </div>
-               <div class="H-over member-over" style="display:none;">
-               		
-               		<div class="member-cancel clearfix">
-                       <span class="be1">订单信息</span>
-                       <span class="be2">收货人</span>
-                       <span class="be2">订单金额</span>
-                       <span class="be2">订单时间</span>
-                       <span class="be2">订单状态</span>
-                       <span class="be2">订单操作</span>
-                   </div>
-                   <div class="member-sheet clearfix">
-                       <ul>
-                           <c:forEach items="${orders}" var="order">
-                           <li>
-                               <div class="member-minute clearfix">
-                                   <span>${order.createDate}</span>
-                                   <span>订单号：<em>${order.orderNO}</em></span>
-                                   <span>验单号：<em>${order.ydNO}</em></span>
-                                   <span><a href="#">商家名称:${order.shopName}</a></span>
-                                   <span class="member-custom">支付方式：<em>${order.payMode}</em></span>
-                               </div>
-                               <div class="member-circle clearfix">
-                                   <div class="ci1">
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="${order.productPic}" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">产品名称:${order.productName}</a></span>
-                                           <span class="gr3">X${order.productNum}</span>
-                                       </div>
-                                       
-                                   </div>
-                                   <div class="ci2" >${order.userInfo}</div>
-                                   <div class="ci3"><b>￥${order.orderAllMoney}</b><p>${order.payMode}</p><p class="iphone">手机订单</p></div>
-                                   <div class="ci4"><p>${order.createDate}</p></div>
-                                   <div class="ci5"><p>${order.orderState}</p> <p><a href="#">物流跟踪</a></p> <p><a href="<%=path %>/user/order/info?orderNO=${order.orderNO}">订单详情</a></p></div>
-                                   <div class="ci5 ci8"><p>剩余15时20分</p> <p><a href="<%=path %>/user/order/submit?order=${order.uuid}" class="member-touch">立即支付</a> </p> <p><a href="#">取消订单</a> </p></div>
-                               </div>
-                           </li>
-                          </c:forEach>
-                       </ul>
-                   </div>
-               </div>
-               <div class="H-over member-over" style="display:none;">
-               	
-               		<div class="member-cancel clearfix">
-                       <span class="be1">订单信息</span>
-                       <span class="be2">收货人</span>
-                       <span class="be2">订单金额</span>
-                       <span class="be2">订单时间</span>
-                       <span class="be2">订单状态</span>
-                       <span class="be2">订单操作</span>
-                   </div>
-                   <div class="member-sheet clearfix">
-                       <ul>
-                           <c:forEach items="${orders}" var="order">
-                           <li>
-                               <div class="member-minute clearfix">
-                                   <span>${order.createDate}</span>
-                                   <span>订单号：<em>${order.orderNO}</em></span>
-                                   <span>验单号：<em>${order.ydNO}</em></span>
-                                   <span><a href="#">商家名称:${order.shopName}</a></span>
-                                   <span class="member-custom">支付方式：<em>${order.payMode}</em></span>
-                               </div>
-                               <div class="member-circle clearfix">
-                                   <div class="ci1">
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="${order.productPic}" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">产品名称:${order.productName}</a></span>
-                                           <span class="gr3">X${order.productNum}</span>
-                                       </div>
-                                       
-                                   </div>
-                                   <div class="ci2" >${order.userInfo}</div>
-                                   <div class="ci3"><b>￥${order.orderAllMoney}</b><p>${order.payMode}</p><p class="iphone">手机订单</p></div>
-                                   <div class="ci4"><p>${order.createDate}</p></div>
-                                   <div class="ci5"><p>${order.orderState}</p> <p><a href="#">物流跟踪</a></p> <p><a href="<%=path %>/user/order/info?orderNO=${order.orderNO}">订单详情</a></p></div>
-                                   <div class="ci5 ci8"><p>剩余15时20分</p> <p><a href="<%=path %>/user/order/submit?order=${order.uuid}" class="member-touch">立即支付</a> </p> <p><a href="#">取消订单</a> </p></div>
-                               </div>
-                           </li>
-                          </c:forEach>
-                       </ul>
-                   </div>
-               </div>
-               <div class="H-over member-over" style="display:none;">
-               		
-               		<div class="member-cancel clearfix">
-                       <span class="be1">订单信息</span>
-                       <span class="be2">收货人</span>
-                       <span class="be2">订单金额</span>
-                       <span class="be2">订单时间</span>
-                       <span class="be2">订单状态</span>
-                       <span class="be2">订单操作</span>
-                   </div>
-                   <div class="member-sheet clearfix">
-                       <ul>
-                           <c:forEach items="${orders}" var="order">
-                           <li>
-                               <div class="member-minute clearfix">
-                                   <span>${order.createDate}</span>
-                                   <span>订单号：<em>${order.orderNO}</em></span>
-                                   <span>验单号：<em>${order.ydNO}</em></span>
-                                   <span><a href="#">商家名称:${order.shopName}</a></span>
-                                   <span class="member-custom">支付方式：<em>${order.payMode}</em></span>
-                               </div>
-                               <div class="member-circle clearfix">
-                                   <div class="ci1">
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="${order.productPic}" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">产品名称:${order.productName}</a></span>
-                                           <span class="gr3">X${order.productNum}</span>
-                                       </div>
-                                       
-                                   </div>
-                                   <div class="ci2" >${order.userInfo}</div>
-                                   <div class="ci3"><b>￥${order.orderAllMoney}</b><p>${order.payMode}</p><p class="iphone">手机订单</p></div>
-                                   <div class="ci4"><p>${order.createDate}</p></div>
-                                   <div class="ci5"><p>${order.orderState}</p> <p><a href="#">物流跟踪</a></p> <p><a href="<%=path %>/user/order/info?orderNO=${order.orderNO}">订单详情</a></p></div>
-                                   <div class="ci5 ci8"><p>剩余15时20分</p> <p><a href="<%=path %>/user/order/submit?order=${order.uuid}" class="member-touch">立即支付</a> </p> <p><a href="#">取消订单</a> </p></div>
-                               </div>
-                           </li>
-                          </c:forEach>
-                       </ul>
-                   </div>
-               </div>
-               <div class="H-over member-over" style="display:none;">
-               		
-               		
-               </div>
-               <div class="H-over member-over" style="display:none;">
-               	
-               		<li>
-                               <div class="member-minute clearfix">
-                                   <span>2015-09-22 18:22:33</span>
-                                   <span>订单号：<em>98653056821</em></span>
-                                   <span><a href="#">以纯甲醇旗舰店</a></span>
-                                   <span class="member-custom">客服电话：<em>010-6544-0986</em></span>
-                               </div>
-                               <div class="member-circle clearfix">
-                                   <div class="ci1">
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="theme/img/pd/m1.png" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">红米Note2 标准版 白色 移动4G手机 双卡双待</a></span>
-                                           <span class="gr3">X1</span>
-                                       </div>
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="theme/img/pd/m2.png" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">AXON天机mini NBA限量版</a></span>
-                                           <span class="gr3">X9</span>
-                                       </div>
-                                   </div>
-                                   <div class="ci2" >张子琪</div>
-                                   <div class="ci3"><b>￥120.00</b><p>货到付款</p><p class="iphone">手机订单</p></div>
-                                   <div class="ci4"><p>2015-09-22</p></div>
-                                   <div class="ci5"><p>已申请退货</p> <p><a href="#">退货日志</a></p></div>
-                                   <div class="ci6"><p><a href="#">取消退货</a> </p></div>
-                               </div>
-                           </li>
-                           <li>
-                               <div class="member-minute clearfix">
-                                   <span>2015-09-22 18:22:33</span>
-                                   <span>订单号：<em>98653056821</em></span>
-                                   <span><a href="#">以纯甲醇旗舰店</a></span>
-                                   <span class="member-custom">客服电话：<em>010-6544-0986</em></span>
-                               </div>
-                               <div class="member-circle clearfix">
-                                   <div class="ci1">
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="theme/img/pd/m1.png" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">红米Note2 标准版 白色 移动4G手机 双卡双待</a></span>
-                                           <span class="gr3">X1</span>
-                                       </div>
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="theme/img/pd/m2.png" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">AXON天机mini NBA限量版</a></span>
-                                           <span class="gr3">X9</span>
-                                       </div>
-                                   </div>
-                                   <div class="ci2" >张子琪</div>
-                                   <div class="ci3"><b>￥120.00</b><p>货到付款</p><p class="iphone">手机订单</p></div>
-                                   <div class="ci4"><p>2015-09-22</p></div>
-                                   <div class="ci5"><p>已完成</p> <p><a href="#">订单详情</a></p></div>
-                                   <div class="ci6"><p><a href="#">取消退货</a> </p></div>
-                               </div>
-                           </li>
-                           <li>
-                               <div class="member-minute clearfix">
-                                   <span>2015-09-22 18:22:33</span>
-                                   <span>订单号：<em>98653056821</em></span>
-                                   <span><a href="#">以纯甲醇旗舰店</a></span>
-                                   <span class="member-custom">客服电话：<em>010-6544-0986</em></span>
-                               </div>
-                               <div class="member-circle clearfix">
-                                   <div class="ci1">
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="theme/img/pd/m1.png" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">红米Note2 标准版 白色 移动4G手机 双卡双待</a></span>
-                                           <span class="gr3">X1</span>
-                                       </div>
-                                       <div class="ci7 clearfix">
-                                           <span class="gr1"><a href="#"><img src="theme/img/pd/m2.png" width="60" height="60" title="" about=""></a></span>
-                                           <span class="gr2"><a href="#">AXON天机mini NBA限量版</a></span>
-                                           <span class="gr3">X9</span>
-                                       </div>
-                                   </div>
-                                   <div class="ci2" >张子琪</div>
-                                   <div class="ci3"><b>￥120.00</b><p>货到付款</p><p class="iphone">手机订单</p></div>
-                                   <div class="ci4"><p>2015-09-22</p></div>
-                                   <div class="ci5"><p>已完成</p> <p><a href="#">订单详情</a></p></div>
-                                   <div class="ci6"><p><a href="#">取消退货</a> </p></div>
-                               </div>
-                           </li>
-               </div> --%>
 
                 <div class="clearfix" style="padding:30px 20px;">
                 	${pages}
-                    <!-- <div class="fr pc-search-g pc-search-gs">
-                        <a style="display:none" class="fl " href="#">上一页</a>
-                        <a href="#" class="current">1</a>
-                        <a href="javascript:;">2</a>
-                        <a href="javascript:;">3</a>
-                        <a href="javascript:;">4</a>
-                        <a href="javascript:;">5</a>
-                        <a href="javascript:;">6</a>
-                        <a href="javascript:;">7</a>
-                        <span class="pc-search-di">…</span>
-                        <a href="javascript:;">1088</a>
-                        <a title="使用方向键右键也可翻到下一页哦！" class="" href="javascript:;">下一页</a>
-                    </div> -->
+                   
                 </div>
             </div>
             <c:if test="${state==1}">

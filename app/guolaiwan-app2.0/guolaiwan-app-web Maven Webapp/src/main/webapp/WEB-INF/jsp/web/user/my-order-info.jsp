@@ -74,49 +74,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        <dt>订单信息</dt>
                        <dd>订单编号：${order.orderNO}</dd>
                        <dd>订单金额：￥${order.orderAllMoney}</dd>
-                       <dd>付款/订单？时间：${order.createDate}</dd>
-                       <dd>发货时间？：2015-09-22 08：22</dd>
-                   </dl>
-                   
-                   <dl>
-                       <dt>商品信息</dt>
-                       <dd class="member-seller">本订单是由 “以纯甲醇旗舰店” 发货并且提高售后服务，商品在下单后会尽快给您发货。 </dd>
+                       <dd>付款/订单时间：${order.createDate}</dd>
                    </dl>
                </div>
                <div class="member-serial">
                    <ul>
                        <li class="clearfix">
-                           <div class="No1">商品编号</div>
-                           <div class="No2">商品详情</div>
+                           <div class="No1" style="width:250px;">商户名称</div>
+                           <div class="No2" style="width:250px;">商品详情</div>
                            <div class="No3">数量</div>
                            <div class="No4">单价</div>
                            <div class="No5">小计</div>
                        </li>
                        <li class="clearfix">
-                           <div class="No1"></div>
-                           <div class="No2"><a href="#">${order.productName}</a> </div>
+                           <div class="No1" style="width:250px;">${order.shopName}</div>
+                           <div class="No2" style="width:250px;"><a href="#">${order.productName}</a> </div>
                            <div class="No3">${order.productNum}</div>
                            <div class="No4">￥${order.productPrice}</div>
-                           <div class="No5">￥???</div>
+                           <div class="No5">￥${order.payMoney}</div>
                        </li>
-                       <li class="clearfix">
-                           <div class="No1">908756</div>
-                           <div class="No2"><a href="#">现货包邮小米手环充电线 小米手环充电器 小米手环数据线 有腕带</a> </div>
-                           <div class="No3">2</div>
-                           <div class="No4">￥78.00</div>
-                           <div class="No5">￥99.00</div>
-                       </li>
+                      
                    </ul>
                </div>
             </div>
-            <div class="member-settle clearfix">
-                <div class="fr">
-                    <div><span>商品金额：</span><em>￥${orderAllMoney}</em></div>
-                    <div><span>运费：</span><em>￥270.00</em></div>
-                    <div class="member-line"></div>
-                    <div><span>共需支付：</span><em>￥280.00</em></div>
-                </div>
-            </div>
+            <c:if test="${order.orderState != '未付款'}">
+	            <image style="margin:0 auto;width:200px;height:200px;" src="<%=path%>/file/${order.ydNO}"/>
+	            <div>截图或拍照订单二维码现场验单</div>
+            </c:if>
+            
         </div>
     </div>
 </section>

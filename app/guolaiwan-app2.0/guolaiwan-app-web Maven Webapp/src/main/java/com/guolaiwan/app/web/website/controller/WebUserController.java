@@ -324,7 +324,14 @@ public class WebUserController extends WebBaseControll {
 		Map<String, Object> data = new HashMap<String, Object>();
 
 		OrderInfoPO order = conn_order.getByField("orderNO", orderNO);
-		data.put("order", order);
+		OrderInfoVO orderInfoVO=new OrderInfoVO();
+		try {
+			orderInfoVO.set(order);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		data.put("order", orderInfoVO);
 		ModelAndView mav = new ModelAndView("/web/user/my-order-info", data);
 
 		return mav;
