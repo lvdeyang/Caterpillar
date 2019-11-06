@@ -14,9 +14,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        background: -webkit-linear-gradient(top, #D6002A, #B40F02) !important;  /*Safari5.1 Chrome 10+*/  
        background: -o-linear-gradient(top, #D6002A, #B40F02) !important; /*Opera 11.10+*/  
    		}   
-		.member-left{
-   		 margin-top:53px !important;
-   		}
    		.member-apart{
    		  padding:0 !important;
    		  height:50px !important;
@@ -31,7 +28,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    		}
    		.login-input{
    		width:auto !important;
-   		padding-left:90px !important;
+   		padding-left:260px !important;
    		margin:25px auto !important;
    		text-align: center;
    		

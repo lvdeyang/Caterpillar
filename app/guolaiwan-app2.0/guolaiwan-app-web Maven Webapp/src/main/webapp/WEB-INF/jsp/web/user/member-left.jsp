@@ -4,7 +4,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="member-left fl" style="border: 1px solid #e4eaee;">
+<div class="member-left fl" style="border: 1px solid #e4eaee;margin:-2px 0 0 -258px;border-radius:2px;overflow: hidden;">
     <div class="member-apart clearfix">
         <div class="fl"><a href="#"><img style="border-radius:50%;" src="<%=path%>/lib/images/logo.png"></a></div>
         <div class="fl" style="padding-left:20px;">

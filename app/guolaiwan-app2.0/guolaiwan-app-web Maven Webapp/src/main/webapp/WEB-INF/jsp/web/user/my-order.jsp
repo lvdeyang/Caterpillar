@@ -164,17 +164,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <li id="stab6"><a href="#">退款成功</a></li>
                 </ul>
             </div>
-            <div class="member-border">
+            <div class="member-border" style="width:100%;">
                <div class="member-return H-over">
-                   <div class="member-cancel clearfix">
+                   <!-- <div class="member-cancel clearfix">
                        <span class="be1">订单信息</span>
                        <span class="be2">收货人</span>
                        <span class="be2">订单金额</span>
                        <span class="be2">订单时间</span>
                        <span class="be2">订单状态</span>
                        <span class="be2">订单操作</span>
-                   </div>
-                   <div class="member-sheet clearfix">
+                   </div> -->
+                   <div class="member-sheet clearfix" style="margin:50px 0 0 0;">
                        <ul>
                            <c:forEach items="${orders}" var="order">
                            <li>

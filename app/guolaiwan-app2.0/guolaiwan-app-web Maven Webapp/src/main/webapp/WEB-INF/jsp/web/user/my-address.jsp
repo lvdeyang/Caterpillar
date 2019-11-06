@@ -5,9 +5,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <style>
-      .member-left{
-   		 margin-top:53px !important;
-   		}
       .member-apart{
    		  padding:0 !important;
    		  height:50px !important;
@@ -182,7 +179,7 @@ height:36px !important;
                     <ul>
                     
                       <c:forEach items="${addresses}" var="address">
-                        <li class="clearfix" style="width:937px;">
+                        <li class="clearfix" style="width:1200px;">
                         	<input type="hidden" value="${address.id}" name="addressId" >
                             <div class="user-info1 fl clearfix" style="float:left;">
                                 <div class="user-info">

@@ -53,17 +53,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<section>
 		<div class="containers">
 			<div class="pc-space">
-				<div class="pc-order-title clearfix">
+				<div class="pc-order-title clearfix"  style="text-align: center;">
 					
-					<div class="fl" style="font-size:14px">
-						<p>订单号：${order.orderNO}</p></br>
-						<p>收款商家：${order.shopName}&nbsp;&nbsp;&nbsp;<font style="font-weight: bold;font-size: 16px">${order.productName}</font></p></br>
+					<div class="fl" style="font-size:14px;width:100%;text-align: center;margin:0 auto;">
+						<ul style="text-align: left;line-height:60px;margin-left:470px;">
+						<li>订单号：${order.orderNO}</li>
+						<li>收款商家：${order.shopName}</li>
+						<li>商品名称：${order.productName}</li>
+						</ul>
+						</br>
+				          
 					</div>
 				</div>
 				<div class="pc-order-text clearfix">
-					<div style="margin-left: 450px">
-						<div style="display: inline;float:left"><img  src="<%=basePath%>/webtheme/theme/img/pay/ok.jpg"  ></div>
-						<div style="display: inline ;margin-top: 5px;float:left"><h3>您的订单已支付成功,请保持电话畅通。。。。</h3></div>
+					<div style="height:92px;text-align: center;margin:0 auto;">
+						<div style="display: inline-block;vertical-align: middle;"><img  src="<%=basePath%>/webtheme/theme/img/pay/ok.png"  ></div>
+						<div style="display: inline-block;margin-top: 5px;"><h3>您的订单已支付成功,请保持电话畅通呦~~</h3></div>
 					</div>
 				</div>
 			</div>

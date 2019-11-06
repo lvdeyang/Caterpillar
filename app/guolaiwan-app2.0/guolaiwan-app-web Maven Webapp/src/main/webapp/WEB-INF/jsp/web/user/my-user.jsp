@@ -6,9 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <style>
 
- .member-left{
-   		 margin-top:53px !important;
-   		}
+
       .member-apart{
    		  padding:0 !important;
    		  height:50px !important;

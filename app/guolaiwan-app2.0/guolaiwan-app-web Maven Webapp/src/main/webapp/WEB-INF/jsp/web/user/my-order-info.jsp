@@ -4,6 +4,42 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style>
+      .member-apart{
+   		  padding:0 !important;
+   		  height:50px !important;
+   		  line-height: 25px !important; 
+   		  width:208px !important;
+   		  background: #fff !important;
+   		}
+		.member-apart img{
+   		  width:35px !important;
+   		  height:35px !important;;
+   		  margin:7.5px 0 0 20px !important;
+   		}
+   		.login-input{
+   		width:auto !important;
+   		padding-left:90px !important;
+   		margin:25px auto !important;
+   		text-align: center;
+   		
+   		}
+   		  #submit,.member-head{ 
+       background: -ms-linear-gradient(top, #D6002A, #B40F02) !important;       /* IE 10 */  
+       background:-moz-linear-gradient(top,#D6002A,#B40F02) !important;/*火狐*/   
+       background:-webkit-gradient(linear, 0% 0%, 0%100%,from(#D6002A), to(#B40F02)) !important;/*谷歌*/   
+       background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#D6002A), to(#B40F02)) !important;      /* Safari 4-5, Chrome 1-9*/
+       background: -webkit-linear-gradient(top, #D6002A, #B40F02) !important;  /*Safari5.1 Chrome 10+*/  
+       background: -o-linear-gradient(top, #D6002A, #B40F02) !important; /*Opera 11.10+*/  
+   		} 
+   		   		.search-text{
+height:36px !important;
+}
+  select{
+   height:35px;
+   line-height: 35px;
+  }
+</style>
 <!DOCTYPE html>
 <html>
  <head>
@@ -65,7 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="member-right fr">
             <div class="member-head">
                 <div class="member-heels fl"><h2>订单号：${order.orderNO}</h2></div>
-                <div class="member-backs fr"><a href="#">返回订单首页</a></div>
+                <!-- <div class="member-backs fr"><a href="#">返回订单首页</a></div> -->
             </div>
             <div class="member-border">
                <div class="member-order">
@@ -98,8 +134,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                </div>
             </div>
             <c:if test="${order.orderState != '未付款'}">
+                 <div style="position: absolute;right:345px;top:380px;text-align: center;">
 	            <image style="margin:0 auto;width:200px;height:200px;" src="<%=path%>/file/${order.ydNO}"/>
-	            <div>截图或拍照订单二维码现场验单</div>
+	            <p style="margin:10px 0;color:red;font-weight: bold;">亲，需要截图或拍照上方二维码现场验单呦~~</p>
+	            </div>
             </c:if>
             
         </div>
