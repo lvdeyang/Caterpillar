@@ -91,9 +91,11 @@ public class AliAppOrderInfo {
 
 		keyValues.put("app_id", APPID);// allMoney
 
+		
+		
 		keyValues.put("biz_content",
 				"{\"timeout_express\":\"30m\",\"product_code\":\"" + num + "\",\"total_amount\":\"" + allMoneyd
-						+ "\",\"subject\":\"" + productName + "*" + num + "\",\"body\":\"" + productName
+						+ "\",\"subject\":\"" + (productName==null?"到店支付":(productName+ "*" + num)) + "\",\"body\":\"" + productName
 						+ "\",\"out_trade_no\":\"" + orderNo + "\",\"notify_url\":\"" + notify_url + "\"}");
 
 		keyValues.put("charset", "utf-8");
