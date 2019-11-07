@@ -5947,6 +5947,12 @@ public class AppController extends WebBaseControll {
 			return "err";
 		}
 	}
-
+	
+	@RequestMapping(value = "/share")
+	public ModelAndView app(HttpServletRequest request,HttpSession session) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("app/homepage");
+		return mv;
+	}
 	
 }
