@@ -466,9 +466,9 @@ html, body {
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span>');
 		           }
-		          html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 2%;">￥'+str[i]+'</span><span style="float:left;text-decoration: line-through;font-size:90%;color:#515151;margin:14px 0 0 5px; ">'+
+		          html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 2%;">￥'+str[i]+'</span>  <span style="float:left;text-decoration: line-through;font-size:90%;color:#515151;margin:14px 0 0 5px; ">'+
 		          list[i].productOldPrice
-		          +'</span><span style="float:right;margin-top:12px">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin-top:12px;">'+grade[i]+'分</span>   </p>');
+		          +'</span><span style="float:right;margin:-16px 8px 0 0">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin:12px 7px 0 0 ;">'+grade[i]+'分</span>   </p>');
 		           html.push('</div></div></div>');
 		          
 		 		$('#contents').append(html.join(''));
@@ -527,8 +527,8 @@ html, body {
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>');
 		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span>'); 
 		           }
-		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 2%;">￥'+str[i]+'</span><span style="float:left;text-decoration: line-through;font-size:90%;color:#515151;margin:14px 0 0 5px; ">'+
-		             list[i].productOldPrice+'</span><span style="float:right;margin-top:12px">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin-top:12px;">'+grade[i]+'分</span>   </p>');
+		           html.push('<p style="font-size:12px;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 2%;">￥'+str[i]+'</span>   <span style="float:left;text-decoration: line-through;font-size:90%;color:#515151;margin:14px 0 0 5px; ">'+
+		             list[i].productOldPrice+'</span><span style="float:right;margin:-16px 8px 0 0">已售'+data.marketList[i]+'+</span><span style="color:#EC6D1E;float:right;margin:12px 7px 0 0 ;">'+grade[i]+'分</span>   </p>');
 		           html.push('</div></div></div>');
 		          
 		 		$('#contents').append(html.join(''));
