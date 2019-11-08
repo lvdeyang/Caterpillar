@@ -73,21 +73,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				      </select>
 				    </div>
 				  </div>
-				<div class="layui-form-item layui-form-text">
-				    <label class="layui-form-label" style="width:110px;float:left;">上级景点id：</label>
-				    <div class="layui-input-block" style="width:400px;float:left;">
-				      <input name="schildid" type="text" placeholder="请输入id" class="layui-input" value="${child.id}" />
-				    </div>
-				  </div>
-				<br />
-				<br />
+				  
+				<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label"> 显示图片</label>
+				<div class="layui-input-inline">
+				<table style="width:360px;">
+					<tr>
+					<td align="center" id='shopImgs'>
+					
+					</td>
+					<td style="width:120px;">
+						<a href="javascript:openMap('添加图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=subImage1&img=subImageUrl1','600','400')" class="layui-btn " >添加图片</a>
+					    <input type="hidden" id="subImage1" class="subImage" value="${pic1}"/>
+					    <image src="${sysConfig.webUrl}${pic1}" style="width:92px;height:92px;margin-top:5px" id="subImageUrl1"/>
+					</td>
+					<td style="width:120px;" >
+						<a href="javascript:openMap('添加图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=subImage2&img=subImageUrl2','600','400')" class="layui-btn " >添加图片</a>
+					    <input type="hidden" id="subImage2" class="subImage" value="${pic2}"/>
+					    <image src="${sysConfig.webUrl}${pic2}" style="width:92px;height:92px;margin-top:5px" id="subImageUrl2"/>
+					</td>
+					<td style="width:120px;" >
+						<a href="javascript:openMap('添加图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=subImage3&img=subImageUrl3','600','400')" class="layui-btn " >添加图片</a>
+					    <input type="hidden" id="subImage3" class="subImage" value="${pic3}"/>
+					    <image src="${sysConfig.webUrl}${pic3}" style="width:92px;height:92px;margin-top:5px" id="subImageUrl3"/>
+					</td>
+					</tr>
+					<tr><td><div style="height:10px;"></div></td></tr>
+				</table>
+				</div>
+				  
 				
 				<div class="layui-form-item">
 					<label for="L_title" class="layui-form-label"> 选择声音</label>
 				<div class="layui-input-inline" style="width: 100px">
 				    <input id="cvoice"  hidden="hidden">
-					<input type="text" id="voice" name="childVoice" 
-						lay-verify="title" autocomplete="off"   class="layui-input" value="${child.chineseGirl}">
+					<input type="text" id="voice" name="voice" 
+						lay-verify="title" autocomplete="off"   class="layui-input" value="${child.cVoice}">
 				</div>
 				<div class="layui-input-inline">
 					<a href="javascript:openMap('选择声音','<%=request.getContextPath() %>/admin/Voice/sellist?sel=voice&img=cvoice','600','400')" class="layui-btn " >更换声音</a>
@@ -121,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input type="text" name="childLatitude" id="shopLatitude"  autocomplete="off" class="layui-input" value="${child.childLatitude}">
 					</div>
 					<div class="layui-input-inline" style="width: 100px;">
-				  		<a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >更该坐标</a>
+				  		<!-- <a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >更该坐标</a> -->
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -135,7 +156,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input type="text" name="wxChildLatitude" id="wxChildLatitude"  autocomplete="off" class="layui-input" value="${child.wxChildLatitude}">
 					</div>
 					<div class="layui-input-inline" style="width: 100px;">
-				  		<a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >更该坐标</a>
+				  		<!-- <a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >更该坐标</a> -->
 					</div>
 				</div>
 				<div class="layui-form-item">

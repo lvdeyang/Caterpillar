@@ -91,63 +91,18 @@
 				</table>
 				</div>
 				
-				<div class="layui-form-item layui-form-text">
-				    <label class="layui-form-label" style="width:110px;float:left;">上级景点id：</label>
-				    <div class="layui-input-block" style="width:400px;float:left;">
-				      <input name="schildid" type="text" placeholder="请输入id" class="layui-input" />
-				    </div>
-				  </div>
-				<br />
-				<br />
 				
 				<div class="layui-form-item">
-					<label for="L_title" class="layui-form-label"> 选择中文女声</label>
+					<label for="L_title" class="layui-form-label"> 选择声音</label>
 				<div class="layui-input-inline" style="width: 100px">
-				    <input id="cvoice"  hidden="hidden">
-					<input type="text" id="voice" name="chinesegirl" 
+				    <input id="cvoice"  hidden="hidden"><!-- 这个没啥用，暂时不删了 -->
+					<input type="text" id="voice" name="voice" 
 						lay-verify="title" autocomplete="off"   class="layui-input">
 				</div>
 				<div class="layui-input-inline">
 					<a href="javascript:openMap('选择声音','<%=request.getContextPath() %>/admin/Voice/sellist?sel=voice&img=cvoice','600','400')" class="layui-btn " >声音素材</a>
 				</div>
 				</div>
- 				
- 				<div class="layui-form-item">
-					<label for="L_title" class="layui-form-label"> 选择中文男声</label>
-				<div class="layui-input-inline" style="width: 100px">
-				    <input id="cvoice"  hidden="hidden">
-					<input type="text" id="voice" name="chineseboy" 
-						lay-verify="title" autocomplete="off"   class="layui-input">
-				</div>
-				<div class="layui-input-inline">
-					<a href="javascript:openMap('选择声音','<%=request.getContextPath() %>/admin/Voice/sellist?sel=voice&img=cvoice','600','400')" class="layui-btn " >声音素材</a>
-				</div>
-				</div>
-				
-				<div class="layui-form-item">
-					<label for="L_title" class="layui-form-label"> 选择英文女声</label>
-				<div class="layui-input-inline" style="width: 100px">
-				    <input id="cvoice"  hidden="hidden">
-					<input type="text" id="voice" name="englishgirl" 
-						lay-verify="title" autocomplete="off"   class="layui-input">
-				</div>
-				<div class="layui-input-inline">
-					<a href="javascript:openMap('选择声音','<%=request.getContextPath() %>/admin/Voice/sellist?sel=voice&img=cvoice','600','400')" class="layui-btn " >声音素材</a>
-				</div>
-				</div>
-				
-				<div class="layui-form-item">
-					<label for="L_title" class="layui-form-label"> 选择英文男声</label>
-				<div class="layui-input-inline" style="width: 100px">
-				    <input id="cvoice"  hidden="hidden">
-					<input type="text" id="voice" name="englishboy" 
-						lay-verify="title" autocomplete="off"   class="layui-input">
-				</div>
-				<div class="layui-input-inline">
-					<a href="javascript:openMap('选择声音','<%=request.getContextPath() %>/admin/Voice/sellist?sel=voice&img=cvoice','600','400')" class="layui-btn " >声音素材</a>
-				</div>
-				</div>
- 				
  				 <div class="layui-form-item">
                	<div class="layui-inline">
                     <label for="productOldPrice" class="layui-form-label">
@@ -180,7 +135,30 @@
 						<input type="text" name="childLatitude" id="shopLatitude"  autocomplete="off" class="layui-input">
 					</div>
 					<div class="layui-input-inline" style="width: 100px;">
-				  		<a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >打开地图</a>
+				  		<!-- <a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >打开地图</a> -->
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label for="L_title" class="layui-form-label"> 微信经度： </label>
+					<div class="layui-input-inline" style="width: 100px;">
+						<input type="text"  name="wxChildLongitude" id="wxChildLongitude"  autocomplete="off" class="layui-input" >
+					</div>
+					<div class="layui-form-mid">-</div>
+					<label for="L_title" class="layui-form-label"> 微信纬度 ：</label>
+      				<div class="layui-input-inline" style="width: 100px;">
+						<input type="text" name="wxChildLatitude" id="wxChildLatitude"  autocomplete="off" class="layui-input" >
+					</div>
+					<div class="layui-input-inline" style="width: 100px;">
+				  		<!-- <a href="javascript:openMap('腾讯地图','<%=request.getContextPath() %>/layui/txmap.html','600','400')" class="layui-btn" >更该坐标</a> -->
+					</div>
+				</div>
+				
+				
+				<div class="layui-form-item">
+					<label for="L_title" class="layui-form-label"> 下个浏览景点： </label>
+					<div class="layui-input-inline" style="width: 100px;">
+						<input type="text"  name="relevance" id="relevance"  autocomplete="off" class="layui-input" value="${child.relevance}">
 					</div>
 				</div>
 				

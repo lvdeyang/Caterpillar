@@ -218,6 +218,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 ,count: allcount
                 ,first: '首页'
     			,last: '尾页'
+    			,page:false
     			,limit: 10
     			,prev: '<em><</em>'
     			,next: '<em>></em>'

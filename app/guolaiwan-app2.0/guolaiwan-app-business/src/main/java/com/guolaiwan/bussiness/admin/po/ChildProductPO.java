@@ -26,17 +26,8 @@ public class ChildProductPO extends AbstractBasePO {
 	private String childPic;
 
 	//中文女声
-	private String chineseGirl;
+	private String cVoice;
 
-	//中文男声
-	private String chineseBoy;
-	
-	//英文女声
-	private String englishGirl;
-	
-	//英文男声
-	private String englishBoy;
-	
 	//经度
 	private String childLongitude;
 
@@ -62,10 +53,6 @@ public class ChildProductPO extends AbstractBasePO {
 	
 	private int isCen;//判断是否是小导览点(1:是,0:不是)
 
-	private String chineseContent;//中文介绍
-	
-	private String englishContent;//英文介绍
-	
 	private String scope; // 讲解范围
 	
 	private int isTaught; // 是否讲解(Taught)
@@ -102,10 +89,7 @@ public class ChildProductPO extends AbstractBasePO {
 		this.wxChildLatitude = wxChildLatitude;
 	}
 
-	public String getEnglishContent() {
-		return englishContent;
-	}
-
+	
 	public String getScope() {
 		return scope;
 	}
@@ -120,50 +104,6 @@ public class ChildProductPO extends AbstractBasePO {
 
 	public void setIsTaught(int isTaught) {
 		this.isTaught = isTaught;
-	}
-
-	public void setEnglishContent(String englishContent) {
-		this.englishContent = englishContent;
-	}
-
-	public String getChineseContent() {
-		return chineseContent;
-	}
-
-	public void setChineseContent(String chineseContent) {
-		this.chineseContent = chineseContent;
-	}
-
-	public String getChineseBoy() {
-		return chineseBoy;
-	}
-
-	public void setChineseBoy(String chineseBoy) {
-		this.chineseBoy = chineseBoy;
-	}
-
-	public String getEnglishGirl() {
-		return englishGirl;
-	}
-
-	public void setEnglishGirl(String englishGirl) {
-		this.englishGirl = englishGirl;
-	}
-
-	public String getEnglishBoy() {
-		return englishBoy;
-	}
-
-	public void setEnglishBoy(String englishBoy) {
-		this.englishBoy = englishBoy;
-	}
-
-	public String getChineseGirl() {
-		return chineseGirl;
-	}
-
-	public void setChineseGirl(String chineseGirl) {
-		this.chineseGirl = chineseGirl;
 	}
 
 	public int getIsCen() {
@@ -253,6 +193,16 @@ public class ChildProductPO extends AbstractBasePO {
 	public void setLinkedPoint(String linkedPoint) {
 		this.linkedPoint = linkedPoint;
 	}
+
+	public String getcVoice() {
+		return cVoice;
+	}
+
+	public void setcVoice(String cVoice) {
+		this.cVoice = cVoice;
+	}
+
+	
 
 
 

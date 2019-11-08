@@ -976,12 +976,13 @@ public class ProductController extends BaseController {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		long productID = Long.parseLong(request.getParameter("productID"));
-		List<ChildProductPO> childListP = conn_childProduct.findByField("productID", productID);
+		int currPage=Integer.parseInt(request.getParameter("pagecurr"));
+		List<ChildProductPO> childListP = conn_childProduct.findByField("productID", productID, currPage, 10);
+		
 		List<ChildProductVO> childListV = ChildProductVO.getConverter(ChildProductVO.class).convert(childListP,
 				ChildProductVO.class);
 
 		strMap.put("childList", childListV);
-		// strMap.put("childList", childListP);
 		return strMap;
 	}
 
@@ -1009,51 +1010,38 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/child/add.do", method = RequestMethod.POST)
 	public String addchilddo(HttpServletRequest request) throws Exception {
 		String childName = request.getParameter("childName");
-		String childVoice = request.getParameter("childVoice");
+		String voice = request.getParameter("voice");
 		String childLongitude = request.getParameter("childLongitude");
 		String childLatitude = request.getParameter("childLatitude");
 		String content = request.getParameter("desc");
 		String lanId = request.getParameter("lan");
 		String scale = request.getParameter("scale");
-		String schildid = request.getParameter("schildid");
-		String chinesegirl = request.getParameter("chinesegirl");
-		String chineseboy = request.getParameter("chineseboy");
-		String englishgirl = request.getParameter("englishgirl");
-		String englishboy = request.getParameter("englishboy");
         String linkedPoint=request.getParameter("linkedPoint");
+        String wxChildLongitude = request.getParameter("wxChildLongitude");
+		String wxChildLatitude = request.getParameter("wxChildLatitude");
 		long productID = Long.parseLong(request.getParameter("productID"));
+		String relevance = request.getParameter("relevance");
+		String scope = request.getParameter("scope");
 
 		ChildProductPO child = new ChildProductPO();
-		if (chinesegirl!=null&&!"".equals(chinesegirl)) {
-			child.setChineseGirl(chinesegirl);
-		}
-		if (chineseboy!=null&&!"".equals(chineseboy)) {
-			child.setChineseBoy(chineseboy);
-		}
-		if (englishgirl!=null&&!"".equals(englishgirl)) {
-			child.setEnglishGirl(englishgirl);
-		}
-		if (englishboy!=null&&!"".equals(englishboy)) {
-			child.setEnglishBoy(englishboy);
-		}
+		
 		child.setUpdateTime(new Date());
 		child.setChildName(childName);
-		child.setChineseGirl(childVoice);
+		child.setcVoice(voice);
 		child.setChildLongitude(childLongitude);
 		child.setChildLatitude(childLatitude);
 		child.setProductID(productID);
 		child.setLanId(Long.parseLong(lanId));
 		child.setChildScale(scale);
+		child.setRelevance(relevance);
 		String imgids = request.getParameter("imgids");
 		child.setChildPic(imgids);
+		child.setContent(content);
+		child.setScope(scope);
 		child.setLinkedPoint(linkedPoint);
+		child.setWxChildLongitude(wxChildLongitude);
+		child.setWxChildLatitude(wxChildLatitude);
 		conn_childProduct.saveOrUpdate(child);
-		ChildPicAndContentPO cpac = new ChildPicAndContentPO();
-		cpac.setChildPic(imgids);
-		cpac.setChildId(Long.parseLong(schildid));
-		cpac.setChildContent(content);
-		cpac.setChildId(child.getId());
-		conn_childPicAndContent.saveOrUpdate(cpac);
 		return "success";
 	}
 
@@ -1066,15 +1054,24 @@ public class ProductController extends BaseController {
 		long productID = Long.parseLong(request.getParameter("productID"));
 		String uuid = request.getParameter("uuid");
 		ChildProductPO child = conn_childProduct.get(uuid);// 获取子产品
-		List<PicproRelationPO> pprs = conn_picproRelation.getPprByChild(child.getId());
-		List<PicturePO> pics = conn_picture.getPicsByPprs(pprs);
+		//List<PicproRelationPO> pprs = conn_picproRelation.getPprByChild(child.getId());
+		//List<PicturePO> pics = conn_picture.getPicsByPprs(pprs);
+		String pic1="",pic2="",pic3="";
+		String[] pics=child.getChildPic().split(",");
+		if(pics.length>0)pic1=pics[0];
+		if(pics.length>1)pic2=pics[1];
+		if(pics.length>2)pic3=pics[2];
+		
+		strMap.put("pic1", pic1);
+		strMap.put("pic2", pic2);
+		strMap.put("pic3", pic3);
+		
 
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		// 获取关联图片对象
 		strMap.put("lanList", volist);
 		strMap.put("productID", productID);
 		strMap.put("child", child);
-		strMap.put("pics", pics);
 		strMap.put("sysConfig", sysConfig);
 		ModelAndView mv = new ModelAndView("admin/product/modifychild", strMap);
 		return mv;
@@ -1086,7 +1083,7 @@ public class ProductController extends BaseController {
 	public String modifyChilddo(HttpServletRequest request) throws Exception {
 		String childName = request.getParameter("childName");
 		String childPic = request.getParameter("childPic");
-		String childVoice = request.getParameter("childVoice");
+		String voice = request.getParameter("voice");
 		String childLongitude = request.getParameter("childLongitude");
 		String childLatitude = request.getParameter("childLatitude");
 		String wxChildLongitude = request.getParameter("wxChildLongitude");
@@ -1096,7 +1093,6 @@ public class ProductController extends BaseController {
 		String content = request.getParameter("desc");
 		String lanId = request.getParameter("lan");
 		String scale = request.getParameter("scale");
-		String schildid = request.getParameter("schildid");
 		String scope = request.getParameter("scope");
 		String isTaught = request.getParameter("isTaught");
 		String linkedPoint=request.getParameter("linkedPoint");
@@ -1104,7 +1100,7 @@ public class ProductController extends BaseController {
 		child.setUpdateTime(new Date());
 		child.setChildName(childName);
 		child.setChildPic(childPic);
-		child.setChineseGirl(childVoice);
+		child.setcVoice(voice);
 		child.setChildLongitude(childLongitude);
 		child.setChildLatitude(childLatitude);
 		child.setWxChildLongitude(wxChildLongitude);
@@ -1119,14 +1115,6 @@ public class ProductController extends BaseController {
 		String imgids = request.getParameter("imgids");
 		child.setChildPic(imgids);
 		conn_childProduct.saveOrUpdate(child);
-
-		ChildPicAndContentPO cpac = new ChildPicAndContentPO();
-		cpac.setChildPic(imgids);
-		cpac.setChildId(Long.parseLong(schildid));
-		cpac.setChildContent(content);
-		cpac.setChildId(child.getId());
-		conn_childPicAndContent.saveOrUpdate(cpac);
-
 		return "success";
 	}
 

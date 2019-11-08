@@ -4907,7 +4907,7 @@ public class PhoneController extends WebBaseControll {
 			throws Exception {
 
 		ChildProductPO child = conn_childProduct.get(childId);
-		String childVoice = conn_sysConfig.getSysConfig().getWebUrl() + child.getChineseGirl();
+		String childVoice = conn_sysConfig.getSysConfig().getWebUrl() + child.getcVoice();
 		return success(childVoice);
 	}
 
