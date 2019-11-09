@@ -221,7 +221,7 @@
 						unresize : true
 					}
 					, {
-						field : 'sort',
+						field : 'sortindex',
 						title : '排序',
 						align : 'center',
 						sort : true

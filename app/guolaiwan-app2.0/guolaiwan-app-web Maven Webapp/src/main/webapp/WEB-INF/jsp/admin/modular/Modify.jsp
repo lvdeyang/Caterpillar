@@ -65,6 +65,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<a href="javascript:openMap('更换图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=shopPic&img=shopImg','600','400')" class="layui-btn " >更换图片</a>
 				</div>
 			</div>
+			
+			<div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                            排序号
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="L_title" name="sortIndex" required lay-verify="required"
+                        autocomplete="off" class="layui-input" value="${list.sortindex }">
+                    </div>
+                </div>
                 <div class="layui-form-item" style="text-align:center;	position: absolute;margin-left: 200px;bottom: 0">
                      
                     <button class="layui-btn" lay-filter="add" lay-submit>

@@ -36,6 +36,7 @@ public class ModularVO extends AbstractBaseVO<ModularVO, ModularPO>{
 
 	// 类型：0活动，1普通
 	private String type;
+	private long sortindex;
 
 
 
@@ -161,7 +162,17 @@ public class ModularVO extends AbstractBaseVO<ModularVO, ModularPO>{
 		.setModularPic(entity.getModularPic())
 		.setSort(entity.getSort())
 		.setComId(entity.getComId())
+		.setSortindex(entity.getSortindex())
 		.setComName(entity.getComName());
+		return this;
+	}
+
+	public long getSortindex() {
+		return sortindex;
+	}
+
+	public ModularVO setSortindex(long sortindex) {
+		this.sortindex = sortindex;
 		return this;
 	}
 }

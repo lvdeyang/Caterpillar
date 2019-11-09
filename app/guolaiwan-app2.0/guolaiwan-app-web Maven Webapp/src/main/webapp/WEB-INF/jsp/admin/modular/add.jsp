@@ -58,6 +58,16 @@
 					<input type="hidden" id="shopPic" name="modularPic" 
 						lay-verify="title" autocomplete="off"   class="layui-input">
 				</div>
+				
+				<div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                            排序号
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="L_title" name="sortIndex" required lay-verify="required"
+                        autocomplete="off" class="layui-input">
+                    </div>
+                </div>
 				<div class="layui-input-inline">
 					<a href="javascript:openMap('上传图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=shopPic&img=shopImg','600','400')" class="layui-btn " >图片素材</a>
 				</div>

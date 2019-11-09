@@ -26,6 +26,7 @@ import com.guolaiwan.bussiness.admin.po.ModularClassPO;
 import com.guolaiwan.bussiness.admin.po.ModularPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 
+import pub.caterpillar.mvc.controller.AdminPO;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
@@ -85,6 +86,7 @@ public class ModularController extends BaseController{
 
 		String modularName = request.getParameter("modularName");
 		String modularPic  = request.getParameter("modularPic");
+		String sortIndex = request.getParameter("sortIndex");
 		long id  = conn_Modular.getMaxId();
 		
 		String modularCode = String.valueOf((id+2000l));
@@ -94,7 +96,10 @@ public class ModularController extends BaseController{
 		modular.setModularName(modularName);
 		modular.setModularIsv(1);
 		modular.setModularPic(modularPic);
+		modular.setSortindex(Long.parseLong(sortIndex));
 
+		AdminPO loginuser =  getLoginInfo();
+		modular.setComId(loginuser.getComId());
 		conn_Modular.save(modular);
 
 		return "success";
@@ -133,8 +138,10 @@ public class ModularController extends BaseController{
 		ModularPO modular = conn_Modular.get(uuid);
 		String modularName = request.getParameter("modularName");
 		String modularPic  = request.getParameter("modularPic");
+		String sortIndex = request.getParameter("sortIndex");
 		modular.setModularName(modularName);
 		modular.setModularPic(modularPic);
+		modular.setSortindex(Long.parseLong(sortIndex));
 		modular.setUpdateTime(new Date());
 		conn_Modular.update(modular);
 		return "success";
