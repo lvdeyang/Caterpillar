@@ -727,7 +727,7 @@ html, body {
 	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
 	       }
 	       //采摘板块
-	      else if('${modularCode}' == 2128){
+	      else if('${modularCode}' == 2126){
 	       location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
 	      } 
 	      //特产
@@ -760,7 +760,7 @@ html, body {
 	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
 	       }
 	       //采摘板块
-	       else if('${modularCode}' == 2128){
+	       else if('${modularCode}' == 2126){
 	         location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
 	      } 
 	      //特产
