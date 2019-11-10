@@ -47,6 +47,14 @@ public class ChildProductDAO extends AbstractBaseDao<ChildProductPO> {
 		return childs;
 	}
 	
+	public List<ChildProductPO> getChildByProductAndLan(Long proId,Long lanId){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("productID", Condition.eq, proId);
+		hql.andBy("lanId", Condition.eq, lanId);
+		List<ChildProductPO> childs =findByHql(hql);
+		return childs;
+	}
+	
 	/*
 	 * 根据商品id查询所有导览点
 	 */

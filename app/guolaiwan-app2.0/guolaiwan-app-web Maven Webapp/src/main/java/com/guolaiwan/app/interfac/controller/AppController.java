@@ -4707,7 +4707,7 @@ public class AppController extends WebBaseControll {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/getChildByPro", method = RequestMethod.GET)
-	public Map<String, Object> getChildByPro(Long merchantId, HttpServletRequest request, HttpServletResponse response)
+	public Map<String, Object> getChildByPro(Long merchantId,Long lanId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
 		ProductPO product = conn_product.getByMerchantId(merchantId);
@@ -4715,6 +4715,10 @@ public class AppController extends WebBaseControll {
 			return success(null);
 		}
 		List<ChildProductPO> childProcucts = conn_childProduct.getChildByProductId(product.getId());
+		if(lanId!=null){
+			childProcucts = conn_childProduct.getChildByProductAndLan(product.getId(),lanId);
+		}
+		
 		List<ChildProductVO> _childProcucts = ChildProductVO.getConverter(ChildProductVO.class).convert(childProcucts,
 				ChildProductVO.class);
 		List<ChildProductVO> result = new ArrayList<ChildProductVO>();
