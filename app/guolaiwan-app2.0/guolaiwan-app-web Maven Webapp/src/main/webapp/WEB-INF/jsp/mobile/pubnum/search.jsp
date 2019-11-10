@@ -502,7 +502,7 @@ html, body {
 				       }
 	                     html.push('<td style="padding:10px;width:50%">');
 		                 html.push('<image style=" width:100%;height:100px;"  relData="'+pros[i].activityReId+"-"+ 
-	                     pros[i].isSurpport+'" data="'+pros[i].productClassCode+'"  src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'-'+pros[i].productMerchantID+'"/>');
+	                     pros[i].isSurpport+'" data="'+pros[i].productClassCode+'" modularData="'+pros[i].productModularCode+'" src="'+pros[i].productShowPic+'" class="product" id="pro-'+pros[i].id+'-'+pros[i].productMerchantID+'"/>');
 		                 html.push('<p style="font-size:12px">'+pros[i].productName+'￥'+pros[i].productPrice+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+pros[i].productOldPrice+'</span></p>');
 		                 html.push('</td>');
 	                     if(pros.length==1){
@@ -573,11 +573,13 @@ html, body {
 	       var codes=this.id.split('-');
 	       var data=$(this).attr('data');
 	       var relData=$(this).attr('relData');
+	       var modularData=$(this).attr('modularData');
 	       var relDatas=relData.split('-');	       
 	       if(relDatas[0]==0&&relDatas[1]==0){	        
 		       if(data=='2021'){
 		          location.href=window.BASEPATH + 'pubnum/product/index/line?id='+codes[1];
-		       }else if(data =='0012'){		      
+		       //}else if(data =='0012'){		
+		       }else if(modularData=='0001'||modularData=='10001'){      
 		       //普通票
 		       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=0';
 		       }		       
@@ -587,7 +589,8 @@ html, body {
 	       
 	       }else{	       	          	          
 	          if(relDatas[1]==0){
-	           if(data =='0012'){
+	           //if(data =='0012'){
+	           if(modularData=='0001'||modularData=='10001'){    
 		           //普通票
 		           location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=1';
 		       }else{

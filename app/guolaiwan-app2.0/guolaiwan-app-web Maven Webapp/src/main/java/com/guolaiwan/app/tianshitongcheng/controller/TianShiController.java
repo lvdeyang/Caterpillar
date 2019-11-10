@@ -126,6 +126,9 @@ public class TianShiController {
 	@ResponseBody
 	@RequestMapping(value = "/isdistributerefund")
 	public String isDistribute(HttpServletRequest request) {
+		if(request.getParameter("orderId").indexOf("bundle")!=-1){
+			return "error";
+		}
 		long orderId = Long.parseLong(request.getParameter("orderId"));
 		System.out.println(orderId);
 		OrderInfoPO order = orderinfoDAO.get(orderId);
