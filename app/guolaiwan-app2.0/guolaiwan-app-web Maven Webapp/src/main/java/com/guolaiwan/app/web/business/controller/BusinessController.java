@@ -1890,10 +1890,13 @@ public class BusinessController extends WebBaseControll {
 						}
 						//是不是天时同城商品，分销商品不允许加入购物车
 						ProductPO productPO=conn_product.get(orderInfoVO.getProductId());
-						String distributeId = productPO.getDistributeId();
-						if(distributeId!=null&&!distributeId.equals("")){
-							continue;
+						if(productPO!=null){
+							String distributeId = productPO.getDistributeId();
+							if(distributeId!=null&&!distributeId.equals("")){
+								continue;
+							}
 						}
+						
 						//订单预订时间判断
 						if (!orderInfoVO.getOrderBookDate().equals("")) {
 							Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");	

@@ -2953,14 +2953,18 @@ public class PhoneController extends WebBaseControll {
 					}
 					//是不是天时同城商品，分销商品不允许加入购物车
 					ProductPO productPO=conn_product.get(orderInfoVO.getProductId());
-					String distributeId = productPO.getDistributeId();
-					if(distributeId!=null&&!distributeId.equals("")){
-						continue;
+					if(productPO!=null){
+						String distributeId = productPO.getDistributeId();
+						if(distributeId!=null&&!distributeId.equals("")){
+							continue;
+						}
 					}
+					
 					
 					if (!orderInfoVO.getOrderBookDate().equals("")) {
 						Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");
-						Date nowdate = DateUtil.parse(new Date()+" 00:00:00", "yyyy年MM月dd日 HH:mm:ss");		
+						String nowTime = DateUtil.format(new Date(), "yyyy年MM月dd日");	
+						Date nowdate = DateUtil.parse(nowTime+" 00:00:00", "yyyy年MM月dd日 HH:mm:ss");		
 						if (bookDate.getTime() < nowdate.getTime()) {
 							continue;
 						}
