@@ -1885,9 +1885,15 @@ public class BusinessController extends WebBaseControll {
 					//封装数据 筛选后的数据
 					List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
 					for (OrderInfoVO orderInfoVO : orderingOrders) {
-						if(orderInfoVO.getOrderRemark() != null &&   "9418".equals(orderInfoVO.getOrderRemark())){							
+						if(OrderType.MERCHANTGROUP.equals(orderInfoVO.getOrderType())){							
 							  continue;
-						}						
+						}
+						//是不是天时同城商品，分销商品不允许加入购物车
+						ProductPO productPO=conn_product.get(orderInfoVO.getProductId());
+						String distributeId = productPO.getDistributeId();
+						if(distributeId!=null&&!distributeId.equals("")){
+							continue;
+						}
 						//订单预订时间判断
 						if (!orderInfoVO.getOrderBookDate().equals("")) {
 							Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");	

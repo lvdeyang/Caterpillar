@@ -961,7 +961,7 @@ return $.cookie(str);
 	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
 	       }
 	       //采摘板块
-	      else if(codes[2] == '2128'){
+	      else if(codes[2] == '2126'){
 	      
 	        location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
 	      } 
@@ -994,7 +994,7 @@ return $.cookie(str);
 	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
 	       }
 	       //采摘板块
-	      else if(codes[2] == '2128'){
+	      else if(codes[2] == '2126'){
 	      
 	        location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
 	      } 

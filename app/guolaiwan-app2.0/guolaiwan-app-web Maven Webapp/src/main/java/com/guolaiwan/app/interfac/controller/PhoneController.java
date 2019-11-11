@@ -2948,10 +2948,20 @@ public class PhoneController extends WebBaseControll {
 						OrderInfoVO.class);
 				List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
 				for (OrderInfoVO orderInfoVO : orderingOrders) {
+					if(OrderType.MERCHANTGROUP.equals(orderInfoVO.getOrderType())){							
+						  continue;
+					}
+					//是不是天时同城商品，分销商品不允许加入购物车
+					ProductPO productPO=conn_product.get(orderInfoVO.getProductId());
+					String distributeId = productPO.getDistributeId();
+					if(distributeId!=null&&!distributeId.equals("")){
+						continue;
+					}
+					
 					if (!orderInfoVO.getOrderBookDate().equals("")) {
 						Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");
-						long between = DateUtil.daysBetween(new Date(), bookDate);
-						if (bookDate.getTime() < new Date().getTime()) {
+						Date nowdate = DateUtil.parse(new Date()+" 00:00:00", "yyyy年MM月dd日 HH:mm:ss");		
+						if (bookDate.getTime() < nowdate.getTime()) {
 							continue;
 						}
 					}
@@ -6364,7 +6374,7 @@ public class PhoneController extends WebBaseControll {
 			order.setOrderBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
 		}
 		//订单说明
-		order.setOrderRemark("9418");
+		
 		// 会员ID
 		order.setUserId(userId);
 		if (user.getUserPhone() != null) {
@@ -6474,7 +6484,7 @@ public class PhoneController extends WebBaseControll {
 		// 是否评价
 		order.setCommentIs(0);
 		order.setSource(OrderSource.fromString("PUBLICADDRESS"));
-		order.setOrderType(OrderType.MERCHANT);
+		order.setOrderType(OrderType.MERCHANTGROUP);
 		productPO.setProductSaleNum(productPO.getProductSaleNum() + 1);
 		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
 		conn_product.update(productPO);
