@@ -109,6 +109,8 @@ import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.SystenCachePo;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
+import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
+import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
@@ -1160,13 +1162,17 @@ public class PubNumController extends WebBaseControll {
 		}
 		return success();
 	}
+	@Autowired
+	MessageMiddleClientDao conn_messageclient;
+	@Autowired
+	MessageDAO conn_message;
 
 	private void sendMessage(OrderInfoPO orderInfoPO, String reason) {
 
 		ProductPO productPO = conn_product.get(orderInfoPO.getProductId());
 		MerchantPO merchantPO = conn_merchant.get(orderInfoPO.getShopId());
 		UserInfoPO buyUser = conn_user.get(orderInfoPO.getUserId());
-		AddressPO addressPO = conn_address.get(orderInfoPO.getMailAddress());
+		
 		// 用户推送消息
 		Double amount = Double.parseDouble(orderInfoPO.getPayMoney() + "") / 100;
 		DecimalFormat df = new DecimalFormat("0.00");
@@ -1196,10 +1202,30 @@ public class PubNumController extends WebBaseControll {
 		dataObject.put("refund", accountTypeObj);
 
 		JSONObject remarkObj = new JSONObject();
+		
+		String userNameStr="";
+		String userPhoneStr="";
+		List<MessageMiddleClientPO> clientPOs=conn_messageclient.findByField("orderId", orderInfoPO.getId());
+        MessagePO messagePO=null;
+        if(clientPOs!=null&&!clientPOs.isEmpty()){
+        	messagePO=conn_message.get(clientPOs.get(0).getMessageId());
+        }
+        if(messagePO!=null){
+        	userNameStr=messagePO.getName();
+        	userPhoneStr=messagePO.getPhone();
+        }else if(conn_address.get(orderInfoPO.getMailAddress())!=null){
+    		//conn_address.get(orderInfoPO.getMailAddress()).getConsigneeName();
+    		AddressPO addressPO = conn_address.get(orderInfoPO.getMailAddress());
+    		userNameStr=addressPO.getConsigneeName();
+    		userPhoneStr=addressPO.getConsigneePhone();
+    	}else{
+    		userNameStr=conn_user.get(orderInfoPO.getUserId()).getUserNickname();
+    		userPhoneStr="用户未留下电话信息";
+    	}
+		
 		remarkObj.put("value",
 				(productPO == null ? "到店支付订单:" + merchantPO.getShopName() : productPO.getProductName()) + "-用户:"
-						+ buyUser.getUserNickname() + "(" + addressPO == null ? ""
-								: addressPO.getConsigneePhone() + ")");
+						+ userNameStr + "(" + userPhoneStr + ")");
 		remarkObj.put("color", "");
 		dataObject.put("remark", remarkObj);
 		obj.put("data", dataObject);
@@ -1232,8 +1258,7 @@ public class PubNumController extends WebBaseControll {
 		JSONObject remarkObj1 = new JSONObject();
 		remarkObj1.put("value",
 				(productPO == null ? "到店支付订单:" + merchantPO.getShopName() : productPO.getProductName()) + "-用户:"
-						+ buyUser.getUserNickname() + "(" + addressPO == null ? ""
-								: addressPO.getConsigneePhone() + ")");
+						+ userNameStr + "(" + userPhoneStr + ")");
 
 		remarkObj1.put("color", "");
 		dataObject1.put("remark", remarkObj1);
