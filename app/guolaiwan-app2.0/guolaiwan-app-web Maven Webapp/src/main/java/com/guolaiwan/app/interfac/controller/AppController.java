@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.servlet.ServletInputStream;
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.core.pattern.MapPatternConverter;
+import org.bytedeco.javacpp.RealSense.error;
 import org.bytedeco.javacpp.RealSense.float2;
 import org.bytedeco.javacpp.RealSense.intrinsics;
 import org.hibernate.metamodel.source.annotations.attribute.MappedAttribute;
@@ -105,6 +107,8 @@ import com.guolaiwan.bussiness.admin.dao.CollectionDAO;
 import com.guolaiwan.bussiness.admin.dao.ColumnDAO;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.CompanyDAO;
+import com.guolaiwan.bussiness.admin.dao.JudgesDao;
+import com.guolaiwan.bussiness.admin.dao.JudgesVoteMsgDAO;
 import com.guolaiwan.bussiness.admin.dao.LanDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
@@ -133,6 +137,11 @@ import com.guolaiwan.bussiness.admin.dao.UserOnedayBuyDAO;
 import com.guolaiwan.bussiness.admin.dao.VPCommentDAO;
 import com.guolaiwan.bussiness.admin.dao.VPRelDAO;
 import com.guolaiwan.bussiness.admin.dao.VideoPicDAO;
+import com.guolaiwan.bussiness.admin.dao.VoteImposeDao;
+import com.guolaiwan.bussiness.admin.dao.VoteModularDAO;
+import com.guolaiwan.bussiness.admin.dao.VoteOptionsDao;
+import com.guolaiwan.bussiness.admin.dao.VotePicsDao;
+import com.guolaiwan.bussiness.admin.dao.VoteProductDAO;
 import com.guolaiwan.bussiness.admin.dao.live.LiveOrderDao;
 import com.guolaiwan.bussiness.admin.dao.live.LiveRecordDao;
 import com.guolaiwan.bussiness.admin.dao.live.SubLiveDao;
@@ -159,6 +168,8 @@ import com.guolaiwan.bussiness.admin.po.CollectionPO;
 import com.guolaiwan.bussiness.admin.po.ColumnPO;
 import com.guolaiwan.bussiness.admin.po.CommentPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
+import com.guolaiwan.bussiness.admin.po.JudgesPo;
+import com.guolaiwan.bussiness.admin.po.JudgesVoteMsgPO;
 import com.guolaiwan.bussiness.admin.po.LanPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
@@ -188,6 +199,11 @@ import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 import com.guolaiwan.bussiness.admin.po.VPCommentPO;
 import com.guolaiwan.bussiness.admin.po.VPRelPO;
 import com.guolaiwan.bussiness.admin.po.VideoPicPO;
+import com.guolaiwan.bussiness.admin.po.VoteImposePo;
+import com.guolaiwan.bussiness.admin.po.VoteModularPO;
+import com.guolaiwan.bussiness.admin.po.VoteOptionsPo;
+import com.guolaiwan.bussiness.admin.po.VotePicsPo;
+import com.guolaiwan.bussiness.admin.po.VoteProductPO;
 import com.guolaiwan.bussiness.admin.po.live.LiveOrderPO;
 import com.guolaiwan.bussiness.admin.po.live.LiveRecordPO;
 import com.guolaiwan.bussiness.admin.po.live.SubLivePO;
@@ -5957,6 +5973,184 @@ public class AppController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("app/homepage");
 		return mv;
+	}
+	
+	//活动相关
+	@ResponseBody
+	@RequestMapping(value = "/getActivityBundle", method = RequestMethod.GET)
+	public Object getActivityBundle(HttpServletRequest request, HttpServletResponse response, String comCode)
+			throws Exception {
+		List<CompanyPO> companyPOs = conn_company.findByField("comCode", comCode);
+		List<ActiveBundlePo> activeBundlePos = conn_activityBundle.findByField("comId", companyPOs.get(0).getId().intValue());
+		SysConfigPO sys = conn_sysConfig.getSysConfig();
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("bundles", activeBundlePos);
+		ret.put("url", sys.getWebUrl());
+		return success(ret);
+	}
+	//活动投票相关
+	@Autowired
+	VoteOptionsDao voteoptionDAO;
+	@Autowired
+	JudgesDao judgesdao;
+	@Autowired
+	VotePicsDao votepicDAO;
+	@Autowired
+	VoteProductDAO voteProductDao;
+	@Autowired
+	VoteImposeDao voteImposeDao;
+	@Autowired
+	JudgesVoteMsgDAO judgesvotemsgDAO;
+	@Autowired
+	VoteModularDAO voteModularDaO;
+	
+	//获取投票活动详细信息
+	@ResponseBody
+	@RequestMapping(value = "/votepage", method = RequestMethod.GET)
+	public Object VotePage(HttpServletRequest request) {
+		
+		//这里上线应该修改成获取的optionId 再用
+		
+		/*String optionId=request.getParameter("optionId");*/
+		
+		VoteOptionsPo voteOption = voteoptionDAO.get(Long.parseLong("1"));
+		List<JudgesPo> all = judgesdao.getByOptionId(Long.parseLong("1"));
+		Map<String, Object> ret = new HashMap<String, Object>();
+		//for (JudgesPo judgesPo : all) {
+			//if(judgesPo.getUserId().equals(userId)){
+				//ret.put("isjudges", "1");
+			//}
+		//}
+		ret.put("optionId", voteOption.getId());//投票ID
+		//ret.put("voterule", voteOption.getVoterule());
+		//ret.put("pollnum", voteOption.getPollnum());//用户已经投票了多少次
+		//ret.put("buynum", voteOption.getOrdernum());
+		//ret.put("titleshow", voteOption.getTitleshow());
+		//ret.put("logoshow", voteOption.getLogoshow());
+		//ret.put("downpicshow", voteOption.getDownpicshow());
+		//ret.put("title", voteOption.getTitle());
+		//此活动的logo
+		//ret.put("logo", "http://"+WXContants.Website+"/file"+voteOption.getSlidepic().toString());
+		//ret.put("downpic", "http://"+WXContants.Website+"/file"+voteOption.getDownpic().toString());
+		return success(ret);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/allpics", method = RequestMethod.GET)
+	public Object picsByOptionList(HttpServletRequest request, long optionId) throws Exception {
+		List<VotePicsPo> VotePics = votepicDAO.getByOptionId(optionId);
+		return success(VotePics);
+	}
+	//获取投票商品
+	@ResponseBody
+	@RequestMapping(value = "/getvoteproduct", method = RequestMethod.GET)
+	public Object getvoteproduct(long userId,long optionId,Integer page) {
+		long current=System.currentTimeMillis();//当前时间毫秒数
+        long zero=current/(1000*3600*24)*(1000*3600*24)-TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+        long twelve=zero+24*60*60*1000-1;
+		Date startTime = new Date(zero);
+		Date endTime = new Date(twelve);
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		List<VoteModularPO> findAll = voteModularDaO.getByOptionId(optionId);
+		
+		List<VoteProductPO> getvoteproduct=new ArrayList<VoteProductPO>();
+		//按照模块id获取投票的商品
+		if(findAll==null){
+			return success(list);
+		} 
+		getvoteproduct = voteProductDao.getvoteproducts(findAll.get(0).getId(),page,pageSize);
+		
+		if(getvoteproduct==null){
+			return success(list);
+		} 
+		VoteOptionsPo voteOption = voteoptionDAO.get(optionId);
+		for (VoteProductPO voteProductPO : getvoteproduct) {
+			HashMap<String, String> hashMap = new HashMap<String, String>();
+			//通过id查到product
+			ProductPO productPO = conn_product.get(voteProductPO.getProductId());
+			//此user今天的投票数量
+			int count = voteImposeDao.countByUidPid(userId+"", voteProductPO.getProductId()+"",startTime,endTime);
+			//订单数量
+			int ordercount = voteImposeDao.buyCountByPid(voteProductPO.getProductId()+"");
+			//此商品的所有群众投票数
+			int manvotes = voteImposeDao.countByPid(voteProductPO.getProductId()+"");
+			int allvotes = (int) voteProductPO.getAllvotes();
+			List<JudgesVoteMsgPO> all = judgesvotemsgDAO.getByVotePId(voteProductPO.getId());
+			long score=0;
+			long avg=0;
+			if(all!=null){
+				for (JudgesVoteMsgPO judgesVoteMsgPO : all) {
+					score+=judgesVoteMsgPO.getScore();
+				}
+				score=score/all.size();
+			}
+			if(score<=10){
+				avg=score*10;
+			}else{
+				avg=score;
+			}
+			double allcount=(manvotes*voteOption.getPepolevote())+(ordercount*voteOption.getOrdervote())+(((manvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
+			double allcount1=(allvotes*voteOption.getPepolevote())+(((allvotes*voteOption.getPepolevote())*(voteOption.getJudgesvote()*1.0/100))*(avg*1.0/100));
+			//封装所有的数据
+			hashMap.put("avg", score+"");
+			hashMap.put("count", count+"");
+			hashMap.put("pollnum", (5-count)+"");
+			hashMap.put("productname", voteProductPO.getProductName());
+			hashMap.put("productId", productPO.getId()+"");
+			hashMap.put("OutOfPrint", ordercount+"");
+			hashMap.put("allvotes", (int)allcount1+"");
+			hashMap.put("manvotes", manvotes+"");
+			hashMap.put("ranking", voteProductPO.getRanking()+"");
+			hashMap.put("productvotes", allcount+allcount1+"");
+			hashMap.put("hotel", productPO.getProductMerchantName());
+			hashMap.put("image", productPO.getProductShowPic());
+			list.add(hashMap);
+		}
+		return success(list);
+	}
+	//投票接口
+	@ResponseBody
+	@RequestMapping(value = "/votepoll", method = RequestMethod.GET)
+	public Object VotePoll(HttpServletRequest request,long userId, long productId,long optionId) {
+	
+		VoteProductPO voteProductPO = voteProductDao.getVoteProduct(productId);
+		long current=System.currentTimeMillis();//当前时间毫秒数
+        long zero=current/(1000*3600*24)*(1000*3600*24)-TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+        long twelve=zero+24*60*60*1000-1;
+		Date startTime = new Date(zero);
+		Date endTime = new Date(twelve);
+		VoteOptionsPo voteOption = voteoptionDAO.get(optionId);
+		try {
+			Map<String, String> hashMap = new HashMap<String, String>();
+			//当天的记录数量
+			int count = voteImposeDao.countByUidPid(userId+"", productId+"",startTime,endTime);
+			//当有记录但是已经满足当天投票总量时
+			if (count >= 0 && count == voteOption.getPollnum()) {
+				hashMap.put("msg", "0");
+				hashMap.put("count", count+"");
+				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
+				return success(hashMap);
+			}
+			//当天的记录数量为0时 或者当有记录但是没有满足当天投票总量时
+			if (count==0||(count > 0 && count <= voteOption.getPollnum())) {
+				VoteImposePo voteImposePo1 = new VoteImposePo();
+				voteImposePo1.setUserId(userId+"");
+				voteImposePo1.setPoll(1);
+				voteImposePo1.setProductId(productId+"");
+				voteImposeDao.save(voteImposePo1);
+				voteProductPO.setAllvotes(voteProductPO.getAllvotes()+1);
+				voteProductDao.saveOrUpdate(voteProductPO);
+				hashMap.put("msg", "1");
+				hashMap.put("count", count+"");
+				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
+				return success(hashMap);
+			}
+
+			return ERROR("系统错误");
+		} catch (Exception e) {
+			
+			return ERROR(e.getMessage());
+		}
 	}
 	
 }

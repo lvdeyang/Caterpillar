@@ -18,6 +18,7 @@ import com.guolaiwan.app.web.admin.vo.ActivityVO;
 import com.guolaiwan.bussiness.admin.dao.ActivityBundleDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
+import com.guolaiwan.bussiness.admin.enumeration.ActivityBundleType;
 import com.guolaiwan.bussiness.admin.enumeration.ActivityType;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
@@ -76,6 +77,7 @@ public class ActivityBundleController extends BaseController {
 	public String add(HttpServletRequest request) throws Exception {
 		String comName = getLoginInfo().getComName();
 		String title = request.getParameter("title");
+		String type=request.getParameter("type");
 		Long comId = null;
 		if (getLoginInfo() != null) {
 			 comId = getLoginInfo().getComId();
@@ -83,6 +85,7 @@ public class ActivityBundleController extends BaseController {
 		ActiveBundlePo bundlePo = new ActiveBundlePo();
 		bundlePo.setTitle(title);
 		bundlePo.setComId(comId.intValue());
+		bundlePo.setType(ActivityBundleType.fromString(type));
 		conn_bundle.save(bundlePo);
 		return "success";
 	}

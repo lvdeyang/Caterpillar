@@ -708,14 +708,14 @@ return $.cookie(str);
 	  
 	  
 	  //test
-	    /*if(comCode=='0000'){
+	    if(comCode=='0000'){
 		    comCode='0001';
 		}
 		getCom();
 	    getRecomment();
 	    getModal();
 		getActivityBundle();
-		initSharewx();*/
+		initSharewx();
 	  
 	  
 	  
@@ -1054,14 +1054,14 @@ return $.cookie(str);
 	   
 	   });
 	   $(document).on('click','#bundle',function(){
-	   if(bundletitle=="美食大赛"){
+	   if(bundleType=="VOTE"){
 	   	   location.href=window.BASEPATH + 'judges/votepage';
 	   }else{
 	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0&comCode='+comCode;
 	   }
 	   });
 	
-	var bundletitle;
+	var bundleType;
 	
 	
 	   function getActivityBundle(){
@@ -1075,7 +1075,7 @@ return $.cookie(str);
 			    if(data.bundles.length>0){
 			       $('#bundle').show();
 			       $('#actTitle').html(data.bundles[0].title);
-			       bundletitle=data.bundles[0].title;
+			       bundleType=data.bundles[0].type;
 			       $('#activityBunlde').attr('src',data.url+data.bundles[0].pic)
 			    }
 				
