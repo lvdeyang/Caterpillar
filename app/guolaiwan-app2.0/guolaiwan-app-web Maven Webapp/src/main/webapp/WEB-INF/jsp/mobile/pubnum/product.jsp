@@ -725,7 +725,13 @@ input[type="datetime-local"]:before{
 			    $('#address1').html('<a href="https://apis.map.qq.com/uri/v1/routeplan?type=drive&to='+data.merchant.shopAddress+'&tocoord='+data.merchant.shopLongitude+','+data.merchant.shopLatitude+'&policy=1&referer=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopAddress+'</a>');
 				$('#addressphone1').html('<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;'+data.merchant.shopTel);
 			    $('#addressphone1').data('phone',data.merchant.shopTel);
-
+			    if(data.product.videourl.indexOf('mp4')!=-1){
+			       $('#provideo').attr('src',data.product.videourl);
+			    }else{
+			       $('#videoDiv').hide();
+			       $('#provideo').hide();
+			    }
+                
 				   function initLogistics(data){
 					   var html=[];
 					   var str = $('#prics').text();
@@ -2300,6 +2306,7 @@ input[type="datetime-local"]:before{
 			
 			<div
 				style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">商品详情</div>
+			<div id="videoDiv"  style="margin-left:2%;margin-top:10px;width:96%;height:180px;float:left;"><video style="width:100%;height:100%" id="provideo" src="" controls autoplay></video></div>
 			<div style="font-size:12px;padding:12px;float:left;width:100%;height:auto;margin:0 auto;overflow-x:scroll" id="proContent"></div>
 
 			<div

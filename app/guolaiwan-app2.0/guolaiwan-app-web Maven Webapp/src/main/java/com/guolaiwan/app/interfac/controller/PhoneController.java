@@ -1297,6 +1297,7 @@ public class PhoneController extends WebBaseControll {
 
 		_product.setProductShowPic(sysConfig.getWebUrl() + _product.getProductShowPic()); // 显示图片
 		_product.setProductMorePic(split(_product.getProductMorePic(), sysConfig.getWebUrl()));// 多图
+		_product.setVideourl(sysConfig.getWebUrl() +_product.getVideourl());
 		// 收藏
 		if (request.getParameter("userId") != null && !request.getParameter("userId").equals("")) {
 			Long userId = Long.parseLong(request.getParameter("userId"));
