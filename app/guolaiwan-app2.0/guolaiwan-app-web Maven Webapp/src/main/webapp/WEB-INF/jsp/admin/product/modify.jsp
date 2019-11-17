@@ -195,7 +195,7 @@
 				<label for="L_title" class="layui-form-label">详情视频 </label>
 				<div class="layui-input-inline" style="width: 100px">
 				    <video src="${sysConfig.webUrl}${product.videourl}" id="provideo" style=" height:100px;width:100px "/>
-					<input type="hidden" id="videourl" name="videourl" 
+					<input type="text" id="videourl" name="videourl" 
 						lay-verify="title" autocomplete="off"  class="layui-input" value="${product.videourl}">
 				</div>
 				<div class="layui-input-inline">
