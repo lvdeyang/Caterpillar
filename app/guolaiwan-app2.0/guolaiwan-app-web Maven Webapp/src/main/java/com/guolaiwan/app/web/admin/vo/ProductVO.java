@@ -170,7 +170,7 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	private String distributeId;
     private int  mealAmount; //菜品数量
 	
-	 
+    private String videourl;
 	 
 	public int getMealAmount() {
 		return mealAmount;
@@ -1312,11 +1312,23 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setSite(entity.getSite())
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)))
 		.setIsgroup(entity.getIsgroup())
+		.setVideourl(entity.getVideourl())
 		.setDistributeId(entity.getDistributeId());
 		
 		if(entity.getIntegralGoods()==1){
 			this.setProductPrice(entity.getProductPrice()+"").setProductPricesStr(entity.getProductPrice()+"");
 		}
+		return this;
+	}
+
+
+	public String getVideourl() {
+		return videourl;
+	}
+
+
+	public ProductVO setVideourl(String videourl) {
+		this.videourl = videourl;
 		return this;
 	}
 

@@ -190,8 +190,18 @@ public class ProductPO extends AbstractBasePO {
 	//分销商品ID（过来玩代理其他家）
 	private String distributeId;
 	
+	private String videourl;
 	
 	
+	
+	public String getVideourl() {
+		return videourl;
+	}
+
+	public void setVideourl(String videourl) {
+		this.videourl = videourl;
+	}
+
 	public String getDistributeId() {
 		return distributeId;
 	}
