@@ -225,6 +225,19 @@
 					<button class="layui-btn layui-btn-xs" type="button" style="width:90px;margin-left:5px;margin-right:5px" onclick="delpic('#shopImg','#shopPic')">删除图片</button>					
 				</div>
 			</div>
+			
+			<div class="layui-form-item">
+				<label for="L_title" class="layui-form-label">详情视频 </label>
+				<div class="layui-input-inline" style="width: 100px">
+				    <video src="${sysConfig.webUrl}${product.videourl}" id="provideo" style=" height:100px;width:100px "/>
+					<input type="hidden" id="videourl" name="videourl" 
+						lay-verify="title" autocomplete="off"  class="layui-input" value="${product.videourl}">
+				</div>
+				<div class="layui-input-inline">
+					<a href="javascript:openMap('更换视频','<%=request.getContextPath() %>/admin/picture/sellist?sel=videourl&img=provideo','600','400')" class="layui-btn " >更换视频</a>
+				</div>
+			</div>
+			
 			<div class="layui-form-item">
 				<label for="L_title" class="layui-form-label"> 商品详情图 </label>
 				<div class="layui-input-inline">

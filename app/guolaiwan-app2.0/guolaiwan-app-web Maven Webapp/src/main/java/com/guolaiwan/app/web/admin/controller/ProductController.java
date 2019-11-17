@@ -259,6 +259,7 @@ public class ProductController extends BaseController {
 		String regionFirst=request.getParameter("regionFirst");
 		String regionSecond=request.getParameter("regionSecond");
 		String regionThird=request.getParameter("regionThird");
+		String videourl=request.getParameter("videourl");
 		//分销商品ID
 		String distributeId=request.getParameter("distributeId");
 		//张羽 新增 5/1 商品购买最低数量限制
@@ -453,6 +454,7 @@ public class ProductController extends BaseController {
 		} else {
 
 		}
+		product.setVideourl(videourl);
 		conn_product.save(product);
 		//如果是的话
 		if(isgroup==1){
@@ -488,6 +490,7 @@ public class ProductController extends BaseController {
 		String modularClass = request.getParameter("modularClass");
 		String Integra = request.getParameter("Integra"); //积分商品
 		String site = request.getParameter("site"); //积分商品
+		String videourl = request.getParameter("videourl"); //积分商品
 		// 商家
 		long productMerchantID = Long.parseLong(request.getParameter("productMerchantID"));
 		String productMerchantName = request.getParameter("productMerchantName");
@@ -679,6 +682,7 @@ public class ProductController extends BaseController {
 		product.setRemarks(remarks);
 		product.setIfFace(ifFace);
 		product.setIsgroup(isgroup);
+		product.setVideourl(videourl);
 		conn_product.saveOrUpdate(product);
 		
 		if(isgroup==1){
