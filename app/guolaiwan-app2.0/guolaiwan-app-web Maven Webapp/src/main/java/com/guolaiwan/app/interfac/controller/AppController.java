@@ -638,12 +638,10 @@ public class AppController extends WebBaseControll {
 
 		data.put("distributors", new ArrayList<DistributorPo>());
 
-
-		List<ActiveBundlePo> ablist = conn_activityBundle.findAll();
+        CompanyPO companyPO=conn_company.getByCode(comCode);
+		List<ActiveBundlePo> ablist = conn_activityBundle.findByField("comId", companyPO.getId().intValue());
 		if (ablist != null) {
-			List<ActiveBundleVO> _ablist = ActiveBundleVO.getConverter(ActiveBundleVO.class).convert(ablist,
-					ActiveBundleVO.class);
-			data.put("SpecialEventsBean", _ablist);
+			data.put("bundleActity", ablist.get(0));
 		}
 
 		List<TodayHotSearchPO> thspolist = conn_todayHotSearch.findAll();
@@ -2651,13 +2649,27 @@ public class AppController extends WebBaseControll {
 
 		List<OrderInfoPO> orders = conn_order.getBasket(userId, page, pageSize);
 		int count = conn_order.countBasket(userId);
-		for (OrderInfoPO orderInfoPO : orders) {
-			orderInfoPO.setProductPic(sysConfig.getWebUrl() + orderInfoPO.getProductPic());
-		}
 		List<OrderInfoVO> _orders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orders, OrderInfoVO.class);
-		dataMap.put("orders", _orders);
+		List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
+		for (OrderInfoVO orderInfoVO : _orders) {
+			if (!orderInfoVO.getOrderBookDate().equals("")) {
+				Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");
+				long between = DateUtil.daysBetween(new Date(), bookDate);
+				if (bookDate.getTime() < new Date().getTime()) {
+					continue;
+				}
+			}
+			//去掉到店支付
+			ProductPO productPO=conn_product.get(orderInfoVO.getProductId());
+			if(productPO==null){
+				continue;
+			}
+			orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
+			checkOrders.add(orderInfoVO);
+		}
+		dataMap.put("orders", checkOrders);
 		dataMap.put("count", count);
-		return success(_orders);
+		return success(checkOrders);
 	}
 
 	/**
