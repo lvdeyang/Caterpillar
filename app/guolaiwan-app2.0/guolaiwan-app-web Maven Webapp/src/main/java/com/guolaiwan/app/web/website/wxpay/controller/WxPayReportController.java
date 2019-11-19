@@ -264,7 +264,6 @@ public class WxPayReportController extends WebBaseControll {
 				OrderInfoPO order = conn_orderInfo.get(Long.parseLong(ridStr));
 				order.setOrderState(OrderStateType.REFUNDED);
 				conn_orderInfo.save(order);
-				sendMessage(order);
 			}
 			stringBuffer.append("<xml><return_code><![CDATA[");
 			stringBuffer.append("SUCCESS");

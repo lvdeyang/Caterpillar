@@ -93,7 +93,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              	$.post(url,{"orderId":orderId},function(data){
              		if(data=="error"||data=="success"){
 			         	 $.get(_urirefund, null, function(data){
-							changeOrderStatus(obj,orderId,'REFUNDED');
+							//changeOrderStatus(obj,orderId,'REFUNDED');
+							layer.msg("已提交微信退款，如果退款成功，刷新数据后订单状态显示退款成功。");
 						 });
              		}else if(data=="lose"){
              			layer.msg("退款出错，请技术查看");

@@ -26,6 +26,11 @@
 		  	<artifactId>caterpillar-communication</artifactId>
 		  	<version>${caterpillar-communication.version}</version>
 		</dependency>
+    	<dependency>
+		   <groupId>org.bouncycastle</groupId>
+		   <artifactId>bcprov-ext-jdk16</artifactId>
+		   <version>1.45</version>
+		</dependency>
 	  	
 	  	<!-- 缓存 -->
     	<dependency>
