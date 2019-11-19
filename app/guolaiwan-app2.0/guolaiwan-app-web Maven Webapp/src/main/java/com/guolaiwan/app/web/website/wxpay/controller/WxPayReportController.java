@@ -144,6 +144,7 @@ public class WxPayReportController extends WebBaseControll {
 		String returncode = respData.get("return_code");
 		String resultcode = respData.get("result_code");
 		System.out.println("returncode是："+returncode+";resultcode是"+resultcode);
+		
 		StringBuffer stringBuffer = new StringBuffer();
 		if(returncode.equals("SUCCESS")){
 			if(resultcode.equals("SUCCESS")){

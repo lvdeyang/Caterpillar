@@ -277,7 +277,7 @@ public class WxPayController extends BaseController {
 						amount = orderInfoPO.getPayMoney();
 					}
 				}
-				String refundOrderNum = "refund" + orderId;
+				String refundOrderNum = "refund-" + orderId;
 				
 				if(type.equals(PayType.WEICHAT)){
 				    try {
@@ -297,6 +297,9 @@ public class WxPayController extends BaseController {
 					//暂时把阿里退款放在这里了
 					double allMoney = ((double) amount) / 100;
 					AliAppOrderInfo.getInstance().refund(orderId,allMoney);
+					OrderInfoPO orderInfoPO=conn_orderInfo.get(Long.parseLong(orderId));
+					orderInfoPO.setOrderState(OrderStateType.REFUNDED);
+					conn_orderInfo.saveOrUpdate(orderInfoPO);
 				}
 				return result;
 		}else{
@@ -312,6 +315,9 @@ public class WxPayController extends BaseController {
 				iWalletPO.setProductname(conn_orderInfo.get(Long.parseLong(orderId)).getProductName());
 				iWalletPO.setUsername(user.getUserNickname());
 				conn_investWallet.save(iWalletPO);
+				OrderInfoPO orderInfoPO=conn_orderInfo.get(Long.parseLong(orderId));
+				orderInfoPO.setOrderState(OrderStateType.REFUNDED);
+				conn_orderInfo.saveOrUpdate(orderInfoPO);
 			}
 			return success();
 		}
