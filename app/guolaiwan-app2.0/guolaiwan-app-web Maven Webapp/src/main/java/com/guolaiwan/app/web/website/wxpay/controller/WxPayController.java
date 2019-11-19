@@ -287,6 +287,7 @@ public class WxPayController extends BaseController {
 						reqData.put("out_refund_no", refundOrderNum);
 						reqData.put("total_fee", amount + "");
 						reqData.put("refund_fee", amount + "");
+						reqData.put("notify_url", "http://"+WXContants.Website+"/website/wxreport/refundreport");
 						Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据
 			
 					} catch (Exception e) {

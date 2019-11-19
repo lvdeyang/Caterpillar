@@ -61,5 +61,16 @@ public class GuolaiwanWxPay {
 		return wxPay.processResponseXml(xml);
 	}
 
+	public Map<String, String> processRefundResponseXml(String xml) throws Exception {
+		Map<String, String> respData = WXPayUtil.xmlToMap(xml);
+		String req_info = respData.get("req_info");
+		String returncode = respData.get("return_code");
+        String resultStr = WxAESUtil.decryptData(req_info,WxAESUtil.MD5(AppKey).toLowerCase());
+        System.out.println(resultStr);
+        Map<String, String> aesMap = WXPayUtil.xmlToMap(resultStr);
+        aesMap.put("return_code", returncode);
+        return aesMap;
+	}
+	
 	
 }
