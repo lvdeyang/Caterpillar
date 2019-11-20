@@ -516,33 +516,23 @@ html, body {
 <script type="text/javascript">
 
 /*记录历史位置  */
-       $(function () {
-var str = window.location.href;
-str = str.substring(str.lastIndexOf("/") + 1);
-if ($.cookie(str)) {
-$("html,body").animate({ scrollTop: $.cookie(str) }, 1000);
-}
-});
-$(window).scroll(function () {
-var str = window.location.href;
-str = str.substring(str.lastIndexOf("/") + 1);
-var top = $(document).scrollTop();
-$.cookie(str, top, { path: '/' });
-return $.cookie(str);
-});  
-/*  $(function() {
-        var loading = '<div id="loading"><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504002746731&di=a7d82714e2b6a150ecb6ab45d2dc73b9&imgtype=0&src=http%3A%2F%2Falcastongallery.com.au%2Fassets%2Fimages%2Fajax-loader.gif"></div>';
-        $('body').append($(loading));
- 
-        setTimeout(function () {
-            $('#loading').remove();
-        }, 3000);
-    }); */
+      $(function () {
+		var str = window.location.href;
+		str = str.substring(str.lastIndexOf("/") + 1);
+		if ($.cookie(str)) {
+		$("html,body").animate({ scrollTop: $.cookie(str) }, 1000);
+		}
+		});
+		$(window).scroll(function () {
+		var str = window.location.href;
+		str = str.substring(str.lastIndexOf("/") + 1);
+		var top = $(document).scrollTop();
+		$.cookie(str, top, { path: '/' });
+		return $.cookie(str);
+	});  
 
-
-   
 	$(function() {
-	var iscollect;
+	  var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
 	  var parseAjaxResult = function(data){
@@ -560,18 +550,9 @@ return $.cookie(str);
 		    if(comCode=='0000'){
 			    comCode='0001';
 			}
-			getCom();
-            getRecomment();
-		    getModal();
-			getActivityBundle();
-			initSharewx();
+			initFirstPage();
 	  }
-	
-	  
-	  
-		
-	 
-	
+
 	  var loca={};
 	  function getloca(){
 	      
@@ -616,11 +597,7 @@ return $.cookie(str);
 	                        if(comCode=='0000'){
 							    comCode='0001';
 							}
-							getCom();
-			                getRecomment();
-						    getModal();
-							getActivityBundle();
-							initSharewx();
+							initFirstPage();
 					}
 	                	
 	             });     
@@ -628,11 +605,7 @@ return $.cookie(str);
 		                if(comCode=='0000'){
 						    comCode='0001';
 						}
-						getCom();
-		                getRecomment();
-					    getModal();
-						getActivityBundle();
-						initSharewx();
+						initFirstPage();
 				
 		         });     
 	            
@@ -666,16 +639,22 @@ return $.cookie(str);
 					}
 				}
 				
-				
-				getCom();
-                getRecomment();
-			    getModal();
-				getActivityBundle();
-				initSharewx();
+				initFirstPage();
             }  
         });  
 	  
 	  }
+	  
+	  
+	  function initFirstPage(){
+	        $('#postionLoading').hide();
+			getCom();
+            getRecomment();
+		    getModal();
+			getActivityBundle();
+			initSharewx();
+	  }
+	  
 	  
 	  function getCom(){
 	     var _uricoms = window.BASEPATH + 'pubnum/getComs';
@@ -708,17 +687,14 @@ return $.cookie(str);
 	  
 	  
 	  //test
-	    if(comCode=='0000'){
+	    /*if(comCode=='0000'){
 		    comCode='0001';
 		}
 		getCom();
 	    getRecomment();
 	    getModal();
 		getActivityBundle();
-		initSharewx();
-	  
-	  
-	  
+		initSharewx();*/
       /**/
 		
 	  function getRecomment(){
@@ -1194,7 +1170,7 @@ return $.cookie(str);
 <body>
 			<!-- 主页 -->
 		
-
+       
 		<div class="header">
 			<div class="wrapper">
 					<!-- <select style="float:left;font-size:11px;width:120px;height:40px;" class="weui-select" id="com"></select> -->
@@ -1225,25 +1201,10 @@ return $.cookie(str);
 				      <span style="margin: auto;margin-top: 3%;">搜索</span>
 				    </label>
            </div> 
-            
-		    
-		    
-		    <!--<div style="border-bottom: 1px solid #f0eff4;margin-top:15px;" id="searchBar">
-               <form style="" class="weui-search-bar__form" action="pubnum/search/post" method="post">
-				    <div style="height:35px;" class="weui-search-bar__box">
-				       <i id="doSearch" class="weui-icon-search"></i>
-				      <input type="search" name="searchContent" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
-				      <a href="javascript:" class="weui-icon-clear" id="searchClear"></a> 
-				    </div>
-				    <label style="" class="weui-search-bar__label" id="searchText">
-				      <i style="margin: auto;margin-top: 2%;" class="weui-icon-search"></i>
-				      <span style="margin: auto;margin-top: 2%;">搜索</span>
-				    </label>
-			   </form>
-		
-			  <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
-			</div>-->
-		    
+            <div class="weui-loadmore" id="postionLoading">
+			  <i class="weui-loading"></i>
+			  <span class="weui-loadmore__tips">正在获取定位，请稍候......</span>
+			</div>
 		    <div class="swiper-container" style="height:160px;margin-top:5px;"  id="columnSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
 			  <div class="swiper-wrapper" id="columnWrapper" style="height:180px;">
 			  </div>
