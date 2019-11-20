@@ -983,26 +983,28 @@ public class BusinessController extends WebBaseControll {
 			distance.add(getDistance(Double.parseDouble(merchantPO.getShopLatitude()), Double.parseDouble(merchantPO.getShopLongitude()), latitude, longitude));
 			pingfens.add(orderInfoDao.GetCountbyPage(merchantId)/100);
 		}
-		for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
-			if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularCode().equals(code)){
-			 	
-			  MerchantPO  _merchant = Mer_chant.get(merchantChildrenPO.getChildrenId());	
-		       if(_merchant.getShopLatitude() != null  && _merchant.getShopLatitude().length() > 0 ){ 		    
-				distance.add(getDistance(Double.parseDouble(_merchant.getShopLatitude()), Double.parseDouble(_merchant.getShopLongitude()), latitude, longitude));
-		       }else{
-		    	 distance.add(1.25);  
-		       }
-		       List<ProductPO> productPO =  conn_product.findByField("productMerchantID", merchantChildrenPO.getChildrenId());
-		       long showNum = 0;
-				for(ProductPO po : productPO){				
-					showNum += po.getProductShowNum();			
+		if(merchantChildren!=null){
+			for (MerchantChildrenPO merchantChildrenPO : merchantChildren) {
+				if(Mer_chant.get(merchantChildrenPO.getChildrenId()).getModularCode().equals(code)){
+				 	
+				  MerchantPO  _merchant = Mer_chant.get(merchantChildrenPO.getChildrenId());	
+			       if(_merchant.getShopLatitude() != null  && _merchant.getShopLatitude().length() > 0 ){ 		    
+					distance.add(getDistance(Double.parseDouble(_merchant.getShopLatitude()), Double.parseDouble(_merchant.getShopLongitude()), latitude, longitude));
+			       }else{
+			    	 distance.add(1.25);  
+			       }
+			       List<ProductPO> productPO =  conn_product.findByField("productMerchantID", merchantChildrenPO.getChildrenId());
+			       long showNum = 0;
+					for(ProductPO po : productPO){				
+						showNum += po.getProductShowNum();			
+					}
+					showNuber.add(showNum);
+					allmerchant.add(_merchant);				
+					pingfens.add(orderInfoDao.GetCountbyPage(merchantChildrenPO.getChildrenId())/100);		
 				}
-				showNuber.add(showNum);
-				allmerchant.add(_merchant);				
-				pingfens.add(orderInfoDao.GetCountbyPage(merchantChildrenPO.getChildrenId())/100);		
 			}
 		}
-		  
+  
 		List<MerchantVO> merlist = MerchantVO.getConverter(MerchantVO.class).convert(allmerchant, MerchantVO.class);
 		//查询商品的最小价格
 		for(MerchantVO vo : merlist){			
