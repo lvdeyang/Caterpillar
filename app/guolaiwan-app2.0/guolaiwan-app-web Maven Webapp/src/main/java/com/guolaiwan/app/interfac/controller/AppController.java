@@ -6153,8 +6153,8 @@ public class AppController extends WebBaseControll {
 				voteProductPO.setAllvotes(voteProductPO.getAllvotes()+1);
 				voteProductDao.saveOrUpdate(voteProductPO);
 				hashMap.put("msg", "1");
-				hashMap.put("count", count+"");
-				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
+				hashMap.put("count", (count+1)+"");
+				hashMap.put("pollnum", (voteOption.getPollnum()-count-1)+"");
 				return success(hashMap);
 			}
 

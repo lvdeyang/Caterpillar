@@ -74,6 +74,7 @@ public class AliAppOrderInfo {
 
 	// 服务器异步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
 	public static String notify_url = "http://" + WXContants.Website + "/website/alireport/reportN";
+	public static String refund_notify_url = "http://" + WXContants.Website + "/website/alireport/reportRefund";
 
 	public static String alipay_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlL86g7bzcjH+HpYGkM211TFI1pSAyyUpB1zKwl/8l9UHmkU2Sf4oTab9UwUEA7xxmHGi6xJU8saJ2SCB7Fi5knxLEEgHthdhpplhjy6JoCKWQJ7V5p+YpSN2MtEW3AV/i1QhCg5VQdvAgiK/mUUzoQBEbrtLeXwP4Ds8cEht4t2ZgomtUPBBBYl0lIL11ScY3jgOZtoLOCqzghhdIEJs5ru7+l91jxqxZCr7YHJDH5LW5YEjzW4qXiU/dwVxff32oSD7eTkjXjHwx7ZqWqIwu8LfT/b7Bsbno70T3jmjFmoP93ryt7N77MYlOdfe/GMUEseVaFsvOCPIPjrs8PIwmwIDAQAB";
 
@@ -128,7 +129,7 @@ public class AliAppOrderInfo {
 				RSA2_PRIVATE, "json", "GBK", alipay_public_key, "RSA2");
 		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 		request.setBizContent("{" + "\"out_trade_no\":"+outTradeNo+","
-				 + "\"refund_amount\":"+df.format(amount) + "  }");
+				 + "\"refund_amount\":"+df.format(amount) + ",\"notify_url\":\""+refund_notify_url+"\"}");
 		AlipayTradeRefundResponse response = alipayClient.execute(request);
 		if (response.isSuccess()) {
 			System.out.println("调用成功");
