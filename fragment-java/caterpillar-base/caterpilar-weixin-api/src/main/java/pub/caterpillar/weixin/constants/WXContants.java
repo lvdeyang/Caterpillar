@@ -20,6 +20,12 @@ public class WXContants {
     public final static String Website ="www.guolaiwan.net";
 
  
+//    public final static String MchId = ""; //
+//    public final static String AppId = "wxf39f394a40df766a"; //网页
+//    public final static String AppSecret = "b510701a12ea030ca0118e5c0f812986"; 
+//    public final static String AppKey = "";
+//    public final static String Website ="";
+    
     //public final static boolean istest=true;
 
     public final static boolean istest=true;

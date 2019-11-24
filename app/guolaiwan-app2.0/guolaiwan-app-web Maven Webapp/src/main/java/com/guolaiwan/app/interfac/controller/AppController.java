@@ -638,12 +638,10 @@ public class AppController extends WebBaseControll {
 
 		data.put("distributors", new ArrayList<DistributorPo>());
 
-
-		List<ActiveBundlePo> ablist = conn_activityBundle.findAll();
+        CompanyPO companyPO=conn_company.getByCode(comCode);
+		List<ActiveBundlePo> ablist = conn_activityBundle.findByField("comId", companyPO.getId().intValue());
 		if (ablist != null) {
-			List<ActiveBundleVO> _ablist = ActiveBundleVO.getConverter(ActiveBundleVO.class).convert(ablist,
-					ActiveBundleVO.class);
-			data.put("SpecialEventsBean", _ablist);
+			data.put("bundleActity", ablist.get(0));
 		}
 
 		List<TodayHotSearchPO> thspolist = conn_todayHotSearch.findAll();
@@ -2651,16 +2649,10 @@ public class AppController extends WebBaseControll {
 
 		List<OrderInfoPO> orders = conn_order.getBasket(userId, page, pageSize);
 		int count = conn_order.countBasket(userId);
-		for (OrderInfoPO orderInfoPO : orders) {
-			orderInfoPO.setProductPic(sysConfig.getWebUrl() + orderInfoPO.getProductPic());
-		}
 		List<OrderInfoVO> _orders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orders, OrderInfoVO.class);
-		
-		List<OrderInfoPO> orderingOrderpos = conn_order.getOrdersByState(userId, OrderStateType.NOTPAY);
-		List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
-				OrderInfoVO.class);
+
 		List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
-		for (OrderInfoVO orderInfoVO : orderingOrders) {
+		for (OrderInfoVO orderInfoVO : _orders) {
 			if (!orderInfoVO.getOrderBookDate().equals("")) {
 				Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");
 				long between = DateUtil.daysBetween(new Date(), bookDate);
@@ -2668,35 +2660,18 @@ public class AppController extends WebBaseControll {
 					continue;
 				}
 			}
+			//去掉到店支付
+			ProductPO productPO=conn_product.get(orderInfoVO.getProductId());
+			if(productPO==null){
+				continue;
+			}
 			orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
-			if (orderInfoVO.getComboId() != 0) {
-				ProductComboPO comboPO = conn_combo.get(orderInfoVO.getComboId());
-				orderInfoVO.setProductPrice(
-						new DecimalFormat("0.00").format((double) comboPO.getComboprice() / 100));
-				orderInfoVO.setComboName(comboPO.getCombo());
-			} else {
-				orderInfoVO.setComboName("标准");
-			}
-			LogisticsPo logisticsPo = conn_logistics.get(orderInfoVO.getLogisticsId());
-			if (logisticsPo != null) {
-				orderInfoVO.setLogisticsName(logisticsPo.getName());
-			} else {
-				orderInfoVO.setLogisticsName("-");
-			}
-			if (orderInfoVO.getActivityId() != 0) {
-				ActivityRelPO activityRelPO = conn_activityRel.get(orderInfoVO.getActivityId());
-				if (activityRelPO != null) {
-					orderInfoVO.setProductPrice(
-							new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
-				}
-
-			}
 			checkOrders.add(orderInfoVO);
 		}
-		
+
 		dataMap.put("orders", checkOrders);
 		dataMap.put("count", count);
-		return success(_orders);
+		return success(checkOrders);
 	}
 
 	/**
@@ -6180,8 +6155,8 @@ public class AppController extends WebBaseControll {
 				voteProductPO.setAllvotes(voteProductPO.getAllvotes()+1);
 				voteProductDao.saveOrUpdate(voteProductPO);
 				hashMap.put("msg", "1");
-				hashMap.put("count", count+"");
-				hashMap.put("pollnum", (voteOption.getPollnum()-count)+"");
+				hashMap.put("count", (count+1)+"");
+				hashMap.put("pollnum", (voteOption.getPollnum()-count-1)+"");
 				return success(hashMap);
 			}
 

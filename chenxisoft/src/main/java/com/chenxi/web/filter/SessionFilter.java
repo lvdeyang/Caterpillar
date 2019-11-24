@@ -49,7 +49,7 @@ public class SessionFilter implements Filter {
 				if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")) {
 					chain.doFilter(request, response);
 				} else {
-					wrapper.sendRedirect("http://www.yueba.net.cn/login/mobile/index1?rUrl="
+					wrapper.sendRedirect("http://www.yueba.net.cn/chenxisoft/login/mobile/index1?rUrl="
 							+ hrequest.getRequestURL().toString() + "?" + hrequest.getQueryString());
 				}
 				return;

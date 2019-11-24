@@ -928,10 +928,15 @@ public class ProductController extends BaseController {
 		if (productAuditstates != null && productAuditstates != "") {
 			newmap.put("productAuditstatus", ShopAuditStateType.fromString(productAuditstates));
 		}
-
-		int page = Integer.parseInt(request.getParameter("page"));
-		int limit = Integer.parseInt(request.getParameter("limit"));
-
+		int page =1;
+		if(request.getParameter("page")!=null){
+			page=Integer.parseInt(request.getParameter("page"));
+		}
+		 
+		int limit = 10;
+		if(request.getParameter("limit")!=null){
+			limit=Integer.parseInt(request.getParameter("limit"));
+		}
 		int count = conn_product.getCountByPageE(newmap);
 		List<ProductPO> listpo = conn_product.getListByPageE(newmap, page, limit);
 		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(listpo, ProductVO.class);

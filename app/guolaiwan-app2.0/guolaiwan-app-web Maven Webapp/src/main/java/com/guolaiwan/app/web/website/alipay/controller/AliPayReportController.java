@@ -225,4 +225,47 @@ public class AliPayReportController extends WebBaseControll {
 
 
 	}
+	
+	
+	
+	//post请求
+		@ResponseBody
+		@RequestMapping(value = "/reportRefund", method = RequestMethod.POST)
+		public String reportRefund(
+				HttpServletRequest request,
+				HttpServletResponse response) throws Exception{
+			//获取支付宝POST过来反馈信息
+			Map<String,String> params = new HashMap<String,String>();
+			Map<String,String[]> requestParams = request.getParameterMap();
+			for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
+				String name = (String) iter.next();
+				String[] values = (String[]) requestParams.get(name);
+				String valueStr = "";
+				for (int i = 0; i < values.length; i++) {
+					valueStr = (i == values.length - 1) ? valueStr + values[i]
+							: valueStr + values[i] + ",";
+				}
+				System.out.println(valueStr);
+				//乱码解决，这段代码在出现乱码时使用
+//				valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");(这行代码有毒，注释掉！)
+				params.put(name, valueStr);
+			}
+
+			boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key, AlipayConfig.charset, AlipayConfig.sign_type); //调用SDK验证签名
+		
+			if(signVerified) {//验证成功
+
+				return "success";
+				
+			}else {//验证失败
+				System.out.println("退款失败fail");
+				return "error";
+			}
+
+
+		}
+	
+	
+	
+	
 }

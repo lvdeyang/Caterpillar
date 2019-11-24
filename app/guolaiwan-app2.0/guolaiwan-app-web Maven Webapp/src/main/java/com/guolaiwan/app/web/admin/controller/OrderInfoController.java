@@ -678,8 +678,11 @@ public class OrderInfoController extends BaseController {
 
 		} else {
 			OrderInfoPO orderInfoPO = conn_OrderInfo.get(orderId);
-			orderInfoPO.setOrderState(OrderStateType.PAYSUCCESS);
-			conn_OrderInfo.update(orderInfoPO);
+			if(orderInfoPO!=null){
+				orderInfoPO.setOrderState(OrderStateType.PAYSUCCESS);
+				conn_OrderInfo.update(orderInfoPO);
+			}
+			
 		}
 
 		return success();
