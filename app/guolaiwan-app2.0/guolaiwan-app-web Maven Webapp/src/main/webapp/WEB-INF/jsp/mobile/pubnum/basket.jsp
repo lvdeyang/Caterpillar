@@ -773,38 +773,46 @@ html, body {
 	
 	
 	
-	   var MAX = 99, MIN = 0;
+	    var MAX = 99, MIN = 0;
 		$(document).on('click','.weui-count__decrease',function (e) {
-		 
-		  var $productRestrictNumber=$(e.currentTarget).parent().find('.productRestrictNumber');
-		  var orderIds=this.id.split('-');
-		  var $input = $(e.currentTarget).parent().find('.weui-count__number');
-		  var number = parseInt($input.val() || "0") - 1;
-		  
-		  var chkStockUrl=window.BASEPATH + 'pubnum/change/ordercount?orderId='+orderIds[1]+'&count=-1';
-			$.get(chkStockUrl, null, function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-				if(data.stock==0){
-				   $.toast("抱歉，库存不足", "forbidden");
-				   return;
-				}else if(data.stock==-1){
-				   $.toast("今天的名额已经使用，明天再来吧", "forbidden");
-				   return;
-				}
-				
-				if(number==parseInt($productRestrictNumber.val())-1){
-				     deleteOrder(orderIds[1]);
-				  }else{
-				  
-				   $input.val(number);
-			       initTotal();
-				  }
-				
-		    });
-		  
-		 
-	      
+		      var $productRestrictNumber=$(e.currentTarget).parent().find('.productRestrictNumber');
+			  var orderIds=this.id.split('-');
+			  var $input = $(e.currentTarget).parent().find('.weui-count__number');
+			  var number = parseInt($input.val() || "0") - 1;
+		      $.confirm("是否删除此订单？", function() {
+                     
+					  
+					  var chkStockUrl=window.BASEPATH + 'pubnum/change/ordercount?orderId='+orderIds[1]+'&count=-1';
+						$.get(chkStockUrl, null, function(data){
+								data = parseAjaxResult(data);
+								if(data === -1) return;
+								if(data.stock==0){
+								   $.toast("抱歉，库存不足", "forbidden");
+								   return;
+								}else if(data.stock==-1){
+								   $.toast("今天的名额已经使用，明天再来吧", "forbidden");
+								   return;
+								}
+							
+							if(number==parseInt($productRestrictNumber.val())-1){
+							    var param={};
+							    param.orderId=orderIds[1];
+						        param.userId=${userId};
+								$.post(window.BASEPATH +"phoneApp/order/delbyID", $.toJSON(param), function(data){
+									$('#or-'+orderIds[1]).remove();
+									initTotal();
+								});
+							  }else{
+							  
+							   $input.val(number);
+						       initTotal();
+							  }
+							
+					    });
+			  
+			  }, function() {
+			  //点击取消后的回调函数
+			  });
 		});
 		$(document).on('click','.weui-count__increase',function (e) {
 		  var orderIds=this.id.split('-');

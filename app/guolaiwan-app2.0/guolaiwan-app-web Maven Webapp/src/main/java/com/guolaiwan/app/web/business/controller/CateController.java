@@ -398,8 +398,8 @@ public class CateController extends WebBaseControll {
 		long userMoney = user.getWallet();
 		long payMoney = 0;
 		TablePO addpo  = null;
-		if (userMoney >= meony/100) {
-			user.setWallet(userMoney - meony/100);
+		if (userMoney >= meony) {
+			user.setWallet(userMoney - meony);
 			if (TableStatus.getTableId() > 0) {
 				 addpo  = Table.getByField("id",TableStatus.getTableId());
 				if (addpo != null && "PAYSUCCESS".equals(TableStatus.getTableState()+"")) {
