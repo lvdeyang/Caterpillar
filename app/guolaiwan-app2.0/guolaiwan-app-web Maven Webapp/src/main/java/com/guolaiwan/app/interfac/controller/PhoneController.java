@@ -6205,7 +6205,7 @@ public class PhoneController extends WebBaseControll {
 	@RequestMapping(value = "/getAllRebroadcast", method = RequestMethod.POST)
 	public Map<String, Object> getAllRebroadcast(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		List<LiveRebroadcastPO> rdvertisement = conn_rdvertisementDao.findAll();
+		List<LiveRebroadcastPO> rdvertisement = conn_rdvertisementDao.findByOrder();
 		List<LiveRebroadcastVO> rdvertisementvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class)
 				.convert(rdvertisement, LiveRebroadcastVO.class);
 		return success(rdvertisementvo);

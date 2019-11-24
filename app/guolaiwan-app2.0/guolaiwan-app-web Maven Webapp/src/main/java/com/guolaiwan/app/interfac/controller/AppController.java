@@ -2655,7 +2655,46 @@ public class AppController extends WebBaseControll {
 			orderInfoPO.setProductPic(sysConfig.getWebUrl() + orderInfoPO.getProductPic());
 		}
 		List<OrderInfoVO> _orders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orders, OrderInfoVO.class);
-		dataMap.put("orders", _orders);
+		
+		List<OrderInfoPO> orderingOrderpos = conn_order.getOrdersByState(userId, OrderStateType.NOTPAY);
+		List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
+				OrderInfoVO.class);
+		List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
+		for (OrderInfoVO orderInfoVO : orderingOrders) {
+			if (!orderInfoVO.getOrderBookDate().equals("")) {
+				Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");
+				long between = DateUtil.daysBetween(new Date(), bookDate);
+				if (bookDate.getTime() < new Date().getTime()) {
+					continue;
+				}
+			}
+			orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
+			if (orderInfoVO.getComboId() != 0) {
+				ProductComboPO comboPO = conn_combo.get(orderInfoVO.getComboId());
+				orderInfoVO.setProductPrice(
+						new DecimalFormat("0.00").format((double) comboPO.getComboprice() / 100));
+				orderInfoVO.setComboName(comboPO.getCombo());
+			} else {
+				orderInfoVO.setComboName("标准");
+			}
+			LogisticsPo logisticsPo = conn_logistics.get(orderInfoVO.getLogisticsId());
+			if (logisticsPo != null) {
+				orderInfoVO.setLogisticsName(logisticsPo.getName());
+			} else {
+				orderInfoVO.setLogisticsName("-");
+			}
+			if (orderInfoVO.getActivityId() != 0) {
+				ActivityRelPO activityRelPO = conn_activityRel.get(orderInfoVO.getActivityId());
+				if (activityRelPO != null) {
+					orderInfoVO.setProductPrice(
+							new DecimalFormat("0.00").format((double) activityRelPO.getPrice() / 100));
+				}
+
+			}
+			checkOrders.add(orderInfoVO);
+		}
+		
+		dataMap.put("orders", checkOrders);
 		dataMap.put("count", count);
 		return success(_orders);
 	}
