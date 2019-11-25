@@ -206,6 +206,7 @@ public class SuperSellController extends BaseController {
 		superSellRelPO.setProductPic(productPO.getProductShowPic());
 		superSellRelPO.setProductId(pId);
 		superSellRelPO.setSupersellId(supersellId);
+		superSellRelPO.setPrice(productPO.getProductPrice());
 		conn_supersellRel.save(superSellRelPO);
 		return "success";
 	}
