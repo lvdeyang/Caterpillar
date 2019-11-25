@@ -485,7 +485,9 @@ html, body {
 	    text-align:center;
 	    font-size:12px;
     }
-    
+    #proContent img{
+        width:100%;
+    }
 
 </style>
 
@@ -494,9 +496,12 @@ html, body {
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="lib/clipboard.min.js"></script>
 <script type="text/javascript">
 
 	$(function() {
+	 
+	   
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -511,54 +516,79 @@ html, body {
        var supersellUrl;
 		
 		$(document).on('click','.product',function(){
-	       var codes=this.id.split('-');
-	       
+	        var codes=this.id.split('-');
+	        var _uriProduct = window.BASEPATH + 'supersell/productInfo?productId='+codes[1];
+		
+			$.get(_uriProduct, null, function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				    var html=[];
+				    var pics=data.product.productMorePic.split(',');
+					for(var i=0; i<pics.length; i++){
+						html.push('<div style="height:200px;" class="swiper-slide"><img style="height:200px" src="'+pics[i]+'" alt=""></div>');
+					}
+					$('.swiper-wrapper').append(html.join(''));
+					$(".swiper-container").swiper({
+				        loop: true,
+				        autoplay: 3000
+				    });
+				    $('.header-content').html(data.product.productName);
+				    $('#proName').html(data.product.productName+'￥<span id="price">'+data.product.productPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
+				    $('#proContent').html(data.product.productIntroduce);
+				    $("#productInfo").popup();
+				}
+				
+			});
 	    
 	    });
-	   
+	    $(document).on('click','#backBtn',function(){
+	       $.closePopup();
+	    });
 	 
 		getProduct();
 		function getProduct(){
-		    var _uriproduct = window.BASEPATH + 'pubnum/supersell/getProducts';
+		    var _uriproduct = window.BASEPATH + 'supersell/getProducts';
 		
 			$.get(_uriproduct, null, function(data){
 				data = parseAjaxResult(data);
-				
 				supersellUrl = window.location.href;
 				if(data === -1) return;
 				if(data){
-				   $('#superImage').attr('src',data.url+data.supersells[0].pic);
-				   $('#superTitle').html(data.supersells[0].name);
-				   supersellName = data.bundles[0].title + '-过来玩';
-				   supersellPic = 'http://<%=weburl%>/file' + data.supersells[0].pic;
+				   $('#superImage').attr('src',data.weburl+data.supersell.pic);
+				   $('#superTitle').html(data.supersell.name);
+				   $('#pageHeader').html(data.supersell.name);
+				   supersellName = data.supersell.name;
+				   supersellPic = data.weburl+data.supersell.pic;
 				   var html=[];
-				   var supersells=data.supersells;
-				   for(var j=0;j<supersells.length;j++){
-				           html.push("<tr><td style='padding-left:15px;font-size:13px;font-weight:bold'>"+supersells[j].name+"</td><td></td></tr>")
-				           var pros=data[supersells[j].id];
-						   for(var i=0;i<pros.length;i++){
-						       if(i%2==0){
-						          html.push('<tr>');
-						       }
-			                     html.push('<td style="padding:10px;width:50%" activityData="'+pros[i].activityReId+'" class="product" id="pro-'+pros[i].id+'">');
-				                 html.push('<image style=" width:100%;height:100px;" src="'+data.url+pros[i].productShowPic+'" />');
-				                 html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+pros[i].productName+'</p>');
-				                 html.push('<p style="font-size:12px;">￥'+pros[i].productPrice+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+pros[i].productOldPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
-				                 html.push('</td>');
-			                     if(pros.length==1){
-			                       html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
-			                     }
-			                  if(i%2==1){
-						          html.push('</tr>');
-						      }
-						   
-						   }
+				   var rels=data.rels;
+				   for(var i=0;i<rels.length;i++){
+				       if(i%2==0){
+				          html.push('<tr>');
+				       }
+	                   html.push('<td style="padding:10px;width:50%" class="product" id="pro-'+rels[i].productId+'">');
+		               html.push('<image style=" width:100%;height:100px;" src="'+data.weburl+rels[i].productPic+'" />');
+		               html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+rels[i].productName+'</p>');
+		               html.push('<p style="font-size:12px;">￥'+rels[i].price+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+rels[i].oldPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
+		               html.push('</td>');
+	                   if(rels.length==1){
+	                      html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
+	                   }
+	                   if(i%2==1){
+				          html.push('</tr>');
+				       }
 				   }
-				  
-				   
 				   $('#product_table').append(html.join(''));
-				   
 				   initShare();
+				   $.modal({
+					  title: "重要说明",
+					  text: "每周一晚上送货上门，暂时仅限于昌平公园六号<br>预定联系：<a href='tel://13810728953'>13810728953（点击）</a>【微信手机同号】",
+					  buttons: [
+					    { text: "确定", onClick: function(){ } }
+					  ]
+				   });
+				   
+			       
 				}
 			});
 		
@@ -605,7 +635,7 @@ html, body {
                         });
 	            wx.onMenuShareAppMessage({
 					title : supersellName, // 分享标题
-					desc : '畅游华夏，尽在过来玩-联系电话:0315-6681288/6686299', // 分享描述
+					desc : '昌平区公园六号每周一晚上送货上门-联系电话:13810728953', // 分享描述
 					link: supersellUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: supersellPic, // 分享图标
 					success : function() {}
@@ -624,11 +654,14 @@ html, body {
 		<!-- 主页 -->
 		<div class="header">
 			<div class="wrapper">
-				<a class="link-left" href="#side-menu"><span
+				<a class="link-left" ><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">超级大卖场主页</div>
+				<div class="header-content" id="pageHeader"></div>
 			</div>
 		</div>
+	
+
+		
 		<div class="content">
 			
 			<div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
@@ -637,6 +670,10 @@ html, body {
 				
 				</div>
 			</div>
+			
+				
+		
+			
             <div id="superTitle" style="font-size:12px;margin-left:12px;margin-top:5px;"></div>
             
 		    <table id="product_table" style="margin-top:15px;padding-bottom:50px;">
@@ -651,6 +688,45 @@ html, body {
 		   
 		    
 		</div>
+	</div>
+	
+	<div id="productInfo" class="weui-popup__container">
+	  <div class="weui-popup__overlay"></div>
+	  <div class="weui-popup__modal">
+	   		
+	   		<div class="header">
+				<div class="wrapper">
+					<a class="link-left" id="backBtn" href="javascript:void(0)"><span
+						class="icon-reorder icon-large"></span></a>
+					<div class="header-content"></div>
+				</div>
+			</div>
+			<div class="content">
+				
+				<div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+				  <div class="swiper-wrapper">
+				  
+				  </div>
+				</div>
+	            <div style="width:100%">
+				    <div style="font-size:12px;margin-left:14px;margin-top:15px;width:50%;float:left;" id="proName"></div>
+			    </div>
+			    <div style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">重要说明</div>
+			    <div style="width:100%">
+			      <div style="font-size:12px;margin-left:14px;margin-top:15px;width:90%;float:left;" id="proName">
+				             每周一晚上送货上门，暂时仅限于昌平公园六号，预定联系：<a href='tel://13810728953'>13810728953（点击）</a>【微信手机同号】。
+                     
+			      </div>
+			      <div style="font-size:12px;margin-left:14px;width:90%;float:left;">也可以加微信:</div>
+				  <image style="width:200px;height:200px;float:left" src="lib/images/mrhuang.jpg"></image>
+			    </div>
+			    <div style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">商品详情</div>
+			    <div style="font-size:12px;padding:12px;float:left;" id="proContent"></div>
+			   
+		 </div>
+	   		
+	   		
+	  </div>
 	</div>
 </body>
 

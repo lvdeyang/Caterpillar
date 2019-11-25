@@ -59,6 +59,7 @@
 		   href.indexOf('pubnum/address/edit')==-1&&
 		   href.indexOf('pubnum/basket/index')==-1&&
 		   href.indexOf('pubnum/surpport')==-1&&
+		   href.indexOf('supersell')==-1&&
 		   href.indexOf('classify=PRODUCT')==-1){
 		   
 		   
@@ -92,7 +93,7 @@
 		    });
 		}
 		
-		initBack();
+		
 		
 		
 		
@@ -103,24 +104,31 @@
 				<div class="header-content">商户</div>
 			</div>
 		</div>*/
-		var str="";
-		if(href.indexOf('pubnum/index')!=-1){
-		  str='<div style="font-size:24px;line-height:40px;position:absolute;margin-top:-42px;z-index:1000;right:10px"><image id="ewmpic" style="height:18px;width:18px;" src="http://<%=weburl%>/file/ewm.jpg" /></div>';
-		}
-		var nameHeader='过来玩';
-		var phone='0315-6681288';
-		var ccode='${comCode}';
-		if(ccode=='1003'){
-		   nameHeader='全域休闲';
-		   phone='010-89991991';
-		}
-		$('.header-content').html('<image src="lib/images/logo.jpg" style="position:absolute;margin-top:5px;width:25px;height:25px;display:inline-block;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="headerName" style="font-size:14px">'+nameHeader+'</span><div id="phone" style="font-size:10px;position:absolute;margin-top:-38px;z-index:1000;right:40px">'+phone+'</div>'
-		+str);
 		$('.header').css('background',"#FFF").css('color','#000');
+		$('.link-left').children().remove();
+		$('.link-left').append('<span class="icon-chevron-left"></span>');
+		if(href.indexOf('supersell')==-1){
+		    initBack();
+	        var str="";
+			if(href.indexOf('pubnum/index')!=-1){
+			  str='<div style="font-size:24px;line-height:40px;position:absolute;margin-top:-42px;z-index:1000;right:10px"><image id="ewmpic" style="height:18px;width:18px;" src="http://<%=weburl%>/file/ewm.jpg" /></div>';
+			}
+			var nameHeader='过来玩';
+			var phone='0315-6681288';
+			var ccode='${comCode}';
+			if(ccode=='1003'){
+			   nameHeader='全域休闲';
+			   phone='010-89991991';
+			}
+			$('.header-content').html('<image src="lib/images/logo.jpg" style="position:absolute;margin-top:5px;width:25px;height:25px;display:inline-block;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="headerName" style="font-size:14px">'+nameHeader+'</span><div id="phone" style="font-size:10px;position:absolute;margin-top:-38px;z-index:1000;right:40px">'+phone+'</div>'
+			+str);
+			
+			
+			$(document).on('click','#phone',function(){
+		       location.href = 'tel://0315-6681288';
+		    });
+		}
 		
-		$(document).on('click','#phone',function(){
-	       location.href = 'tel://0315-6681288';
-	    });
 		
     	
     });
