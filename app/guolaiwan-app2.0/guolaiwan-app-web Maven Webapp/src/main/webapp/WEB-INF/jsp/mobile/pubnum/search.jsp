@@ -578,10 +578,11 @@ html, body {
 	       if(relDatas[0]==0&&relDatas[1]==0){	        
 		       if(data=='2021'){
 		          location.href=window.BASEPATH + 'pubnum/product/index/line?id='+codes[1];
-		       //}else if(data =='0012'){		
+		       }else if(modularData == '0003'){
+		          location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[2];	     
 		       }else if(modularData=='0001'||modularData=='10001'){      
-		       //普通票
-		       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=0';
+			       //普通票
+			       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=0';
 		       }		       
 		       else{		          	       		           
 		          location.href=window.BASEPATH + 'pubnum/product/index?id='+codes[1];
@@ -589,32 +590,35 @@ html, body {
 	       
 	       }else{	       	          	          
 	          if(relDatas[1]==0){
-	           //if(data =='0012'){
-	           if(modularData=='0001'||modularData=='10001'){    
-		           //普通票
-		           location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=1';
-		       }else{
-		       location.href=window.BASEPATH + 'pubnum/product/index/'+codes[1];
-		       }	            
-	          }else{	          
-	            location.href=window.BASEPATH + 'pubnum/product/index/surpport/'+relDatas[0]+'/0';
-	          }
+		           if(modularData=='0001'||modularData=='10001'){    
+			           //普通票
+			           location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=1';
+			       }
+			       else if(modularData == '0003'){
+			           location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[2];	     
+			       }else{
+			           location.href=window.BASEPATH + 'pubnum/product/index/'+codes[1];
+			       }
+			   }
+	           else{	          
+	               location.href=window.BASEPATH + 'pubnum/product/index/surpport/'+relDatas[0]+'/0';
+	           }
 	       } 
 	   });
 	   $(document).on('click','.merchant',function(){
 	      var ids=this.id.split('-');
      
 	       if(ids[2]=='0001'){
-	        location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+ids[1]+'&comCode=0001';
-	      }else{
-	       if(ids[1]==387){
-	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
-	      }else{
-	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+ids[1];
-	      } 
-	     }  
+	           location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+ids[1]+'&comCode=0001';
+	       }else if(ids[2] == '0003'){
+		       location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+ids[1];	     
+		   }else if(ids[1]==387){
+		       location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	       }else{
+	           location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+ids[1]; 
+	       }  
 	  
-	});
+	   });
 	});
 </script>
 

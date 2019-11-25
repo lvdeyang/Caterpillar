@@ -333,14 +333,20 @@ public class PubNumController extends WebBaseControll {
 			break;
 
 		case "PRODUCT":
-			mv = new ModelAndView("mobile/pubnum/product");
-			// 轮播图商品购买跳转 张羽 新增参数到页面 商品购买数量限制 5/2
-			long productLimitNum = conn_product.get(code).getProductLimitNum();
-			mv.addObject("productLimitNum", productLimitNum);
-			mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
-			mv.addObject("merchantId", conn_product.get(code).getProductMerchantID());
-			mv.addObject("id", code);
-			mv.addObject("userHeadimg", userHeadimg);
+			ProductPO productPO=conn_product.get(code);
+			if(productPO.getProductModularCode().equals("0001")){
+				mv = new ModelAndView("redirect:/product/package/commodity/jump?merchantId="+productPO.getProductMerchantID()+"&proId="+productPO.getId()+"&choice=0");
+			}else if(productPO.getProductModularCode().equals("0003")){
+				mv = new ModelAndView("redirect:/business/gotodelicacystore?merchantId="+productPO.getProductMerchantID());
+			}else{
+				mv = new ModelAndView("mobile/pubnum/product");
+				long productLimitNum = productPO.getProductLimitNum();
+				mv.addObject("productLimitNum", productLimitNum);
+				mv.addObject("productRestrictNumber", conn_product.get(code).getProductRestrictNumber());
+				mv.addObject("merchantId", conn_product.get(code).getProductMerchantID());
+				mv.addObject("id", code);
+				mv.addObject("userHeadimg", userHeadimg);
+			}
 			break;
 		default:
 			break;
