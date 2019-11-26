@@ -303,8 +303,8 @@ html, body {
 							 html.push('<img style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file'+data.merlist[i].shopHeading+'"/>');
 							 html.push('<div class="zhifu-in">');
 							 html.push('<p style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+data.merlist[i].shopName+'</p>'); 
-							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>'+distance[i]+'</span>km</p>');
-							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+(data.merlist[i].minPrice)/100+'元起</span><span style="color:#EC6D1E;float:right;margin-top:10px;">'+pingfen+'分</span>   <span style="float:right;margin-top:10px">'+shownum[i]+'人来过</span></p>');
+							 html.push('<p style="font-size:12px;margin:10px 0 0 3%;">距您<span>'+distance[i]+'</span>km  <span style="color:#EC6D1E;float:right;margin-right:3%;">'+pingfen+'分</span></p>');
+							 html.push('<p style="font-size:12px;color:#C0C0C0;"><span style="color:#EC6D1E;font-size:16px;float:left;margin:10px 0 0 3%;">￥'+(data.merlist[i].minPrice)/100+'元起</span>   <span style="float:right;margin:12.5px 3% 0 0">'+shownum[i]+'人来过</span></p>');
 							 html.push('</div></div></div></a>');
 							}
 					}

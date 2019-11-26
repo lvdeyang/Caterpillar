@@ -565,7 +565,7 @@ z-index:11111 !important;
 		  input: '',
 		  empty: false, // 是否允许为空
 		  onOK: function (input) {
-		    if(/^(([1-9][0-9])|(([0].\d{0,2}|[1-9][0-9].\d{0,2})))$/.test(input)){
+		    if(/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(input)){
 		    	 $.post(orderurl,{'money':input,'userId':userId,'type':1},function(data){
 		    		data = parseAjaxResult(data)
 		    		orderNo=data.id;
@@ -604,11 +604,17 @@ z-index:11111 !important;
 				  input: '',
 				  empty: false, // 是否允许为空
 				  onOK: function (input) {
-				    if(/^(([1-9][0-9])|(([0].\d{0,2}|[1-9][0-9].\d{0,2})))$/.test(input)){
+			 		  
+				    if(/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/.test(input)){
 				    	 $.post(orderurl,{'money':input,'userId':userId,'type':2},function(data){
 				    		data = parseAjaxResult(data)
+				    		if(input<1){
+  						$.alert('提现金额不能小于1元！')
+						return;		  	
+						}
 				    		if(data==2){
-				    			$.alert('您的钱包余额不足！')
+				    		 
+				    		$.alert('您的钱包余额不足！')
 				    		}else{
 				    		orderNo=data.id;
 				    		mmpay(orderNo);
