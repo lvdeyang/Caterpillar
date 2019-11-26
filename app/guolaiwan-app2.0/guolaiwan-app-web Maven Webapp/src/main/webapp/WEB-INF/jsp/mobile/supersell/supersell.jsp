@@ -514,7 +514,7 @@ html, body {
        var supersellName;
        var supersellPic;
        var supersellUrl;
-		
+	   var infoFlg=false;
 		$(document).on('click','.product',function(){
 	        var codes=this.id.split('-');
 	        var _uriProduct = window.BASEPATH + 'supersell/productInfo?productId='+codes[1];
@@ -537,13 +537,16 @@ html, body {
 				    $('#proName').html(data.product.productName+'￥<span id="price">'+data.product.productPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
 				    $('#proContent').html(data.product.productIntroduce);
 				    $("#productInfo").popup();
+				    infoFlg=true;
 				}
 				
 			});
 	    
 	    });
+	  
 	    $(document).on('click','#backBtn',function(){
 	       $.closePopup();
+	       infoFlg=false;
 	    });
 	 
 		getProduct();
@@ -643,6 +646,52 @@ html, body {
 	            
 	       });
         }
+        
+        
+        $(window).scroll(function(){
+　　			//判断是否滑动到页面底部
+		     if($(window).scrollTop() === $(document).height() - $(window).height()){
+					var _uriproduct = window.BASEPATH + 'supersell/getProducts';
+					$.get(_uriproduct, null, function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+						if(data){
+						   
+						   var html=[];
+						   var rels=data.rels;
+						   for(var i=0;i<rels.length;i++){
+						       if(i%2==0){
+						          html.push('<tr>');
+						       }
+			                   html.push('<td style="padding:10px;width:50%" class="product" id="pro-'+rels[i].productId+'">');
+				               html.push('<image style=" width:100%;height:100px;" src="'+data.weburl+rels[i].productPic+'" />');
+				               html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+rels[i].productName+'</p>');
+				               html.push('<p style="font-size:12px;">￥'+rels[i].price+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+rels[i].oldPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
+				               html.push('</td>');
+			                   if(rels.length==1){
+			                      html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
+			                   }
+			                   if(i%2==1){
+						          html.push('</tr>');
+						       }
+						   }
+						   $('#product_table').append(html.join(''));
+						}
+					});
+		
+	
+			 }
+		});
+        
+
+		window.addEventListener("popstate", function(e) { 
+			if(infoFlg==true){
+				$.closePopup();
+	        	infoFlg=false;
+			}
+		}, false); 
+		
+        
 	
 	});
 </script>
@@ -689,6 +738,14 @@ html, body {
 		    
 		</div>
 	</div>
+	
+	<div class="weui-loadmore" hidden="hidden" style="position:fixed;bottom: 5%;left:18%;z-index: 10000">
+			  <i class="weui-loading"></i>
+			  <span class="weui-loadmore__tips">正在加载</span>
+	</div>
+	<div class="weui-loadmores" hidden="hidden" style="position:fixed;bottom: 7%;left:50%;margin-left:-40px;z-index: 10000">
+			  <span class="weui-loadmore__tips">没有内容了</span>
+	</div>		
 	
 	<div id="productInfo" class="weui-popup__container">
 	  <div class="weui-popup__overlay"></div>

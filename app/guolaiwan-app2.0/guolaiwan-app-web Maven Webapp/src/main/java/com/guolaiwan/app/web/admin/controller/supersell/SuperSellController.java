@@ -222,6 +222,7 @@ public class SuperSellController extends BaseController {
 
 		map.put("productName", pName);
 		map.put("productMerchantName", mName);
+		map.put("productModularCode", "01");
 		int count = conn_product.getCountByPageE(map);
 		List<ProductPO> listpo = conn_product.getListByPageE(map, page, limit);
 		List<ProductVO> listvo = ProductVO.getConverter(ProductVO.class).convert(listpo, ProductVO.class);

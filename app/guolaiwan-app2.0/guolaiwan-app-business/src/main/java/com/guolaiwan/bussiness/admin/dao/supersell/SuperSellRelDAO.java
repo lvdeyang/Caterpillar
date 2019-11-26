@@ -52,4 +52,23 @@ public class SuperSellRelDAO extends AbstractBaseDao<SuperSellRelPO> {
 		List<SuperSellRelPO> superSellRelPOs = this.findByHqlPage(hql, pageNum, pageSize);
 		return superSellRelPOs;
 	}
+	
+	public List<SuperSellRelPO> findBysuperIdRandom(long supersellId,int pageSize){
+		StringBufferWrapper sqlWrapper = new StringBufferWrapper().append(
+				"select s.* from supersell_relation s where s.supersellId="+supersellId);
+		sqlWrapper.append(" order by rand()");
+		System.out.println(sqlWrapper.toString());
+		SQLQuery query = getCurrentSession().createSQLQuery(sqlWrapper.toString())
+				.addScalar("supersellId", StandardBasicTypes.LONG)
+				.addScalar("productId", StandardBasicTypes.LONG)
+				.addScalar("productName", StandardBasicTypes.STRING)
+				.addScalar("productPic", StandardBasicTypes.STRING)
+				.addScalar("merchantName", StandardBasicTypes.STRING)
+				.addScalar("oldPrice", StandardBasicTypes.LONG)
+				.addScalar("price", StandardBasicTypes.LONG);
+		query.setResultTransformer(Transformers.aliasToBean(SuperSellRelPO.class));
+		query.setMaxResults(pageSize);
+		return query.list();
+	}
+	
 }

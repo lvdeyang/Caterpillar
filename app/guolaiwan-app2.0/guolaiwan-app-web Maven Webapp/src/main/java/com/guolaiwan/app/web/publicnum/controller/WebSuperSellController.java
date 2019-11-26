@@ -74,7 +74,7 @@ public class WebSuperSellController extends WebBaseControll{
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("weburl", sys.getWebUrl());
 		ret.put("supersell", superSellPOs.get(0));
-		List<SuperSellRelPO> superSellRelPOs=superSellRelDAO.findByField("supersellId", superSellPOs.get(0).getId());
+		List<SuperSellRelPO> superSellRelPOs=superSellRelDAO.findBysuperIdRandom(superSellPOs.get(0).getId(),20);
 		ret.put("rels", superSellRelPOs);
 		return ret;
 	}
