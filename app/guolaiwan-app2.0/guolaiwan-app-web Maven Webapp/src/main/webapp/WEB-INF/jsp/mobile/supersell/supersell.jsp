@@ -66,7 +66,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>活动主页</title>
+<title>大卖场主页</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -585,7 +585,7 @@ html, body {
 				   initShare();
 				   $.modal({
 					  title: "重要说明",
-					  text: "每周一晚上送货上门，暂时仅限于昌平公园六号<br>预定联系：<a href='tel://13810728953'>13810728953（点击）</a>【微信手机同号】",
+					  text: "每周一晚上送货上门，暂时仅限于昌平公园六号<br>预定联系：<a href='tel://13810728953'>13810728953（点击复制）</a>【微信手机同号】",
 					  buttons: [
 					    { text: "确定", onClick: function(){ } }
 					  ]
