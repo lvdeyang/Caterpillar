@@ -528,6 +528,7 @@ html, body {
 					for(var i=0; i<pics.length; i++){
 						html.push('<div style="height:200px;" class="swiper-slide"><img style="height:200px" src="'+pics[i]+'" alt=""></div>');
 					}
+					$('.swiper-wrapper').children().remove();
 					$('.swiper-wrapper').append(html.join(''));
 					$(".swiper-container").swiper({
 				        loop: true,
