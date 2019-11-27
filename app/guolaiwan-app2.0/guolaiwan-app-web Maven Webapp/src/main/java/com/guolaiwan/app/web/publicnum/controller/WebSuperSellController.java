@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.CommentVO;
 import com.guolaiwan.app.web.admin.vo.LogisticVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
@@ -60,7 +61,14 @@ public class WebSuperSellController extends WebBaseControll{
 	@RequestMapping(value = "/index")
 	public ModelAndView pubHome(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
+		String flg=request.getParameter("flg");
 		mv = new ModelAndView("mobile/supersell/supersell");
+		if(flg!=null){
+			mv.addObject("flg", flg);
+		}else{
+			mv.addObject("flg", 0);
+		}
+		
 		return mv;
 	}
 
