@@ -535,7 +535,9 @@ html, body {
 				        autoplay: 3000
 				    });
 				    $('.header-content').html(data.product.productName);
-				    $('#proName').html(data.product.productName+'￥<span id="price">'+data.product.productPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+data.product.productOldPrice+'</span>');
+				    $('#proName').html(data.product.productName+'￥<span id="price">'+
+				    (data.product.productPrice/100).toFixed(2)+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+
+				    (data.product.productOldPrice/100).toFixed(2)+'</span>');
 				    $('#proContent').html(data.product.productIntroduce);
 				    $("#productInfo").popup();
 				    pushHistory();

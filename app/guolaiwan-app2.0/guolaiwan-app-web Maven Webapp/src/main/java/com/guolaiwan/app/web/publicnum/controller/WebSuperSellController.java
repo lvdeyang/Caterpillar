@@ -106,13 +106,15 @@ public class WebSuperSellController extends WebBaseControll{
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		HttpSession session = request.getSession();
 		ProductPO product = conn_product.get(productId);
-		
+		List<SuperSellRelPO> superSellRelPOs=superSellRelDAO.findByField("productId", productId);
 		SysConfigPO sysConfig = sysConfigDAO.getSysConfig();
 		// 商品
 		ProductVO _product = new ProductVO().set(product);
 		_product.setProductShowPic(sysConfig.getWebUrl() + _product.getProductShowPic()); // 显示图片
 		_product.setProductMorePic(split(_product.getProductMorePic(), sysConfig.getWebUrl()));// 多图
 		_product.setVideourl(sysConfig.getWebUrl() +_product.getVideourl());
+		_product.setProductOldPrice(superSellRelPOs.get(0).getOldPrice()+"");
+		_product.setProductPrice(superSellRelPOs.get(0).getPrice()+"");
 		dataMap.put("product", _product);
 
 		return success(dataMap);
