@@ -536,8 +536,8 @@ html, body {
 				    });
 				    $('.header-content').html(data.product.productName);
 				    $('#proName').html(data.product.productName+'￥<span id="price">'+
-				    (data.product.productPrice/100).toFixed(2)+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+
-				    (data.product.productOldPrice/100).toFixed(2)+'</span>');
+				    (data.product.productPrice/100).toFixed(2)+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">'+
+				    ''+'</span>');
 				    $('#proContent').html(data.product.productIntroduce);
 				    $("#productInfo").popup();
 				    pushHistory();
@@ -577,8 +577,8 @@ html, body {
 		               html.push('<image style=" width:100%;height:100px;" src="'+data.weburl+rels[i].productPic+'" />');
 		               html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+rels[i].productName+'</p>');
 		               html.push('<p style="font-size:12px;">￥'+(rels[i].price/100).toFixed(2)+
-		               '&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+
-		               (rels[i].oldPrice/100).toFixed(2)+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
+		               '&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">'+
+		               ''+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
 		               html.push('</td>');
 	                   if(rels.length==1){
 	                      html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
@@ -678,7 +678,7 @@ html, body {
 			                   html.push('<td style="padding:10px;width:50%" class="product" id="pro-'+rels[i].productId+'">');
 				               html.push('<image style=" width:100%;height:100px;" src="'+data.weburl+rels[i].productPic+'" />');
 				               html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+rels[i].productName+'</p>');
-				               html.push('<p style="font-size:12px;">￥'+rels[i].price+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">￥'+rels[i].oldPrice+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
+				               html.push('<p style="font-size:12px;">￥'+(rels[i].price/100).toFixed(2)+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">'+''+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
 				               html.push('</td>');
 			                   if(rels.length==1){
 			                      html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
