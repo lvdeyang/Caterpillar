@@ -597,6 +597,12 @@ html, body {
 	       var codes=this.id.split('-');
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
+	       }else if('${modularCode}' == "0001"){	      
+	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=0001';
+	       }else if('${modularCode}' == 0003){//美食模块 
+	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
+	       }else if('${modularCode}' == 2126){//采摘板块
+	         location.href=window.BASEPATH + 'business/gotopicking?merchantId='+codes[1];
 	       }else{
 	          location.href=window.BASEPATH + 'pubnum/merchant/index?merchantId='+codes[1];
 	       }
