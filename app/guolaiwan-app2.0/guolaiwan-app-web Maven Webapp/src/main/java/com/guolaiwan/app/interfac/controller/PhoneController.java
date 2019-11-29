@@ -2112,6 +2112,17 @@ public class PhoneController extends WebBaseControll {
 				ProductPO productPO = conn_product.get(orderPO.getProductId());
 				if(orderPO.getRoomId()==0){
 					productPO.setProductStock(productPO.getProductStock() + orderPO.getProductNum());
+				}else{
+					
+					String[] field1s ={"roomId","inRoomDate","outRoomDate"};
+					Object[] value1s = {orderPO.getRoomId(),DateUtil.format(orderPO.getOrderBookDate(),"yyyy-MM-dd"),DateUtil.format(orderPO.getEndBookDate(),"yyyy-MM-dd")}; 
+					List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(field1s, value1s);
+					if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
+					    //cRoomSatePO.get(0).setRoomState("0");
+						//conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+						conn_roomSateDao.delete(cRoomSatePO.get(0));
+					}
+					
 				}
 				conn_product.save(productPO);
 			}

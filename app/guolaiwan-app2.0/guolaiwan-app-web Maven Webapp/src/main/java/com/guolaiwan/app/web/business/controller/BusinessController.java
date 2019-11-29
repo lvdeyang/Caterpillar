@@ -1367,8 +1367,9 @@ public class BusinessController extends WebBaseControll {
 					Object[] values = {orderInfoVO.getRoomId(),inRoomDate[0],outRoomDate[0]}; 
 					List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
 					if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
-					     cRoomSatePO.get(0).setRoomState("0");
-						conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+					    //cRoomSatePO.get(0).setRoomState("0");
+						//conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+						conn_roomSateDao.delete(cRoomSatePO.get(0));
 					 }
 					}
 					continue;

@@ -1725,8 +1725,9 @@ public class PubNumController extends WebBaseControll {
 					Object[] values = {orderInfoPO.getRoomId(),DateUtil.format(orderInfoPO.getOrderBookDate(),"yyyy-MM-dd"),DateUtil.format(orderInfoPO.getEndBookDate(),"yyyy-MM-dd")}; 
 					List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
 					if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
-					    cRoomSatePO.get(0).setRoomState("0");
-						conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+					    //cRoomSatePO.get(0).setRoomState("0");
+						//conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+						conn_roomSateDao.delete(cRoomSatePO.get(0));
 					 }
 				}
 				ret.put("stock", 1);
