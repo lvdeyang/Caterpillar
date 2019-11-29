@@ -551,7 +551,6 @@ text-align: center;
 		
 	//添加下单客户 orderID 
 	  function addMessageOrderId(orderId){
-	  alert(orderId)
 	    if(clientNumber.length > 0){	   
 	        var gather = {};
 	        gather.oderId= orderId;

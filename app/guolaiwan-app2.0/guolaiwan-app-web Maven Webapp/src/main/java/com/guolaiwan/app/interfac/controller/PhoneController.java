@@ -192,6 +192,8 @@ import com.guolaiwan.bussiness.admin.po.live.LiveRecordPO;
 import com.guolaiwan.bussiness.admin.po.live.SubLivePO;
 import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 import com.guolaiwan.bussiness.javacv.GuoliawanLiveServiceWrapper;
+import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
+import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
@@ -2928,6 +2930,9 @@ public class PhoneController extends WebBaseControll {
 		return success();
 	}
 
+	@Autowired
+	private CurrentRoomSateDao conn_roomSateDao;
+	
 	/**
 	 * 订单：获取订单
 	 * 
@@ -2960,22 +2965,43 @@ public class PhoneController extends WebBaseControll {
 					if(productPO!=null){
 						String distributeId = productPO.getDistributeId();
 						if(distributeId!=null&&!distributeId.equals("")){
+							conn_order.delete(orderInfoVO.getId());
 							continue;
 						}
 					}
-					
+
+					if(productPO==null&&orderInfoVO.getRoomId()==0){
+						conn_order.delete(orderInfoVO.getId());
+						continue;
+					}
 					
 					if (!orderInfoVO.getOrderBookDate().equals("")) {
 						Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");
 						String nowTime = DateUtil.format(new Date(), "yyyy年MM月dd日");	
 						Date nowdate = DateUtil.parse(nowTime+" 00:00:00", "yyyy年MM月dd日 HH:mm:ss");		
 						if (bookDate.getTime() < nowdate.getTime()) {
+							
+							if(orderInfoVO.getRoomId() != 0){
+								String[] inRoomDate = orderInfoVO.getOrderBookDate().split(" ");
+								String[] outRoomDate = 	orderInfoVO.getEndBookDate().split(" ");
+								String[] fields ={"roomId","inRoomDate","outRoomDate"};
+								Object[] values = {orderInfoVO.getRoomId(),inRoomDate[0],outRoomDate[0]}; 
+								List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
+								if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
+								    cRoomSatePO.get(0).setRoomState("0");
+									conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+								}
+							}
+							
+							
+							conn_order.delete(orderInfoVO.getId());
 							continue;
 						}
 					}
 
-					orderInfoVO.setProductRestrictNumber(
-							conn_product.get(orderInfoVO.getProductId()).getProductRestrictNumber());
+				    if(productPO!=null){
+				    	orderInfoVO.setProductRestrictNumber(productPO.getProductRestrictNumber());
+				    }
 
 					orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
 					if (orderInfoVO.getComboId() != 0) {

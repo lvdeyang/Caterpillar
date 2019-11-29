@@ -1887,16 +1887,15 @@ public class BusinessController extends WebBaseControll {
 					//封装数据 筛选后的数据
 					List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
 					for (OrderInfoVO orderInfoVO : orderingOrders) {
-						if(OrderType.MERCHANTGROUP.equals(orderInfoVO.getOrderType())){							
+						if(OrderType.MERCHANTGROUP.equals(orderInfoVO.getOrderType())){	
+							  orderInfoDao.delete(orderInfoVO.getId());
 							  continue;
 						}
-						//是不是天时同城商品，分销商品不允许加入购物车
+						//到店支付订单不加入购物车
 						ProductPO productPO=conn_product.get(orderInfoVO.getProductId());
-						if(productPO!=null){
-							String distributeId = productPO.getDistributeId();
-							if(distributeId!=null&&!distributeId.equals("")){
-								continue;
-							}
+						if(productPO==null&&orderInfoVO.getRoomId()==0){
+							orderInfoDao.delete(orderInfoVO.getId());
+							continue;
 						}
 						
 						//订单预订时间判断
@@ -1907,16 +1906,17 @@ public class BusinessController extends WebBaseControll {
 							if (bookDate.getTime() < nowdate.getTime()) {
 								//修改订单过期状态
 								if(orderInfoVO.getRoomId() != 0){
-								String[] inRoomDate = orderInfoVO.getOrderBookDate().split(" ");
-								String[] outRoomDate = 	orderInfoVO.getEndBookDate().split(" ");
-								String[] fields ={"roomId","inRoomDate","outRoomDate"};
-								Object[] values = {orderInfoVO.getRoomId(),inRoomDate[0],outRoomDate[0]}; 
-								List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
-								if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
-								     cRoomSatePO.get(0).setRoomState("0");
-									conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
-								 }
+									String[] inRoomDate = orderInfoVO.getOrderBookDate().split(" ");
+									String[] outRoomDate = 	orderInfoVO.getEndBookDate().split(" ");
+									String[] fields ={"roomId","inRoomDate","outRoomDate"};
+									Object[] values = {orderInfoVO.getRoomId(),inRoomDate[0],outRoomDate[0]}; 
+									List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
+									if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
+									    cRoomSatePO.get(0).setRoomState("0");
+										conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+									}
 								}
+								orderInfoDao.delete(orderInfoVO.getId());
 								continue;
 							}
 						}
