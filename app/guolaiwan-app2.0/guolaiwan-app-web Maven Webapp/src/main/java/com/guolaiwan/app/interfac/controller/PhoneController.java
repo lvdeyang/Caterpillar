@@ -2110,7 +2110,9 @@ public class PhoneController extends WebBaseControll {
 				conn_activityRel.save(actPro);
 			} else {
 				ProductPO productPO = conn_product.get(orderPO.getProductId());
-				productPO.setProductStock(productPO.getProductStock() + orderPO.getProductNum());
+				if(orderPO.getRoomId()==0){
+					productPO.setProductStock(productPO.getProductStock() + orderPO.getProductNum());
+				}
 				conn_product.save(productPO);
 			}
 			conn_order.delete(orderID);

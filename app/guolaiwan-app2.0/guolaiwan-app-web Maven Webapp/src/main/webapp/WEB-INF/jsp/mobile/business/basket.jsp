@@ -544,7 +544,7 @@ color: #EC6D1E!important;
 			   
 				for(var i=0; i<data.length; i++){
 				    var countStyle='';
-				    if(data[i].activityId!=0){
+				    if(data[i].activityId!=0||data[i].roomId!=0){
 				       countStyle='visibility:hidden;';
 				    }
 				    html.push('<div class="orderAll" style="width:100%;height:200px;border-bottom:1px solid #CCC" id="or-'+data[i].id+'">');

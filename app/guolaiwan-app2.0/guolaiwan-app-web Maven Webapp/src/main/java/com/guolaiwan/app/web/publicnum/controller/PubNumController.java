@@ -1729,7 +1729,8 @@ public class PubNumController extends WebBaseControll {
 						conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
 					 }
 				}
-				return ret.put("stock", 1);
+				ret.put("stock", 1);
+				return ret;
 			}
 			if (count > 0) {
 				if (productPO.getProductStock() < count) {
