@@ -2,6 +2,7 @@ package com.guolaiwan.app.web.publicnum.controller;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,9 @@ import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
+import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.supersell.SuperSellDAO;
+import com.guolaiwan.bussiness.admin.dao.supersell.SuperSellRecordDAO;
 import com.guolaiwan.bussiness.admin.dao.supersell.SuperSellRelDAO;
 import com.guolaiwan.bussiness.admin.enumeration.ActivityType;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
@@ -42,6 +45,7 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.supersell.SuperSellPO;
+import com.guolaiwan.bussiness.admin.po.supersell.SuperSellRecordPO;
 import com.guolaiwan.bussiness.admin.po.supersell.SuperSellRelPO;
 
 import pub.caterpillar.commons.util.html2text.ReduceHtml2Text;
@@ -57,11 +61,21 @@ public class WebSuperSellController extends WebBaseControll{
 	private SuperSellRelDAO superSellRelDAO;
 	@Autowired
 	private SysConfigDAO sysConfigDAO;
+	@Autowired
+	private UserInfoDAO userInfoDAO;
+	@Autowired
+	private SuperSellRecordDAO superSellRecordDAO;
 	
 	@RequestMapping(value = "/index")
 	public ModelAndView pubHome(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		String flg=request.getParameter("flg");
+		Object userId=request.getSession().getAttribute("userId");
+		UserInfoPO userInfoPO =userInfoDAO.get(Long.parseLong(userId.toString()));
+		SuperSellRecordPO superSellRecordPO=new SuperSellRecordPO();
+		superSellRecordPO.setUserName(userInfoPO.getUserNickname());
+		superSellRecordPO.setUpdateTime(new Date());
+		superSellRecordDAO.save(superSellRecordPO);
 		mv = new ModelAndView("mobile/supersell/supersell");
 		if(flg!=null){
 			mv.addObject("flg", flg);
