@@ -1013,19 +1013,37 @@ input[type="datetime-local"]:before{
 		   for(var i=0;i<comments.length;i++){
 		      html.push('<div class="weui-media-box weui-media-box_text">');
 	          html.push('  <h4 class="weui-media-box__title" style="font-size:13px;"><img style="height:20px;wight:20px;" src="'+userimgs[i]+'" />&nbsp;&nbsp;&nbsp;&nbsp;'+comments[i].userName+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:11px;">'+comments[i].userDate+'</span></h4>');
+	         
+	     
+	         
 	          if(${userId} == useridlist[i]){
 	          	html.push('  <p class="weui-media-box__desc">'+comments[i].content+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="javascript:deletepl('+comments[i].id+')" id="deletepl">删除</a></p>');
 	          }else{
-	          	html.push('  <p class="weui-media-box__desc">'+comments[i].content+'</p>');
+	          	html.push('  <p id="ssd" class="weui-media-box__desc">'+comments[i].content+'</p>');
 	          }
+	        
 	          html.push('</div>');
+	          
 		   }
 		   if(comments.length==0){
 		      html.push("<div style='width:100%;margin-top:10px;font-size:12px;text-align:center'>暂无数据</div>");
 		   }
-		   $('#comment').append(html.join(''));
+		   
+		     $('#comment').append(html.join(''));
+		   /* var str = $('#ssd').text();
+		    alert(str)
+			str = str.replace(/uD83C|uD83D|uD83E[u200D|uFE0F]|uD83C|uD83D|uD83E|[0-9|*|#]uFE0Fu20E3|[0-9|#]u20E3|[u203C-u3299]uFE0Fu200D|[u203C-u3299]uFE0F|[u2122-u2B55]|u303D|[A9|AE]u3030|uA9|uAE|u3030/ig,"微笑~");  */
+			var regStr = /uD83C|uD83D|uD83E[u200D|uFE0F]|uD83C|uD83D|uD83E|[0-9|*|#]uFE0Fu20E3|[0-9|#]u20E3|[u203C-u3299]uFE0Fu200D|[u203C-u3299]uFE0F|[u2122-u2B55]|u303D|[A9|AE]u3030|uA9|uAE|u3030/ig;
+			var str = $("#ssd").text();
+			if(regStr.test(str)){
+			　　$("#ssd").text(str.replace(regStr,"微笑~"));
+			}
+			
+			
+			
+			
 		}
-		
+		//\ud83c[\udf00-\udfff]|\ud83d[\udc00-\ude4f]|\ud83d[\ude80-\udeff].split(/[{}]/)
 		
 		var share={};
 		

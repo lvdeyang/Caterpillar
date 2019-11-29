@@ -984,7 +984,7 @@ clientMessage(firstAddr);
 		    <p style="position: absolute;top:105px;left:10%;">购买数量</p>
 		    <p class="p1" style="position: absolute;top:105px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
 		    <input type="text" readonly="true"  class="zhi" id="shuliang" value="1"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:108px;font-size:14px;font-weight:bold;text-align: center;">
-		    <p class="p2" style="position: absolute;top:105px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;">+</p>
+		    <p class="p2" style="position: absolute;top:105px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;line-height:25px;">+</p>
 		    </li>
 		    <li>
 		    <input type="button">
