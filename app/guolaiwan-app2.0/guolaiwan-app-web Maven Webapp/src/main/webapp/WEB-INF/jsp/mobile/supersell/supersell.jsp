@@ -578,7 +578,7 @@ html, body {
 		               html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+rels[i].productName+'</p>');
 		               html.push('<p style="font-size:12px;">￥'+(rels[i].price/100).toFixed(2)+
 		               '&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">'+
-		               ''+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
+		               ''+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>');
 		               html.push('</td>');
 	                   if(rels.length==1){
 	                      html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
@@ -593,7 +593,8 @@ html, body {
 				   if(flg!=1){
 				   		$.modal({
 				  		  title: "重要说明",
-						  text: "每周一晚上送货上门，暂时仅限于昌平公园六号<br>预定联系：<a href='tel://13810728953'>13810728953（点击复制）</a>【微信手机同号】",
+						  //text: "每周一晚上送货上门，暂时仅限于昌平公园六号<br>预定联系：<a href='tel://13810728953'>13810728953（点击复制）</a>【微信手机同号】",
+						  text: "每周一晚上送货上门，暂时仅限于昌平公园六号",
 						  buttons: [
 						    { text: "确定", onClick: function(){ } }
 						  ]
@@ -650,7 +651,7 @@ html, body {
                         });
 	            wx.onMenuShareAppMessage({
 					title : supersellName, // 分享标题
-					desc : '昌平区公园六号每周一晚上送货上门-联系电话:13810728953', // 分享描述
+					desc : '昌平区公园六号每周一晚上送货上门', // 分享描述
 					link: supersellUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: supersellPic, // 分享图标
 					success : function() {}
@@ -678,7 +679,7 @@ html, body {
 			                   html.push('<td style="padding:10px;width:50%" class="product" id="pro-'+rels[i].productId+'">');
 				               html.push('<image style=" width:100%;height:100px;" src="'+data.weburl+rels[i].productPic+'" />');
 				               html.push('<p style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+rels[i].productName+'</p>');
-				               html.push('<p style="font-size:12px;">￥'+(rels[i].price/100).toFixed(2)+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">'+''+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;购买</p>');
+				               html.push('<p style="font-size:12px;">￥'+(rels[i].price/100).toFixed(2)+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through">'+''+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>');
 				               html.push('</td>');
 			                   if(rels.length==1){
 			                      html.push('<td style="padding:10px;"><div style="width:100%;height:100px;"></div></td>');
@@ -796,7 +797,7 @@ html, body {
 			    <div style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">重要说明</div>
 			    <div style="width:100%">
 			      <div style="font-size:12px;margin-left:14px;margin-top:15px;width:90%;float:left;" id="proName">
-				             每周一晚上送货上门，暂时仅限于昌平公园六号，预定联系：<a href='tel://13810728953'>13810728953（点击）</a>【微信手机同号】。
+				             每周一晚上送货上门，暂时仅限于昌平公园六号。
                      
 			      </div>
 			      <div style="font-size:12px;margin-left:14px;width:90%;float:left;">也可以加微信:</div>
