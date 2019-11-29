@@ -271,6 +271,12 @@ public class PubNumController extends WebBaseControll {
 				userInfoPO.setUserNickname(nickname);
 			}
 			conn_user.save(userInfoPO);
+		}else{
+			if (!istest) {
+				userInfoPO.setUserHeadimg(headimgurl);
+				userInfoPO.setUserNickname(nickname);
+				conn_user.saveOrUpdate(userInfoPO);
+			}
 		}
 
 		session.setAttribute("userId", userInfoPO.getId());

@@ -2643,8 +2643,11 @@ public class PhoneController extends WebBaseControll {
 		 * = payMoney; }
 		 */
 		// 张羽 修改支付时的价钱按照页面的计算来 4/30
-		long bet = Long.parseLong(pageObject.getString("payMoney"));
-		payMoney = payMoney * bet;
+		if(pageObject.getString("payMoney")!=null){
+			long bet = Long.parseLong(pageObject.getString("payMoney"));
+			payMoney = payMoney * bet;
+		}
+		
 		orderAllMoney = payMoney;
 		System.out.println(orderAllMoney + "-------------------------");
 		// 商品单价

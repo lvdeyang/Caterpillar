@@ -1014,7 +1014,7 @@ appearance:none;
 		        html.push('<div class="menu-img"><img class="men_img" style="border-radius:4px;" src=http://www.guolaiwan.net/file'+list[i].productShowPic+' width="55" height="55" /></div>');
 		        html.push('<div class="menu-txt" >');
 		        html.push('<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;font-size:14px;">'+list[i].productName+'</p>');
-		        html.push('<p class="list1"  >月销<span>120</span></p>');
+		        html.push('<p class="list1"  ><span></span></p>');
 		        html.push('<p class="list2">');
 		        html.push('<b>￥'+list[i].productPrice+'</b>');
 		        html.push('<div class="btn">');
