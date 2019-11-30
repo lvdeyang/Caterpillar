@@ -273,7 +273,7 @@ function getRecomment(){
 			        }
 			        html.push('</div>');
 		         }
-		         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">'+data[i].distance+'km</p>');
+		         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">距离您'+data[i].distance+'km</p>');
 		         html.push('</div>');
 		         html.push('</div></a>');  		        
 		    }
@@ -314,7 +314,7 @@ function getRecomment(){
 						        }
 						        html.push('</div>');
 					         }
-					         html.push('<p style="position: absolute;right:2%;top:55px;font-size:12px;color:#757575;">'+distance[i]+'km</p>');
+					         html.push('<p style="position: absolute;top:25px;font-size:12px;color:#757575;">距离您'+distance[i]+'km</p>');
 					         html.push('</div>');
 					         html.push('</div></a>');
 							
@@ -328,18 +328,7 @@ function getRecomment(){
         location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+id;
    }
 </script>
-<!--  <script>
-$(function(){
-    $(window).scroll(function(){
-        var aa = $(window).scrollTop(); //当前滚动条滚动的距离
-        var bb = $(window).height();//浏览器当前窗口可视区域高度
-        var cc = $(document).height(); //浏览器当前窗口文档的高度 
-      
-        if(cc <= aa+bb){
-            $(".youxuan").append($(".goupiao").clone()); 
-        }
-    })
-  })
+ <script>
  /*返回顶部  */
   $(function(){
 	$(window).scroll(function(){
@@ -357,7 +346,7 @@ $(function(){
 	});
 });
 </script>
--->
+
 
 
 
