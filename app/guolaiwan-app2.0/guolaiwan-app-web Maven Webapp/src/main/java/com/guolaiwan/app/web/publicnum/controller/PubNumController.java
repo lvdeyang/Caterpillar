@@ -76,6 +76,7 @@ import com.guolaiwan.bussiness.admin.dao.OlChatMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderPeopleDao;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
+import com.guolaiwan.bussiness.admin.dao.RoomStatusDao;
 import com.guolaiwan.bussiness.admin.dao.SurpportBuyDao;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.SystemCacheDao;
@@ -109,7 +110,9 @@ import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.SystenCachePo;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
+import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
 import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
+import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
@@ -1703,7 +1706,10 @@ public class PubNumController extends WebBaseControll {
 		}
 		return ret;
 	}
-
+	
+	@Autowired
+	CurrentRoomSateDao conn_roomSateDao;
+	
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/change/ordercount", method = RequestMethod.GET)
@@ -1713,6 +1719,20 @@ public class PubNumController extends WebBaseControll {
 		OrderInfoPO orderInfoPO = conn_order.get(orderId);
 		if (orderInfoPO.getActivityId() == 0) {
 			ProductPO productPO = conn_product.get(orderInfoPO.getProductId());
+			if(productPO==null){
+				if(orderInfoPO.getRoomId()!=0){
+					String[] fields ={"roomId","inRoomDate","outRoomDate"};
+					Object[] values = {orderInfoPO.getRoomId(),DateUtil.format(orderInfoPO.getOrderBookDate(),"yyyy-MM-dd"),DateUtil.format(orderInfoPO.getEndBookDate(),"yyyy-MM-dd")}; 
+					List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
+					if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
+					    //cRoomSatePO.get(0).setRoomState("0");
+						//conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+						conn_roomSateDao.delete(cRoomSatePO.get(0));
+					 }
+				}
+				ret.put("stock", 1);
+				return ret;
+			}
 			if (count > 0) {
 				if (productPO.getProductStock() < count) {
 					ret.put("stock", 0);

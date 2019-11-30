@@ -225,8 +225,9 @@ color:#fff;
 	    $(document).on('click', '.close-window-1', function(){ 
 		    $(".window-1").fadeOut();
 		});
-		var inroomdate =formatDate(new Date("${inRoomDate}"));
-		var outroomdate =formatDate(new Date("${outRoomDate}"));
+               
+		var inroomdate =new Date("${inRoomDate}");
+		var outroomdate =new Date("${outRoomDate}");
 		 dayNumber = calculateDate(inroomdate,outroomdate);
 		$('#zong').text((${room.price/100}*dayNumber).toFixed(2));
 		
@@ -271,11 +272,10 @@ color:#fff;
 	}) 
 	
 	 //用时间算天数
-	 function  calculateDate(sDate1,  sDate2){	    
-	   var  oDate1,  oDate2,  iDays;  
-       oDate1  =  new  Date(sDate1.substring(4,6)  +  '/'  + sDate1.substring(6)  +  '/'  +  sDate1.substring(0,4));     
-       oDate2  =  new  Date(sDate2.substring(4,6)  +  '/'  + sDate2.substring(6)  +  '/'  +  sDate2.substring(0,4));  
-       iDays  =  parseInt(Math.abs(oDate1  -  oDate2) / 1000 / 60 / 60 /24);     
+	 function  calculateDate(sDate1,  sDate2){	       
+	  
+       iDays  =  parseInt(Math.abs(sDate1  -  sDate2) / 1000 / 60 / 60 /24); 
+            
        return  iDays;
 	 }
 		
@@ -314,7 +314,9 @@ color:#fff;
 						    } },  */					    
 						    { text: "微信支付", onClick: function(){ 
 							    $.confirm("确定支付？", function() {
-							       addMessageOrderId(data.orderId,1);							      							      						       													    
+							       addMessageOrderId(data.orderId,1);							      							      				
+
+		       													    
 								  }, function() {});
 						    } },
 						    { text: "取消", className: "default", onClick: function(){ } },
@@ -426,7 +428,9 @@ color:#fff;
 		                //每五秒刷新订单状态					
 		                setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){								    
-								    if(data.data=="PAYSUCCESS"){								      							    								       
+								    if(data.data=="PAYSUCCESS"){								      							    			
+
+					       
 								       location.href=window.BASEPATH +"business/gotopayment?merchantId=${merchantId}&orderId="+orderNo;
 								    }
 								});
@@ -850,7 +854,9 @@ color:#fff;
      
      
      <div  class="window-1" style="z-index:11111;width:100%;display: none;height:500px;padding:0 0 50px 0;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0; ">
-	   <p style="text-align:center;width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">添加/修改信息<span class="close-window-1" style="float:right;color:#fff;margin-right:5%;font-weight:bold;">关闭</span></p>
+	   <p style="text-align:center;width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">添加/修改信息<span class="close-window-1" 
+
+style="float:right;color:#fff;margin-right:5%;font-weight:bold;">关闭</span></p>
 	   <button onclick="addInfo()" style="width:50%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 0;">添加信息</button>	 
 	  <div id="window-1-message"></div>
 	  </div>
@@ -878,7 +884,9 @@ color:#fff;
 <div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;">
           <img id="uploadImages" style="width:140px;height:171px;position: absolute;left:50%;margin:40px 0 0 -70px;" alt="" src="lib/images/renliansss.png">
           <p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-126px;">请保持正脸，平视屏幕，面部足够清晰。</p>
-          <button id="photo" style="position: absolute;left:50%;margin-left:-50px;top:300px;font-size:18px;width:100px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>
+          <button id="photo" style="position: absolute;left:50%;margin-left:-50px;top:300px;font-size:18px;width:100px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄
+
+</button>
           <button onclick="save()" style="position: absolute;left:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">保存</button>
           <button onclick="shutdown()" style="position: absolute;right:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">关闭</button>
       </div>

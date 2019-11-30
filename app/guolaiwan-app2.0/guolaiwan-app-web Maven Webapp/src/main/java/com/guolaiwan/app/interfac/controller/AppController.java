@@ -209,6 +209,8 @@ import com.guolaiwan.bussiness.admin.po.live.LiveRecordPO;
 import com.guolaiwan.bussiness.admin.po.live.SubLivePO;
 import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 import com.guolaiwan.bussiness.javacv.GuoliawanLiveServiceWrapper;
+import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
+import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 import com.mysql.fabric.xmlrpc.base.Array;
@@ -2632,7 +2634,9 @@ public class AppController extends WebBaseControll {
 			return ERROR("系统错误！");
 		}
 	}
-
+    @Autowired
+    CurrentRoomSateDao conn_roomSateDao;
+	
 	/**
 	 * 订单：获取购物车
 	 * 
@@ -2657,12 +2661,26 @@ public class AppController extends WebBaseControll {
 				Date bookDate = DateUtil.parse(orderInfoVO.getOrderBookDate(), "yyyy年MM月dd日 HH:mm:ss");
 				long between = DateUtil.daysBetween(new Date(), bookDate);
 				if (bookDate.getTime() < new Date().getTime()) {
+					if(orderInfoVO.getRoomId() != 0){
+						String[] inRoomDate = orderInfoVO.getOrderBookDate().split(" ");
+						String[] outRoomDate = 	orderInfoVO.getEndBookDate().split(" ");
+						String[] fields ={"roomId","inRoomDate","outRoomDate"};
+						Object[] values = {orderInfoVO.getRoomId(),inRoomDate[0],outRoomDate[0]}; 
+						List<CurrentRoomSatePO> cRoomSatePO  =  conn_roomSateDao.findByFields(fields, values);
+						if(cRoomSatePO.size() != 0 && "1".equals(cRoomSatePO.get(0).getRoomState())){
+						    //cRoomSatePO.get(0).setRoomState("0");
+							//conn_roomSateDao.saveOrUpdate(cRoomSatePO.get(0));
+							conn_roomSateDao.delete(cRoomSatePO.get(0));
+						}
+					}
+					conn_order.delete(orderInfoVO.getId());
 					continue;
 				}
 			}
 			//去掉到店支付
 			ProductPO productPO=conn_product.get(orderInfoVO.getProductId());
-			if(productPO==null){
+			if(productPO==null&&orderInfoVO.getRoomId()==0){
+				conn_order.delete(orderInfoVO.getId());
 				continue;
 			}
 			orderInfoVO.setProductPic(sysConfig.getWebUrl() + orderInfoVO.getProductPic());
