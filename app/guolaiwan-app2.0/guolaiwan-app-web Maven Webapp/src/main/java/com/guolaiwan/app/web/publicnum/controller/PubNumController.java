@@ -230,17 +230,20 @@ public class PubNumController extends WebBaseControll {
             	isfans=true;
             	
             }
-            if(isfans){
+            if(isfans||rUrl.indexOf("supersell")!=-1){
             	session.setAttribute("type", "PHONENUM");
             }else{
             	session.setAttribute("type", null);
-            	params = new JSONObject();
-    			params.put("access_token", access_token);
-    			params.put("openid", openid);
-    			params.put("lang", "zh_CN");
-    			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
-    			userInfo = JSON.parseObject(result);
+            	
             }
+            
+            params = new JSONObject();
+			params.put("access_token", access_token);
+			params.put("openid", openid);
+			params.put("lang", "zh_CN");
+			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
+			userInfo = JSON.parseObject(result);
+            
 			try {
 				nickname = EmojiFilter.emoji(userInfo.getString("nickname"));
 			} catch (Exception e) {
@@ -284,7 +287,7 @@ public class PubNumController extends WebBaseControll {
 
 		session.setAttribute("userId", userInfoPO.getId());
 		session.setAttribute("openid", openid);
-		if(isfans){
+		if(isfans||rUrl.indexOf("supersell")!=-1){
 			mv = new ModelAndView("redirect:" + rUrl);
 		}else{
 			mv = new ModelAndView("mobile/business/focuson");
