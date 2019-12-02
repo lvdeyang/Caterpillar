@@ -81,4 +81,14 @@ public interface UserFeign {
 			@RequestParam("currentPage") int currentPage,
 			@RequestParam("pageSize") int pageSize);
 	
+	
+	@RequestMapping(value = "/user/feign/add")
+	public Object add(
+			@RequestParam("nickname") String nickname,
+			@RequestParam("companyId") Long companyId,
+			@RequestParam("password") String password,
+			@RequestParam("mobile") String mobile,
+			@RequestParam("mail") String mail,
+			@RequestParam("classify")  String classify);
+	
 }

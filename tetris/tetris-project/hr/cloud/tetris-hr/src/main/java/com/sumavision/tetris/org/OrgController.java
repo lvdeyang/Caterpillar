@@ -104,10 +104,8 @@ public class OrgController {
 	@ResponseBody
 	@RequestMapping(value = "/add/user")
 	public Object addUser(String name,HttpServletRequest request) throws Exception {
-		UserVO userVO=new UserVO();
-		userVO.setNickname(name);
-
-        return userVO;
+		userQuery.add(name, Long.parseLong(userQuery.current().getGroupId()), "111111", "", "", "");
+        return null;
 	}
 
 }

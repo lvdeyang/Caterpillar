@@ -230,8 +230,14 @@ public class UserQuery {
 		return find(userIds);
 	}
 	
-	public UserVO add(UserVO userVO){
-		return userVO;
+	public UserVO add(String nickName,
+			long companyId,
+			String password,
+			String mobile,
+			String mail,
+			String classify){
+		userFeign.add(nickName,companyId , password, mobile, mail, classify);
+		return null;
 	}
 	
 	/** 测试数据 */

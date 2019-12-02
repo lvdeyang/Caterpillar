@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
+import com.sumavision.tetris.user.UserClassify;
 import com.sumavision.tetris.user.UserQuery;
+import com.sumavision.tetris.user.UserService;
+import com.sumavision.tetris.user.UserVO;
 
 @Controller
 @RequestMapping(value = "/user/feign")
@@ -20,6 +23,9 @@ public class UserFeignController {
 
 	@Autowired
 	private UserQuery userQuery;
+	
+	@Autowired
+	private UserService userService;
 	
 	/**
 	 * 用户登录校验<br/>
@@ -118,6 +124,22 @@ public class UserFeignController {
 			List<Long> exceptIds = JSON.parseArray(except, Long.class);
 			return userQuery.listByCompanyIdWithExcept(companyId, exceptIds, currentPage, pageSize);
 		}
+	}
+	
+	
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/add")
+	public Object add(
+			String nickname,
+            Long companyId,
+            String password,
+            String mobile,
+            String mail,
+            String classify) throws Exception{
+		
+		userService.add(nickname, nickname, password, password, mobile, mail, classify, companyId);
+		return null;
 	}
 	
 }
