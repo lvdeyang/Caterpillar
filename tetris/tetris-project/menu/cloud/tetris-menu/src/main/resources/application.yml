@@ -14,7 +14,7 @@ spring:
 #      uri: http://192.165.56.71:8081
 #      fail-fast: true
     client:
-      ipAddress: localhost
+      ipAddress: 192.165.56.64
 #  profiles:
 #    active: pro
   datasource:
@@ -80,7 +80,7 @@ ribbon:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8081/eureka/
+      defaultZone: http://192.165.56.64:8081/eureka/
   instance:
     instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
     prefer-ip-address: true

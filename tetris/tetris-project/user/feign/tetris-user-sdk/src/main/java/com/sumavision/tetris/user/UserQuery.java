@@ -230,6 +230,10 @@ public class UserQuery {
 		return find(userIds);
 	}
 	
+	public UserVO add(UserVO userVO){
+		return userVO;
+	}
+	
 	/** 测试数据 */
 	private List<UserVO> users = new ArrayListWrapper<UserVO>().add(new UserVO().setUuid("1")
 																        .setNickname("用户1")

@@ -8,7 +8,7 @@ spring:
     #这里保存全部历史记录
     #history-level: full
   application:
-    name: tetris-user
+    name: tetris-hr
   cloud:
 #    config:
 #      uri: http://192.165.56.71:8081
@@ -19,7 +19,7 @@ spring:
 #    active: pro
   datasource:
     base:
-      url: jdbc:mysql://localhost:3306/user?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&&useSSL=true
+      url: jdbc:mysql://localhost:3306/hr?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&&useSSL=true
       username: root
       password: sumavisionrd
       driver-class-name: com.mysql.jdbc.Driver
@@ -65,7 +65,7 @@ spring:
 server:
 #  context-path: /menu 
 #  address: 192.165.56.71
-  port: 8084
+  port: 8091
 logging:
   pattern:
     console: "%d - %msg%n" 
