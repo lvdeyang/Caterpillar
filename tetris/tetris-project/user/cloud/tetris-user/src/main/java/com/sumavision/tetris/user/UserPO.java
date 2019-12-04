@@ -63,6 +63,8 @@ public class UserPO extends AbstractBasePO{
 	/** 用户分类 */
 	private UserClassify classify;
 	
+	private String code;
+	
 	@Column(name = "USERNAME")
 	public String getUsername() {
 		return username;
@@ -172,6 +174,14 @@ public class UserPO extends AbstractBasePO{
 
 	public void setClassify(UserClassify classify) {
 		this.classify = classify;
+	}
+	@Column(name = "CODE")
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 }

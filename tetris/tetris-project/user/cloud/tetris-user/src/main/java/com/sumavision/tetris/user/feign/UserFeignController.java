@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -136,9 +137,21 @@ public class UserFeignController {
             String password,
             String mobile,
             String mail,
-            String classify) throws Exception{
+            String classify,
+            String code) throws Exception{
 		
-		userService.add(nickname, nickname, password, password, mobile, mail, classify, companyId);
+		UserVO user=userService.addWithCode(nickname, nickname, password, password, mobile, mail, classify, companyId,code);
+		return user.getId();
+	}
+	
+	
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/delete")
+	public Object delete(
+			Long id) throws Exception{
+		
+		userService.delete(id);
 		return null;
 	}
 	

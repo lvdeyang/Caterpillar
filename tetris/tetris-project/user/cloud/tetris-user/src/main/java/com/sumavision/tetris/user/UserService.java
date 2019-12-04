@@ -144,7 +144,8 @@ public class UserService{
             String mobile,
             String mail,
             String classify,
-            String companyName) throws Exception{
+            String companyName,
+            String code) throws Exception{
 		
 		UserPO user = addUser(nickname, username, password, repeat, mobile, mail, UserClassify.COMPANY.getName());
 		
@@ -221,6 +222,41 @@ public class UserService{
 		return new UserVO().set(user);
 	}
 	
+	
+	public UserVO addWithCode(
+			String nickname,
+            String username,
+            String password,
+            String repeat,
+            String mobile,
+            String mail,
+            String classify,
+            Long companyId,
+            String code) throws Exception{
+		
+		CompanyPO company = companyDao.findOne(companyId);
+		
+		if(company == null){
+			throw new CompanyNotExistException(companyId);
+		}
+		
+		UserPO user = addUserWithCode(nickname, username, password, repeat, mobile, mail, classify,code);
+		
+		if(user.getClassify().equals(UserClassify.COMPANY)){
+			//加入公司
+			companyUserPermissionService.add(company, user);
+			//绑定用户和系统角色
+			userSystemRolePermissionService.bindSystemRole(user.getId(), new ArrayListWrapper<Long>().add(3l).getList());
+		}
+		
+		//发布用户注册事件
+		UserRegisteredEvent event = new UserRegisteredEvent(applicationEventPublisher, user.getId().toString(), user.getNickname(), company.getId().toString(), company.getName());
+		applicationEventPublisher.publishEvent(event);
+		
+		return new UserVO().set(user);
+	}
+	
+	
 	/**
 	 * 添加一个用户<br/>
 	 * <b>作者:</b>lvdeyang<br/>
@@ -285,6 +321,60 @@ public class UserService{
 		
 		return user;
 	}
+	
+	private UserPO addUserWithCode(
+			String nickname,
+            String username,
+            String password,
+            String repeat,
+            String mobile,
+            String mail,
+            String classify,
+            String code) throws Exception{
+		
+		if(username == null) throw new UsernameCannotBeNullException();
+		
+		if(nickname == null) nickname = username;
+		
+		if(password == null) throw new PasswordCannotBeNullException();
+		
+		if(!password.equals(repeat)) throw new RepeatNotMatchPasswordException();
+		
+		UserPO user = userDao.findByUsername(username);
+		if(user != null){
+			throw new UsernameAlreadyExistException(username);
+		}
+		
+		if(mobile != null){
+			user = userDao.findByMobile(mobile);
+			if(user != null){
+				throw new MobileAlreadyExistException(mobile);
+			}
+		}
+		
+		if(mail != null){
+			user = userDao.findByMail(mail);
+			if(user != null){
+				throw new MailAlreadyExistException(mail);
+			}
+		}
+		
+		user = new UserPO();
+		user.setNickname(nickname);
+		user.setUsername(username);
+		user.setPassword(sha256Encoder.encode(password));
+		user.setMobile(mobile);
+		user.setMail(mail);
+		user.setStatus(UserStatus.OFFLINE);
+		user.setAutoGeneration(false);
+		user.setClassify(UserClassify.fromName(classify));
+		user.setUpdateTime(new Date());
+		user.setCode(code);
+		userDao.save(user);
+		
+		return user;
+	}
+	
 	
 	/**
 	 * 删除一个用户<br/>

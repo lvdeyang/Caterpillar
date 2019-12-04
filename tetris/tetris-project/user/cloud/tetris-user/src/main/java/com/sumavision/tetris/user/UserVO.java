@@ -87,6 +87,8 @@ public class UserVO extends AbstractBaseVO<UserVO, UserPO>{
 	/** 业务角色id,以“,”分割 */
 	private String businessRoles;
 	
+	private String code;
+	
 	/** 用户标签,以“,”分割 */
 	private List<String> tags;
 	
@@ -297,6 +299,17 @@ public class UserVO extends AbstractBaseVO<UserVO, UserPO>{
 		return this;
 	}
 
+	
+	
+	public String getCode() {
+		return code;
+	}
+
+	public UserVO setCode(String code) {
+		this.code = code;
+		return this;
+	}
+
 	@Override
 	public UserVO set(UserPO entity){
 		this.setId(entity.getId())
@@ -307,6 +320,7 @@ public class UserVO extends AbstractBaseVO<UserVO, UserPO>{
 			.setMobile(entity.getMobile())
 			.setMail(entity.getMail())
 			.setIcon(entity.getIcon())
+			.setCode(entity.getCode())
 			.setStatus(entity.getStatus()==null?"":entity.getStatus().getName())
 			.setToken(entity.getToken())
 			.setAutoGeneration(entity.isAutoGeneration());

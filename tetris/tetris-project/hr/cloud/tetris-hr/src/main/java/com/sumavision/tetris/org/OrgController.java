@@ -1,5 +1,6 @@
 package com.sumavision.tetris.org;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.sumavision.tetris.commons.util.wrapper.HashMapWrapper;
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
+import com.sumavision.tetris.user.UserClassify;
 import com.sumavision.tetris.user.UserQuery;
 import com.sumavision.tetris.user.UserVO;
 
@@ -100,12 +102,43 @@ public class OrgController {
 		return null;
 	}
 	
+	@Autowired
+	private OrgUserDAO orgUserDao;
+	
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/list/user/{orgId}")
+	public Object listUser(@PathVariable long orgId,HttpServletRequest request) throws Exception {
+		List<Long> ids=new ArrayList<Long>();
+		List<OrgUserPO> orgUserPOs=orgUserDao.findByOrgId(orgId);
+	    for (OrgUserPO orgUserPO : orgUserPOs) {
+			ids.add(orgUserPO.getUserId());
+		}
+	    List<UserVO> userVOs=userQuery.findByIdIn(ids);
+        return userVOs;
+	}
+	
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/add/user")
-	public Object addUser(String name,HttpServletRequest request) throws Exception {
-		userQuery.add(name, Long.parseLong(userQuery.current().getGroupId()), "111111", "", "", "");
-        return null;
+	public Object addUser(String name,String code,Long orgId,String mobile,String mail,HttpServletRequest request) throws Exception {
+		Long userId=userQuery.add(name, Long.parseLong(userQuery.current().getGroupId()), "111111", mobile, mail, UserClassify.COMPANY.getName(),code);
+        OrgUserPO orgUserPO=new OrgUserPO();
+        orgUserPO.setOrgId(orgId);
+        orgUserPO.setUserId(userId);
+        orgUserDao.save(orgUserPO);
+		return null;
+	}
+	
+	
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/delete/user")
+	public Object deleteUser(long id,HttpServletRequest request) throws Exception {
+		userQuery.delete(id);
+		List<OrgUserPO> orgUserPOs=orgUserDao.findByUserId(id);
+		orgUserDao.deleteInBatch(orgUserPOs);
+		return null;
 	}
 
 }

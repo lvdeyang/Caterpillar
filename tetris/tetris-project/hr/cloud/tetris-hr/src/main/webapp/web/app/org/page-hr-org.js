@@ -58,6 +58,8 @@ define([
                         data:'',
                         name:'',
                         code:'',
+                        mobile:'',
+                        mail:'',
                         remark:''
                     }
                 },
@@ -219,18 +221,25 @@ define([
                     var self = this;
                     self.dialog.editUserTag.data = '';
                     self.dialog.editUserTag.name = '';
+                    self.dialog.editUserTag.mobile='';
+                    self.dialog.editUserTag.mail='';
                     self.dialog.editUserTag.visible = false;
                 },
                 handleEditUserTagCommit:function(){
                     var self = this;
                     self.loading.tree = true;
-                    ajax.post('/hr/user/update/', {
+                    ajax.post('/hr/org/add/user/', {
                         name:self.dialog.editUserTag.name,
-                        code:self.dialog.editUserTag.code
+                        code:self.dialog.editUserTag.code,
+                        orgId: self.tree.current.id,
+                        mobile:self.dialog.editUserTag.mobile,
+                        mail:self.dialog.editUserTag.mail
+                        
                     }, function(data, status){
                         self.loading.tree = false;
                         if(status !== 200) return;
                         self.handleEditUserTagClose();
+                        self.loadUsers(self.tree.current.id);
                     }, null, ajax.NO_ERROR_CATCH_CODE);
                 },
                 currentNode:function(data){
@@ -243,12 +252,18 @@ define([
                     self.$nextTick(function(){
                         self.$refs.orgTree.setCurrentKey(data.uuid);
                     });
-                    self.loadArticles(data.id);
+                    self.loadUsers(data.id);
                 },
-                loadArticles:function(columnId){
+                loadUsers:function(orgId){
                     var self = this;
                     self.table.data.splice(0, self.table.data.length);
-                    
+                    ajax.post('/hr/org/list/user/'+orgId, null, function(data){
+                        if(data && data.length>0){
+                            for(var i=0; i<data.length; i++){
+                                self.table.data.push(data[i]);
+                            }
+                        };
+                    });
                 },
                 rowDelete:function(scope){
                     var self = this;
@@ -259,7 +274,7 @@ define([
                         message:h('div', null, [
                             h('div', {class:'el-message-box__status el-icon-warning'}, null),
                             h('div', {class:'el-message-box__message'}, [
-                                h('p', null, ['此操作将下架该文章，是否继续?'])
+                                h('p', null, ['此操作将删除该用户，是否继续?'])
                             ])
                         ]),
                         type:'wraning',
@@ -269,7 +284,13 @@ define([
                         beforeClose:function(action, instance, done){
                             instance.confirmButtonLoading = true;
                             if(action === 'confirm'){
-                                
+                            	ajax.post('/hr/org/delete/user', {
+                                    id:scope.row.id 
+                                }, function(data, status){
+                                    if(status !== 200) return;
+                                    self.loadUsers(self.tree.current.id);
+                                }, null, ajax.NO_ERROR_CATCH_CODE);
+                            	done();
                             }else{
                                 instance.confirmButtonLoading = false;
                                 done();

@@ -224,7 +224,7 @@ public class UserController {
 			if(companyId!=null && companyName==null){
 				return userService.add(nickname, username, password, repeat, mobile, mail, classify, companyId);
 			}else if(companyName!=null && companyId==null){
-				return userService.add(nickname, username, password, repeat, mobile, mail, classify, companyName);
+				return userService.add(nickname, username, password, repeat, mobile, mail, classify, companyName,"");
 			}
 		}
 		return null;

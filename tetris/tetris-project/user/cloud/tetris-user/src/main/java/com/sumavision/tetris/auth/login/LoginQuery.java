@@ -35,7 +35,7 @@ public class LoginQuery {
 		UserPO user = userDao.findByToken(token);
 		
 		String redirectUrl = null;
-		if(UserClassify.INTERNAL.equals(user.getClassify())){
+		if(UserClassify.INTERNAL.equals(user.getClassify())||UserClassify.COMPANY.equals(user.getClassify())){
 			ServerProps props = userServerPropsQuery.queryProps();
 			redirectUrl = new StringBufferWrapper().append("http://").append(props.getIp()).append(":").append(props.getPort()).append("/index/").append(token).append("#/page-user").toString();
 		}else if(UserClassify.COMPANY.equals(user.getClassify())){

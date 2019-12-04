@@ -82,6 +82,8 @@ public class UserVO{
 	
 	/** 用户标签 */
 	private List<String> tags;
+	
+	private String code;
 
 	public Long getId() {
 		return id;
@@ -305,6 +307,14 @@ public class UserVO{
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 }

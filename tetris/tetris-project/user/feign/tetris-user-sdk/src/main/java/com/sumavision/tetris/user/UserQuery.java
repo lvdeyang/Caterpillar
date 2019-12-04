@@ -230,14 +230,22 @@ public class UserQuery {
 		return find(userIds);
 	}
 	
-	public UserVO add(String nickName,
+	public Long add(String nickName,
 			long companyId,
 			String password,
 			String mobile,
 			String mail,
-			String classify){
-		userFeign.add(nickName,companyId , password, mobile, mail, classify);
-		return null;
+			String classify,
+			String code){
+		Object userObj= userFeign.add(nickName,companyId , password, mobile, mail, classify,code);
+		Map<String, Object> userMap=(Map<String, Object>) userObj;
+		return Long.parseLong(userMap.get("data")+"");
+	}
+	
+	
+	public void delete(Long id){
+		Object userObj= userFeign.delete(id);
+		
 	}
 	
 	/** 测试数据 */

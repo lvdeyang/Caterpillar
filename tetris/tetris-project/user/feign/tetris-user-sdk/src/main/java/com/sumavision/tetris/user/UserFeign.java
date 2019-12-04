@@ -89,6 +89,12 @@ public interface UserFeign {
 			@RequestParam("password") String password,
 			@RequestParam("mobile") String mobile,
 			@RequestParam("mail") String mail,
-			@RequestParam("classify")  String classify);
+			@RequestParam("classify")  String classify,
+			@RequestParam("code") String code);
+	
+	
+	@RequestMapping(value = "/user/feign/delete")
+	public Object delete(
+			@RequestParam("nickname") Long id);
 	
 }
