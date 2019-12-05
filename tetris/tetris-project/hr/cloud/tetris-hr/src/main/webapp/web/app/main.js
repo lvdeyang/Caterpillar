@@ -46,7 +46,8 @@ require.config({
         'mi-tag-dialog':window.APPPATH + 'component/dialog/mims/tag/mims-tag',
 
         /* pages */
-        'page-hr-org':window.APPPATH + 'org/page-hr-org'
+        'page-hr-org':window.APPPATH + 'org/page-hr-org',
+        'page-hr-sche':window.APPPATH + 'sche/page-hr-sche'
     },
     shim:{
         'vue':{
