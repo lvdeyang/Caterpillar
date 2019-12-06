@@ -2,9 +2,11 @@ package com.sumavision.tetris.commons.util.date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 
 public class DateUtil {
@@ -413,4 +415,36 @@ public class DateUtil {
 		}
 		return num;
 	}
+	
+	/**
+	 * 根据年 月 获取对应的月份 天数
+	 * */
+	public static int getDaysByYearMonth(int year, int month) {
+		
+		Calendar a = Calendar.getInstance();
+		a.set(Calendar.YEAR, year);
+		a.set(Calendar.MONTH, month - 1);
+		a.set(Calendar.DATE, 1);
+		a.roll(Calendar.DATE, -1);
+		int maxDate = a.get(Calendar.DATE);
+		return maxDate;
+	}
+	
+	public static List<Date> getDates(String startDate, String endDate) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<Date> list = new ArrayList<Date>(); //保存日期的集合 
+		Date date_start = sdf.parse(startDate);
+		Date date_end = sdf.parse(endDate);
+		Date date =date_start;
+		Calendar cd = Calendar.getInstance();//用Calendar 进行日期比较判断
+		while (date.getTime() <= date_end.getTime()){
+			list.add(date);
+			cd.setTime(date);
+			cd.add(Calendar.DATE, 1);//增加一天 放入集合
+			date=cd.getTime();
+		}
+		return list;
+	}
+
+	
 }

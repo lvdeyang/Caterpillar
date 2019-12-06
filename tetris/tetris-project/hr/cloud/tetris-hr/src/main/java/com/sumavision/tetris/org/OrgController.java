@@ -135,9 +135,7 @@ public class OrgController {
 	@ResponseBody
 	@RequestMapping(value = "/delete/user")
 	public Object deleteUser(long id,HttpServletRequest request) throws Exception {
-		userQuery.delete(id);
-		List<OrgUserPO> orgUserPOs=orgUserDao.findByUserId(id);
-		orgUserDao.deleteInBatch(orgUserPOs);
+		orgService.deleteUser(id);
 		return null;
 	}
 

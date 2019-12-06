@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sumavision.tetris.commons.util.wrapper.HashSetWrapper;
 import com.sumavision.tetris.commons.util.wrapper.StringBufferWrapper;
+import com.sumavision.tetris.user.UserQuery;
 import com.sumavision.tetris.user.UserVO;
 
 /**
@@ -32,7 +33,11 @@ public class OrgService {
 	@Autowired
 	private OrgQuery orgQuery;
 	
+	@Autowired
+	UserQuery userQuery;
 	
+	@Autowired
+	OrgUserDAO orgUserDao;
 
 	public OrgPO addRoot() throws Exception {
 
@@ -79,6 +84,13 @@ public class OrgService {
 		subOrgPOs.add(orgPO);
 		orgDao.deleteInBatch(subOrgPOs);
 
+	}
+	
+	public void deleteUser(long id){
+		
+		userQuery.delete(id);
+		List<OrgUserPO> orgUserPOs=orgUserDao.findByUserId(id);
+		orgUserDao.deleteInBatch(orgUserPOs);
 	}
 
 }

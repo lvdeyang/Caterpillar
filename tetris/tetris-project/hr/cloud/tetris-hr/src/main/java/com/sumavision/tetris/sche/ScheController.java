@@ -49,6 +49,22 @@ public class ScheController {
 													   .put("total", total)
 													   .getMap();
 	}
+	
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/alllist")
+	public Object alllist(HttpServletRequest request) throws Exception{
+		
+		UserVO user = userQuery.current();
+		
+		
+		List<SchePO> entities =scheDao.findAll();
+		List<ScheVO> sches = ScheVO.getConverter(ScheVO.class).convert(entities, ScheVO.class);
+
+			
+		return sches;
+	}
+	
 
 	@Autowired
 	ScheService scheService;

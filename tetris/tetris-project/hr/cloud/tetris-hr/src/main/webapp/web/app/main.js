@@ -47,7 +47,8 @@ require.config({
 
         /* pages */
         'page-hr-org':window.APPPATH + 'org/page-hr-org',
-        'page-hr-sche':window.APPPATH + 'sche/page-hr-sche'
+        'page-hr-sche':window.APPPATH + 'sche/page-hr-sche',
+        'page-hr-set':window.APPPATH + 'set/page-hr-set'
     },
     shim:{
         'vue':{
