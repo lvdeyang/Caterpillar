@@ -90,7 +90,7 @@ html, body {
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
-	font-size:100%;
+	
 }
 
 * {
@@ -149,7 +149,16 @@ html, body {
         text-align: center;
 } 
 
-
+select {
+/*清除默认的select选择框样式*/
+appearance:none;
+-moz-appearance:none;
+-webkit-appearance:none;
+background: #fff;
+}
+input{
+-webkit-appearance:none;
+}
 </style>
 
 </head>
@@ -161,10 +170,10 @@ html, body {
 $(function(){
 var html = [];
 for (var i = 0; i < 8; i++) {
-html.push('<div style="width:40%;height:150px;margin:20px 4.5%;display: inline-block;overflow: hidden;position: relative;">');
+html.push('<div style="width:40%;height:auto;margin:15px 4.5%;display: inline-block;overflow: hidden;position: relative;">');
 html.push('<img style="width:100%;" src="lib/images/7.jpg">');
 html.push('<p style="line-height: 20px;">遵化市xxxxxxxxxxx/斤￥7.00</p>');
-html.push('<p style="transform:rotate(-45deg);height:25px;background: #2BAD4A;color:#fff;position: absolute;width:100%;left:-55px;top:5px;font-size:110%;line-height:25px;text-align: center;">满减</p>');
+html.push('<p style="transform:rotate(-45deg);height:25px;background: #2BAD4A;color:#fff;position: absolute;width:100%;left:-55px;top:5px;line-height:25px;text-align: center;font-size:110%">满减</p>');
 html.push('</div>');
 }
 $('.main').append(html.join('')); 
@@ -185,14 +194,14 @@ $('.main').append(html.join(''));
 	 <div class="nav" style="width:100%;height:auto;margin:0 auto;text-align: center;position: relative;">
 	    <input placeholder="搜索商家或商品"  type="text" style="padding:0 15%;overflow: hidden;text-align:center;border:none;outline:none;width:85%;margin:20px auto;height:35px;border:2px solid #626262;border-radius:8px;line-height: 35px;">
 	    <select style="position: absolute;border:none;outline:none;top:27.5px;left:10%;">
-	    <option>商家</option>
-	    <option>商品</option>
+	    <option>商家▾</option>
+	    <option>商品▾</option>
 	    </select>
 	    <div style="height:auto;width:auto;padding:3px 11px;background: #626262;position: absolute;top:22px;right:7.5%;    border-top-right-radius: 7px;border-bottom-right-radius: 7px;">
 	    <img style="height:20px;" src="lib/images/sousuo.png">
 	    </div>
 	 </div>
-	 <div class="main" style="width:100%;height:520px;overflow-x: hidden;font-size:80%;">
+	 <div class="main" style="width:100%;height:520px;overflow-x: hidden;font-size:90%">
 	 </div>
 </body>
 
