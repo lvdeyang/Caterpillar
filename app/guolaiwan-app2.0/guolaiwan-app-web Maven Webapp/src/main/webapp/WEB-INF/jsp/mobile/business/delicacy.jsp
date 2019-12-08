@@ -167,7 +167,7 @@ html, body {
 $(function(){
   consoleLog();
    getRecomment();
-   getCate();
+   //getCate();
 });
  
 //轮播图以及下面的图片   	
@@ -300,8 +300,8 @@ function getRecomment(){
 					         html.push('<div class="youxuan-in" style="display: inline-block;">');  
 					         html.push('<p style="position: absolute;top:-40px;font-size:16px;font-weight: bold;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:180px;">'+merlist[i].shopName+'</p>');
 					         html.push('<p style="position: absolute;top:0px;font-size:12px;color:#757575;"><span style="">'+merlist[i].modularClass+'</span></p>');
-					         if(data[i].average < 100){
-		                     html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>'+data[i].average+'</span>元</p>'); 
+					         if(data.average[0] < 100){
+		                     html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>'+data.average[0]+'</span>元</p>'); 
 		                     }else{
 		                      html.push('<p style="color:#757575;position: absolute;top:0px;right:1%;font-size:14px">人均<span>30</span>元</p>');
 		                     }
