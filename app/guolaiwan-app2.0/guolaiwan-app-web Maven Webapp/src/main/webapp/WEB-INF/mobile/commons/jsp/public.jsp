@@ -20,10 +20,10 @@
     location.href=window.BASEPATH +'pubnum/wallet';
    });
     $(document).on('click',' #backet',function(){ 
-    location.href=window.BASEPATH +'business/basket/index?merchantId='+${applicationScope.merch_id};
+    location.href=window.BASEPATH +'business/basket/index?merchantId='+${merchantId};
    });
     $(document).on('click',' #order',function(){ 
-    location.href=window.BASEPATH +'business/order/list?merchantId='+${applicationScope.merch_id};
+    location.href=window.BASEPATH +'business/order/list?merchantId='+${merchantId};
    });
     
   });

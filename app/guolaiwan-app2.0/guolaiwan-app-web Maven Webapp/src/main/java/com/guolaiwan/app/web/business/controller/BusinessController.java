@@ -191,10 +191,10 @@ public class BusinessController extends WebBaseControll {
 	@RequestMapping(value = "/merchant/nsAndView")
 	public ModelAndView nsAndView(HttpServletRequest request, long merchantId, String comCode) throws Exception {
 		//保存商户的id
-		ServletContext sContext = request.getServletContext();
+		/*ServletContext sContext = request.getServletContext();
 		if(sContext.getAttribute("merch_id") == null){			
 			sContext.setAttribute("merch_id",merchantId);
-		}
+		}*/
 		ModelAndView mv = null;		
 		mv = new ModelAndView("mobile/business/home");
 		mv.addObject("merchantId", merchantId);
