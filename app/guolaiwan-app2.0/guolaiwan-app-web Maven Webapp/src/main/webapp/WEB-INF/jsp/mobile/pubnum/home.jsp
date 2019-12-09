@@ -1016,8 +1016,14 @@ html, body {
 	      var _urifav = window.BASEPATH + 'phoneApp/mercollectionPro';
 		  $.post(_urifav, $.toJSON(param), function(data){
 			data = parseAjaxResult(data);
-			if(data === -1) return;
+			if(data == "收藏成功"){
 			$.toast("收藏成功");
+			return;
+			}else{
+			$.toast("已收藏");
+			return;
+			}
+			
 			iscollect=1;
 		  });
 	   });
