@@ -3815,8 +3815,10 @@ public class PhoneController extends WebBaseControll {
 			collection.setUser(user);
 			conn_user.save(user);
 			conn_collection.save(collection);
+		}else{
+			return success("已收藏");
 		}
-		return success();
+		return success("收藏成功");
 	}
 
 	/**

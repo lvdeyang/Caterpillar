@@ -305,13 +305,13 @@ color:#fff;
 					$.modal({
 						  title: "付款方式",
 						  buttons: [
-						    /*  { text: "余额支付", onClick: function(){ 
+						    { text: "余额支付", onClick: function(){ 
 
 						    	$.confirm("确定支付？", function() {
 									addMessageOrderId(data.orderId,0);										
 								  }, function() {});
 
-						    } },  */					    
+						    } }, 					    
 						    { text: "微信支付", onClick: function(){ 
 							    $.confirm("确定支付？", function() {
 							       addMessageOrderId(data.orderId,1);							      							      				

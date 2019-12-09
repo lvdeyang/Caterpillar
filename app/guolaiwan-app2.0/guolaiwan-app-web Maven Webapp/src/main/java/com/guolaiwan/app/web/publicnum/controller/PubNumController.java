@@ -2336,7 +2336,11 @@ public class PubNumController extends WebBaseControll {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");	
 		long merchatId=order.getShopId();
 		ProductPO product = conn_product.get(order.getProductId());
-		String distributeId = product.getDistributeId();
+		String distributeId = null;
+		if(product!=null){
+			distributeId=product.getDistributeId();
+		}
+				
 		if(distributeId==null||distributeId==""){
 			System.out.println("判断此商品不是分销商品");
 		}else{
