@@ -1158,7 +1158,7 @@ html, body {
                                              支付(￥<span id="total">0</span>)
               </a> -->
 
-			<div style="width:100%;height:40px;position:fixed;bottom:2px;z-index:111111111111111;">
+			<div style="width:100%;height:40px;position:fixed;bottom:2px;z-index:1;">
 				<a id="selectAll"
 					style="width:46%;font-size:14px;margin-left:2%;float:left;background-color:#18b4ed;height:40px;line-height:40px;"
 					href="javascript:;" class="weui-btn weui-btn_primary"><span
@@ -1169,7 +1169,7 @@ html, body {
 				</a>
 
 			</div>
-
+</div>
 
 
 
@@ -1177,7 +1177,7 @@ html, body {
 				style="padding-bottom:50px;">
 				<div class="weui-popup__overlay"></div>
 				<div class="weui-popup__modal">
-					<div id="addressFitst">
+					<div id="addressFitst" style="height:100%;">
 
 						<div class="weui-cells__title" style="color:red;font-weight:bold">点击地址选择或添加新联系人</div>
 						<a id="addAddress"
