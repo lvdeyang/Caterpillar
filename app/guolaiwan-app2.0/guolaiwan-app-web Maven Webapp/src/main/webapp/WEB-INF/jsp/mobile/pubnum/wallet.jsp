@@ -83,9 +83,9 @@ html, body {
 	width: 100%;
 	min-height: 100%;
 	background-color: #fff;
-	position: relative;
 	-webkit-text-size-adjust: none;
 	background-color: #fbfbfb;
+	position: fixed;
 }
 
 * {
@@ -528,7 +528,11 @@ z-index:11111 !important;
 			}
 	  };
     
-		
+	//ios弹出输入法页面元素错位问题
+  　　document.body.addEventListener('focusout', () => {
+    　　   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+  　   })
+
 		getMoney();
 	getreckoning();
 	
@@ -610,6 +614,7 @@ z-index:11111 !important;
 				    		data = parseAjaxResult(data)
 				    		if(input<1){
   						$.alert('提现金额不能小于1元！')
+  						  
 						return;		  	
 						}
 				    		if(data==2){
@@ -625,6 +630,7 @@ z-index:11111 !important;
 				    	$.alert('您的输入有误！')
 						return;		    	
 				    }
+				    
 				  },
 				  onCancel: function () {
 				    //点击取消
@@ -733,7 +739,7 @@ z-index:11111 !important;
 			page++;
 	  	})
 	  }
-	    	
+	
 </script>
 <script>
 $(function(){
