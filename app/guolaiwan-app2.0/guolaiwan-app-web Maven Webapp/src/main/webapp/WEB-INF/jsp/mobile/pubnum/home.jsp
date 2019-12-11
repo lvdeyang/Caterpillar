@@ -1222,13 +1222,9 @@ html, body {
 	            <img id="activityBunlde" src="" style="width:100%;height:110px;">
 	            <img style="display:none;" id="downloadapp" src="lib/images/downapp.gif" style="margin-top:-70px;margin-left:120px;z-index:500;width:130px;height:35px;">
             </div>
-		   
-		    
-		    
-		    
 		</div>
 	</div>
-	 
+	 <p style="height:40px;"></p>
 </body>
 
 

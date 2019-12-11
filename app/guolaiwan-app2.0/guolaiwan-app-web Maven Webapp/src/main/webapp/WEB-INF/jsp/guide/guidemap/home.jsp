@@ -70,7 +70,7 @@
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
-<title></title>
+<title>积分商城</title>
 <style>
   #body{
   background-color : #f2f2f2;
@@ -87,6 +87,80 @@
    border-radius:4px;
    text-align: center;
   }
+  a {
+	cursor: pointer !important;
+}
+
+ .link-left{
+	color: inherit;
+	text-decoration: none;
+} 
+
+html, body {
+	width: 100%;
+	min-height:100%;
+	background-color: #fff !important; 
+	position: relative;
+	-webkit-text-size-adjust: none;
+	text-decoration: none !important;
+	
+}
+
+* {
+	box-sizing: border-box;
+	list-style: none;
+	text-decoration: none;
+	font-family: "微软雅黑";
+}
+
+
+
+/* 页面样式 */
+.header {
+	height: 40px;
+	line-height: 40px;
+	background-color: #18b4ed;
+	color: #fff;
+	border-bottom: 1px solid #bababa;
+}
+
+.header .link-left {
+	margin-left: 10px;
+	margin-right: 10px;
+	position: relative;
+	z-index: 1;
+}
+
+.header-content {
+	height:auto;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-left: 40px;
+	padding-right: 40px;
+	text-align: center;
+	z-index: 0;
+}
+
+  .swiper-container {
+    width: 100%;
+    padding:0;
+    margin:0;
+    height:200px;
+  } 
+
+  .swiper-container img {
+    display: block;
+    width: 100%;
+  }
+    
+.weui-navbar{
+ display: none !important;
+}
+  .inp::-webkit-input-placeholder{
+        text-align: center;
+} 
 </style>
 </head>
 <!-- 公共脚本引入 -->
@@ -97,6 +171,7 @@
 <script src="../../../../layui/lib/alert/js/jquery-1.7.1.min.js"></script>
 <script src="../../../../layui/lib/alert/js/ui.js"></script>
 <link href="../../../../layui/lib/alert/css/alertstyle.css"  rel="stylesheet" />
+<link rel="stylesheet" type="text/css" media="screen" href="https://cdn.staticfile.org/ionicons/2.0.1/css/ionicons.min.css">
 <script type="text/javascript">
 var money;
 var commodityId; //商品id
@@ -147,7 +222,11 @@ var commodityId; //商品id
     //编辑地址
 		$(document).on('click','#addAddress',function(){
 			    $('.modDiv').hide();
-		    $('#addressSecond').show();
+		    	$('#addressSecond').show();
+		});
+		$(document).on('click','#fan',function(){
+		 		$('.modDiv').show();
+			    $('#addressSecond').hide();
 		});
 		$(document).on('click','#save',function(){
 		    if($('#address').val()==''){
@@ -277,12 +356,14 @@ var commodityId; //商品id
 
 
 <body id ="body">
-	<div style="width:100%;height:40px;background:#ffffff;text-align: center;line-height: 40px;position:relative;z-index:10;">
-			<span style="font-weight: bold;float:left;line-height: 40px;margin-left:3%;"><a style="color:#333;" class="link-left" href="#side-menu"><span
-				class="icon-reorder icon-large"></span></a></span> 	
-			<span style="text-align:center;">积分商城</span>
-    </div>
-	
+
+	<div class="header">
+			<div class="wrapper">
+			<a class="link-left" href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
+				<div class="header-content">商户</div>
+			</div>
+	</div>
       
      
       <div id="selAddress" class="weui-popup__container"
@@ -293,7 +374,7 @@ var commodityId; //商品id
 				    
 				    </div>
 				
-					<div class="modDiv" id="addressFitst" style="margin-top:20%;">
+					<div class="modDiv" id="addressFitst" style="">
 
 						<div class="weui-cells__title" style="color:red;font-weight:bold">点击地址选择或添加新联系人</div>
 						<a id="addAddress"
@@ -314,8 +395,12 @@ var commodityId; //商品id
 
 
 					<div class="modDiv" id="addressSecond" style="display:none;">
-
-						<div class="weui-cells weui-cells_form" style="padding-top:15%;">
+                          <div style="width:100%;height:40px;background:#ffffff;text-align: center;line-height: 40px;position:relative;z-index:10;">
+							<span id="fan" style="font-weight: bold;float:left;line-height: 40px;margin-left:5%;"><i class="icon ion-chevron-left"></i></span> 	
+					       </div>
+						<div class="weui-cells weui-cells_form" style="width:100%;">
+						
+					 
 							<div class="weui-cells__title">添加收货地址</div>
 							<div class="weui-cell">
 								<div class="weui-cell__hd">
@@ -362,7 +447,7 @@ var commodityId; //商品id
 							</div>
 						</div>
 						<a id="save"
-							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
+							style="width:96%;position:fixed;bottom:20px;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
 							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
 
 					</div>
