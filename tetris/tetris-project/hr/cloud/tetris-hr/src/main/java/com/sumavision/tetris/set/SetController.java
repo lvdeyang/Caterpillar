@@ -74,7 +74,7 @@ public class SetController {
 	@JsonBody
 	@ResponseBody
 	@RequestMapping(value = "/list/user/{orgId}")
-	public Object listUser(@PathVariable long orgId,int year,int month,HttpServletRequest request) throws Exception {
+	public Object listUser(@PathVariable long orgId,String month,HttpServletRequest request) throws Exception {
 		Map<Integer,String> dic=new HashMapWrapper().put(1,"yi")
 			.put(2, "er").put(3, "san").put(4, "si").put(5, "wu").put(6, "liu")
 			.put(7, "qi").put(8, "ba").put(9, "jiu").put(10, "shi").put(11, "shiyi")
@@ -85,6 +85,7 @@ public class SetController {
 			.put(30, "sanshi").put(31, "sanyi")
 			.getMap();
 
+		String[] monthStrs=month.split("-");
 		Map<String, Object> ret=new HashMap<String, Object>();
 		List<Long> ids=new ArrayList<Long>();
 		List<OrgUserPO> orgUserPOs=orgUserDao.findByOrgId(orgId);
@@ -94,12 +95,14 @@ public class SetController {
 	    List<UserVO> userVOs=userQuery.findByIdIn(ids);
 	    List<Map<String, Object>> userMaps=new ArrayList<Map<String,Object>>();
 	    List<Map<String, Object>> daysMaps=new ArrayList<Map<String,Object>>();
-	    int count=DateUtil.getDaysByYearMonth(year, month);
+	    int count=DateUtil.getDaysByYearMonth(Integer.parseInt(monthStrs[0]),
+	    		Integer.parseInt(monthStrs[1]));
 		for(int i=0;i<count;i++){
 			Map<String, Object> daysMap=new HashMap<String, Object>();
 			daysMap.put("name", i+1);
 			daysMap.put("title", dic.get(i+1));
-			int week=DateUtil.getDayOfWeek(DateUtil.parse(year+"-"+month+"-"+
+			int week=DateUtil.getDayOfWeek(DateUtil.parse(monthStrs[0]+"-"+
+					monthStrs[1]+"-"+
 			((i+1+"").length()==1?("0"+(i+1)):(i+1+"")),"yyyy-MM-dd"));
 			daysMap.put("week", week);
             daysMaps.add(daysMap);
@@ -112,7 +115,7 @@ public class SetController {
 			for (Map<String, Object> map : daysMaps) {
 				int current=Integer.parseInt(map.get("name").toString());
 				SetPO setPO=setDao.findOneByUserIdAndCurDate(userVO.getId(),
-						DateUtil.parse(year+"-"+month+"-"+
+						DateUtil.parse(monthStrs[0]+"-"+monthStrs[1]+"-"+
 								((current+"").length()==1?("0"+current):(current+"")),"yyyy-MM-dd"));
 				if(setPO==null){
 					userMap.put(map.get("title").toString(), "");

@@ -35,7 +35,7 @@ define([
                 days:[],
                 types:[],
                 schelist:[],
-                selectMoth:'',
+                selectMonth:((new Date()).getFullYear()+"-"+((new Date()).getMonth()+1)),
                 tree:{
                     props:{
                         label: 'name',
@@ -70,6 +70,10 @@ define([
 
             },
             methods:{
+            	dateChange:function(){
+            		var self = this;
+            		self.loadUsers(self.tree.current.id);
+            	},
                 mouseEnter:function(){
                     var self = this;
                     self.showButton30=false;
@@ -123,8 +127,7 @@ define([
                     self.table.data.splice(0, self.table.data.length);
                     self.days.splice(0,self.days.length)
                     ajax.post('/hr/set/list/user/'+orgId, {
-                    	year:2019,
-                    	month:12
+                    	month:self.selectMonth
                     }, function(data){
                         if(data.userMaps && data.userMaps.length>0){
                             for(var i=0; i<data.userMaps.length; i++){

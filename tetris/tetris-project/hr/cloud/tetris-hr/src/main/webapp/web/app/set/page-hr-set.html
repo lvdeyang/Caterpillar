@@ -44,11 +44,13 @@
                         <div style="height:54px;">
      
 							    <el-date-picker
-							      v-model="selectMoth"
-							      format="yyyy-MM-dd"
-							      value-format="yyyy-MM-dd"
+							      v-model="selectMonth"
+							      format="yyyy-MM"
+							      value-format="yyyy-MM"
 							      type="month"
-							      placeholder="选择日期">
+							      placeholder="选择日期"
+							      @change="dateChange()">
+							      
 							    </el-date-picker>
                         </div>
                         <div style="position:absolute; top:54px; left:0; right:0; bottom:0;">
