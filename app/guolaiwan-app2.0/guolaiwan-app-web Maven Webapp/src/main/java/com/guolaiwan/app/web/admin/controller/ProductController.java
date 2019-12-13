@@ -46,7 +46,9 @@ import com.guolaiwan.bussiness.admin.dao.PicproRelationDAO;
 import com.guolaiwan.bussiness.admin.dao.PictureDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
+import com.guolaiwan.bussiness.admin.dao.ProductLayerDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductPackDAO;
+import com.guolaiwan.bussiness.admin.dao.ProductRegionDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.ProductSaleType;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
@@ -62,8 +64,10 @@ import com.guolaiwan.bussiness.admin.po.ModularPO;
 import com.guolaiwan.bussiness.admin.po.PicproRelationPO;
 import com.guolaiwan.bussiness.admin.po.PicturePO;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
+import com.guolaiwan.bussiness.admin.po.ProductLayerPo;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.ProductPackPO;
+import com.guolaiwan.bussiness.admin.po.ProductRegionPo;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.distribute.dao.DistributePolicyDao;
@@ -455,6 +459,24 @@ public class ProductController extends BaseController {
 
 		}
 		product.setVideourl(videourl);
+		
+		
+		String x=request.getParameter("x");
+
+		String y=request.getParameter("y");
+		
+		String voiceUrl=request.getParameter("voiceUrl");
+		
+		String mapUrl=request.getParameter("mapUrl");
+		
+		int isInner=Integer.parseInt(request.getParameter("isInner"));//1室内，0室外
+		
+		product.setX(x);
+		product.setY(y);
+		product.setVoiceUrl(voiceUrl);
+		product.setMapUrl(mapUrl);
+		product.setIsInner(isInner);
+		
 		conn_product.save(product);
 		//如果是的话
 		if(isgroup==1){
@@ -470,6 +492,10 @@ public class ProductController extends BaseController {
 			group.setProductid(productId);
 			conn_groupbuydao.save(group);
 		}
+		
+		
+		
+		
 
 		return "success";
 	}
@@ -683,6 +709,23 @@ public class ProductController extends BaseController {
 		product.setIfFace(ifFace);
 		product.setIsgroup(isgroup);
 		product.setVideourl(videourl);
+		
+		String x=request.getParameter("x");
+
+		String y=request.getParameter("y");
+		
+		String voiceUrl=request.getParameter("voiceUrl");
+		
+		String mapUrl=request.getParameter("mapUrl");
+		
+		int isInner=Integer.parseInt(request.getParameter("isInner"));//1室内，0室外
+		
+		product.setX(x);
+		product.setY(y);
+		product.setVoiceUrl(voiceUrl);
+		product.setMapUrl(mapUrl);
+		product.setIsInner(isInner);
+		
 		conn_product.saveOrUpdate(product);
 		
 		if(isgroup==1){
@@ -997,7 +1040,10 @@ public class ProductController extends BaseController {
 
 	@Autowired
 	private LanDAO conn_lan;
-
+    @Autowired
+    private ProductLayerDAO conn_layer;
+    @Autowired
+    private ProductRegionDAO conn_pregion;
 	// 添加子产品页面
 	@RequestMapping(value = "/child/addv", method = RequestMethod.GET)
 	public ModelAndView addChild(HttpServletRequest request) throws Exception {
@@ -1005,6 +1051,12 @@ public class ProductController extends BaseController {
 		List<LanPO> lanList = conn_lan.findAll();
 		strMap.put("lanList", lanList);
 
+		List<ProductLayerPo> layerPos=conn_layer.findAll();
+		strMap.put("layerList", layerPos);
+		
+		List<ProductRegionPo> regionPos=conn_pregion.findAll();
+		strMap.put("regionList", regionPos);
+		
 		long productID = Long.parseLong(request.getParameter("productID"));
 		strMap.put("productID", productID);
 		ModelAndView mv = new ModelAndView("admin/product/addchild", strMap);
@@ -1050,6 +1102,16 @@ public class ProductController extends BaseController {
 		child.setLinkedPoint(linkedPoint);
 		child.setWxChildLongitude(wxChildLongitude);
 		child.setWxChildLatitude(wxChildLatitude);
+		
+		String layerStr=request.getParameter("layer");
+		String regionStr=request.getParameter("region");
+		if(layerStr!=null){
+			child.setLayer(Long.parseLong(layerStr));
+		}
+		if(regionStr!=null){
+			child.setRegion(Long.parseLong(regionStr));
+		}
+		
 		conn_childProduct.saveOrUpdate(child);
 		return "success";
 	}

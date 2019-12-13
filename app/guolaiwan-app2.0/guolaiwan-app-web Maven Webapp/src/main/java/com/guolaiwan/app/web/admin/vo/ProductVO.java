@@ -1313,6 +1313,11 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setProductPricesStr(new DecimalFormat("0.00").format(((double)entity.getProductPrice()/100)))
 		.setIsgroup(entity.getIsgroup())
 		.setVideourl(entity.getVideourl())
+		.setX(entity.getX())
+		.setY(entity.getY())
+		.setVideourl(entity.getVideourl())
+		.setMapUrl(entity.getMapUrl())
+		.setIsInner(entity.getIsInner())
 		.setDistributeId(entity.getDistributeId());
 		
 		if(entity.getIntegralGoods()==1){
@@ -1333,4 +1338,82 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	}
 
 
+	//室内导览新增
+	//经度
+	private String x;
+
+	private String y;
+	
+	private String voiceUrl;
+	
+	private String mapUrl;
+	
+	private int isInner;//1室内，0室外
+
+	public int getIsactivityproduct() {
+		return isactivityproduct;
+	}
+
+
+	public ProductVO setIsactivityproduct(int isactivityproduct) {
+		this.isactivityproduct = isactivityproduct;
+		return this;
+	}
+
+
+	public String getX() {
+		return x;
+	}
+
+
+	public ProductVO setX(String x) {
+		this.x = x;
+		return this;
+	}
+
+
+	public String getY() {
+		return y;
+	}
+
+
+	public ProductVO setY(String y) {
+		this.y = y;
+		return this;
+	}
+
+
+	public String getVoiceUrl() {
+		return voiceUrl;
+	}
+
+
+	public ProductVO setVoiceUrl(String voiceUrl) {
+		this.voiceUrl = voiceUrl;
+		return this;
+	}
+
+
+	public String getMapUrl() {
+		return mapUrl;
+	}
+
+
+	public ProductVO setMapUrl(String mapUrl) {
+		this.mapUrl = mapUrl;
+		return this;
+	}
+
+
+	public int getIsInner() {
+		return isInner;
+	}
+
+
+	public ProductVO setIsInner(int isInner) {
+		this.isInner = isInner;
+		return this;
+	}
+	
+	
 }
