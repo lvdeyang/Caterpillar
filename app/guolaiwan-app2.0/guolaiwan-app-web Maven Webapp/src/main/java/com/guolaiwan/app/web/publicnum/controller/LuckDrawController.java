@@ -82,13 +82,13 @@ public class LuckDrawController extends WebBaseControll {
         	return mv;
         }
     	//活动没开始
-    	if (now.getDate()==28) {
+    	if (now.getDate()<=13) {
     		mv = new ModelAndView("luckdraw/luckresult");
 			mv.addObject("result","notstart");
 			return mv;
 		}
     	//活动结束
-    	if (now.getDate()!=29&&now.getDate()!=30&&now.getDate()!=31&&now.getDate()!=1) {
+    	if (now.getDate()<14||now.getDate()>18) {
     		mv = new ModelAndView("luckdraw/luckresult");
     		mv.addObject("result","over");
     		return mv;
@@ -245,7 +245,15 @@ public class LuckDrawController extends WebBaseControll {
         int result=0;
         int resultNum=getRandom(1, 10);
         if(resultNum<=pos){
-        	int secondRandom=getRandom(1, 7);
+        	//这部分只有电影票
+        	int size=conn_luckdraw.countGodlike(1);
+    		if(size>=100){
+    			result=0;
+    		}else{
+    			result=1;
+    		}
+        	//下面又有眼镜又有电影票
+        	/*int secondRandom=getRandom(1, 7);
         	if(secondRandom<=2){
         		int size=conn_luckdraw.countGodlike(1);
         		if(size>=100){
@@ -261,7 +269,7 @@ public class LuckDrawController extends WebBaseControll {
         		}else{
         			result=2;
         		}
-        	}
+        	}*/
         }
         LuckDrawRecord luckDrawRecord=new LuckDrawRecord();
         luckDrawRecord.setDrawProductId(result);

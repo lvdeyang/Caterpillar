@@ -40,7 +40,7 @@ $(document).ready(function(){
 	//动态添加大转盘的奖品与奖品区域背景颜色
 	var num=location.hash;//根据接收过来的值判断概率。
 	//	alert(num.substr(1));
-	turnplate.restaraunts = [ "谢谢参与", "电影票", "眼镜", "谢谢参与", "电影票","眼镜","电影票","眼镜", "谢谢参与"];
+	turnplate.restaraunts = [ "谢谢参与", "电影票", "电影票", "谢谢参与", "电影票","电影票","电影票","电影票", "谢谢参与"];
 	turnplate.colors = ["#FBDB00", "#FACA00", "#FBDB00", "#FACA00","#FBDB00", "#FACA00","#FBDB00","#FACA00","#FFEB64"];
 	//turnplate.fontcolors = ["#CB0030", "#FFFFFF", "#CB0030", "#FFFFFF","#CB0030", "#FFFFFF"];
 	
