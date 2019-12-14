@@ -879,7 +879,7 @@ html, body {
 				<div class="weui-cells">
 				  <div class="weui-cell">
 				    <div class="weui-cell__bd">
-				       <textarea id="reasonContent" class="weui-textarea" placeholder="" rows="3"></textarea>
+				       <textarea id="reasonContent" style="border:1px solid #fbfbfb;" class="weui-textarea" placeholder="" rows="3"></textarea>
 				    </div>
 				  </div>
 				</div>
