@@ -62,7 +62,6 @@ public class ChildProductPO extends AbstractBasePO {
 	private String relevance; //下一个浏览点 
 	
 	
-
 	
 
 	public String getRelevance() {
@@ -203,8 +202,30 @@ public class ChildProductPO extends AbstractBasePO {
 	}
 
 	
+    private long region;
+	
+	private long layer;
 
 
+
+
+	public long getRegion() {
+		return region;
+	}
+
+	public void setRegion(long region) {
+		this.region = region;
+	}
+
+	public long getLayer() {
+		return layer;
+	}
+
+	public void setLayer(long layer) {
+		this.layer = layer;
+	}
+
+    
 
 	
 	

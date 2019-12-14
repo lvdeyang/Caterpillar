@@ -1872,7 +1872,8 @@ public class PubNumController extends WebBaseControll {
 				List<OrderInfoPO> rOrderpos = conn_order.getOrdersByState(userId, OrderStateType.PAYSUCCESS);
 				List<OrderInfoPO> rOrderpos2 = new ArrayList<OrderInfoPO>();
 				for (OrderInfoPO orderInfoPO : rOrderpos) {
-					if (orderInfoPO.getJustification() != "" && orderInfoPO.getJustification() != null) {
+					if ((orderInfoPO.getJustification() != null&&!orderInfoPO.getJustification().isEmpty())
+							||(orderInfoPO.getRefundReason()!=null&&!orderInfoPO.getRefundReason().isEmpty())) {
 						rOrderpos2.add(orderInfoPO);
 					}
 				}

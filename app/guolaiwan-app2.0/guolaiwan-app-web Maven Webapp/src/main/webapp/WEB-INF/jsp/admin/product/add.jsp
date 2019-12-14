@@ -494,6 +494,66 @@
                  
                  <div class="layui-inline">
                     <label for="sent" class="layui-form-label">
+						坐标X：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="x" name="x"
+                        	autocomplete="off" class="layui-input">
+                 	</div>
+                 </div>
+                 <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
+						坐标Y：
+                    </label>
+                    <div class="layui-input-inline">
+                   		 <input type="text" id="y" name="y"
+                        	autocomplete="off" class="layui-input">
+                 	</div>
+                 </div>
+                 
+                 <div class="layui-form-item">
+					<label for="L_title" class="layui-form-label"> 导览地图 </label>
+					<div class="layui-input-inline">
+						<table>
+							<tr>
+							<td align="center">
+							<img alt="" src="" style=" height:100px;width:100px " id="imgmap">
+							<input type="hidden" id="mapUrl" name="mapUrl" >
+							<a href="javascript:openMap('上传图片','<%=request.getContextPath() %>/admin/picture/sellist?sel=mapUrl&img=imgmap','600','400')" class="layui-btn layui-btn-xs" style="width:90px;margin-left:5px;margin-right:5px" >更换图片</a>
+							<button class="layui-btn layui-btn-xs" type="button" style="width:90px;margin-left:5px;margin-right:5px" onclick="delpic('#imgmap','#mapUrl')">删除图片</button>						
+							</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+                <div class="layui-form-item">
+					<label for="L_title" class="layui-form-label"> 选择声音</label>
+					<div class="layui-input-inline" style="width: 100px">
+					    <input id="voiceUrl"  hidden="hidden"><!-- 这个没啥用，暂时不删了 -->
+						<input type="text" id="voice" name="voice" 
+							lay-verify="title" autocomplete="off"   class="layui-input">
+					</div>
+					<div class="layui-input-inline">
+						<a href="javascript:openMap('选择声音','<%=request.getContextPath() %>/admin/Voice/sellist?sel=voice&img=voiceUrl','600','400')" class="layui-btn " >声音素材</a>
+					</div>
+				</div>
+                <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
+						是否室内：
+                    </label>
+                    <div class="layui-input-inline">
+                    	  <select name="isInner" lay-verify="required">
+					        <option selected="selected" value="0">室外</option>
+					       	<option value="1">室内</option>
+					      </select>
+                   	
+                 	</div>
+                 </div> 
+      
+                 
+                 
+                 <div class="layui-inline">
+                    <label for="sent" class="layui-form-label">
 						分销ID：
                     </label>
                     <div class="layui-input-inline">

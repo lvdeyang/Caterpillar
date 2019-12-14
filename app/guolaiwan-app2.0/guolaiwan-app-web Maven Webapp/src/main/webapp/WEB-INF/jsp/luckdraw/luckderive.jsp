@@ -28,8 +28,8 @@
 		<xblock>
 		<button type="button" class="layui-btn" id="deriveall"
 			onclick="deriveall()">导出所有中奖名单</button>
-		<button type="button" class="layui-btn" id="deriveglass"
-			onclick="deriveglass()">导出眼镜中奖名单</button>
+		<!-- <button type="button" class="layui-btn" id="deriveglass"
+			onclick="deriveglass()">导出眼镜中奖名单</button> -->
 		<button type="button" class="layui-btn" id="deriveticket"
 			onclick="deriveticket()">导出电影票中奖名单</button>	
 		<button type="button" class="layui-btn" id="deriveticket"
@@ -41,8 +41,8 @@
 						<select class="lay-input-inline" name="sName" lay-verify="required" id="sName">
 	        				<option value="-1">全部</option>
 	        	<%-- 			<c:forEach items="${pmenus}" var="pmenu">   --%>
-	                		<option  value="眼镜" >眼镜</option>  
-	                		<option  value="电影票" >电影票</option> 
+	                		<!-- <option  value="眼镜" >眼镜</option>  -->  
+	                		<option  value="电影票" >电影票</option>
 	               			<!-- </c:forEach>  -->
 	      				</select>
 	      			</td>

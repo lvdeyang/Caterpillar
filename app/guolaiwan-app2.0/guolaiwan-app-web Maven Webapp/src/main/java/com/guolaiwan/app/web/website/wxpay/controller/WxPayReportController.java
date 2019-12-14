@@ -168,6 +168,7 @@ public class WxPayReportController extends WebBaseControll {
 						// 生成验单码,和二维码图片
 						String ydNO = ydNoCode(orderId);
 						order.setYdNO(ydNO);
+						order.setPayDate(new Date());
 						// 支付状态、减库存
 						// order.setOrderState(OrderStateType.PAYSUCCESS);
 						ProductPO product = conn_product.get(order.getProductId());

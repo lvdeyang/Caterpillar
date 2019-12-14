@@ -678,5 +678,60 @@ public class ProductPO extends AbstractBasePO {
 		this.ifFace = ifFace;
 	}
 	
+	//室内导览新增
+	//经度
+	private String x;
+
+	private String y;
+	
+	private String voiceUrl;
+	
+	private String mapUrl;
+	
+	private int isInner;//1室内，0室外
+
+
+	public String getX() {
+		return x;
+	}
+
+	public void setX(String x) {
+		this.x = x;
+	}
+
+	public String getY() {
+		return y;
+	}
+
+	public void setY(String y) {
+		this.y = y;
+	}
+
+	public String getVoiceUrl() {
+		return voiceUrl;
+	}
+
+	public void setVoiceUrl(String voiceUrl) {
+		this.voiceUrl = voiceUrl;
+	}
+
+	public String getMapUrl() {
+		return mapUrl;
+	}
+
+	public void setMapUrl(String mapUrl) {
+		this.mapUrl = mapUrl;
+	}
+
+	public int getIsInner() {
+		return isInner;
+	}
+
+	public void setIsInner(int isInner) {
+		this.isInner = isInner;
+	}
+	
+	
+	
 	
 }

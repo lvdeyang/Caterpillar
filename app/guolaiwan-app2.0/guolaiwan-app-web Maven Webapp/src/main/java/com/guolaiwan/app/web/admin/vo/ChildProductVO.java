@@ -304,6 +304,8 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
                 .setWxChildLongitude(entity.getWxChildLongitude())
 				.setChildPic(entity.getChildPic()).setContent(entity.getContent()).setChildScale(entity.getChildScale())
 				.setRelevance(entity.getRelevance())
+				.setLayer(entity.getLayer())
+				.setRegion(entity.getRegion())
 				.setChildRoad(entity.getChildRoad()).setIsCen(entity.getIsCen()).setProductID(entity.getProductID());
 		this.setScope(entity.getScope());
 		this.setIsTaught(entity.getIsTaught());
@@ -318,5 +320,35 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 		this.linkedPoint = linkedPoint;
 		return this;
 	}
+	
+    private long region;
+	
+	private long layer;
+
+
+
+
+
+
+
+	public long getRegion() {
+		return region;
+	}
+
+	public ChildProductVO setRegion(long region) {
+		this.region = region;
+		return this;
+	}
+
+	public long getLayer() {
+		return layer;
+	}
+
+	public ChildProductVO setLayer(long layer) {
+		this.layer = layer;
+		return this;
+	}
+	
+	
 
 }

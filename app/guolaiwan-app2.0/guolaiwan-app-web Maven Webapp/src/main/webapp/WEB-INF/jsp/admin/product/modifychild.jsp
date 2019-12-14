@@ -175,6 +175,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				      </select>
 				    </div>
 				  </div>
+				<div class="layui-form-item">
+				    <label class="layui-form-label">楼层</label>
+				    <div class="layui-input-block" style="width:190px;">
+				      <select name="layer" lay-verify="required" value="${child.layer}">
+				        <c:forEach items="${layerList}" var="layer" >
+						  	<option value="${layer.id}">${layer.name}</option>
+						</c:forEach>
+				      </select>
+				    </div>
+				  </div>
+				  
+				  
+				  <div class="layui-form-item">
+				    <label class="layui-form-label">区域</label>
+				    <div class="layui-input-block" style="width:190px;">
+				      <select name="region" lay-verify="required" value="${child.region}">
+				        <c:forEach items="${regionList}" var="region" >
+						  	<option value="${region.id}">${region.name}</option>
+						</c:forEach>
+				      </select>
+				    </div>
+				  </div>
                	<div class="layui-form-item layui-form-text">
 				    <label class="layui-form-label" style="width:110px;float:left;">描述：</label>
 				    <div class="layui-input-block" style="width:400px;float:left;">
