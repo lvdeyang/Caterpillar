@@ -127,6 +127,7 @@ import com.guolaiwan.bussiness.admin.dao.ProLatitudeLongitudeDAO;
 import com.guolaiwan.bussiness.admin.dao.ProTourismPictureDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductComboDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
+import com.guolaiwan.bussiness.admin.dao.ProductRegionDAO;
 import com.guolaiwan.bussiness.admin.dao.RoomStatusDao;
 import com.guolaiwan.bussiness.admin.dao.ShareDAO;
 import com.guolaiwan.bussiness.admin.dao.SurpportBuyDao;
@@ -188,7 +189,7 @@ import com.guolaiwan.bussiness.admin.po.ProLatitudeLongitudePO;
 import com.guolaiwan.bussiness.admin.po.ProTourismPicturePO;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
-
+import com.guolaiwan.bussiness.admin.po.ProductRegionPo;
 import com.guolaiwan.bussiness.admin.po.RoomStatusPO;
 import com.guolaiwan.bussiness.admin.po.SharePO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
@@ -4715,6 +4716,54 @@ public class AppController extends WebBaseControll {
 		return success(dataMap);
 	}
 
+	@Autowired
+	private ProductRegionDAO conn_productregion;
+	
+	@ResponseBody
+	@RequestMapping(value = "/guide/info/{productId}", method = RequestMethod.GET)
+	public Map<String, Object> getregionList(@PathVariable Long productId, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		ProductPO product = conn_product.get(productId);
+		if (product == null) {
+			return success(null);
+		}
+		Map<String, Object> retMap=new HashMap<String, Object>();
+		retMap.put("mapUrl", product.getMapUrl());
+		retMap.put("voiceUrl", product.getVoiceUrl());
+        List<ProductRegionPo> regionPos=conn_productregion.findByField("productId", productId);
+        retMap.put("regionList", regionPos);
+		return success(retMap);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getChildByRegion/{productId}/{regionId}", method = RequestMethod.GET)
+	public Map<String, Object> getChildByProIdAndRegion(@PathVariable Long productId,@PathVariable Long regionId, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		ProductPO product = conn_product.get(productId);
+		if (product == null) {
+			return success(null);
+		}
+		List<ChildProductPO> childProcucts = conn_childProduct.getChildByProAndRegion(product.getId(),regionId);
+		List<ChildProductVO> _childProcucts = ChildProductVO.getConverter(ChildProductVO.class).convert(childProcucts,
+				ChildProductVO.class);
+		SysConfigPO sys = conn_sysConfig.getSysConfig();
+		String lastUrl = "";
+		for (ChildProductVO childProductVO : _childProcucts) {
+			String picStr = childProductVO.getChildPic();
+			String[] pics = picStr.split(",");
+			for (String url : pics) {
+				if (url.length() > 0) {
+					lastUrl += sys.getWebUrl() + url + ",";
+				}
+			}
+			childProductVO.setChildPic(lastUrl);
+			childProductVO.setChineseGirl(sys.getWebUrl() + childProductVO.getChineseGirl());
+		}
+
+		return success(_childProcucts);
+	}
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/getChildByPro/{productId}", method = RequestMethod.GET)
 	public Map<String, Object> getChildByProId(@PathVariable Long productId, HttpServletRequest request,
