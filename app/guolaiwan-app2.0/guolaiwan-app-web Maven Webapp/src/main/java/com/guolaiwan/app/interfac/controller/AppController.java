@@ -3789,7 +3789,7 @@ public class AppController extends WebBaseControll {
 			if (collectionPO.getProductId() != 0) {
 				ProductPO product = conn_product.get(collectionPO.getProductId());
 				ProductVO _product = new ProductVO().set(product);
-				_product.setisactivityproduct(0);
+				_product.setIsactivityproduct(0);
 				if (collectionPO.getActivityproductId() != 0) {
 					ActivityRelPO activityRelPO = conn_activityRel.get(collectionPO.getActivityproductId());
 					if (activityRelPO == null) {
@@ -3798,7 +3798,7 @@ public class AppController extends WebBaseControll {
 					}
 					_product.setActivityReId(activityRelPO.getId());
 					_product.setProductPrice(String.valueOf((double) activityRelPO.getPrice() / 100));
-					_product.setisactivityproduct(1);
+					_product.setIsactivityproduct(1);
 				}
 				// 图片
 				_product.setProductShowPic(sysConfig.getWebUrl() + _product.getProductShowPic());

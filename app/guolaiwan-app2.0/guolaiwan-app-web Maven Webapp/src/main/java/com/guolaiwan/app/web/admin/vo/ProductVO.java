@@ -252,19 +252,6 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
     }
 	
 	
-	//获取收藏列表专用，收藏的是否是活动产品标识
-	public int getisactivityproduct() {
-		return isactivityproduct;
-	}
-
-
-
-	public void setisactivityproduct(int isactivityproduct) {
-		this.isactivityproduct = isactivityproduct;
-	}
-	
-	
-	
 	public long getActivityReId() {
 		return activityReId;
 	}
@@ -1315,7 +1302,7 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 		.setVideourl(entity.getVideourl())
 		.setX(entity.getX())
 		.setY(entity.getY())
-		.setVideourl(entity.getVideourl())
+		.setVoiceUrl(entity.getVoiceUrl())
 		.setMapUrl(entity.getMapUrl())
 		.setIsInner(entity.getIsInner())
 		.setDistributeId(entity.getDistributeId());

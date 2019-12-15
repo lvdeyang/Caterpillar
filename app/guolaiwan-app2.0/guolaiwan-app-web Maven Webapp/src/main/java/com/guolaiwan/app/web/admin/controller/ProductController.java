@@ -465,7 +465,7 @@ public class ProductController extends BaseController {
 
 		String y=request.getParameter("y");
 		
-		String voiceUrl=request.getParameter("voiceUrl");
+		String voiceUrl=request.getParameter("voice");
 		
 		String mapUrl=request.getParameter("mapUrl");
 		
@@ -714,7 +714,7 @@ public class ProductController extends BaseController {
 
 		String y=request.getParameter("y");
 		
-		String voiceUrl=request.getParameter("voiceUrl");
+		String voiceUrl=request.getParameter("voice");
 		
 		String mapUrl=request.getParameter("mapUrl");
 		
@@ -1054,10 +1054,13 @@ public class ProductController extends BaseController {
 		List<ProductLayerPo> layerPos=conn_layer.findAll();
 		strMap.put("layerList", layerPos);
 		
-		List<ProductRegionPo> regionPos=conn_pregion.findAll();
-		strMap.put("regionList", regionPos);
+		
 		
 		long productID = Long.parseLong(request.getParameter("productID"));
+		
+		List<ProductRegionPo> regionPos=conn_pregion.findByField("productId", productID);
+		strMap.put("regionList", regionPos);
+		
 		strMap.put("productID", productID);
 		ModelAndView mv = new ModelAndView("admin/product/addchild", strMap);
 		return mv;
