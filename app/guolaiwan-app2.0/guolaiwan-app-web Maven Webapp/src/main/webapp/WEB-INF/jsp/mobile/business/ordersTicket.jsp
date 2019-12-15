@@ -190,6 +190,7 @@ color:#fff;
     outline: none;
     border:1px solid  rgb(230, 230, 230);
 }
+
 </style>
 
 </head>
@@ -853,7 +854,7 @@ color:#fff;
 	          	    number = 0;
 	           		getUserInfo(false);
 	           		
-	           		
+          		     $.alert("保存成功");  
 	           	}
 	         })                                                                                                       
      }	
@@ -896,8 +897,8 @@ color:#fff;
              html.push('<P>姓名：'+mesage[i].name+'</P>');
              html.push('<P>手机号：'+mesage[i].phone+'</P>');
              html.push('<P>身份证号：'+mesage[i].number+'</P>');
-             html.push('<img id="img1-'+mesage[i].id+'" onclick="deleteClientMessage(this.id)" style="width:28px;height:28px;position: absolute;top:26px;right:15%;border-radius:50%;" src="lib/images/trashss.png">');
-             html.push('<img id="'+mesage[i].id+'" onclick="update(this.id)"  style="width:20px;height:20px;position: absolute;top:30px;right:5%;" src="lib/images/xiugai.png">');
+             html.push('<img id="img1-'+mesage[i].id+'" onclick="deleteClientMessage(this.id)" style="width:28px;height:28px;position: absolute;top:26px;right:20%;border-radius:50%;" src="lib/images/trashss.png">');
+             html.push('<img id="'+mesage[i].id+'" onclick="update(this.id)"  style="width:20px;height:20px;position: absolute;top:30px;right:10%; cursor:pointer " src="lib/images/xiugai.png">');
 			 html.push('</div>');
              $("#window-1-message").append(html.join(''));
 			 
@@ -953,6 +954,29 @@ clientMessage(firstAddr);
             }                           
      }         
   }         					
+</script>
+<!-- ios 软键盘兼容问题 -->
+<script>
+FastClick.prototype.focus = function(targetElement) {
+        var length;
+        //兼容处理:在iOS7中，有一些元素（如date、datetime、month等）在setSelectionRange会出现TypeError
+        //这是因为这些元素并没有selectionStart和selectionEnd的整型数字属性，所以一旦引用就会报错，因此排除这些属性才使用setSelectionRange方法
+        if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month' && targetElement.type !== 'email') {
+            length = targetElement.value.length;
+            targetElement.setSelectionRange(length, length);
+            /*修复bug ios 11.3不弹出键盘，这里加上聚焦代码，让其强制聚焦弹出键盘*/
+            targetElement.focus();
+        } else {
+            targetElement.focus();
+        }
+    };
+const str= navigator.userAgent.toLowerCase()
+const ver=str.match(/cpu iphone os (.*?) like mac os/)
+
+if(!ver || parseInt(ver[1])< 11){//非IOS系统或者系统版本小于11
+  // 引入fastclick 做相关处理
+}
+
 </script>
 <body>
 	<!-- 主页 -->
