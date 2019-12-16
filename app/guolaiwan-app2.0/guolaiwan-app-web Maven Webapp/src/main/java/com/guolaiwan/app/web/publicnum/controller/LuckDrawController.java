@@ -94,13 +94,13 @@ public class LuckDrawController extends WebBaseControll {
     		return mv;
 		}
     	//今日活动未开始
-    	/*if (now.getHours()<=9) {
+    	if (now.getHours()<=9) {
     		mv = new ModelAndView("luckdraw/luckresult");
     		mv.addObject("result","time");
         	return mv;
 		}
     	//今日结束
-    	if (now.getHours()>20) {
+    	if (now.getHours()>11) {
     		if (now.getDate()==1) {
     			mv = new ModelAndView("luckdraw/luckresult");
         		mv.addObject("result","over");
@@ -109,7 +109,7 @@ public class LuckDrawController extends WebBaseControll {
     		mv = new ModelAndView("luckdraw/luckresult");
     		mv.addObject("result","todayover");
         	return mv;
-		}*/
+		}
         if(contact==null){
         	//奖品抽没了
             if (glassnum>=250&&ticketnum>=100) {
