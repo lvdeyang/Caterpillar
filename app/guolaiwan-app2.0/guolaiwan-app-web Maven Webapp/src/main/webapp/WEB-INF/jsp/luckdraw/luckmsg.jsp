@@ -31,7 +31,7 @@
 <input type="hidden" name="mId" id="mId" value="{{mId}}">
 <!-------------抽奖页面-------------->
 <div class="ml-main" id="ml-main">
-	<img class="main_back" src="../lib/luckdraw/newback.jpg">
+	<img class="main_back" src="../lib/luckdraw/newbacks.jpg">
 	<!-- <img class="animated zoomIn img_2_1" src="../lib/luckdraw/img_1.png">
 	<img class="animated bounceIn img_2_2" src="../lib/luckdraw/img_2.png"> -->
 	<div class="kePublic">
@@ -52,7 +52,7 @@
 		</div>
 	</div>
 	
-	<div class="record_line" id="record_line" style="margin-top:0px;color:#FFF">点击进入抽奖
+	<div class="record_line" id="record_line" style="margin-top:-30px;color:#FFF;font-size:14px;">点击进入抽奖
     </div>
 	<!-------------底部声明-------------->
 	<!-- <img class="rule_title" src="../lib/luckdraw/rule_title.png">
