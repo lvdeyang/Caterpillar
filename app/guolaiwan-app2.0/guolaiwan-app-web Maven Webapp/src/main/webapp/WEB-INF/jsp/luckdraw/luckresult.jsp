@@ -52,7 +52,7 @@
 </div>
 
 <div class="ml-main" id="ml-main1" style="display:none;">
-	<img class="main_back" src="../lib/luckdraw/notstart.png">
+	<img class="main_back" src="../lib/luckdraw/notstarts.jpg">
 	<!-- <img class="animated zoomIn img_2_1" src="../lib/luckdraw/img_1.png">
 	<img class="animated bounceIn img_2_2" src="../lib/luckdraw/img_2.png"> -->
 	<div class="kePublic">
