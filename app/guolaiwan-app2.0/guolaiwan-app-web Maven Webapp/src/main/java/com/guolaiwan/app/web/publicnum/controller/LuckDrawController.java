@@ -196,6 +196,9 @@ public class LuckDrawController extends WebBaseControll {
 
 		List<LuckDrawRecord> luckDrawRecords = conn_luckdraw.getAllRecord(prizeid,1,100000);
 		String title = "中奖名单" + DateUtil.format(new Date(), "yyyyMMddhhmmss") + ".xls";
+		if (prizeid == 3) {
+			title = "兑奖名单" + DateUtil.format(new Date(), "yyyyMMddhhmmss") + ".xls";
+		}
 		// 设置表格标题行
 		String[] headers = new String[] { "序号", "中奖时间", "兑换码", "中奖内容", "手机号", "姓名" };
 		//if (prizeid == 1) {
