@@ -124,7 +124,7 @@
 						title : '奖品',
 						sort : true
 					}
-					/* , {
+					, {
 						field : 'phone',
 						align : 'center',
 						title : '手机号',
@@ -135,7 +135,7 @@
 						align : 'center',
 						title : '姓名',
 						sort : true
-					} */
+					} 
 				] ],
 				done : function(res) { //返回数据执行回调函数
 					layer.close(index); //返回数据关闭loading
