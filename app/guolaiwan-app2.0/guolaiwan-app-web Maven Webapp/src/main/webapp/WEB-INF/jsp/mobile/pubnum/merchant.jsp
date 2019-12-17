@@ -1071,7 +1071,7 @@ html, body {
 	
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
-	<p style="width:100%;"><span class="tui" style="font-weight: bold;margin-left: 5%;">＜</span> <span class="ltname"></span>
+	<p style="width:100%;"><span class="tui" style="font-weight: bold;margin-left: 10%;">＜</span> <span class="ltname"></span>
 	</p>
 		
 	</div>
