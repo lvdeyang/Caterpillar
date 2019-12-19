@@ -166,6 +166,7 @@ $(function(){
  $(".btn").click(function(){
      $(".footer").fadeIn();
      setTimeout(function() {
+     $(".footer").hide();
        /* 跳转链接 */
       location.href=window.BASEPATH + '/product/activity/Shotgun';
      }, 2000)
