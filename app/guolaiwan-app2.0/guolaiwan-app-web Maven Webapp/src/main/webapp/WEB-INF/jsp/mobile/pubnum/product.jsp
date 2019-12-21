@@ -608,8 +608,26 @@ input[type="datetime-local"]:before{
     outline: none;
     border:1px solid  rgb(230, 230, 230);
 }
-
-
+.laydate_body .laydate_ym{
+top:-5px;
+}
+.laydate_body .laydate_bottom{
+height:32px !important;
+}
+.laydate_box{
+font-weight: bold !important;
+width:100% !important;
+left:0 !important;
+}
+.laydate_body .laydate_box .laydate_show{
+width:100% !important;
+}
+.laydate_body .laydate_ym{
+margin-left:10% !important;
+}
+.laydate_body .laydate_table{
+width:100% !important;
+}
 </style>
 
 </head>
