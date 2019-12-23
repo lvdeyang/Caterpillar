@@ -571,7 +571,7 @@ html, body {
 			    }
 			    var html=[];
 			    for(var i=0;i<data.length;i++){
-			       html.push('<a class="weui-cell weui-cell_access" href="javascript:;">');
+			       html.push('<a class="weui-cell" href="javascript:;">');
 		           html.push(' <div class="weui-cell__bd">');
 		           html.push('   <p>'+data[i].idNum+'</p>');
 		           html.push(' </div>');

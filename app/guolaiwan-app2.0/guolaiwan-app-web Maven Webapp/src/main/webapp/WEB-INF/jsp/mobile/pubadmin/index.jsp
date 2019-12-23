@@ -1295,7 +1295,7 @@ html, body {
 	
 
 	    function ydNow(orderNo){
-
+            $.toast("验单中")
 	       var _uriYd = window.BASEPATH + 'phoneApp/order/ydNow';
 
 		   var params={};
