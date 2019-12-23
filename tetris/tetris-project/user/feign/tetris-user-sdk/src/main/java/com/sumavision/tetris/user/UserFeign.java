@@ -95,6 +95,6 @@ public interface UserFeign {
 	
 	@RequestMapping(value = "/user/feign/delete")
 	public Object delete(
-			@RequestParam("nickname") Long id);
+			@RequestParam("id") Long id);
 	
 }

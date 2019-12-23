@@ -59,8 +59,14 @@ public class SetController {
 
 		UserVO user = userQuery.current();
 
-		List<OrgVO> rootOrgs = orgQuery.queryorgTree();
-
+		List<OrgVO> rootOrgs = new ArrayList<OrgVO>();
+		List<OrgUserPO> orgUserPOs = orgUserDao.findByUserId(user.getId());
+        if(orgUserPOs!=null&&orgUserPOs.size()>0){
+        	rootOrgs=orgQuery.queryUserorgTree(orgUserPOs.get(0).getOrgId());
+        }else{
+        	rootOrgs=orgQuery.queryorgTree();
+        }
+		
 		return rootOrgs;
 	}
 	
