@@ -197,6 +197,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				      </select>
 				    </div>
 				  </div>
+				
+				<div class="layui-form-item">
+					<label for="L_title" class="layui-form-label"> 起始角度： </label>
+					<div class="layui-input-inline" style="width: 100px;">
+						<input type="text"  name="startAngle" id="startAngle"  autocomplete="off" class="layui-input" value="${child.startAngle}">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label for="L_title" class="layui-form-label"> 结束角度： </label>
+					<div class="layui-input-inline" style="width: 100px;">
+						<input type="text"  name="endAngle" id="endAngle"  autocomplete="off" class="layui-input"  value="${child.endAngle}">
+					</div>
+				</div>
+				
+				  
                	<div class="layui-form-item layui-form-text">
 				    <label class="layui-form-label" style="width:110px;float:left;">描述：</label>
 				    <div class="layui-input-block" style="width:400px;float:left;">

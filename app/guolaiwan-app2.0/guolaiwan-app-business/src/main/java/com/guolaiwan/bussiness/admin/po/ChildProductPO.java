@@ -61,8 +61,6 @@ public class ChildProductPO extends AbstractBasePO {
 	
 	private String relevance; //下一个浏览点 
 	
-	
-	
 
 	public String getRelevance() {
 		return relevance;
@@ -201,12 +199,15 @@ public class ChildProductPO extends AbstractBasePO {
 		this.cVoice = cVoice;
 	}
 
-	
+	//室内定位
     private long region;
 	
 	private long layer;
 
-
+    private String startAngle;
+	
+	private String endAngle;
+	
 
 
 	public long getRegion() {
@@ -223,6 +224,22 @@ public class ChildProductPO extends AbstractBasePO {
 
 	public void setLayer(long layer) {
 		this.layer = layer;
+	}
+
+	public String getStartAngle() {
+		return startAngle;
+	}
+
+	public void setStartAngle(String startAngle) {
+		this.startAngle = startAngle;
+	}
+
+	public String getEndAngle() {
+		return endAngle;
+	}
+
+	public void setEndAngle(String endAngle) {
+		this.endAngle = endAngle;
 	}
 
     
