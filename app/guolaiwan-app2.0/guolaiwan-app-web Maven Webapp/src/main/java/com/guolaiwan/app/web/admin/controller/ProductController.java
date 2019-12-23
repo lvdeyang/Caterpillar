@@ -1154,6 +1154,14 @@ public class ProductController extends BaseController {
 		strMap.put("productID", productID);
 		strMap.put("child", child);
 		strMap.put("sysConfig", sysConfig);
+		
+		List<ProductLayerPo> layerPos=conn_layer.findAll();
+		strMap.put("layerList", layerPos);
+		
+		
+		List<ProductRegionPo> regionPos=conn_pregion.findByField("productId", productID);
+		strMap.put("regionList", regionPos);
+		
 		ModelAndView mv = new ModelAndView("admin/product/modifychild", strMap);
 		return mv;
 	}
