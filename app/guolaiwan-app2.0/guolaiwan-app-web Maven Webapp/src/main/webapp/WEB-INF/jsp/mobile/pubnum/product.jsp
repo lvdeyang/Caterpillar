@@ -1877,7 +1877,10 @@ width:100% !important;
 			$.post(url,{'orderId':orderId,'userId':userId},function(data){
 						data = parseAjaxResult(data);
 				if(data==1){
-				$("body").append("<div style='z-index:11111111111;margin:0 0 -60px -25%;border-radius:10px;height:120px;width:50%;background: #fff;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;'><img style='width:40%;' src='lib/images/8.png'><p  style='line-height: 45px;color:#1afa29;'>支付成功</p><div>");
+				$("body").append("<div class='yess' style='z-index:11111111111;margin:0 0 -60px -25%;border-radius:10px;height:120px;width:50%;background: #fff;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;'><img style='width:40%;' src='lib/images/8.png'><p  style='line-height: 45px;color:#1afa29;'>支付成功</p><div>");
+						setTimeout(function() {
+							$(".yess").hide()
+						}, 2000)
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
 						    if(data.data=="PAYSUCCESS"){				
 						       	if(ifFace==1){

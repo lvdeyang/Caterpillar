@@ -526,7 +526,8 @@ html, body {
 			    $('#payAmount').val('￥'+data.order.payMoney);
 			    $('#largeYd').attr('src',data.order.ydNO);
 			    $('#orderNo').html(data.order.orderNO);
-			    $('#orderDate').html(data.order.payDate);
+			    $('#orderDate').html(data.order.orderBookDate);
+			    
 			    $('#combo').html(data.order.comboName);
 			    $('#logistics').html(data.order.logisticsName);
 			    $('#cuserName').html(data.address.consigneeName);
