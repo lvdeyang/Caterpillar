@@ -49,7 +49,8 @@ require.config({
         'page-hr-org':window.APPPATH + 'org/page-hr-org',
         'page-hr-sche':window.APPPATH + 'sche/page-hr-sche',
         'page-hr-set':window.APPPATH + 'set/page-hr-set',
-        'page-hr-device':window.APPPATH + 'device/page-hr-device'
+        'page-hr-device':window.APPPATH + 'device/page-hr-device',
+        'page-hr-attend':window.APPPATH + 'set/page-hr-attend'
     },
     shim:{
         'vue':{

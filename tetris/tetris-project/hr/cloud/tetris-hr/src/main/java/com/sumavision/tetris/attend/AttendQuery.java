@@ -2,7 +2,12 @@ package com.sumavision.tetris.attend;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import com.sumavision.tetris.device.DevicePO;
 
 
 @Component
@@ -84,5 +89,11 @@ public class AttendQuery {
 		return null;
 	}
 	
+	
+	public Page<AttendPo> findAll(int currentPage, int pageSize){
+		Pageable page = new PageRequest(currentPage-1, pageSize);
+		Page<AttendPo> attends = dao.findAll(page);
+		return attends;
+	}
 
 }

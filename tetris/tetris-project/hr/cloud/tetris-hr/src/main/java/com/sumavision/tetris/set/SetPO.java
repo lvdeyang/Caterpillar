@@ -5,10 +5,13 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
+import com.sumavision.tetris.attend.AttendClassify;
 import com.sumavision.tetris.orm.po.AbstractBasePO;
 
 
@@ -27,6 +30,8 @@ public class SetPO extends AbstractBasePO{
     private Date start;
 	
 	private Date end;
+	
+	private AttendClassify attendState;
 
 	public Long getUserId() {
 		return userId;
@@ -66,6 +71,14 @@ public class SetPO extends AbstractBasePO{
 
 	public void setScheName(String scheName) {
 		this.scheName = scheName;
+	}
+	@Enumerated(value = EnumType.STRING)
+	public AttendClassify getAttendState() {
+		return attendState;
+	}
+
+	public void setAttendState(AttendClassify attendState) {
+		this.attendState = attendState;
 	}
 
 	

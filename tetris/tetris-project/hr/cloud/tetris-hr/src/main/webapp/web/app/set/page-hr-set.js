@@ -122,6 +122,10 @@ define([
                 	self.dialog.addSet.visible = true;
                 	self.dialog.addSet.userId=scope.row.id;
                 },
+                gotoperson:function(scope){
+                	var self=this;
+                	window.location.hash="#/page-hr-attend/"+scope.row.code;
+                },
                 loadUsers:function(orgId){
                     var self = this;
                     self.table.data.splice(0, self.table.data.length);

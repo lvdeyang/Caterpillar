@@ -1,5 +1,7 @@
 package com.sumavision.tetris.attend;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -18,7 +20,7 @@ import com.sumavision.tetris.orm.po.AbstractBasePO;
 public class AttendPo extends AbstractBasePO{
 	private static final long serialVersionUID = 1L;
 	//添加时间
-    String addTime;
+    Date addTime;
     //主键id
     int attendRecId;
     //企业
@@ -28,35 +30,24 @@ public class AttendPo extends AbstractBasePO{
     //设备
     int deviceId;
     //考勤日期
-    String dutyDay;
+    Date dutyDay;
     //集团
     int groupId;
     //下班状态 0正常 1早退
     int offDutuState;
     //下班打卡时间
-    String offDutyTime;
+    Date offDutyTime;
     //上班状态
     int onDutyState;
     //上班打卡时间
-    String onDutyTime;
+    Date onDutyTime;
     //员工
     int workerId;
     //员工名称
     String workerName;
     //员工工号
     String workerNo;
-	/**
-	 * @return the addTime
-	 */
-	public String getAddTime() {
-		return addTime;
-	}
-	/**
-	 * @param addTime the addTime to set
-	 */
-	public void setAddTime(String addTime) {
-		this.addTime = addTime;
-	}
+	
 	/**
 	 * @return the attendRecId
 	 */
@@ -105,18 +96,7 @@ public class AttendPo extends AbstractBasePO{
 	public void setDeviceId(int deviceId) {
 		this.deviceId = deviceId;
 	}
-	/**
-	 * @return the dutyDay
-	 */
-	public String getDutyDay() {
-		return dutyDay;
-	}
-	/**
-	 * @param dutyDay the dutyDay to set
-	 */
-	public void setDutyDay(String dutyDay) {
-		this.dutyDay = dutyDay;
-	}
+	
 	/**
 	 * @return the groupId
 	 */
@@ -141,18 +121,7 @@ public class AttendPo extends AbstractBasePO{
 	public void setOffDutuState(int offDutuState) {
 		this.offDutuState = offDutuState;
 	}
-	/**
-	 * @return the offDutyTime
-	 */
-	public String getOffDutyTime() {
-		return offDutyTime;
-	}
-	/**
-	 * @param offDutyTime the offDutyTime to set
-	 */
-	public void setOffDutyTime(String offDutyTime) {
-		this.offDutyTime = offDutyTime;
-	}
+	
 	/**
 	 * @return the onDutyState
 	 */
@@ -165,18 +134,7 @@ public class AttendPo extends AbstractBasePO{
 	public void setOnDutyState(int onDutyState) {
 		this.onDutyState = onDutyState;
 	}
-	/**
-	 * @return the onDutyTime
-	 */
-	public String getOnDutyTime() {
-		return onDutyTime;
-	}
-	/**
-	 * @param onDutyTime the onDutyTime to set
-	 */
-	public void setOnDutyTime(String onDutyTime) {
-		this.onDutyTime = onDutyTime;
-	}
+	
 	/**
 	 * @return the workerId
 	 */
@@ -213,6 +171,31 @@ public class AttendPo extends AbstractBasePO{
 	public void setWorkerNo(String workerNo) {
 		this.workerNo = workerNo;
 	}
+	public Date getAddTime() {
+		return addTime;
+	}
+	public void setAddTime(Date addTime) {
+		this.addTime = addTime;
+	}
+	public Date getDutyDay() {
+		return dutyDay;
+	}
+	public void setDutyDay(Date dutyDay) {
+		this.dutyDay = dutyDay;
+	}
+	public Date getOffDutyTime() {
+		return offDutyTime;
+	}
+	public void setOffDutyTime(Date offDutyTime) {
+		this.offDutyTime = offDutyTime;
+	}
+	public Date getOnDutyTime() {
+		return onDutyTime;
+	}
+	public void setOnDutyTime(Date onDutyTime) {
+		this.onDutyTime = onDutyTime;
+	}
     
+	
 
 }

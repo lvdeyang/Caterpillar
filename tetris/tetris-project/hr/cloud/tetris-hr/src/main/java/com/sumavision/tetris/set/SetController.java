@@ -126,7 +126,14 @@ public class SetController {
 				if(setPO==null){
 					userMap.put(map.get("title").toString(), "");
 				}else{
-					userMap.put(map.get("title").toString(), setPO.getScheName());
+					if(setPO.getAttendState()==null){
+						userMap.put(map.get("title").toString(), 
+								setPO.getScheName());
+					}else{
+						userMap.put(map.get("title").toString(), 
+								setPO.getAttendState().getName());
+					}
+					
 				}
 			}
 			userMaps.add(userMap);
