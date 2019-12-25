@@ -2,6 +2,7 @@ package com.sumavision.tetris.outlink;
 import java.text.ParseException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,8 @@ import javassist.compiler.ast.NewExpr;
  * @Description //TODO 考勤记录调用
  * @Date
  **/
+
+@EnableScheduling
 @Component
 public class AttendoutLink {
 	@Autowired 

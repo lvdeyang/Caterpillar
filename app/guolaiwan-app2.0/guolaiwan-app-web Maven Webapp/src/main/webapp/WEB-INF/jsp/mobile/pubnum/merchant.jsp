@@ -569,6 +569,10 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	$("input").blur(function() {
+		console.log("失去焦点");
+		window.scrollTo(0, 0);
+		});
 	  addProducntSort();
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
@@ -977,6 +981,7 @@ html, body {
 				$(this).ImgZoomIn();
 
 	 });
+	 
 
 		});
 

@@ -558,7 +558,42 @@ input[type="datetime-local"]:before{
 .icon-map-marker,.icon-mobile-phone{
  font-size:18px;
 }
+.alert {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 200px;
+    margin-left: -100px;
+    z-index: 99999;
+    padding: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
 
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
 /* 对话框样式 */   
   input,button{outline:none;}
 	.wenwen-footer{width:100%;position:fixed;bottom:-5px;left:0;background:#fff;padding:3%;border-top:solid 1px #ddd;box-sizing:border-box;}
@@ -1944,16 +1979,22 @@ width:100% !important;
 		        },
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		                $.confirm("交易成功");
+		            $("body").append("<div class='oks' style='z-index:11111111111;margin:0 0 -50px -25%;border-radius:6px;height:100px;width:50%;background:#FAFBFB;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;border:1px solid'><p  style='line-height: 100px;'>交易成功</p><div>");	
+		            setTimeout(function() {
+		               $('.oks').hide()
+		            }, 1500)
+		         
+		           /*      $.alert("交易成功"); */
 		                //每五秒刷新订单状态
 						
-		                setInterval(function(){ 
+		            var myVar = setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){
 								    
 								    if(data.data=="PAYSUCCESS"){
 								       if(ifFace==1){
 					                      updatemessage(orderNo);
 					                    }
+					                     clearInterval(myVar);
 								   location.href=window.BASEPATH +"pubnum/order/info?orderId="+orderNo;
 								    }
 								});
@@ -2511,6 +2552,7 @@ width:100% !important;
 
 
 </div>
+<div class="alert" style="height:100px;line-height:100px;font-size:14px;width:65%;margin:auto;position:absolute;top:0;left:0;bottom:0;right:0;"></div>
 </body>
 
 
