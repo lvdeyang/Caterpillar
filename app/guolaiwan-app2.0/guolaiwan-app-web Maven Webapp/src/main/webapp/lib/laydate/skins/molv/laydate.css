@@ -34,7 +34,7 @@
 .laydate_body .laydate_chdown cite, .laydate_body .laydate_ym label{border-top-color:#fff;}
 .laydate_body .laydate_chprev cite{border-right-style:solid; border-right-color:#fff;}
 .laydate_body .laydate_chnext cite{border-left-style:solid; border-left-color:#fff;}
-.laydate_body .laydate_table{width: 240px!important; margin: 0!important; border:1px solid #ccc; border-top:none; border-bottom:none;}
+.laydate_body .laydate_table{width: 240px; margin: 0!important; border:1px solid #ccc; border-top:none; border-bottom:none;}
 .laydate_body .laydate_table td{border:none;  height:21px!important; line-height:21px!important; background-color:#fff; color:#00625A;}
 .laydate_body .laydate_table .laydate_nothis{color:#999;}
 .laydate_body .laydate_table thead{border-bottom:1px solid #ccc; height:21px!important; line-height:21px!important;}

@@ -934,7 +934,7 @@ html, body {
 
 		$.fn.ImgZoomIn = function() {
 
-			bgstr = '<div id="ImgZoomInBG" style=" background:#000000; filter:Alpha(Opacity=70); opacity:0.7; position:fixed; left:0; top:0; z-index:10000; width:100%; height:100%; display:none;"><iframe src="about:blank" frameborder="5px" scrolling="yes" style="width:100%; height:100%;"></iframe></div>';
+			bgstr = '<div id="ImgZoomInBG" onclick=$(\'#ImgZoomInImage\').hide();$(\'#ImgZoomInBG\').hide(); style=" background:#000000; filter:Alpha(Opacity=70); opacity:0.7; position:fixed; left:0; top:0; z-index:10000; width:100%; height:100%; display:none;"></div>';
 
 			//alert($(this).attr('src'));
 
@@ -979,6 +979,8 @@ html, body {
 	 });
 
 		});
+
+
 	</script>
 
 <body>
@@ -1071,7 +1073,7 @@ html, body {
 	
 <div class="speak_window" >
 <div style="position:fixed;top:0;width:100%;height:50px;background: #FFFFFF;z-index: 11111;float: left;line-height: 50px;">
-	<p style="width:100%;"><span class="tui" style="font-weight: bold;margin-left: 5%;">＜</span> <span class="ltname"></span>
+	<p style="width:100%;"><span class="tui" style="font-weight: bold;margin-left: 10%;">＜</span> <span class="ltname"></span>
 	</p>
 		
 	</div>

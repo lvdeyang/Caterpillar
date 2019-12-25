@@ -41,6 +41,19 @@ public class OrgQuery {
 		return rootorgs;
 	}
 	
+	
+	public List<OrgVO> queryUserorgTree(long orgId) throws Exception {
+
+		List<OrgPO> orgs = new ArrayList<OrgPO>();
+		orgs.add(orgDao.findOne(orgId));
+	
+		List<OrgVO> rootorgs = generateUserRootorgs(orgs);
+
+		packorgTree(rootorgs, orgs);
+
+		return rootorgs;
+	}
+	
 
 	private List<OrgVO> generateRootorgs(Collection<OrgPO> orgs) throws Exception {
 		if (orgs == null || orgs.size() <= 0)
@@ -50,6 +63,19 @@ public class OrgQuery {
 			if (org.getParentId() == null) {
 				rootorgs.add(new OrgVO().set(org));
 			}
+		}
+		
+		return rootorgs;
+	}
+	
+	private List<OrgVO> generateUserRootorgs(Collection<OrgPO> orgs) throws Exception {
+		if (orgs == null || orgs.size() <= 0)
+			return null;
+		List<OrgVO> rootorgs = new ArrayList<OrgVO>();
+		for (OrgPO org : orgs) {
+			
+			rootorgs.add(new OrgVO().set(org));
+			
 		}
 		
 		return rootorgs;

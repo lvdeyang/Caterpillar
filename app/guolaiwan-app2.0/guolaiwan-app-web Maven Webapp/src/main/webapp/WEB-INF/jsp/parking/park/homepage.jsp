@@ -176,7 +176,7 @@ html,body{
 	var sal = ${param.sal}
 		$.post(_uri, null, function(data) {
 			data = parseAjaxResult(data);
-          if(data.userHeadimg != null &&  sal != 1){
+          if(data.userHeadimg && data.userHeadimg != null &&  sal != 1){
           window.location.href="quit/merchant/smartparking?merchantId=${merchantId}";
           }
 		});

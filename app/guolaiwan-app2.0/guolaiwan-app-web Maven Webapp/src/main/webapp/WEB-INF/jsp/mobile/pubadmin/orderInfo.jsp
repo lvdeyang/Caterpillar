@@ -526,7 +526,8 @@ html, body {
 			    $('#payAmount').val('￥'+data.order.payMoney);
 			    $('#largeYd').attr('src',data.order.ydNO);
 			    $('#orderNo').html(data.order.orderNO);
-			    $('#orderDate').html(data.order.payDate);
+			    $('#orderDate').html(data.order.orderBookDate);
+			    
 			    $('#combo').html(data.order.comboName);
 			    $('#logistics').html(data.order.logisticsName);
 			    $('#cuserName').html(data.address.consigneeName);
@@ -571,7 +572,7 @@ html, body {
 			    }
 			    var html=[];
 			    for(var i=0;i<data.length;i++){
-			       html.push('<a class="weui-cell weui-cell_access" href="javascript:;">');
+			       html.push('<a class="weui-cell" href="javascript:;">');
 		           html.push(' <div class="weui-cell__bd">');
 		           html.push('   <p>'+data[i].idNum+'</p>');
 		           html.push(' </div>');

@@ -564,7 +564,7 @@ html, body {
 			    $('#ydImage').attr('src',data.order.ydNO);
 			    $('#largeYd').attr('src',data.order.ydNO);
 			    $('#orderNo').html(data.order.id);
-			    $('#orderDate').html(data.order.payDate);
+			    $('#orderDate').html(data.order.orderBookDate);
 			    $('#combo').html(data.order.comboName);
 			    $('#logistics').html(data.order.logisticsName);
 			    $('#cuserName').html(data.address.consigneeName);

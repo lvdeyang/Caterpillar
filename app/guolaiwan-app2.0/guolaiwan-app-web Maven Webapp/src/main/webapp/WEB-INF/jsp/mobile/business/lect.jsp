@@ -159,7 +159,7 @@ appearance:none;
 -moz-appearance:none;
 -webkit-appearance:none;
 background: #fff;
-width:7%;
+width:8%;
 }
 
 </style>

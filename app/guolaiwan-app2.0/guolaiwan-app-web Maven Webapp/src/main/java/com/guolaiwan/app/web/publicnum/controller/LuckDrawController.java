@@ -94,13 +94,13 @@ public class LuckDrawController extends WebBaseControll {
     		return mv;
 		}
     	//今日活动未开始
-    	/*if (now.getHours()<=9) {
+    	if (now.getHours()<9) {
     		mv = new ModelAndView("luckdraw/luckresult");
     		mv.addObject("result","time");
         	return mv;
 		}
     	//今日结束
-    	if (now.getHours()>20) {
+    	if (now.getHours()>=11) {
     		if (now.getDate()==1) {
     			mv = new ModelAndView("luckdraw/luckresult");
         		mv.addObject("result","over");
@@ -109,7 +109,7 @@ public class LuckDrawController extends WebBaseControll {
     		mv = new ModelAndView("luckdraw/luckresult");
     		mv.addObject("result","todayover");
         	return mv;
-		}*/
+		}
         if(contact==null){
         	//奖品抽没了
             if (glassnum>=250&&ticketnum>=100) {
@@ -196,11 +196,14 @@ public class LuckDrawController extends WebBaseControll {
 
 		List<LuckDrawRecord> luckDrawRecords = conn_luckdraw.getAllRecord(prizeid,1,100000);
 		String title = "中奖名单" + DateUtil.format(new Date(), "yyyyMMddhhmmss") + ".xls";
+		if (prizeid == 3) {
+			title = "兑奖名单" + DateUtil.format(new Date(), "yyyyMMddhhmmss") + ".xls";
+		}
 		// 设置表格标题行
-//		String[] headers = new String[] { "序号", "中奖时间", "兑换码", "中奖内容", "手机号", "姓名" };
-//		if (prizeid == 1) {
-		String[] headers = new String[] { "序号", "中奖时间", "兑换码", "中奖内容" };
-//		}
+		String[] headers = new String[] { "序号", "中奖时间", "兑换码", "中奖内容", "手机号", "姓名" };
+		//if (prizeid == 1) {
+		//   headers = new String[] { "序号", "中奖时间", "兑换码", "中奖内容" };
+		//}
 		List<Object[]> dataList = new ArrayList<Object[]>();
 		if (luckDrawRecords!=null) {
 			for (int i = 0; i < luckDrawRecords.size(); i++) {
@@ -213,10 +216,10 @@ public class LuckDrawController extends WebBaseControll {
 					}else if (luckDrawRecords.get(i).getDrawProductId()==2) {
 						obj[3] = "眼镜";
 					}
-//					if (prizeid!=1) {
-//						obj[4] = luckDrawRecords.get(i).getPhone();
-//						obj[5] = luckDrawRecords.get(i).getUserName();
-//					}
+					//if (prizeid!=1) {
+						obj[4] = luckDrawRecords.get(i).getPhone();
+						obj[5] = luckDrawRecords.get(i).getUserName();
+					//}
 					dataList.add(obj);
 				}
 			} 

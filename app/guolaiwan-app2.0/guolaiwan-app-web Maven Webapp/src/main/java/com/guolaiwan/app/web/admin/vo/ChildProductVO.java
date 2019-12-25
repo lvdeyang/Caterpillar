@@ -306,6 +306,8 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 				.setRelevance(entity.getRelevance())
 				.setLayer(entity.getLayer())
 				.setRegion(entity.getRegion())
+				.setStartAngle(entity.getStartAngle())
+				.setEndAngle(entity.getEndAngle())
 				.setChildRoad(entity.getChildRoad()).setIsCen(entity.getIsCen()).setProductID(entity.getProductID());
 		this.setScope(entity.getScope());
 		this.setIsTaught(entity.getIsTaught());
@@ -326,7 +328,9 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 	private long layer;
 
 
-
+    private String startAngle;
+	
+	private String endAngle;
 
 
 
@@ -346,6 +350,24 @@ public class ChildProductVO extends AbstractBaseVO<ChildProductVO, ChildProductP
 
 	public ChildProductVO setLayer(long layer) {
 		this.layer = layer;
+		return this;
+	}
+
+	public String getStartAngle() {
+		return startAngle;
+	}
+
+	public ChildProductVO setStartAngle(String startAngle) {
+		this.startAngle = startAngle;
+		return this;
+	}
+
+	public String getEndAngle() {
+		return endAngle;
+	}
+
+	public ChildProductVO setEndAngle(String endAngle) {
+		this.endAngle = endAngle;
 		return this;
 	}
 	

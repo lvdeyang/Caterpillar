@@ -1114,7 +1114,14 @@ public class ProductController extends BaseController {
 		if(regionStr!=null){
 			child.setRegion(Long.parseLong(regionStr));
 		}
-		
+		String startAngle=request.getParameter("startAngle");
+		String endAngle=request.getParameter("endAngle");
+		if(startAngle!=null){
+			child.setStartAngle(startAngle);
+		}
+		if(endAngle!=null){
+			child.setEndAngle(endAngle);
+		}
 		conn_childProduct.saveOrUpdate(child);
 		return "success";
 	}
@@ -1147,6 +1154,14 @@ public class ProductController extends BaseController {
 		strMap.put("productID", productID);
 		strMap.put("child", child);
 		strMap.put("sysConfig", sysConfig);
+		
+		List<ProductLayerPo> layerPos=conn_layer.findAll();
+		strMap.put("layerList", layerPos);
+		
+		
+		List<ProductRegionPo> regionPos=conn_pregion.findByField("productId", productID);
+		strMap.put("regionList", regionPos);
+		
 		ModelAndView mv = new ModelAndView("admin/product/modifychild", strMap);
 		return mv;
 	}
@@ -1188,6 +1203,25 @@ public class ProductController extends BaseController {
 		child.setIsTaught(Integer.parseInt(isTaught));
 		String imgids = request.getParameter("imgids");
 		child.setChildPic(imgids);
+		
+		
+		String layerStr=request.getParameter("layer");
+		String regionStr=request.getParameter("region");
+		if(layerStr!=null){
+			child.setLayer(Long.parseLong(layerStr));
+		}
+		if(regionStr!=null){
+			child.setRegion(Long.parseLong(regionStr));
+		}
+		String startAngle=request.getParameter("startAngle");
+		String endAngle=request.getParameter("endAngle");
+		if(startAngle!=null){
+			child.setStartAngle(startAngle);
+		}
+		if(endAngle!=null){
+			child.setEndAngle(endAngle);
+		}
+		
 		conn_childProduct.saveOrUpdate(child);
 		return "success";
 	}

@@ -31,7 +31,7 @@
 <input type="hidden" name="mId" id="mId" value="{{mId}}">
 <!-------------抽奖页面-------------->
 <div class="ml-main" id="ml-main">
-	<img class="main_back" src="../lib/luckdraw/newback.jpg">
+	<img class="main_back" src="../lib/luckdraw/newbacksss.jpg">
 	<!-- <img class="animated zoomIn img_2_1" src="../lib/luckdraw/img_1.png">
 	<img class="animated bounceIn img_2_2" src="../lib/luckdraw/img_2.png"> -->
 	<div class="kePublic">

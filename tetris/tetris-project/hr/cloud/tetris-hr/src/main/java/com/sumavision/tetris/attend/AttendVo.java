@@ -1,5 +1,6 @@
 package com.sumavision.tetris.attend;
 
+import com.sumavision.tetris.commons.util.date.DateUtil;
 import com.sumavision.tetris.mvc.converter.AbstractBaseVO;
 
 /**
@@ -225,17 +226,17 @@ public class AttendVo extends AbstractBaseVO<AttendVo,AttendPo>{
 	@Override
 	public AttendVo set(AttendPo entity) throws Exception {
 		// TODO Auto-generated method stub
-		this.setAddTime(entity.getAddTime())
+		this.setAddTime(DateUtil.format(entity.getAddTime(),"yyyy-MM-dd HH:mm:ss"))
 			.setAttendRecId(entity.getAttendRecId())
 			.setCompanyId(entity.getCompanyId())
 			.setCompanyName(entity.getCompanyName())
 			.setDeviceId(entity.getDeviceId())
-			.setDutyDay(entity.getDutyDay())
+			.setDutyDay(DateUtil.format(entity.getDutyDay(),"yyyy-MM-dd HH:mm:ss"))
 			.setGroupId(entity.getGroupId())
 			.setOffDutuState(entity.getOffDutuState())
-			.setOffDutyTime(entity.getOffDutyTime())
+			.setOffDutyTime(DateUtil.format(entity.getOffDutyTime(),"yyyy-MM-dd HH:mm:ss"))
 			.setOnDutyState(entity.getOnDutyState())
-			.setOnDutyTime(entity.getOnDutyTime())
+			.setOnDutyTime(DateUtil.format(entity.getOnDutyTime(),"yyyy-MM-dd HH:mm:ss"))
 			.setWorkerId(entity.getWorkerId())
 			.setWorkerName(entity.getWorkerName())
 			.setWorkerNo(entity.getWorkerNo());

@@ -230,7 +230,7 @@ public class PubNumController extends WebBaseControll {
             	isfans=true;
             	
             }
-            if(isfans||rUrl.indexOf("supersell")!=-1){
+            if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
             	session.setAttribute("type", "PHONENUM");
             }else{
             	session.setAttribute("type", null);
@@ -287,7 +287,7 @@ public class PubNumController extends WebBaseControll {
 
 		session.setAttribute("userId", userInfoPO.getId());
 		session.setAttribute("openid", openid);
-		if(isfans||rUrl.indexOf("supersell")!=-1){
+		if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
 			mv = new ModelAndView("redirect:" + rUrl);
 		}else{
 			mv = new ModelAndView("mobile/business/focuson");
