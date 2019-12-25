@@ -89,6 +89,15 @@
 			<artifactId>tetris-ui</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
+
+<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-ext-jdk15on -->
+<dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcprov-ext-jdk15on</artifactId>
+    <version>1.64</version>
+</dependency>
+
 		
 		<!-- eureka依赖 -->
 		<dependency>

@@ -4,10 +4,10 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.sumavision.tetris.capacity.bo.request.AddTaskEncodeRequest;
 import com.sumavision.tetris.capacity.bo.request.AllRequest;
 import com.sumavision.tetris.capacity.bo.request.CreateInputsRequest;
@@ -108,8 +108,8 @@ public class CapacityService {
 		String msg_id = UUID.randomUUID().toString().replaceAll("-", "");
 		all.setMsg_id(msg_id);
 		
-		System.out.println("create:  " + JSONObject.toJSONString(all));
-		
+		System.out.println("create:  " + JSONObject.toJSONString(all, SerializerFeature.DisableCircularReferenceDetect));
+
 		return createAll(all, ip, port);
 	}
 	
@@ -130,7 +130,7 @@ public class CapacityService {
 										      .append(UrlConstant.URL_COMBINE)
 										      .toString();
 		
-		JSONObject request = JSONObject.parseObject(JSON.toJSONString(all));
+		JSONObject request = JSONObject.parseObject(JSON.toJSONString(all, SerializerFeature.DisableCircularReferenceDetect));
 		
 		JSONObject resp = HttpUtil.httpPost(url, request);
 		
@@ -1252,15 +1252,52 @@ public class CapacityService {
 	 */
 	private JSONObject getAuthorization(String msg_id, String ip, Long port) throws Exception{
 		
-		String url = new StringBufferWrapper().append(UrlConstant.URL_AUTHORIZATION)
+		String url = new StringBufferWrapper().append(UrlConstant.URL_PREFIX)
 											  .append(ip)
 											  .append(":")
 											  .append(port)
+											  .append(UrlConstant.URL_AUTHORIZATION)
 											  .append("?msg_id=")
 											  .append(msg_id)
 											  .toString();
 		
 		return HttpUtil.httpGet(url);
+	}
+	
+	/**
+	 * 更改节目备份源<br/>
+	 * <b>作者:</b>wjw<br/>
+	 * <b>版本：</b>1.0<br/>
+	 * <b>日期：</b>2019年12月25日 上午11:48:39
+	 * @param String inputId 输入id(back_up)
+	 * @param String index 索引
+	 * @param String ip 能力ip
+	 * @param Long port 能力端口
+	 * @return ResultCodeResponse
+	 */
+	public ResultCodeResponse changeBackUp(String inputId, String index, String ip, Long port) throws Exception{
+		
+		String msg_id = UUID.randomUUID().toString().replaceAll("-", "");
+		
+		String url = new StringBufferWrapper().append(UrlConstant.URL_PREFIX)
+											  .append(ip)
+											  .append(":")
+											  .append(port)
+											  .append(UrlConstant.URL_INPUT)
+											  .append("/")
+											  .append(inputId)
+											  .append(UrlConstant.URL_TASK_SOURCE_INDEX)
+											  .toString();
+		
+		JSONObject post = new JSONObject();
+		post.put("msg_id", msg_id);
+		post.put("select_index", index);
+		
+		JSONObject res = HttpUtil.httpPost(url, post);
+		
+		ResultCodeResponse response = JSONObject.parseObject(res.toJSONString(), ResultCodeResponse.class);
+		
+		return response;
 	}
 	
 }

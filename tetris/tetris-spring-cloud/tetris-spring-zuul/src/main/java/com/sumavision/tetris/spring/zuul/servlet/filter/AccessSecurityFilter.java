@@ -72,6 +72,7 @@ public class AccessSecurityFilter implements Filter{
 				!requestUri.startsWith("/tetris-cms") && 
 				!requestUri.startsWith("/tetris-easy-process") && 
 				!requestUri.startsWith("/tetris-media-editor") && 
+				!requestUri.startsWith("/tetris-capacity") &&
 				!requestUri.startsWith("/tetris-cs")){
 			
 			LOG.error("----------------------------");

@@ -7,7 +7,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
@@ -20,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.sumavision.tetris.commons.util.wrapper.HashMapWrapper;
 
 public class HttpUtil {
 	
@@ -56,7 +54,8 @@ public class HttpUtil {
         try {
             if (null != jsonParam) {
                 //解决中文乱码问题
-                StringEntity entity = new StringEntity(JSONObject.toJSONString(jsonParam), "utf-8");
+                StringEntity entity = new StringEntity(JSONObject.toJSONString(jsonParam, SerializerFeature.DisableCircularReferenceDetect), "utf-8");
+                System.out.println(JSONObject.toJSONString(jsonParam, SerializerFeature.DisableCircularReferenceDetect));
                 entity.setContentEncoding("UTF-8");
                 entity.setContentType("application/json");
                 method.setEntity(entity);

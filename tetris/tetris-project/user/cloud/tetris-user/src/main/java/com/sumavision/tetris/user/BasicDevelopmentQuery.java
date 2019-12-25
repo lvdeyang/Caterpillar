@@ -66,10 +66,10 @@ public class BasicDevelopmentQuery {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		String appId = "327a89ed0afd0042880af8b0b98b6218ee64";
+		String appId = "2a36d94c0c3c5045310a3db0bec9eeb97f74";
 		String timestamp = "1555925360574";
-		String appSecret = "sumavisionrd";
-		String sign = "7c20ec619dd34e212a46e8c9b66ef3eb471a5139a72d9b7cde210be6965b5e70";
+		String appSecret = "123456";
+		String sign = "";
 		
 		List<String> resources = new ArrayListWrapper<String>().add(appId)
 															   .add(timestamp)

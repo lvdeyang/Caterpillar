@@ -16,13 +16,10 @@ public class BackUpEsAndRawBO {
 	/** 选中索引 */
 	private String select_index;
 	
-	/** 输入id */
-	private String input_id;
-	
 	/** 备份节目数组 */
 	private List<BackUpProgramBO> program_array;
 	
-	private List<ProgramOutputBO> output_program;
+	private ProgramOutputBO output_program;
 	
 	private BackUpFileBO file;
 
@@ -44,15 +41,6 @@ public class BackUpEsAndRawBO {
 		return this;
 	}
 
-	public String getInput_id() {
-		return input_id;
-	}
-
-	public BackUpEsAndRawBO setInput_id(String input_id) {
-		this.input_id = input_id;
-		return this;
-	}
-
 	public List<BackUpProgramBO> getProgram_array() {
 		return program_array;
 	}
@@ -62,11 +50,11 @@ public class BackUpEsAndRawBO {
 		return this;
 	}
 
-	public List<ProgramOutputBO> getOutput_program() {
+	public ProgramOutputBO getOutput_program() {
 		return output_program;
 	}
 
-	public BackUpEsAndRawBO setOutput_program(List<ProgramOutputBO> output_program) {
+	public BackUpEsAndRawBO setOutput_program(ProgramOutputBO output_program) {
 		this.output_program = output_program;
 		return this;
 	}

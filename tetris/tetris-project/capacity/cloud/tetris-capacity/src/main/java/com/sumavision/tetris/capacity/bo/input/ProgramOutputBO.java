@@ -29,8 +29,9 @@ public class ProgramOutputBO {
 		return element_array;
 	}
 
-	public void setElement_array(List<ProgramElementBO> element_array) {
+	public ProgramOutputBO setElement_array(List<ProgramElementBO> element_array) {
 		this.element_array = element_array;
+		return this;
 	}
 	
 }
