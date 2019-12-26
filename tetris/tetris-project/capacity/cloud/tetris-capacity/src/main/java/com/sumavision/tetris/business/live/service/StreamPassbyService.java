@@ -231,9 +231,9 @@ public class StreamPassbyService {
 			count++;
 		}
 
-		BackUpBO backUpBO = new BackUpBO().setBack_up_es(back_up_es);
+		
 		// 创建输入
-		InputBO input = new InputBO().setBack_up(backUpBO).setId(backInputId)
+		InputBO input = new InputBO().setBack_up_es(back_up_es).setId(backInputId)
 				.setProgram_array(new ArrayList<ProgramBO>()).setNormal_map(new JSONObject());
 		ProgramBO program = new ProgramBO().setProgram_number(1).setVideo_array(new ArrayList<ProgramVideoBO>())
 				.setAudio_array(new ArrayList<ProgramAudioBO>());

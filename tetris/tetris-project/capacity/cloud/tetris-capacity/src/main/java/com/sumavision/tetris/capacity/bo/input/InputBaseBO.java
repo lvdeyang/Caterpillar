@@ -38,7 +38,11 @@ public class InputBaseBO <V extends InputBaseBO>{
 	
 	private RtpEsBO rtp_es;
 	
-	private BackUpBO back_up;
+	private BackUpPassByBO back_up_passby;
+	
+	private BackUpEsAndRawBO back_up_es;
+	
+	private BackUpEsAndRawBO back_up_raw;
 	
 	private SourceUrlBO file;
 	
@@ -171,12 +175,30 @@ public class InputBaseBO <V extends InputBaseBO>{
 		return (V)this;
 	}
 
-	public BackUpBO getBack_up() {
-		return back_up;
+	public BackUpPassByBO getBack_up_passby() {
+		return back_up_passby;
 	}
 
-	public V setBack_up(BackUpBO back_up) {
-		this.back_up = back_up;
+	public V setBack_up_passby(BackUpPassByBO back_up_passby) {
+		this.back_up_passby = back_up_passby;
+		return (V)this;
+	}
+
+	public BackUpEsAndRawBO getBack_up_es() {
+		return back_up_es;
+	}
+
+	public V setBack_up_es(BackUpEsAndRawBO back_up_es) {
+		this.back_up_es = back_up_es;
+		return (V)this;
+	}
+
+	public BackUpEsAndRawBO getBack_up_raw() {
+		return back_up_raw;
+	}
+
+	public V setBack_up_raw(BackUpEsAndRawBO back_up_raw) {
+		this.back_up_raw = back_up_raw;
 		return (V)this;
 	}
 
