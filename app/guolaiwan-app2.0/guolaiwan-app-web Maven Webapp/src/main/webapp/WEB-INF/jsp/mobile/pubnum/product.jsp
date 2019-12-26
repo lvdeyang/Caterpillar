@@ -678,6 +678,12 @@ width:100% !important;
 <link href="../../../../layui/lib/alert/css/alertstyle.css"
 	rel="stylesheet" />
 <script type="text/javascript">
+$(function() {
+	$("input").blur(function() {
+		console.log("失去焦点");
+		window.scrollTo(0, 0);
+		});
+	});	
    //设置时间的全局变量
     var isUseDate = "";
     var base;	
