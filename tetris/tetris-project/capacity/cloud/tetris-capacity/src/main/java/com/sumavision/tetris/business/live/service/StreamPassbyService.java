@@ -234,7 +234,7 @@ public class StreamPassbyService {
 		BackUpBO backUpBO = new BackUpBO().setBack_up_es(back_up_es);
 		// 创建输入
 		InputBO input = new InputBO().setBack_up(backUpBO).setId(backInputId)
-				.setProgram_array(new ArrayList<ProgramBO>());
+				.setProgram_array(new ArrayList<ProgramBO>()).setNormal_map(new JSONObject());
 		ProgramBO program = new ProgramBO().setProgram_number(1).setVideo_array(new ArrayList<ProgramVideoBO>())
 				.setAudio_array(new ArrayList<ProgramAudioBO>());
 
@@ -612,7 +612,7 @@ public class StreamPassbyService {
 		SourceUrlBO rtmp = new SourceUrlBO().setUrl(rtmpUrl);
 
 		InputBO input = new InputBO().setRtmp(rtmp).setId(inputId).setMedia_type_once_map(new JSONObject())
-				.setProgram_array(new ArrayList<ProgramBO>());
+				.setProgram_array(new ArrayList<ProgramBO>()).setNormal_map(new JSONObject());
 
 		ProgramBO program = new ProgramBO().setProgram_number(1).setVideo_array(new ArrayList<ProgramVideoBO>())
 				.setAudio_array(new ArrayList<ProgramAudioBO>());
