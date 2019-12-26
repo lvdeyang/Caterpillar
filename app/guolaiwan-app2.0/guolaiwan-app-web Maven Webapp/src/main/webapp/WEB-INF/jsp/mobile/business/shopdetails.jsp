@@ -298,6 +298,11 @@ padding:10px 5px;
 	function gotoparking(){
 	   location.href=window.BASEPATH + 'quit/merchant/smartparking?merchantId=${merchant.id}';	
 	}
+	//服务
+	function gotoservice(){
+	  $.alert("该功能暂未开放，敬请期待")
+	}
+	
 </script>
 
 
@@ -331,7 +336,7 @@ padding:10px 5px;
              <li onclick="gotolect()"><img style="width:60%;" src="lib/images/roomType.png"><p>房型选择</p></li>
              <li onclick="gototable()"><img style="width:60%;" src="lib/images/bookingTable.png"><p>订桌</p></li>
              <li onclick="gotomeal()"><img style="width:60%;" src="lib/images/order.png"><p>点餐</p></li>
-             <li><img style="width:60%;" src="lib/images/serve.png"><p>服务</p></li>
+             <li onclick="gotoservice()"><img style="width:60%;" src="lib/images/serve.png"><p>服务</p></li>
              <li onclick="gotoparking()"><img style="width:60%;" src="lib/images/parkingSpace.png"><p>停车位</p></li>
         </ul>
 	

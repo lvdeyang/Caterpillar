@@ -764,15 +764,20 @@ $(function(){
 				class="icon-reorder icon-large"></span></a>
 			<div class="header-content">个人</div>
 		</div>
-	</div>
+	</div> 
 	<p class="order" style="padding:0 5%;height:40px;line-height: 40px;float:right;">钱包详情</p>
-	 <div class="mingxi" style="width:100%;height:auto;overflow: hidden;text-align: center;padding:0 5%;display: none;">
-	    <p style="height:50px;line-height: 50px;border-bottom:1px solid black;"><span style="float:left;">时间</span><span style="margin-left:30px;">商品</span><span style="float:right;">金额</span></p> 
+	 <div class="mingxi" style="width:100%;height:600px;overflow:hidden;overflow-y:auto;text-align: center;padding:0 5% 0 5%;display: none;">
+	    <p style="width:90%;height:50px;line-height: 50px;border-bottom:1px solid black;position: absolute;background:#fbfbfb ">
+	    <span style="float:left;">时间</span>
+	    <span style="">商品</span>
+	    <span style="float:right;">金额</span>
+	    </p> 
+	    <p style="height:50px;"></p>
 	 </div>
 	
 	
-<div class="zong">
-	<div id="page" style="text-align:center;margin-top:30%;">
+	<div class="zong">
+		<div id="page" style="text-align:center;margin-top:30%;">
 		
 		<img class="jinbi" alt="" src="lib/images/jinbi.png">
 		<p class="lingqian">我的零钱</p>

@@ -213,7 +213,7 @@ input, button {
 
 .question_text p, .answer_text p {
 	border-radius: 6px;
-	padding: .5rem;
+	padding: .3rem;
 	margin: 0;
 	font-size: 14px;
 	line-height: 40px;
@@ -348,7 +348,7 @@ audio {
 							//查找出这个房间touser是登录人的信息展示出来
 							if(data[i].fromuserId!=userId&&data[i].merchantId==merchantId){
 								$('.ltname').text(data[i].fromuser);
-								ans  = '<div class="answer" style="margin-top:30px;">';
+								ans  = '<div class="answer" style="margin-top:45px;">';
 								ans += '<div class="heard_img left"><img src="'+data[i].userheadimg+'"></div>';
 				            	ans += '<div class="answer_text"><p>'+data[i].message+'</p><i></i>';
 				        		ans += '</div></div>';
@@ -404,7 +404,7 @@ audio {
 	function changetouser(id,name){
 		$('.touser').val(id);
 		$('.ltname').text(name);
-	
+	 $(".chatline").fadeOut().removeClass("show");
 	
 	}
 	$(document).on('click','.olline',function(){
