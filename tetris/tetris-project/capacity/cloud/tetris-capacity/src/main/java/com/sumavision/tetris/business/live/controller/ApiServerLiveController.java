@@ -48,4 +48,16 @@ public class ApiServerLiveController {
 		return null;
 	}
 	
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/switch/task")
+	public Object createTask(HttpServletRequest request,int index) throws Exception{
+		
+		streamPassbyService.switchTask(1l, index);
+		
+		return null;
+	}
+	
+	
+	
 }

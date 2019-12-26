@@ -1293,7 +1293,7 @@ public class CapacityService {
 		post.put("msg_id", msg_id);
 		post.put("select_index", index);
 		
-		JSONObject res = HttpUtil.httpPost(url, post);
+		JSONObject res = HttpUtil.httpPut(url, post);
 		
 		ResultCodeResponse response = JSONObject.parseObject(res.toJSONString(), ResultCodeResponse.class);
 		

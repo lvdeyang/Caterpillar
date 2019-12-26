@@ -208,7 +208,7 @@ public class StreamPassbyService {
 
 		String backInputId = new StringBufferWrapper().append("backup-").append(taskId).toString();
 
-		BackUpEsAndRawBO back_up_es = new BackUpEsAndRawBO().setSelect_index("0");
+		BackUpEsAndRawBO back_up_es = new BackUpEsAndRawBO().setSelect_index("0").setMode("manual");
 		back_up_es.setProgram_array(new ArrayList<BackUpProgramBO>());
 		//back_up_es.setOutput_program(new ArrayList<ProgramOutputBO>());
 		int count=0;
@@ -612,7 +612,7 @@ public class StreamPassbyService {
 		SourceUrlBO rtmp = new SourceUrlBO().setUrl(rtmpUrl);
 
 		InputBO input = new InputBO().setRtmp(rtmp).setId(inputId).setMedia_type_once_map(new JSONObject())
-				.setProgram_array(new ArrayList<ProgramBO>()).setNormal_map(new JSONObject());
+				.setProgram_array(new ArrayList<ProgramBO>()).setMedia_type_once_map(new JSONObject());
 
 		ProgramBO program = new ProgramBO().setProgram_number(1).setVideo_array(new ArrayList<ProgramVideoBO>())
 				.setAudio_array(new ArrayList<ProgramAudioBO>());
