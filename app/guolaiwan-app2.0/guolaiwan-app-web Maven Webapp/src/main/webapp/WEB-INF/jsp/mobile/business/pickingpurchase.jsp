@@ -498,7 +498,7 @@ $(function(){
 		</div>
 		  <!-- 选项卡 -->
 			<div class="tab" style="">
-			  <p style="float:left;font-size:16px;margin:0 0 0 40px;line-height:50px;">收货方式</p>
+			  <p style="float:left;font-size:16px;margin:0 0 0 20px;line-height:50px;">收货方式：</p>
 					<ul class="tab-btn active" style="padding:0 5%;margin:0;height:50px;line-height: 50px;background: #fff;">
 					<li id="logistics1" class="btn-active"><p class="wuliu">过来玩物流</p></li>
 					<li id="logistics2" class="ling"><p>到店领取</p></li>				
