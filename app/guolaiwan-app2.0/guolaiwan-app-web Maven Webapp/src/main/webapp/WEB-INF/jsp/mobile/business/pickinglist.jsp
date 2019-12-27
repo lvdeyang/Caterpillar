@@ -212,6 +212,7 @@ $(function(){
  /*返回顶部  */
   $(function(){
   getAllMerchant();
+
 	$(window).scroll(function(){
 		if($(window).scrollTop()>100){
 			$(".gotop").fadeIn(400);	
@@ -232,6 +233,7 @@ $(function(){
 			var url="<%=basePath%>business/getmerchant1";
            $.post(url,{"merchantId":${merchantId},"code":"采摘"},function(data){
            	var html=[];
+           	  
            	if(data.merlist.length==0){
            		html.push('<p style="text-align: center;position: fixed;bottom:5px;left:50%;margin-left:-28px;color:#858585;">暂无数据</p>');
            	}else{
@@ -251,10 +253,18 @@ $(function(){
 					   html.push('</div></a>');
 					}
 			}
+			
 	    	$('.huodong').append(html.join(''));
+	    		
            })
+           setTimeout(function() {
+            	if($(".huodong").height() == 0){
+				$("body").append('<p style="text-align: center;position: fixed;top:270px;left:50%;margin-left:-28px;color:#858585;">暂无商品</p>');
+				  } 	
+           }, 1000)
+         
 	}
-
+	
   function gotocomdlist(id){
         location.href=window.BASEPATH + 'business/gotocomdlist?merchantId='+id;
    }
