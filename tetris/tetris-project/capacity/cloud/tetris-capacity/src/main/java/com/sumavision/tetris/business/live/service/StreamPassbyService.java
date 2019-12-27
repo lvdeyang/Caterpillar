@@ -47,7 +47,11 @@ import com.sumavision.tetris.capacity.bo.request.DeleteTasksRequest;
 import com.sumavision.tetris.capacity.bo.request.IdRequest;
 import com.sumavision.tetris.capacity.bo.request.PutRealIndexRequest;
 import com.sumavision.tetris.capacity.bo.response.AllResponse;
+import com.sumavision.tetris.capacity.bo.task.AacBO;
 import com.sumavision.tetris.capacity.bo.task.EncodeBO;
+import com.sumavision.tetris.capacity.bo.task.H264BO;
+import com.sumavision.tetris.capacity.bo.task.PreProcessingBO;
+import com.sumavision.tetris.capacity.bo.task.ResampleBO;
 import com.sumavision.tetris.capacity.bo.task.TaskBO;
 import com.sumavision.tetris.capacity.bo.task.TaskSourceBO;
 import com.sumavision.tetris.capacity.config.CapacityProps;
@@ -233,7 +237,7 @@ public class StreamPassbyService {
 
 		
 		// 创建输入
-		InputBO input = new InputBO().setBack_up_es(back_up_es).setId(backInputId)
+		InputBO input = new InputBO().setBack_up_raw(back_up_es).setId(backInputId)
 				.setProgram_array(new ArrayList<ProgramBO>()).setNormal_map(new JSONObject());
 		ProgramBO program = new ProgramBO().setProgram_number(1).setVideo_array(new ArrayList<ProgramVideoBO>())
 				.setAudio_array(new ArrayList<ProgramAudioBO>());
@@ -617,8 +621,8 @@ public class StreamPassbyService {
 		ProgramBO program = new ProgramBO().setProgram_number(1).setVideo_array(new ArrayList<ProgramVideoBO>())
 				.setAudio_array(new ArrayList<ProgramAudioBO>());
 
-		ProgramVideoBO video = new ProgramVideoBO().setPid(2);
-		ProgramAudioBO audio = new ProgramAudioBO().setPid(1);
+		ProgramVideoBO video = new ProgramVideoBO().setPid(2).setDecode_mode("cpu");
+		ProgramAudioBO audio = new ProgramAudioBO().setPid(1).setDecode_mode("cpu");
 
 		program.getVideo_array().add(video);
 		program.getAudio_array().add(audio);
@@ -649,10 +653,16 @@ public class StreamPassbyService {
 				.setProgram_number(input.getProgram_array().get(0).getProgram_number())
 				.setElement_pid(input.getProgram_array().get(0).getVideo_array().get(0).getPid());
 
-		TaskBO videoTask = new TaskBO().setId(videoTaskId).setType("passby").setEs_source(videoSource)
+		TaskBO videoTask = new TaskBO().setId(videoTaskId).setType("video").setRaw_source(videoSource)
 				.setEncode_array(new ArrayList<EncodeBO>());
 
-		EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId).setPassby(new JSONObject());
+		H264BO h264 = new H264BO().setBitrate(Integer.valueOf(2400000))
+				  .setRatio("16:9")
+				  .setFps("30")
+				  .setWidth(1920)
+				  .setHeight(1080);
+		
+		EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId).setH264(h264);
 
 		videoTask.getEncode_array().add(videoEncode);
 
@@ -663,11 +673,22 @@ public class StreamPassbyService {
 				.setProgram_number(input.getProgram_array().get(0).getProgram_number())
 				.setElement_pid(input.getProgram_array().get(0).getAudio_array().get(0).getPid());
 
-		TaskBO audioTask = new TaskBO().setId(audioTaskId).setType("passby").setEs_source(audioSource)
+		TaskBO audioTask = new TaskBO().setId(audioTaskId).setType("audio").setRaw_source(audioSource)
 				.setEncode_array(new ArrayList<EncodeBO>());
 
-		EncodeBO audioEncode = new EncodeBO().setEncode_id(encodeAudioId).setPassby(new JSONObject());
+		AacBO aac = new AacBO().setAac()
+				   .setBitrate(192000)
+				   .setSample_rate(44100);
 
+		EncodeBO audioEncode = new EncodeBO().setEncode_id(encodeAudioId).setAac(aac)
+																	.setProcess_array(new ArrayList<PreProcessingBO>());
+		
+		ResampleBO resample = new ResampleBO().setSample_rate(44100)
+											  .setChannels(1)
+											  .setChannel_layout("mono");
+		PreProcessingBO audio_decode_processing = new PreProcessingBO().setResample(resample);
+		audioEncode.getProcess_array().add(audio_decode_processing);
+		
 		audioTask.getEncode_array().add(audioEncode);
 
 		tasks.add(audioTask);
