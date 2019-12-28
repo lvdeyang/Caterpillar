@@ -208,6 +208,9 @@ html, body {
   function getVideoPics(){       
 	var url = window.BASEPATH + 'business/getVideoPics?merchantId=${merchantId}';
 	$.get(url, null, function(data){
+	if(data.length == 0){
+	 $("body").append('<p style="text-align: center;position: fixed;top:270px;left:50%;margin-left:-28px;color:#858585;">暂无攻略</p>');
+	}
 	    var html=[];
 	   	for(var i=0;i<data.length;i++){
 	   		  var time=parseInt(((new Date().getTime())-(new Date(data[i].updatetime).getTime()))/(1000*60*60*24));

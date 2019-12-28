@@ -501,7 +501,7 @@ $(function() {
 	     <ul style="">
 	     <li><img src="lib/images/goupiaos.png" onclick="ticket()"/></li>
    	     <li onclick="accommodation()"><img src="lib/images/zhusus.png"/></li>
-         <li><img src="lib/images/tingchess.png"/></li>
+         <li onclick="paking()"><img src="lib/images/tingchess.png"/></li>
          <li><img onclick="cate()" src="lib/images/meishis.png"/></li>
          <li><img src="lib/images/fenxiaos.png"/></li>
          <li><span onclick="ticket()">购票</span></li>
