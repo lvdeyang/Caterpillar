@@ -3050,6 +3050,17 @@ public class PubNumController extends WebBaseControll {
 		}
 
 	}
+	
+	
+	 //年货节
+		@RequestMapping(value = "/activities")
+		public ModelAndView activitieActivities(HttpServletRequest request,HttpSession session) throws Exception {
+			ModelAndView mv = null;
+			mv = new ModelAndView("mobile/activitie/activities"); 
+			return mv;
+		}
+	
+	
 
 	// 跳转快递物流详情页面的方法
 	@RequestMapping(value = "/admin/indexces")
