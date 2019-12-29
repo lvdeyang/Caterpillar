@@ -84,12 +84,12 @@ html, body {
 	background: url(lib/images/ditu.jpg) no-repeat center;
 	background-size: cover;
 	width: 100%;
-	height: 100%;
+	height: auto;
 }
 
 .footer_on {
 	position: fixed;
-	top: 90%;
+	bottom: 0;
 	/*  z-index: -1;*/
 }
 </style>
@@ -99,10 +99,14 @@ html, body {
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
+
       leng = null;
       var time= null;
     $(function(){ 
-			
+	$("select").blur(function() {
+		console.log("失去焦点");
+		window.scrollTo(0, 0);
+		});
         var _uti = window.BASEPATH + 'vice/reneworder';
 	    $.post(_uti, null, function(data) {  
 	      	data = parseAjaxResult(data);
