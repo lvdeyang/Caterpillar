@@ -1039,7 +1039,8 @@ html, body {
 	   if(bundleType=="VOTE"){
 	   	   location.href=window.BASEPATH + 'judges/votepage';
 	   }else{
-	       location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0&comCode='+comCode;
+	       //location.href=window.BASEPATH + 'pubnum/activity/index?refActivityId=0&comCode='+comCode;
+	       location.href=window.BASEPATH + 'pubnum/activities';
 	   }
 	   });
 	
