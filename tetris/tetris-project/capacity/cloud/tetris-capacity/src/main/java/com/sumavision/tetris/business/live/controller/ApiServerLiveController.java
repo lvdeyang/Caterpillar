@@ -43,7 +43,7 @@ public class ApiServerLiveController {
 		
 		streamPassbyService.createTask(1l, 
 				new ArrayListWrapper<String>().add("test1").add("test2").getList(),
-				"test","/home/nginx/live/test");
+				"test");
 		
 		return null;
 	}

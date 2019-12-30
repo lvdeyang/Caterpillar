@@ -98,10 +98,8 @@ public class StreamPassbyService {
 	 *            按照机位顺序放入ArrayList【机位的发布名】
 	 * @param dstPubName
 	 *            注意所有的dstPubname不可以与srcPubname重名
-	 ** @param recordPath
-	 *            recordPath服务器录制的路径，一般是web服务器根目录+/live/dstPubName
 	 */
-	public void createTask(Long taskId, List<String> srcPubNames, String dstPubName,String recordPath) {
+	public void createTask(Long taskId, List<String> srcPubNames, String dstPubName) {
 		try {
 			// 创建输入源
 			List<InputBO> inputBOs = new ArrayList<InputBO>();
@@ -126,13 +124,13 @@ public class StreamPassbyService {
 			OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
 					dstPubName);
 			// 创建录制
-            OutputBO recordOutputBo=record2OutputBO(taskId, taskBOs, recordPath);
+            //OutputBO recordOutputBo=record2OutputBO(taskId, taskBOs, recordPath);
 			// 发送命令了
 
 			AllRequest allRequest = new AllRequest();
 			allRequest.setInput_array(inputBOs);
 			allRequest.setTask_array(taskBOs);
-			allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).add(recordOutputBo).getList());
+			allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
 
 			AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
 					capacityProps.getPort());
@@ -146,7 +144,88 @@ public class StreamPassbyService {
 
 	}
 
-	private OutputBO record2OutputBO(Long taskId, List<TaskBO> tasks, String recordPath) throws Exception {
+	/**
+	 * 创建录制任务【mr】
+	 * @param pubName 发布名称【要录制视频的发布名称】
+	 * @param recordPath 录制路径
+	 */
+	public void createRecordTask(String pubName,String recordPath) {
+		try {
+			// 创建输入源
+			List<InputBO> inputBOs = new ArrayList<InputBO>();
+			InputBO inputBO = stream2InputBO(pubName, "rtmp://192.165.56.70/live/" + pubName);
+			inputBOs.add(inputBO);
+			
+			
+			// 创建任务了
+			String videoTaskId = new StringBufferWrapper().append("task-video-").append(pubName).toString();
+
+			String audioTaskId = new StringBufferWrapper().append("task-audio-").append(pubName).toString();
+
+			String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(pubName).toString();
+
+			String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(pubName).toString();
+			List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
+	
+			
+			// 创建录制
+            OutputBO recordOutputBo=record2OutputBO(pubName, taskBOs, recordPath);
+			// 发送命令了
+
+			AllRequest allRequest = new AllRequest();
+			allRequest.setInput_array(inputBOs);
+			allRequest.setTask_array(taskBOs);
+			allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(recordOutputBo).getList());
+
+			AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
+					capacityProps.getPort());
+
+			responseService.allResponseProcess(allResponse);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	/**
+	 * 删除录制任务【mr】
+	 * @param pubName【录制的源的发布名称】
+	 * @throws Exception
+	 */
+	public void deleteRecordTask(String pubName) throws Exception {
+
+		// 删除输出
+		String outputId = new StringBufferWrapper().append("output").append("-").append("record").append("-").append(pubName)
+				.toString();
+		DeleteOutputsRequest deleteOutputsRequest = new DeleteOutputsRequest();
+		List<IdRequest> outIdRequests = new ArrayList<IdRequest>();
+		outIdRequests.add(new IdRequest().setId(outputId));
+		deleteOutputsRequest.setOutput_array(outIdRequests);
+		capacityService.deleteOutputsAddMsgId(deleteOutputsRequest);
+		// 删除任务
+		String videoTaskId = new StringBufferWrapper().append("task-video-").append(pubName).toString();
+
+		String audioTaskId = new StringBufferWrapper().append("task-audio-").append(pubName).toString();
+		DeleteTasksRequest deleteTasksRequest = new DeleteTasksRequest();
+		List<IdRequest> taskIdRequests = new ArrayList<IdRequest>();
+		taskIdRequests.add(new IdRequest().setId(videoTaskId));
+		taskIdRequests.add(new IdRequest().setId(audioTaskId));
+		deleteTasksRequest.setTask_array(taskIdRequests);
+		capacityService.deleteTasksAddMsgId(deleteTasksRequest);
+		// 删除输入
+		DeleteInputsRequest deleteInputsRequest = new DeleteInputsRequest();
+		List<IdRequest> idRequests = new ArrayList<IdRequest>();
+		IdRequest idRequest = new IdRequest().setId(pubName);
+		idRequests.add(idRequest);
+		
+		deleteInputsRequest.setInput_array(idRequests);
+		capacityService.deleteInputsAddMsgId(deleteInputsRequest);
+
+	}
+	
+	
+	private OutputBO record2OutputBO(String taskId, List<TaskBO> tasks, String recordPath) throws Exception {
 
 		// 录制输出hls_record
 		String outputId = new StringBufferWrapper().append("output").append("-").append("record").append("-").append(taskId)
