@@ -414,6 +414,8 @@ public class ActivityController extends BaseController {
 		String dayStock=request.getParameter("dayStock");
 		String price=request.getParameter("price");
 		String expireTime=request.getParameter("expireTime");
+		
+		String count=request.getParameter("count");
 		ActivityRelPO arpo = conn_activityRel.getById(Long.parseLong(proid));
 		Date beginDate = sdf.parse(productBeginDate);
 		Date endDate = sdf.parse(productEnddate);
@@ -434,6 +436,7 @@ public class ActivityController extends BaseController {
 		arpo.setDayStock(Integer.parseInt(dayStock));
 		arpo.setPrice(Long.valueOf(price));
 		arpo.setExpireTime(Integer.parseInt(expireTime));
+		arpo.setCount(Integer.parseInt(count));
 		conn_activityRel.saveOrUpdate(arpo);
 		Map<String, Object> map = new HashMap<String, Object>();
 		

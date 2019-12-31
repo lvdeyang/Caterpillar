@@ -171,6 +171,8 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
     private int  mealAmount; //菜品数量
 	
     private String videourl;
+    
+    private int count;
 	 
 	public int getMealAmount() {
 		return mealAmount;
@@ -1400,6 +1402,16 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 	public ProductVO setIsInner(int isInner) {
 		this.isInner = isInner;
 		return this;
+	}
+
+
+	public int getCount() {
+		return count;
+	}
+
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 	
 	

@@ -46,6 +46,8 @@ public class ActivityRelPO extends AbstractBasePO {
 	
 	private long price;
 	
+	private int count;
+	
 	public long getProductStock() {
 		return productStock;
 	}
@@ -141,6 +143,12 @@ public class ActivityRelPO extends AbstractBasePO {
 	}
 	public void setExpireTime(int expireTime) {
 		this.expireTime = expireTime;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
 	}
 	
 	

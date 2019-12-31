@@ -1316,7 +1316,7 @@ public class WxPayReportController extends WebBaseControll {
 		// opVUYv9LtqKAbiaXInBqI01hlpYg
 
 		JSONObject obj2 = new JSONObject();
-		obj2.put("touser", "opVUYv-havBnt8CaydM5zmmhkLlw");
+		obj2.put("touser", "opVUYv_KDzCscwik3O4pnl64qYLU");
 		obj2.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
 		obj2.put("url", "");
 		JSONObject microProObj2 = new JSONObject();
@@ -1798,7 +1798,7 @@ public class WxPayReportController extends WebBaseControll {
 		// opVUYv9LtqKAbiaXInBqI01hlpYg
 
 		JSONObject obj2 = new JSONObject();
-		obj2.put("touser", "opVUYv-havBnt8CaydM5zmmhkLlw");
+		obj2.put("touser", "opVUYv_KDzCscwik3O4pnl64qYLU");
 		obj2.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
 		obj2.put("url", "");
 		JSONObject microProObj2 = new JSONObject();
