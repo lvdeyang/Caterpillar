@@ -189,7 +189,7 @@ top:22.5%;
 .main_in ul{
 position: absolute;
 text-align:left;
-right:10%;
+right:5%;
 top:15%;
 }
 .main_in ul li{
@@ -208,7 +208,7 @@ height:20px;
 line-height: 20px;
 cursor:pointer
 }
-.main_a_on{
+.main_a_on,.main_c_on{
 width:49%;
 height:auto;
 background:url("lib/images/main_a.png")no-repeat;
@@ -217,12 +217,12 @@ float:left;
 margin:0 0.5% 20px 0.5%;
 padding:30px 5% 20px 5%;
 }
-.main_a_on ul li{
+.main_a_on ul li,.main_c_on ul li{
 text-align:left;
 color:#D9201D;
 line-height:24px;
 }
-.main_a_on ul li button{
+.main_a_on ul li button,.main_c_on ul li button{
 font-size:80%;
 padding:0 10px;
 background: #D9201D;
@@ -234,7 +234,7 @@ height:20px;
 line-height: 20px;
 cursor:pointer
 }
-.main_b_on{
+.main_b_on,.main_d_on{
 width:49%;
 height:auto;
 background:url("lib/images/main_b.png")no-repeat;
@@ -243,12 +243,12 @@ float:left;
 margin:0 0.5% 20px 0.5%;
 padding:30px 5% 20px 5%;
 }
-.main_b_on ul li{
+.main_b_on ul li,.main_d_on ul li{
 text-align:left;
 color:#FAEACA;
 line-height:24px;
 }
-.main_b_on ul li button{
+.main_b_on ul li button,.main_d_on ul li button{
 font-size:80%;
 padding:0 10px;
 background:#FFF8D3;
@@ -260,6 +260,10 @@ height:20px;
 line-height: 20px;
 cursor:pointer
 }
+.main_ol img{
+width:100%;
+
+}
 </style>
 
 </head>
@@ -270,76 +274,130 @@ cursor:pointer
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
 <script type="text/javascript">
     $(function(){
-    /* 头部 */
-      var htmlss=[];
-      for(var i = 0;i<2;i++){
+  // 初始化
+    
+      var _uriActivitys = window.BASEPATH + 'pubnum/activity/getProducts?comCode=0001'; 
+		/* var _uriActivitys = 'http://www.guolaiwan.net/pubnum/activity/getProducts?comCode=0001' */
+     $.get(_uriActivitys, null, function(data){
+
+	data = parseAjaxResult(data);
+	if(data === -1) return;
+	if(data){
+	var activitys=data.activity;
+		var htmlss=[];
+      for(var i = 0;i<activitys.length;i++){
+       var ps =data[activitys[i].id]
+      
+       if(activitys[i].id == 22){
+       for(var i = 0;i<ps.length;i++){
         htmlss.push('<p class="title_header"><img src="lib/images/title_lefts.png"><span class="title_on">礼包一</span><img src="lib/images/title_rights.png"></p>'); 
-	    htmlss.push('<img style="width:100%;" src="lib/images/ceshis.jpg">'); 
+	    htmlss.push('<img style="width:100%;" src="'+data.url+ps[i].productShowPic+'">'); 
 	    htmlss.push('<img style="width:60%;" src="lib/images/title_only.png">'); 
-	    htmlss.push(' <ol class="main_ol">');
-	    htmlss.push('<li>年货节大礼包限量抢购年货节大礼包限量抢购</li>'); 
-	    htmlss.push('<li>年货节大礼包限量抢购年货节大礼包限量抢购</li>');
-	    htmlss.push('<li>年货节大礼包限量抢购年货节大礼包限量抢购</li>');
-	    htmlss.push('</ol>'); 
+	    htmlss.push('<div class="main_ol" style="height:auto;width:100%;">'+ps[i].productIntroduce+'</div>'); 
       	htmlss.push('<div class="main_in">');
-      	htmlss.push('<img src="lib/images/ceshis.jpg">');
+      	htmlss.push('<img src="'+data.url+ps[i].productShowPic+'">');
       	htmlss.push('<ul>');
-        htmlss.push('<li><span style="font-size:110%;">礼包名称</span></li>');
-        htmlss.push('<li><span style="font-size:80%;text-decoration: line-through;">原价：218</span></li>');
-        htmlss.push('<li><span style="font-size:90%;">年货价：￥</span><span style="font-size:140%;">99</span></li>'); 
-        htmlss.push('<li><button  onclick="btn_a()">点击抢购</button></li>');
+        htmlss.push('<li><span style="font-size:110%;">'+ps[i].productClassName+'</span></li>');
+        htmlss.push('<li><span style="font-size:80%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
+        htmlss.push('<li><span style="font-size:90%;">年货价:￥</span><span style="font-size:140%;">'+ps[i].productPricesStr+'</span></li>'); 
+        htmlss.push('<li><button  onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	    htmlss.push(' </ul>');
 	    htmlss.push('</div>'); 
    }
    $('.main').append(htmlss.join('')); 
-  
-   
-  
-   
-   
-   /* 黄底 红框 */
-   var html=[];
-   for(var i = 0;i<6;i++){
-   html.push('<div class="main_a_on">');
-   html.push('<img style="width:100%;margin-bottom:10px;" src="lib/images/ceshis.jpg">');
-   html.push('<ul>');
-   html.push('<li><span style="font-size:110%;font-weight:bold;">礼包名称</span><span style="font-size:70%;">（四瓶）</span></li>');
-   html.push('<li><span style="font-size:70%;text-decoration: line-through;">原价：218</span></li>');
-   html.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">199</span><span style="font-size:70%;">（一箱）</span></li>');
-   html.push('<li><button onclick="btn_b()">点击抢购</button></li>');
-   html.push('</ul>');
-   html.push('</div>');
-   }
-   $('.main_a_in').append(html.join('')); 
-   
-   /* 红底 黄框 */
-    var htmls=[];
-     for(var i = 0;i<6;i++){
-   htmls.push('<div class="main_b_on">');
-   htmls.push('<img style="width:100%;margin-bottom:10px;" src="lib/images/ceshis.jpg">');
-   htmls.push('<ul>');
-   htmls.push('<li><span style="font-size:110%;font-weight:bold;">礼包名称</span><span style="font-size:70%;">（四瓶）</span></li>');
-   htmls.push('<li><span style="font-size:70%;text-decoration: line-through;">原价：218</span></li>');
-   htmls.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">199</span><span style="font-size:70%;">（一箱）</span></li>');
-   htmls.push('<li><button onclick="btn_c()">点击抢购</button></li>');
-   htmls.push('</ul>');
-   htmls.push('</div>');
-   }
-   $('.main_b_in').append(htmls.join('')); 
+	  } 
+	}
+	
+	  /* 黄底 红框 */
+       var html=[];
+       for(var i = 0;i<activitys.length;i++){
+       var ps =data[activitys[i].id]
+       if(activitys[i].id == 23){
+      for(var i = 0;i<ps.length;i++){
+	   html.push('<div class="main_a_on">');
+	   html.push('<img style="width:100%;margin-bottom:10px;" src="'+data.url+ps[i].productShowPic+'">');
+	   html.push('<ul>');
+	   html.push('<li style="height:80px;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
+	   html.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
+	   html.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   html.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
+	   html.push('</ul>');
+	   html.push('</div>');
+	   }
+	   $('.main_a_in').append(html.join('')); 
+	  } 
+	}
+       /* 红底 黄框 */
+	   var htmls=[];
+       for(var i = 0;i<activitys.length;i++){
+       var ps =data[activitys[i].id]
+       if(activitys[i].id == 24){
+	   for(var i = 0;i<ps.length;i++){
+	   htmls.push('<div class="main_b_on">');
+	   htmls.push('<img style="width:100%;margin-bottom:10px;" src="'+data.url+ps[i].productShowPic+'">');
+	   htmls.push('<ul>');
+	   htmls.push('<li style="height:80px;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
+	   htmls.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
+	   htmls.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   htmls.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
+	   htmls.push('</ul>');
+	   htmls.push('</div>');
+	   }
+	   $('.main_b_in').append(htmls.join('')); 
+	  } 
+	}
+	
+	
+	  /* 黄底 红框 */
+       var html=[];
+       for(var i = 0;i<activitys.length;i++){
+       var ps =data[activitys[i].id]
+       if(activitys[i].id == 25){
+      for(var i = 0;i<ps.length;i++){
+	   html.push('<div class="main_c_on">');
+	   html.push('<img style="width:100%;margin-bottom:10px;" src="'+data.url+ps[i].productShowPic+'">');
+	   html.push('<ul>');
+	   html.push('<li style="height:80px;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
+	   html.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
+	   html.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   html.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
+	   html.push('</ul>');
+	   html.push('</div>');
+	   }
+	   $('.main_c_in').append(html.join('')); 
+	  } 
+	}
+       /* 红底 黄框 */
+	   var htmls=[];
+       for(var i = 0;i<activitys.length;i++){
+       var ps =data[activitys[i].id]
+       if(activitys[i].id == 26){
+	   for(var i = 0;i<ps.length;i++){
+	   htmls.push('<div class="main_d_on">');
+	   htmls.push('<img style="width:100%;margin-bottom:10px;" src="'+data.url+ps[i].productShowPic+'">');
+	   htmls.push('<ul>');
+	   htmls.push('<li style="height:80px;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
+	   htmls.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
+	   htmls.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   htmls.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
+	   htmls.push('</ul>');
+	   htmls.push('</div>');
+	   }
+	   $('.main_d_in').append(htmls.join('')); 
+	  } 
+	}
+	}			
+     });
    }) 
    
-   function btn_a(){
-     alert(11)
+	/*购买 */
+   function btn_a(id){
+/*    location.href=window.BASEPATH + 'pubnum/product/index?id; */
+   location.href=window.BASEPATH + 'pubnum/product/index?id='+id;
    }
-   function btn_b(){
-     alert(22)
-   }
-   function btn_c(){
-     alert(33)
-   }
+
 </script>
 <body οncοpy='document.selection.empty()' οnselect='document.selection.empty()' >
 	<!-- 主页 -->
@@ -359,66 +417,39 @@ cursor:pointer
 	</div>
 	 
 	<div class="main" style="width:100%;height:auto;padding:0 10% 50px 10%;text-align: center;">
-	 <!--   <p class="title_header">
-		  <img src="lib/images/title_lefts.png">
-		  <span class="title_on">礼包一</span>
-		  <img src="lib/images/title_rights.png">
-       </p>
-	  <img style="width:100%;" src="lib/images/ceshis.jpg">
-	  <img style="width:60%;" src="lib/images/title_only.png">
-	   <ol class="main_ol">
-	   <li>年货节大礼包限量抢购年货节大礼包限量抢购</li>
-	   <li>年货节大礼包限量抢购年货节大礼包限量抢购</li>
-	   <li>年货节大礼包限量抢购年货节大礼包限量抢购</li>
-	   </ol>
-	   <div class="main_in">
-	     <img src="lib/images/ceshis.jpg">
-	     <ul>
-	      <li><span style="font-size:110%;">礼包名称</span></li>
-	      <li><span style="font-size:80%;text-decoration: line-through;">原价：218</span></li>
-	      <li><span style="font-size:90%;">年货价：￥</span><span style="font-size:140%;">99</span></li>
-	      <li><button>点击抢购</button></li>
-	     </ul>
-	   </div> -->
-	   
 	</div>
 	
 	<div style="width: 100%;position: relative;">
 	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_two.png">
 	 <div class="main_a" style="width:100%;height:auto;overflow: hidden;padding:70px 0;">
 	   <div class="main_a_in" style="width:100%;height:auto;padding:0 6%;margin-top:-10px;text-align: center;">
-		  <!--   <div class="main_a_on">
-		     <img style="width:100%;margin-bottom:10px;" src="lib/images/ceshis.jpg">
-		     <ul>
-		      <li><span style="font-size:110%;font-weight:bold;">礼包名称</span><span style="font-size:70%;">（四瓶）</span></li>
-		      <li><span style="font-size:70%;text-decoration: line-through;">原价：218</span></li>
-		      <li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">199</span><span style="font-size:70%;">（一箱）</span></li>
-		      <li><button>点击抢购</button></li>
-		     </ul>
-		    </div> -->  
-		    
 	   </div>
 	</div>
-</div>	
+    </div>	
+    
   <div style="width: 100%;position: relative;">
 	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_three.png">
 	 <div class="main_b" style="width:100%;height:auto;overflow: hidden;background: #D10006;padding:70px 0;">
-	  
 	   <div class="main_b_in" style="width:100%;height:auto;padding:0 6%;margin-top:-10px;text-align: center;">
-		    <!--  <div class="main_b_on">
-		     <img style="width:100%;margin-bottom:10px;" src="lib/images/ceshis.jpg">
-		     <ul>
-		      <li><span style="font-size:110%;font-weight:bold;">礼包名称</span><span style="font-size:70%;">（四瓶）</span></li>
-		      <li><span style="font-size:70%;text-decoration: line-through;">原价：218</span></li>
-		      <li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">199</span><span style="font-size:70%;">（一箱）</span></li>
-		      <li><button>点击抢购</button></li>
-		     </ul>
-		    </div> -->
-		    
-	   </div> 
+ 	   </div> 
 	</div>
   </div>
   	
+  	<div style="width: 100%;position: relative;">
+	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_four.png">
+	 <div class="main_c" style="width:100%;height:auto;overflow: hidden;padding:70px 0;">
+	   <div class="main_c_in" style="width:100%;height:auto;padding:0 6%;margin-top:-10px;text-align: center;">
+	   </div>
+	</div>
+    </div>	
+    
+  <div style="width: 100%;position: relative;">
+	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_five.png">
+	 <div class="main_d" style="width:100%;height:auto;overflow: hidden;background: #D10006;padding:70px 0;">
+	   <div class="main_d_in" style="width:100%;height:auto;padding:0 6%;margin-top:-10px;text-align: center;">
+ 	   </div> 
+	</div>
+  </div>
 </body>
 
 </html>
