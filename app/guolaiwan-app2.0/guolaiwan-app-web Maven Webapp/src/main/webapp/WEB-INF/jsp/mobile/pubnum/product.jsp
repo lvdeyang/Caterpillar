@@ -2503,7 +2503,7 @@ $(function() {
 							</div>
 						</div>
 						<a id="save"
-							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
+							style="width:96%;position:fixed;bottom:5%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
 							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
 
 					</div>

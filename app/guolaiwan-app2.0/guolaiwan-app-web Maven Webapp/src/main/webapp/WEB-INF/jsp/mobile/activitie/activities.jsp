@@ -153,7 +153,7 @@ text-align: center;
 width:100%;
 height:40px;
 line-height: 40px;
-margin:0 0 20px 0;
+margin:0;
 }
 .title_header img{
  height:20px;
@@ -171,7 +171,27 @@ font-weight: bold;
 }
 .main_ol{
 text-align: left;
-text-indent: 4px;
+width:100%;
+}
+.main_ol li{
+height:26px;
+line-height: 26px;
+color:#CD1521;
+font-size:85%;
+}
+.main_ol li span{
+color:#FEF8D3;
+background: #CD1521;
+font-weight: bold;
+border-radius: 50%;
+display: inline-block;
+width:22px;
+height:22px;
+text-align: center;
+line-height: 22px;
+margin:0 2px 0 4px;
+padding:0;
+font-weight: 400;
 }
 .main_in{
 width:100%;
@@ -189,11 +209,11 @@ top:22.5%;
 .main_in ul{
 position: absolute;
 text-align:left;
-right:5%;
+right:7%;
 top:15%;
 }
 .main_in ul li{
- color:#fff;
+ color:#FFF8D3;
  line-height:25px;
 }
 .main_in ul li button{
@@ -224,7 +244,7 @@ line-height:24px;
 }
 .main_a_on ul li button,.main_c_on ul li button{
 font-size:80%;
-padding:0 10px;
+padding:0 15px;
 background: #D9201D;
 color:#FFF8D3;
 border:none;
@@ -250,7 +270,7 @@ line-height:24px;
 }
 .main_b_on ul li button,.main_d_on ul li button{
 font-size:80%;
-padding:0 10px;
+padding:0 15px;
 background:#FFF8D3;
 color:#D9201D;
 border:none;
@@ -274,10 +294,11 @@ width:100%;
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<!-- <script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script> -->
 <script type="text/javascript">
     $(function(){
   // 初始化
-    
+     /* var vConsole = new VConsole(); */
       var _uriActivitys = window.BASEPATH + 'pubnum/activity/getProducts?comCode=0001'; 
 		/* var _uriActivitys = 'http://www.guolaiwan.net/pubnum/activity/getProducts?comCode=0001' */
      $.get(_uriActivitys, null, function(data){
@@ -292,16 +313,37 @@ width:100%;
       
        if(activitys[i].id == 22){
        for(var i = 0;i<ps.length;i++){
+       console.log(ps[i].id)
+        if(ps[i].id == 2423){
         htmlss.push('<p class="title_header"><img src="lib/images/title_lefts.png"><span class="title_on">礼包一</span><img src="lib/images/title_rights.png"></p>'); 
-	    htmlss.push('<img style="width:100%;" src="'+data.url+ps[i].productShowPic+'">'); 
-	    htmlss.push('<img style="width:60%;" src="lib/images/title_only.png">'); 
-	    htmlss.push('<div class="main_ol" style="height:auto;width:100%;">'+ps[i].productIntroduce+'</div>'); 
+       }else{
+       htmlss.push('<p class="title_header" style="margin-top:20px;"><img src="lib/images/title_lefts.png"><span class="title_on">礼包二</span><img src="lib/images/title_rights.png"></p>'); 
+       }
+	    htmlss.push('<img style="width:140%;margin-left:-20%;" src="'+data.url+ps[i].productShowPic+'">'); 
+	    htmlss.push('<img style="width:70%;" src="lib/images/title_only.png">'); 
+	  /*   htmlss.push('<div class="main_ol" style="height:auto;width:100%;">'+ps[i].productIntroduce+'</div>');  */
+	   if(ps[i].id == 2423){
+	    htmlss.push('<ul class="main_ol">'); 
+	     htmlss.push('<li><span>1</span>遵化不得不吃任记花生红土炒花生100g x 2袋；</li>'); 
+	     htmlss.push('<li><span>2</span>任记吃了就上瘾的瓜子250g x 2袋；</li>'); 
+	     htmlss.push('<li><span>3</span>遵化十大不得不吃的美味山楂糕1盒；</li>'); 
+	     htmlss.push('<li><span>4</span>香糯可口的粘豆包1袋；</li>'); 
+	     htmlss.push('<li><span>5</span>手工纯红薯粉500g；</li>'); 
+	     htmlss.push('<li><span>6</span>汇福园糖400g x 1袋。</li>'); 
+	    htmlss.push('</ul>'); 
+       }else{
+       htmlss.push('<ul class="main_ol">'); 
+	     htmlss.push('<li><span>1</span>承德老酒1箱（4瓶）；</li>'); 
+	     htmlss.push('<li><span>2</span>加把力乳酸菌一件（12瓶）。</li>'); 
+	    htmlss.push('</ul>'); 
+       }
+	    
       	htmlss.push('<div class="main_in">');
       	htmlss.push('<img src="'+data.url+ps[i].productShowPic+'">');
       	htmlss.push('<ul>');
-        htmlss.push('<li><span style="font-size:110%;">'+ps[i].productClassName+'</span></li>');
+        htmlss.push('<li><span style="font-size:110%;">'+ps[i].productName+'</span></li>');
         htmlss.push('<li><span style="font-size:80%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-        htmlss.push('<li><span style="font-size:90%;">年货价:￥</span><span style="font-size:140%;">'+ps[i].productPricesStr+'</span></li>'); 
+        htmlss.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:140%;">'+ps[i].productPricesStr+'</span></li>'); 
         htmlss.push('<li><button  onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	    htmlss.push(' </ul>');
 	    htmlss.push('</div>'); 
@@ -317,11 +359,11 @@ width:100%;
        if(activitys[i].id == 23){
       for(var i = 0;i<ps.length;i++){
 	   html.push('<div class="main_a_on">');
-	   html.push('<img style="width:100%;margin-bottom:10px;" src="'+data.url+ps[i].productShowPic+'">');
+	   html.push('<img style="width:110%;margin:0 0 10px -5%;" src="'+data.url+ps[i].productShowPic+'">');
 	   html.push('<ul>');
-	   html.push('<li style="height:80px;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
+	   html.push('<li style=""><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span><span style="font-size:80%;">( '+ps[i].count+'瓶 )</span></li>');
 	   html.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-	   html.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   html.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
 	   html.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	   html.push('</ul>');
 	   html.push('</div>');
@@ -336,11 +378,11 @@ width:100%;
        if(activitys[i].id == 24){
 	   for(var i = 0;i<ps.length;i++){
 	   htmls.push('<div class="main_b_on">');
-	   htmls.push('<img style="width:100%;margin-bottom:10px;" src="'+data.url+ps[i].productShowPic+'">');
+	   htmls.push('<img style="width:110%;margin:0 0 10px -5%;" src="'+data.url+ps[i].productShowPic+'">');
 	   htmls.push('<ul>');
-	   htmls.push('<li style="height:80px;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
+	   htmls.push('<li style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
 	   htmls.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-	   htmls.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   htmls.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
 	   htmls.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	   htmls.push('</ul>');
 	   htmls.push('</div>');
@@ -357,11 +399,11 @@ width:100%;
        if(activitys[i].id == 25){
       for(var i = 0;i<ps.length;i++){
 	   html.push('<div class="main_c_on">');
-	   html.push('<img style="width:100%;margin-bottom:10px;" src="'+data.url+ps[i].productShowPic+'">');
+	   html.push('<img style="width:110%;margin:0 0 10px -5%;" src="'+data.url+ps[i].productShowPic+'">');
 	   html.push('<ul>');
-	   html.push('<li style="height:80px;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
+	   html.push('<li style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
 	   html.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-	   html.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   html.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
 	   html.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	   html.push('</ul>');
 	   html.push('</div>');
@@ -376,11 +418,11 @@ width:100%;
        if(activitys[i].id == 26){
 	   for(var i = 0;i<ps.length;i++){
 	   htmls.push('<div class="main_d_on">');
-	   htmls.push('<img style="width:100%;margin-bottom:10px;" src="'+data.url+ps[i].productShowPic+'">');
+	   htmls.push('<img style="width:110%;margin:0 0 10px -5%;" src="'+data.url+ps[i].productShowPic+'">');
 	   htmls.push('<ul>');
-	   htmls.push('<li style="height:80px;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
+	   htmls.push('<li style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
 	   htmls.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-	   htmls.push('<li><span style="font-size:80%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   htmls.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
 	   htmls.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	   htmls.push('</ul>');
 	   htmls.push('</div>');
@@ -416,13 +458,13 @@ width:100%;
 	 	 <!-- <span class="title_a">年货节大礼包限量抢购</span> -->
 	</div>
 	 
-	<div class="main" style="width:100%;height:auto;padding:0 10% 50px 10%;text-align: center;">
+	<div class="main" style="width:100%;height:auto;padding:0 10% 50px 10%;text-align: center;overflow: hidden;text-align: center;">
 	</div>
 	
 	<div style="width: 100%;position: relative;">
 	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_two.png">
 	 <div class="main_a" style="width:100%;height:auto;overflow: hidden;padding:70px 0;">
-	   <div class="main_a_in" style="width:100%;height:auto;padding:0 6%;margin-top:-10px;text-align: center;">
+	   <div class="main_a_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
 	   </div>
 	</div>
     </div>	
@@ -430,7 +472,7 @@ width:100%;
   <div style="width: 100%;position: relative;">
 	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_three.png">
 	 <div class="main_b" style="width:100%;height:auto;overflow: hidden;background: #D10006;padding:70px 0;">
-	   <div class="main_b_in" style="width:100%;height:auto;padding:0 6%;margin-top:-10px;text-align: center;">
+	   <div class="main_b_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
  	   </div> 
 	</div>
   </div>
@@ -438,7 +480,7 @@ width:100%;
   	<div style="width: 100%;position: relative;">
 	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_four.png">
 	 <div class="main_c" style="width:100%;height:auto;overflow: hidden;padding:70px 0;">
-	   <div class="main_c_in" style="width:100%;height:auto;padding:0 6%;margin-top:-10px;text-align: center;">
+	   <div class="main_c_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
 	   </div>
 	</div>
     </div>	
@@ -446,7 +488,7 @@ width:100%;
   <div style="width: 100%;position: relative;">
 	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_five.png">
 	 <div class="main_d" style="width:100%;height:auto;overflow: hidden;background: #D10006;padding:70px 0;">
-	   <div class="main_d_in" style="width:100%;height:auto;padding:0 6%;margin-top:-10px;text-align: center;">
+	   <div class="main_d_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
  	   </div> 
 	</div>
   </div>
