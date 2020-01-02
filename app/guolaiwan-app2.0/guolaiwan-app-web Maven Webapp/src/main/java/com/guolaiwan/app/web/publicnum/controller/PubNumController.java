@@ -1580,6 +1580,7 @@ public class PubNumController extends WebBaseControll {
 				vo.setActivityReId(activityRelPO.getId());
 				vo.setIsSurpport(activityRelPO.getSurpportBuy());
 				vo.setCount(activityRelPO.getCount());
+				vo.setUnit(activityRelPO.getUnit());
 				vos.add(vo);
 			}
 			ret.put(activityPO.getId() + "", vos);

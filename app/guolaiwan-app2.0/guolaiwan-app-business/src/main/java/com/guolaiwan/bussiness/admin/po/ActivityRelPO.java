@@ -48,6 +48,9 @@ public class ActivityRelPO extends AbstractBasePO {
 	
 	private int count;
 	
+	//计量单位
+	private String unit;
+	
 	public long getProductStock() {
 		return productStock;
 	}
@@ -149,6 +152,12 @@ public class ActivityRelPO extends AbstractBasePO {
 	}
 	public void setCount(int count) {
 		this.count = count;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 	
