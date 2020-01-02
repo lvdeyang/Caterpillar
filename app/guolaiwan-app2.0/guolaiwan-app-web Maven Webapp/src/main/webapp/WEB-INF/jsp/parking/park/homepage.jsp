@@ -72,7 +72,7 @@
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
-<title></title>
+<title>停车登录</title>
 <style type="text/css">
 * {
 	margin: 0px;
@@ -158,7 +158,52 @@
 html,body{
 	height: 100%;
 	background-color:#E6E6E6 ;
+	width: 100%;
+	-webkit-text-size-adjust: none;
+	text-decoration: none !important;
 }
+a {
+	cursor: pointer !important;
+}
+
+a, a:link, a:active, a:visited, a:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+* {
+	box-sizing: border-box;
+	list-style: none;
+	text-decoration: none;
+}
+/* 页面样式 */
+.header {
+	height: 40px;
+	line-height: 40px;
+	background-color: #18b4ed;
+	color: #fff;
+	border-bottom: 1px solid #bababa;
+}
+
+.header .link-left {
+	margin-left: 10px;
+	margin-right: 10px;
+	position: relative;
+	z-index: 1;
+}
+
+.header-content {
+	height: auto;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-left: 40px;
+	padding-right: 40px;
+	text-align: center;
+	z-index: 0;
+}
+
 
 </style>
 
@@ -168,10 +213,16 @@ html,body{
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/city-picker.js" charset="utf-8"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
+<script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
 <script type="text/javascript">
-   
+ 
 	$(function() {
+		$(document).on('click', '#indexs', function() {
+		     location.href=window.BASEPATH + '/pubnum/index';
+		   });
+   
 	var _uri = window.BASEPATH + 'quit/query';
 	var sal = ${param.sal}
 		$.post(_uri, null, function(data) {
@@ -228,11 +279,18 @@ html,body{
       }
    
    })
+    
 </script>
 
 
 <body>
-
+		<div class="header">
+			<div class="wrapper" >
+			<a id="indexs" class="link-left"  href="#side-menu"><span
+					class="icon-reorder icon-large"></span></a>
+				<div class="header-content">商户</div>
+			</div>
+	   </div>
 	<div class='header-pic'>
 		<div id="img" style="height:80px;"></div>
 		<div class="conformity">
