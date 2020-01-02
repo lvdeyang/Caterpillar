@@ -1044,7 +1044,9 @@ $(function() {
 				}
 			});
 		});
-		
+		$(document).on('click','#cancel',function(){
+		 				$.closePopup();
+		})
 		
 		$(document).on('click','.room',function(){
 		      var ids=this.id.split('-');
@@ -2457,6 +2459,7 @@ $(function() {
 					<div class="modDiv" id="addressSecond" style="display:none;">
 
 						<div class="weui-cells weui-cells_form">
+						    <div class="weui-cells__title" id="cancel" style="font-size:18px;font-weight:bold;">取消添加</div>
 							<div class="weui-cells__title">添加收货地址</div>
 							<div class="weui-cell">
 								<div class="weui-cell__hd">
@@ -2503,7 +2506,7 @@ $(function() {
 							</div>
 						</div>
 						<a id="save"
-							style="width:96%;position:fixed;bottom:0;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
+							style="width:96%;position:fixed;bottom:5%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
 							href="javascript:;" class="weui-btn weui-btn_primary"> 保存</a>
 
 					</div>

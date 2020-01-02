@@ -203,7 +203,7 @@ html, body {
 		<button class="btn" id="refund"
 			style="width:100%;height:35px;background-color:#D5D5D5;color:red;border:none;outline:none;">取消订单</button>
 	</div>
-	<div class="footer" style="padding-top:10%;">
+	<div class="footer" style="padding:10% 3% 0 3% ">
 		<p>温馨提示：</p>
 		<ol style="font-size:12px;margin: 20px 15px;">
 			<li>预订成功后<span style="color:red;">15 分钟内可免费取消，</span>约定入场时间内未入场，订单将自动计费。
