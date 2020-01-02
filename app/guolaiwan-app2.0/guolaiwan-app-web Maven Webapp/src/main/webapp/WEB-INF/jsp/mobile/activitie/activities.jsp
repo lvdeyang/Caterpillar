@@ -235,7 +235,7 @@ background:url("lib/images/main_a.png")no-repeat;
 background-size:100% 100%;
 float:left;
 margin:0 0.5% 20px 0.5%;
-padding:30px 5% 20px 5%;
+padding:30px 2% 20px 5%;
 }
 .main_a_on ul li,.main_c_on ul li{
 text-align:left;
@@ -261,7 +261,7 @@ background:url("lib/images/main_b.png")no-repeat;
 background-size:100% 100%;
 float:left;
 margin:0 0.5% 20px 0.5%;
-padding:30px 5% 20px 5%;
+padding:30px 2% 20px 5%;
 }
 .main_b_on ul li,.main_d_on ul li{
 text-align:left;
@@ -358,12 +358,13 @@ width:100%;
        var ps =data[activitys[i].id]
        if(activitys[i].id == 23){
       for(var i = 0;i<ps.length;i++){
+       var productPricesStr = parseFloat(ps[i].productPricesStr);
 	   html.push('<div class="main_a_on">');
 	   html.push('<img style="width:110%;margin:0 0 10px -5%;" src="'+data.url+ps[i].productShowPic+'">');
 	   html.push('<ul>');
 	   html.push('<li style=""><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span><span style="font-size:80%;">( '+ps[i].count+'瓶 )</span></li>');
 	   html.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-	   html.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   html.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+productPricesStr+'</span><span style="font-size:80%;">(一'+ps[i].unit+')</span></li>');
 	   html.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	   html.push('</ul>');
 	   html.push('</div>');
@@ -377,12 +378,13 @@ width:100%;
        var ps =data[activitys[i].id]
        if(activitys[i].id == 24){
 	   for(var i = 0;i<ps.length;i++){
+	    var productPricesStr = parseFloat(ps[i].productPricesStr);
 	   htmls.push('<div class="main_b_on">');
 	   htmls.push('<img style="width:110%;margin:0 0 10px -5%;" src="'+data.url+ps[i].productShowPic+'">');
 	   htmls.push('<ul>');
 	   htmls.push('<li style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
 	   htmls.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-	   htmls.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   htmls.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+productPricesStr+'</span><span style="font-size:120%;font-weight:bold;">/'+ps[i].unit+'</span></li>');
 	   htmls.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	   htmls.push('</ul>');
 	   htmls.push('</div>');
@@ -398,12 +400,13 @@ width:100%;
        var ps =data[activitys[i].id]
        if(activitys[i].id == 25){
       for(var i = 0;i<ps.length;i++){
+       var productPricesStr = parseFloat(ps[i].productPricesStr);
 	   html.push('<div class="main_c_on">');
 	   html.push('<img style="width:110%;margin:0 0 10px -5%;" src="'+data.url+ps[i].productShowPic+'">');
 	   html.push('<ul>');
 	   html.push('<li style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
 	   html.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-	   html.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   html.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+productPricesStr+'</span><span style="font-size:120%;font-weight:bold;">/'+ps[i].unit+'</span></li>');
 	   html.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	   html.push('</ul>');
 	   html.push('</div>');
@@ -413,22 +416,28 @@ width:100%;
 	}
        /* 红底 黄框 */
 	   var htmls=[];
+	   
        for(var i = 0;i<activitys.length;i++){
        var ps =data[activitys[i].id]
        if(activitys[i].id == 26){
+       
 	   for(var i = 0;i<ps.length;i++){
+	   var productPricesStr = parseFloat(ps[i].productPricesStr);
 	   htmls.push('<div class="main_d_on">');
 	   htmls.push('<img style="width:110%;margin:0 0 10px -5%;" src="'+data.url+ps[i].productShowPic+'">');
 	   htmls.push('<ul>');
 	   htmls.push('<li style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:90%;"><span style="font-size:110%;font-weight:400;">'+ps[i].productName+'</span></li>');
 	   htmls.push('<li><span style="font-size:70%;text-decoration: line-through;">原价:'+ps[i].productOldPrice+'</span></li>');
-	   htmls.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+ps[i].productPricesStr+'</span></li>');
+	   htmls.push('<li><span style="font-size:100%;">年货价:￥</span><span style="font-size:120%;font-weight:bold;">'+productPricesStr+'</span><span style="font-size:120%;font-weight:bold;">/'+ps[i].unit+'</span></li>');
 	   htmls.push('<li><button onclick="btn_a('+ps[i].id+')">点击抢购</button></li>');
 	   htmls.push('</ul>');
 	   htmls.push('</div>');
 	   }
+	  
 	   $('.main_d_in').append(htmls.join('')); 
-	  } 
+	   
+	  }
+	   
 	}
 	}			
      });
