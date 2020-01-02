@@ -298,7 +298,7 @@ width:100%;
 <script type="text/javascript">
     $(function(){
   // 初始化
-     /* var vConsole = new VConsole(); */
+   /*    var vConsole = new VConsole();  */
       var _uriActivitys = window.BASEPATH + 'pubnum/activity/getProducts?comCode=0001'; 
 		/* var _uriActivitys = 'http://www.guolaiwan.net/pubnum/activity/getProducts?comCode=0001' */
      $.get(_uriActivitys, null, function(data){
@@ -313,7 +313,7 @@ width:100%;
       
        if(activitys[i].id == 22){
        for(var i = 0;i<ps.length;i++){
-       console.log(ps[i].id)
+       /* console.log(ps[i].id) */
         if(ps[i].id == 2423){
         htmlss.push('<p class="title_header"><img src="lib/images/title_lefts.png"><span class="title_on">礼包一</span><img src="lib/images/title_rights.png"></p>'); 
        }else{
@@ -436,8 +436,9 @@ width:100%;
    
 	/*购买 */
    function btn_a(id){
-/*    location.href=window.BASEPATH + 'pubnum/product/index?id; */
-   location.href=window.BASEPATH + 'pubnum/product/index?id='+id;
+   console.log(id)
+   location.href=window.BASEPATH + 'pubnum/product/index/'+id;
+   
    }
 
 </script>
