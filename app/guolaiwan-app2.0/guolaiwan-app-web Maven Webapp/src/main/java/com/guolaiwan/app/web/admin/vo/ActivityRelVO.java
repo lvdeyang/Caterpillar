@@ -25,7 +25,7 @@ public class ActivityRelVO extends AbstractBaseVO<ActivityRelVO, ActivityRelPO> 
 	private String price;
 	private int expireTime;
 	private int count;
-	
+	private String unit;
 	public long getProductStock() {
 		return productStock;
 	}
@@ -142,6 +142,7 @@ public class ActivityRelVO extends AbstractBaseVO<ActivityRelVO, ActivityRelPO> 
 		.setExpireTime(entity.getExpireTime())
 		.setCount(entity.getCount())
 		.setPrice(new DecimalFormat("0.00").format(((double)entity.getPrice()/100)))
+		.setUnit(entity.getUnit())
 		.setProductName(entity.getProductName());
 		return this;
 
@@ -180,6 +181,15 @@ public class ActivityRelVO extends AbstractBaseVO<ActivityRelVO, ActivityRelPO> 
 
 	public ActivityRelVO setCount(int count) {
 		this.count = count;
+		return this;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public ActivityRelVO setUnit(String unit) {
+		this.unit = unit;
 		return this;
 	}
 	

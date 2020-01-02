@@ -169,7 +169,6 @@ function getProductList(){
     {type:'checkbox'}
     ,{field: 'productId', title: '商品Id',sort: true,width:80} 
     ,{field: 'productName', title: '商品名称',sort: true} 
-    ,{title:'活动内容',templet:'#content',width:150}
     ,{fixed: 'right',title: '操作',width:200,toolbar:'#zsgc',unresize:true} 
     ]]
     ,id:'activityRel'

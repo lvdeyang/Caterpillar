@@ -416,6 +416,7 @@ public class ActivityController extends BaseController {
 		String expireTime=request.getParameter("expireTime");
 		
 		String count=request.getParameter("count");
+		String unit=request.getParameter("unit");
 		ActivityRelPO arpo = conn_activityRel.getById(Long.parseLong(proid));
 		Date beginDate = sdf.parse(productBeginDate);
 		Date endDate = sdf.parse(productEnddate);
@@ -437,6 +438,7 @@ public class ActivityController extends BaseController {
 		arpo.setPrice(Long.valueOf(price));
 		arpo.setExpireTime(Integer.parseInt(expireTime));
 		arpo.setCount(Integer.parseInt(count));
+		arpo.setUnit(unit);
 		conn_activityRel.saveOrUpdate(arpo);
 		Map<String, Object> map = new HashMap<String, Object>();
 		

@@ -163,6 +163,15 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label" style="width:250px;">
+                                                                       计量单位
+                    </label>
+                    <div class="layui-input-block" style="margin-left:270px">
+                        <input type="text" id="L_title" value="${rel.unit}" name="unit" required lay-verify="required"
+                        class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <input class="layui-btn" type="submit" value="修改" />
                 </div>
             </form>

@@ -173,6 +173,8 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
     private String videourl;
     
     private int count;
+    
+    private String unit;
 	 
 	public int getMealAmount() {
 		return mealAmount;
@@ -1412,6 +1414,16 @@ public class ProductVO extends AbstractBaseVO<ProductVO, ProductPO> implements C
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+
+	public String getUnit() {
+		return unit;
+	}
+
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 	
