@@ -208,7 +208,26 @@ height:auto;
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
 <script type="text/javascript">
+function IOS_Return_Reload() {
 
+    var isPageHide = false;
+    
+    window.addEventListener('pageshow', function () {
+    if (isPageHide) {
+    
+    window.location.reload();
+    
+    }
+    
+    });
+    
+    window.addEventListener('pagehide', function () {
+    isPageHide = true;
+    
+    });
+    
+}
+IOS_Return_Reload();
 	$(function() {
         $(".btn").click(function() {
 			window.location.href = "smart/merchant/parking?sal=1";
