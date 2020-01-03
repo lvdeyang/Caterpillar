@@ -464,7 +464,7 @@ width:100%;
 	 <img style="width:100%;z-index:1" src="lib/images/headers.png" />
 	</div>
 	<div style="width:100%;position: relative;top:-90px;">
-	 	  <img style="width:70%;z-index:2;position: absolute;left:15%;top:20px;" src="lib/images/title_one.png" />
+	 	  <img style="width:100%;z-index:2;position: absolute;left:0;top:-15px;" src="lib/images/title_ones.png" />
 	 	 <!-- <span class="title_a">年货节大礼包限量抢购</span> -->
 	</div>
 	 
@@ -472,7 +472,7 @@ width:100%;
 	</div>
 	
 	<div style="width: 100%;position: relative;">
-	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_two.png">
+	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_twos.png">
 	 <div class="main_a" style="width:100%;height:auto;overflow: hidden;padding:70px 0;">
 	   <div class="main_a_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
 	   </div>
@@ -480,7 +480,7 @@ width:100%;
     </div>	
     
   <div style="width: 100%;position: relative;">
-	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_three.png">
+	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_threes.png">
 	 <div class="main_b" style="width:100%;height:auto;overflow: hidden;background: #D10006;padding:70px 0;">
 	   <div class="main_b_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
  	   </div> 
@@ -488,7 +488,7 @@ width:100%;
   </div>
   	
   	<div style="width: 100%;position: relative;">
-	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_four.png">
+	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_fours.png">
 	 <div class="main_c" style="width:100%;height:auto;overflow: hidden;padding:70px 0;">
 	   <div class="main_c_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
 	   </div>
@@ -496,7 +496,7 @@ width:100%;
     </div>	
     
   <div style="width: 100%;position: relative;">
-	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_five.png">
+	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_fives.png">
 	 <div class="main_d" style="width:100%;height:auto;overflow: hidden;background: #D10006;padding:70px 0;">
 	   <div class="main_d_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
  	   </div> 
