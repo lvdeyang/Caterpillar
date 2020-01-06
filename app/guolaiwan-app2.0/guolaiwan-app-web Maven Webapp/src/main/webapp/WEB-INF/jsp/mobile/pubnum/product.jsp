@@ -594,32 +594,32 @@ input[type="datetime-local"]:before{
     background-color: #f2dede;
     border-color: #ebccd1;
 }
-/* 对话框样式 */   
+ /* 对话框样式 */   
   input,button{outline:none;}
 	.wenwen-footer{width:100%;position:fixed;bottom:-5px;left:0;background:#fff;padding:3%;border-top:solid 1px #ddd;box-sizing:border-box;}
-	.wenwen_btn,.wenwen_help{width:15%;text-align:center;-webkit-user-select:text !important;}
+	.wenwen_btn,.wenwen_help{width:15%;text-align:center;}
 	.wenwen_btn img,.wenwen_help img{height:40px;}
 	.wenwen_text{height:40px;border-radius:5px;border:solid 1px #636162;box-sizing:border-box;width:80%;text-align:center;overflow:hidden;margin-left:2%;}
 	.circle-button{padding:0 5px;}
 	.wenwen_text .circle-button{font-size:14px;color:#666;line-height:38px;}
-	.write_box{background:#fff;width:100%;height:40px;line-height:40px;-webkit-user-select:text !important;}
+	.write_box{background:#fff;width:100%;height:40px;line-height:40px;}
 	.write_box input{height:40px;padding:0 5px;line-height:40px;width:100%;box-sizing:border-box;border:0;}
 	.wenwen_help button{width:100%;background:#42929d;color:#fff;border-radius:5px;border:0;height:40px;}
 	#wenwen{height:100%;}
-	.speak_window{overflow-y:scroll;height:100%;width:100%;position:fixed;top:0;left:0;}
+	.speak_window{overflow-y:scroll;height:100%;width:100%;top:0;left:0;}
 	.speak_box{margin-bottom:70px;padding:10px;}
 	.question,.answer{margin-bottom:1rem;}
 	.question{text-align:right;margin-top:50px;}
 	.question>div{display:inline-block;}
 	.left{float:left;cursor:pointer}
-	.right{float:right;cursor:pointer;}
+	.right{float:right;cursor:pointer}
 	.clear{clear:both;}
 	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
 	.heard_img img{width:100%;height:100%}
-	.question_text,.answer_text{box-sizing:border-box;position:relative;display:table-cell;min-height:60px;}
+	.question_text,.answer_text{box-sizing:border-box;position:relative;display:table-cell;min-height:60px;width:80%;}
 	.question_text{padding-right:20px;}
 	.answer_text{padding-left:20px;}
-	.question_text p,.answer_text p{border-radius:6px;padding:.5rem;margin:0;font-size:14px;line-height:40px;box-sizing:border-box;vertical-align:middle;display:table-cell;height:40px;word-wrap:break-word;}
+	.question_text p,.answer_text p{position: absolute;right:20px;top:10px;word-wrap:break-word;word-break:normal;border-radius:6px;padding:0 5px 2px 5px;margin:0;font-size:14px;line-height:40px;box-sizing:border-box;vertical-align:middle;display:table-cell;word-wrap:break-word;}
 	.answer_text p{background:#fff;}
 	.question_text p{background:#94EB68;color:#fff;text-align:left;}
 	.question_text i,.answer_text i{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;position:absolute;top:25px;}
@@ -2194,6 +2194,8 @@ $(function() {
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
 	 	$('.left').val("");
+	 	 var h = $(document).height()-$(window).height();
+		       $(document).scrollTop(h);
 	 	//将发送的信息存入数据库 
 	 	$.post(url,{"userId":userId,"merchantId":merchantId,"message":message,"touser":touser},function(data){
 	 	})

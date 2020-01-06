@@ -489,10 +489,7 @@ html, body {
     width:280px;
  
 }
-#merchantContent image{
-    width:280px;
 
-}
 /*#address{
         -webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;
     }
@@ -528,10 +525,10 @@ html, body {
 	.clear{clear:both;}
 	.heard_img{height:40px;width:40px;border-radius:5px;overflow:hidden;background:#ddd;margin-top:10px}
 	.heard_img img{width:100%;height:100%}
-	.question_text,.answer_text{box-sizing:border-box;position:relative;display:table-cell;min-height:60px;}
+	.question_text,.answer_text{box-sizing:border-box;position:relative;display:table-cell;min-height:60px;width:80%;}
 	.question_text{padding-right:20px;}
 	.answer_text{padding-left:20px;}
-	.question_text p,.answer_text p{border-radius:6px;padding:.5rem;margin:0;font-size:14px;line-height:40px;box-sizing:border-box;vertical-align:middle;display:table-cell;height:40px;word-wrap:break-word;}
+	.question_text p,.answer_text p{position: absolute;right:20px;top:10px;word-wrap:break-word;word-break:normal;border-radius:6px;padding:0 5px 2px 5px;margin:0;font-size:14px;line-height:40px;box-sizing:border-box;vertical-align:middle;display:table-cell;word-wrap:break-word;}
 	.answer_text p{background:#fff;}
 	.question_text p{background:#94EB68;color:#fff;text-align:left;}
 	.question_text i,.answer_text i{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;position:absolute;top:25px;}
@@ -864,7 +861,7 @@ html, body {
 	 
 	
 	//消息发送方法
-	 function SubSend(){
+	 function SubSend(event){
 	 	var message="";
 	 	var userId=${userId};
 		var merchantId=${merchantId};
@@ -884,7 +881,9 @@ html, body {
 	        str += '<div class="question_text clear"><p>'+message+'</p><i></i>';
 	        str += '</div></div>';
 	        $('.speak_box').append(str);
-	 	$('.left').val("");
+		 	$('.left').val("");
+		     var h = $(document).height()-$(window).height();
+		       $(document).scrollTop(h);
 	 	//将发送的信息存入数据库 
 	 	$.post(url,{"userId":userId,"merchantId":merchantId,"message":message,"touser":touser},function(data){
 	 	})
@@ -1047,7 +1046,7 @@ html, body {
 						</div>
 						<div
 							style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">商家详情</div>
-						<div style="font-size:12px;padding:12px;float:left;width:100%;overflow-x:scroll" id="merchantContent"></div>
+						<div style="font-size:12px;padding:12px;float:left;width:100%;overflow-x:scroll;" id="merchantContent"></div>
 						
 						
 						<table id="product_table1"
