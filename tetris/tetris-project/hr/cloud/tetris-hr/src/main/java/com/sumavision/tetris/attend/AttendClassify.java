@@ -15,6 +15,7 @@ public enum AttendClassify {
 	QUEQIN("缺勤", false),
 	ZHENGCHANG("正常", false),
 	CHIDAO("迟到", true),
+	QINGJIA("请假", true),
 	ZAOTUI("早退", true);
 	
 	private String name;

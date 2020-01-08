@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sumavision.tetris.attend.AttendClassify;
 import com.sumavision.tetris.commons.util.date.DateUtil;
 import com.sumavision.tetris.commons.util.wrapper.HashMapWrapper;
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
@@ -164,7 +165,10 @@ public class SetController {
 	    	setPO.setCurDate(date);
 	    	setPO.setUserId(userId);
 	    	SchePO schePo=scheDao.findOne(sche);
-	    	if(schePo!=null){
+	    	if(sche.longValue()==0){
+	    		setPO.setAttendState(AttendClassify.QINGJIA);
+		    	setDao.save(setPO);
+	    	}else if(schePo!=null){
 	    		setPO.setScheName(schePo.getName());
 		    	setPO.setStart(schePo.getStart());
 		    	setPO.setEnd(schePo.getEnd());

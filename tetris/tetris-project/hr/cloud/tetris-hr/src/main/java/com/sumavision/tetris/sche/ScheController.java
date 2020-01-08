@@ -61,7 +61,10 @@ public class ScheController {
 		List<SchePO> entities =scheDao.findAll();
 		List<ScheVO> sches = ScheVO.getConverter(ScheVO.class).convert(entities, ScheVO.class);
 
-			
+		ScheVO vo=new ScheVO();
+		vo.setId(0l);
+		vo.setName("休假");
+		sches.add(vo);	
 		return sches;
 	}
 	
