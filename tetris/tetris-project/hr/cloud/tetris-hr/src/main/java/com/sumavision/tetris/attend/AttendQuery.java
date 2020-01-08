@@ -82,7 +82,7 @@ public class AttendQuery {
 		 */
 	public Long getAttendById(Integer attendRecId) {
 		// TODO Auto-generated method stub
-		AttendPo attend =dao.findById(attendRecId);
+		AttendPo attend =dao.findByAttendRecId(attendRecId);
 		if (attend!=null) {
 			return attend.getId();
 		}
@@ -95,5 +95,20 @@ public class AttendQuery {
 		Page<AttendPo> attends = dao.findAll(page);
 		return attends;
 	}
+
+	/**
+		 * 根据ID查询当日考勤<br/>
+		 * <b>作者:</b>SJJ<br/>
+		 * <b>版本：</b>1.0<br/>
+		 * <b>日期：</b> 2020年1月3日  
+		 * @param code
+		 * @return
+		 */
+	public AttendPo selectTodayOrderById(String code) {
+		// TODO Auto-generated method stub
+		AttendPo attend = dao.findTodayOrderById(code);
+		return attend;
+	}
+
 
 }
