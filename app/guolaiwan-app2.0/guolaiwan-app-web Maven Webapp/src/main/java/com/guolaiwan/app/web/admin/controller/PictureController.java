@@ -1,6 +1,7 @@
 package com.guolaiwan.app.web.admin.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.po.PicturePO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 
+import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.mvc.controller.BaseController;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
 
@@ -102,6 +104,9 @@ public class PictureController extends BaseController{
 		picture.setIntroduce("上传成功！");
 		picture.setIf_valid(1);
 		PictureVO pic = new PictureVO().set(picture);
+		//上传到阿里云oss
+		OSSUtils.createFolder("glw-old-file", "image/"+folderName+"/");
+		OSSUtils.uploadObjectOSS("/image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
 		map.put("pic", pic);
 		map.put("path", config);
 		map.put("code", "0");

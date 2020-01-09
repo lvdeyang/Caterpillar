@@ -2,6 +2,7 @@ package com.guolaiwan.app.interfac.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -197,6 +198,7 @@ import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
+import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.commons.img.VerifyCodeUtils;
 import pub.caterpillar.commons.util.binary.Sha1Util;
 import pub.caterpillar.commons.util.date.DateUtil;
@@ -5110,7 +5112,9 @@ public class PhoneController extends WebBaseControll {
 		// 上传文件
 		File newFile = new File(path1 + newName);
 		file.transferTo(newFile);
-
+		OSSUtils.createFolder("glw-old-file", path);
+		OSSUtils.uploadObjectOSS(path, newName,newFile, new FileInputStream(newFile));
+		
 		return success("http://" + WXContants.Website + "/file/" + path + newName);
 	}
 
