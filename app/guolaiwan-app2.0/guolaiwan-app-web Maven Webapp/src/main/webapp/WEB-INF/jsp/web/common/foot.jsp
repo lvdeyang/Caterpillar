@@ -211,7 +211,7 @@ $(document).scroll(function() {
 	
  <div align="center"  style="background:#444444 ">
  <a href="javascript:void(0)" style="center;color:#CFCFCF" target="_blank">©遵化市博客旅游集散中心有限公司(guolaiwan.net)</a>
- <a href="<%=path  %>/webtheme/theme/foot/a1.png" style="center;color:#CFCFCF" target="_blank">营业执照</a>  <span style="color:#CFCFCF;margin-left:20px;">   冀ICP备 15016998</span></div>
+ <a href="<%=path  %>/webtheme/theme/foot/a1.png" style="center;color:#CFCFCF" target="_blank">营业执照</a> <a href="http://www.beian.miit.gov.cn"><span style="color:#CFCFCF;margin-left:20px;">   冀ICP备 15016998</span></a></div>
  <!--  <div style="width:100%;height:30px;line-height: 30px;text-align: center;">
      <p style="">冀ICP备 15016998</p>
      </div> -->
