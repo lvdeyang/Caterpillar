@@ -19,7 +19,7 @@ import com.sumavision.tetris.user.UserVO;
 
 
 @Controller
-@RequestMapping(value = "/hr/attend")
+@RequestMapping(value = "/api/attend")
 public class AttendController {
 	
 	@Autowired

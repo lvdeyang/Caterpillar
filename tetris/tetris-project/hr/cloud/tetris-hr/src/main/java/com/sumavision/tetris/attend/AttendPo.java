@@ -47,7 +47,78 @@ public class AttendPo extends AbstractBasePO{
     String workerName;
     //员工工号
     String workerNo;
+    //外勤名称
+    String title;
+    //外勤内容
+    String content;
+    //外勤地点
+    String address;
+    //员工code
+    String code;
+    //考勤种类 0未考勤1上班打卡2外勤
+    int type;
+    
 	
+	/**
+	 * @return the type
+	 */
+	public int getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(int type) {
+		this.type = type;
+	}
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
+	}
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
+	}
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+		return content;
+	}
+	/**
+	 * @param content the content to set
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+	/**
+	 * @return the address
+	 */
+	public String getAddress() {
+		return address;
+	}
+	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	/**
 	 * @return the attendRecId
 	 */
