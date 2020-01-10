@@ -82,7 +82,7 @@ public class VideoController extends BaseController{
 		file.transferTo(newFile);           //写
 
 		OSSUtils.createFolder("glw-old-file", "image/"+folderName+"/");
-		OSSUtils.uploadObjectOSS("/image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
+		OSSUtils.uploadObjectOSS("image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
 		
 		//写数据库
 		PicturePO picture = new PicturePO();

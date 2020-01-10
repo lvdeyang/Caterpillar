@@ -106,7 +106,7 @@ public class PictureController extends BaseController{
 		PictureVO pic = new PictureVO().set(picture);
 		//上传到阿里云oss
 		OSSUtils.createFolder("glw-old-file", "image/"+folderName+"/");
-		OSSUtils.uploadObjectOSS("/image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
+		OSSUtils.uploadObjectOSS("image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
 		map.put("pic", pic);
 		map.put("path", config);
 		map.put("code", "0");

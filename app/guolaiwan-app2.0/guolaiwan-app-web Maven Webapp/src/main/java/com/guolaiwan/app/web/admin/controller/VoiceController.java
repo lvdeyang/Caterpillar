@@ -83,7 +83,7 @@ public class VoiceController extends BaseController{
 
 		
 		OSSUtils.createFolder("glw-old-file", "image/"+folderName+"/");
-		OSSUtils.uploadObjectOSS("/image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
+		OSSUtils.uploadObjectOSS("image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
 		
 		//写数据库
 		VoicePO Voice = new VoicePO();
