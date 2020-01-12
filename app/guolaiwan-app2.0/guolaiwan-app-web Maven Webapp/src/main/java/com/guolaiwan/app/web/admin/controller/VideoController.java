@@ -1,6 +1,7 @@
 package com.guolaiwan.app.web.admin.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.po.PicturePO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 
+import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.mvc.controller.BaseController;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
 
@@ -79,6 +81,9 @@ public class VideoController extends BaseController{
 		String config = conn_sysConfig.getSysConfig().getWebUrl()+folderName+"/"+newName;
 		file.transferTo(newFile);           //写
 
+		OSSUtils.createFolder("glw-old-file", "image/"+folderName+"/");
+		OSSUtils.uploadObjectOSS("image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
+		
 		//写数据库
 		PicturePO picture = new PicturePO();
 
