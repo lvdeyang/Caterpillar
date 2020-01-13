@@ -5112,8 +5112,8 @@ public class PhoneController extends WebBaseControll {
 		// 上传文件
 		File newFile = new File(path1 + newName);
 		file.transferTo(newFile);
-		OSSUtils.createFolder("glw-old-file", path);
-		OSSUtils.uploadObjectOSS(path, newName,newFile, new FileInputStream(newFile));
+		OSSUtils.createFolder("glw-old-file", "file/"+path);
+		OSSUtils.uploadObjectOSS("file/"+path, newName,newFile, new FileInputStream(newFile));
 		
 		return success("http://" + WXContants.Website + "/file/" + path + newName);
 	}

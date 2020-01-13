@@ -81,7 +81,7 @@ public class PictureController extends BaseController{
 		}
 		//上传
 		File newFile=new File(path+"/"+newName);
-		String config = conn_sysConfig.getSysConfig().getWebUrl()+folderName+"/"+newName;
+		String config = conn_sysConfig.getSysConfig().getWebUrl()+"/"+folderName+"/"+newName;
 		file.transferTo(newFile);           //写
 
 		//写数据库
@@ -105,8 +105,8 @@ public class PictureController extends BaseController{
 		picture.setIf_valid(1);
 		PictureVO pic = new PictureVO().set(picture);
 		//上传到阿里云oss
-		OSSUtils.createFolder("glw-old-file", "image/"+folderName+"/");
-		OSSUtils.uploadObjectOSS("image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
+		OSSUtils.createFolder("glw-old-file", "file/"+folderName+"/");
+		OSSUtils.uploadObjectOSS("file/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
 		map.put("pic", pic);
 		map.put("path", config);
 		map.put("code", "0");
