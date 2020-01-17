@@ -319,16 +319,16 @@ html, body {
 			</div>
 		</div>
 	</div>
-           <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;border-radius:10px;overflow: hidden;position: relative;top:-60px;z-index:111;">        
+           <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;border-radius:10px;overflow: hidden;margin-top:10px;z-index:111;">        
 	     </div>
 	  
-	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-40px;padding:0 0 30px 0;">
+	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;margin:10px 0;padding:0 0 30px 0;">
 	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">票种选择</p>
 	    <div class="productlist">	              		          
 	    </div>	     	  
 	  </div> 
 	 <!-- 商品详情 -->
-	  <div style="width:100%;height:auto;background:#fff;border-radius:10px;padding:0 0 30px 0;overflow: hidden;margin-top:-15px;">
+	  <div style="width:100%;height:auto;background:#fff;border-radius:10px;padding:0 0 30px 0;overflow: hidden;margin:10px 0;">
 	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">商品详情</p>
 	    <div style="font-size:12px;padding:20px;float:left;width:100%;height:auto;margin:0 auto;overflow-x:scroll" id="proContent"></div>
 
