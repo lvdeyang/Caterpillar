@@ -1028,10 +1028,10 @@ public class ProductPackageController extends BaseController {
 			SimpleDateFormat myFmt = new SimpleDateFormat("yyyy-MM-dd");
 			System.out.println("order对象" + order);
 			System.out.println("票务参数" + messagePO.getPhone() + "###" + order.getUserName() + "###" + order.getOrderNO()
-					+ "###" + "860076" + "###" + numInteger + "###" + myFmt.format(order.getOrderBookDate()) + "###"
+					+ "###" + "723026" + "###" + numInteger + "###" + myFmt.format(order.getOrderBookDate()) + "###"
 					+ price / 100);
 			String result = TravelService.createOrder(messagePO.getPhone(), order.getUserName(), order.getOrderNO(),
-					"860076", numInteger, myFmt.format(order.getOrderBookDate()), price / 100);
+					"723026", numInteger, myFmt.format(order.getOrderBookDate()), price / 100);
 			System.out.println("南湖票下单返回结果" + result);
 			Map<String, Object> resultMap = JSONUtil.toBean(JSONUtil.parse(result), Map.class, false);
 			if (resultMap.get("rspCode").equals("200")) {
