@@ -494,21 +494,7 @@ html, body {
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 
 <script type="text/javascript">
-var hidden=0;
-if( ("onhashchange" in window) && ((typeof document.documentMode==="undefined") || document.documentMode==8)) {
-    // 浏览器支持onhashchange事件
-    window.onhashchange = hashChangeFire;  // TODO，对应新的hash执行的操作函数
-    hidden=1;
-} else {
-    // 不支持则用定时器检测的办法
-    setInterval(function() {
-        var ischanged = isHashChanged();  // TODO，检测hash值或其中某一段是否更改的函数
-        if(ischanged) {
-            hashChangeFire();  // TODO，对应新的hash执行的操作函数
-        }
-    }, 150);
-}
-function hashChangeFire(){ alert("URL产生了变化") } 
+
 	$(function() {
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
@@ -558,13 +544,7 @@ function hashChangeFire(){ alert("URL产生了变化") } 
 					           if(type==2){
 							    //添加退款限制理由 张羽 4/28
 							    if(data[i].orderList[j].productIsRefund!="1"&&data[i].orderList[j].productId==2469&&data[i].orderList[j].orderState!="INREVIEW"){
-							    if(hidden==1){
 							        html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-review" href="javascript:void(0)">&nbsp;&nbsp;申请退票</a>')
-							  	 }
-							  	 else if(hidden==0){
-							  		html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-none" href="javascript:void(0)">&nbsp;&nbsp;订单出库中</a>')
-							  	 
-							  	 }
 							    }
 							    else if(data[i].orderList[j].productIsRefund!="1"){
 							        html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
@@ -717,11 +697,12 @@ function hashChangeFire(){ alert("URL产生了变化") } 
           }
         
          var _urichangeorders = window.BASEPATH + 'travel/NhTicket/review/'+newIds;
-         alert("请求已发送！等待审核中")
+        
      	  $.get(_urichangeorders,function(data){
        		
       	 })
-          
+           alert("请求已发送！等待审核中");
+            getOrder(2);
       });
     
       $(document).on('click','#saveReject',function(){
