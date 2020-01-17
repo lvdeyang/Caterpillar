@@ -29,7 +29,6 @@ import cn.hutool.json.JSONUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
 
-
 public class TravelService {
 
 	@Autowired
@@ -37,11 +36,16 @@ public class TravelService {
 
 	@Autowired
 	private OrderInfoDAO orderInfoDAO;
-
+	/*
+	 * public static String appkey = "4ac93b78-231c-4bf8-9c19-c0671dfd5efd"
+	 * test地址; public static String securitykey =
+	 * "YEakFURjOlldIzlIKGaXfBclJNHjHVTq"; public static String url =
+	 * "http://apitest.qmx028.com";
+	 */
 	public static Map<String, Object> mapBodyMap = new HashMap<String, Object>();
-	public static String appkey = "4ac93b78-231c-4bf8-9c19-c0671dfd5efd";
-	public static String securitykey = "YEakFURjOlldIzlIKGaXfBclJNHjHVTq";
-	public static String url = "http://apitest.qmx028.com";
+	public static String appkey = "bc995720-3cc3-4e00-8ee0-c5e9538f6d37";
+	public static String securitykey = "sTfGckcPfmUuHdzqnqyOKpLmSWqiMvLu";
+	public static String url = "http://otamp2.qmx028.com/";
 
 	private static Map<String, Object> responseMap() {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -55,7 +59,7 @@ public class TravelService {
 	public static String getProductList() {
 		Map<String, Object> map = responseMap();
 		List<String> list = new ArrayList<String>();
-		list.add("860076");
+		list.add("723026");
 		mapBodyMap.put("method", "LIST");
 		mapBodyMap.put("pageIndex", 1);
 		mapBodyMap.put("pageSize", 3);
@@ -89,9 +93,9 @@ public class TravelService {
 	}
 
 	public static void main(String[] args) {
-		String aString = createOrder("13591015211", "yudi", "42100012020011523184313695", "860076", 1, "2020-01-18",
+		String aString = createOrder("13591015211", "yudi", "42100012020011523184313695", "723026", 1, "2020-01-18",
 				0.01);
-		// 票务参数13591015211###迪迪###42100012020011523184313695###860076###1###2020-01-18###0.01
+		// 票务参数13591015211###迪迪###42100012020011523184313695###723026###1###2020-01-18###0.01
 		// String result = getProductList();
 		System.out.println(aString);
 	}
@@ -176,7 +180,6 @@ public class TravelService {
 				JSONUtil.parseFromMap(map), 6000, 6000, "utf-8");
 		return result;
 	}
-
 
 	/*
 	 * 取消订单
