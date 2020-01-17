@@ -78,7 +78,7 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
+	height:auto;
 	background:#E0E0E0 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
@@ -150,6 +150,17 @@ html, body {
 .fangxing p{
  margin:0;
 }
+#proContent img{
+    width:320px;
+  
+}
+#proContent image{
+    width:320px;
+  
+}
+#proContent p:nth-child(2){
+text-align: center;
+}
 </style>
 
 </head>
@@ -174,7 +185,6 @@ html, body {
 	  getComment();
   })
 
-
 	 function getRecomment(){
 	      var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
 		
@@ -183,6 +193,7 @@ html, body {
 			merchantName = data.shopName + '-过来玩';
 			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
 			merchantUrl = window.location.href;
+			
 			if(data === -1) return;
 			if(data){
 			    var html=[];
@@ -196,6 +207,7 @@ html, body {
 					}
 				}
 			    $('.header-content').html(data.shopName);
+			    
 				$('.swiper-wrapper').append(html.join(''));
 				$(".swiper-container").swiper({
 			        loop: true,
@@ -208,11 +220,14 @@ html, body {
 	 function getallteam(){
      var _uricoms = window.BASEPATH + 'product/package/commodity/info?merchantId=${merchantId}&proId=${proId}&choice=0';	
      $.get(_uricoms, null, function(msg){    
+     console.log(msg)
        //商品信息
        var merchantMessage =  msg.merinfo;
        var prouctMessage =  msg.proinfo;
        var ticketOrderNumber = msg.ticketOrderNumber;
-       var html = [];
+       productPic = msg.proinfo[0].productIntroduce;
+       $('#proContent').html(productPic);
+       var html = []; 
        html.push('<ul>');
        html.push('<li><p style="font-size:18px;">'+prouctMessage[0].productName+'</p></li>');
        html.push('<li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
@@ -317,9 +332,14 @@ html, body {
 	    <div class="productlist">	              		          
 	    </div>	     	  
 	  </div> 
-	 
+	 <!-- 商品详情 -->
+	  <div style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-20px;padding:0 0 30px 0;margin:0;overflow-x:scroll">
+	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">商品详情</p>
+	    <div style="font-size:12px;padding:12px;float:left;width:100%;height:auto;margin:0 auto;overflow-x:scroll" id="proContent"></div>
+
+	  </div> 
 	   <!-- 点评 -->
-	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-20px;padding:0 0 30px 0;">
+	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:0px;padding:0 0 30px 0;">
 	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">用户评价</p>	  	      
 	  </div>
 
