@@ -36,6 +36,15 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		return orders.get(0);
 	}
 
+	public OrderInfoPO getById(long id) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("id", Condition.eq, id);
+		List<OrderInfoPO> orders = findByHql(hql);
+		if (orders == null || orders.size() <= 0)
+			return null;
+		return orders.get(0);
+	}
+
 	public List<OrderInfoPO> GetListbyPage(int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
 
@@ -79,15 +88,14 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		return countByHql(hql);
 
 	}
-	
-	
-	public int countDateByActpro(long actproId,Date bDate) throws ParseException {
-		String sqlString="SELECT SUM(productNum) FROM t_sys_orderinfo where activityId="+
-		actproId+" And (orderBookDate between '"+ 
-				DateUtil.format(bDate, "yyyy-MM-dd") + " 00:00:00'"+
-				" and '"+  DateUtil.format(bDate, "yyyy-MM-dd") + " 23:59:59'"+")";
-	    List<Object> oList=this.findBySql(sqlString);
-	    if(oList.get(0)==null) return 0;
+
+	public int countDateByActpro(long actproId, Date bDate) throws ParseException {
+		String sqlString = "SELECT SUM(productNum) FROM t_sys_orderinfo where activityId=" + actproId
+				+ " And (orderBookDate between '" + DateUtil.format(bDate, "yyyy-MM-dd") + " 00:00:00'" + " and '"
+				+ DateUtil.format(bDate, "yyyy-MM-dd") + " 23:59:59'" + ")";
+		List<Object> oList = this.findBySql(sqlString);
+		if (oList.get(0) == null)
+			return 0;
 		return Integer.parseInt(oList.get(0).toString());
 
 	}
@@ -153,23 +161,23 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 			}
 		} else {
 			if (start != null && !start.equals("")) {
-				if(state.equals(OrderStateType.NOTPAY)){
+				if (state.equals(OrderStateType.NOTPAY)) {
 					hql.andBy("createDate", Condition.gt, DateUtil.parse(start + " 00:00:00"));
-				}else{
+				} else {
 					hql.andBy("payDate", Condition.gt, DateUtil.parse(start + " 00:00:00"));
 				}
 			}
 			if (end != null && !end.equals("")) {
-				if(state.equals(OrderStateType.NOTPAY)){
-					hql.andBy("createDate", Condition.lt, DateUtil.parse(end + " 23:59:59"));	
-				}else{
+				if (state.equals(OrderStateType.NOTPAY)) {
+					hql.andBy("createDate", Condition.lt, DateUtil.parse(end + " 23:59:59"));
+				} else {
 					hql.andBy("payDate", Condition.lt, DateUtil.parse(end + " 23:59:59"));
 				}
 			}
 		}
-		if (proId != 0l&&proId != -1) {
+		if (proId != 0l && proId != -1) {
 			hql.andBy("productId", Condition.eq, proId);
-		}else if (proId==-1){
+		} else if (proId == -1) {
 			hql.andBy("productId", Condition.eq, 0L);
 		}
 		hql.orderBy("createDate", true);
@@ -203,7 +211,7 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 			return null;
 		return orders.get(0);
 	}
-	
+
 	// 后台验单
 	public OrderInfoPO getByRoderNo(Long orderNo) {
 		QueryHql hql = newQueryHql();
@@ -237,15 +245,14 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
 		return orders;
 	}
-	
-	public List<OrderInfoPO> findByDistributorAndSource(long distributorId,OrderSource source) {
+
+	public List<OrderInfoPO> findByDistributorAndSource(long distributorId, OrderSource source) {
 		QueryHql hql = newQueryHql();
 		hql.andBy("distributorId", Condition.eq, distributorId);
-		hql.andBy("source",Condition.eq,source);
-		
+		hql.andBy("source", Condition.eq, source);
+
 		return this.findByHql(hql);
 	}
-	
 
 	// 后台验单列表
 	public int countByYd() {
@@ -356,7 +363,23 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		return orders;
 	}
 
-	/*// 订单状态
+	/*
+	 * // 订单状态 public List<OrderInfoPO> findOrdersByState(OrderStateType type,
+	 * Map<String, Object> map, int pageNum, int pageSize) throws Exception {
+	 * QueryHql hql = newQueryHql(); hql.andBy("orderState", Condition.eq,
+	 * type); for (Map.Entry<String, Object> entry : map.entrySet()) { if
+	 * (entry.getKey().equals("shopId")) { hql.andBy(entry.getKey(),
+	 * Condition.eq, Long.parseLong(entry.getValue().toString())); } else if
+	 * (entry.getKey().equals("source")) { hql.andBy(entry.getKey(),
+	 * Condition.eq, OrderSource.fromName(entry.getValue().toString())); } else
+	 * { hql.andBy(entry.getKey(), Condition.lk, entry.getValue()); } }
+	 * hql.orderBy("createDate", true);
+	 * 
+	 * List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize); return
+	 * orders; }
+	 */
+
+	// 订单状态 4/26 添加comId条件
 	public List<OrderInfoPO> findOrdersByState(OrderStateType type, Map<String, Object> map, int pageNum, int pageSize)
 			throws Exception {
 		QueryHql hql = newQueryHql();
@@ -366,6 +389,8 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 				hql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
 			} else if (entry.getKey().equals("source")) {
 				hql.andBy(entry.getKey(), Condition.eq, OrderSource.fromName(entry.getValue().toString()));
+			} else if (entry.getKey().equals("comId")) {
+				hql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
 			} else {
 				hql.andBy(entry.getKey(), Condition.lk, entry.getValue());
 			}
@@ -374,33 +399,22 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 
 		List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
 		return orders;
-	}*/
-	
-	// 订单状态 4/26 添加comId条件
-		public List<OrderInfoPO> findOrdersByState(OrderStateType type, Map<String, Object> map, int pageNum, int pageSize)
-				throws Exception {
-			QueryHql hql = newQueryHql();
-			hql.andBy("orderState", Condition.eq, type);
-			for (Map.Entry<String, Object> entry : map.entrySet()) {
-				if (entry.getKey().equals("shopId")) {
-					hql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
-				} else if (entry.getKey().equals("source")) {
-					hql.andBy(entry.getKey(), Condition.eq, OrderSource.fromName(entry.getValue().toString()));
-				}else if (entry.getKey().equals("comId")) {
-					hql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
-				} else {
-					hql.andBy(entry.getKey(), Condition.lk, entry.getValue());
-				}
-			}
-			hql.orderBy("createDate", true);
+	}
 
-			List<OrderInfoPO> orders = findByHqlPage(hql, pageNum, pageSize);
-			return orders;
-		}
-	
-	
+	/*
+	 * // 订单状态（数量） public int countOrdersByState(OrderStateType type,
+	 * Map<String, Object> map) throws Exception { CountHql cHql =
+	 * newCountHql(); cHql.andBy("orderState", Condition.eq, type); for
+	 * (Map.Entry<String, Object> entry : map.entrySet()) { if
+	 * (entry.getKey().equals("shopId")) { cHql.andBy(entry.getKey(),
+	 * Condition.eq, Long.parseLong(entry.getValue().toString())); } else if
+	 * (entry.getKey().equals("source")) { cHql.andBy(entry.getKey(),
+	 * Condition.eq, OrderSource.fromName(entry.getValue().toString())); } else
+	 * { cHql.andBy(entry.getKey(), Condition.lk, entry.getValue()); } } int
+	 * count = countByHql(cHql); return count; }
+	 */
 
-	/*// 订单状态（数量）
+	// 订单状态（数量）4/26 添加comId条件
 	public int countOrdersByState(OrderStateType type, Map<String, Object> map) throws Exception {
 		CountHql cHql = newCountHql();
 		cHql.andBy("orderState", Condition.eq, type);
@@ -409,34 +423,15 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 				cHql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
 			} else if (entry.getKey().equals("source")) {
 				cHql.andBy(entry.getKey(), Condition.eq, OrderSource.fromName(entry.getValue().toString()));
+			} else if (entry.getKey().equals("comId")) {
+				cHql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
 			} else {
 				cHql.andBy(entry.getKey(), Condition.lk, entry.getValue());
 			}
 		}
 		int count = countByHql(cHql);
 		return count;
-	}*/
-		
-		// 订单状态（数量）4/26 添加comId条件
-		public int countOrdersByState(OrderStateType type, Map<String, Object> map) throws Exception {
-			CountHql cHql = newCountHql();
-			cHql.andBy("orderState", Condition.eq, type);
-			for (Map.Entry<String, Object> entry : map.entrySet()) {
-				if (entry.getKey().equals("shopId")) {
-					cHql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
-				} else if (entry.getKey().equals("source")) {
-					cHql.andBy(entry.getKey(), Condition.eq, OrderSource.fromName(entry.getValue().toString()));
-				}else if (entry.getKey().equals("comId")) {
-					cHql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
-				} else {
-					cHql.andBy(entry.getKey(), Condition.lk, entry.getValue());
-				}
-			}
-			int count = countByHql(cHql);
-			return count;
-		}
-		
-	
+	}
 
 	// 订单NO,Id
 	public OrderInfoPO getByIdNO(Long orderId, String orderNO) {
@@ -765,15 +760,16 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		}
 		return result;
 	}
-	 //查询多个商户的订单
-	 public List<OrderInfoPO> findOrdersByMerchantMessage(long userId, Collection<Long> ids,OrderStateType state){
-		 QueryHql hql = this.newQueryHql();
-			hql.andBy("userId", Condition.eq, userId);
-			hql.andBy("orderState", Condition.eq, state);						
-			hql.andBy("shopId", Condition.in, ids);
-			hql.orderBy("createDate", true);
-			List<OrderInfoPO> orders = findByHql(hql);
-		    return orders;		
-	 }
+
+	// 查询多个商户的订单
+	public List<OrderInfoPO> findOrdersByMerchantMessage(long userId, Collection<Long> ids, OrderStateType state) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("userId", Condition.eq, userId);
+		hql.andBy("orderState", Condition.eq, state);
+		hql.andBy("shopId", Condition.in, ids);
+		hql.orderBy("createDate", true);
+		List<OrderInfoPO> orders = findByHql(hql);
+		return orders;
+	}
 
 }
