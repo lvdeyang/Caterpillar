@@ -440,59 +440,57 @@ html, body {
 	text-align: center;
 }
 
+.swiper-container {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	height: 200px;
+}
 
-      .swiper-container {
-        width: 100%;
-        padding:0;
-        margin:0;
-        height:200px;
-      } 
+.swiper-container img {
+	display: block;
+	width: 100%;
+}
 
-      .swiper-container img {
-        display: block;
-        width: 100%;
-      }
-    
-    #distributeList{
-       margin-top:10px;
-       padding-left:10px;
-       border-bottom:solid 2px #18b4ed;
-       width:100%;height:35px;
-       
-    }
-    
-    #distributeList a{
-       text-decoration:none;
-       color:#CCC;
-       font-size:12px;
-    }
-    #distributeList a.current{
-       text-decoration:none;
-       color:#18b4ed;
-       font-size:20px;
-    }
-    #columnTable{
-    
-        width:100%;
-        margin-top:10px;
-        
-    }
-    #columnTable td{
-	    width:20%;
-	    text-align:center;
-	    font-size:12px;
-    }
-    
-    .weui-grid{
-    
-    width:25% !important;
-    }
-    
-    .qianbao{
-    width:22px !important;
-    height:22px !important;
-    }
+#distributeList {
+	margin-top: 10px;
+	padding-left: 10px;
+	border-bottom: solid 2px #18b4ed;
+	width: 100%;
+	height: 35px;
+}
 
+#distributeList a {
+	text-decoration: none;
+	color: #CCC;
+	font-size: 12px;
+}
+
+#distributeList a.current {
+	text-decoration: none;
+	color: #18b4ed;
+	font-size: 20px;
+}
+
+#columnTable {
+	width: 100%;
+	margin-top: 10px;
+}
+
+#columnTable td {
+	width: 20%;
+	text-align: center;
+	font-size: 12px;
+}
+
+.weui-grid {
+	width: 25% !important;
+}
+
+.qianbao {
+	width: 22px !important;
+	height: 22px !important;
+}
 </style>
 
 </head>
@@ -503,21 +501,22 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-	  window.BASEPATH = '<%=basePath%>';
-	  var parseAjaxResult = function(data){
-			if(data.status !== 200){
+		window.BASEPATH = '<%=basePath%>';
+		var parseAjaxResult = function(data) {
+			if (data.status !== 200) {
 				$.toptip('data.message', 'error');
 				return -1;
-			}else{
-				return data.data;		
+			} else {
+				return data.data;
 			}
-	  };
-		
+		};
 
-   
-	
-	
+
+
+
+
 	});
+	document.getElementById("myOrder").onclick = function() {}
 </script>
 
 
@@ -534,73 +533,65 @@ html, body {
 		</div>
 		<div class="content">
 			<div style="width:100%;height:100px;">
-			    <a style="margin-top:20px;" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-			      <div class="weui-media-box__hd">
-			        <img id="userHead" style="border-radius:50%;width:60px;height:60px;" class="weui-media-box__thumb" src="${user.userHeadimg}">
-			      </div>
-			      <div class="weui-media-box__bd">
-			        <h4 class="weui-media-box__title" style="font-size:12px;" id="userName">${user.userNickname}</h4>
-			        <p class="weui-media-box__desc" style="font-size:12px;">积分: ${user.userIntegral}</p>
-			      </div>
-    		    </a>
+				<a style="margin-top:20px;" href="javascript:void(0);"
+					class="weui-media-box weui-media-box_appmsg">
+					<div class="weui-media-box__hd">
+						<img id="userHead"
+							style="border-radius:50%;width:60px;height:60px;"
+							class="weui-media-box__thumb" src="${user.userHeadimg}">
+					</div>
+					<div class="weui-media-box__bd">
+						<h4 class="weui-media-box__title" style="font-size:12px;"
+							id="userName">${user.userNickname}</h4>
+						<p class="weui-media-box__desc" style="font-size:12px;">积分:
+							${user.userIntegral}</p>
+					</div>
+				</a>
 			</div>
 			<div class="weui-grids">
-			  <a href="pubnum/favoritelist/index" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/sc.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                    收藏
-			    </p>
-			  </a>
-			  <a href="pubnum/order/list" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/dd.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                我的订单
-			    </p>
-			  </a>
-			  <a href="pubnum/wallet" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/qianbao.png" class="qianbao" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                我的钱包
-			    </p>
-			  </a>
-			  <a href="pubnum/basket/index" class="weui-grid js_grid">
-			    <div class="weui-grid__icon">
-			      <img src="lib/images/gwc.png" alt="">
-			    </div>
-			    <p class="weui-grid__label">
-			                   购物车
-			    </p>
-			  </a>
+				<a href="pubnum/favoritelist/index" class="weui-grid js_grid">
+					<div class="weui-grid__icon">
+						<img src="lib/images/sc.png" alt="">
+					</div>
+					<p class="weui-grid__label">收藏</p>
+				</a> <a href="pubnum/order/list" class="weui-grid js_grid">
+					<div class="weui-grid__icon">
+						<img src="lib/images/dd.png" alt="">
+					</div>
+					<p class="weui-grid__label" id="myOrder">我的订单</p>
+				</a> <a href="pubnum/wallet" class="weui-grid js_grid">
+					<div class="weui-grid__icon">
+						<img src="lib/images/qianbao.png" class="qianbao" alt="">
+					</div>
+					<p class="weui-grid__label">我的钱包</p>
+				</a> <a href="pubnum/basket/index" class="weui-grid js_grid">
+					<div class="weui-grid__icon">
+						<img src="lib/images/gwc.png" alt="">
+					</div>
+					<p class="weui-grid__label">购物车</p>
+				</a>
 			</div>
-			
-			
+
+
 			<div class="weui-cells" style="font-size:12px">
-			  <a class="weui-cell weui-cell_access" href="pubnum/address/index">
-			    <div class="weui-cell__bd">
-			      <p>收货地址</p>
-			    </div>
-			    <div class="weui-cell__ft">
-			    </div>
-			  </a>
+				<a class="weui-cell weui-cell_access" href="pubnum/address/index">
+					<div class="weui-cell__bd">
+						<p>收货地址</p>
+					</div>
+					<div class="weui-cell__ft"></div>
+				</a>
 			</div>
-			
+
 			<div class="weui-cells" style="font-size:12px">
-			  <a class="weui-cell weui-cell_access" href="integral/visitors/home">
-			    <div class="weui-cell__bd">
-			      <p>积分商城</p>
-			    </div>
-			    <div class="weui-cell__ft">
-			    </div>
-			  </a>
+				<a class="weui-cell weui-cell_access" href="integral/visitors/home">
+					<div class="weui-cell__bd">
+						<p>积分商城</p>
+					</div>
+					<div class="weui-cell__ft"></div>
+				</a>
 			</div>
-			
-			
+
+
 		</div>
 	</div>
 </body>

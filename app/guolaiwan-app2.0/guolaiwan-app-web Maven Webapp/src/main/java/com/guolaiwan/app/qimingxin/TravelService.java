@@ -1,6 +1,5 @@
 package com.guolaiwan.app.qimingxin;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,15 +8,40 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.bussiness.admin.dao.NhEticketsDao;
+import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
+import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
+import com.guolaiwan.bussiness.admin.po.NhEticketsPo;
+import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
+import pub.caterpillar.mvc.util.HttpServletRequestParser;
+
 
 public class TravelService {
 
+	@Autowired
+	private NhEticketsDao nhEticketsDao;
+
+	@Autowired
+	private OrderInfoDAO orderInfoDAO;
+
 	public static Map<String, Object> mapBodyMap = new HashMap<String, Object>();
-	public static String appkey = Param.getValue("NhappKey");
-	public static String securitykey = Param.getValue("NhsecretKey");
-	public static String url = Param.getValue("NhUrl");
+	public static String appkey = "4ac93b78-231c-4bf8-9c19-c0671dfd5efd";
+	public static String securitykey = "YEakFURjOlldIzlIKGaXfBclJNHjHVTq";
+	public static String url = "http://apitest.qmx028.com";
 
 	private static Map<String, Object> responseMap() {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -30,15 +54,20 @@ public class TravelService {
 	 */
 	public static String getProductList() {
 		Map<String, Object> map = responseMap();
-		mapBodyMap.put("appkey", appkey);
+		List<String> list = new ArrayList<String>();
+		list.add("860076");
 		mapBodyMap.put("method", "LIST");
+		mapBodyMap.put("pageIndex", 1);
+		mapBodyMap.put("pageSize", 3);
+		mapBodyMap.put("snList", list);
+		mapBodyMap.put("appkey", appkey);
+
 		// 产品ID
 		map.put("body", mapBodyMap);
 		long timestamp = new Date().getTime();
 		map.put("timestamp", new Date().getTime());
 		map.put("sign", MD5Util.MD5(appkey + JSONUtil.parseFromMap(mapBodyMap) + securitykey + timestamp));
 		return HttpUtil.post(url + "/open/openapi/v2/getProductList", JSONUtil.parseFromMap(map));
-
 	}
 
 	/*
@@ -47,8 +76,8 @@ public class TravelService {
 	public static String queryProductPriceList(String productId) {
 		Map<String, Object> map = responseMap();
 
-		mapBodyMap.put("startTime", "2019-12-29");
-		mapBodyMap.put("endTime", "2020-12-31");
+		mapBodyMap.put("startTime", "2020-01-01");
+		mapBodyMap.put("endTime", "2020-01-31");
 		mapBodyMap.put("appkey", appkey);
 		mapBodyMap.put("productId", productId);
 		// 产品ID
@@ -60,7 +89,11 @@ public class TravelService {
 	}
 
 	public static void main(String[] args) {
-
+		String aString = createOrder("13591015211", "yudi", "42100012020011523184313695", "860076", 1, "2020-01-18",
+				0.01);
+		// 票务参数13591015211###迪迪###42100012020011523184313695###860076###1###2020-01-18###0.01
+		// String result = getProductList();
+		System.out.println(aString);
 	}
 
 	/*
@@ -82,10 +115,8 @@ public class TravelService {
 		long timestamp = new Date().getTime();
 		map.put("timestamp", timestamp);
 		map.put("sign", MD5Util.MD5(appkey + JSONUtil.parseFromMap(mapBodyMap) + securitykey + timestamp));
-		String result = com.guolaiwan.app.qimingxin.HttpUtil.post(url + "/open/openapi/v2/createOrder", JSONUtil.parseFromMap(map),
-				6000, 6000, "utf-8");
-
-		System.out.println(result);
+		String result = com.guolaiwan.app.qimingxin.HttpUtil.post(url + "/open/openapi/v2/createOrder",
+				JSONUtil.parseFromMap(map), 6000, 6000, "utf-8");
 		return result;
 
 	}
@@ -102,8 +133,8 @@ public class TravelService {
 		map.put("timestamp", timestamp);
 		map.put("sign", MD5Util.MD5(appkey + JSONUtil.parseFromMap(mapBodyMap) + securitykey + timestamp));
 
-		String result = com.guolaiwan.app.qimingxin.HttpUtil.post(url + "/open/openapi/v2/payOrder", JSONUtil.parseFromMap(map),
-				6000, 6000, "utf-8");
+		String result = com.guolaiwan.app.qimingxin.HttpUtil.post(url + "/open/openapi/v2/payOrder",
+				JSONUtil.parseFromMap(map), 6000, 6000, "utf-8");
 		System.out.println(result);
 		return result;
 
@@ -141,10 +172,11 @@ public class TravelService {
 		long timestamp = new Date().getTime();
 		map.put("timestamp", timestamp);
 		map.put("sign", MD5Util.MD5(appkey + JSONUtil.parseFromMap(mapBodyMap) + securitykey + timestamp));
-		String result = com.guolaiwan.app.qimingxin.HttpUtil.post(url + "/open/openapi/v2/orderRefund", JSONUtil.parseFromMap(map),
-				6000, 6000, "utf-8");
+		String result = com.guolaiwan.app.qimingxin.HttpUtil.post(url + "/open/openapi/v2/orderRefund",
+				JSONUtil.parseFromMap(map), 6000, 6000, "utf-8");
 		return result;
 	}
+
 
 	/*
 	 * 取消订单
