@@ -592,13 +592,19 @@ html, body {
 		        
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		                $.confirm("交易成功");
+		            $("body").append("<div class='oks' style='z-index:11111111111;margin:0 0 -50px -25%;border-radius:6px;height:100px;width:50%;background:#FAFBFB;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;border:1px solid'><p  style='line-height: 100px;'>交易成功</p><div>");	
+		            setTimeout(function() {
+		               $('.oks').hide()
+		            }, 1500)
+		                /* $.confirm("交易成功"); */
 		                //每五秒刷新订单状态					
-		                setInterval(function(){ 
+		                var myVar = setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){								    
-								    if(data.data=="PAYSUCCESS"){								      							    
+								    if(data.data=="PAYSUCCESS"){	
+								    	clearInterval(myVar);							      							    
 								       location.href=window.BASEPATH +"business/gotopayment?merchantId=${merchantId}&orderId="+orderNo;
 								    }
+								     
 								});
                         }, 1000);
 		            }
