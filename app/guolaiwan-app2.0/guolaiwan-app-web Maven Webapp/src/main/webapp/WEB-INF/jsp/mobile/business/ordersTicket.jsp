@@ -214,6 +214,7 @@ html, body {
 	href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css"
 	type="text/css" rel="stylesheet">
 <script>	 var ifFace=0;
+     var resNum=${resNum};
 	 layui.use('laydate', function(){
 	  //禁止软键盘弹出
 	   $("#useDate").focus(function(){
@@ -273,14 +274,14 @@ html, body {
 	   var prc = msg.ticketPrice;
 	   ifFace=msg.ifFace;
 		     
-	  $("#zong").text(prc);
+	  $("#zong").text(prc*${resNum});
 	   pice=prc;
 	 })
 	}
 	 /*控制数量  */
 	$(document).on('click','.p1',function(){
 	 var value=parseInt($('.zhi').val())-1;
-	 if($('.zhi').val()<=1){
+	 if($('.zhi').val()<=resNum){
 	 return false;
 	 }
 	 $('.zhi').val(value);
@@ -1053,7 +1054,7 @@ clientMessage(firstAddr);
 					<p class="p1"
 						style="position: absolute;top:105px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
 					<input type="text" readonly="true" class="zhi" id="shuliang"
-					value="1"
+					value="${resNum}"
 					style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:108px;font-size:14px;font-weight:bold;text-align: center;">
 					<p class="p2"
 						style="position: absolute;top:105px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;line-height:25px;">+</p>

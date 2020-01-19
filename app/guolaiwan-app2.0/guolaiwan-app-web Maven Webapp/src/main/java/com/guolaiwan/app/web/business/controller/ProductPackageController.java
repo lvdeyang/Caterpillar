@@ -141,7 +141,6 @@ public class ProductPackageController extends BaseController {
 		mapp.put("productMerchantID", Long.parseLong(merhcantId));
 		mapp.put("productAuditstatus", ShopAuditStateType.T);
 		mapp.put("productIsShow", 1);
-		mapp.put("productClassCode", "0012");
 		// 过滤 不符合日期及审核未通过的商品
 		long nowDate = new Date().getTime();
 		List<ProductPO> productPOs = productDao.findByPageC(mapp, Integer.valueOf(pageNum), pageSize);
@@ -456,11 +455,17 @@ public class ProductPackageController extends BaseController {
 	/**
 	 * 跳转订单页面
 	 */
+	@Autowired
+	ProductDAO conn_product;
+	
 	@RequestMapping(value = "/payment/jump")
 	public ModelAndView paymentJump(HttpServletRequest request, long isCombo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String merchantId = request.getParameter("merchantId");
 		String proId = request.getParameter("proId");
+		
+		ProductPO productPO=conn_product.get(Long.parseLong(proId));
+		
 		String choice = request.getParameter("choice");
 		// 是否为套餐
 		if (isCombo == 1) {
@@ -477,6 +482,7 @@ public class ProductPackageController extends BaseController {
 		map.put("proId", proId);
 		map.put("choice", choice);
 		map.put("isCombo", isCombo);
+		map.put("resNum", productPO.getProductRestrictNumber());
 
 		return new ModelAndView("mobile/business/ordersTicket", map);
 	}
