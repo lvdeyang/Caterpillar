@@ -895,9 +895,6 @@ public class ProductPackageController extends BaseController {
 			//根据预约日期取得预约信息中的场馆编号
 			JSONObject syhInfo = AoYouV1Service.bookInfoQuery(Integer.parseInt(syhID),bDate,bDate);
 			if(!"00000".equals(syhInfo.get("errcode"))){
-				if(!"".equals(syhInfo.getString("errdata"))){
-					return ERROR(syhInfo.get("errdata").toString());
-				}
 				return ERROR(syhInfo.get("errmsg").toString());
 			}
 			JSONArray ja = JSON.parseObject(syhInfo.get("errdata").toString()).getJSONArray("bookinfolist");
@@ -915,6 +912,10 @@ public class ProductPackageController extends BaseController {
 			JSONObject aoyou = AoYouV1Service.createOrder(aoYouOrder);
 			System.out.println("创建世园会票务订单返回结果:" + aoyou);
 			if(!"00000".equals(aoyou.get("errcode"))){
+				if(!"".equals(aoyou.getString("errdata"))){
+					JSONObject resultmsg = JSON.parseObject(aoyou.get("errdata").toString());
+					return ERROR(resultmsg.getString("resultmsg"));
+				}
 				return ERROR(aoyou.get("errmsg").toString());
 			} else {
 				AoYouOrderPO aoYouOrderPO = new AoYouOrderPO();

@@ -192,7 +192,7 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/index2", method = RequestMethod.GET)
 	public ModelAndView index2(String code, String state, HttpServletRequest request) throws Exception {
 		List<SystenCachePo> cachePos = conn_systemcache.findByField("wxKey", state);
-
+		System.out.println("我就想看看istest到底是什么-------" + istest);
 		String rUrl = "";
 		if (!cachePos.isEmpty()) {
 			rUrl = cachePos.get(0).getWxVal();
@@ -232,16 +232,16 @@ public class PubNumController extends WebBaseControll {
             System.out.println(result);
             
             
-//            if(userInfo.getInteger("subscribe").equals(1)){ //未关注
-//            	isfans=true;
-//            	
-//            }
-//            if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
-//            	session.setAttribute("type", "PHONENUM");
-//            }else{
-//            	session.setAttribute("type", null);
-//            	
-//            }
+            if(userInfo.getInteger("subscribe").equals(1)){ //未关注
+            	isfans=true;
+            	
+            }
+            if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
+            	session.setAttribute("type", "PHONENUM");
+            }else{
+            	session.setAttribute("type", null);
+            	
+            }
             
             params = new JSONObject();
 			params.put("access_token", access_token);
@@ -293,11 +293,11 @@ public class PubNumController extends WebBaseControll {
 
 		session.setAttribute("userId", userInfoPO.getId());
 		session.setAttribute("openid", openid);
-//		if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
-//			mv = new ModelAndView("redirect:" + rUrl);
-//		}else{
-//			mv = new ModelAndView("mobile/business/focuson");
-//		}
+		if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
+			mv = new ModelAndView("redirect:" + rUrl);
+		}else{
+			mv = new ModelAndView("mobile/business/focuson");
+		}
 		
 		return mv;
 	}
