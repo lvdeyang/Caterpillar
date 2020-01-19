@@ -2,6 +2,7 @@ package com.guolaiwan.app.web.website.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ import com.guolaiwan.bussiness.admin.po.MerModularPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
+import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.commons.qrcode.QRCodeGenerator;
 import pub.caterpillar.mvc.controller.BaseController;
 import pub.caterpillar.orm.po.AbstractBasePO;
@@ -196,6 +198,9 @@ public class WebBaseControll<T extends AbstractBasePO> extends BaseController{
 		String path = conn_sysConfig.getSysConfig().getFolderUrl()+ydNO;
 		//生成二维码
 		QRCodeGenerator.generate(path, content);
+		File newFile=new File(path);
+		OSSUtils.createFolder("glw-old-file", "file/orderNO/"+datepath+"/");
+		OSSUtils.uploadObjectOSS("file/orderNO/"+datepath+"/", fileName,newFile, new FileInputStream(newFile));
 		return ydNO;
 	}
 
