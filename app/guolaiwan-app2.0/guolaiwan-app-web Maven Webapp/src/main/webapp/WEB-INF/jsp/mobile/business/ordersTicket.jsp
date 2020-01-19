@@ -453,6 +453,13 @@ html, body {
 	  }
 	  				 
 	 function dobuy(){
+		    //勾选的购买人的身份信息
+		var youP = [];
+		var myP = document.getElementsByClassName("psss");
+		for(let i=0;i<myP.length;i++){
+			let a =myP[i]
+			youP.push(a.getAttribute("name"));
+		}
 		    var param={};
 			param.id=${proId};
 			param.productNum=$('.zhi').val();        
@@ -465,6 +472,7 @@ html, body {
 			if(${isCombo} == 1){	
 			param.ComboId = ${comboId};
 			}
+			param.messageUserIds=youP;
 		   		   	                   
 	        var _uriPay = window.BASEPATH + 'product/package/order/add';
 				$.post(_uriPay, $.toJSON(param), function(data){
@@ -977,7 +985,7 @@ clientMessage(firstAddr);
              clientNumber[i[1]] = clientInfo[i[1]].id;	
 			 var htm = [];	
 			
-             htm.push('<p style="width:20%;padding:2px 5px;background:#FF9C00;color:#fff;border-radius:12px;margin:2px 5px;display: inline-block;text-align:center;" id="homepage-'+i[1]+'">'+clientInfo[i[1]].name+'</p>');            
+             htm.push('<p class="psss" name="'+clientInfo[i[1]].id+'" style="width:20%;padding:2px 5px;background:#FF9C00;color:#fff;border-radius:12px;margin:2px 5px;display: inline-block;text-align:center;" id="homepage-'+i[1]+'">'+clientInfo[i[1]].name+'</p>');            
              $(".homepage_add").append(htm.join(''));         
             } 
             if(clientNumber.length==$('#shuliang').val()){

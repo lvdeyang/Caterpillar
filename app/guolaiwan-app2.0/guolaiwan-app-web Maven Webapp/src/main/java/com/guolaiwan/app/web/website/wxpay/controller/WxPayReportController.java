@@ -25,6 +25,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.domain.RefundDetail;
+import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.qimingxin.TravelService;
 import com.guolaiwan.bussiness.admin.po.NhEticketsPo;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
@@ -41,6 +43,7 @@ import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
 import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
+import com.guolaiwan.bussiness.admin.dao.AoYouOrderDao;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.MealListDao;
@@ -56,6 +59,7 @@ import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
+import com.guolaiwan.bussiness.admin.po.AoYouOrderPO;
 import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.MealListPo;
@@ -128,6 +132,9 @@ public class WxPayReportController extends WebBaseControll {
 
 	@Autowired
 	private NhEticketsDao nhEticketsDao;
+	
+	@Autowired
+	private AoYouOrderDao aoYouOrderDao;
 
 	@ResponseBody
 	@RequestMapping(value = "/payreport", method = RequestMethod.POST)
@@ -205,6 +212,9 @@ public class WxPayReportController extends WebBaseControll {
 						// 判断是不是分销商品 调用接口 买票（凤凰山 皮影乐园）
 						isDistribute(order);
 						isNhTicket(order);
+						// 中青旅==========================================================================================================
+						isAoYou(order);
+						// 中青旅==========================================================================================================
 						sendMessage(order);
 					}
 				}
@@ -309,6 +319,32 @@ public class WxPayReportController extends WebBaseControll {
 		return stringBuffer.toString();
 	}
 
+	// 中青旅==========================================================================================================
+	/**
+	 * 对接遨游系统订单支付
+	 * 
+	 * @param order
+	 * @throws Exception 
+	 */
+	public void isAoYou(OrderInfoPO order) throws Exception {
+		//世园会
+		Long productId = order.getProductId();
+		if(AoyouIDUtil.isSyhID(productId.toString())){
+			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(order.getOrderNO());
+			JSONObject syhOrder = AoYouV1Service.submitOrder(aoYouOrderPO.getSaleorder_no(), aoYouOrderPO.getMobile_no());
+			System.out.println("支付世园会票务订单返回结果:" + syhOrder);
+			JSONObject errdata = JSON.parseObject(syhOrder.get("errdata").toString());
+			aoYouOrderPO.setConfirm_code(errdata.getString("confirm_code"));
+			aoYouOrderDao.saveOrUpdate(aoYouOrderPO);
+		}
+		
+		//冰雪
+		if(AoyouIDUtil.isBxID(productId.toString())){
+
+		}
+	}
+	// 中青旅==========================================================================================================
+	
 	/**
 	 * 启明芯南湖票
 	 * 

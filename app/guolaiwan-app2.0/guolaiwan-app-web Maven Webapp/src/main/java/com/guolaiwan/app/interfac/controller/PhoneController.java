@@ -43,6 +43,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.interfac.util.FilterSensitive;
 import com.guolaiwan.app.interfac.util.KdniaoTrackQueryAPI;
@@ -85,6 +87,7 @@ import com.guolaiwan.app.web.weixin.SendMsgUtil;
 import com.guolaiwan.bussiness.admin.dao.ActivityBundleDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
+import com.guolaiwan.bussiness.admin.dao.AoYouOrderDao;
 import com.guolaiwan.bussiness.admin.dao.AuctionDAO;
 import com.guolaiwan.bussiness.admin.dao.CarouselDAO;
 import com.guolaiwan.bussiness.admin.dao.ChildPicAndContentDAO;
@@ -146,6 +149,7 @@ import com.guolaiwan.bussiness.admin.enumeration.VideoPicType;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.AoYouOrderPO;
 import com.guolaiwan.bussiness.admin.po.AuctionPO;
 import com.guolaiwan.bussiness.admin.po.CarouselPO;
 import com.guolaiwan.bussiness.admin.po.ChildPicAndContentPO;
@@ -284,6 +288,8 @@ public class PhoneController extends WebBaseControll {
 	private ExpressDao expressdao;
 	@Autowired
 	private GroupTeamDAO conn_groupteam;
+	@Autowired
+	private AoYouOrderDao aoYouOrderDao;
 	/**
 	 * 首页搜索
 	 * 
@@ -3321,7 +3327,33 @@ public class PhoneController extends WebBaseControll {
 		}else{
 			_order.setYdNO(sysConfig.getWebUrl() + _order.getYdNO());
 		}
+		// 中青旅==========================================================================================================
+		//世园会
+		Long productId = _order.getProductId();
+		if(AoyouIDUtil.isSyhID(productId.toString())){
+			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(_order.getOrderNO());
+			JSONObject syhOrder = AoYouV1Service.getOrderInfo(aoYouOrderPO.getOrderno(), aoYouOrderPO.getSaleorder_no());
+			System.out.println("支付世园会票务订单返回结果:" + syhOrder);
+			if(!"00000".equals(syhOrder.get("errcode"))){
+				return ERROR(syhOrder.get("errmsg").toString());
+			}
+			JSONObject errdata = JSON.parseObject(syhOrder.get("errdata").toString());
+			JSONArray orderinfolist = errdata.getJSONArray("orderinfolist");
+			JSONObject js = JSON.parseObject(orderinfolist.get(0).toString());
+			JSONArray orderdetaillist = js.getJSONArray("orderdetaillist");
+			String ydNo = "确认码：" + js.getString("confirmcode") + "</br>";
+			for (Object object : orderdetaillist) {
+				JSONObject jo = JSON.parseObject(object.toString());
+				ydNo += "票号：" + jo.getString("ticketno") + "&nbsp;&nbsp;&nbsp;&nbsp;持票人：" + jo.getString("holdername") + "</br>";
+			}
+			_order.setYdNO(ydNo);
+		}
 		
+		//冰雪
+		if(AoyouIDUtil.isBxID(productId.toString())){
+
+		}
+		// 中青旅==========================================================================================================
 		_order.setProductPic(sysConfig.getWebUrl() + _order.getProductPic());
 		_order.setShopLongitude(merchantPO.getShopLongitude());
 		_order.setShopLatitude(merchantPO.getShopLatitude());

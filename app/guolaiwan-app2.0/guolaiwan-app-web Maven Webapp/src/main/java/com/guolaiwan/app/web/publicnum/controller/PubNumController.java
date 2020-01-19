@@ -36,6 +36,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.interfac.util.HttpUtils;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
 import com.guolaiwan.app.web.admin.vo.BalanceVO;
@@ -57,6 +59,7 @@ import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.admin.dao.ActivityBundleDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityDAO;
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
+import com.guolaiwan.bussiness.admin.dao.AoYouOrderDao;
 import com.guolaiwan.bussiness.admin.dao.BalanceDAO;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.ChildProductDAO;
@@ -88,6 +91,7 @@ import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.ActiveBundlePo;
 import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.AoYouOrderPO;
 import com.guolaiwan.bussiness.admin.po.BalancePO;
 import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.ChildProductPO;
@@ -146,6 +150,8 @@ public class PubNumController extends WebBaseControll {
 	// 商户
 	@Autowired
 	private MerchantDAO conn_merchant;
+	@Autowired
+	private AoYouOrderDao aoYouOrderDao;
 
 	@RequestMapping(value = "/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
@@ -226,16 +232,16 @@ public class PubNumController extends WebBaseControll {
             System.out.println(result);
             
             
-            if(userInfo.getInteger("subscribe").equals(1)){ //未关注
-            	isfans=true;
-            	
-            }
-            if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
-            	session.setAttribute("type", "PHONENUM");
-            }else{
-            	session.setAttribute("type", null);
-            	
-            }
+//            if(userInfo.getInteger("subscribe").equals(1)){ //未关注
+//            	isfans=true;
+//            	
+//            }
+//            if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
+//            	session.setAttribute("type", "PHONENUM");
+//            }else{
+//            	session.setAttribute("type", null);
+//            	
+//            }
             
             params = new JSONObject();
 			params.put("access_token", access_token);
@@ -287,11 +293,11 @@ public class PubNumController extends WebBaseControll {
 
 		session.setAttribute("userId", userInfoPO.getId());
 		session.setAttribute("openid", openid);
-		if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
-			mv = new ModelAndView("redirect:" + rUrl);
-		}else{
-			mv = new ModelAndView("mobile/business/focuson");
-		}
+//		if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
+//			mv = new ModelAndView("redirect:" + rUrl);
+//		}else{
+//			mv = new ModelAndView("mobile/business/focuson");
+//		}
 		
 		return mv;
 	}
@@ -1169,6 +1175,26 @@ public class PubNumController extends WebBaseControll {
 			Long orderId = Long.parseLong(orderIdStr);
 			OrderInfoPO orderInfoPO = conn_order.get(orderId);
 			orderInfoPO.setOrderState(OrderStateType.REFUNDING);
+			// 中青旅==========================================================================================================
+			//世园会
+			Long productId = orderInfoPO.getProductId();
+			if(AoyouIDUtil.isSyhID(productId.toString())){
+				AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(orderInfoPO.getOrderNO());
+				Long productNum = orderInfoPO.getProductNum();
+				Long orderTotal = orderInfoPO.getOrderAllMoney();
+				JSONObject syhOrder = AoYouV1Service.refund(aoYouOrderPO.getSaleorder_no(), Integer.parseInt(productNum.toString()), 
+						Integer.parseInt(orderTotal.toString()), aoYouOrderPO.getMobile_no(), reason);
+				System.out.println("退票世园会票务订单返回结果:" + syhOrder);
+				if(!"00000".equals(syhOrder.get("errcode"))){
+					return ERROR(syhOrder.get("errmsg").toString());
+				}
+			}
+			
+			//冰雪
+			if(AoyouIDUtil.isBxID(productId.toString())){
+
+			}
+			// 中青旅==========================================================================================================
 			orderInfoPO.setRefundReason(reason);
 			conn_order.save(orderInfoPO);
 			try{
