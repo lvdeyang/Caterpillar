@@ -176,6 +176,7 @@ html, body {
  position:absolute;
  right:60px !important;
  }
+ .site{display:flex;flex-direction:column;min-height: 100vh;}
 </style>
 </head>
 <!-- 公共脚本引入 -->
@@ -471,7 +472,7 @@ $(function() {
 
 
 
-<body>
+<body class="site">
 	<!-- 主页 -->
 	<div class="header">
 		<div class="wrapper">
