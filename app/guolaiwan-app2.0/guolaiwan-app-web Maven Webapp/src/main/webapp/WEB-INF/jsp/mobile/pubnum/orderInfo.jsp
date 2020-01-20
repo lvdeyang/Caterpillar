@@ -561,7 +561,14 @@ html, body {
 			    }
 			    $('#amount').val('￥'+data.order.orderAllMoney);
 			    $('#payAmount').val('￥'+data.order.payMoney);
-			    $('#ydImage').attr('src',data.order.ydNO);
+			    var str = data.order.ydNO;
+			    var reg = RegExp(/票号/);
+				if(str.match(reg)){
+			 		$("#ydDiv").hide(); 
+			 		$(".yd").html(str);
+				}else{
+					$('#ydImage').attr('src',data.order.ydNO);
+				}
 			    $('#largeYd').attr('src',data.order.ydNO);
 			    $('#orderNo').html(data.order.id);
 			    $('#orderDate').html(data.order.orderBookDate);
@@ -660,11 +667,14 @@ html, body {
 					      <input id="payAmount" class="weui-input" value="" disabled type="text" placeholder="">
 					    </div>
 					  </div>
-					  
+					  <div class="weui-media-box__bd" style="display:inline-block;padding:10px 15px;">
+					   <p class="yd" style="color: #999999;font-size: 13px;line-height: 1.2;"></p>
+					  </div>
 					  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" style="height:100px">
-				      <div class="weui-media-box__hd" style="width:100px;height:100px;">
+				      <div id="ydDiv" class="weui-media-box__hd" style="width:100px;height:100px;">
 				        <img style="width:100px;height:100px;" class="weui-media-box__thumb open-popup" id="ydImage" src="">
 				      </div>
+				      
 				      <div class="weui-media-box__bd">
 				        <!-- <h4 class="weui-media-box__title">订单号:<span id="orderNo"></span></h4> -->
 				        <p class="weui-media-box__desc">支付日期:<span id="orderDate"></span></p>

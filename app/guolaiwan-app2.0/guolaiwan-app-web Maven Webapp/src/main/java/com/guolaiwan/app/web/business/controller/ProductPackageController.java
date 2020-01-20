@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -33,6 +33,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.bo.AoYouOrder;
+import com.guolaiwan.app.aoyou.bo.AoYouOrder.AoYouOrderDetail;
+import com.guolaiwan.app.aoyou.bo.AoYouOrder.BookDetail;
+import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.qimingxin.TravelService;
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
@@ -41,6 +46,7 @@ import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 
 import com.guolaiwan.bussiness.admin.dao.ActivityRelDAO;
+import com.guolaiwan.bussiness.admin.dao.AoYouOrderDao;
 import com.guolaiwan.bussiness.admin.dao.CommentDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MessageDAO;
@@ -57,7 +63,7 @@ import com.guolaiwan.bussiness.admin.enumeration.OrderType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
-
+import com.guolaiwan.bussiness.admin.po.AoYouOrderPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
@@ -112,6 +118,9 @@ public class ProductPackageController extends BaseController {
 
 	@Autowired
 	private MessageMiddleClientDao conn_mesMidleClien;
+	
+	@Autowired
+	private AoYouOrderDao aoYouOrderDao;
 
 	/**
 	 * 首页跳转购票页
@@ -844,6 +853,89 @@ public class ProductPackageController extends BaseController {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		Date bookDate = sf.parse(pageObject.getString("bookDate"));
 
+		// 中青旅==========================================================================================================
+		//世园会
+		if(AoyouIDUtil.isSyhID(id)){
+			//根据产品id查产品信息，为订单号做准备
+			ProductPO productPO = productDao.get(Long.parseLong(id));
+			//根据商户id查商户信息，为订单号做准备
+			MerchantPO merchant = merchantDao.get(productPO.getProductMerchantID());
+			//生成订单号
+			DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+			String orderNO = merchant.getId() + productPO.getProductModularCode() + df.format(new Date()) + userId;
+			//取得勾选的购票人信息
+			JSONArray split = (JSONArray) pageObject.get("messageUserIds");
+	        Set<Long> idSet = new HashSet<>();
+	        for (Object s : split) {
+	            idSet.add(Long.valueOf((String) s));
+	        }
+	        List<MessagePO> messagePOList = conn_message.getAllByIds(idSet);
+			//根据产品id查世园会票种id
+			String syhID = AoyouIDUtil.getSyhID(id);
+			//创建世园会票务订单start
+			AoYouOrder aoYouOrder = new AoYouOrder();
+			aoYouOrder.setTrade_no("glw-aoyou-" + orderNO);//过来玩提交世园会的订单
+			aoYouOrder.setProd_id(Integer.parseInt(syhID));//世园会票种id
+			aoYouOrder.setMobile_no(messagePOList.get(0).getPhone());//购买人的手机号
+			aoYouOrder.setProd_count(Integer.parseInt(num));//购买票数
+			List aoYouOrderDetailList = new ArrayList();
+	        for (MessagePO messagePO : messagePOList) {
+	        	AoYouOrderDetail aoYouOrderDetail = new AoYouOrderDetail();
+				aoYouOrderDetail.setTicket_count(1);//单人购买票数限制1张
+				aoYouOrderDetail.setHolder_name(messagePO.getName());//购买人名字
+				aoYouOrderDetail.setHolder_mobile(messagePO.getPhone());//购买人手机号
+				aoYouOrderDetail.setId_type(1);//证件类型（身份证传1）
+				aoYouOrderDetail.setId_no(messagePO.getNumber());//购买人身份证号码
+				aoYouOrderDetailList.add(aoYouOrderDetail);
+			}
+			aoYouOrder.setOrder_detail(aoYouOrderDetailList);
+			BookDetail bookDetail = new BookDetail();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			String bDate = sdf.format(bookDate);
+			//根据预约日期取得预约信息中的场馆编号
+			JSONObject syhInfo = AoYouV1Service.bookInfoQuery(Integer.parseInt(syhID),bDate,bDate);
+			if(!"00000".equals(syhInfo.get("errcode"))){
+				return ERROR(syhInfo.get("errmsg").toString());
+			}
+			JSONArray ja = JSON.parseObject(syhInfo.get("errdata").toString()).getJSONArray("bookinfolist");
+			String venue_code = ja.getJSONObject(0).getString("venue_code");
+			bookDetail.setBook_date(bDate);//预约入园日期
+			//套餐票是下午，普通票是上午
+			if ("1".equals(isCombo)) {
+				bookDetail.setBook_period("2");//TODO 入院时间段 1-上午、2-下午、3-晚上
+			} else {
+				bookDetail.setBook_period("1");
+			}
+			bookDetail.setVenue_code(venue_code);//场馆编号
+			bookDetail.setBook_count(Integer.parseInt(num));//预约人数要与购买票数一致
+			aoYouOrder.setBook_detail(bookDetail);
+			JSONObject aoyou = AoYouV1Service.createOrder(aoYouOrder);
+			System.out.println("创建世园会票务订单返回结果:" + aoyou);
+			if(!"00000".equals(aoyou.get("errcode"))){
+				if(!"".equals(aoyou.getString("errdata"))){
+					JSONObject resultmsg = JSON.parseObject(aoyou.get("errdata").toString());
+					return ERROR(resultmsg.getString("resultmsg"));
+				}
+				return ERROR(aoyou.get("errmsg").toString());
+			} else {
+				AoYouOrderPO aoYouOrderPO = new AoYouOrderPO();
+				JSONObject errdata = JSON.parseObject(aoyou.get("errdata").toString());
+				aoYouOrderPO.setGlwOrderNO(orderNO);
+				aoYouOrderPO.setTrade_no(errdata.getString("trade_no"));
+				aoYouOrderPO.setSaleorder_no(errdata.getString("saleorder_no"));
+				aoYouOrderPO.setOrderno(errdata.getString("orderno"));
+				aoYouOrderPO.setMobile_no(errdata.getString("mobile_no"));
+				aoYouOrderDao.saveOrUpdate(aoYouOrderPO);
+			}
+			//创建世园会票务订单end
+		}
+		
+		//冰雪
+		if(AoyouIDUtil.isBxID(id)){
+			String bxID = AoyouIDUtil.getBxID(id);
+		}
+		// 中青旅==========================================================================================================
+						
 		OrderInfoPO order = new OrderInfoPO();
 
 		ProductPO productPO = null;
