@@ -306,14 +306,14 @@ html, body {
 			    var reg = RegExp(/票号/);
 				if(str.match(reg)){
 			 		$("#ydDiv").hide(); 
-			 		$(".yd").text(str);
+			 		$("#combo").html('</br>' + str);
 				}else{
 					$('#ydImage').attr('src',data.order.ydNO);
+					$('#combo').html(data.order.comboName);
 				}
 				$('#largeYd').attr('src', data.order.ydNO);
 				$('#orderNo').html(data.order.id);
 				$('#orderDate').html(data.order.payDate);
-				$('#combo').html(data.order.comboName);
 				$('#logistics').html(data.order.logisticsName);
 				$('#bookspan').html(data.order.orderBookDate);
 				$('#startspan').html(data.order.orderBookDate);
@@ -423,9 +423,6 @@ html, body {
 				src="lib/images/logo.png" />
 			<p style="font-size:12px;">扫码验单</p>
 		</div>
- 		<div class="weui-media-box__bd" style="display:inline-block;padding:10px 15px;">
-		    <p class="yd" style="color: #999999;font-size: 13px;line-height: 1.2;"></p>
- 		</div>
 		<div
 			style="width:100%;height:auto;margin:10px auto;text-align: center; display:none"
 			id="nhDiv">

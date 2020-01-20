@@ -330,6 +330,7 @@ public class WxPayReportController extends WebBaseControll {
 		//世园会
 		Long productId = order.getProductId();
 		if(AoyouIDUtil.isSyhID(productId.toString())){
+			System.out.println(order.getId() + "支付世园会=====" + order.getOrderNO());
 			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(order.getOrderNO());
 			JSONObject syhOrder = AoYouV1Service.submitOrder(aoYouOrderPO.getSaleorder_no(), aoYouOrderPO.getMobile_no());
 			System.out.println("支付世园会票务订单返回结果:" + syhOrder);

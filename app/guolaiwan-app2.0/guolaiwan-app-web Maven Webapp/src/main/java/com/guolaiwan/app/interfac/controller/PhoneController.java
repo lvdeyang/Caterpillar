@@ -3333,20 +3333,24 @@ public class PhoneController extends WebBaseControll {
 		if(AoyouIDUtil.isSyhID(productId.toString())){
 			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(_order.getOrderNO());
 			JSONObject syhOrder = AoYouV1Service.getOrderInfo(aoYouOrderPO.getOrderno(), aoYouOrderPO.getSaleorder_no());
-			System.out.println("支付世园会票务订单返回结果:" + syhOrder);
-			if(!"00000".equals(syhOrder.get("errcode"))){
-				return ERROR(syhOrder.get("errmsg").toString());
+			System.out.println("查询世园会票务订单返回结果:" + syhOrder);
+			if("00000".equals(syhOrder.get("errcode"))){
+				JSONObject errdata = JSON.parseObject(syhOrder.get("errdata").toString());
+				JSONArray orderinfolist = errdata.getJSONArray("orderinfolist");
+				JSONObject js = JSON.parseObject(orderinfolist.get(0).toString());
+				JSONArray orderdetaillist = js.getJSONArray("orderdetaillist");
+				String ydNo = "确认码：" + js.getString("confirmcode") + "</br> ";
+				if("1".equals(js.getString("bookperiod"))){
+					ydNo += "入园日期：" + js.getString("bookdate") + "&nbsp; 上午  </br> ";
+				} else if("2".equals(js.getString("bookperiod"))){
+					ydNo += "入园日期：" + js.getString("bookdate") + "&nbsp; 下午  </br> ";
+				}
+				for (Object object : orderdetaillist) {
+					JSONObject jo = JSON.parseObject(object.toString());
+					ydNo += "票号：" + jo.getString("ticketno") + "&nbsp;&nbsp;&nbsp;&nbsp;持票人：" + jo.getString("holdername") + "</br>";
+				}
+				_order.setYdNO(ydNo);
 			}
-			JSONObject errdata = JSON.parseObject(syhOrder.get("errdata").toString());
-			JSONArray orderinfolist = errdata.getJSONArray("orderinfolist");
-			JSONObject js = JSON.parseObject(orderinfolist.get(0).toString());
-			JSONArray orderdetaillist = js.getJSONArray("orderdetaillist");
-			String ydNo = "确认码：" + js.getString("confirmcode") + "</br>";
-			for (Object object : orderdetaillist) {
-				JSONObject jo = JSON.parseObject(object.toString());
-				ydNo += "票号：" + jo.getString("ticketno") + "&nbsp;&nbsp;&nbsp;&nbsp;持票人：" + jo.getString("holdername") + "</br>";
-			}
-			_order.setYdNO(ydNo);
 		}
 		
 		//冰雪
@@ -3354,6 +3358,7 @@ public class PhoneController extends WebBaseControll {
 
 		}
 		// 中青旅==========================================================================================================
+		
 		_order.setProductPic(sysConfig.getWebUrl() + _order.getProductPic());
 		_order.setShopLongitude(merchantPO.getShopLongitude());
 		_order.setShopLatitude(merchantPO.getShopLatitude());

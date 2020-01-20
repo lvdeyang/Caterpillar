@@ -565,14 +565,14 @@ html, body {
 			    var reg = RegExp(/票号/);
 				if(str.match(reg)){
 			 		$("#ydDiv").hide(); 
-			 		$(".yd").html(str);
+			 		$("#combo").html(str);
 				}else{
 					$('#ydImage').attr('src',data.order.ydNO);
+					$('#combo').html(data.order.comboName);
 				}
 			    $('#largeYd').attr('src',data.order.ydNO);
 			    $('#orderNo').html(data.order.id);
 			    $('#orderDate').html(data.order.orderBookDate);
-			    $('#combo').html(data.order.comboName);
 			    $('#logistics').html(data.order.logisticsName);
 			    $('#cuserName').html(data.address.consigneeName);
 			    $('#cphone').html(data.address.consigneePhone);
