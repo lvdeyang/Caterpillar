@@ -353,6 +353,8 @@ public class ProductPackageController extends BaseController {
 		}
 	}
 
+	@Autowired
+	private SysConfigDAO conn_sys;
 	/**
 	 * 单个商品详情
 	 * 
@@ -369,6 +371,7 @@ public class ProductPackageController extends BaseController {
 		// 商户信息 商品信息 订单数量
 		mer_po.add(merchantDao.get(merchantId));
 		List<MerchantVO> mer_vo = new MerchantVO().getConverter(MerchantVO.class).convert(mer_po, MerchantVO.class);
+		
 		// 价格处理
 		DecimalFormat def = new DecimalFormat("0.00");
 		// 票种类型
@@ -442,6 +445,9 @@ public class ProductPackageController extends BaseController {
 		map.put("priceList", priceList);
 		map.put("merinfo", mer_vo);
 		map.put("oderNumList", oderNumList);
+		
+		map.put("webUrl", conn_sys.getSysConfig().getWebUrl());
+		
 		return map;
 
 	}
