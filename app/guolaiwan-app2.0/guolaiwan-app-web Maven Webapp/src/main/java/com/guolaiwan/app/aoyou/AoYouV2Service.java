@@ -33,7 +33,7 @@ public class AoYouV2Service {
 	//渠道密钥
 	private static final String channel_secret="aeda3ef3930912816cbb52f251a8ed26";
 	//应用ID
-	private static final String app_id="21wQJDtNcEdVZBefCnZkbnI3v7OLLP7Ue90VOJSvIKA%3D";
+	private static final String app_id="mcbdEODE5AFSSbfSFWZALwEtoDmruuw017IINIV9ziE%3D";
 		
 		
 	//应用ID
@@ -262,11 +262,11 @@ public class AoYouV2Service {
 	
 	public static void main(String[] args) {
 		try {
-			System.out.println(getVenueList(1));
+//			System.out.println(getVenueList(1));
 			
-			System.out.println(getprodList("12", 1, ""));
+			System.out.println(getprodList("25", 1, ""));
 			
-			System.out.println(getproductInfo("50"));
+//			System.out.println(getproductInfo("50"));
 			
 //			AoYouOrder aoYouOrder = new AoYouOrder();
 //			aoYouOrder.setTrade_no("glw-aoyou-202001211324548952");
@@ -283,7 +283,7 @@ public class AoYouV2Service {
 			
 //			System.out.println(refund("XCX621800201211416387688", "18701322998", "test"));
 			
-			System.out.println(getOrderInfo("XCX621800201211416387688"));
+//			System.out.println(getOrderInfo("XCX621800201211416387688"));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
