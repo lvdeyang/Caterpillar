@@ -447,6 +447,11 @@ public class ProductPackageController extends BaseController {
 		map.put("oderNumList", oderNumList);
 		
 		map.put("webUrl", conn_sys.getSysConfig().getWebUrl());
+	
+		
+		ProductPO productPO=conn_product.get(proId);
+		ProductVO productVO=new ProductVO().set(productPO);
+		map.put("product", productVO);
 		
 		return map;
 
