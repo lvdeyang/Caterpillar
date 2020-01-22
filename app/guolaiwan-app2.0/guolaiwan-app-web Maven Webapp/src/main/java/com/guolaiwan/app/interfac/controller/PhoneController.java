@@ -44,6 +44,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.AoYouV2Service;
 import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.interfac.util.FilterSensitive;
@@ -3355,7 +3356,31 @@ public class PhoneController extends WebBaseControll {
 		
 		//冰雪
 		if(AoyouIDUtil.isBxID(productId.toString())){
-
+			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(_order.getOrderNO());
+			JSONObject syhOrder = AoYouV2Service.getOrderInfo(aoYouOrderPO.getOrderno());
+			System.out.println("查询冰雪票务订单返回结果:" + syhOrder);
+			if("00000".equals(syhOrder.get("errcode"))){
+				JSONObject errdata = JSON.parseObject(syhOrder.get("errdata").toString());
+				String ydNo = "确认码：" + aoYouOrderPO.getConfirm_code() + "(详情请注意查收短信) </br> ";
+					ydNo += "预约日期：" + errdata.getString("book_date") + "</br> ";
+					ydNo += "下单人手机号：" + errdata.getString("mobile_no") + "&nbsp;&nbsp;&nbsp;&nbsp;姓名：" + errdata.getString("user_name") + "</br>";
+				if("1".equals(errdata.getString("status"))){
+					ydNo += "订单状态： 有效 </br> ";
+				} else if ("0".equals(errdata.getString("status"))){
+					ydNo += "订单状态： 已取消 </br> ";
+				}
+				if("1".equals(errdata.getString("use_status"))){
+					ydNo += "核销状态： 已使用 </br> ";
+				} else if ("0".equals(errdata.getString("use_status"))){
+					ydNo += "核销状态： 未使用  </br> ";
+				}
+				if("1".equals(errdata.getString("refund_status"))){
+					ydNo += "退单状态： 已退单 </br> ";
+				} else if ("0".equals(errdata.getString("refund_status"))){
+					ydNo += "退单状态： 未退单 </br> ";
+				}
+				_order.setYdNO(ydNo);
+			}
 		}
 		// 中青旅==========================================================================================================
 		

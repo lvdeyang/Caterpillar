@@ -303,7 +303,7 @@ html, body {
 				$('#amount').html('￥' + data.order.orderAllMoney);
 				$('#payAmount').html('￥' + data.order.payMoney);
 				var str = data.order.ydNO;
-			    var reg = RegExp(/票号/);
+			    var reg = RegExp(/确认码/);
 				if(str.match(reg)){
 			 		$("#ydDiv").hide(); 
 			 		$("#combo").html('</br>' + str);

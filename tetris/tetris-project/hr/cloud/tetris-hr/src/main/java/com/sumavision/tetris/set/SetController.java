@@ -161,6 +161,8 @@ public class SetController {
 		
 	    List<Date> list=DateUtil.getDates(start, end);
 	    for (Date date : list) {
+	    	SetPO oldSetPO=setDao.findOneByUserIdAndCurDate(userId,date);
+	    	setDao.delete(oldSetPO);
 	    	SetPO setPO=new SetPO();
 	    	setPO.setCurDate(date);
 	    	setPO.setUserId(userId);

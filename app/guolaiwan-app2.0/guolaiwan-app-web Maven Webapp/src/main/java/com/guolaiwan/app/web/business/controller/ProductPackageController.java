@@ -34,6 +34,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.AoYouV2Service;
 import com.guolaiwan.app.aoyou.bo.AoYouOrder;
 import com.guolaiwan.app.aoyou.bo.AoYouOrder.AoYouOrderDetail;
 import com.guolaiwan.app.aoyou.bo.AoYouOrder.BookDetail;
@@ -447,6 +448,11 @@ public class ProductPackageController extends BaseController {
 		map.put("oderNumList", oderNumList);
 		
 		map.put("webUrl", conn_sys.getSysConfig().getWebUrl());
+	
+		
+		ProductPO productPO=conn_product.get(proId);
+		ProductVO productVO=new ProductVO().set(productPO);
+		map.put("product", productVO);
 		
 		return map;
 
@@ -1105,7 +1111,44 @@ public class ProductPackageController extends BaseController {
 		
 		//冰雪
 		if(AoyouIDUtil.isBxID(id)){
-			String bxID = AoyouIDUtil.getBxID(id);
+			//取得勾选的购票人信息
+			JSONArray split = (JSONArray) pageObject.get("messageUserIds");
+	        Set<Long> idSet = new HashSet<>();
+	        for (Object s : split) {
+	            idSet.add(Long.valueOf((String) s));
+	        }
+	        List<MessagePO> messagePOList = conn_message.getAllByIds(idSet);
+			//根据产品id查冰雪票种id
+	        String bxID = AoyouIDUtil.getBxID(id);
+			//创建冰雪票务订单start
+			AoYouOrder aoYouOrder = new AoYouOrder();
+			aoYouOrder.setTrade_no("glw-aoyou-" + orderNO);//过来玩提交世园会的订单
+			aoYouOrder.setProd_id(Integer.parseInt(bxID));//世园会票种id
+			aoYouOrder.setMobile_no(messagePOList.get(0).getPhone());//购买人的手机号
+			aoYouOrder.setProd_count(Integer.parseInt(num));//购买票数
+			aoYouOrder.setUser_name(messagePOList.get(0).getName());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String bDate = sdf.format(bookDate);
+			aoYouOrder.setBook_date(bDate);
+			JSONObject aoyou = AoYouV2Service.createOrder(aoYouOrder);
+			System.out.println("创建冰雪票务订单返回结果:" + aoyou);
+			if(!"00000".equals(aoyou.get("errcode"))){
+				if(!"".equals(aoyou.getString("errdata")) && aoyou.getString("errdata") != null){
+					JSONObject resultmsg = JSON.parseObject(aoyou.get("errdata").toString());
+					return ERROR(resultmsg.getString("resultmsg"));
+				}
+				return ERROR(aoyou.get("errmsg").toString());
+			} else {
+				AoYouOrderPO aoYouOrderPO = new AoYouOrderPO();
+				JSONObject errdata = JSON.parseObject(aoyou.get("errdata").toString());
+				aoYouOrderPO.setGlwOrderNO(orderNO);
+				aoYouOrderPO.setTrade_no(errdata.getString("trade_no"));
+				aoYouOrderPO.setSaleorder_no(errdata.getString("sale_no"));
+				aoYouOrderPO.setOrderno(errdata.getString("order_no"));
+				aoYouOrderPO.setMobile_no(errdata.getString("mobile_no"));
+				aoYouOrderDao.saveOrUpdate(aoYouOrderPO);
+			}
+			//创建冰雪票务订单end
 		}
 		// 中青旅==========================================================================================================
 			

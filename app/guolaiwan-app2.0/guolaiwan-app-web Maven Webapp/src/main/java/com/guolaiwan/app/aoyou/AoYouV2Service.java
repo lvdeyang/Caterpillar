@@ -17,14 +17,25 @@ import pub.caterpillar.communication.http.client.HttpClient;
 @Service
 public class AoYouV2Service {
 
-	//测试地址
-	private static final String URL="https://fxapitest.aoyou.com/v2/ota/";
+//	//测试地址
+//	private static final String URL="https://fxapitest.aoyou.com/v2/ota/";
+//	//渠道ID号
+//	private static final String channel_id="glw_test";	
+//	//渠道密钥
+//	private static final String channel_secret="a88ffb04e6f0357195820b7f570d6f2b";
+//	//应用ID
+//	private static final String app_id="21wQJDtNcEdVZBefCnZkbnI3v7OLLP7Ue90VOJSvIKA%3D";	
+	
+	//正式地址
+	private static final String URL="https://fxapi.aoyou.com/v2/ota/";
 	//渠道ID号
-	private static final String channel_id="glw_test";	
+	private static final String channel_id="glw";	
 	//渠道密钥
-	private static final String channel_secret="a88ffb04e6f0357195820b7f570d6f2b";
+	private static final String channel_secret="aeda3ef3930912816cbb52f251a8ed26";
 	//应用ID
-	private static final String app_id="21wQJDtNcEdVZBefCnZkbnI3v7OLLP7Ue90VOJSvIKA%3D";	
+	private static final String app_id="21wQJDtNcEdVZBefCnZkbnI3v7OLLP7Ue90VOJSvIKA%3D";
+		
+		
 	//应用ID
 	private static String access_token="";	
 	
@@ -51,15 +62,22 @@ public class AoYouV2Service {
 	 * @throws Exception 
 	 */
 	public static JSONObject getVenueList(int page) throws Exception{
-		String result = "";
 		Map map = new HashMap<String, String>();
 		map.put("page", page);
 		if("".equals(access_token) || null == access_token){
 			getAccessToken();
 		}
-		result = HttpClient.postJson(URL + "venue-list?access_token=" + access_token,
+		String result = HttpClient.postJson(URL + "venue-list?access_token=" + access_token,
 				JSON.parseObject(JSONObject.toJSONString(map)));
 		JSONObject reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+		if(!"00000".equals(reJson.get("errcode"))){
+			if("没找到登录信息".equals(reJson.get("errmsg").toString())) {
+				getAccessToken();
+				result = HttpClient.postJson(URL + "venue-list?access_token=" + access_token,
+						JSON.parseObject(JSONObject.toJSONString(map)));
+				reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+			}
+		}
 		return reJson;
 	}
 	
@@ -79,6 +97,14 @@ public class AoYouV2Service {
 		String result = HttpClient.postJson(URL + "prod-list?access_token=" + access_token,
 				JSON.parseObject(JSONObject.toJSONString(map)));
 		JSONObject reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+		if(!"00000".equals(reJson.get("errcode"))){
+			if("没找到登录信息".equals(reJson.get("errmsg").toString())) {
+				getAccessToken();
+				result = HttpClient.postJson(URL + "prod-list?access_token=" + access_token,
+						JSON.parseObject(JSONObject.toJSONString(map)));
+				reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+			}
+		}
 		return reJson;
 	}
 	
@@ -96,6 +122,14 @@ public class AoYouV2Service {
 		String result = HttpClient.postJson(URL + "product-info?access_token=" + access_token,
 				JSON.parseObject(JSONObject.toJSONString(map)));
 		JSONObject reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+		if(!"00000".equals(reJson.get("errcode"))){
+			if("没找到登录信息".equals(reJson.get("errmsg").toString())) {
+				getAccessToken();
+				result = HttpClient.postJson(URL + "product-info?access_token=" + access_token,
+						JSON.parseObject(JSONObject.toJSONString(map)));
+				reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+			}
+		}
 		return reJson;
 	}
 	
@@ -111,6 +145,14 @@ public class AoYouV2Service {
 		String result = HttpClient.postJson(URL + "create-order?access_token=" + access_token,
 				JSON.parseObject(JSONObject.toJSONString(aoYouOrder)));
 		JSONObject reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+		if(!"00000".equals(reJson.get("errcode"))){
+			if("没找到登录信息".equals(reJson.get("errmsg").toString())) {
+				getAccessToken();
+				result = HttpClient.postJson(URL + "create-order?access_token=" + access_token,
+						JSON.parseObject(JSONObject.toJSONString(aoYouOrder)));
+				reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+			}
+		}
 		return reJson;
 	}
 	
@@ -129,6 +171,14 @@ public class AoYouV2Service {
 		String result = HttpClient.postJson(URL + "cancel-order?access_token=" + access_token,
 				JSON.parseObject(JSONObject.toJSONString(map)));
 		JSONObject reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+		if(!"00000".equals(reJson.get("errcode"))){
+			if("没找到登录信息".equals(reJson.get("errmsg").toString())) {
+				getAccessToken();
+				result = HttpClient.postJson(URL + "cancel-order?access_token=" + access_token,
+						JSON.parseObject(JSONObject.toJSONString(map)));
+				reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+			}
+		}
 		return reJson;
 	}
 	
@@ -147,6 +197,14 @@ public class AoYouV2Service {
 		String result = HttpClient.postJson(URL + "submit-order?access_token=" + access_token,
 				JSON.parseObject(JSONObject.toJSONString(map)));
 		JSONObject reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+		if(!"00000".equals(reJson.get("errcode"))){
+			if("没找到登录信息".equals(reJson.get("errmsg").toString())) {
+				getAccessToken();
+				result = HttpClient.postJson(URL + "submit-order?access_token=" + access_token,
+						JSON.parseObject(JSONObject.toJSONString(map)));
+				reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+			}
+		}
 		return reJson;
 	}
 	
@@ -166,6 +224,14 @@ public class AoYouV2Service {
 		String result = HttpClient.postJson(URL + "refund?access_token=" + access_token,
 				JSON.parseObject(JSONObject.toJSONString(map)));
 		JSONObject reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+		if(!"00000".equals(reJson.get("errcode"))){
+			if("没找到登录信息".equals(reJson.get("errmsg").toString())) {
+				getAccessToken();
+				result = HttpClient.postJson(URL + "refund?access_token=" + access_token,
+						JSON.parseObject(JSONObject.toJSONString(map)));
+				reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+			}
+		}
 		return reJson;
 	}
 	
@@ -183,6 +249,14 @@ public class AoYouV2Service {
 		String result = HttpClient.postJson(URL + "order-info?access_token=" + access_token,
 				JSON.parseObject(JSONObject.toJSONString(map)));
 		JSONObject reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+		if(!"00000".equals(reJson.get("errcode"))){
+			if("没找到登录信息".equals(reJson.get("errmsg").toString())) {
+				getAccessToken();
+				result = HttpClient.postJson(URL + "order-info?access_token=" + access_token,
+						JSON.parseObject(JSONObject.toJSONString(map)));
+				reJson = JSON.parseObject(UnicodeUtil.unicodeStr2String(result));
+			}
+		}
 		return reJson;
 	}
 	
@@ -190,26 +264,26 @@ public class AoYouV2Service {
 		try {
 			System.out.println(getVenueList(1));
 			
-			System.out.println(getprodList("7", 1, ""));
+			System.out.println(getprodList("12", 1, ""));
 			
-			System.out.println(getproductInfo("131"));
+			System.out.println(getproductInfo("50"));
 			
 //			AoYouOrder aoYouOrder = new AoYouOrder();
-//			aoYouOrder.setTrade_no("glw-aoyou-202001161324548952");
-//			aoYouOrder.setProd_id(98);
+//			aoYouOrder.setTrade_no("glw-aoyou-202001211324548952");
+//			aoYouOrder.setProd_id(50);
 //			aoYouOrder.setUser_name("test");
 //			aoYouOrder.setMobile_no("18701322998");
 //			aoYouOrder.setProd_count(1);
-//			aoYouOrder.setBook_date("2020-01-18");
+//			aoYouOrder.setBook_date("2019-01-18");
 //			System.out.println(createOrder(aoYouOrder));
 			
 //			System.out.println(cancelOrder("XCX621800201161445202569","18701322998"));
 			
-//			System.out.println(submitOrder("XCX621800201161445202569","18701322998"));
+//			System.out.println(submitOrder("XCX621800201211416387688","18701322998"));
 			
-//			System.out.println(refund("XCX621800201161445202569", "18701322998", "test"));
+//			System.out.println(refund("XCX621800201211416387688", "18701322998", "test"));
 			
-//			System.out.println(getOrderInfo("XCX621800201161445202569"));
+			System.out.println(getOrderInfo("XCX621800201211416387688"));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
