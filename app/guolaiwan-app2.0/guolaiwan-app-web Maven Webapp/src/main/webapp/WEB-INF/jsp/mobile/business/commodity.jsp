@@ -170,52 +170,37 @@ html, body {
 <script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script>
 <script>
 
 </script>
 <script type="text/javascript">
     $(function(){
-	  getRecomment();
 	  getallteam(); 
 	  getComment();
+	  var vConsole = new VConsole();
   })
-
-	 function getRecomment(){
-	      var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
-		
-		$.get(_uriMerchantInfo, null, function(data){
-			data = parseAjaxResult(data);
-			merchantName = data.shopName + '-过来玩';
-			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
-			merchantUrl = window.location.href;
-			
-			if(data === -1) return;
-			if(data){
-			    var html=[];
-			    var pics=data.shopMpic.split(',');
-				for(var i=0; i<pics.length; i++){
-					var str = pics[i].split('.');
-					if(str[3]!="mp4"&&str[3]!="MP4"){ 
-					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
-					}else{
-					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
-					}
-				}
-			    $('.header-content').html(data.shopName);
-			    
-				$('.swiper-wrapper').append(html.join(''));
-				$(".swiper-container").swiper({
-			        loop: true,
-			        autoplay: 3000
-			    });
-			    }
-			    });
-	  }
 	 //全局获取商品内容 
 	 function getallteam(){
      var _uricoms = window.BASEPATH + 'product/package/commodity/info?merchantId=${merchantId}&proId=${proId}&choice=0';	
-     $.get(_uricoms, null, function(msg){    
-     console.log(msg)
+     $.get(_uricoms, null, function(msg){   
+     console.log(msg) 
+       var html = []; 
+       	merchantPic = msg.webUrl;
+        var pics=msg.product.productMorePic.split(',');
+	 	for(var i=0; i<pics.length; i++){
+		var str = pics[i].split('.');
+		if(str[3]!="mp4"&&str[3]!="MP4"){ 
+		html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+merchantPic+''+pics[i]+'" alt=""></div>');
+		}else{
+		html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+merchantPic+''+pics[i]+'" controls="controls" ></div>');
+		}
+	}
+		$('.swiper-wrapper').append(html.join(''));
+		$(".swiper-container").swiper({
+	        loop: true,
+	        autoplay: 3000
+	    });	
        //商品信息
        var merchantMessage =  msg.merinfo;
        var prouctMessage =  msg.proinfo;
@@ -223,6 +208,9 @@ html, body {
        productPic = msg.proinfo[0].productIntroduce;
        $('#proContent').html(productPic);
        var html = []; 
+       
+       
+     	
        html.push('<ul>');
        html.push('<li><p style="font-size:18px;">'+prouctMessage[0].productName+'</p></li>');
        html.push('<li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
