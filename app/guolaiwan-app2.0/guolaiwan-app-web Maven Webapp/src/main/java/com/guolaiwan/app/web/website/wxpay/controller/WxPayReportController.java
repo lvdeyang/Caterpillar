@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.domain.RefundDetail;
 import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.AoYouV2Service;
 import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.qimingxin.TravelService;
 import com.guolaiwan.bussiness.admin.po.NhEticketsPo;
@@ -330,7 +331,6 @@ public class WxPayReportController extends WebBaseControll {
 		//世园会
 		Long productId = order.getProductId();
 		if(AoyouIDUtil.isSyhID(productId.toString())){
-			System.out.println(order.getId() + "支付世园会=====" + order.getOrderNO());
 			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(order.getOrderNO());
 			JSONObject syhOrder = AoYouV1Service.submitOrder(aoYouOrderPO.getSaleorder_no(), aoYouOrderPO.getMobile_no());
 			System.out.println("支付世园会票务订单返回结果:" + syhOrder);
@@ -341,7 +341,12 @@ public class WxPayReportController extends WebBaseControll {
 		
 		//冰雪
 		if(AoyouIDUtil.isBxID(productId.toString())){
-
+			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(order.getOrderNO());
+			JSONObject syhOrder = AoYouV2Service.submitOrder(aoYouOrderPO.getOrderno(), aoYouOrderPO.getMobile_no());
+			System.out.println("支付冰雪票务订单返回结果:" + syhOrder);
+			JSONObject errdata = JSON.parseObject(syhOrder.get("errdata").toString());
+			aoYouOrderPO.setConfirm_code(errdata.getString("confirm_code"));
+			aoYouOrderDao.saveOrUpdate(aoYouOrderPO);
 		}
 	}
 	// 中青旅==========================================================================================================
