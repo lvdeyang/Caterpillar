@@ -216,7 +216,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                	<div class="layui-form-item layui-form-text">
 				    <label class="layui-form-label" style="width:110px;float:left;">描述：</label>
 				    <div class="layui-input-block" style="width:400px;float:left;">
-				      <textarea name="desc" placeholder="${child.content}" class="layui-textarea"></textarea>
+				      <textarea name="desc" value="${child.content}" class="layui-textarea">${child.content}</textarea>
 				    </div>
 				  </div>
                 <div class="layui-form-item">
