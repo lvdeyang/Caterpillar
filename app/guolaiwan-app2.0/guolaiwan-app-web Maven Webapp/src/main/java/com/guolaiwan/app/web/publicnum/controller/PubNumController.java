@@ -37,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.AoYouV2Service;
 import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.interfac.util.HttpUtils;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
@@ -1192,7 +1193,12 @@ public class PubNumController extends WebBaseControll {
 			
 			//冰雪
 			if(AoyouIDUtil.isBxID(productId.toString())){
-
+				AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(orderInfoPO.getOrderNO());
+				JSONObject syhOrder = AoYouV2Service.refund(aoYouOrderPO.getOrderno(), aoYouOrderPO.getMobile_no(), reason);
+				System.out.println("退票冰雪票务订单返回结果:" + syhOrder);
+				if(!"00000".equals(syhOrder.get("errcode"))){
+					return ERROR(syhOrder.get("errmsg").toString());
+				}
 			}
 			// 中青旅==========================================================================================================
 			orderInfoPO.setRefundReason(reason);

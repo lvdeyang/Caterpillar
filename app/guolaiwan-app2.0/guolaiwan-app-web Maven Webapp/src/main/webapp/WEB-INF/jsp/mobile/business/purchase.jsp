@@ -175,7 +175,6 @@ html, body {
      var distance=0;
    
 	$(function() {
-	 
 	 getRecomment();	
 	var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
@@ -415,18 +414,19 @@ html, body {
 		}    
 
 }
-    
+    var currentPage=0;
     var page = 2;
     //下拉加载
     $(window).scroll(function(){
 　　			//判断是否滑动到页面底部
 		     if($(document).height()<=$(window).scrollTop()  + $(window).height()){
-
+					if(page==currentPage) return;
+					currentPage=page;
 				
-		           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
-		        var pageNumber=page;			
-				var date={ "merchantId":${productMerchantID},"pageNum":pageNumber}				
-				$.post('<%=basePath%>product/package/list', date, function(data){							   			 									
+		           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法	
+				var date={ "merchantId":${productMerchantID},"pageNum":currentPage}			
+				$.post('<%=basePath%>product/package/list', date, function(data){	
+									   			 									
 					if(data.productPOs.length>0){
 					  page+=1;
 					  getLine(data);

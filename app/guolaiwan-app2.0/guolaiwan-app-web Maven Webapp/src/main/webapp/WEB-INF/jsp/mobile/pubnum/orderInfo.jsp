@@ -562,7 +562,7 @@ html, body {
 			    $('#amount').val('￥'+data.order.orderAllMoney);
 			    $('#payAmount').val('￥'+data.order.payMoney);
 			    var str = data.order.ydNO;
-			    var reg = RegExp(/票号/);
+			    var reg = RegExp(/确认码/);
 				if(str.match(reg)){
 			 		$("#ydDiv").hide(); 
 			 		$("#combo").html(str);

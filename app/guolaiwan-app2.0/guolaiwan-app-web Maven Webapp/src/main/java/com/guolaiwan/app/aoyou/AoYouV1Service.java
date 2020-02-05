@@ -36,7 +36,7 @@ public class AoYouV1Service {
 	//渠道密钥
 	private static final String channel_secret="aeda3ef3930912816cbb52f251a8ed26";
 	//应用ID
-	private static final String app_id="21wQJDtNcEdVZBefCnZkbnI3v7OLLP7Ue90VOJSvIKA%3D";
+	private static final String app_id="mcbdEODE5AFSSbfSFWZALwEtoDmruuw017IINIV9ziE%3D";
 		
 	//应用ID
 	private static String access_token="";	

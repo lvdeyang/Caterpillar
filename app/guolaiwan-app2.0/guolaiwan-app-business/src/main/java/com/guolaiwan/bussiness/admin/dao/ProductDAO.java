@@ -170,6 +170,7 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 	public List<ProductPO> productSearch(String pcName, int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("productName", Condition.lk, pcName);
+		hql.andBy("productAuditstatus", Condition.eq, ShopAuditStateType.T);
 		List<ProductPO> products = findByHqlPage(hql, pageNum, pageSize);
 		if (products == null || products.size() <= 0)
 			return null;
