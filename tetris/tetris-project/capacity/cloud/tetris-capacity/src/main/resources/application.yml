@@ -14,14 +14,14 @@ spring:
 #      uri: http://192.165.56.71:8081
 #      fail-fast: true
     client:
-      ipAddress: 192.165.56.64
+      ipAddress: 192.168.0.185
 #  profiles:
 #    active: pro
   datasource:
     base:
       url: jdbc:mysql://localhost:3306/capacity?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&&useSSL=true
       username: root
-      password: sumavisionrd
+      password: root
       driver-class-name: com.mysql.jdbc.Driver
       initial-size : 10
       min-idle : 20
@@ -98,7 +98,7 @@ ribbon:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://192.165.56.64:8081/eureka/
+      defaultZone: http://192.168.0.185:8081/eureka/
   instance:
     instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
     prefer-ip-address: true

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.netflix.infix.lang.infix.antlr.EventFilterParser.null_predicate_return;
 import com.sumavision.tetris.capacity.bo.request.DeleteInputsRequest;
 import com.sumavision.tetris.capacity.bo.request.DeleteOutputsRequest;
 import com.sumavision.tetris.capacity.bo.request.DeleteTasksRequest;
@@ -48,7 +47,9 @@ public class ResponseService {
 		List<ResultResponse> inputs = allResponse.getInput_array();
 		List<ResultResponse> tasks = allResponse.getTask_array();
 		List<ResultResponse> outputs = allResponse.getOutput_array();
-		
+		System.out.println(inputs);
+		System.out.println(tasks);
+		System.out.println(outputs);
 		if(inputs != null && inputs.size() > 0){
 			for(ResultResponse input_response: inputs){
 				if(!input_response.getResult_code().equals(InputResponseEnum.SUCCESS.getCode())){

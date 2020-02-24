@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/caterpillar-base.iml" filepath="$PROJECT_DIR$/caterpillar-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/caterpillar-cache/caterpillar-cache.iml" filepath="$PROJECT_DIR$/caterpillar-cache/caterpillar-cache.iml" />
+      <module fileurl="file://$PROJECT_DIR$/caterpillar-commons/caterpillar-commons.iml" filepath="$PROJECT_DIR$/caterpillar-commons/caterpillar-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/caterpillar-communication/caterpillar-communication.iml" filepath="$PROJECT_DIR$/caterpillar-communication/caterpillar-communication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/caterpillar-executor/caterpillar-executor.iml" filepath="$PROJECT_DIR$/caterpillar-executor/caterpillar-executor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/caterpillar-mvc/caterpillar-mvc.iml" filepath="$PROJECT_DIR$/caterpillar-mvc/caterpillar-mvc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/caterpillar-orm/caterpillar-orm.iml" filepath="$PROJECT_DIR$/caterpillar-orm/caterpillar-orm.iml" />
+    </modules>
+  </component>
+</project>

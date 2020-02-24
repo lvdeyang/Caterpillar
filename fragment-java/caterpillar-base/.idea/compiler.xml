@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="caterpillar-orm" />
+        <module name="caterpillar-mvc" />
+        <module name="caterpillar-executor" />
+        <module name="caterpillar-communication" />
+        <module name="caterpillar-commons" />
+        <module name="caterpillar-cache" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="caterpillar-base" target="1.8" />
+      <module name="caterpillar-cache" target="1.8" />
+      <module name="caterpillar-commons" target="1.8" />
+      <module name="caterpillar-communication" target="1.8" />
+      <module name="caterpillar-executor" target="1.8" />
+      <module name="caterpillar-mvc" target="1.8" />
+      <module name="caterpillar-orm" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
