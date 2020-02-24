@@ -78,11 +78,11 @@ public class VideoController extends BaseController{
 		}
 		//上传
 		File newFile=new File(path+"/"+newName);
-		String config = conn_sysConfig.getSysConfig().getWebUrl()+folderName+"/"+newName;
+		String config = conn_sysConfig.getSysConfig().getWebUrl()+"/"+folderName+"/"+newName;
 		file.transferTo(newFile);           //写
 
-		OSSUtils.createFolder("glw-old-file", "image/"+folderName+"/");
-		OSSUtils.uploadObjectOSS("image/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
+		OSSUtils.createFolder("glw-old-file", "file/"+folderName+"/");
+		OSSUtils.uploadObjectOSS("file/"+folderName+"/", newName,newFile, new FileInputStream(newFile));
 		
 		//写数据库
 		PicturePO picture = new PicturePO();

@@ -111,7 +111,7 @@
 		    initBack();
 	        var str="";
 			if(href.indexOf('pubnum/index')!=-1){
-			  str='<div style="font-size:24px;line-height:40px;position:absolute;margin-top:-42px;z-index:1000;right:10px"><image id="ewmpic" style="height:18px;width:18px;" src="http://<%=weburl%>/file/ewm.jpg" /></div>';
+			  str='<div style="font-size:24px;line-height:40px;position:absolute;margin-top:-42px;z-index:1000;right:10px"><img id="ewmpic" style="height:18px;width:18px;" src="lib/images/ewm.jpg"/></div>';
 			}
 			var nameHeader='过来玩';
 			var phone='0315-6681288';

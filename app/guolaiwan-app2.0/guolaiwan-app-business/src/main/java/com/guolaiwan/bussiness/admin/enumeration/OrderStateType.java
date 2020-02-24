@@ -2,123 +2,136 @@ package com.guolaiwan.bussiness.admin.enumeration;
 
 public enum OrderStateType {
 
-	//商品类型
+	// 商品类型
 	NOTPAY("未付款"),
 
-	//支付成功
+	// 支付成功
 	PAYSUCCESS("支付成功"),
 
-	//已验单（虚拟）
+	// 已验单（虚拟）
 	TESTED("已验单"),
 
-	//发货（商品）
+	// 发货（商品）
 	DELIVER("已发货"),
 
-	//已验单（商品）
+	// 已验单（商品）
 	RECEIPT("已收货"),
 
-	//已确认（餐桌订单使用）
+	// 已确认（餐桌订单使用）
 	CONFIRMED("已确认"),
 
-	//已评价
+	// 已评价
 	COMMENTED("已评价"),
 
-	//退款
+	// 退款
 	REFUNDING("申请退款"),
 
-	//失败
+	// 失败
 	REFUNDFAIL("退款失败"),
 
-	//数量过滤
-	REFUNDED("退款成功");
-
-
+	// 数量过滤
+	REFUNDED("退款成功"),
+	// 票务退款审核中
+	INREVIEW("审核中"),
+	// 审核成功
+	REVIEWSUCCESS("审核通过");
 	private String name;
 
-	private OrderStateType(String name){
+	private OrderStateType(String name) {
 		this.name = name;
 	}
 
-	public String getName(){
+	public String getName() {
 		return this.name;
 	}
 
-
-	public String getFiled() throws Exception{
-		if(this.equals(NOTPAY)){
+	public String getFiled() throws Exception {
+		if (this.equals(NOTPAY)) {
 			return "NOTPAY";
-		}else if(this.equals(PAYSUCCESS)){
+		} else if (this.equals(INREVIEW)) {
+			return "INREVIEW";
+		} else if (this.equals(PAYSUCCESS)) {
 			return "PAYSUCCESS";
-		}else if(this.equals(TESTED)){
+		} else if (this.equals(TESTED)) {
 			return "TESTED";
-		}else if(this.equals(REFUNDING)){
+		} else if (this.equals(REFUNDING)) {
 			return "REFUNDING";
-		}else if(this.equals(REFUNDFAIL)){
+		} else if (this.equals(REFUNDFAIL)) {
 			return "REFUNDFAIL";
-		}else if(this.equals(REFUNDED)){
+		} else if (this.equals(REFUNDED)) {
 			return "REFUNDED";
-		}else if(this.equals(DELIVER)){
+		} else if (this.equals(DELIVER)) {
 			return "DELIVER";
-		}else if(this.equals(RECEIPT)){
+		} else if (this.equals(RECEIPT)) {
 			return "RECEIPT";
-		}else if(this.equals(CONFIRMED)){
+		} else if (this.equals(CONFIRMED)) {
 			return "CONFIRMED";
-		}else if(this.equals(COMMENTED)){
+		} else if (this.equals(COMMENTED)) {
 			return "COMMENTED";
-		}else{
+		} else if (this.equals(REVIEWSUCCESS)) {
+			return "REVIEWSUCCESS";
+		} else {
 			throw new Exception("错误的订单类型！");
 		}
 	}
 
-	public static OrderStateType fromName(String name) throws Exception{
-		if("未付款".equals(name)){
+	public static OrderStateType fromName(String name) throws Exception {
+		if ("未付款".equals(name)) {
 			return NOTPAY;
-		}else if("支付成功".equals(name)){
+		} else if ("支付成功".equals(name)) {
 			return PAYSUCCESS;
-		}else if("已验单".equals(name)){
+		} else if ("已验单".equals(name)) {
 			return TESTED;
-		}else if("申请退款".equals(name)){
+		} else if ("申请退款".equals(name)) {
 			return REFUNDING;
-		}else if("退款失败".equals(name)){
+		} else if ("退款失败".equals(name)) {
 			return REFUNDFAIL;
-		}else if("退款成功".equals(name)){
+		} else if ("退款成功".equals(name)) {
 			return REFUNDED;
-		}else if("已发货".equals(name)){
+		} else if ("已发货".equals(name)) {
 			return DELIVER;
-		}else if("已收货".equals(name)){
+		} else if ("已收货".equals(name)) {
 			return RECEIPT;
-		}else if("已确认".equals(name)){
+		} else if ("已确认".equals(name)) {
 			return CONFIRMED;
-		}else if("已评价".equals(name)){
+		} else if ("已评价".equals(name)) {
 			return COMMENTED;
-		}else {
-			throw new Exception("错误的订单状态："+name);
+		} else if ("审核中".endsWith(name)) {
+			return INREVIEW;
+		} else if ("审核通过".endsWith(name)) {
+			return REVIEWSUCCESS;
+		} else {
+			throw new Exception("错误的订单状态：" + name);
 		}
 	}
 
-	public static OrderStateType fromString(String s) throws Exception{
-		if("NOTPAY".equals(s)){
+	public static OrderStateType fromString(String s) throws Exception {
+		if ("NOTPAY".equals(s)) {
 			return NOTPAY;
-		}else if("PAYSUCCESS".equals(s)){
+		} else if ("INREVIEW".equals(s)) {
+			return INREVIEW;
+		} else if ("REVIEWSUCCESS".equals(s)) {
+			return REVIEWSUCCESS;
+		} else if ("PAYSUCCESS".equals(s)) {
 			return PAYSUCCESS;
-		}else if("TESTED".equals(s)){
+		} else if ("TESTED".equals(s)) {
 			return TESTED;
-		}else if("REFUNDING".equals(s)){
+		} else if ("REFUNDING".equals(s)) {
 			return REFUNDING;
-		}else if("REFUNDFAIL".equals(s)){
+		} else if ("REFUNDFAIL".equals(s)) {
 			return REFUNDFAIL;
-		}else if("REFUNDED".equals(s)){
+		} else if ("REFUNDED".equals(s)) {
 			return REFUNDED;
-		}else if("DELIVER".equals(s)){
+		} else if ("DELIVER".equals(s)) {
 			return DELIVER;
-		}else if("RECEIPT".equals(s)){
+		} else if ("RECEIPT".equals(s)) {
 			return RECEIPT;
-		}else if("CONFIRMED".equals(s)){
+		} else if ("CONFIRMED".equals(s)) {
 			return CONFIRMED;
-		}else if("COMMENTED".equals(s)){
+		} else if ("COMMENTED".equals(s)) {
 			return COMMENTED;
-		}else {
-			throw new Exception("错误的订单状态："+s);
+		} else {
+			throw new Exception("错误的订单状态：" + s);
 		}
 	}
 

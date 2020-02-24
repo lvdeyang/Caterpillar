@@ -176,6 +176,7 @@ html, body {
  position:absolute;
  right:60px !important;
  }
+ .site{display:flex;flex-direction:column;min-height: 100vh;}
 </style>
 </head>
 <!-- 公共脚本引入 -->
@@ -471,7 +472,7 @@ $(function() {
 
 
 
-<body>
+<body class="site">
 	<!-- 主页 -->
 	<div class="header">
 		<div class="wrapper">
@@ -545,13 +546,13 @@ $(function() {
          
         </div>
          <!-- 常见问题  -->
-	  	<div class="wenti"  style="width:96%;height:260px;margin:0 auto;background:#fff;position: relative;top:48px;overflow: hidden;">
+	  	<div class="wenti"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:48px;overflow: hidden;">
              <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;"><span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/wentis.png"/>常见问题  </span> <span onclick="question()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span></p>     
              <ol id="ol">
              </ol>
         </div> 
          <!-- 为你优选  -->
-	  	<div class="youxuan"   style="width:96%;height:790px;margin:0 auto;background:#fff;position: relative;top:60px;overflow: hidden;">
+	  	<div class="youxuan"   style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;top:60px;overflow: hidden;">
             <p style="height:60px;line-height:60px;margin:0 5%;font-size:20px;border-bottom:1px solid #C0C0C0;">
             <span style="float:left;"><img style="width:30px;height:30px;" src="lib/images/youxuans.png"/>为你优选 </span> 
             <span onclick="preferably()" style="margin-right:3%;float:right;color:#C0C0C0;font-size:14px">查看更多&gt;</span>

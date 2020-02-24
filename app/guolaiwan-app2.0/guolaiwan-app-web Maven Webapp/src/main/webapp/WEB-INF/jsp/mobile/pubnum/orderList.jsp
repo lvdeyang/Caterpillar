@@ -440,54 +440,52 @@ html, body {
 	text-align: center;
 }
 
+.swiper-container {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	height: 200px;
+}
 
-      .swiper-container {
-        width: 100%;
-        padding:0;
-        margin:0;
-        height:200px;
-      } 
+.swiper-container img {
+	display: block;
+	width: 100%;
+}
 
-      .swiper-container img {
-        display: block;
-        width: 100%;
-      }
-    
-    #distributeList{
-       margin-top:10px;
-       padding-left:10px;
-       border-bottom:solid 2px #18b4ed;
-       width:100%;height:35px;
-       
-    }
-    
-    #distributeList a{
-       text-decoration:none;
-       color:#CCC;
-       font-size:12px;
-    }
-    #distributeList a.current{
-       text-decoration:none;
-       color:#18b4ed;
-       font-size:20px;
-    }
-    #columnTable{
-    
-        width:100%;
-        margin-top:10px;
-        
-    }
-    #columnTable td{
-	    width:20%;
-	    text-align:center;
-	    font-size:12px;
-    }
-    #saveReject:hover{
-    box-shadow:5px 5px 10px #8E8F8F;
-    
-    }
-    
+#distributeList {
+	margin-top: 10px;
+	padding-left: 10px;
+	border-bottom: solid 2px #18b4ed;
+	width: 100%;
+	height: 35px;
+}
 
+#distributeList a {
+	text-decoration: none;
+	color: #CCC;
+	font-size: 12px;
+}
+
+#distributeList a.current {
+	text-decoration: none;
+	color: #18b4ed;
+	font-size: 20px;
+}
+
+#columnTable {
+	width: 100%;
+	margin-top: 10px;
+}
+
+#columnTable td {
+	width: 20%;
+	text-align: center;
+	font-size: 12px;
+}
+
+#saveReject:hover {
+	box-shadow: 5px 5px 10px #8E8F8F;
+}
 </style>
 
 </head>
@@ -513,8 +511,12 @@ html, body {
 	       location.href=window.BASEPATH + 'pubnum/order/info?orderId='+codes[1];
 	    
 	  });
-	  getOrder(2);	 
+	  	
+	  window.onload=function(){
+			getOrder(2);
+	  } 
       function getOrder(type){
+      var data =null;
           var _uriorder = window.BASEPATH + 'pubnum/order/get?userId=${userId}&type='+type+'&uType=USER&ifpay=true';
           $.get(_uriorder, null, function(data){
 			data = parseAjaxResult(data);
@@ -540,9 +542,11 @@ html, body {
 					            //这里加各种各样的奇葩限制。
 					        }else{
 					           if(type==2){
-								    
 							    //添加退款限制理由 张羽 4/28
-							    if(data[i].orderList[j].productIsRefund!="1"){
+							    if(data[i].orderList[j].productIsRefund!="1"&&data[i].orderList[j].productId==2469&&data[i].orderList[j].orderState!="INREVIEW"){
+							        html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-review" href="javascript:void(0)">&nbsp;&nbsp;申请退票</a>')
+							    }
+							    else if(data[i].orderList[j].productIsRefund!="1"){
 							        html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+addStr+data[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')
 							    }else{
 							    	html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')
@@ -685,6 +689,22 @@ html, body {
           
       });
       
+      $(document).on('click','.icon-review',function(){
+           var ids=this.id.split('-');
+          var newIds=[];
+          for(var i=1;i<ids.length;i++){
+             newIds.push(ids[i]);
+          }
+        
+         var _urichangeorders = window.BASEPATH + 'travel/NhTicket/review/'+newIds;
+        
+     	  $.get(_urichangeorders,function(data){
+       		
+      	 })
+           alert("请求已发送！等待审核中");
+            getOrder(2);
+      });
+    
       $(document).on('click','#saveReject',function(){
           if($('#reasonContent').val()==''){
               $.toast("请填写退款原因", "forbidden");
@@ -794,96 +814,77 @@ html, body {
 		<div class="content">
 			<!-- 1.未支付;2.已支付;3.已发货;4.待退款;5.已退款;6.已收货;7.已评价 -->
 			<div class="weui-tab">
-			  <div class="weui-navbar">
-			    <!-- <a id="tab-1" onclick="return false" class="weui-navbar__item weui-bar__item--on" href="#tab1">
+				<div class="weui-navbar">
+					<!-- <a id="tab-1" onclick="return false" class="weui-navbar__item weui-bar__item--on" href="#tab1">
 			      未支付
 			    </a> -->
-			    <a id="tab-2" onclick="return false" class="weui-navbar__item weui-bar__item--on" href="#tab2">
-			      已支付
-			    </a>
-			    <a id="tab-3" onclick="return false" class="weui-navbar__item" href="#tab3">
-			      已发货
-			    </a>
-			     <a id="tab-4" onclick="return false" class="weui-navbar__item" href="#tab4">
-			      待退款
-			    </a>
-			    <a id="tab-5" onclick="return false" class="weui-navbar__item" href="#tab5">
-			      已退款
-			    </a>
-			    <a id="tab-6" onclick="return false" class="weui-navbar__item" href="#tab6">
-			      已收货
-			    </a>
-			    <a id="tab-8" onclick="return false" class="weui-navbar__item" href="#tab8">
-			      已验单
-			    </a>
-			    <a id="tab-9" onclick="return false" class="weui-navbar__item" href="#tab9">
-			      未退款 
-			    </a> 
-			   
-			  </div>
-			  <div class="weui-tab__bd" style="padding-bottom:50px">
-			    <div id="tab1" class="weui-tab__bd-item ">
-			      
-				   
-			    </div>
-			    <div id="tab2" class="weui-tab__bd-item weui-tab__bd-item--active">
-			      
-			    </div>
-			    <div id="tab3" class="weui-tab__bd-item">
-			      
-			    </div>
-			    <div id="tab4" class="weui-tab__bd-item">
-			      
-			    </div>
-			    <div id="tab5" class="weui-tab__bd-item">
-			      
-			    </div>
-			    <div id="tab6" class="weui-tab__bd-item">
-			      
-			    </div>
-			    <div id="tab8" class="weui-tab__bd-item">
-			      
-			    </div>
-			    <div id="tab9" class="weui-tab__bd-item">
-			      
-			    </div>
-		
-			  </div>
+					<a id="tab-2" onclick="return false"
+						class="weui-navbar__item weui-bar__item--on" href="#tab2"> 已支付
+					</a> <a id="tab-3" onclick="return false" class="weui-navbar__item"
+						href="#tab3"> 已发货 </a> <a id="tab-4" onclick="return false"
+						class="weui-navbar__item" href="#tab4"> 待退款 </a> <a id="tab-5"
+						onclick="return false" class="weui-navbar__item" href="#tab5">
+						已退款 </a> <a id="tab-6" onclick="return false"
+						class="weui-navbar__item" href="#tab6"> 已收货 </a> <a id="tab-8"
+						onclick="return false" class="weui-navbar__item" href="#tab8">
+						已验单 </a> <a id="tab-9" onclick="return false"
+						class="weui-navbar__item" href="#tab9"> 未退款 </a>
+
+				</div>
+				<div class="weui-tab__bd" style="padding-bottom:50px">
+					<div id="tab1" class="weui-tab__bd-item "></div>
+					<div id="tab2" class="weui-tab__bd-item weui-tab__bd-item--active">
+
+					</div>
+					<div id="tab3" class="weui-tab__bd-item"></div>
+					<div id="tab4" class="weui-tab__bd-item"></div>
+					<div id="tab5" class="weui-tab__bd-item"></div>
+					<div id="tab6" class="weui-tab__bd-item"></div>
+					<div id="tab8" class="weui-tab__bd-item"></div>
+					<div id="tab9" class="weui-tab__bd-item"></div>
+
+				</div>
 			</div>
-			
+
 			<div id="commentContent" class="weui-popup__container">
-			  <div class="weui-popup__overlay"></div>
-			  <div class="weui-popup__modal">
-				<div class="weui-cells__title">请输入评论内容</div>
-				<div class="weui-cells">
-				  <div class="weui-cell">
-				    <div class="weui-cell__bd">
-				       <textarea id="comContent"  style="border:1px solid;" class="weui-textarea" placeholder="" rows="3"></textarea>
-				    </div>
-				  </div>
+				<div class="weui-popup__overlay"></div>
+				<div class="weui-popup__modal">
+					<div class="weui-cells__title">请输入评论内容</div>
+					<div class="weui-cells">
+						<div class="weui-cell">
+							<div class="weui-cell__bd">
+								<textarea id="comContent" style="border:1px solid;"
+									class="weui-textarea" placeholder="" rows="3"></textarea>
+							</div>
+						</div>
+					</div>
+					<a id="save"
+						style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
+						href="javascript:;" class="weui-btn weui-btn_primary">保存</a>
 				</div>
-				<a id="save" style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">保存</a>
-			  </div>
-			  
+
 			</div>
-			
+
 			<div id="rejectContent" class="weui-popup__container">
-			  <div class="weui-popup__overlay"></div>
-			  <div class="weui-popup__modal">
-				<div class="weui-cells__title">请输入退款理由</div>
-				<div class="weui-cells">
-				  <div class="weui-cell">
-				    <div class="weui-cell__bd">
-				       <textarea id="reasonContent" style="border:1px solid;" class="weui-textarea" placeholder="" rows="3"></textarea>
-				    </div>
-				  </div>
+				<div class="weui-popup__overlay"></div>
+				<div class="weui-popup__modal">
+					<div class="weui-cells__title">请输入退款理由</div>
+					<div class="weui-cells">
+						<div class="weui-cell">
+							<div class="weui-cell__bd">
+								<textarea id="reasonContent" style="border:1px solid;"
+									class="weui-textarea" placeholder="" rows="3"></textarea>
+							</div>
+						</div>
+					</div>
+					<a id="saveReject"
+						style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;"
+						href="javascript:;" class="weui-btn weui-btn_primary">保存</a>
 				</div>
-				<a id="saveReject" style="width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">保存</a>
-			  </div>
-			  
+
 			</div>
-			
-			
+
+
 		</div>
 	</div>
 </body>

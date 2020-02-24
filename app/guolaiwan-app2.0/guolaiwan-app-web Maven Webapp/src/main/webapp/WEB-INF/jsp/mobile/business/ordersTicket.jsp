@@ -5,7 +5,7 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	String weburl=WXContants.Website;
+	String weburl = WXContants.Website;
 %>
 <!DOCTYPE HTML>
 <html lang="zh-cmn-Hans">
@@ -79,11 +79,10 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
-	background:#E1E1E1 !important; 
+	min-height: auto;
+	background: #E1E1E1 !important;
 	position: relative;
 	-webkit-text-size-adjust: none;
-	
 	text-decoration: none !important;
 }
 
@@ -120,77 +119,80 @@ html, body {
 	z-index: 0;
 }
 
-  .swiper-container {
-    width: 100%;
-    padding:0;
-    margin:0;
-    height:200px;
-  } 
-
-  .swiper-container img {
-    display: block;
-    width: 100%;
-  }
-    
-.weui-navbar{
- display: none !important;
-}
-  .inp::-webkit-input-placeholder{
-        text-align: center;
-}  
-
-.listbox li input{
-    width: 100%;
-    height: 60px;
-    margin:5px auto;
-    text-align: right;
-    margin-left: 2%;
-    padding: 0 10%;
-    border-radius:6px;
-    border:none;
-    background:#fff;
-    outline: none;
-    border:1px solid  rgb(230, 230, 230);
-}
-.fukuan{
-  background: -webkit-linear-gradient(left,rgba(254,187,56,1),rgba(254,104,33,1)); /* Safari 5.1 - 6 */
-}
-.homepage_add span{
-border-radius:10px;
-border:1px solid #FCB735;
-padding:3px 20px;
-margin:20px 0 0 10px;
-display: inline-block;
-color:#FCB735;
-}
-.homepage_add span:hover{
-background: #FCB735;
-color:#fff;
-}
-.fuceng{
-    position: fixed;
-    width:100%;
-    height:100%;
-    left:0;
-    top: 0;
-    background-color:rgba(0,0,0,0.6);
-    z-index: 10000;
-
-}
-.listbox-2 li input{
-    width: 100%;
-    height: 60px;
-    margin:5px auto;
-    text-align:center;
-  
-
-    border-radius:6px;
-    border:none;
-    background:#fff;
-    outline: none;
-    border:1px solid  rgb(230, 230, 230);
+.swiper-container {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	height: 200px;
 }
 
+.swiper-container img {
+	display: block;
+	width: 100%;
+}
+
+.weui-navbar {
+	display: none !important;
+}
+
+.inp::-webkit-input-placeholder {
+	text-align: center;
+}
+
+.listbox li input {
+	width: 100%;
+	height: 60px;
+	margin: 5px auto;
+	text-align: right;
+	margin-left: 2%;
+	padding: 0 10%;
+	border-radius: 6px;
+	border: none;
+	background: #fff;
+	outline: none;
+	border: 1px solid rgb(230, 230, 230);
+}
+
+.fukuan {
+	background: -webkit-linear-gradient(left, rgba(254, 187, 56, 1),
+		rgba(254, 104, 33, 1)); /* Safari 5.1 - 6 */
+}
+
+.homepage_add span {
+	border-radius: 10px;
+	border: 1px solid #FCB735;
+	padding: 3px 20px;
+	margin: 20px 0 0 10px;
+	display: inline-block;
+	color: #FCB735;
+}
+
+.homepage_add span:hover {
+	background: #FCB735;
+	color: #fff;
+}
+
+.fuceng {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: rgba(0, 0, 0, 0.6);
+	z-index: 10000;
+}
+
+.listbox-2 li input {
+	width: 100%;
+	height: 60px;
+	margin: 5px auto;
+	text-align: center;
+	border-radius: 6px;
+	border: none;
+	background: #fff;
+	outline: none;
+	border: 1px solid rgb(230, 230, 230);
+}
 </style>
 
 </head>
@@ -198,14 +200,21 @@ color:#fff;
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css" />
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js"charset="utf-8"></script>
- <script src="<%=request.getContextPath() %>/layui/js/x-layui.js"charset="utf-8"></script>
-<link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
-<link href="<%=request.getContextPath() %>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<script type="text/javascript"
+	src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"
+	charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"
+	charset="utf-8"></script>
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/layui/css/x-admin.css" media="all">
+<link
+	href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css"
+	type="text/css" rel="stylesheet">
 <script>	 var ifFace=0;
+     var resNum=${resNum};
 	 layui.use('laydate', function(){
 	  //禁止软键盘弹出
 	   $("#useDate").focus(function(){
@@ -253,18 +262,26 @@ color:#fff;
 	 }else{
 	  var order_path = window.BASEPATH + 'product/package/orders/info?proId=${proId}&choice=${choice}&isCombo=${isCombo}';
 	 }	 
+	 //南湖 不显示游玩日期
+	if(${proId}==2469){
+		document.getElementById("travelDate").style.display = "none"
+		document.getElementById("travelDates").style.display = "block"
+	}else{
+		document.getElementById("travelDate").style.display = "block"
+		document.getElementById("travelDates").style.display = "none"
+	}
 	 $.get(order_path,null,function(msg){
 	   var prc = msg.ticketPrice;
 	   ifFace=msg.ifFace;
 		     
-	  $("#zong").text(prc);
+	  $("#zong").text(prc*${resNum});
 	   pice=prc;
 	 })
 	}
 	 /*控制数量  */
 	$(document).on('click','.p1',function(){
 	 var value=parseInt($('.zhi').val())-1;
-	 if($('.zhi').val()<=1){
+	 if($('.zhi').val()<=resNum){
 	 return false;
 	 }
 	 $('.zhi').val(value);
@@ -331,7 +348,8 @@ color:#fff;
 	var clientNumber = []; //所选的用户ID
 	$(document).on('click','#nowbuy',function(){	
          //日期判断
-    	 if($("#useDate").val()==''){
+        	//南湖id 2469 日期不判断
+    	 if($("#useDate").val()==''&&${proId}!=2469){
 		     $.toast("预定时间不能为空", "forbidden");
 		      return false;
 		    }
@@ -347,8 +365,15 @@ color:#fff;
 		    var nowDate = new Date(formatDate(time));
 		    
 		    if(buyDate>=nowDate){
+		  	 
  				 var url =  window.BASEPATH + 'product/package/productDate';
-				  var date = {"id":${proId},"choice":${choice},"buyDate":$("#useDate").val()}
+ 				 var date = {"id":${proId},"choice":${choice},"buyDate":$("#useDate").val()}
+ 				 if(${proId}==2469){
+ 				 //如果是南湖的票 不用定义日期 又得让我传 。。我觉得你是在难为我。我选择传明天
+ 				 var nhDateTime = new Date();
+ 				 var d = nhDateTime.getFullYear() + "-" + (nhDateTime.getMonth() + 1) + "-" + (nhDateTime.getDate()+1);
+			   		 date={"id":${proId},"choice":${choice},"buyDate":d}
+		   		 }
 				  $.post(url,date,function(msg){
 				  if(msg.result == 1){		
 				     nobuy="1";
@@ -359,7 +384,9 @@ color:#fff;
 				     return false;		    
 		        }		   
 		  }) 			
-            }else{
+            }
+            
+            else{
              nobuy="0";
              $.toast("预订日期应大于当前日期", "forbidden");
             }
@@ -426,6 +453,13 @@ color:#fff;
 	  }
 	  				 
 	 function dobuy(){
+		    //勾选的购买人的身份信息
+		var youP = [];
+		var myP = document.getElementsByClassName("psss");
+		for(let i=0;i<myP.length;i++){
+			let a =myP[i]
+			youP.push(a.getAttribute("name"));
+		}
 		    var param={};
 			param.id=${proId};
 			param.productNum=$('.zhi').val();        
@@ -438,6 +472,7 @@ color:#fff;
 			if(${isCombo} == 1){	
 			param.ComboId = ${comboId};
 			}
+			param.messageUserIds=youP;
 		   		   	                   
 	        var _uriPay = window.BASEPATH + 'product/package/order/add';
 				$.post(_uriPay, $.toJSON(param), function(data){
@@ -498,7 +533,10 @@ color:#fff;
 			$.post(url,{'orderId':orderId,'userId':userId},function(data){
 						data = parseAjaxResult(data);
 				if(data==1){
-				$("body").append("<div style='z-index:11111111111;margin:0 0 -60px -25%;border-radius:10px;height:120px;width:50%;background: #fff;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;'><img style='width:40%;' src='lib/images/8.png'><p  style='line-height: 45px;color:#1afa29;'>支付中</p><div>");
+				$("body").append("<div class='yue' style='z-index:11111111111;margin:0 0 -60px -25%;border-radius:10px;height:120px;width:50%;background: #fff;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;'><img style='width:40%;' src='lib/images/8.png'><p  style='line-height: 45px;color:#1afa29;'>支付中</p><div>");
+						 setTimeout(function() {
+						 	$('.yue').hide()
+						 }, 1500)
 						$.get(window.BASEPATH +"pubnum/order/status?orderId="+orderId, null, function(data){
 						    if(data.data=="PAYSUCCESS"){						    	
 					           updatemessage(orderId);					            
@@ -562,13 +600,19 @@ color:#fff;
 		        
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		                $.confirm("交易成功");
+		            $("body").append("<div class='oks' style='z-index:11111111111;margin:0 0 -50px -25%;border-radius:6px;height:100px;width:50%;background:#FAFBFB;position: fixed;bottom:50%;left:50%;font-size:16px;font-weight: bold;text-align: center;overflow: hidden;border:1px solid'><p  style='line-height: 100px;'>交易成功</p><div>");	
+		            setTimeout(function() {
+		               $('.oks').hide()
+		            }, 1500)
+		                /* $.confirm("交易成功"); */
 		                //每五秒刷新订单状态					
-		                setInterval(function(){ 
+		                var myVar = setInterval(function(){ 
                                 $.get(window.BASEPATH +"pubnum/order/status?orderId="+orderNo, null, function(data){								    
-								    if(data.data=="PAYSUCCESS"){								      							    
+								    if(data.data=="PAYSUCCESS"){	
+								    	clearInterval(myVar);							      							    
 								       location.href=window.BASEPATH +"business/gotopayment?merchantId=${merchantId}&orderId="+orderNo;
 								    }
+								     
 								});
                         }, 1000);
 		            }
@@ -941,7 +985,7 @@ clientMessage(firstAddr);
              clientNumber[i[1]] = clientInfo[i[1]].id;	
 			 var htm = [];	
 			
-             htm.push('<p style="width:20%;padding:2px 5px;background:#FF9C00;color:#fff;border-radius:12px;margin:2px 5px;display: inline-block;text-align:center;" id="homepage-'+i[1]+'">'+clientInfo[i[1]].name+'</p>');            
+             htm.push('<p class="psss" name="'+clientInfo[i[1]].id+'" style="width:20%;padding:2px 5px;background:#FF9C00;color:#fff;border-radius:12px;margin:2px 5px;display: inline-block;text-align:center;" id="homepage-'+i[1]+'">'+clientInfo[i[1]].name+'</p>');            
              $(".homepage_add").append(htm.join(''));         
             } 
             if(clientNumber.length==$('#shuliang').val()){
@@ -958,119 +1002,154 @@ clientMessage(firstAddr);
 </script>
 <!-- ios 软键盘兼容问题 -->
 <script>
-FastClick.prototype.focus = function(targetElement) {
-        var length;
-        //兼容处理:在iOS7中，有一些元素（如date、datetime、month等）在setSelectionRange会出现TypeError
-        //这是因为这些元素并没有selectionStart和selectionEnd的整型数字属性，所以一旦引用就会报错，因此排除这些属性才使用setSelectionRange方法
-        if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month' && targetElement.type !== 'email') {
-            length = targetElement.value.length;
-            targetElement.setSelectionRange(length, length);
-            /*修复bug ios 11.3不弹出键盘，这里加上聚焦代码，让其强制聚焦弹出键盘*/
-            targetElement.focus();
-        } else {
-            targetElement.focus();
-        }
-    };
-const str= navigator.userAgent.toLowerCase()
-const ver=str.match(/cpu iphone os (.*?) like mac os/)
+	FastClick.prototype.focus = function(targetElement) {
+		var length;
+		//兼容处理:在iOS7中，有一些元素（如date、datetime、month等）在setSelectionRange会出现TypeError
+		//这是因为这些元素并没有selectionStart和selectionEnd的整型数字属性，所以一旦引用就会报错，因此排除这些属性才使用setSelectionRange方法
+		if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month' && targetElement.type !== 'email') {
+			length = targetElement.value.length;
+			targetElement.setSelectionRange(length, length);
+			/*修复bug ios 11.3不弹出键盘，这里加上聚焦代码，让其强制聚焦弹出键盘*/
+			targetElement.focus();
+		} else {
+			targetElement.focus();
+		}
+	};
+	const str = navigator.userAgent.toLowerCase()
+	const ver = str.match(/cpu iphone os (.*?) like mac os/)
 
-if(!ver || parseInt(ver[1])< 11){//非IOS系统或者系统版本小于11
-  // 引入fastclick 做相关处理
-}
-
+	if (!ver || parseInt(ver[1]) < 11) { //非IOS系统或者系统版本小于11
+		// 引入fastclick 做相关处理
+	}
 </script>
 <body>
 	<!-- 主页 -->
-		<div class="header">
-			<div class="wrapper">
+	<div class="header">
+		<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
-			</div>
-		</div>	
-		
-<div class="homepage" style="z-index:11111111;">		
-	 <!-- 订单信息  -->
-	  	<div id="order"  style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">
-	     	
-	    </div>
-	  
-	  
-	  
-      <div class="layui-inline" style="width:96%;height:auto;position: relative;"> <!-- 注意：这一层元素并不是必须的 -->
-  			<ul class="listbox" style="color:black;">
-		    <li>
-  			<input type="text"  placeholder="请您选择游玩日期"   style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;" class="layui-input" id="useDate">
-	        <p style="position: absolute;top:30px;left:10%;">游玩日期</p>
-	        <p style="position: absolute;top:30px;right:5%;">❯</p>
-		    </li>
-		    <li>
-		    <input type="button">
-		    <p style="position: absolute;top:105px;left:10%;">购买数量</p>
-		    <p class="p1" style="position: absolute;top:105px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
-		    <input type="text" readonly="true"  class="zhi" id="shuliang" value="1"  style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:108px;font-size:14px;font-weight:bold;text-align: center;">
-		    <p class="p2" style="position: absolute;top:105px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;line-height:25px;">+</p>
-		    </li>
-		    <li>
-		    <input type="button">
-		    <p style="position: absolute;top:175px;left:10%;">优惠券</p>
-		    <p style="position: absolute;top:175px;right:7%;"><span>0</span>张可用</p>
-		    </li> 
-		    <li>
-		    <input type="button">
-		    <p style="position: absolute;top:245px;left:10%;">填写身份信息 </p>
-		    <p class="change" style="position: absolute;top:245px;right:7%;color:#FCB735;">添加/修改▲</p>
-		    <div class="homepage_add" style="height:auto;width:85%;background: #fff;margin:-20px auto 0;padding:20px 0;border-radius:10px;">		   						     
-		    </div> 		   
-		    </li>
-		    
-		    </ul>	 
-	  </div>
-	 <!-- 付款  -->
-	 <div   style="background:#fff;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
-	     	<p style="height:100%;float:left;text-align:center;width:55%;line-height: 60px;color:#EC6D1E;font-size:20px;font-weight:bold;display: inline-block;">￥<span id="zong"></span></p>	        
-	        <p id="nowbuy" style="height:100%;float:right;text-align:center;width:45%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;background:#EC6D1E; ">立即购买</p>
-	 </div> 
-     <div style="height:90px;width:100%;"> </div> 
-     
-     </div> 
-     
-     
-     <div  class="window-1" style="z-index:11111;width:100%;display: none;height:500px;padding:0 0 50px 0;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0; ">
-	   <p style="text-align:center;width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">添加/修改信息<span class="close-window-1" style="float:right;color:#fff;margin-right:5%;font-weight:bold;">关闭</span></p>
-	   <button onclick="addInfo()" style="width:50%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 0;">添加信息</button>	 
-	  <div id="window-1-message"></div>
-	  </div>
-	  
-	  
-	  
-	<!-- 添加信息 -->  
-		<div class="window-2" style="z-index:111111;display: none;">
+				class="icon-reorder icon-large"></span></a>
+			<div class="header-content">商户</div>
+		</div>
+	</div>
+
+	<div class="homepage" style="z-index:11111111;">
+		<!-- 订单信息  -->
+		<div id="order"
+			style="width:96%;height:auto;margin:0 auto;background:#fff;position: relative;overflow: hidden;">
+
+		</div>
+
+
+
+		<div class="layui-inline"
+			style="width:96%;height:auto;position: relative;">
+			<!-- 注意：这一层元素并不是必须的 -->
+			<ul class="listbox" style="color:black;">
+				<li id="travelDate"><input type="text" placeholder="请您选择游玩日期"
+					style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;"
+					class="layui-input" id="useDate">
+					<p style="position: absolute;top:30px;left:10%;">游玩日期</p>
+					<p style="position: absolute;top:30px;right:5%;">❯</p></li>
+
+				<li id="travelDates">
+					<!-- position: absolute;top:30px;left:10%; --> <!-- style="position: absolute;top:30px;right:5%;" -->
+					<!-- 					<p style="color:red;position: absolute;top:30px;left:10%;">活动规则:2020年1月17日-2020年1月24日(1月24日闭园),过期作废。</p>
+ --> <p 
+					style="cursor: pointer;width:100%;height:60px;line-height:60px;margin:10px auto;text-align: center;margin-left:2%;font-size:80%"
+					class="layui-input" id="useDate" >活动日期:2020-1-17至2020-2-24 (1月24日闭园),过期作废。</p>
+
+				</li>
+
+
+
+
+				<li><input type="button">
+					<p style="position: absolute;top:105px;left:10%;">购买数量</p>
+					<p class="p1"
+						style="position: absolute;top:105px;right:22%;font-size:14px;font-weight:bold;line-height:25px;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid #666666;text-align: center;">—</p>
+					<input type="text" readonly="true" class="zhi" id="shuliang"
+					value="${resNum}"
+					style="padding:0;border:none;outline: none;width:20px;height:20px;position: absolute;right:14%;margin:0;top:108px;font-size:14px;font-weight:bold;text-align: center;">
+					<p class="p2"
+						style="position: absolute;top:105px;right:4%;font-size:22px;color:#fff;background:#EC6D1E;display:inline-block;width:25px;height:25px;border-radius:50%;border:1px solid;text-align: center;line-height:25px;">+</p>
+				</li>
+				<li><input type="button">
+					<p style="position: absolute;top:175px;left:10%;">优惠券</p>
+					<p style="position: absolute;top:175px;right:7%;">
+						<span>0</span>张可用
+					</p></li>
+				<li><input type="button">
+					<p style="position: absolute;top:245px;left:10%;">填写身份信息</p>
+					<p class="change"
+						style="position: absolute;top:245px;right:7%;color:#FCB735;">添加/修改▲</p>
+					<div class="homepage_add"
+						style="height:auto;width:85%;background: #fff;margin:-20px auto 0;padding:20px 0;border-radius:10px;">
+					</div></li>
+
+			</ul>
+		</div>
+		<!-- 付款  -->
+		<div
+			style="background:#fff;height:60px;width:100%;border-bottom:1px solid  rgb(230, 230, 230);border-top:1px solid  rgb(230, 230, 230);position: fixed;bottom:0;">
+			<p
+				style="height:100%;float:left;text-align:center;width:55%;line-height: 60px;color:#EC6D1E;font-size:20px;font-weight:bold;display: inline-block;">
+				￥<span id="zong"></span>
+			</p>
+			<p id="nowbuy"
+				style="height:100%;float:right;text-align:center;width:45%;line-height: 60px;color:#fff;font-size:20px;font-weight:bold;display: inline-block;background:#EC6D1E; ">立即购买</p>
+		</div>
+		<div style="height:90px;width:100%;"></div>
+
+	</div>
+
+
+	<div class="window-1"
+		style="z-index:11111;width:100%;display: none;height:500px;padding:0 0 50px 0;overflow-x: hidden;text-align: center;background: #fff;position: fixed;bottom:0; ">
+		<p
+			style="text-align:center;width:100%;margin:0 auto;height:40px;line-height: 40px;font-size: 14px;border-bottom:1px solid #D3D3D3;background:#CFCFCF">
+			添加/修改信息<span class="close-window-1"
+				style="float:right;color:#fff;margin-right:5%;font-weight:bold;">关闭</span>
+		</p>
+		<button onclick="addInfo()"
+			style="width:50%;height:30px;color:#FFA940;border:none;outline:none;background: #fff;border:1px solid #FFA940;margin:20px 0;">添加信息</button>
+		<div id="window-1-message"></div>
+	</div>
+
+
+
+	<!-- 添加信息 -->
+	<div class="window-2" style="z-index:111111;display: none;">
 		<ul class="listbox-2" style="color:black;">
-		    <li>
-		    <input  id="_name" type="text" placeholder="请输入您的姓名" minlength="4" maxlength="4" style="" >
-		    <p    style="position: absolute;top:65px;left:10%;">用户姓名</p>
-		    </li>
-		    <li>
-		     <input id="_phone" class="phone" type="text" placeholder="请输入正确的手机号码" minlength="11" maxlength="11" style="" >
-		    <p   style="position: absolute;top:135px;left:10%;">联系电话</p>
-		    </li>
-		    <li>
-		    <input id="_idcard" class="pid"  type="text" placeholder="请输入身份证号码" minlength="18" maxlength="18" style="" >
-		     <img id="face" style="height:20px;height:20px;position: absolute;top:205px;right:10%;" src="lib/images/zhaoxiang.png"> 
-		    <p  style="position: absolute;top:205px;left:10%;">身份证号码</p>
-		    </li>
-		 </ul>
-		    
-<div style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;">
-          <img id="uploadImages" style="width:140px;height:171px;position: absolute;left:50%;margin:40px 0 0 -70px;" alt="" src="lib/images/renliansss.png">
-          <p style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-126px;">请保持正脸，平视屏幕，面部足够清晰。</p>
-          <button onclick="getPicture()" style="position: absolute;left:50%;margin-left:-50px;top:300px;font-size:18px;width:100px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>
-          <button onclick="save()" style="position: absolute;left:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">保存</button>
-          <button onclick="shutdown()" style="position: absolute;right:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">关闭</button>
-      </div>
-  </div>    
-  </body>
+			<li><input id="_name" type="text" placeholder="请输入您的姓名"
+				minlength="4" maxlength="4" style="">
+				<p style="position: absolute;top:65px;left:10%;">用户姓名</p></li>
+			<li><input id="_phone" class="phone" type="text"
+				placeholder="请输入正确的手机号码" minlength="11" maxlength="11" style="">
+				<p style="position: absolute;top:135px;left:10%;">联系电话</p></li>
+			<li><input id="_idcard" class="pid" type="text"
+				placeholder="请输入身份证号码" minlength="18" maxlength="18" style="">
+				<img id="face"
+				style="height:20px;height:20px;position: absolute;top:205px;right:10%;"
+				src="lib/images/zhaoxiang.png">
+				<p style="position: absolute;top:205px;left:10%;">身份证号码</p></li>
+		</ul>
+
+		<div
+			style="background:#fff;height:370px;width:96%;border-radius:6px;margin:0 auto;position: relative;top:10px;">
+			<img id="uploadImages"
+				style="width:140px;height:171px;position: absolute;left:50%;margin:40px 0 0 -70px;"
+				alt="" src="lib/images/renliansss.png">
+			<p
+				style="text-align: center;position: absolute;top:250px;left:50%;margin-left:-126px;">请保持正脸，平视屏幕，面部足够清晰。</p>
+			<button onclick="getPicture()"
+				style="position: absolute;left:50%;margin-left:-50px;top:300px;font-size:18px;width:100px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">开始拍摄</button>
+			<button onclick="save()"
+				style="position: absolute;left:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">保存</button>
+			<button onclick="shutdown()"
+				style="position: absolute;right:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">关闭</button>
+		</div>
+	</div>
+</body>
 
 
 

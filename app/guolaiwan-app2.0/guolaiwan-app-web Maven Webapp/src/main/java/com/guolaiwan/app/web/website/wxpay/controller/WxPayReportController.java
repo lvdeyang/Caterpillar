@@ -22,8 +22,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.domain.RefundDetail;
+import com.guolaiwan.app.aoyou.AoYouV1Service;
+import com.guolaiwan.app.aoyou.AoYouV2Service;
+import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
+import com.guolaiwan.app.qimingxin.TravelService;
+import com.guolaiwan.bussiness.admin.po.NhEticketsPo;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.web.weixin.SendMsgUtil;
@@ -38,12 +44,14 @@ import com.guolaiwan.bussiness.Parking.po.OrderPO;
 import com.guolaiwan.bussiness.Parking.po.ParkingPositionPO;
 import com.guolaiwan.bussiness.Parking.po.VehiclePO;
 import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
+import com.guolaiwan.bussiness.admin.dao.AoYouOrderDao;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.MealListDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
 import com.guolaiwan.bussiness.admin.dao.MessageDAO;
+import com.guolaiwan.bussiness.admin.dao.NhEticketsDao;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
 import com.guolaiwan.bussiness.admin.dao.TableDAO;
@@ -52,6 +60,7 @@ import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
+import com.guolaiwan.bussiness.admin.po.AoYouOrderPO;
 import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.MealListPo;
@@ -70,6 +79,7 @@ import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 
+import cn.hutool.json.JSONUtil;
 import pub.caterpillar.weixin.constants.WXContants;
 import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
 
@@ -120,6 +130,12 @@ public class WxPayReportController extends WebBaseControll {
 
 	@Autowired
 	private MessageMiddleClientDao messageClientDAO;
+
+	@Autowired
+	private NhEticketsDao nhEticketsDao;
+	
+	@Autowired
+	private AoYouOrderDao aoYouOrderDao;
 
 	@ResponseBody
 	@RequestMapping(value = "/payreport", method = RequestMethod.POST)
@@ -196,7 +212,10 @@ public class WxPayReportController extends WebBaseControll {
 
 						// 判断是不是分销商品 调用接口 买票（凤凰山 皮影乐园）
 						isDistribute(order);
-
+						isNhTicket(order);
+						// 中青旅==========================================================================================================
+						isAoYou(order);
+						// 中青旅==========================================================================================================
 						sendMessage(order);
 					}
 				}
@@ -235,6 +254,7 @@ public class WxPayReportController extends WebBaseControll {
 	@RequestMapping(value = "/refundreport", method = RequestMethod.POST)
 	public String refundreport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Map<String, Object> ret = new HashMap<String, Object>();
+		// request.getParameter(arg0);
 		System.out.println("*****************wxreport****************");
 		// Mr.huang 2017/09/12 飞的好低的小蜜蜂
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
@@ -244,8 +264,23 @@ public class WxPayReportController extends WebBaseControll {
 			xml += tempStr;
 			System.out.println(tempStr);
 		}
-
-		GuolaiwanWxPay wxPay = GuolaiwanWxPay
+		/*
+		 * // 事发突然...我要瞎写了... OrderInfoPO oPo =
+		 * conn_orderInfo.getByRoderNo(refundNum); long nhProductId = 2469; if
+		 * (oPo.getProductId() == nhProductId) { List<NhEticketsPo> NhList =
+		 * nhEticketsDao.getByOrderId(oPo.getId()); List<String> snList = new
+		 * ArrayList<String>(); for (NhEticketsPo nhEticketsPo : NhList) {
+		 * snList.add(nhEticketsPo.getSn()); } String result =
+		 * TravelService.orderRefund(refundNum, oPo.getTargetId(), snList,
+		 * NhList.size()); Map<String, Object> resultMap =
+		 * JSONUtil.toBean(JSONUtil.parse(result), Map.class, false);
+		 * 
+		 * if (resultMap.get("rspCode").equals("200") &&
+		 * resultMap.get("rspDesc").equals("请求验证成功")) {
+		 * System.out.println(result); System.out.println("南湖申请退票....等待审核中"); }
+		 * 
+		 * } // 上面是我瞎写的...有待测试.......
+		 */ GuolaiwanWxPay wxPay = GuolaiwanWxPay
 				.getInstance("http://" + WXContants.Website + "/website/wxreport/payreport");
 		Map<String, String> respData = wxPay.processRefundResponseXml(xml);
 		String returncode = respData.get("return_code");
@@ -273,6 +308,7 @@ public class WxPayReportController extends WebBaseControll {
 			stringBuffer.append("OK");
 			stringBuffer.append("]]></return_msg>");
 			System.out.println("微信支付退款成功!订单号：" + tradeNum);
+
 			return stringBuffer.toString();
 		}
 		stringBuffer.append("<xml><return_code><![CDATA[");
@@ -282,6 +318,73 @@ public class WxPayReportController extends WebBaseControll {
 		stringBuffer.append("fail");
 		stringBuffer.append("]]></return_msg>");
 		return stringBuffer.toString();
+	}
+
+	// 中青旅==========================================================================================================
+	/**
+	 * 对接遨游系统订单支付
+	 * 
+	 * @param order
+	 * @throws Exception 
+	 */
+	public void isAoYou(OrderInfoPO order) throws Exception {
+		//世园会
+		Long productId = order.getProductId();
+		if(AoyouIDUtil.isSyhID(productId.toString())){
+			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(order.getOrderNO());
+			JSONObject syhOrder = AoYouV1Service.submitOrder(aoYouOrderPO.getSaleorder_no(), aoYouOrderPO.getMobile_no());
+			System.out.println("支付世园会票务订单返回结果:" + syhOrder);
+			JSONObject errdata = JSON.parseObject(syhOrder.get("errdata").toString());
+			aoYouOrderPO.setConfirm_code(errdata.getString("confirm_code"));
+			aoYouOrderDao.saveOrUpdate(aoYouOrderPO);
+		}
+		
+		//冰雪
+		if(AoyouIDUtil.isBxID(productId.toString())){
+			AoYouOrderPO aoYouOrderPO = aoYouOrderDao.getByOrderNo(order.getOrderNO());
+			JSONObject syhOrder = AoYouV2Service.submitOrder(aoYouOrderPO.getOrderno(), aoYouOrderPO.getMobile_no());
+			System.out.println("支付冰雪票务订单返回结果:" + syhOrder);
+			JSONObject errdata = JSON.parseObject(syhOrder.get("errdata").toString());
+			aoYouOrderPO.setConfirm_code(errdata.getString("confirm_code"));
+			aoYouOrderDao.saveOrUpdate(aoYouOrderPO);
+		}
+	}
+	// 中青旅==========================================================================================================
+	
+	/**
+	 * 启明芯南湖票
+	 * 
+	 * @param order
+	 */
+	public void isNhTicket(OrderInfoPO order) {
+		long nhProductId = 2469;
+		if (order.getProductId() == nhProductId) {
+			System.out.println("进入南湖票务支付订单中....");
+			// 支付回调 result
+			String result = TravelService.payOrder(order.getTargetId());
+			System.out.println("南湖支付回调"+result);
+			Map<String, Object> resultMap = JSONUtil.toBean(JSONUtil.parse(result), Map.class, false);
+			if (resultMap.get("rspCode").equals("200")) {
+				System.out.println("回调成功 开始发送票务已支付");
+				String object = com.alibaba.fastjson.JSON.toJSONString(resultMap.get("etickets"));
+				JSONArray jsonArray = JSONArray.parseArray(object.toString());
+				// 支付订单回调成功 添加二维码信息到NhEtickets表中
+				for (int i = 0; i < jsonArray.size(); i++) {
+
+					List<NhEticketsPo> list = nhEticketsDao.getByOrderId(order.getId());
+					if (list == null||list.size()<jsonArray.size()) {
+						NhEticketsPo nhEticketsPo = new NhEticketsPo();
+						nhEticketsPo.setIsInUse(0);
+						nhEticketsPo.setOrderId(order.getId());
+						nhEticketsPo.setSn(jsonArray.getJSONObject(i).get("sn").toString());
+						nhEticketsPo.setUrl(jsonArray.getJSONObject(i).get("url").toString());
+						nhEticketsDao.save(nhEticketsPo);
+					}
+
+				}
+				System.out.println("二维码信息存储成功！");
+			}
+		}
 	}
 
 	/**
@@ -1386,11 +1489,7 @@ public class WxPayReportController extends WebBaseControll {
 		dataObject3.put("remark", remarkObj);
 		obj3.put("data", dataObject3);
 		SendMsgUtil.sendTemplate(obj3.toJSONString());
-		
-		
-		
-		
-		
+
 		JSONObject obj4 = new JSONObject();
 		obj4.put("touser", "opVUYv1VUjjOlwYUeLj4hJRcTZPE");
 		obj4.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
@@ -1426,7 +1525,6 @@ public class WxPayReportController extends WebBaseControll {
 		dataObject4.put("remark", remarkObj);
 		obj4.put("data", dataObject4);
 		SendMsgUtil.sendTemplate(obj4.toJSONString());
-		
 
 	}
 
@@ -1837,7 +1935,7 @@ public class WxPayReportController extends WebBaseControll {
 		SendMsgUtil.sendTemplate(obj.toJSONString());
 
 		// opVUYv9LtqKAbiaXInBqI01hlpYg
-        //opVUYv1VUjjOlwYUeLj4hJRcTZPE
+		// opVUYv1VUjjOlwYUeLj4hJRcTZPE
 		JSONObject obj2 = new JSONObject();
 		obj2.put("touser", "opVUYv_KDzCscwik3O4pnl64qYLU");
 		obj2.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");

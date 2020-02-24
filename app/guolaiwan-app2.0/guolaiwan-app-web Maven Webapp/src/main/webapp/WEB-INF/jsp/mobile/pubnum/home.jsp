@@ -512,9 +512,32 @@ html, body {
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
 <script type="text/javascript">
-
+		start()
+		$(window).on('scroll', function(){
+		 start()
+		})
+		function start(){
+		  //.not('[data-isLoaded]')选中已加载的图片不需要重新加载
+		 $('.lazy').not('[data-isLoaded]').each(function(){
+		   var $node = $(this)
+		   if( isShow($node) ){
+		     loadImg($node)
+		   }
+		 })
+		 }
+		//判断一个元素是不是出现在窗口(视野)
+		function isShow($node){
+		 return $node.offset().top <= $(window).height() + $(window).scrollTop()
+		 }
+		//加载图片
+		 function loadImg($img){
+		//.attr(值)
+		//.attr(属性名称,值)
+		$img.attr('src', $img.attr('data-src')) //把data-src的值 赋值给src
+		$img.attr('data-isLoaded', 1)//已加载的图片做标记
+		}
+		
 /*记录历史位置  */
       $(function () {
 		var str = window.location.href;
@@ -824,16 +847,16 @@ html, body {
 	           html.push('<div class="zong" style="width:100%;position: relative;">');
 	           html.push('<button id="fav"class="collect" value="'+merchants[0].id+'" style="position: absolute;top:30%;left:80%;float:right;width:17%;height:35px;font-size:14px;border-radius: 25px;color:#F6A2A2;background:#ffffff;border:1px solid #F6A2A2 ;outline:none;margin-right:5%;z-index:10;">+ 收藏</button>');
 	           html.push('<div style="width:100%;margin-top:10px;float:left;" class="merchant1" id="merchant1-'+merchants[0].id+'-'+merchants[0].modularCode+'">');
-		       html.push('<image style="width:60px;height:60px;float:left;margin-left:12px;" src="'+merchants[0].shopHeading+'"/>');
+		       html.push('<image style="width:60px;height:60px;float:left;margin-left:12px;"  class="lazy" src="lib/images/loading.gif" data-src="'+merchants[0].shopHeading+'"/>');
 		       html.push('<div style="width:50%;float:left;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;font-weight:bold;padding-left:12px;height:40px;">'+merchants[0].shopName+'</div>');
 		    
 		       html.push('</br>');
 		       html.push('<div style="width:80%;float:left;font-size:12px;padding-left:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;">'+merchants[0].shopAddress+'</div>');
                html.push('<div style="width;100%;margin-top:15px;height:90px;float:left;margin-left:12px">');
                var morePics=merchants[0].shopMpic.split(',');
-               html.push('<image style="width:32%;height:90px;display: inline-block;" src="'+morePics[0]+'"/>');
-		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" src="'+morePics[1]+'"/>');
-		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" src="'+morePics[2]+'"/>');
+               html.push('<image style="width:32%;height:90px;display: inline-block;" class="lazy" src="lib/images/loading.gif" data-src="'+morePics[0]+'"/>');
+		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" class="lazy" src="lib/images/loading.gif" data-src="'+morePics[1]+'"/>');
+		       html.push('<image style="width:32%;height:90px;display: inline-block;margin-left:1%" class="lazy" src="lib/images/loading.gif" data-src="'+morePics[2]+'"/>');
 		       html.push('<div style="width:100%;height:47px;display:block;">');
 	           html.push('</div>');
 		       html.push('</div>');
@@ -848,7 +871,7 @@ html, body {
 			   for(var j=1;j<merchants.length;j++){
 				   html.push('<a  href="javascript:void(0);"  class="weui-media-box weui-media-box_appmsg merchant" id="merchant-'+merchants[j].id+'-'+merchants[j].modularCode+'">');
 				   html.push('<div class="weui-media-box__hd">');
-				   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb" src="'+merchants[j].shopHeading+'">');
+				   html.push('<img style="width:100%;height:100%" class="weui-media-box__thumb lazy"  src="lib/images/loading.gif" data-src="'+merchants[j].shopHeading+'">');
 				   html.push('</div>');
 				   html.push('<div class="weui-media-box__bd">');
 				   html.push('<h4 class="weui-media-box__title">'+merchants[j].shopName+'</h4>');

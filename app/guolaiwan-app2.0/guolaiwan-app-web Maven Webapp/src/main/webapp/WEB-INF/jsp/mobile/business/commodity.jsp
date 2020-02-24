@@ -78,7 +78,7 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
+	height:auto;
 	background:#E0E0E0 !important; 
 	position: relative;
 	-webkit-text-size-adjust: none;
@@ -150,6 +150,12 @@ html, body {
 .fangxing p{
  margin:0;
 }
+#proContent img{
+    width:100%;
+  
+}
+
+
 </style>
 
 </head>
@@ -164,55 +170,47 @@ html, body {
 <script src="<%=request.getContextPath()%>/layui/js/x-layui.js"charset="utf-8"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/layui/css/x-admin.css" media="all">
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script>
 <script>
 
 </script>
 <script type="text/javascript">
     $(function(){
-	  getRecomment();
 	  getallteam(); 
 	  getComment();
+	  var vConsole = new VConsole();
   })
-
-
-	 function getRecomment(){
-	      var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${merchantId}&userId=${userId}';
-		
-		$.get(_uriMerchantInfo, null, function(data){
-			data = parseAjaxResult(data);
-			merchantName = data.shopName + '-过来玩';
-			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
-			merchantUrl = window.location.href;
-			if(data === -1) return;
-			if(data){
-			    var html=[];
-			    var pics=data.shopMpic.split(',');
-				for(var i=0; i<pics.length; i++){
-					var str = pics[i].split('.');
-					if(str[3]!="mp4"&&str[3]!="MP4"){ 
-					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
-					}else{
-					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
-					}
-				}
-			    $('.header-content').html(data.shopName);
-				$('.swiper-wrapper').append(html.join(''));
-				$(".swiper-container").swiper({
-			        loop: true,
-			        autoplay: 3000
-			    });
-			    }
-			    });
-	  }
 	 //全局获取商品内容 
 	 function getallteam(){
      var _uricoms = window.BASEPATH + 'product/package/commodity/info?merchantId=${merchantId}&proId=${proId}&choice=0';	
-     $.get(_uricoms, null, function(msg){    
+     $.get(_uricoms, null, function(msg){   
+     console.log(msg) 
+       var html = []; 
+       	merchantPic = msg.webUrl;
+        var pics=msg.product.productMorePic.split(',');
+	 	for(var i=0; i<pics.length; i++){
+		var str = pics[i].split('.');
+		if(str[3]!="mp4"&&str[3]!="MP4"){ 
+		html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+merchantPic+''+pics[i]+'" alt=""></div>');
+		}else{
+		html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+merchantPic+''+pics[i]+'" controls="controls" ></div>');
+		}
+	}
+		$('.swiper-wrapper').append(html.join(''));
+		$(".swiper-container").swiper({
+	        loop: true,
+	        autoplay: 3000
+	    });	
        //商品信息
        var merchantMessage =  msg.merinfo;
        var prouctMessage =  msg.proinfo;
        var ticketOrderNumber = msg.ticketOrderNumber;
-       var html = [];
+       productPic = msg.proinfo[0].productIntroduce;
+       $('#proContent').html(productPic);
+       var html = []; 
+       
+       
+     	
        html.push('<ul>');
        html.push('<li><p style="font-size:18px;">'+prouctMessage[0].productName+'</p></li>');
        html.push('<li><p><span style="font-size:18px;color:#EA6B1F;">'+msg.grade+'分</span><span style="margin:0 5px;color:#DFDFDF;">|</span><span>好评率'+msg.feedback+'%</span></p></li>');
@@ -309,17 +307,22 @@ html, body {
 			</div>
 		</div>
 	</div>
-           <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;border-radius:10px;overflow: hidden;position: relative;top:-60px;z-index:111;">        
+           <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;border-radius:10px;overflow: hidden;margin-top:10px;z-index:111;">        
 	     </div>
 	  
-	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-40px;padding:0 0 30px 0;">
+	  <div class="fangxing" style="width:100%;height:auto;background:#fff;border-radius:10px;margin:10px 0;padding:0 0 30px 0;">
 	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;"><img style="width:30px;height:30px;" alt="" src="lib/images/goupiaoss.png">票种选择</p>
 	    <div class="productlist">	              		          
 	    </div>	     	  
 	  </div> 
-	 
+	 <!-- 商品详情 -->
+	  <div style="width:100%;height:auto;background:#fff;border-radius:10px;padding:0 0 30px 0;overflow: hidden;margin:10px 0;">
+	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">商品详情</p>
+	    <div style="font-size:12px;padding:20px;float:left;width:100%;height:auto;margin:0 auto;overflow-x:scroll" id="proContent"></div>
+
+	  </div> 
 	   <!-- 点评 -->
-	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;position: relative;top:-20px;padding:0 0 30px 0;">
+	   <div class="dianping" style="width:100%;height:auto;background:#fff;border-radius:10px;padding:0 0 30px 0;margin-top:15px;">
 	    <p style="font-size:18px;font-weight:bold;width:90%;margin:0 auto;height:50px;line-height: 50px;border-bottom:1px solid #BCBCBC;">用户评价</p>	  	      
 	  </div>
 

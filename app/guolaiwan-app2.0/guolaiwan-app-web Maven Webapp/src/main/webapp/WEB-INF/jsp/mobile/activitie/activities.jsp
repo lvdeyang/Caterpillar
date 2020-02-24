@@ -445,11 +445,19 @@ width:100%;
    
 	/*购买 */
    function btn_a(id){
-   console.log(id)
    location.href=window.BASEPATH + 'pubnum/product/index/'+id;
    
    }
-
+   function btn_nanhu(){
+   location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId=421'
+   }
+   
+   function btn_denghui(){
+   location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId=423'
+   }
+   function btn_huaxue(){
+   location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId=424'
+   }
 </script>
 <body οncοpy='document.selection.empty()' οnselect='document.selection.empty()' >
 	<!-- 主页 -->
@@ -499,6 +507,16 @@ width:100%;
 	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_fives.png">
 	 <div class="main_d" style="width:100%;height:auto;overflow: hidden;background: #D10006;padding:70px 0;">
 	   <div class="main_d_in" style="width:100%;height:auto;padding:0 2%;margin-top:-10px;text-align: center;">
+ 	   </div> 
+	</div>
+  </div>
+   <div style="width: 100%;position: relative;">
+	 <img style="width:100%;position:absolute;top:-80px;" src="lib/images/title_sixs.png">
+	 <div class="main_e" style="width:100%;height:auto;overflow: hidden;padding:70px 0 20px 0;">
+	   <div class="main_e_in" style="width:100%;height:auto;padding:0 3%;margin-top:10px;text-align: center;">
+	   <img style="width:100%;margin:3px 0;" onclick="btn_nanhu()" src="lib/images/nanhu.png">
+	   <img style="width:100%;margin:3px 0;" onclick="btn_denghui()" src="lib/images/denghui.png">
+	   <img style="width:100%;margin:3px 0;" onclick="btn_huaxue()"src="lib/images/huaxue.png">
  	   </div> 
 	</div>
   </div>
