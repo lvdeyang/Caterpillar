@@ -1,7 +1,11 @@
 package com.sumavision.tetris.show;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
 
 import java.util.List;
 
@@ -28,4 +32,10 @@ public class LiveQuery {
         liveDao.getByType(type);
         return null;
     }
+    
+    public Page<LivePo> findAll(int currentPage, int pageSize){
+		Pageable page = new PageRequest(currentPage-1, pageSize);
+		Page<LivePo> sches = liveDao.findAll(page);
+		return sches;
+	}
 }
