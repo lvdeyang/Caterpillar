@@ -101,7 +101,7 @@ public class StreamPassbyService {
             // 创建输入源
             List<InputBO> inputBOs = new ArrayList<InputBO>();
             for (String pubName : srcPubNames) {
-                InputBO inputBO = stream2InputBO(pubName, "rtmp://www.guolaiwan.net/live/" + pubName);
+                InputBO inputBO = stream2InputBO(pubName, "rtmp://127.0.0.1/live/" + pubName);
                 inputBOs.add(inputBO);
             }
             // 创建备份源关系了
@@ -151,7 +151,7 @@ public class StreamPassbyService {
         try {
             // 创建输入源
             List<InputBO> inputBOs = new ArrayList<InputBO>();
-            InputBO inputBO = stream2InputBO(pubName, "rtmp://www.guolaiwan.net/live/" + pubName);
+            InputBO inputBO = stream2InputBO(pubName, "rtmp://127.0.0.1/live/" + pubName);
             inputBOs.add(inputBO);
 
 
@@ -265,7 +265,7 @@ public class StreamPassbyService {
     private OutputBO streamRtmp2OutputBO(String outputId, String videoTaskId, String audioTaskId, String encodeVideoId,
                                          String encodeAudioId, String name) throws Exception {
 
-        OutputRtmpBO rtmp = new OutputRtmpBO().setServer_url("rtmp://www.guolaiwan.net/live/" + name)
+        OutputRtmpBO rtmp = new OutputRtmpBO().setServer_url("rtmp://127.0.0.1/live/" + name)
                 .setAud_exist(true).setVid_exist(true);
 
         BaseMediaBO vmedia = new BaseMediaBO().setEncode_id(encodeVideoId).setTask_id(videoTaskId);
@@ -728,11 +728,11 @@ public class StreamPassbyService {
         TaskBO videoTask = new TaskBO().setId(videoTaskId).setType("video").setRaw_source(videoSource)
                 .setEncode_array(new ArrayList<EncodeBO>());
 
-        H264BO h264 = new H264BO().setBitrate(Integer.valueOf(1500000))
-                .setRatio("16:9")
+        H264BO h264 = new H264BO().setBitrate(Integer.valueOf(500000))
+                .setRatio("9:16")
                 .setFps("20")
-                .setWidth(640)
-                .setHeight(360);
+                .setWidth(544)
+                .setHeight(960);
 
         EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId).setH264(h264);
 
