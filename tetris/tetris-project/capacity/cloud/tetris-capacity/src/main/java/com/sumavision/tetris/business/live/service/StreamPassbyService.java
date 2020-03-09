@@ -122,10 +122,9 @@ public class StreamPassbyService {
             String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
             OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
                     dstPubName);
-            // 创建录制
-            //OutputBO recordOutputBo=record2OutputBO(taskId, taskBOs, recordPath);
-            // 发送命令了
 
+            ///OutputBO recordOutputBo = record2OutputBO(taskId+"", taskBOs, "/home/hls");
+            
             AllRequest allRequest = new AllRequest();
             allRequest.setInput_array(inputBOs);
             allRequest.setTask_array(taskBOs);
@@ -166,8 +165,7 @@ public class StreamPassbyService {
             String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(pubName).toString();
 
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(pubName).toString();
-            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO,
-            		 resolution, bitrate, fps, hw);
+            List<TaskBO> taskBOs = stream2PassbyTaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
 
 
             // 创建录制
@@ -776,6 +774,58 @@ public class StreamPassbyService {
 
     }
 
+    /**
+	 * 任务<br/>
+	 * <b>作者:</b>wjw<br/>
+	 * <b>版本：</b>1.0<br/>
+	 * <b>日期：</b>2019年11月13日 下午4:44:02
+	 * @param id
+	 * @param input
+	 * @return
+	 */
+	public List<TaskBO> stream2PassbyTaskBO(String videoTaskId, String audioTaskId, String encodeVideoId, String encodeAudioId, InputBO input) throws Exception{
+		
+		List<TaskBO> tasks = new ArrayList<TaskBO>();
+		
+		//视频
+		TaskSourceBO videoSource = new TaskSourceBO().setInput_id(input.getId())
+													 .setProgram_number(input.getProgram_array().get(0).getProgram_number())
+													 .setElement_pid(input.getProgram_array().get(0).getVideo_array().get(0).getPid());
+		
+		TaskBO videoTask = new TaskBO().setId(videoTaskId)
+									   .setType("passby")
+									   .setEs_source(videoSource)
+									   .setEncode_array(new ArrayList<EncodeBO>());
+		
+		EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId)
+											 .setPassby(new JSONObject());
+		
+		videoTask.getEncode_array().add(videoEncode);
+		
+		tasks.add(videoTask);
+		
+		//音频
+		TaskSourceBO audioSource = new TaskSourceBO().setInput_id(input.getId())
+													 .setProgram_number(input.getProgram_array().get(0).getProgram_number())
+													 .setElement_pid(input.getProgram_array().get(0).getAudio_array().get(0).getPid());
+		
+		TaskBO audioTask = new TaskBO().setId(audioTaskId)
+									   .setType("passby")
+									   .setEs_source(audioSource)
+									   .setEncode_array(new ArrayList<EncodeBO>());
+		
+		EncodeBO audioEncode = new EncodeBO().setEncode_id(encodeAudioId)
+				                             .setPassby(new JSONObject());
+		
+		audioTask.getEncode_array().add(audioEncode);
+		
+		tasks.add(audioTask);
+		
+		return tasks;
+		
+	}
+    
+    
     /**
      * 输出<br/>
      * <b>作者:</b>wjw<br/>
