@@ -96,7 +96,8 @@ public class StreamPassbyService {
      * @param srcPubNames 按照机位顺序放入ArrayList【机位的发布名】
      * @param dstPubName  注意所有的dstPubname不可以与srcPubname重名
      */
-    public void createTask(Long taskId, List<String> srcPubNames, String dstPubName) {
+    public void createTask(Long taskId, List<String> srcPubNames, String dstPubName,
+    		String resolution,int bitrate,int fps,String hw) {
         try {
             // 创建输入源
             List<InputBO> inputBOs = new ArrayList<InputBO>();
@@ -115,7 +116,8 @@ public class StreamPassbyService {
             String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(taskId).toString();
 
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
-            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput);
+            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
+            		,resolution, bitrate, fps, hw);
             // 创建输出了
             String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
             OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
@@ -147,7 +149,8 @@ public class StreamPassbyService {
      * @param pubName    发布名称【要录制视频的发布名称】
      * @param recordPath 录制路径
      */
-    public void createRecordTask(String pubName, String recordPath) {
+    public void createRecordTask(String pubName, String recordPath,
+    		String resolution,int bitrate,int fps,String hw) {
         try {
             // 创建输入源
             List<InputBO> inputBOs = new ArrayList<InputBO>();
@@ -163,7 +166,8 @@ public class StreamPassbyService {
             String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(pubName).toString();
 
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(pubName).toString();
-            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
+            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO,
+            		 resolution, bitrate, fps, hw);
 
 
             // 创建录制
@@ -467,7 +471,8 @@ public class StreamPassbyService {
 
                 inputBO = stream2InputBO(inputId, rtmpUrl);
 
-                taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
+                //taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO
+                //		);
 
                 outputBO = stream2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, name,
                         storageUrl);
@@ -534,7 +539,7 @@ public class StreamPassbyService {
                     inputBO = JSONObject.parseObject(input.getInput(), InputBO.class);
                 }
 
-                taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
+                //taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
 
                 outputBO = stream2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, name,
                         storageUrl);
@@ -716,7 +721,8 @@ public class StreamPassbyService {
      * @return
      */
     public List<TaskBO> stream2TaskBO(String videoTaskId, String audioTaskId, String encodeVideoId,
-                                      String encodeAudioId, InputBO input) throws Exception {
+                                      String encodeAudioId, InputBO input,
+                                      String resolution,int bitrate,int fps,String hw) throws Exception {
 
         List<TaskBO> tasks = new ArrayList<TaskBO>();
 
@@ -728,11 +734,12 @@ public class StreamPassbyService {
         TaskBO videoTask = new TaskBO().setId(videoTaskId).setType("video").setRaw_source(videoSource)
                 .setEncode_array(new ArrayList<EncodeBO>());
 
-        H264BO h264 = new H264BO().setBitrate(Integer.valueOf(500000))
-                .setRatio("9:16")
-                .setFps("20")
-                .setWidth(544)
-                .setHeight(960);
+        String[] res=resolution.split(",");
+        H264BO h264 = new H264BO().setBitrate(Integer.valueOf(bitrate))
+                .setRatio(hw)
+                .setFps(fps+"")
+                .setWidth(Integer.parseInt(res[0]))
+                .setHeight(Integer.parseInt(res[1]));
 
         EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId).setH264(h264);
 

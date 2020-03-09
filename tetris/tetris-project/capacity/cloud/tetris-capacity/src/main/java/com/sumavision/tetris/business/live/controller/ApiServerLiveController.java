@@ -14,6 +14,8 @@ import com.sumavision.tetris.business.live.service.StreamPassbyService;
 import com.sumavision.tetris.commons.util.wrapper.ArrayListWrapper;
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -23,63 +25,31 @@ public class ApiServerLiveController {
     @Autowired
     private StreamPassbyService streamPassbyService;
 
-    /**
-     * 删除流透传任务<br/>
-     * <b>作者:</b>wjw<br/>
-     * <b>版本：</b>1.0<br/>
-     * <b>日期：</b>2019年11月25日 上午9:37:08
-     *
-     * @param String id 任务标识
-     */
-    @JsonBody
-    @ResponseBody
-    @RequestMapping(value = "/delete/stream/passby")
-    public Object deleteStreamPassby(String id, HttpServletRequest request) throws Exception {
-
-        streamPassbyService.deleteRtmp2Hls(id);
-
-        return null;
-    }
-
-
+   
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/create/task")
-    public Object createTask(HttpServletRequest request, String list, Long userId) throws Exception {
+    public Object createTask(HttpServletRequest request, String list, Long userId,
+    		String resolution,int bitrate,int fps,String hw) throws Exception {
 
-//		streamPassbyService.createTask(1l,
-//				new ArrayListWrapper<String>().add("test1").add("test2").getList(),
-//				"test");
-    	List<String> array=JSONArray.parseArray(list,String.class);
+    	List<String> array=Arrays.asList(list.split(","));
+    	
     	
         streamPassbyService.createTask(userId,
         		array,
-                "camera" + userId);
+                "camera" + userId,resolution, bitrate, fps, hw);
 
         return null;
     }
-    
-    @JsonBody
-    @ResponseBody
-    @RequestMapping(value = "/create/ntask")
-    public Object createNTask(HttpServletRequest request) throws Exception {
-
-		streamPassbyService.createTask(1l,
-				new ArrayListWrapper<String>().add("952783").add("952782").getList(),
-				"test");
-       
-
-        return null;
-    }
-    
 
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/create/record")
-    public Object createTask(HttpServletRequest request, String pubName, String path) throws Exception {
+    public Object createTask(HttpServletRequest request, String pubName, String path,
+    		String resolution,int bitrate,int fps,String hw) throws Exception {
 
 
-        streamPassbyService.createRecordTask(pubName, path);
+        streamPassbyService.createRecordTask(pubName, path, resolution, bitrate, fps, hw);
 
         return null;
     }
@@ -108,10 +78,7 @@ public class ApiServerLiveController {
     @ResponseBody
     @RequestMapping(value = "/delete/task")
     public Object deleteTask(HttpServletRequest request, String list, Long userId) throws Exception {
-    	List<String> array=JSONArray.parseArray(list,String.class);
-//		streamPassbyService.createTask(1l,
-//				new ArrayListWrapper<String>().add("test1").add("test2").getList(),
-//				"test");
+    	List<String> array=Arrays.asList(list.split(","));
         streamPassbyService.deleteTask(userId,
                 array);
 
