@@ -299,9 +299,9 @@ public class StreamPassbyService {
         int count = 0;
         for (String inputId : srcPubNames) {
 
-            ProgramElementBO velementBO = new ProgramElementBO().setPid(1).setProgram_switch_array(
+            ProgramElementBO velementBO = new ProgramElementBO().setType("audio").setPid(1).setProgram_switch_array(
                     new ArrayListWrapper<PidIndexBO>().addAll(generatePidIndex(2, 0)).getList());
-            ProgramElementBO aelementBO = new ProgramElementBO().setPid(2).setProgram_switch_array(
+            ProgramElementBO aelementBO = new ProgramElementBO().setType("video").setPid(2).setProgram_switch_array(
                     new ArrayListWrapper<PidIndexBO>().addAll(generatePidIndex(2, 1)).getList());
             List<ProgramElementBO> elementBOs = new ArrayList<ProgramElementBO>();
             elementBOs.add(velementBO);
@@ -736,6 +736,7 @@ public class StreamPassbyService {
         H264BO h264 = new H264BO().setBitrate(Integer.valueOf(bitrate))
                 .setRatio(hw)
                 .setFps(fps+"")
+                .setMax_bframe(0)
                 .setWidth(Integer.parseInt(res[0]))
                 .setHeight(Integer.parseInt(res[1]));
 
