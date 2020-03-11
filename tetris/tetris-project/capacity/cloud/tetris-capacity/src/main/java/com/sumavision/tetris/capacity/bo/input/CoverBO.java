@@ -20,7 +20,11 @@ public class CoverBO {
 	
 	private String end_time;
 	
-	private List<FileBO> file_array;
+	private String url;
+	
+	private String file_start;
+	
+	private String file_end;
 	
 	private List<BackUpProgramBO> program_array;
 
@@ -60,12 +64,30 @@ public class CoverBO {
 		return this;
 	}
 
-	public List<FileBO> getFile_array() {
-		return file_array;
+	public String getUrl() {
+		return url;
 	}
 
-	public CoverBO setFile_array(List<FileBO> file_array) {
-		this.file_array = file_array;
+	public CoverBO setUrl(String url) {
+		this.url = url;
+		return this;
+	}
+
+	public String getFile_start() {
+		return file_start;
+	}
+
+	public CoverBO setFile_start(String file_start) {
+		this.file_start = file_start;
+		return this;
+	}
+
+	public String getFile_end() {
+		return file_end;
+	}
+
+	public CoverBO setFile_end(String file_end) {
+		this.file_end = file_end;
 		return this;
 	}
 

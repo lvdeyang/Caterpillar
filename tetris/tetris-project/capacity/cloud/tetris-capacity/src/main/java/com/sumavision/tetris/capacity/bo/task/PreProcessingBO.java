@@ -21,16 +21,22 @@ public class PreProcessingBO {
 	private TextOsdBO text_osd;
 	
 	/** 静态图片osd */
-	private PictureOsdBO static_pic_osd;
+	private StaticPictureOsdBO static_pic_osd;
 	
 	/** 动态图片osd */
-	private PictureOsdBO dynamic_pic_osd;
+	private DynamicPictureOsdBO dynamic_pic_osd;
 	
 	/** 模糊 */
 	private FuzzyBO fuzzy;
 	
+	/** HDR */
+	private HdrBO SDRHDRConvert;
+	
 	/** 图像增强 */
 	private EnhanceBO enhance;
+	
+	/** 图像滤波 */
+	private ImageFilterBO imageFilter;
 	
 	/** 重采样 */
 	private ResampleBO resample;
@@ -74,20 +80,20 @@ public class PreProcessingBO {
 		return this;
 	}
 
-	public PictureOsdBO getStatic_pic_osd() {
+	public StaticPictureOsdBO getStatic_pic_osd() {
 		return static_pic_osd;
 	}
 
-	public PreProcessingBO setStatic_pic_osd(PictureOsdBO static_pic_osd) {
+	public PreProcessingBO setStatic_pic_osd(StaticPictureOsdBO static_pic_osd) {
 		this.static_pic_osd = static_pic_osd;
 		return this;
 	}
 
-	public PictureOsdBO getDynamic_pic_osd() {
+	public DynamicPictureOsdBO getDynamic_pic_osd() {
 		return dynamic_pic_osd;
 	}
 
-	public PreProcessingBO setDynamic_pic_osd(PictureOsdBO dynamic_pic_osd) {
+	public PreProcessingBO setDynamic_pic_osd(DynamicPictureOsdBO dynamic_pic_osd) {
 		this.dynamic_pic_osd = dynamic_pic_osd;
 		return this;
 	}
@@ -125,6 +131,24 @@ public class PreProcessingBO {
 
 	public PreProcessingBO setFps_convert(FpsConvertBO fps_convert) {
 		this.fps_convert = fps_convert;
+		return this;
+	}
+
+	public HdrBO getSDRHDRConvert() {
+		return SDRHDRConvert;
+	}
+
+	public PreProcessingBO setSDRHDRConvert(HdrBO sDRHDRConvert) {
+		SDRHDRConvert = sDRHDRConvert;
+		return this;
+	}
+
+	public ImageFilterBO getImageFilter() {
+		return imageFilter;
+	}
+
+	public PreProcessingBO setImageFilter(ImageFilterBO imageFilter) {
+		this.imageFilter = imageFilter;
 		return this;
 	}
 	

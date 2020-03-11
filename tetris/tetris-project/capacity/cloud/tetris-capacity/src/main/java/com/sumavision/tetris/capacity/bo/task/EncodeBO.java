@@ -24,6 +24,8 @@ public class EncodeBO {
 	
 	private Mpeg2BO mpeg2;
 	
+	private Avs2BO avs2;
+	
 	@JSONField(name = "avs+")
 	private AvsPlusBO avs_plus;
 	
@@ -155,6 +157,15 @@ public class EncodeBO {
 
 	public EncodeBO setPassby(JSONObject passby) {
 		this.passby = passby;
+		return this;
+	}
+
+	public Avs2BO getAvs2() {
+		return avs2;
+	}
+
+	public EncodeBO setAvs2(Avs2BO avs2) {
+		this.avs2 = avs2;
 		return this;
 	}
 	

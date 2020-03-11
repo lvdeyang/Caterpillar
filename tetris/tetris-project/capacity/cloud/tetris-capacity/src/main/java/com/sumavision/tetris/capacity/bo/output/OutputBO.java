@@ -14,9 +14,9 @@ public class OutputBO {
 	
 	private CommonTsOutputBO rtp_ts;
 	
-	private CommonTsOutputBO http_ts;
+	private OutputHttpTsBO http_ts;
 	
-	private CommonTsOutputBO srt_ts;
+	private OutputSrtTsBO srt_ts;
 	
 	private OutputHlsBO hls;
 	
@@ -67,20 +67,20 @@ public class OutputBO {
 		return this;
 	}
 
-	public CommonTsOutputBO getHttp_ts() {
+	public OutputHttpTsBO getHttp_ts() {
 		return http_ts;
 	}
 
-	public OutputBO setHttp_ts(CommonTsOutputBO http_ts) {
+	public OutputBO setHttp_ts(OutputHttpTsBO http_ts) {
 		this.http_ts = http_ts;
 		return this;
 	}
 
-	public CommonTsOutputBO getSrt_ts() {
+	public OutputSrtTsBO getSrt_ts() {
 		return srt_ts;
 	}
 
-	public OutputBO setSrt_ts(CommonTsOutputBO srt_ts) {
+	public OutputBO setSrt_ts(OutputSrtTsBO srt_ts) {
 		this.srt_ts = srt_ts;
 		return this;
 	}

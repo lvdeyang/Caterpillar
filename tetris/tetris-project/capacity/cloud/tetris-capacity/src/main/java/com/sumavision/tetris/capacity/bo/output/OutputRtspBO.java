@@ -15,11 +15,11 @@ public class OutputRtspBO {
 	
 	private String sdp_name;
 	
-	private String localIP;
+	private String local_ip;
 	
-	private String streamserverIP;
+	private String ip;
 	
-	private Integer streamserverPORT;
+	private Integer port;
 	
 	private Integer mtu;
 	
@@ -45,30 +45,30 @@ public class OutputRtspBO {
 		return this;
 	}
 
-	public String getLocalIP() {
-		return localIP;
+	public String getLocal_ip() {
+		return local_ip;
 	}
 
-	public OutputRtspBO setLocalIP(String localIP) {
-		this.localIP = localIP;
+	public OutputRtspBO setLocal_ip(String local_ip) {
+		this.local_ip = local_ip;
 		return this;
 	}
 
-	public String getStreamserverIP() {
-		return streamserverIP;
+	public String getIp() {
+		return ip;
 	}
 
-	public OutputRtspBO setStreamserverIP(String streamserverIP) {
-		this.streamserverIP = streamserverIP;
+	public OutputRtspBO setIp(String ip) {
+		this.ip = ip;
 		return this;
 	}
 
-	public Integer getStreamserverPORT() {
-		return streamserverPORT;
+	public Integer getPort() {
+		return port;
 	}
 
-	public OutputRtspBO setStreamserverPORT(Integer streamserverPORT) {
-		this.streamserverPORT = streamserverPORT;
+	public OutputRtspBO setPort(Integer port) {
+		this.port = port;
 		return this;
 	}
 

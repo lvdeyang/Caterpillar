@@ -10,7 +10,7 @@ public class X265BO {
 
 	private String preset;
 	
-	private String refine;
+	private Integer refine;
 	
 	private String pixel_format;
 	
@@ -25,11 +25,11 @@ public class X265BO {
 		return this;
 	}
 
-	public String getRefine() {
+	public Integer getRefine() {
 		return refine;
 	}
 
-	public X265BO setRefine(String refine) {
+	public X265BO setRefine(Integer refine) {
 		this.refine = refine;
 		return this;
 	}

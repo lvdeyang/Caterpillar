@@ -6,7 +6,7 @@ package com.sumavision.tetris.capacity.bo.output;
  * <b>版本：</b>1.0<br/>
  * <b>日期：</b>2019年11月1日 下午5:29:43
  */
-public class OutputSrtTsBO {
+public class OutputSrtTsBO extends BaseTsOutputBO<OutputSrtTsBO>{
 
 	private String mode;
 	

@@ -9,14 +9,23 @@ import java.util.List;
  * <b>日期：</b>2019年10月29日 上午11:21:51
  */
 public class ProgramElementBO {
+	
+	private String type;
 
 	/** 媒体的pid 0~8191 */
 	private Integer pid;
 	
-	private  String type;
-	
 	/** 节目切换数组，数组成员数量与顺序应与program_array相同 */
 	private List<PidIndexBO> program_switch_array;
+
+	public String getType() {
+		return type;
+	}
+
+	public ProgramElementBO setType(String type) {
+		this.type = type;
+		return this;
+	}
 
 	public Integer getPid() {
 		return pid;
@@ -33,15 +42,6 @@ public class ProgramElementBO {
 
 	public ProgramElementBO setProgram_switch_array(List<PidIndexBO> program_switch_array) {
 		this.program_switch_array = program_switch_array;
-		return this;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public ProgramElementBO setType(String type) {
-		this.type = type;
 		return this;
 	}
 	

@@ -49,11 +49,16 @@ import com.sumavision.tetris.capacity.bo.request.PutRealIndexRequest;
 import com.sumavision.tetris.capacity.bo.response.AllResponse;
 import com.sumavision.tetris.capacity.bo.task.AacBO;
 import com.sumavision.tetris.capacity.bo.task.EncodeBO;
+import com.sumavision.tetris.capacity.bo.task.FontBO;
 import com.sumavision.tetris.capacity.bo.task.H264BO;
+import com.sumavision.tetris.capacity.bo.task.OsdBO;
+import com.sumavision.tetris.capacity.bo.task.PictureOsdObjectBO;
 import com.sumavision.tetris.capacity.bo.task.PreProcessingBO;
 import com.sumavision.tetris.capacity.bo.task.ResampleBO;
+import com.sumavision.tetris.capacity.bo.task.StaticPictureOsdBO;
 import com.sumavision.tetris.capacity.bo.task.TaskBO;
 import com.sumavision.tetris.capacity.bo.task.TaskSourceBO;
+import com.sumavision.tetris.capacity.bo.task.TextOsdBO;
 import com.sumavision.tetris.capacity.config.CapacityProps;
 import com.sumavision.tetris.capacity.service.CapacityService;
 import com.sumavision.tetris.capacity.service.ResponseService;
@@ -118,6 +123,9 @@ public class StreamPassbyService {
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
             List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
             		,resolution, bitrate, fps, hw);
+            
+            
+            
             // 创建输出了
             String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
             OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
@@ -402,201 +410,7 @@ public class StreamPassbyService {
 
     /* 上面都是MR黄写的 */
 
-    /**
-     * 透传<br/>
-     * <b>作者:</b>wjw<br/>
-     * <b>版本：</b>1.0<br/>
-     * <b>日期：</b>2019年11月13日 下午5:09:32
-     *
-     * @param String rtmpUrl rtmp流地址
-     * @param String name 发布名称
-     * @param String storageUrl 存储地址
-     */
-    public String createRtmp2hls(String uuid, String rtmpUrl, String name, String storageUrl) throws Exception {
-
-        // 参数在这里设是因为区分不了音视频（passby）
-        String inputId = new StringBufferWrapper().append("input-").append(uuid).toString();
-
-        String videoTaskId = new StringBufferWrapper().append("task-video-").append(uuid).toString();
-
-        String audioTaskId = new StringBufferWrapper().append("task-audio-").append(uuid).toString();
-
-        String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(uuid).toString();
-
-        String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(uuid).toString();
-
-        String outputId = new StringBufferWrapper().append("output-").append(uuid).toString();
-
-        save(uuid, inputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, outputId, rtmpUrl, name, storageUrl,
-                BusinessType.LIVE);
-
-        return uuid;
-
-    }
-
-    /**
-     * 添加任务流程 -- 一个输入，多个任务，多个输出， 输入计数+1（并发）， 输出直接存储（不管并发）
-     * 说明：联合unique校验insert（rtmpUrl）； 数据行锁（乐观锁version）校验update<br/>
-     * <b>作者:</b>wjw<br/>
-     * <b>版本：</b>1.0<br/>
-     * <b>日期：</b>2019年11月29日 下午1:41:25
-     *
-     * @param taskUuid
-     * @param inputId
-     * @param videoTaskId
-     * @param audioTaskId
-     * @param encodeVideoId
-     * @param encodeAudioId
-     * @param outputId
-     * @param rtmpUrl
-     * @param name
-     * @param storageUrl
-     * @param businessType
-     */
-    public void save(String taskUuid, String inputId, String videoTaskId, String audioTaskId, String encodeVideoId,
-                     String encodeAudioId, String outputId, String rtmpUrl, String name, String storageUrl,
-                     BusinessType businessType) throws Exception {
-
-        TaskInputPO input = taskInputDao.findByUniq(rtmpUrl);
-
-        if (input == null) {
-
-            AllRequest allRequest = new AllRequest();
-            InputBO inputBO = new InputBO();
-            List<TaskBO> taskBOs = new ArrayList<TaskBO>();
-            OutputBO outputBO = new OutputBO();
-            try {
-
-                inputBO = stream2InputBO(inputId, rtmpUrl);
-
-                //taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO
-                //		);
-
-                outputBO = stream2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, name,
-                        storageUrl);
-
-                input = new TaskInputPO();
-                input.setUpdateTime(new Date());
-                input.setUniq(rtmpUrl);
-                input.setTaskUuid(taskUuid);
-                input.setInput(JSON.toJSONString(inputBO));
-                input.setType(businessType);
-                taskInputDao.save(input);
-
-                TaskOutputPO output = new TaskOutputPO();
-                output.setInputId(input.getId());
-                output.setOutput(JSON.toJSONString(outputBO));
-                output.setTask(JSON.toJSONString(taskBOs));
-                output.setTaskUuid(taskUuid);
-                output.setType(businessType);
-                output.setUpdateTime(new Date());
-
-                taskOutputDao.save(output);
-
-                allRequest.setInput_array(new ArrayListWrapper<InputBO>().add(inputBO).getList());
-                allRequest.setTask_array(new ArrayListWrapper<TaskBO>().addAll(taskBOs).getList());
-                allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
-
-                AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
-                        capacityProps.getPort());
-
-                responseService.allResponseProcess(allResponse);
-
-            } catch (ConstraintViolationException e) {
-
-                // 数据已存在（ip，port校验）
-                System.out.println("校验输入已存在");
-                Thread.sleep(300);
-                save(taskUuid, inputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, outputId, rtmpUrl, name,
-                        storageUrl, businessType);
-
-            } catch (BaseException e) {
-
-                capacityService.deleteAllAddMsgId(allRequest, capacityProps.getIp(), capacityProps.getPort());
-
-            } catch (Exception e) {
-
-                if (!(e instanceof ConstraintViolationException)) {
-                    throw e;
-                }
-
-            }
-
-        } else {
-
-            AllRequest allRequest = new AllRequest();
-            InputBO inputBO = new InputBO();
-            List<TaskBO> taskBOs = new ArrayList<TaskBO>();
-            OutputBO outputBO = new OutputBO();
-            try {
-
-                if (input.getCount().equals(0)) {
-                    // 转输入
-                    inputBO = stream2InputBO(inputId, rtmpUrl);
-                } else {
-                    inputBO = JSONObject.parseObject(input.getInput(), InputBO.class);
-                }
-
-                //taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
-
-                outputBO = stream2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, name,
-                        storageUrl);
-
-                if (input.getCount().equals(0)) {
-                    input.setInput(JSON.toJSONString(inputBO));
-                    input.setTaskUuid(taskUuid);
-                    input.setType(businessType);
-                }
-                input.setUpdateTime(new Date());
-                input.setCount(input.getCount() + 1);
-                taskInputDao.save(input);
-
-                TaskOutputPO output = new TaskOutputPO();
-                output.setInputId(input.getId());
-                output.setOutput(JSON.toJSONString(outputBO));
-                output.setTask(JSON.toJSONString(taskBOs));
-                output.setTaskUuid(taskUuid);
-                output.setType(businessType);
-                output.setUpdateTime(new Date());
-
-                taskOutputDao.save(output);
-
-                if (input.getCount().equals(0)) {
-
-                    allRequest.setInput_array(new ArrayListWrapper<InputBO>().add(inputBO).getList());
-
-                }
-
-                allRequest.setTask_array(new ArrayListWrapper<TaskBO>().addAll(taskBOs).getList());
-                allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
-
-                AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
-                        capacityProps.getPort());
-
-                responseService.allResponseProcess(allResponse);
-
-            } catch (ObjectOptimisticLockingFailureException e) {
-
-                // 版本不对，version校验
-                System.out.println("save校验version版本不对");
-                Thread.sleep(300);
-                save(taskUuid, inputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, outputId, rtmpUrl, name,
-                        storageUrl, businessType);
-
-            } catch (BaseException e) {
-
-                capacityService.deleteAllAddMsgId(allRequest, capacityProps.getIp(), capacityProps.getPort());
-
-            } catch (Exception e) {
-
-                if (!(e instanceof ObjectOptimisticLockingFailureException)) {
-                    throw e;
-                }
-            }
-        }
-
-    }
-
+   
     /**
      * 删除透传任务<br/>
      * <b>作者:</b>wjw<br/>
@@ -730,7 +544,8 @@ public class StreamPassbyService {
                 .setElement_pid(input.getProgram_array().get(0).getVideo_array().get(0).getPid());
 
         TaskBO videoTask = new TaskBO().setId(videoTaskId).setType("video").setRaw_source(videoSource)
-                .setEncode_array(new ArrayList<EncodeBO>());
+                .setEncode_array(new ArrayList<EncodeBO>())
+                .setDecode_process_array(new ArrayList<PreProcessingBO>());
 
         String[] res=resolution.split(",");
         H264BO h264 = new H264BO().setBitrate(Integer.valueOf(bitrate))
@@ -743,7 +558,27 @@ public class StreamPassbyService {
         EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId).setH264(h264);
 
         videoTask.getEncode_array().add(videoEncode);
-
+        
+        //字幕
+        OsdBO osdBO=new OsdBO().setHeight(50).setWidth(1000).setX(140).setY(5)
+        		.setHas_background(false).setBackground_color("(255,255,255,60)")
+        		.setTrack_type("right_to_left").setTrack_speed(80)
+        		.setFont(new FontBO().setFamily("STZhongsong").
+        				setColor("(255,255,255,255)").setSize(35)
+        				.setHas_border(false).setBorder_color("(255,255,255,60)"))
+        		.setContent("欢迎观看过来玩电影频道，广告招商：6685656，地址：法院对面，联系人：刘建江");
+        TextOsdBO textOsdBO=new TextOsdBO().setText_osds(new ArrayListWrapper().add(osdBO).getList());
+        PreProcessingBO preProcessingBO=new PreProcessingBO().setText_osd(textOsdBO);
+        videoTask.getDecode_process_array().add(preProcessingBO);
+        //台标
+        PictureOsdObjectBO pObjectBO=new PictureOsdObjectBO().setAuto_scale(true)
+        		.setHeight(100).setWidth(100).setX(5).setY(5).setTransparent(0)
+        		.setPath("/home/logos.png");
+        StaticPictureOsdBO staticPictureOsdBO=new StaticPictureOsdBO()
+        		.setStatic_pic_osds(new ArrayListWrapper().add(pObjectBO).getList());
+        PreProcessingBO preProcessingBOlogo=new PreProcessingBO().setStatic_pic_osd(staticPictureOsdBO);
+        videoTask.getDecode_process_array().add(preProcessingBOlogo);        
+        
         tasks.add(videoTask);
 
         // 音频
@@ -827,46 +662,6 @@ public class StreamPassbyService {
 	}
     
     
-    /**
-     * 输出<br/>
-     * <b>作者:</b>wjw<br/>
-     * <b>版本：</b>1.0<br/>
-     * <b>日期：</b>2019年11月13日 下午5:03:36
-     *
-     * @param outputId
-     * @param videoTaskId
-     * @param audioTaskId
-     * @param encodeVideoId
-     * @param encodeAudioId
-     * @param name
-     * @return
-     */
-    public OutputBO stream2OutputBO(String outputId, String videoTaskId, String audioTaskId, String encodeVideoId,
-                                    String encodeAudioId, String name, String storageUrl) throws Exception {
-
-        OutputHlsBO hls = new OutputHlsBO().setPrimary_m3u8(name).setVideo_array(new ArrayList<OutputVideoBO>())
-                .setAudio_array(new ArrayList<OutputAudioBO>()).setMedia_group(new ArrayList<OutputMediaGroupBO>())
-                .setStorage(new ArrayList<OutputStorageBO>());
-
-        OutputVideoBO video = new OutputVideoBO().setTask_id(videoTaskId).setEncode_id(encodeVideoId);
-
-        OutputAudioBO audio = new OutputAudioBO().setTask_id(audioTaskId).setEncode_id(encodeAudioId);
-
-        OutputIndexBO index = new OutputIndexBO().setIndex(0);
-
-        OutputMediaGroupBO media = new OutputMediaGroupBO().setVideo(0)
-                .setAudio(new ArrayListWrapper<OutputIndexBO>().add(index).getList());
-
-        OutputStorageBO storage = new OutputStorageBO().setUrl(storageUrl);
-
-        hls.getAudio_array().add(audio);
-        hls.getVideo_array().add(video);
-        hls.getMedia_group().add(media);
-        hls.getStorage().add(storage);
-
-        OutputBO output = new OutputBO().setId(outputId).setHls(hls);
-
-        return output;
-    }
+   
 
 }
