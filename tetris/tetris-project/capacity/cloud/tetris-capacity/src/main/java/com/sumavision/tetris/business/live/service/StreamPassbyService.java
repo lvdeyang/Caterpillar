@@ -560,16 +560,30 @@ public class StreamPassbyService {
         videoTask.getEncode_array().add(videoEncode);
         
         //字幕
-        OsdBO osdBO=new OsdBO().setHeight(50).setWidth(1000).setX(140).setY(5)
+        OsdBO osdBO=new OsdBO().setHeight(100).setWidth(1000).setX(140).setY(5)
         		.setHas_background(false).setBackground_color("(255,255,255,60)")
         		.setTrack_type("right_to_left").setTrack_speed(80)
         		.setFont(new FontBO().setFamily("STZhongsong").
         				setColor("(255,255,255,255)").setSize(35)
         				.setHas_border(false).setBorder_color("(255,255,255,60)"))
-        		.setContent("欢迎观看过来玩电影频道，广告招商：6685656，地址：法院对面，联系人：刘建江");
+        		.setContent("欢迎观看过来玩电影频道 畅游天下尽在过来玩");
         TextOsdBO textOsdBO=new TextOsdBO().setText_osds(new ArrayListWrapper().add(osdBO).getList());
         PreProcessingBO preProcessingBO=new PreProcessingBO().setText_osd(textOsdBO);
         videoTask.getDecode_process_array().add(preProcessingBO);
+        
+        
+        OsdBO osdBO1=new OsdBO().setHeight(100).setWidth(1000).setX(140).setY(600)
+        		.setHas_background(false).setBackground_color("(255,255,255,60)")
+        		.setTrack_type("right_to_left").setTrack_speed(80)
+        		.setFont(new FontBO().setFamily("STZhongsong").
+        				setColor("(255,255,255,255)").setSize(35)
+        				.setHas_border(false).setBorder_color("(255,255,255,60)"))
+        		.setContent("地址：法院对面。联系人：刘建江");
+        TextOsdBO textOsdBO1=new TextOsdBO().setText_osds(new ArrayListWrapper().add(osdBO1).getList());
+        PreProcessingBO preProcessingBO1=new PreProcessingBO().setText_osd(textOsdBO1);
+        videoTask.getDecode_process_array().add(preProcessingBO1);
+        
+        
         //台标
         PictureOsdObjectBO pObjectBO=new PictureOsdObjectBO().setAuto_scale(true)
         		.setHeight(100).setWidth(100).setX(5).setY(5).setTransparent(0)
