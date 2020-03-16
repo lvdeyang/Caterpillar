@@ -130,6 +130,8 @@ public class StreamPassbyService {
             String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
             OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
                     dstPubName);
+            
+            
 
             ///OutputBO recordOutputBo = record2OutputBO(taskId+"", taskBOs, "/home/hls");
             
@@ -138,6 +140,16 @@ public class StreamPassbyService {
             allRequest.setTask_array(taskBOs);
             allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
 
+            String[] pullServerList=capacityProps.getPip().split(",");
+            int index=1;
+            for (String url : pullServerList) {
+            	String destPubUrl="rtmp://127.0.0.1/live/"+dstPubName+index;
+            	OutputBO temOutputBO = streamUrlRtmp2OutputBO(outputId+"-"+index, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+            			destPubUrl);
+            	allRequest.getOutput_array().add(temOutputBO);
+            	index++;
+			}
+            
             AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
                     capacityProps.getPort());
 
@@ -287,6 +299,22 @@ public class StreamPassbyService {
 
         return output;
     }
+    
+	private OutputBO streamUrlRtmp2OutputBO(String outputId, String videoTaskId, String audioTaskId,
+			String encodeVideoId, String encodeAudioId, String nameurl) throws Exception {
+
+		OutputRtmpBO rtmp = new OutputRtmpBO().setServer_url(nameurl).setAud_exist(true)
+				.setVid_exist(true);
+
+		BaseMediaBO vmedia = new BaseMediaBO().setEncode_id(encodeVideoId).setTask_id(videoTaskId);
+		BaseMediaBO amedia = new BaseMediaBO().setEncode_id(encodeAudioId).setTask_id(audioTaskId);
+
+		rtmp.setMedia_array(new ArrayListWrapper().add(vmedia).add(amedia).getList());
+
+		OutputBO output = new OutputBO().setId(outputId).setRtmp(rtmp);
+
+		return output;
+	}
 
     /**
      * 备份输入<br/>

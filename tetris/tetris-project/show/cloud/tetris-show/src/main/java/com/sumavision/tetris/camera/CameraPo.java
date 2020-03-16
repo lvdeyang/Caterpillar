@@ -144,4 +144,7 @@ public class CameraPo extends AbstractBasePO {
         this.setUserId(entity.getUserId());
         return this;
     }
+    
+    
+    
 }

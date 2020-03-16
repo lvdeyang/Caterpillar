@@ -11,9 +11,9 @@ import com.sumavision.tetris.commons.context.SystemInitialization;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class HrInitialization implements SystemInitialization{
+public class ShowInitialization implements SystemInitialization{
 	
-	private static final Logger LOG = LoggerFactory.getLogger(HrInitialization.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ShowInitialization.class);
 	@Override
 	public int index() {
 		return 0;

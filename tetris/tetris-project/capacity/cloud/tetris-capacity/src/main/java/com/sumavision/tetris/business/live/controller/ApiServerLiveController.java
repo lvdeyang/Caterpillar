@@ -28,6 +28,21 @@ public class ApiServerLiveController {
    
     @JsonBody
     @ResponseBody
+    @RequestMapping(value = "/create/easytask")
+    public Object createTask(HttpServletRequest request, String list, Long userId) throws Exception {
+
+    	List<String> array=Arrays.asList(list.split(","));
+    	
+    	
+        streamPassbyService.createTask(userId,
+        		array,
+                "camera" + userId,"", 500000, 25, "");
+
+        return null;
+    }
+    
+    @JsonBody
+    @ResponseBody
     @RequestMapping(value = "/create/task")
     public Object createTask(HttpServletRequest request, String list, Long userId,
     		String resolution,int bitrate,int fps,String hw) throws Exception {

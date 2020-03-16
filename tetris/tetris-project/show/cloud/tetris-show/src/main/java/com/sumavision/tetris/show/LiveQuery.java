@@ -28,9 +28,10 @@ public class LiveQuery {
         return livePo;
     }
 
-    public List<LivePo> getByType(Integer type) {
-        liveDao.getByType(type);
-        return null;
+   
+    
+    public List<LivePo> getByAnchorId(Long anchorId) {
+    	return liveDao.getByAnchorId(anchorId);
     }
     
     public Page<LivePo> findAll(int currentPage, int pageSize){

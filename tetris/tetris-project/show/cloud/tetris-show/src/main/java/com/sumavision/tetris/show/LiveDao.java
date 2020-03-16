@@ -11,4 +11,5 @@ import java.util.List;
 public interface LiveDao extends BaseDAO<LivePo> {
     @Query(value = "select * from TETRIS_SHOW where type =?", nativeQuery = true)
     List<LivePo> getByType(Integer type);
+    List<LivePo> getByAnchorId(Long anchorId);
 }

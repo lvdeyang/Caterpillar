@@ -38,7 +38,7 @@ public class CameraService {
     public List<CameraVo> findAllCamera() throws Exception {
         List<CameraPo> list = cameraQuery.findAllCamera();
 
-        return this.generateRootattends(list);
+        return this.generateRootCameras(list);
     }
 
     /**
@@ -60,53 +60,27 @@ public class CameraService {
             for (CameraPo cameraPo : list) {
                 stringList.add(cameraPo.getUserId().toString() + cameraPo.getId().toString() + "");
             }
-            // capacityService.createTask(stringList, list.get(0).getUserId());
-
-            return generateRootattends(list);
+            return generateRootCameras(list);
         }
         if (list.size() == 0) {
             for (int i = 0; i < 6; i++) {
                 CameraPo cameraPo = new CameraPo();
                 cameraPo.setUserId(userId);
                 cameraPo.setCameraName("机位" + (i + 1));
+                cameraPo.setRtmpUrl("https://47.95.241.89/live/" + userId + cameraPo.getId());
+                cameraPo.setHttpUrl("rtmp://47.95.241.89/live/" + userId + cameraPo.getId());
+                cameraPo.setUserId(userId);
+                cameraPo.setIsInUse(0);
+                cameraPo.setType(0);
+                cameraPo.setUpdateTime(new Date());
                 cameraDao.save(cameraPo);
             }
         }
         List<CameraPo> cameraPoList = cameraDao.findByUserId(userId);
-
-        for (CameraPo cameraPo : cameraPoList) {
-            cameraPo.setRtmpUrl("https://www.guolaiwan.net/live/" + userId + cameraPo.getId());
-            cameraPo.setHttpUrl("rtmp://www.guolaiwan.net/live/" + userId + cameraPo.getId());
-            cameraPo.setUserId(userId);
-            cameraPo.setIsInUse(0);
-            cameraPo.setType(0);
-            cameraPo.setUpdateTime(new Date());
-            cameraDao.save(cameraPo);
-
-        }
-
-        return generateRootattends(cameraDao.findByUserId(userId));
+        return generateRootCameras(cameraDao.findByUserId(userId));
     }
 
-    /**
-     * @描述 开播 开始推流~~
-     * @参数 id
-     * @返回值 void
-     * @创建人 yud
-     * @创建时间 2019/12/24
-     */
-    public void isOpen(Long id) throws Exception {
-        List<CameraPo> cameraPoList = cameraQuery.isOpen(id);
-        CameraPo cameraPo1 = cameraDao.findOne(id);
-        List<String> list = new ArrayList<>();
-        for (CameraPo cameraPo : cameraPoList) {
-            list.add(cameraPo.getUserId().toString() + cameraPo.getId().toString() + "");
-        }
-        //推流 创建6个流
-        //capacityService.createTask(list, cameraPoList.get(0).getUserId());
-
-    }
-
+   
 
     /**
      * @描述 停止该用户下的所有推流 设置type isInUse都为0
@@ -124,7 +98,7 @@ public class CameraService {
             cameraDao.save(cameraPo);
             list.add(cameraPo.getUserId().toString() + cameraPo.getId().toString() + "");
         }
-        capacityService.deleteTask(list, cameraPoList.get(0).getUserId());
+        //capacityService.deleteTask(list, cameraPoList.get(0).getUserId());
     }
 
     /**
@@ -135,18 +109,7 @@ public class CameraService {
      * @创建时间 2020/2/5
      */
     public void createRecordTask(long id) throws Exception {
-//        CameraPo cameraPo = cameraDao.findOne(id);
-//        Date date = new Date();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH-mm-ss");
-//        String dateStr = sdf.format(date);
-//        String pubName = "camera" + cameraPo.getUserId();
-//        //用userId作为文件夹名称，保持唯一性；
-//        String path = cameraPo.getUserId().toString() + "_" + dateStr;
-//        //本地存储使用
-//        File file = new File("D:\\live/" + cameraPo.getUserId() + path);
-//        if (file.exists()) {
-//            file.mkdir();
-//        }
+
         //用户ID作为文件夹目录，日期作为二级目录
         String pubName="camera123456";
         //path  =  record  / userId / date (YYYY-MM-dd) /cameraId
@@ -268,16 +231,12 @@ public class CameraService {
 
             cameraDao.save(cameraPo);
         }
-//        List<CameraPo> cameraPoList = cameraQuery.isOpen(id);
-//
-//        CameraPo cameraPo1 = cameraDao.findOne(id);
-//        List<String> list = new ArrayList<>();
-//        for (CameraPo po : cameraPoList) {
-//            list.add(po.getUserId().toString() + po.getId().toString() + "");
-//
-//        }
-
-
+    }
+    
+    public void changeStatus(Long id, int status) throws Exception {
+        CameraPo cameraPo = cameraDao.findOne(id);
+	    cameraPo.setType(status);
+	    cameraDao.save(cameraPo);
     }
 
     /**
@@ -290,12 +249,11 @@ public class CameraService {
     public CameraPo switchCamera(Long oldId, Long newId) throws Exception {
         if (oldId != 0) {
             CameraPo cameraPo = cameraDao.findOne(oldId);
-            cameraPo.setType(0);
+            cameraPo.setIsInUse(0);
             cameraDao.save(cameraPo);
         }
         CameraPo cameraPo1 = cameraDao.findOne(newId);
         cameraPo1.setIsInUse(1);
-        cameraPo1.setType(1);
         cameraDao.save(cameraPo1);
         //切换机位
         String[] strings = cameraPo1.getCameraName().split("机位");
@@ -314,33 +272,30 @@ public class CameraService {
      */
     public Object createTask(long userId) throws Exception {
         List<CameraPo> list = cameraDao.findByUserId(userId);
-        List<String> list1 = new ArrayList<>();
+        StringBuffer sb=new StringBuffer();
         for (CameraPo cameraPo : list) {
-            list1.add("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString());
-
+            //list1.add("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString());
+        	sb.append("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
         }
-        capacityService.createTask(list1, list.get(0).getUserId());
+        capacityService.createTask(sb.toString(), list.get(0).getUserId());
         return null;
     }
 
-    public Object findByShowId(Long showId) throws Exception {
-        return generateRootattends(cameraDao.findByShowID(showId));
+
+    
+    public void deleteTask(Long userId) throws Exception {
+        List<CameraPo> cameraPoList = cameraDao.findByUserId(userId);
+        List<String> list = new ArrayList<>();
+        StringBuffer sb=new StringBuffer();
+        for (CameraPo cameraPo : cameraPoList) {
+        	sb.append("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
+            //list.add(cameraPo.getUserId().toString() + cameraPo.getId().toString() + "");
+        }
+        capacityService.deleteTask(sb.toString(), cameraPoList.get(0).getUserId());
     }
-
-    /**
-     * @描述 测试创建流
-     * @参数
-     * @返回值
-     * @创建人 yud
-     * @创建时间 2020/1/31
-     */
-    public void testCeateTask() throws Exception {
-        List list = new ArrayList();
-        list.add("test9");
-        list.add("test10");
-        long userId = 123456;
-        capacityService.createTask(list, userId);
-
+    
+    public Object findByShowId(Long showId) throws Exception {
+        return generateRootCameras(cameraDao.findByShowID(showId));
     }
 
     /**
@@ -362,12 +317,12 @@ public class CameraService {
      * @return
      * @throws Exception
      */
-    private List<CameraVo> generateRootattends(Collection<CameraPo> attends) throws Exception {
-        if (attends == null || attends.size() <= 0)
+    private List<CameraVo> generateRootCameras(Collection<CameraPo> cameras) throws Exception {
+        if (cameras == null || cameras.size() <= 0)
             return null;
         List<CameraVo> cameraVos = new ArrayList<CameraVo>();
-        for (CameraPo attend : attends) {
-            cameraVos.add(new CameraVo().set(attend));
+        for (CameraPo camera : cameras) {
+            cameraVos.add(new CameraVo().set(camera));
         }
 
         return cameraVos;

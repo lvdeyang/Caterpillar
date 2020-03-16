@@ -65,8 +65,8 @@ public interface CapacityFeign {
      * @创建人 yud
      * @创建时间 2020/1/11
      */
-    @RequestMapping(value = "/api/server/live/create/task")
-    public JSONObject createTask(@RequestParam("list") List<String> list, @RequestParam("userId") Long userId) throws Exception;
+    @RequestMapping(value = "/api/server/live/create/easytask")
+    public JSONObject createTask(@RequestParam("list") String list, @RequestParam("userId") Long userId) throws Exception;
 
 
     /**
@@ -77,7 +77,7 @@ public interface CapacityFeign {
      * @创建时间 2020/1/11
      */
     @RequestMapping(value = "/api/server/live/delete/task")
-    public JSONObject deleteTask(@RequestParam("list") List<String> list, @RequestParam("userId") Long userId) throws Exception;
+    public JSONObject deleteTask(@RequestParam("list") String list, @RequestParam("userId") Long userId) throws Exception;
 
     /**
      * @描述

@@ -44,18 +44,21 @@ public class LiveService {
         return new LiveVo().set(livePo);
     }
 
-    /**
-     * @描述 根据类别进行查询
-     * @参数 type
-     * @返回值 List<LiveVo>
-     * @创建人 yud
-     * @创建时间 2019/12/23
-     */
-    public List<LiveVo> getByType(Integer type) throws Exception {
-        List<LivePo> livePos = liveQuery.getByType(type);
-        List<LiveVo> liveVos = this.generateRootattends(livePos);
-        return liveVos;
+   
+    
+    public LiveVo getByAnchorId(long anchorId) throws Exception{
+    	List<LivePo> livePos = liveQuery.getByAnchorId(anchorId);
+    	if(livePos==null||livePos.isEmpty()){
+    		LivePo livePo=new LivePo();
+    		livePo.setAnchorId(anchorId);
+    		liveDao.save(livePo);
+    		return new LiveVo().set(livePo);
+    	}else{
+    		return new LiveVo().set(livePos.get(0));
+    	}
+    	
     }
+    
 
     /**
      * @描述 save

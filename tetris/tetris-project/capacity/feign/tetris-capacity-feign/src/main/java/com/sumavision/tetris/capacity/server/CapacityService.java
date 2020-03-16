@@ -72,7 +72,7 @@ public class CapacityService {
      *
      * @param
      */
-    public void createTask(List<String> list, Long userId) throws Exception {
+    public void createTask(String list, Long userId) throws Exception {
         JsonBodyResponseParser.parseObject(capacityFeign.createTask(list, userId), null);
     }
 
@@ -85,7 +85,7 @@ public class CapacityService {
      *
      * @param
      */
-    public void deleteTask(List<String> list, Long userId) throws Exception {
+    public void deleteTask(String list, Long userId) throws Exception {
         JsonBodyResponseParser.parseObject(capacityFeign.deleteTask(list, userId), null);
     }
 
