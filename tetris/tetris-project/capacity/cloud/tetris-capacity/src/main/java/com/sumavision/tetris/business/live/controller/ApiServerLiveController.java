@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/api/server/live")
+@RequestMapping(value = "/capacity/live")
 public class ApiServerLiveController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class ApiServerLiveController {
     	
         streamPassbyService.createTask(userId,
         		array,
-                "camera" + userId,"", 500000, 25, "");
+                "camera" + userId,"1280,720", 500000, 25, "16:9");
 
         return null;
     }

@@ -401,7 +401,17 @@ public class StreamPassbyService {
         DeleteOutputsRequest deleteOutputsRequest = new DeleteOutputsRequest();
         List<IdRequest> outIdRequests = new ArrayList<IdRequest>();
         outIdRequests.add(new IdRequest().setId(outputId));
+        
+        
+        String[] pullServerList=capacityProps.getPip().split(",");
+        int index=1;
+        for (String url : pullServerList) {
+        	String tempOutId = new StringBufferWrapper().append("output-").append(taskId).append("-"+index).toString();
+        	outIdRequests.add(new IdRequest().setId(outputId));
+        	index++;
+		}
         deleteOutputsRequest.setOutput_array(outIdRequests);
+        
         capacityService.deleteOutputsAddMsgId(deleteOutputsRequest);
         // 删除任务
         String videoTaskId = new StringBufferWrapper().append("task-video-").append(taskId).toString();

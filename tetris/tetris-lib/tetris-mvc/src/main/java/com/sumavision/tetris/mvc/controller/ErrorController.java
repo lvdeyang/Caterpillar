@@ -40,6 +40,7 @@ public class ErrorController {
 													   .append("#")
 													   .append(hash)
 													   .toString());
+		e.printStackTrace();
 		return mv;
 	}
 	
