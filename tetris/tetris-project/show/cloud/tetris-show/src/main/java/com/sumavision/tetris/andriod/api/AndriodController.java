@@ -4,6 +4,8 @@ import com.sumavision.tetris.camera.CameraService;
 import com.sumavision.tetris.capacity.server.CapacityFeign;
 import com.sumavision.tetris.capacity.server.CapacityFeignService;
 import com.sumavision.tetris.result.Result;
+import com.sumavision.tetris.show.LivePo;
+import com.sumavision.tetris.show.LiveQuery;
 import com.sumavision.tetris.show.LiveService;
 import com.sumavision.tetris.show.LiveVo;
 import com.sumavision.tetris.user.UserQuery;
@@ -33,7 +35,8 @@ public class AndriodController {
     @Autowired
     LiveService liveService;
 
-   
+    @Autowired
+    LiveQuery liveQuery;
     /**
      * 根据机位Id查询机位信息
      * @param id 机位Id
@@ -55,6 +58,12 @@ public class AndriodController {
     	UserVO user=userQuery.current();
     	return Result.sussess(cameraService.findByUserId(user.getId()));
     }
+    
+    @GetMapping("/findLive")
+    public Map<String, Object> findLive() throws Exception {
+    	UserVO user=userQuery.current();
+    	return Result.sussess(liveService.getByAnchorId(user.getId()));
+    }
 
     
    /**
@@ -69,7 +78,7 @@ public class AndriodController {
         cameraService.changeStatus(id,status);
         return Result.success();
     }
-
+    
 
     /**
      * 开始直播
@@ -80,6 +89,9 @@ public class AndriodController {
     public Map<String, Object> startShow() throws Exception {
     	UserVO user=userQuery.current();
     	LiveVo liveVo=liveService.getByAnchorId(user.getId());
+    	liveVo.setStatus(1);
+    	liveService.save(liveVo);
+		
     	//调用capacityfein开始任务
     	cameraService.createTask(user.getId());
         return Result.success();
@@ -95,6 +107,8 @@ public class AndriodController {
     public Map<String, Object> stopShow() throws Exception {
     	UserVO user=userQuery.current();
     	LiveVo liveVo=liveService.getByAnchorId(user.getId());
+    	liveVo.setStatus(0);
+    	liveService.save(liveVo);
     	//调用capacityfein停止任务
     	cameraService.deleteTask(user.getId());
         return Result.success();
