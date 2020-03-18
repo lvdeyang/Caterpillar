@@ -29,17 +29,8 @@
 	</properties>
 	
 	<dependencies>
-		<dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>4.0.12</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.10</version>
-            <scope>provided</scope>
-        </dependency>
+	
+        
 		<!-- mysql驱动 -->
 		<dependency>
             <groupId>mysql</groupId>
@@ -84,6 +75,12 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>com.sumavision.tetris</groupId>
+			<artifactId>tetris-capacity-feign</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
 		<!-- tetris-ui -->
 		<dependency>
 			<groupId>com.sumavision.tetris</groupId>
@@ -101,11 +98,7 @@
 			<artifactId>spring-cloud-starter-feign</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>com.sumavision.tetris</groupId>
-            <artifactId>tetris-capacity-feign</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+        
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>

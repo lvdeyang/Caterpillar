@@ -1,7 +1,6 @@
 package com.sumavision.tetris.show;
 
 import com.sumavision.tetris.mvc.converter.AbstractBaseVO;
-import lombok.Data;
 
 
 public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {

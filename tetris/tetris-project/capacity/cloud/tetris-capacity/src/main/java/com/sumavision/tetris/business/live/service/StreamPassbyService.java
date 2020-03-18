@@ -143,7 +143,7 @@ public class StreamPassbyService {
             String[] pullServerList=capacityProps.getPip().split(",");
             int index=1;
             for (String url : pullServerList) {
-            	String destPubUrl="rtmp://127.0.0.1/live/"+dstPubName+index;
+            	String destPubUrl="rtmp://"+url+"/live/"+dstPubName+index;
             	OutputBO temOutputBO = streamUrlRtmp2OutputBO(outputId+"-"+index, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
             			destPubUrl);
             	allRequest.getOutput_array().add(temOutputBO);
@@ -407,7 +407,7 @@ public class StreamPassbyService {
         int index=1;
         for (String url : pullServerList) {
         	String tempOutId = new StringBufferWrapper().append("output-").append(taskId).append("-"+index).toString();
-        	outIdRequests.add(new IdRequest().setId(outputId));
+        	outIdRequests.add(new IdRequest().setId(tempOutId));
         	index++;
 		}
         deleteOutputsRequest.setOutput_array(outIdRequests);

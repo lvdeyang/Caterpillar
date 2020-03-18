@@ -7,7 +7,7 @@
   	<groupId>com.sumavision.tetris</groupId>
   	<artifactId>tetris-capacity-feign</artifactId>
   	<version>0.0.1-SNAPSHOT</version>
-  	<packaging>war</packaging>
+  	<packaging>jar</packaging>
 
  	<name>tetris-capacity-feign</name>
 	

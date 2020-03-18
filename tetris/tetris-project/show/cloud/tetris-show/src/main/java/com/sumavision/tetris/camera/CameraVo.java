@@ -1,8 +1,6 @@
 package com.sumavision.tetris.camera;
 
 import com.sumavision.tetris.mvc.converter.AbstractBaseVO;
-import lombok.Data;
-
 
 /**
  * @ClassName CameraVo
@@ -10,7 +8,7 @@ import lombok.Data;
  * @Author yud
  * @Date 2019/12/24 11:16
  **/
-@Data
+
 public class CameraVo extends AbstractBaseVO<CameraVo, CameraPo> {
     //url
     private String rtmpUrl;

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class CapacityService {
+public class CapacityFeignService {
 
     @Autowired
     private CapacityFeign capacityFeign;

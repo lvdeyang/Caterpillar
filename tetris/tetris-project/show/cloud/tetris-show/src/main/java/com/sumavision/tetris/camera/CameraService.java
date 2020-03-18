@@ -1,7 +1,7 @@
 package com.sumavision.tetris.camera;
 
 
-import com.sumavision.tetris.capacity.server.CapacityService;
+import com.sumavision.tetris.capacity.server.CapacityFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class CameraService {
     private CameraDao cameraDao;
 
     @Autowired
-    private CapacityService capacityService;
+    private CapacityFeignService capacityService;
 
 
     /**
@@ -67,12 +67,14 @@ public class CameraService {
                 CameraPo cameraPo = new CameraPo();
                 cameraPo.setUserId(userId);
                 cameraPo.setCameraName("机位" + (i + 1));
-                cameraPo.setRtmpUrl("https://47.95.241.89/live/" + userId + cameraPo.getId());
-                cameraPo.setHttpUrl("rtmp://47.95.241.89/live/" + userId + cameraPo.getId());
+                
                 cameraPo.setUserId(userId);
                 cameraPo.setIsInUse(0);
                 cameraPo.setType(0);
                 cameraPo.setUpdateTime(new Date());
+                cameraDao.save(cameraPo);
+                cameraPo.setHttpUrl("http://47.95.241.89:6690/live/" + userId + cameraPo.getId()+".m3u8");
+                cameraPo.setRtmpUrl("rtmp://47.95.241.89/live/" + userId + cameraPo.getId());
                 cameraDao.save(cameraPo);
             }
         }

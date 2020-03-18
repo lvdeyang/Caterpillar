@@ -2,7 +2,7 @@ package com.sumavision.tetris.andriod.api;
 
 import com.sumavision.tetris.camera.CameraService;
 import com.sumavision.tetris.capacity.server.CapacityFeign;
-import com.sumavision.tetris.capacity.server.CapacityService;
+import com.sumavision.tetris.capacity.server.CapacityFeignService;
 import com.sumavision.tetris.result.Result;
 import com.sumavision.tetris.show.LiveService;
 import com.sumavision.tetris.show.LiveVo;
