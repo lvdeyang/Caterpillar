@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <head>
         <meta charset="utf-8">
         <title>
-           添加物流
+           添加
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -35,11 +35,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <form class="layui-form layui-form-pane">
                 <div class="layui-form-item">
                 	<div class="layui-inline">
-                    	<label for="lanName" class="layui-form-label">
-                    		物流名称：
+                    	<label for="IP" class="layui-form-label">
+                    		Ip：
                     	</label>
                     	<div class="layui-input-inline">
-                        	<input type="text" id="logisticName" name="logisticName" required lay-verify="required"
+                        	<input type="text" id="ip" name="ip" required lay-verify="required"
                         	autocomplete="off" class="layui-input">
                     	</div>
                     </div>
@@ -65,7 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
              //监听提交
               form.on('submit(add)', function(data){
-              	var message = "保存物流成功！";
+              	var message = "保存成功！";
               	add(data,message);
               	return false;
             	});
@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				
                 $.ajax({
                 	  type:"post",
-           			  url:"addLogistic.do",
+           			  url:"add.do",
                       data:data.field,
                       success:function(msg){
                         if(msg=="success"){

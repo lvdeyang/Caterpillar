@@ -143,7 +143,7 @@
 		
 	</script>
 	<script type="text/html" id="handle"> 
-    <a title="删除" href="javascript:;" onclick="logistic_del(this,'{{ d.id }}')" style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a>
+    <a title="删除" href="javascript:;" onclick="server_del(this,'{{ d.id }}')" style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a>
     </script>
 </body>
 </html>

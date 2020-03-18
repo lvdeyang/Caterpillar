@@ -540,7 +540,7 @@ html, body {
 <script type="text/javascript" src="lib/video-hls.js"></script>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript">
-   var  valve = 1;
+    var  valve = 1;
    
 	$(function() {
 	
@@ -947,7 +947,7 @@ html, body {
 		<div class="content" style="">
              <div style="position: absolute;top:40px;right:5%;color:#ffffff;z-index:111111;font-size:12px;"><img style="width:15px;height:15px;display: inline-block;" alt="" src="lib/images/renshu2.png"><p style="display: inline-block;">57812</p></div>
 			<video style="display: none;" id="my-video" class="video-js" width="100%" height="100%"  controls="controls" autoplay="autoplay"   x-webkit-airplay="true" x5-video-player-fullscreen="true"  preload="auto" playsinline="true" webkit-playsinline  x5-video-player-typ="h5">
-		    <source type="application/x-mpegURL" src="${live.leshiyunId}">		
+		    <source type="application/x-mpegURL" src="${url}">		
 			</video>
 
 			<div id="player" style="width:100%;height:250px;display:none;">

@@ -41,6 +41,7 @@ import com.guolaiwan.app.aoyou.AoYouV2Service;
 import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.interfac.util.HttpUtils;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
+import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.BalanceVO;
 import com.guolaiwan.app.web.admin.vo.ChildProductVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
@@ -71,6 +72,7 @@ import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveServerDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantBusinessDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
@@ -103,6 +105,7 @@ import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
+import com.guolaiwan.bussiness.admin.po.LiveServerPO;
 import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
@@ -1088,12 +1091,18 @@ public class PubNumController extends WebBaseControll {
 		return mv;
 	}
 
+	@Autowired
+	LiveServerDAO conn_liveserver;
+	
 	@RequestMapping(value = "/liveplay")
 	public ModelAndView livePlay(HttpServletRequest request, Long id) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/pubnum/liveplay");
 		LivePO live = conn_live.get(id);
 		mv.addObject("live", live);
+		List<LiveServerPO> serverList=conn_liveserver.findAll();
+		int randomNum=(int) (1+Math.random()*serverList.size());
+		mv.addObject("url","http://"+serverList.get(randomNum-1).getIp()+":6690/"+live.getPubName());
 		HttpSession session = request.getSession();
 		mv.addObject("userId", session.getAttribute("userId"));
 		return mv;
