@@ -29,6 +29,8 @@ public class LivePo extends AbstractBasePO {
     private Integer isRecommend;
     /*0：未直播， 1：直播中 ，2：已被封停 */
     private Integer status;
+    
+    private int recordstatus;//是否开始录制1：开始0：停止
 
     public String getTitle() {
         return title;
@@ -121,6 +123,15 @@ public class LivePo extends AbstractBasePO {
         this.setType(entity.getType());
         this.setUrlHttp(entity.getUrlHttp());
         this.setUrlRtmp(entity.getUrlRtmp());
+        this.setRecordstatus(entity.getRecordstatus());
         return this;
     }
+
+	public int getRecordstatus() {
+		return recordstatus;
+	}
+
+	public void setRecordstatus(int recordstatus) {
+		this.recordstatus = recordstatus;
+	}
 }

@@ -24,6 +24,8 @@ public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {
     private Integer isRecommend;
     /*0：未直播， 1：直播中 ，2：已被封停 */
     private Integer status;
+    
+    private int recordstatus;
 
     public String getTitle() {
 		return title;
@@ -119,6 +121,15 @@ public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {
         this.setType(entity.getType());
         this.setUrlHttp(entity.getUrlHttp());
         this.setUrlRtmp(entity.getUrlRtmp());
+        this.setRecordstatus(entity.getRecordstatus());
         return this;
     }
+
+	public int getRecordstatus() {
+		return recordstatus;
+	}
+
+	public void setRecordstatus(int recordstatus) {
+		this.recordstatus = recordstatus;
+	}
 }

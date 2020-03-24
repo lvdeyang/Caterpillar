@@ -34,6 +34,7 @@ define([
 				groups : context.getProp('groups'),
 				activeId : window.BASEPATH + 'index#/page-business-show',
 				table : {
+					data:[],
 					rows : [],
 					page:{
                         currentPage:1,
@@ -69,27 +70,30 @@ define([
 						self.table.currentPage = currentPage;
 					});
 				},
-				handleStop : function() {
+				handleRecord : function(scope) {
 					var self = this;
-					self.dialog.editUser.loading = true;
-					ajax.post('/user/edit/' + self.dialog.editUser.id, {
-						nickname : self.dialog.editUser.nickname,
-						mobile : self.dialog.editUser.mobile,
-						mail : self.dialog.editUser.mail,
-						editPassword : self.dialog.editUser.editPassword,
-						oldPassword : self.dialog.editUser.oldPassword,
-						newPassword : self.dialog.editUser.newPassword,
-						repeat : self.dialog.editUser.repeat
-					}, function(data, status) {
-						self.dialog.editUser.loading = false;
-						if (status !== 200) return;
-						for (var i = 0; i < self.table.rows.length; i++) {
-							if (self.table.rows[i].id === self.dialog.editUser.id) {
-								self.table.rows.splice(i, 1, data);
-								break;
-							}
-						}
-						self.handleEditUserClose();
+					var row = scope.row;
+					ajax.post('/show/live/startRecord/'+row.id, null,function(data, status) {
+						if(status !== 200) return;
+                        for(var i=0; i<self.table.rows.length; i++){
+                            if(self.table.rows[i].id === data.id){
+                                self.table.rows.splice(i, 1, data);
+                                break;
+                            }
+                        }
+					}, null, ajax.NO_ERROR_CATCH_CODE);
+				},
+				handleStopRecord : function(scope) {
+					var self = this;
+					var row = scope.row;
+					ajax.post('/show/live/stopRecord/'+row.id, null,function(data, status) {
+						if(status !== 200) return;
+                        for(var i=0; i<self.table.rows.length; i++){
+                            if(self.table.rows[i].id === data.id){
+                                self.table.rows.splice(i, 1, data);
+                                break;
+                            }
+                        }
 					}, null, ajax.NO_ERROR_CATCH_CODE);
 				},
 				handleSizeChange : function(size) {

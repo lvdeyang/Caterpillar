@@ -4,6 +4,7 @@ import com.sumavision.tetris.camera.CameraService;
 import com.sumavision.tetris.capacity.server.CapacityFeign;
 import com.sumavision.tetris.capacity.server.CapacityFeignService;
 import com.sumavision.tetris.result.Result;
+import com.sumavision.tetris.show.LiveDao;
 import com.sumavision.tetris.show.LivePo;
 import com.sumavision.tetris.show.LiveQuery;
 import com.sumavision.tetris.show.LiveService;
@@ -11,6 +12,7 @@ import com.sumavision.tetris.show.LiveVo;
 import com.sumavision.tetris.user.UserQuery;
 import com.sumavision.tetris.user.UserVO;
 
+import org.apache.hadoop.mapred.gethistory_jsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,6 +82,8 @@ public class AndriodController {
     }
     
 
+    @Autowired
+    LiveDao liveDao;
     /**
      * 开始直播
      * @return
@@ -88,9 +92,12 @@ public class AndriodController {
     @RequestMapping(value = "/startShow", method = {RequestMethod.POST, RequestMethod.PUT})
     public Map<String, Object> startShow() throws Exception {
     	UserVO user=userQuery.current();
-    	LiveVo liveVo=liveService.getByAnchorId(user.getId());
-    	liveVo.setStatus(1);
-    	liveService.save(liveVo);
+    	
+    	List<LivePo> livePo=liveDao.getByAnchorId(user.getId());
+    	if(livePo!=null&&!livePo.isEmpty()){
+    		livePo.get(0).setStatus(1);
+    		liveDao.save(livePo.get(0));
+    	}
 		
     	//调用capacityfein开始任务
     	cameraService.createTask(user.getId());
@@ -106,9 +113,12 @@ public class AndriodController {
     @RequestMapping(value = "/stopShow", method = {RequestMethod.POST, RequestMethod.PUT})
     public Map<String, Object> stopShow() throws Exception {
     	UserVO user=userQuery.current();
-    	LiveVo liveVo=liveService.getByAnchorId(user.getId());
-    	liveVo.setStatus(0);
-    	liveService.save(liveVo);
+    	List<LivePo> livePo=liveDao.getByAnchorId(user.getId());
+    	
+    	if(livePo!=null&&!livePo.isEmpty()){
+    		livePo.get(0).setStatus(0);
+    		liveDao.save(livePo.get(0));
+    	}
     	//调用capacityfein停止任务
     	cameraService.deleteTask(user.getId());
         return Result.success();

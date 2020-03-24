@@ -14,6 +14,8 @@ import com.sumavision.tetris.api.exception.MobileVerificationCodeTimeoutExceptio
 import com.sumavision.tetris.auth.login.LoginService;
 import com.sumavision.tetris.mvc.ext.context.HttpSessionContext;
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
+import com.sumavision.tetris.mvc.wrapper.CachedHttpServletRequestWrapper;
+import com.sumavision.tetris.mvc.wrapper.JSONHttpServletRequestWrapper;
 import com.sumavision.tetris.user.UserQuery;
 import com.sumavision.tetris.user.UserService;
 

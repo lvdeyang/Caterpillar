@@ -51,6 +51,9 @@ public class LiveService {
     	if(livePos==null||livePos.isEmpty()){
     		LivePo livePo=new LivePo();
     		livePo.setAnchorId(anchorId);
+    		livePo.setUrlHttp("http://47.95.241.89:6690/live/camera" + anchorId+".m3u8");
+    		livePo.setUrlRtmp("rtmp://47.95.241.89/live/camera" + anchorId);
+            livePo.setStatus(0);
     		liveDao.save(livePo);
     		return new LiveVo().set(livePo);
     	}else{

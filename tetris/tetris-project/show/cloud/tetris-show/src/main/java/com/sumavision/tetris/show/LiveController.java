@@ -68,4 +68,30 @@ public class LiveController {
 													   .put("total", total)
 													   .getMap();
 	}
+    
+    
+    @Autowired
+    LiveService liveService;
+    @Autowired
+    LiveDao liveDao;
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/startRecord/{id}", method = {RequestMethod.POST})
+    public Object startRecord(@PathVariable Long id) throws Exception {
+        LivePo livePo=liveDao.findOne(id);
+        livePo.setRecordstatus(1);
+        liveDao.save(livePo);
+        return new LiveVo().set(livePo);
+    }
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/stopRecord/{id}", method = {RequestMethod.POST})
+    public Object stopRecord(@PathVariable Long id) throws Exception {
+    	LivePo livePo=liveDao.findOne(id);
+        livePo.setRecordstatus(0);
+        liveDao.save(livePo);
+        return new LiveVo().set(livePo);
+    }
+    
 }
