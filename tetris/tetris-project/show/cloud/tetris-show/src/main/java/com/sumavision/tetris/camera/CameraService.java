@@ -259,7 +259,7 @@ public class CameraService {
         cameraDao.save(cameraPo1);
         //切换机位
         String[] strings = cameraPo1.getCameraName().split("机位");
-        int index = Integer.parseInt(strings[1]);
+        int index = Integer.parseInt(strings[1])-1;
         capacityService.switchTask(cameraPo1.getUserId(), index);
 
         return cameraPo1;
@@ -277,7 +277,7 @@ public class CameraService {
         StringBuffer sb=new StringBuffer();
         for (CameraPo cameraPo : list) {
             //list1.add("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString());
-        	sb.append("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
+        	sb.append(cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
         }
         capacityService.createTask(sb.toString(), list.get(0).getUserId());
         return null;
@@ -290,7 +290,7 @@ public class CameraService {
         List<String> list = new ArrayList<>();
         StringBuffer sb=new StringBuffer();
         for (CameraPo cameraPo : cameraPoList) {
-        	sb.append("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
+        	sb.append(cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
             //list.add(cameraPo.getUserId().toString() + cameraPo.getId().toString() + "");
         }
         capacityService.deleteTask(sb.toString(), cameraPoList.get(0).getUserId());

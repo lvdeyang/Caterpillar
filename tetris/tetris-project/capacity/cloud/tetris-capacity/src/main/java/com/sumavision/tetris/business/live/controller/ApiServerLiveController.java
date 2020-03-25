@@ -36,7 +36,7 @@ public class ApiServerLiveController {
     	
         streamPassbyService.createTask(userId,
         		array,
-                "camera" + userId,"1280,720", 500000, 25, "16:9");
+                "camera" + userId,"544,960", 500000, 20, "9:16");
 
         return null;
     }

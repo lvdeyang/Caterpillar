@@ -19,7 +19,7 @@ public class LivePo extends AbstractBasePO {
     private Integer peoNum;
     /*封面图片路径*/
     private String coverPic;
-    /*直播类型 唱歌 卖货 ...*/
+    /*直播类型 唱歌 卖货 */
     private Integer type;
     /*http url*/
     private String urlHttp;
@@ -31,6 +31,8 @@ public class LivePo extends AbstractBasePO {
     private Integer status;
     
     private int recordstatus;//是否开始录制1：开始0：停止
+    
+    private long tempId;
 
     public String getTitle() {
         return title;
@@ -124,6 +126,7 @@ public class LivePo extends AbstractBasePO {
         this.setUrlHttp(entity.getUrlHttp());
         this.setUrlRtmp(entity.getUrlRtmp());
         this.setRecordstatus(entity.getRecordstatus());
+        this.setTempId(entity.getTempId());
         return this;
     }
 
@@ -134,4 +137,14 @@ public class LivePo extends AbstractBasePO {
 	public void setRecordstatus(int recordstatus) {
 		this.recordstatus = recordstatus;
 	}
+
+	public long getTempId() {
+		return tempId;
+	}
+
+	public void setTempId(long tempId) {
+		this.tempId = tempId;
+	}
+	
+	
 }
