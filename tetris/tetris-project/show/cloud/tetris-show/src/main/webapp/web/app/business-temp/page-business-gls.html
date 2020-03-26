@@ -1,0 +1,201 @@
+<mi-frame id="page-business-gls-wrapper" :menus="menus" :user="user" :groups="groups" :active-id="activeId">
+
+    <glslate slot="title">字幕管理</glslate>
+
+    <glslate slot="links">
+        <el-breadcrumb-item><a href="#/page-home">首页</a></el-breadcrumb-item>
+        <el-breadcrumb-item>字幕管理</el-breadcrumb-item>
+    </glslate>
+
+    <glslate>
+        <el-card class="box-card" shadow="hover" style="width:100%; height:100%;">
+
+			<div style="position:absolute; left:0; top:0; right:0; bottom:0; padding:20px;">
+                 <div style="width:100%; height:100%; position:relative;">
+                     <div style="height:48px; position:absolute; left:0; top:0; width:100%;">
+                         <el-button size="small" type="primary" @click="dialog.addgls.visible = true"><span class="icon-plus" style="margin-right:5px;"></span>添加</el-button>
+                         <el-button size="small" type="warning"><span class="icon-trash" style="margin-right:5px;"></span>删除</el-button>
+                     </div>
+                     <div style="position:absolute; left:0; right:0; top:48px; bottom:48px;">
+                         <el-table
+                                 :data="table.data"
+                                 tooltip-effect="dark"
+                                 style="width: 100%">
+                              <el-table-column
+                                 type="selection"
+                                 width="55">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="ID"
+		                               prop="id">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="字幕内容"
+		                               prop="content" width="400">
+		                       </el-table-column>
+		  					   <el-table-column
+		                               label="距离左边"
+		                               prop="x" width="400">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="距离上边"
+		                               prop="x" width="400">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="宽度"
+		                               prop="width" width="400">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="高度"
+		                               prop="x" width="400">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="背景颜色"
+		                               prop="backgroundColor" width="400">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="字体颜色"
+		                               prop="fontColor">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="字体大小"
+		                               prop="fontSize">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="滚动速度"
+		                               prop="rollSpead">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="字体"
+		                               prop="fontFamily">
+		                       </el-table-column>
+		                       <el-table-column
+		                               label="滚动方向"
+		                               prop="trackType">
+		                       </el-table-column>    
+		                       <el-table-column
+		                               label="台标路径"
+		                               prop="logoPath">
+		                       </el-table-column>   
+                               <el-table-column
+                                     label="操作"
+                                     width="220">
+                                 <glslate slot-scope="scope">
+                                     <el-tooltip class="item" effect="dark" content="修改字幕" placement="bottom">
+                                         <el-button type="text" icon="el-icon-edit" style="margin:0; font-size:18px; padding:0; margin-right:20px;" @click="rowEdit(scope)"></el-button>
+                                     </el-tooltip>
+                                     <el-tooltip class="item" effect="dark" content="删除字幕" placement="bottom">
+                                         <el-button type="text" icon="el-icon-delete" style="margin:0; font-size:18px; padding:0;" @click="rowDelete(scope)"></el-button>
+                                     </el-tooltip>
+                                 </glslate>
+                               </el-table-column>
+                         </el-table>
+                     </div>
+                     <div style="height:48px; width:100%; text-align:right; padding-top:16px; position:absolute; left:0; bottom:0; box-sizing:border-box;">
+                         <el-pagination
+                                 background
+                                 @size-change="handleSizeChange"
+                                 @current-change="handleCurrentChange"
+                                 :current-page="table.page.currentPage"
+                                 :page-sizes="table.page.sizes"
+                                 :page-size="table.page.size"
+                                 layout="total, sizes, prev, pager, next, jumper"
+                                 :total="table.page.total">
+                         </el-pagination>
+                     </div>
+                 </div>
+             </div>
+        </el-card>
+
+        
+		 <!-- 添加设备对话框 -->
+        <el-dialog
+                title="添加设备"
+                :visible.sync="dialog.addgls.visible"
+                width="500px"
+                :before-close="handleAddglsClose">
+            <el-form ref="form" label-width="70px">
+            
+                <el-form-item label="字幕内容">
+	            	<el-input style="width:100%" v-model="dialog.addgls.x"></el-input>
+	            </el-form-item>
+	            <el-form-item label="距离左边">
+	            	<el-input style="width:100%" v-model="dialog.addgls.y"></el-input>
+	            </el-form-item>
+	        	<el-form-item label="距离上边">
+	            	<el-input style="width:100%" v-model="dialog.addgls.ratio"></el-input>
+	            </el-form-item>
+	            <el-form-item label="宽度">
+	            	<el-input style="width:100%" v-model="dialog.addgls.rate"></el-input>
+	            </el-form-item>
+	            <el-form-item label="高度">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+	            <el-form-item label="背景颜色">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+	            <el-form-item label="字体颜色">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+	            <el-form-item label="字体大小">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+	            <el-form-item label="滚动速度">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+	            <el-form-item label="字体">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+	            <el-form-item label="滚动方向">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+	            <el-form-item label="台标路径">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="medium" @click="dialog.addgls.visible = false">取 消</el-button>
+                <el-button size="medium" type="primary" @click="handleAddglsCommit" :loading="dialog.addgls.loading">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 编辑设备对话框 -->
+        <el-dialog
+                title="编辑设备"
+                :visible.sync="dialog.editgls.visible"
+                width="500px"
+                :before-close="handleEditglsClose">
+
+            <el-form ref="form" label-width="70px">
+                <el-form-item label="名称">
+                    <el-input v-model="dialog.addgls.name"></el-input>
+                </el-form-item>
+                <el-form-item label="分辨率宽">
+	            	<el-input style="width:100%" v-model="dialog.addgls.x"></el-input>
+	            </el-form-item>
+	            <el-form-item label="分辨率高">
+	            	<el-input style="width:100%" v-model="dialog.addgls.y"></el-input>
+	            </el-form-item>
+	        	<el-form-item label="宽高比">
+	            	<el-input style="width:100%" v-model="dialog.addgls.ratio"></el-input>
+	            </el-form-item>
+	            <el-form-item label="码率">
+	            	<el-input style="width:100%" v-model="dialog.addgls.rate"></el-input>
+	            </el-form-item>
+	            <el-form-item label="帧率">
+	            	<el-input style="width:100%" v-model="dialog.addgls.frame"></el-input>
+	            </el-form-item>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="medium" @click="dialog.editgls.visible = false">取 消</el-button>
+                <el-button size="medium" type="primary" @click="handleEditglsCommit">确 定</el-button>
+            </span>
+        </el-dialog>
+		
+       
+
+    </glslate>
+
+</mi-frame>

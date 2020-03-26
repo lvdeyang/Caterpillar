@@ -20,6 +20,7 @@ import com.sumavision.tetris.user.UserQuery;
 import com.sumavision.tetris.user.UserStatus;
 import com.sumavision.tetris.user.UserVO;
 import com.sumavision.tetris.user.exception.PasswordErrorException;
+import com.sumavision.tetris.user.exception.TokenTimeoutException;
 import com.sumavision.tetris.user.exception.UsernameNotExistException;
 
 @Service
@@ -85,8 +86,17 @@ public class LoginService {
 		
 		if(!user.getPassword().equals(password)) throw new PasswordErrorException(username, password);
 		
-		String token = UUID.randomUUID().toString().replaceAll("-", "");
+		String token = user.getToken();
+		boolean tokenUseable = false;
+		if(token != null){
+			try{
+				userQuery.checkToken(token);
+				tokenUseable = true;
+			}catch(Exception e){}
+		}
+		if(tokenUseable) return user.getToken();
 		
+		token = UUID.randomUUID().toString().replaceAll("-", "");
 		user.setStatus(UserStatus.ONLINE);
 		user.setLastModifyTime(new Date());
 		user.setToken(token);
