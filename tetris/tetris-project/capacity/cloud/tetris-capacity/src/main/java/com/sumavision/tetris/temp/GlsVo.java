@@ -16,7 +16,7 @@ public class GlsVo extends AbstractBaseVO<GlsVo, GlsPo>{
 	private String fontFamily;//STZhongsong
 	private String trackType;//滚动字幕方向right_to_left
 	private String logoPath;
-	
+	private int type;
 	
 	
 	public long getTempId() {
@@ -203,7 +203,21 @@ public class GlsVo extends AbstractBaseVO<GlsVo, GlsPo>{
 		.setTrackType(entity.getTrackType())
 		.setWidth(entity.getWidth())
 		.setX(entity.getX())
+		.setType(entity.getType())
 		.setY(entity.getY());
+		return this;
+	}
+
+
+
+	public int getType() {
+		return type;
+	}
+
+
+
+	public GlsVo setType(int type) {
+		this.type = type;
 		return this;
 	}
 

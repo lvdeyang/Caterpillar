@@ -115,7 +115,18 @@
                 width="500px"
                 :before-close="handleAddglsClose">
             <el-form ref="form" label-width="70px">
-                <el-form-item label="字幕内容">
+	            <el-form-item label="类型">
+		            <el-select style="width:100%" class="item-choose" v-model="dialog.addgls.type" size="small">
+					    <el-option
+					        v-for="(item,index) in options"
+					        :key="index"
+					        :label="item.label"
+					        :value="item.value"
+						></el-option>
+					</el-select>
+	            </el-form-item>
+            
+                <el-form-item label="字幕内容" v-if="dialog.addgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.addgls.content"></el-input>
 	            </el-form-item>
 	            <el-form-item label="距离左边">
@@ -130,25 +141,25 @@
 	            <el-form-item label="高度">
 	            	<el-input style="width:100%" v-model="dialog.addgls.height"></el-input>
 	            </el-form-item>
-	            <el-form-item label="背景颜色">
+	            <el-form-item label="背景颜色" v-if="dialog.addgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.addgls.backgroundColor"></el-input>
 	            </el-form-item>
-	            <el-form-item label="字体颜色">
+	            <el-form-item label="字体颜色" v-if="dialog.addgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.addgls.fontColor"></el-input>
 	            </el-form-item>
-	            <el-form-item label="字体大小">
+	            <el-form-item label="字体大小" v-if="dialog.addgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.addgls.fontSize"></el-input>
 	            </el-form-item>
-	            <el-form-item label="滚动速度">
+	            <el-form-item label="滚动速度" v-if="dialog.addgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.addgls.rollSpead"></el-input>
 	            </el-form-item>
-	            <el-form-item label="字体">
+	            <el-form-item label="字体" v-if="dialog.addgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.addgls.fontFamily"></el-input>
 	            </el-form-item>
-	            <el-form-item label="滚动方向">
+	            <el-form-item label="滚动方向" v-if="dialog.addgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.addgls.trackType"></el-input>
 	            </el-form-item>
-	            <el-form-item label="台标路径">
+	            <el-form-item label="台标路径" v-if="dialog.addgls.type==1">
 	            	<el-input style="width:100%" v-model="dialog.addgls.logoPath"></el-input>
 	            </el-form-item>
             </el-form>
@@ -167,7 +178,17 @@
                 :before-close="handleEditglsClose">
 
             <el-form ref="form" label-width="70px">
-                 <el-form-item label="字幕内容">
+            	<el-form-item label="类型">
+		            <el-select style="width:100%" class="item-choose" v-model="dialog.editgls.type" size="small">
+					    <el-option
+					        v-for="(item,index) in options"
+					        :key="index"
+					        :label="item.label"
+					        :value="item.value"
+						></el-option>
+					</el-select>
+	            </el-form-item>
+                <el-form-item label="字幕内容" v-if="dialog.editgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.editgls.content"></el-input>
 	            </el-form-item>
 	            <el-form-item label="距离左边">
@@ -182,25 +203,25 @@
 	            <el-form-item label="高度">
 	            	<el-input style="width:100%" v-model="dialog.editgls.height"></el-input>
 	            </el-form-item>
-	            <el-form-item label="背景颜色">
+	            <el-form-item label="背景颜色" v-if="dialog.editgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.editgls.backgroundColor"></el-input>
 	            </el-form-item>
-	            <el-form-item label="字体颜色">
+	            <el-form-item label="字体颜色" v-if="dialog.editgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.editgls.fontColor"></el-input>
 	            </el-form-item>
-	            <el-form-item label="字体大小">
+	            <el-form-item label="字体大小" v-if="dialog.editgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.editgls.fontSize"></el-input>
 	            </el-form-item>
-	            <el-form-item label="滚动速度">
+	            <el-form-item label="滚动速度" v-if="dialog.editgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.editgls.rollSpead"></el-input>
 	            </el-form-item>
-	            <el-form-item label="字体">
+	            <el-form-item label="字体" v-if="dialog.editgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.editgls.fontFamily"></el-input>
 	            </el-form-item>
-	            <el-form-item label="滚动方向">
+	            <el-form-item label="滚动方向" v-if="dialog.editgls.type==0">
 	            	<el-input style="width:100%" v-model="dialog.editgls.trackType"></el-input>
 	            </el-form-item>
-	            <el-form-item label="台标路径">
+	            <el-form-item label="台标路径" v-if="dialog.editgls.type==1">
 	            	<el-input style="width:100%" v-model="dialog.editgls.logoPath"></el-input>
 	            </el-form-item>
             </el-form>

@@ -67,6 +67,7 @@ public class TempService {
 		    String fontFamily,
 		    String trackType,
 		    String logoPath,
+		    int type,
 		    Long tempId) throws Exception{
 		
 		GlsPo gls=new GlsPo();
@@ -83,6 +84,7 @@ public class TempService {
 		gls.setWidth(width);
 		gls.setX(x);
 		gls.setY(y);
+		gls.setType(type);
 		glsDao.save(gls);
 		return gls;
 	}
@@ -103,6 +105,7 @@ public class TempService {
 		    String fontFamily,
 		    String trackType,
 		    String logoPath,
+		    int type,
 		    Long tempId) throws Exception{
 		
 		gls.setBackgroundColor(backgroundColor);
@@ -118,6 +121,7 @@ public class TempService {
 		gls.setWidth(width);
 		gls.setX(x);
 		gls.setY(y);
+		gls.setType(type);
 		glsDao.save(gls);
 		return gls;
 	}

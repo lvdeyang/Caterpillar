@@ -28,6 +28,13 @@ define([
         new Vue({
             el: '#' + pageId + '-wrapper',
             data: {
+            	options:[{
+                    value: 0,
+                    label: '字幕'
+                }, {
+                    value: 1,
+                    label: '台标'
+                }],
                 menus: context.getProp('menus'),
                 user: context.getProp('user'),
                 groups: context.getProp('groups'),
@@ -42,16 +49,17 @@ define([
                 },
                 dialog:{
                     addgls:{
+                    	type:0,
                         visible:false,
                         content:'',
-                    	x:'',
-                    	y:'',
-                    	width:'',
-                    	height:'',
+                    	x:0,
+                    	y:0,
+                    	width:0,
+                    	height:0,
                     	backgroundColor:'',
                     	fontColor:'',
-                    	fontSize:'',
-                    	rollSpead:'',
+                    	fontSize:0,
+                    	rollSpead:0,
                     	fontFamily:'',
                     	trackType:'',
                     	logoPath:'',
@@ -60,15 +68,16 @@ define([
                     editgls:{
                         visible:false,
                         id:'',
+                        type:0,
                         content:'',
-                    	x:'',
-                    	y:'',
-                    	width:'',
-                    	height:'',
+                    	x:0,
+                    	y:0,
+                    	width:0,
+                    	height:0,
                     	backgroundColor:'',
                     	fontColor:'',
-                    	fontSize:'',
-                    	rollSpead:'',
+                    	fontSize:0,
+                    	rollSpead:0,
                     	fontFamily:'',
                     	trackType:'',
                     	logoPath:'',
@@ -87,7 +96,7 @@ define([
                     var self = this;
                     var row = scope.row;
                     self.dialog.editgls.id = row.id;
-                    
+                    self.dialog.editgls.type= row.type;
                     self.dialog.editgls.content= row.content;
                     self.dialog.editgls.x= row.x;
                     self.dialog.editgls.y= row.y;
@@ -175,14 +184,15 @@ define([
                 handleAddglsClose:function(){
                     var self = this;
                     self.dialog.addgls.content='';
-                    self.dialog.addgls.x= '';
-                    self.dialog.addgls.y= '';
-                    self.dialog.addgls.width= '';
-                    self.dialog.addgls.height= '';
+                    self.dialog.addgls.type= 0;
+                    self.dialog.addgls.x= 0;
+                    self.dialog.addgls.y= 0;
+                    self.dialog.addgls.width= 0;
+                    self.dialog.addgls.height= 0;
                     self.dialog.addgls.backgroundColor= '';
                     self.dialog.addgls.fontColor= '';
-                    self.dialog.addgls.fontSize= '';
-                    self.dialog.addgls.rollSpead= '';
+                    self.dialog.addgls.fontSize= 0;
+                    self.dialog.addgls.rollSpead= 0;
                     self.dialog.addgls.fontFamily= '';
                     self.dialog.addgls.trackType= '';
                     self.dialog.addgls.logoPath= '';
@@ -204,6 +214,7 @@ define([
                         fontFamily: self.dialog.addgls.fontFamily,
                         trackType: self.dialog.addgls.trackType,
                         logoPath: self.dialog.addgls.logoPath,
+                        type:self.dialog.addgls.type,
                         tempId:p.tempId
                     }, function(data, status){
                         self.dialog.addgls.loading = false;
@@ -217,14 +228,15 @@ define([
                     var self = this;
                     self.dialog.editgls.id = '';
                     self.dialog.editgls.content='';
-                    self.dialog.editgls.x= '';
-                    self.dialog.editgls.y= '';
-                    self.dialog.editgls.width= '';
-                    self.dialog.editgls.height= '';
+                    self.dialog.editgls.type= 0;
+                    self.dialog.editgls.x= 0;
+                    self.dialog.editgls.y= 0;
+                    self.dialog.editgls.width= 0;
+                    self.dialog.editgls.height= 0;
                     self.dialog.editgls.backgroundColor= '';
                     self.dialog.editgls.fontColor= '';
-                    self.dialog.editgls.fontSize= '';
-                    self.dialog.editgls.rollSpead= '';
+                    self.dialog.editgls.fontSize= 0;
+                    self.dialog.editgls.rollSpead= 0;
                     self.dialog.editgls.fontFamily= '';
                     self.dialog.editgls.trackType= '';
                     self.dialog.editgls.logoPath= '';
@@ -246,6 +258,7 @@ define([
                         fontFamily: self.dialog.editgls.fontFamily,
                         trackType: self.dialog.editgls.trackType,
                         logoPath: self.dialog.editgls.logoPath,
+                        type:self.dialog.editgls.type,
                         tempId:p.tempId
                     }, function(data, status){
                         self.dialog.editgls.loading = false;

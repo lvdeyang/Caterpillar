@@ -159,6 +159,7 @@ public class TempController {
 		    String fontFamily,
 		    String trackType,
 		    String logoPath,
+		    int type,
 		    Long tempId,
 			HttpServletRequest request) throws Exception{
 		
@@ -176,6 +177,7 @@ public class TempController {
 			     fontFamily,
 			     trackType,
 			     logoPath,
+			     type,
 			     tempId);
 		return new GlsVo().set(glsPo);
 	}	
@@ -199,6 +201,7 @@ public class TempController {
 		    String fontFamily,
 		    String trackType,
 		    String logoPath,
+		    int type,
 		    Long tempId,
 			HttpServletRequest request) throws Exception{
 		
@@ -219,6 +222,7 @@ public class TempController {
 			     fontFamily,
 			     trackType,
 			     logoPath,
+			     type,
 			     tempId);
 		
 		return new GlsVo().set(glsPo);

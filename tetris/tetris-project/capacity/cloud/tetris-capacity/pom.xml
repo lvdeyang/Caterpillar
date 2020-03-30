@@ -89,7 +89,11 @@
 			<artifactId>tetris-ui</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.sumavision.tetris</groupId>
+			<artifactId>tetris-menu-feign</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-ext-jdk15on -->
 <dependency>

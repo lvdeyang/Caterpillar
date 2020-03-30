@@ -65,6 +65,10 @@ import com.sumavision.tetris.capacity.service.ResponseService;
 import com.sumavision.tetris.commons.exception.BaseException;
 import com.sumavision.tetris.commons.util.wrapper.ArrayListWrapper;
 import com.sumavision.tetris.commons.util.wrapper.StringBufferWrapper;
+import com.sumavision.tetris.temp.GlsDao;
+import com.sumavision.tetris.temp.GlsPo;
+import com.sumavision.tetris.temp.TempDao;
+import com.sumavision.tetris.temp.TempPo;
 
 /**
  * 流透传<br/>
@@ -122,7 +126,7 @@ public class StreamPassbyService {
 
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
             List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
-            		,resolution, bitrate, fps, hw);
+            		,resolution, bitrate, fps, hw,null);
             
             
             
@@ -161,6 +165,76 @@ public class StreamPassbyService {
         }
 
     }
+    
+    @Autowired
+    TempDao tempDao;
+    @Autowired
+    GlsDao glsDao;
+    
+    public void createTempTask(Long taskId, List<String> srcPubNames, String dstPubName,
+    		long tempId) {
+        try {
+            // 创建输入源
+            List<InputBO> inputBOs = new ArrayList<InputBO>();
+            for (String pubName : srcPubNames) {
+                InputBO inputBO = stream2InputBO(pubName, "rtmp://127.0.0.1/live/" + pubName);
+                inputBOs.add(inputBO);
+            }
+            // 创建备份源关系了
+            InputBO backInput = stream2BackInputBO(taskId, srcPubNames);
+            inputBOs.add(backInput);
+            // 创建任务了
+            String videoTaskId = new StringBufferWrapper().append("task-video-").append(taskId).toString();
+
+            String audioTaskId = new StringBufferWrapper().append("task-audio-").append(taskId).toString();
+
+            String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(taskId).toString();
+
+            String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
+            
+            TempPo tempPo=tempDao.findOne(tempId);
+            List<GlsPo> glsPos=glsDao.findByTempId(tempId);
+            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
+            		,tempPo.getX()+","+tempPo.getY(), tempPo.getRate(),tempPo.getFrame(),tempPo.getRatio(),glsPos);
+            
+            
+            
+            // 创建输出了
+            String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
+            OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+                    dstPubName);
+            
+            
+
+            ///OutputBO recordOutputBo = record2OutputBO(taskId+"", taskBOs, "/home/hls");
+            
+            AllRequest allRequest = new AllRequest();
+            allRequest.setInput_array(inputBOs);
+            allRequest.setTask_array(taskBOs);
+            allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
+
+            String[] pullServerList=capacityProps.getPip().split(",");
+            int index=1;
+            for (String url : pullServerList) {
+            	String destPubUrl="rtmp://"+url+"/live/"+dstPubName;
+            	OutputBO temOutputBO = streamUrlRtmp2OutputBO(outputId+"-"+index, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+            			destPubUrl);
+            	allRequest.getOutput_array().add(temOutputBO);
+            	index++;
+			}
+            
+            AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
+                    capacityProps.getPort());
+
+            responseService.allResponseProcess(allResponse);
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+    
 
     /**
      * 创建录制任务【mr】
@@ -572,7 +646,7 @@ public class StreamPassbyService {
      */
     public List<TaskBO> stream2TaskBO(String videoTaskId, String audioTaskId, String encodeVideoId,
                                       String encodeAudioId, InputBO input,
-                                      String resolution,int bitrate,int fps,String hw) throws Exception {
+                                      String resolution,int bitrate,int fps,String hw,List<GlsPo> glsList) throws Exception {
 
         List<TaskBO> tasks = new ArrayList<TaskBO>();
 
@@ -598,38 +672,33 @@ public class StreamPassbyService {
         videoTask.getEncode_array().add(videoEncode);
         
         //字幕
-        OsdBO osdBO=new OsdBO().setHeight(100).setWidth(1000).setX(140).setY(5)
-        		.setHas_background(false).setBackground_color("(255,255,255,60)")
-        		.setTrack_type("right_to_left").setTrack_speed(80)
-        		.setFont(new FontBO().setFamily("STZhongsong").
-        				setColor("(255,255,255,255)").setSize(35)
-        				.setHas_border(false).setBorder_color("(255,255,255,60)"))
-        		.setContent("欢迎观看过来玩电影频道 畅游天下尽在过来玩");
-        TextOsdBO textOsdBO=new TextOsdBO().setText_osds(new ArrayListWrapper().add(osdBO).getList());
-        PreProcessingBO preProcessingBO=new PreProcessingBO().setText_osd(textOsdBO);
-        videoTask.getDecode_process_array().add(preProcessingBO);
+        if(glsList!=null){
+        	for (GlsPo gls : glsList) {
+        		if(gls.getType()==0){
+        			OsdBO osdBO=new OsdBO().setHeight(gls.getHeight()).setWidth(gls.getWidth()).setX(gls.getX()).setY(gls.getY())
+        	        		.setHas_background(false).setBackground_color(gls.getBackgroundColor())
+        	        		.setTrack_type(gls.getTrackType()).setTrack_speed(gls.getRollSpead())
+        	        		.setFont(new FontBO().setFamily(gls.getFontFamily()).
+        	        				setColor(gls.getFontColor()).setSize(gls.getFontSize())
+        	        				.setHas_border(false).setBorder_color("(255,255,255,60)"))
+        	        		.setContent(gls.getContent());
+        	        TextOsdBO textOsdBO=new TextOsdBO().setText_osds(new ArrayListWrapper().add(osdBO).getList());
+        	        PreProcessingBO preProcessingBO=new PreProcessingBO().setText_osd(textOsdBO);
+        	        videoTask.getDecode_process_array().add(preProcessingBO);
+        		}else{
+        			PictureOsdObjectBO pObjectBO=new PictureOsdObjectBO().setAuto_scale(true)
+        	        		.setHeight(gls.getHeight()).setWidth(gls.getWidth()).setX(gls.getX()).setY(gls.getY()).setTransparent(0)
+        	        		.setPath(gls.getLogoPath());
+        	        StaticPictureOsdBO staticPictureOsdBO=new StaticPictureOsdBO()
+        	        		.setStatic_pic_osds(new ArrayListWrapper().add(pObjectBO).getList());
+        	        PreProcessingBO preProcessingBOlogo=new PreProcessingBO().setStatic_pic_osd(staticPictureOsdBO);
+        	        videoTask.getDecode_process_array().add(preProcessingBOlogo);  
+        		}
+				
+			}
+        }
         
-        
-        OsdBO osdBO1=new OsdBO().setHeight(100).setWidth(1000).setX(140).setY(600)
-        		.setHas_background(false).setBackground_color("(255,255,255,60)")
-        		.setTrack_type("right_to_left").setTrack_speed(80)
-        		.setFont(new FontBO().setFamily("STZhongsong").
-        				setColor("(255,255,255,255)").setSize(35)
-        				.setHas_border(false).setBorder_color("(255,255,255,60)"))
-        		.setContent("地址：法院对面。联系人：刘建江");
-        TextOsdBO textOsdBO1=new TextOsdBO().setText_osds(new ArrayListWrapper().add(osdBO1).getList());
-        PreProcessingBO preProcessingBO1=new PreProcessingBO().setText_osd(textOsdBO1);
-        videoTask.getDecode_process_array().add(preProcessingBO1);
-        
-        
-        //台标
-        PictureOsdObjectBO pObjectBO=new PictureOsdObjectBO().setAuto_scale(true)
-        		.setHeight(100).setWidth(100).setX(5).setY(5).setTransparent(0)
-        		.setPath("/home/logos.png");
-        StaticPictureOsdBO staticPictureOsdBO=new StaticPictureOsdBO()
-        		.setStatic_pic_osds(new ArrayListWrapper().add(pObjectBO).getList());
-        PreProcessingBO preProcessingBOlogo=new PreProcessingBO().setStatic_pic_osd(staticPictureOsdBO);
-        videoTask.getDecode_process_array().add(preProcessingBOlogo);        
+
         
         tasks.add(videoTask);
 

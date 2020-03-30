@@ -58,6 +58,24 @@ public class ApiServerLiveController {
     }
     
     
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/create/temptask")
+    public Object createTempTask(HttpServletRequest request, String list, Long userId) throws Exception {
+
+    	List<String> array=Arrays.asList(list.split(","));
+    	
+    	long tempId=0;
+    	
+        streamPassbyService.createTempTask(userId,
+        		array,
+                "camera" + userId,tempId);
+
+        return null;
+    }
+    
+    
+    
 
     @JsonBody
     @ResponseBody
