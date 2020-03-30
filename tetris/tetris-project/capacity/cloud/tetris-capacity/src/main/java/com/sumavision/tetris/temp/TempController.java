@@ -18,7 +18,7 @@ import com.sumavision.tetris.user.UserQuery;
 import com.sumavision.tetris.user.UserVO;
 
 @RestController
-@RequestMapping(value = "/show/temp")
+@RequestMapping(value = "/capacity/temp")
 public class TempController {
 	@Autowired
 	private UserQuery userQuery;
@@ -51,6 +51,29 @@ public class TempController {
 	
 	@JsonBody
 	@ResponseBody
+	@RequestMapping(value = "/gls/list")
+	public Object list(
+			Long tempId,
+			Integer currentPage,
+			Integer pageSize,
+			HttpServletRequest request) throws Exception{
+		
+		UserVO user = userQuery.current();
+		
+		//TODO 权限校验		
+		Page<GlsPo> page = tempQuery.findAllByTempId(tempId,currentPage, pageSize);
+		List<GlsPo> entities =page.getContent();
+		List<GlsVo> gls = GlsVo.getConverter(GlsVo.class).convert(entities, GlsVo.class);
+		
+		Long total = page.getTotalElements();
+			
+		return new HashMapWrapper<String, Object>().put("rows", gls)
+													   .put("total", total)
+													   .getMap();
+	}
+	
+	@JsonBody
+	@ResponseBody
 	@RequestMapping(value = "/alllist")
 	public Object alllist(HttpServletRequest request) throws Exception{
 		
@@ -58,10 +81,10 @@ public class TempController {
 		
 		
 		List<TempPo> entities =tempDao.findAll();
-		List<TempVo> devices = TempVo.getConverter(TempVo.class).convert(entities, TempVo.class);
+		List<TempVo> temps = TempVo.getConverter(TempVo.class).convert(entities, TempVo.class);
 
 			
-		return devices;
+		return temps;
 	}
 	
 
@@ -109,7 +132,7 @@ public class TempController {
 			@PathVariable Long id) throws Exception{
 		
 		
-		TempPo device = deviceDao.findOne(id);
+		TempPo device = tempDao.findOne(id);
 		
 		
 		tempService.remove(device);
@@ -117,4 +140,105 @@ public class TempController {
 		
 		return null;
 	}
+	
+	
+		
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/gls/add")
+	public Object glsadd(
+			String content,
+		    int x,
+		    int y,
+		    int width,
+		    int height,
+		    String backgroundColor,
+		    String fontColor,
+		    int fontSize,
+		    int rollSpead,
+		    String fontFamily,
+		    String trackType,
+		    String logoPath,
+		    Long tempId,
+			HttpServletRequest request) throws Exception{
+		
+		UserVO user = userQuery.current();
+		//TODO 权限校验
+		GlsPo glsPo =tempService.glsadd(content,
+			     x,
+			     y,
+			     width,
+			     height,
+			     backgroundColor,
+			     fontColor,
+			     fontSize,
+			     rollSpead,
+			     fontFamily,
+			     trackType,
+			     logoPath,
+			     tempId);
+		return new GlsVo().set(glsPo);
+	}	
+	
+	@Autowired
+	GlsDao glsDao;
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/gls/edit/{id}")
+	public Object glsedit(
+			@PathVariable Long id,
+			String content,
+		    int x,
+		    int y,
+		    int width,
+		    int height,
+		    String backgroundColor,
+		    String fontColor,
+		    int fontSize,
+		    int rollSpead,
+		    String fontFamily,
+		    String trackType,
+		    String logoPath,
+		    Long tempId,
+			HttpServletRequest request) throws Exception{
+		
+		UserVO user = userQuery.current();
+	
+		GlsPo glsPo = glsDao.findOne(id);
+	
+		
+		glsPo =tempService.glsedit(glsPo,content,
+			     x,
+			     y,
+			     width,
+			     height,
+			     backgroundColor,
+			     fontColor,
+			     fontSize,
+			     rollSpead,
+			     fontFamily,
+			     trackType,
+			     logoPath,
+			     tempId);
+		
+		return new GlsVo().set(glsPo);
+	}
+	
+
+	@JsonBody
+	@ResponseBody
+	@RequestMapping(value = "/gls/remove/{id}")
+	public Object glsremove(
+			@PathVariable Long id) throws Exception{
+		
+		
+		GlsPo gls = glsDao.findOne(id);
+		
+		
+		tempService.glsremove(gls);
+		
+		
+		return null;
+	}
+	
 }

@@ -68,8 +68,8 @@ public class TempVo extends AbstractBaseVO<TempVo, TempPo>{
 	public TempVo set(TempPo entity) throws Exception {
 		// TODO Auto-generated method stub
 		this.setX(entity.getX()).setY(entity.getY()).setFrame(entity.getFrame())
-		.setName(entity.getName()).setRate(entity.getRate()).setRatio(entity.getRatio());
-		return null;
+		.setName(entity.getName()).setRate(entity.getRate()).setRatio(entity.getRatio()).setId(entity.getId());
+		return this;
 	}
 
 }

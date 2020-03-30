@@ -93,6 +93,12 @@ public class GlsPo extends AbstractBasePO{
 	public void setLogoPath(String logoPath) {
 		this.logoPath = logoPath;
 	}
+	public long getTempId() {
+		return tempId;
+	}
+	public void setTempId(long tempId) {
+		this.tempId = tempId;
+	}
 	
 	
 }

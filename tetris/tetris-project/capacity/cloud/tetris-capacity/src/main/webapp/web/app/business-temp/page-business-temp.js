@@ -102,7 +102,7 @@ define([
                         beforeClose:function(action, instance, done){
                             instance.confirmButtonLoading = true;
                             if(action === 'confirm'){
-                                ajax.post('/show/temp/remove/' + row.id, null, function(data, status){
+                                ajax.post('/capacity/temp/remove/' + row.id, null, function(data, status){
                                     instance.confirmButtonLoading = false;
                                     done();
                                     if(status !== 200) return;
@@ -139,7 +139,7 @@ define([
                 loadtemp:function(){
                     var self = this;
                     self.table.data.splice(0, self.table.data.length);
-                    ajax.post('/show/temp/list', {
+                    ajax.post('/capacity/temp/list', {
                         currentPage:self.table.page.currentPage,
                         pageSize:self.table.page.size
                     }, function(data){
@@ -166,7 +166,7 @@ define([
                 handleAddtempCommit:function(){
                     var self = this;
                     self.dialog.addtemp.loading = true;
-                    ajax.post('/show/temp/add', {
+                    ajax.post('/capacity/temp/add', {
                     	x:self.dialog.addtemp.x,
                         y:self.dialog.addtemp.y,
                         ratio:self.dialog.addtemp.ratio,
@@ -195,7 +195,7 @@ define([
                 handleEdittempCommit:function(){
                     var self = this;
                     self.dialog.edittemp.loading = true;
-                    ajax.post('/show/temp/edit/' + self.dialog.edittemp.id, {
+                    ajax.post('/capacity/temp/edit/' + self.dialog.edittemp.id, {
                     	x:self.dialog.edittemp.x,
 	                    y:self.dialog.edittemp.y,
 	                    ratio:self.dialog.edittemp.ratio,

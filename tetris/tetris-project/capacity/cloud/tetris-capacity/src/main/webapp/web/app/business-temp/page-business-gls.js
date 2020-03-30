@@ -122,7 +122,7 @@ define([
                         beforeClose:function(action, instance, done){
                             instance.confirmButtonLoading = true;
                             if(action === 'confirm'){
-                                ajax.post('/show/temp/gls/remove/' + row.id, null, function(data, status){
+                                ajax.post('/capacity/temp/gls/remove/' + row.id, null, function(data, status){
                                     instance.confirmButtonLoading = false;
                                     done();
                                     if(status !== 200) return;
@@ -157,7 +157,7 @@ define([
                 loadgls:function(){
                     var self = this;
                     self.table.data.splice(0, self.table.data.length);
-                    ajax.post('/show/temp/gls/list', {
+                    ajax.post('/capacity/temp/gls/list', {
                     	tempId:p.tempId,
                         currentPage:self.table.page.currentPage,
                         pageSize:self.table.page.size
@@ -191,7 +191,7 @@ define([
                 handleAddglsCommit:function(){
                     var self = this;
                     self.dialog.addgls.loading = true;
-                    ajax.post('/show/temp/gls/add', {
+                    ajax.post('/capacity/temp/gls/add', {
                     	content: self.dialog.addgls.content,
                         x: self.dialog.addgls.x,
                         y: self.dialog.addgls.y,
@@ -233,7 +233,7 @@ define([
                 handleEditglsCommit:function(){
                     var self = this;
                     self.dialog.editgls.loading = true;
-                    ajax.post('/show/temp/gls/edit/' + self.dialog.editgls.id, {
+                    ajax.post('/capacity/temp/gls/edit/' + self.dialog.editgls.id, {
                     	content: self.dialog.editgls.content,
                         x: self.dialog.editgls.x,
                         y: self.dialog.editgls.y,
