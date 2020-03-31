@@ -2,6 +2,8 @@ package com.sumavision.tetris.camera;
 
 
 import com.sumavision.tetris.capacity.server.CapacityFeignService;
+import com.sumavision.tetris.capacity.server.TempVo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,6 +82,11 @@ public class CameraService {
         }
         List<CameraPo> cameraPoList = cameraDao.findByUserId(userId);
         return generateRootCameras(cameraDao.findByUserId(userId));
+    }
+    
+    
+    public List<TempVo> tempList() throws Exception {
+        return capacityService.tempList();
     }
 
    
@@ -280,6 +287,17 @@ public class CameraService {
         	sb.append(cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
         }
         capacityService.createTask(sb.toString(), list.get(0).getUserId());
+        return null;
+    }
+    
+    public Object createTempTask(long userId,long tempId) throws Exception {
+        List<CameraPo> list = cameraDao.findByUserId(userId);
+        StringBuffer sb=new StringBuffer();
+        for (CameraPo cameraPo : list) {
+            //list1.add("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString());
+        	sb.append(cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
+        }
+        capacityService.createTempTask(sb.toString(), list.get(0).getUserId(),tempId);
         return null;
     }
 

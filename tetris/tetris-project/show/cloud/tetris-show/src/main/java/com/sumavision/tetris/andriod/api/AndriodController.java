@@ -61,6 +61,12 @@ public class AndriodController {
     	return Result.sussess(cameraService.findByUserId(user.getId()));
     }
     
+    @GetMapping("/findAllTemps")
+    public Map<String, Object> findAllTemps() throws Exception {
+    	UserVO user=userQuery.current();
+    	return Result.sussess(cameraService.tempList());
+    }
+    
     @GetMapping("/findLive")
     public Map<String, Object> findLive() throws Exception {
     	UserVO user=userQuery.current();
@@ -103,6 +109,23 @@ public class AndriodController {
     	cameraService.createTask(user.getId());
         return Result.success();
     }
+    
+    
+    @RequestMapping(value = "/startTempShow/{tempId}", method = {RequestMethod.POST, RequestMethod.PUT})
+    public Map<String, Object> startTempShow(@PathVariable Long tempId) throws Exception {
+    	UserVO user=userQuery.current();
+    	
+    	List<LivePo> livePo=liveDao.getByAnchorId(user.getId());
+    	if(livePo!=null&&!livePo.isEmpty()){
+    		livePo.get(0).setStatus(1);
+    		liveDao.save(livePo.get(0));
+    	}
+		
+    	//调用capacityfein开始任务
+    	cameraService.createTempTask(user.getId(),tempId);
+        return Result.success();
+    }
+    
     
     
     /**

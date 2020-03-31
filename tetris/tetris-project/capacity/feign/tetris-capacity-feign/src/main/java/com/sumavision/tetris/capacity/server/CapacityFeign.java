@@ -68,6 +68,10 @@ public interface CapacityFeign {
     @RequestMapping(value = "/capacity/live/create/easytask")
     public JSONObject createTask(@RequestParam("list") String list, @RequestParam("userId") Long userId) throws Exception;
 
+    
+    @RequestMapping(value = "/capacity/live/create/temptask")
+    public JSONObject createTempTask(@RequestParam("list") String list, @RequestParam("userId") Long userId, @RequestParam("tempId") Long tempId) throws Exception;
+
 
     /**
      * @描述
@@ -108,5 +112,9 @@ public interface CapacityFeign {
      */
     @RequestMapping(value = "/api/server/live/delete/recordTask")
     public JSONObject deleteRecordTask(@RequestParam("pubName") String pubName) throws Exception;
+
+    
+    @RequestMapping(value = "/capacity/live/temp/list")
+    public JSONObject tempList() throws Exception;
 
 }

@@ -75,7 +75,11 @@ public class CapacityFeignService {
     public void createTask(String list, Long userId) throws Exception {
         JsonBodyResponseParser.parseObject(capacityFeign.createTask(list, userId), null);
     }
-
+    
+    
+    public void createTempTask(String list, Long userId,Long tempId) throws Exception {
+        JsonBodyResponseParser.parseObject(capacityFeign.createTempTask(list, userId,tempId), null);
+    }
 
     /**
      * 创建推流<br/>
@@ -120,5 +124,9 @@ public class CapacityFeignService {
      */
     public void deleteRecordTask(String pubName) throws Exception{
         JsonBodyResponseParser.parseObject(capacityFeign.deleteRecordTask(pubName),null);
+    }
+    
+    public List<TempVo> tempList() throws Exception{
+        return JsonBodyResponseParser.parseArray(capacityFeign.tempList(),TempVo.class);
     }
 }
