@@ -3,6 +3,7 @@ package com.sumavision.tetris.capacity.server;
 import com.sumavision.tetris.mvc.converter.AbstractBaseVO;
 
 public class TempVo{
+	private Long id;
 	private int x;//分辨率宽
     private int y;//分辨率高
     private String ratio;//宽高比 4:3 16:9
@@ -63,5 +64,15 @@ public class TempVo{
 		this.name = name;
 		return this;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
 
 }
