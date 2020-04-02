@@ -247,6 +247,33 @@
                     </div>
                 </div>
                 
+                
+                  
+               <div class="layui-form-item">
+		               <div class="layui-inline">
+		                    	<label class="layui-form-label" style="width:200px !important;">
+		 							是否限制每天预约门票数:
+		                    	</label>
+		                    	<div class="layui-input-inline" >
+		                        	<input type="checkbox" name="numTicketsByDayType" lay-skin="switch" id="numTicketsByDayType" lay-text="ON|OFF" lay-filter="switchTest" value="${product.numTicketsByDayType}" disabled="disabled">
+		                        	<div class="layui-unselect	layui-form-switch" lay-skin="_switch" >
+		                        	<em>OFF</em>
+		                        	<i></i>
+		                        	</div>
+		                    	</div>
+		                    </div>
+               
+		                <div class="layui-inline" >
+		                    <label class="layui-form-label" style="width:200px !important;">
+		 						每天可预约门票数量:
+		                    </label>
+		                    <div class="layui-input-inline">
+		                        	<input type="text" id="numTicketsByDay" name="numTicketsByDay"  placeholder="个数"
+		                        	autocomplete="off" class="layui-input" disabled="disabled" value="${product.numTicketsByDay}">
+		                    </div>
+		                </div>
+             	</div>   
+                
                 <div class="layui-form-item">
                 	<div class="layui-inline">
                 	
@@ -292,7 +319,7 @@
                     </div>
                 </div>
                 
-                
+        
                 
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -548,6 +575,16 @@
             }
             if($("#productLimitType").val()=="0"){
              		$("#productLimitNum").val("");
+            }
+      	        //是否限购预约    
+            if($("#numTicketsByDayType").val()=="1"){
+            console.log("产品审核");
+             		$("#numTicketsByDayType").prop("checked",true);
+             		$("#numTicketsByDay").removeAttr("disabled");
+           			$("#LimitNum").removeAttr("style");
+            }
+            if($("#numTicketsByDayType").val()=="0"){
+             		$("#numTicketsByDay").val("");
             }
             
               //是否拼团
