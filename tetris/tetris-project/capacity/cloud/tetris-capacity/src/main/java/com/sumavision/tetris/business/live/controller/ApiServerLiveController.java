@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.sumavision.tetris.business.live.service.StreamPassbyService;
 import com.sumavision.tetris.commons.util.wrapper.ArrayListWrapper;
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
+import com.sumavision.tetris.temp.TempDao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +57,33 @@ public class ApiServerLiveController {
 
         return null;
     }
+    
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/create/temptask")
+    public Object createTempTask(HttpServletRequest request, String list, Long userId,Long tempId) throws Exception {
+
+    	List<String> array=Arrays.asList(list.split(","));
+    	
+    	
+        streamPassbyService.createTempTask(userId,
+        		array,
+                "camera" + userId,tempId);
+
+        return null;
+    }
+    
+    @Autowired
+    TempDao tempDao;
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/temp/list")
+    public Object tempList(HttpServletRequest request) throws Exception {
+        return tempDao.findAll();
+    }
+    
 
     @JsonBody
     @ResponseBody

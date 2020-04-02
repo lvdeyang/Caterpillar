@@ -17,4 +17,11 @@ public class TempQuery {
 		Page<TempPo> temps = tempDao.findAll(page);
 		return temps;
 	}
+	@Autowired
+	GlsDao glsDao;
+	public Page<GlsPo> findAllByTempId(Long tempId,int currentPage, int pageSize){
+		Pageable page = new PageRequest(currentPage-1, pageSize);
+		Page<GlsPo> gls = glsDao.findAllByTempId(tempId,page);
+		return gls;
+	}
 }

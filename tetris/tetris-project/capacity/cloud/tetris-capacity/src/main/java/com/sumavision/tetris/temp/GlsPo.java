@@ -21,6 +21,7 @@ public class GlsPo extends AbstractBasePO{
 	private String fontFamily;//STZhongsong
 	private String trackType;//滚动字幕方向right_to_left
 	private String logoPath;
+	private int type;//0 台标 1字幕
 	public String getContent() {
 		return content;
 	}
@@ -92,6 +93,18 @@ public class GlsPo extends AbstractBasePO{
 	}
 	public void setLogoPath(String logoPath) {
 		this.logoPath = logoPath;
+	}
+	public long getTempId() {
+		return tempId;
+	}
+	public void setTempId(long tempId) {
+		this.tempId = tempId;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 	
 	
