@@ -1316,7 +1316,7 @@ html, body {
 
 				if(data){
 
-				    if(data=='TESTED'){
+				    if(data.state=='TESTED'){
 
 				       $.toast("验单通过");
 
@@ -1324,7 +1324,7 @@ html, body {
 
 				   
 
-					       location.href=window.BASEPATH + "pubnum/admin/orderinfo?orderId="+orderNo;
+					       location.href=window.BASEPATH + "pubnum/admin/orderinfo?orderId="+data.orderId;
 
 					   
 
