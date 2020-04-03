@@ -1032,13 +1032,7 @@ html, body {
 
 	  };
 
-		
-
-		
-
      var _uriModal = window.BASEPATH + 'phoneApp/getModulars?comCode=0001';
-
-		
 
 		$.get(_uriModal, null, function(data){
 
@@ -1053,8 +1047,6 @@ html, body {
 			    var html=[];
 
 				for(var i=0; i<modals.length; i++){
-
-				   
 
 				   if(i%5==0){
 
@@ -1077,22 +1069,11 @@ html, body {
 				   }
 
 				  myProductCount(modals[i].modularCode);
-
-				   
-
 				}
-
 				 $('#columnTable').append(html.join(''));
-
-				
-
 			}
 
-			
-
 		});
-
-		
 
 		$(document).on('click','.modal',function(){
           
@@ -1102,21 +1083,15 @@ html, body {
 
 		});
 
-		
-
 		function myProductCount(id){
 
 		   var _uriMyProductCount = window.BASEPATH + 'pubnum/getMerchantProCount?code='+id;
-
-		
 
 			$.get(_uriMyProductCount, null, function(data){
 
 				data = parseAjaxResult(data);
 
 				if(data === -1) return;
-
-				
 
 				if(data){
 
@@ -1132,23 +1107,15 @@ html, body {
 
 		}
 
-		
-
 		function getOrderCount(type){
 
-		
-
 		    var _uriMyProductCount = window.BASEPATH + 'pubnum/getOrderCount?type='+type;
-
-		
 
 			$.get(_uriMyProductCount, null, function(data){
 
 				data = parseAjaxResult(data);
 
 				if(data === -1) return;
-
-				 
 
 				if(data){
 
@@ -1198,19 +1165,13 @@ html, body {
 
 				    }
 
-				   
-
 				}
 
 			});
 
 		}
 
-		
-
 		setInterval(function(){ 
-
-
 
             getOrderCount("NOTPAY");
 
@@ -1228,21 +1189,11 @@ html, body {
 
 			getOrderCount("COMMENTED");
 
-            
-
         }, 1000);
-
-		
-
-	
-
-	    
 
 	    var paras={};
 
-	    
-
-	    function doScan(){
+	    function doScan(val){
 
             wx.config({
 
@@ -1264,90 +1215,74 @@ html, body {
 
 	        wx.ready(function() {
 
-	
+               wx.scanQRCode({ 
 
-	               wx.scanQRCode({ 
+	                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
 
-		                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+	                scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
 
-		                scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+	                success: function (res) {
 
-		                success: function (res) {
-
-		                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-		                    if(result.indexOf(",") != -1){
-		                    var values = result.split(',')
-		                    	result=values[1]
-		                    }
-                      
-		                    ydNow(result);
-
-		                  
-
-		                }
-
-		            });
-
-	            
-
+						var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+						if(result.indexOf(",") != -1){
+						var values = result.split(',')
+							result=values[1]
+						}
+						if(val==1){
+							ydNow(result);
+						}
+						if(val==2){
+							offsell(result);
+						}
+	                }
+	            });
 	        });
-
        }
-
-	
 
 	    function ydNow(orderNo){
             $.toast("验单中")
 	       var _uriYd = window.BASEPATH + 'phoneApp/order/ydNow';
-
 		   var params={};
-
 		   params.userId=${muserId};
-
 		   params.orderNo=orderNo;
-
 			$.post(_uriYd, $.toJSON(params), function(data){
-
 				data = parseAjaxResult(data);
-
 				if(data === -1) return;
-
-				
-
 				if(data){
-
 				    if(data.state=='TESTED'){
-
 				       $.toast("验单通过");
-
 				       setTimeout(function(){
-
-				   
-
 					       location.href=window.BASEPATH + "pubnum/admin/orderinfo?orderId="+data.orderId;
-
-					   
-
 					   },1000);
-
 				    }else{
-
 				       $.toast("验单未通过");
-
 				    }
-
 				}
-
 			});
-
 	    }
 
-	
-
-	
-
-	   
-
+		function offsell(orderNo){
+			$.toast("退票中")
+	       var _uriYd = window.BASEPATH + 'phoneApp/order/refundOffline';
+		   var params={};
+		   params.userId=${muserId};
+		   params.orderNo=orderNo;
+			$.post(_uriYd, $.toJSON(params), function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+				if(data){
+				    if(data.state=='REFUNDED'){
+				       $.toast("已退票");
+				       setTimeout(function(){
+					       location.href=window.BASEPATH + "pubnum/admin/orderinfo?orderId="+data.orderId;
+					   },1000);
+				    }else{
+				       $.toast("退票失败");
+				    }
+				}
+			});
+	    }
+	    
 	   $(document).on('click','#scan',function(){
 
 	    var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+location.href.split('#')[0];
@@ -1359,28 +1294,30 @@ html, body {
 			if(data === -1) return;
 
 			if(data){
-
-			    
-
 				paras=data;
-
-				doScan();
-
+				doScan(1);
 			}
-
-			
-
 		});
-
-        
-
 	   });
+	   $(document).on('click','#scan-off',function(){
 
+	    var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+location.href.split('#')[0];
+
+	    $.get(_uri, null, function(data){
+
+			data = parseAjaxResult(data);
+
+			if(data === -1) return;
+
+			if(data){
+				paras=data;
+				doScan(2);
+			}
+		});
+	   });
 	   
 
  	  $(document).on('click','#closeadmin',function(){
-
-	  
 
 		$.confirm("确定退出？", function() {
 
@@ -1388,14 +1325,9 @@ html, body {
 
 		});
 
-			
-
 	  }); 
 
-	   
-
 	   function crtTimeFtt(val) {
-
 		    if (val != null) {
 
 		            var date = new Date(val);
@@ -1403,10 +1335,7 @@ html, body {
 		            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 
 		        }
-
 		}
-
-	   
 
 	   var _uriBalance = window.BASEPATH + 'pubnum/admin/balance';
 
@@ -1417,8 +1346,6 @@ html, body {
 			if(data === -1) return;
 
 			if(data){
-
-			    
 
 				$('#menu').html(data.total);
 
@@ -1448,25 +1375,12 @@ html, body {
 
 				$('#balanceContent').append(html.join(''));
 
-				
-
 			}
-
-			
 
 		});
 
-		
-
-		
-
-	
-
 	});
 
-	
-
-	
 
 	$(document).on('click','#uploadImages',function(){	  
          var myName="${merchantId}"; 
@@ -1501,27 +1415,7 @@ html, body {
 		})
 	}
 
-	
-
-		
-
-	
-
-	
-
-	
-
-	
-
-
-
 </script>
-
-
-
-
-
-
 
 <body>
 
@@ -1567,8 +1461,6 @@ html, body {
 
 			</div>
 
-			
-
 			<div class="weui-cells__title">用户操作</div>
 
 			<div class="weui-cells" id="operation">
@@ -1600,7 +1492,21 @@ html, body {
 			    </div>
 
 			  </a>
+			  
+ 				<a id="scan-off" class="weui-cell weui-cell_access" href="javascript:void(0);">
 
+			    <div class="weui-cell__bd">
+
+			      <p>线下退票</p>
+
+			    </div>
+
+			    <div class="weui-cell__ft">
+
+			    </div>
+
+			  </a>
+			  
 			  <a id="scan" class="weui-cell weui-cell_access" href="pubnum/admin/olchat">
 
 			    <div class="weui-cell__bd">
@@ -1614,9 +1520,6 @@ html, body {
 			    </div>
 
 			  </a>
-			  
-	 	
-
 
 			  <a id="numchecklist" class="weui-cell weui-cell_access" href="pubnum/admin/numchecklist/${muserId}" >
 
@@ -1627,8 +1530,6 @@ html, body {
 			    </div>
 
 			    <div class="weui-cell__ft">
-
-			    
 
 			    </div>
 
@@ -1648,8 +1549,6 @@ html, body {
 			    </div>
 
 			  </a>
-
-			  
 
 			 <a id="uploadImages" class="weui-cell weui-cell_access" href="javascript:void(0);">
 
@@ -1684,8 +1583,6 @@ html, body {
 			<div class="weui-cells__title">商品管理</div>
 
 			<table id="columnTable">
-
-		 
 
 		    </table>
 
@@ -1825,22 +1722,11 @@ html, body {
 
 			<div class="weui-cells" id="balanceContent">
 
-			 
-
 			</div>
-
-			
-
-			
 
 		</div>
 
 	</div>
 
 </body>
-
-
-
-
-
 </html>

@@ -1380,7 +1380,7 @@ public class ProductPackageController extends BaseController {
 		Date bookDate = new Date();
 
 		OrderInfoPO orderInfoPO = conn_orif.getByField("targetId", ticketid);
-		if(orderInfoPO != null) {
+		if(orderInfoPO != null && !orderInfoPO.getOrderState().equals(OrderStateType.REFUNDED)) {
 			return ERROR("该票已售出，无法重复使用");
 		}
 		
@@ -1468,9 +1468,9 @@ public class ProductPackageController extends BaseController {
 		}
 		order.setProportionMoney(proportionMoney);
 		// 支付金额
-		order.setPayMoney(payMoney);
+		order.setPayMoney(0);
 		// 订单总金额
-		order.setOrderAllMoney(orderAllMoney);
+		order.setOrderAllMoney(0);
 		// 订单说明
 		if (request.getParameter("orderRemark") != null && request.getParameter("orderRemark").length() > 0) {
 			order.setOrderRemark(request.getParameter("orderRemark"));

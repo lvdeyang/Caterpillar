@@ -504,7 +504,7 @@ html, body {
 	width: 100%;
 	height: 60px;
 	margin: 5px auto;
-	padding:0 0 0 42%;
+	padding:0 10% 0 32%;
 	text-align: center;
 	border-radius: 6px;
 	border: none;
@@ -746,7 +746,7 @@ html, body {
 				  			alert("购买成功")
 				  			window.location.reload();
 				  			}else{
-				  			alert("购买失败，请重新购买")
+				  			alert(data.message)
 				  			return;
 				  			}
 			   		
@@ -770,7 +770,7 @@ html, body {
 		<div class="content">
 					    <ul class="listbox-2" style="color:black;position: relative;">
 					    <li>
-					    	<select class="selectList"><option value="">请选择</option></select>
+					    	<select class="selectList"><option value=""></option></select>
 					    	<p style="position: absolute;top:23.5px;left:10%;">选择商品</p>
 					    </li>
 						<li>
