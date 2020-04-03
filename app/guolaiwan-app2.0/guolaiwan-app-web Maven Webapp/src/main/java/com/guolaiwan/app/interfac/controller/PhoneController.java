@@ -3512,8 +3512,17 @@ public class PhoneController extends WebBaseControll {
 
 		String userId = pageObject.getString("userId");
 		String orderNO = pageObject.getString("orderNo");
+		
 		// 获取订单
-		orderInfoPO = conn_order.get(Long.parseLong(orderNO));
+		String DIGIT_REGEX = "[0-9]+";
+		if(orderNO.matches(DIGIT_REGEX)) {
+			//纯数字根据订单号查订单
+			orderInfoPO = conn_order.get(Long.parseLong(orderNO));
+		} else {
+			//否则根据验单码查订单
+			orderInfoPO = conn_order.getByField("targetId", orderNO);
+		}
+		
 		if (orderInfoPO != null) {
 
 			// 判断商家id是否一致
@@ -3549,7 +3558,10 @@ public class PhoneController extends WebBaseControll {
 			orderInfoPO.setYdDate(date);
 			conn_order.saveOrUpdate(orderInfoPO);
 			sendMessage(orderInfoPO);
-			return success(orderInfoPO.getOrderState());
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("state", orderInfoPO.getOrderState());
+			data.put("orderId", orderInfoPO.getId());
+			return success(data);
 		} else {
 			String message = "订单信息不对！";
 			return FORBIDDEN(message);
@@ -6715,5 +6727,84 @@ public class PhoneController extends WebBaseControll {
 		return "success";
 	}
 	
-	
+	/**
+	 * 线下售票 退单
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/order/refundOffline", method = RequestMethod.POST)
+	public Map<String, Object> refundOffline(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		OrderInfoPO orderInfoPO = null;
+
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+
+		JSONObject pageObject = JSON.parseObject(param);
+
+		String userId = pageObject.getString("userId");
+		String orderNO = pageObject.getString("orderNo");
+		
+		// 获取订单
+		String DIGIT_REGEX = "[0-9]+";
+		if(!orderNO.matches(DIGIT_REGEX)) {
+			//根据验单码查订单
+			String[] fields = new String[]{"targetId","orderState"};
+			Object[] orderNOs = new Object[]{orderNO,OrderStateType.PAYSUCCESS};
+			orderInfoPO = conn_order.getByFields(fields, orderNOs);
+		}
+		
+		if (orderInfoPO != null) {
+
+			// 判断商家id是否一致
+			if (userId != null) {
+				long _userId = orderInfoPO.getShopId();
+				MerchantPO merchantPO = conn_merchant.getMerByUser(conn_user.get(Long.parseLong(userId)));
+				if (_userId != merchantPO.getId()) {
+					String message = "这条订单不属于您！";
+					return FORBIDDEN(message);
+				}
+			}
+			if (orderInfoPO.getOrderBookDate() != null && orderInfoPO.getProductId() != 0) {
+				MerchantPO merchantPO = conn_merchant.get(orderInfoPO.getShopId());
+				if (merchantPO.getModularCode().equals("0001")) {
+					String today = DateUtil.format(new Date(), "yyyy-MM-dd");
+					Date sDate = DateUtil.parse(today + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
+					Date eDate = DateUtil.parse(today + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
+					if (sDate.after(orderInfoPO.getOrderBookDate()) || eDate.before(orderInfoPO.getOrderBookDate())) {
+						String message = "这条订单日期不是今天！";
+						return FORBIDDEN(message);
+					}
+				}
+
+			}
+
+			// 判断订单状态？？？
+			if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
+				return FORBIDDEN("订单状态是：" + orderInfoPO.getOrderState());
+			}
+			// 更改订单的状态，验单时间
+			orderInfoPO.setOrderState(OrderStateType.REFUNDED);
+			Date date = new Date();
+			orderInfoPO.setRefundReason("线下退单");
+			orderInfoPO.setTargetId("");
+			conn_order.saveOrUpdate(orderInfoPO);
+			sendMessage(orderInfoPO);
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("state", orderInfoPO.getOrderState());
+			data.put("orderId", orderInfoPO.getId());
+			return success(data);
+		} else {
+			String message = "订单信息不对！";
+			return FORBIDDEN(message);
+		}
+
+	}
 }

@@ -772,4 +772,18 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		return orders;
 	}
 
+	/**
+	 * 预约购票新增 根据订单实时查询剩余可预约票数
+	 * 
+	 */
+	public int countProductNumByDate(long id, String date) throws ParseException {
+		String sqlString = "SELECT sum(productNum) as productCount FROM t_sys_orderinfo WHERE productId= '"+ id
+				+"' AND (orderState= 'PAYSUCCESS' OR orderState= 'TESTED') AND Date(orderBookDate) = '"+ date +"'";
+		SQLQuery query = getCurrentSession().createSQLQuery(sqlString).addScalar("productCount", StandardBasicTypes.INTEGER);
+		int count = 0;
+		if(query.uniqueResult() != null) {
+			count = (int) query.uniqueResult();
+		}		 
+		return count;
+	}
 }

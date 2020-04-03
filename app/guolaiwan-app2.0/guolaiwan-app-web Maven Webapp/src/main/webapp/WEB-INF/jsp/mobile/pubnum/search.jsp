@@ -610,6 +610,8 @@ html, body {
      
 	       if(ids[2]=='0001'){
 	           location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+ids[1]+'&comCode=0001';
+	       }else if(ids[2]=='10001'){
+	           location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+ids[1]+'&comCode=10001';
 	       }else if(ids[2] == '0003'){
 		       location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+ids[1];	     
 		   }else if(ids[1]==387){

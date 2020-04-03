@@ -732,6 +732,38 @@ public class ProductPO extends AbstractBasePO {
 	}
 	
 	
+	//预约购票新增
+	//是否限制每天预约门票数（0：不限制，1：限制）
+	private int numTicketsByDayType;
 	
+	public int getNumTicketsByDayType() {
+		return numTicketsByDayType;
+	}
+
+	public void setNumTicketsByDayType(int numTicketsByDayType) {
+		this.numTicketsByDayType = numTicketsByDayType;
+	}
+
+	//每天可预约门票数量
+	private int numTicketsByDay;
+	
+	public int getNumTicketsByDay() {
+		return numTicketsByDay;
+	}
+
+	public void setNumTicketsByDay(int numTicketsByDay) {
+		this.numTicketsByDay = numTicketsByDay;
+	}
+	
+	//限制单人一次购买票数
+//	private int numByOnePerson;
+//
+//	public int getNumByOnePerson() {
+//		return numByOnePerson;
+//	}
+//
+//	public void setNumByOnePerson(int numByOnePerson) {
+//		this.numByOnePerson = numByOnePerson;
+//	}
 	
 }

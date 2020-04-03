@@ -193,6 +193,115 @@ html, body {
 	outline: none;
 	border: 1px solid rgb(230, 230, 230);
 }
+.demo-box{
+	width: 100%;
+	height:100%;
+	overflow: hidden;
+	background: #E1E1E1;
+	/* border: 1px solid #E6E8EB; */
+
+}
+/*******单独组件样式********/
+.calendar-box *{
+	box-sizing: border-box;
+}
+.ht-rili-head{
+	overflow: hidden;
+}
+.ht-rili-querybox{
+	overflow: hidden;
+	height:80px;
+	padding-top:20px;
+}
+.ht-rili-title{
+	padding: 10px;
+	display: inline-block;
+	max-width: 200px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	vertical-align: middle;
+	margin-left:5%;
+	font-weight: bold;
+}
+.ht-rili-datebox{
+	float: right;
+	display: inline-block;
+	vertical-align: middle;
+	padding: 10px;
+}
+.ht-rili-date{
+	text-align: center;
+	display: inline-block;
+	padding:0 5px;
+	font-weight: bold;
+	height: 19px;
+	line-height: 19px;
+	vertical-align: middle;
+}
+.ht-rili-leftarr{
+	display: inline-block;
+	width:25px;
+	height: 19px;
+	background: url("lib/images/left-arr.png") left center no-repeat;
+	background-size: contain;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.ht-rili-rightarr{
+	display: inline-block;
+	width:25px;
+	height: 19px;
+	background: url("lib/images/right-arr.png") right center no-repeat;
+	background-size: contain;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.ht-rili-th{
+	width: 14.25%;
+	float: left;
+	text-align: center;
+	height: 60px;
+	line-height: 60px;
+	/*background: #E66B14;*/
+	color: #000;
+}
+.ht-rili-td{
+	width: 14.25%;
+	float: left;
+	text-align: center;
+	height:60px;
+	/*line-height: 50px;*/
+	background: #E1E1E1;
+	padding-top: 5px;
+	/*border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;*/
+	cursor: pointer;
+}
+.ht-rili-body{
+	overflow: hidden;
+}
+.ht-rili-day{
+	font-family:Arial;
+	font-size: 18px;
+	font-weight: bold;
+	display: inline-block;
+	width: 100%;
+}
+.ht-rili-money{
+	font-family:Arial;
+	display: inline-block;
+	width: 100%;
+	font-size: 12px;
+	color: #D4585A
+}
+.ht-rili-td-disabled{
+	color: #BFC4CA;
+}
+.ht-rili-td-active{
+	border-radius: 4px;
+	background: #80B3E8;
+}
 </style>
 
 </head>
@@ -201,31 +310,345 @@ html, body {
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.css" />
+<link rel="stylesheet" href="<%=request.getContextPath()%>/jss/calendar-pro.css" />
+<script src="<%=request.getContextPath()%>/jss/calendar-pro.js"></script>
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
-<script type="text/javascript"
-	src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js"
-	charset="utf-8"></script>
-<script src="<%=request.getContextPath()%>/layui/js/x-layui.js"
-	charset="utf-8"></script>
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/layui/css/x-admin.css" media="all">
-<link
-	href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css"
-	type="text/css" rel="stylesheet">
-<script>	 var ifFace=0;
-     var resNum=${resNum};
-	 layui.use('laydate', function(){
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="<%=request.getContextPath()%>/layui/lib/layui/layui.js" charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/layui/js/x-layui.js" charset="utf-8"></script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/layui/css/x-admin.css" media="all">
+<link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+	<script>
+	(function(){
+	var calendarDate = {};
+	var riliHtml = '';
+	calendarDate.today = new Date();
+	calendarDate.year = calendarDate.today.getFullYear();//当前年
+	calendarDate.month = calendarDate.today.getMonth()+1;//当前月
+	calendarDate.date = calendarDate.today.getDate();//当前日
+	calendarDate.day = calendarDate.today.getDay();//当前周几
+	
+	
+	//绘制
+	function getIndexDay(){
+		isLeapYear();
+    	getDays();
+    	riliHtml = '';
+    	//本月一号周几
+    	calendarDate.monthStart = new Date(calendarDate.year+"/"+calendarDate.month+"/1").getDay();
+		//上个月所占空格数
+		console.log(calendarDate)
+		if( calendarDate.monthStart == 0 ){//独占一行
+			calendarDate.monthStart = 7;
+		}
+		//上月数据
+		for( var i = calendarDate.monthStart;i>0;i-- ){
+			var dataDateStr = calendarDate.lastYear + "-" + calendarDate.lastMonth + "-" + (calendarDate.lastDays - i + 1);
+			riliHtml += '<div class="ht-rili-td ht-rili-td-disabled" data-date="'+ dataDateStr +'"><span class="ht-rili-day">'+ (calendarDate.lastDays - i + 1) +'</span><span class="ht-rili-money"></span></div>'
+		}
+		//本月数据
+		for( var k = 0;k<calendarDate.days;k++ ){
+			var flag
+			var dataDateStr = calendarDate.year + "-" + calendarDate.month + "-" + ( k + 1  );
+			for( var d in calendarDate.opt.data ){
+				var nowDate = dataDateStr;
+				var dataDate = calendarDate.opt.data[d].date; 
+				flag = checkDate(nowDate,dataDate);
+				if( flag ){
+					riliHtml += '<div class="ht-rili-td ht-rili-onclick" data-date="'+ dataDateStr +'"><span class="ht-rili-day">'+ (k + 1) +'</span><span class="ht-rili-money" data-money="'+ calendarDate.opt.data[d].data +'">（'+ calendarDate.opt.data[d].data +'）</span></div>';
+					break;
+				}
+			}
+			if( !flag ){
+				riliHtml += '<div class="ht-rili-td ht-rili-td-disabled" data-date="'+ dataDateStr +'"><span class="ht-rili-day">'+ (k + 1) +'</span><span class="ht-rili-money"></span></div>';	
+			}
+		}
+		//下月数据
+		for( var j = 0;j<(42 - calendarDate.days - calendarDate.monthStart);j++ ){//42-已占用表格数=剩余表格数
+			var dataDateStr = calendarDate.nextYear + "-" + calendarDate.nextMonth + "-" + (j + 1);
+			riliHtml += '<div class="ht-rili-td ht-rili-td-disabled" data-date="'+ dataDateStr +'"><span class="ht-rili-day">'+ (j + 1) +'</span><span class="ht-rili-money"></span></div>';
+		}
+		$('.ht-rili-body').append(riliHtml);
+		$('.ht-rili-onclick').on('click',function(){
+			dateClick(this);
+		})
+		
+	}
+	//是否是闰年
+	function isLeapYear(){
+		if( (calendarDate.year % 4 == 0) && (calendarDate.year % 100 != 0 || calendarDate.year % 400 == 0) ){
+			calendarDate.isLeapYear = true;
+		}else{
+			calendarDate.isLeapYear = false;
+		}
+	}
+	//日期点击事件
+	function dateClick(obj){
+		$(obj).siblings().each(function(){
+			$(this).removeClass('ht-rili-td-active');
+		});
+		$(obj).addClass('ht-rili-td-active');
+	}
+	//获取上个月份，本月，下个月份信息
+	function getDays(){
+		//上月天数
+        if(  parseInt(calendarDate.month) == 1 ){
+        	calendarDate.lastDays = new Date(calendarDate.year-1,12, 0).getDate();
+        	calendarDate.lastMonth = new Date(calendarDate.year-1,12, 0).getMonth()+1;
+        	calendarDate.lastYear = new Date(calendarDate.year-1,12, 0).getFullYear();
+        }else{
+            calendarDate.lastDays = new Date(calendarDate.year,calendarDate.month-1, 0).getDate();
+            calendarDate.lastMonth = new Date(calendarDate.year,calendarDate.month-1, 0).getMonth()+1;
+            calendarDate.lastYear = new Date(calendarDate.year,calendarDate.month-1, 0).getFullYear();
+        }
+        //下个月天数
+        if( parseInt(calendarDate.month) == 12 ){
+            calendarDate.nextDays  = new Date(calendarDate.year+1,1, 0).getDate();
+            calendarDate.nextMonth  = new Date(calendarDate.year+1,1, 0).getMonth()+1;
+            calendarDate.nextYear  = new Date(calendarDate.year+1,1, 0).getFullYear();
+        }else{
+            calendarDate.nextDays  = new Date(calendarDate.year,calendarDate.month+1, 0).getDate();
+            calendarDate.nextMonth  = new Date(calendarDate.year,calendarDate.month+1, 0).getMonth()+1;
+            calendarDate.nextYear  = new Date(calendarDate.year,calendarDate.month+1, 0).getFullYear();
+        }
+        //本月天数
+		calendarDate.days = new Date(calendarDate.year,calendarDate.month, 0).getDate();
+	}
+	//检测时间是否一致
+	function checkDate( dateStr1, dateStr2 ){
+		var date1 = dateStr1.split("-"); //[0]year,[1]month,[2]date;
+		var date2 = dateStr2.split("-"); //[0]year,[1]month,[2]date;
+		if( date1[1] < 10 && date1[1].length < 2){
+			date1[1] = "0"+date1[1];
+		}
+		if( date1[2] < 10 && date1[2].length < 2){
+			date1[2] = "0"+date1[2];
+		}
+		if( date2[1] < 10 && date2[1].length < 2){
+			date2[1] = "0"+date2[1];
+		}
+		if( date2[2] < 10 && date2[2].length < 2){
+			date2[2] = "0"+date2[2];
+		}
+		date1 = date1.join("-");
+		date2 = date2.join("-");
+		return date1 == date2;
+	}
+	
+	$.fn.extend({
+	    calendar:function(opt){
+	        if( (opt.beginDate != undefined && opt.endDate != undefined )||( opt.data.length > 0 ) ){
+	        	var beginDate = opt.data[0].date;
+	        	var endDate = opt.data[opt.data.length-1].date;
+	        	calendarDate.beginYear = parseInt(beginDate.split('-')[0]);//起始年
+				calendarDate.beginMonth = parseInt(beginDate.split('-')[1]);//起始月
+				calendarDate.beginDate = parseInt(beginDate.split('-')[2]);//起始日
+	        	
+	        	calendarDate.endYear = parseInt(endDate.split('-')[0]);//结束年
+				calendarDate.endMonth = parseInt(endDate.split('-')[1]);//结束月
+				calendarDate.endDate = parseInt(endDate.split('-')[2]);//结束日
+				
+				calendarDate.year = parseInt(beginDate.split('-')[0]);//设置起始日期为当前日期
+				calendarDate.month = parseInt(beginDate.split('-')[1]);//设置起始日期为当前日期
+				calendarDate.date = parseInt(beginDate.split('-')[2]);//设置起始日期为当前日期
+	        	calendarDate.opt = opt;
+	        	
+	        }else{
+	        	console.log('未传入beginDate或endDate！');
+	        }
+	        //加载容器
+	    	calendarDate.container = '<div class="ht-rili-querybox"><strong class="ht-rili-title">'+ opt.title +'</strong><div class="ht-rili-datebox"><span class="ht-rili-leftarr"></span><span class="ht-rili-date"></span><span class="ht-rili-rightarr"></span></div></div><div class="ht-rili-head"><div class="ht-rili-th">周日</div><div class="ht-rili-th">周一</div><div class="ht-rili-th">周二</div><div class="ht-rili-th">周三</div><div class="ht-rili-th">周四</div><div class="ht-rili-th">周五</div><div class="ht-rili-th">周六</div></div><div class="ht-rili-body"><!--<div class="ht-rili-td"><span class="ht-rili-day">1</span><span class="ht-rili-money">&yen;100</span></div>--></div>'
+	    	$(opt.ele).append(calendarDate.container);
+	        $('.ht-rili-date').html(calendarDate.year+'年 '+calendarDate.month+'月');
+	        
+	    	getIndexDay();
+	    	
+ 	    	$('.ht-rili-leftarr').on('click',function(){
+    		/* $('.ht-rili-body').html(''); */
+    		 $('.demo-box').html('');
+    		if( calendarDate.month == 1 ){
+    			calendarDate.year -= 1;
+    			calendarDate.month = 12;
+    		}else{
+    			calendarDate.month -=1;
+    		}
+	  		var nextmonth = calendarDate.month+1;
+	  		var start = calendarDate.year + "-" + calendarDate.month + "-01";
+	  		var end = calendarDate.year + "-" + nextmonth + "-01";
+    		var url =  window.BASEPATH + 'product/package/getNumTicketsByDay';
+ 			var date = {"id":${proId},"choice":${choice},"start":start , "end": end}
+			$.post(url,date,function(data){
+				if(data.length==0){
+				 $('.Calendar').hide();
+				alert('抱歉,当月暂无可预订门票')
+				 return; 
+				}
+				$('.calendar-box').calendar({
+				ele : '.demo-box', //依附
+				title : '请选择游览日期',
+				beginDate : start,
+				endDate : end, 
+				data : data
+				});
+			
+			})	
+    		$('.ht-rili-date').html(calendarDate.year+'年 '+calendarDate.month+'月');
+    		/*  getIndexDay();  */
+    		})
+    		
+	    	$('.ht-rili-rightarr').on('click',function(){
+	    		/* $('.ht-rili-body').html(''); */
+	    		 $('.demo-box').html('');
+	    		if( calendarDate.month == 12 ){
+	    			calendarDate.year += 1;
+	    			calendarDate.month = 1;
+	    		}else{
+	    			calendarDate.month +=1;
+	    		}
+   			var nextmonth = calendarDate.month+1;
+	  		var start = calendarDate.year + "-" + calendarDate.month + "-01";
+	  		var end = calendarDate.year + "-" + nextmonth + "-01";
+    		var url =  window.BASEPATH + 'product/package/getNumTicketsByDay';
+ 			var date = {"id":${proId},"choice":${choice},"start":start , "end": end}
+			$.post(url,date,function(data){
+				if(data.length==0){
+				$('.Calendar').hide();
+				alert('抱歉,当月暂无可预订门票')
+				 return; 
+				}
+				$('.calendar-box').calendar({
+				ele : '.demo-box', //依附
+				title : '请选择游览日期',
+				beginDate : start,
+				endDate : end, 
+				data : data
+				});
+			
+			})	
+	    		
+	    		$('.ht-rili-date').html(calendarDate.year+'年 '+calendarDate.month+'月');
+	    		/* getIndexDay(); */
+	    	})
+	   
+	    	
+	    },
+	    calendarGetActive: function(){//获取当前选中日期的值
+	    	//未选中时返回undefined
+	    	var activeEle = $(this).find(".ht-rili-td-active");
+	    	var date = activeEle.attr("data-date");
+	    	var money = activeEle.children(".ht-rili-money").attr("data-money");
+	    	return data = {
+	    		date : date,
+	    		money : money
+	    	}
+	    }
+	});
+})(jQuery)
+	</script>
+<script>	 
+  		var limt=0;
+		var ifFace=0;
+     	var resNum=${resNum};
+	layui.use('laydate', function(){
 	  //禁止软键盘弹出
 	   $("#useDate").focus(function(){
         document.activeElement.blur();
     });
-	  var laydate = layui.laydate;
+
+	var url = window.BASEPATH + 'product/package/getNumTicketsByDayType?id='+${proId};
+	$.get(url,null,function(msg){
+	 let msgs = msg.numTicketsByDayType;
+	    //判断是否显示预约	  
+	  if(msgs==1){
+	    //显示自制日历
+	     $("#useDate").click(function(){
+	  		/* 请求票数 */
+	  		var myDate = new Date();
+	  		var year = myDate.getFullYear();
+	  		var month = myDate.getMonth()+1;
+	  		var nextmonth = myDate.getMonth()+2;
+	  		var start = year + "-" + month + "-01";
+	  		var end = year + "-" + nextmonth + "-01";
+	    	
+			var url =  window.BASEPATH + 'product/package/getNumTicketsByDay';
+ 			var date = {"id":${proId},"choice":${choice},"start": start, "end": end}
+			$.post(url,date,function(data){
+				console.log(data)
+				if(data.length==0){
+				alert('抱歉暂无可预订门票')
+				 return; 
+				}
+		    	$('.calendar-box').calendar({
+					ele : '.demo-box', //依附
+					title : '请选择游览日期',
+					beginDate : start,
+					endDate : end, 
+					data : data
+				});
+				$('.Calendar').show();
+			})		
+			
+    	});
+    		//隐藏日历  获取日子 票数
+   		$("#getActive").click(function(){
+			var data = $('.calendar-box').calendarGetActive();
+			$('.zhi').val(1);
+			    limt=data.money
+				 if(limt==0){
+			    alert('该日期门票已售罄')
+		      	$('.Calendar').hide();
+			    return; 
+				 }
+	 		/* 	alert(data.date+"--¥"+data.money);  */
+			 $('#useDate').val(data.date);
+			 $('.Calendar').hide();
+       		 $('.demo-box').html('');
+		});
+	$(document).on('click','.p2',function(){
+		 var value=parseInt($('.zhi').val())+1;
+		  var values=parseInt(limt);
+		 if($('.zhi').val()>=99){
+		alert("抱歉，最多同时购买99张")
+		 return false;
+		 }
+		if($('.zhi').val()>=values){
+		alert("抱歉，库存不足")
+		$('.zhi').val(values)
+		 return false;
+		 }
+		 $('.zhi').val(value);
+		 var num1 = pice;
+		 var num2 = document.getElementById('shuliang').value;
+		 //总额
+		 var num3 = document.getElementById("zong");
+		 num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+	})
+	  }else{
 	  
+	  var laydate = layui.laydate;
 	  //执行一个laydate实例
 	  laydate.render({
 	    elem: '#useDate' //指定元素
 	  });
+	  $(document).on('click','.p2',function(){
+		 var value=parseInt($('.zhi').val())+1;
+		 if($('.zhi').val()>=99){
+		alert("抱歉，最多同时购买99张")
+		 return false;
+		 }
+		 $('.zhi').val(value);
+		 var num1 = pice;
+		 var num2 = document.getElementById('shuliang').value;
+		 //总额
+		 var num3 = document.getElementById("zong");
+		 num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
+	})
+	  }
+	  
+	}) 
+
+
+	  
 	  var today = new Date();
       var tmonth=today.getMonth()+1+'';
       tmonth=(tmonth.length==1?(0+''+tmonth):tmonth);
@@ -238,7 +661,7 @@ html, body {
 	   $(function() {
 	    if(${choice}== 0){
 	     $("title").html("购票确认订单"); 
-	   
+	  
 	    }
 	   
 	    getUserInfo(true);	   	   	   	   
@@ -291,19 +714,8 @@ html, body {
 	 var num3 = document.getElementById("zong");
 	 num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
 	})
-    
-	$(document).on('click','.p2',function(){
-		 var value=parseInt($('.zhi').val())+1;
-		 if($('.zhi').val()>=99){
-		 return false;
-		 }
-		 $('.zhi').val(value);
-		 var num1 = pice;
-		 var num2 = document.getElementById('shuliang').value;
-		 //总额
-		 var num3 = document.getElementById("zong");
-		 num3.innerText = (parseFloat(num1).toFixed(2) * parseFloat(num2).toFixed(2)).toFixed(2);
-	})
+   
+
 			$(document).on('click', '.change', function(){ 															
 		    $(".window-1").fadeIn();
 		  });
@@ -359,7 +771,6 @@ html, body {
 		      return false;         
           }    
 
-		    
 		    var buyDate = new Date($("#useDate").val().replace(/-/g,"/"))
 		    var time = new Date();
 		    var nowDate = new Date(formatDate(time));
@@ -388,12 +799,17 @@ html, body {
             
             else{
              nobuy="0";
-             $.toast("预订日期应大于当前日期", "forbidden");
+             $.toast("预订日期不能小于当前日期", "forbidden");
+             return false;		 
             }
                  	         	
       var url = window.BASEPATH + 'product/package/commonticket?proId=${proId}&choice=${choice}&ticketnumber='+$('.zhi').val();	 
 	  $.get(url,null,function(msg){
+	
 	  var sign = msg.state;
+	    if($.isEmptyObject(msg) == true){
+	　　　		sign=4;
+	　　}
 	 //普通票判断
 	  if(choice == 0){		   	    
 	  /*  $(document).attr("title","购票确认订单"); */	        	    	     
@@ -1001,7 +1417,7 @@ clientMessage(firstAddr);
   }         					
 </script>
 <!-- ios 软键盘兼容问题 -->
-<script>
+<!-- <script>
 	FastClick.prototype.focus = function(targetElement) {
 		var length;
 		//兼容处理:在iOS7中，有一些元素（如date、datetime、month等）在setSelectionRange会出现TypeError
@@ -1021,7 +1437,7 @@ clientMessage(firstAddr);
 	if (!ver || parseInt(ver[1]) < 11) { //非IOS系统或者系统版本小于11
 		// 引入fastclick 做相关处理
 	}
-</script>
+</script> -->
 <body>
 	<!-- 主页 -->
 	<div class="header">
@@ -1045,9 +1461,9 @@ clientMessage(firstAddr);
 			style="width:96%;height:auto;position: relative;">
 			<!-- 注意：这一层元素并不是必须的 -->
 			<ul class="listbox" style="color:black;">
-				<li id="travelDate"><input type="text" placeholder="请您选择游玩日期"
-					style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;"
-					class="layui-input" id="useDate">
+				<li id="travelDate">
+				<input type="text" placeholder="请您选择游玩日期" id="useDate" class="layui-input"
+				style="cursor: pointer;width:100%;height:60px;margin:10px auto;text-align: right;margin-left:2%;padding:0 10%;">
 					<p style="position: absolute;top:30px;left:10%;">游玩日期</p>
 					<p style="position: absolute;top:30px;right:5%;">❯</p></li>
 
@@ -1149,6 +1565,12 @@ clientMessage(firstAddr);
 				style="position: absolute;right:14%;top:300px;font-size:18px;width:70px;height:35px;color:#fff;font-weight:bold;background:#FFC138;border:none;outline:none;border-radius:10px;">关闭</button>
 		</div>
 	</div>
+	
+	<!--日历  -->
+<div class='Calendar' style="display: none;position: fixed;top:0;width:100%;z-index:111;">
+<div class="calendar-box demo-box"></div>
+<p id="getActive" style="width:100%;text-align: center;height:70px;line-height: 70px;font-size:20px;background:#434343;position: fixed;bottom:0;color:#fff; ">确定</p>
+</div>
 </body>
 
 
