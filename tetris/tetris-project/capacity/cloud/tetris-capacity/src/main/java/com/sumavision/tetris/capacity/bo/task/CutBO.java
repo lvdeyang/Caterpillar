@@ -7,6 +7,10 @@ package com.sumavision.tetris.capacity.bo.task;
  * <b>日期：</b>2019年10月29日 下午8:09:11
  */
 public class CutBO {
+	
+	private String plat = "cpu";
+	
+	private Integer nv_card_idx;
 
 	private Integer width;
 	
@@ -15,6 +19,24 @@ public class CutBO {
 	private Integer x;
 	
 	private Integer y;
+
+	public String getPlat() {
+		return plat;
+	}
+
+	public CutBO setPlat(String plat) {
+		this.plat = plat;
+		return this;
+	}
+
+	public Integer getNv_card_idx() {
+		return nv_card_idx;
+	}
+
+	public CutBO setNv_card_idx(Integer nv_card_idx) {
+		this.nv_card_idx = nv_card_idx;
+		return this;
+	}
 
 	public Integer getWidth() {
 		return width;

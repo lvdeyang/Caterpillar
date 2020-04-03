@@ -1,5 +1,7 @@
 package com.sumavision.tetris.capacity.bo.task;
 
+import java.util.List;
+
 /**
  * 区域模糊参数<br/>
  * <b>作者:</b>wjw<br/>
@@ -8,40 +10,17 @@ package com.sumavision.tetris.capacity.bo.task;
  */
 public class FuzzyBO {
 
-	private String position;
-	
-	private String zone;
-	
-	/** 模糊效果 fuzzy/mosaic */
-	private String fuzzy_effect;
+	private List<FuzzyObjectBO> fuzzys;
 	
 	/** 范围 */
 	private Integer mosaic_radius;
 
-	public String getPosition() {
-		return position;
+	public List<FuzzyObjectBO> getFuzzys() {
+		return fuzzys;
 	}
 
-	public FuzzyBO setPosition(String position) {
-		this.position = position;
-		return this;
-	}
-
-	public String getZone() {
-		return zone;
-	}
-
-	public FuzzyBO setZone(String zone) {
-		this.zone = zone;
-		return this;
-	}
-
-	public String getFuzzy_effect() {
-		return fuzzy_effect;
-	}
-
-	public FuzzyBO setFuzzy_effect(String fuzzy_effect) {
-		this.fuzzy_effect = fuzzy_effect;
+	public FuzzyBO setFuzzys(List<FuzzyObjectBO> fuzzys) {
+		this.fuzzys = fuzzys;
 		return this;
 	}
 

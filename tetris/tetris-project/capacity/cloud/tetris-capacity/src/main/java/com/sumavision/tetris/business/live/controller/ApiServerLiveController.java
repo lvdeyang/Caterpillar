@@ -9,60 +9,90 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
 import com.sumavision.tetris.business.live.service.StreamPassbyService;
 import com.sumavision.tetris.commons.util.wrapper.ArrayListWrapper;
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
+import com.sumavision.tetris.temp.TempDao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/api/server/live")
+@RequestMapping(value = "/capacity/live")
 public class ApiServerLiveController {
 
     @Autowired
     private StreamPassbyService streamPassbyService;
 
-    /**
-     * 删除流透传任务<br/>
-     * <b>作者:</b>wjw<br/>
-     * <b>版本：</b>1.0<br/>
-     * <b>日期：</b>2019年11月25日 上午9:37:08
-     *
-     * @param String id 任务标识
-     */
+   
     @JsonBody
     @ResponseBody
-    @RequestMapping(value = "/delete/stream/passby")
-    public Object deleteStreamPassby(String id, HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/create/easytask")
+    public Object createTask(HttpServletRequest request, String list, Long userId) throws Exception {
 
-        streamPassbyService.deleteRtmp2Hls(id);
+    	List<String> array=Arrays.asList(list.split(","));
+    	
+    	
+        streamPassbyService.createTask(userId,
+        		array,
+                "camera" + userId,"544,960", 500000, 20, "9:16");
 
         return null;
     }
-
-
+    
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/create/task")
-    public Object createTask(HttpServletRequest request, @RequestParam("list") List<String> list, @RequestParam("userId") Long userId) throws Exception {
+    public Object createTask(HttpServletRequest request, String list, Long userId,
+    		String resolution,int bitrate,int fps,String hw) throws Exception {
 
-//		streamPassbyService.createTask(1l,
-//				new ArrayListWrapper<String>().add("test1").add("test2").getList(),
-//				"test");
+    	List<String> array=Arrays.asList(list.split(","));
+    	
+    	
         streamPassbyService.createTask(userId,
-                list,
-                "camera" + userId);
+        		array,
+                "camera" + userId,resolution, bitrate, fps, hw);
 
         return null;
     }
+    
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/create/temptask")
+    public Object createTempTask(HttpServletRequest request, String list, Long userId,Long tempId) throws Exception {
+
+    	List<String> array=Arrays.asList(list.split(","));
+    	
+    	
+        streamPassbyService.createTempTask(userId,
+        		array,
+                "camera" + userId,tempId);
+
+        return null;
+    }
+    
+    @Autowired
+    TempDao tempDao;
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/temp/list")
+    public Object tempList(HttpServletRequest request) throws Exception {
+        return tempDao.findAll();
+    }
+    
 
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/create/record")
-    public Object createTask(HttpServletRequest request, @RequestParam("pubName") String pubName, @RequestParam("path") String path) throws Exception {
+    public Object createTask(HttpServletRequest request, String pubName, String path,
+    		String resolution,int bitrate,int fps,String hw) throws Exception {
 
 
-        streamPassbyService.createRecordTask(pubName, path);
+        streamPassbyService.createRecordTask(pubName, path, resolution, bitrate, fps, hw);
 
         return null;
     }
@@ -70,7 +100,7 @@ public class ApiServerLiveController {
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/delete/recordTask")
-    public Object deleteRecordTask(HttpServletRequest request, @RequestParam("pubName") String pubName) throws Exception {
+    public Object deleteRecordTask(HttpServletRequest request, String pubName) throws Exception {
 
         streamPassbyService.deleteRecordTask(pubName);
 
@@ -80,7 +110,7 @@ public class ApiServerLiveController {
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/switch/task")
-    public Object createTask(HttpServletRequest request, @RequestParam("userId") long userId, @RequestParam("index") int index) throws Exception {
+    public Object createTask(HttpServletRequest request, long userId, int index) throws Exception {
 
         streamPassbyService.switchTask(userId, index);
 
@@ -90,13 +120,10 @@ public class ApiServerLiveController {
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/delete/task")
-    public Object deleteTask(HttpServletRequest request, @RequestParam("list") List<String> list, @RequestParam("userId") Long userId) throws Exception {
-
-//		streamPassbyService.createTask(1l,
-//				new ArrayListWrapper<String>().add("test1").add("test2").getList(),
-//				"test");
+    public Object deleteTask(HttpServletRequest request, String list, Long userId) throws Exception {
+    	List<String> array=Arrays.asList(list.split(","));
         streamPassbyService.deleteTask(userId,
-                list);
+                array);
 
         return null;
     }

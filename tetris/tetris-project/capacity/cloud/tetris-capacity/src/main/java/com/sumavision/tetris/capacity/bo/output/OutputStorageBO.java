@@ -10,9 +10,9 @@ public class OutputStorageBO {
 
 	private String url;
 	
-	private Integer max_upload_bps;
+	private String dir_name;
 	
-	private Integer can_del;
+	private String can_del;
 
 	public String getUrl() {
 		return url;
@@ -23,20 +23,20 @@ public class OutputStorageBO {
 		return this;
 	}
 
-	public Integer getMax_upload_bps() {
-		return max_upload_bps;
+	public String getDir_name() {
+		return dir_name;
 	}
 
-	public OutputStorageBO setMax_upload_bps(Integer max_upload_bps) {
-		this.max_upload_bps = max_upload_bps;
+	public OutputStorageBO setDir_name(String dir_name) {
+		this.dir_name = dir_name;
 		return this;
 	}
 
-	public Integer getCan_del() {
+	public String getCan_del() {
 		return can_del;
 	}
 
-	public OutputStorageBO setCan_del(Integer can_del) {
+	public OutputStorageBO setCan_del(String can_del) {
 		this.can_del = can_del;
 		return this;
 	}

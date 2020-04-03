@@ -7,10 +7,32 @@ package com.sumavision.tetris.capacity.bo.task;
  * <b>日期：</b>2019年12月18日 下午1:50:26
  */
 public class FpsConvertBO {
+	
+	private String plat = "cpu";
+	
+	private Integer nv_card_idx;
 
 	private String fps;
 	
-	private String fps_change_mode;
+	private String mode;
+
+	public String getPlat() {
+		return plat;
+	}
+
+	public FpsConvertBO setPlat(String plat) {
+		this.plat = plat;
+		return this;
+	}
+
+	public Integer getNv_card_idx() {
+		return nv_card_idx;
+	}
+
+	public FpsConvertBO setNv_card_idx(Integer nv_card_idx) {
+		this.nv_card_idx = nv_card_idx;
+		return this;
+	}
 
 	public String getFps() {
 		return fps;
@@ -21,12 +43,12 @@ public class FpsConvertBO {
 		return this;
 	}
 
-	public String getFps_change_mode() {
-		return fps_change_mode;
+	public String getMode() {
+		return mode;
 	}
 
-	public void setFps_change_mode(String fps_change_mode) {
-		this.fps_change_mode = fps_change_mode;
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 	
 }

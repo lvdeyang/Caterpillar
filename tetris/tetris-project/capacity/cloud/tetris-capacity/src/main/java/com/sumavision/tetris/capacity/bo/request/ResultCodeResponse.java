@@ -11,6 +11,8 @@ public class ResultCodeResponse {
 	private String msg_id;
 	
 	private Integer result_code;
+	
+	private String result_msg;
 
 	public String getMsg_id() {
 		return msg_id;
@@ -27,6 +29,15 @@ public class ResultCodeResponse {
 
 	public ResultCodeResponse setResult_code(Integer result_code) {
 		this.result_code = result_code;
+		return this;
+	}
+
+	public String getResult_msg() {
+		return result_msg;
+	}
+
+	public ResultCodeResponse setResult_msg(String result_msg) {
+		this.result_msg = result_msg;
 		return this;
 	}
 	

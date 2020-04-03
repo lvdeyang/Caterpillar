@@ -36,6 +36,8 @@ public class H264BO extends BaseEncodeBO<H264BO>{
 	private Uux264BO uux264;
 	
 	private IntelBO msdk_encode;
+	
+	private CudaBO cuda_encode;
 
 	public String getProfile() {
 		return profile;
@@ -142,6 +144,15 @@ public class H264BO extends BaseEncodeBO<H264BO>{
 
 	public H264BO setMsdk_encode(IntelBO msdk_encode) {
 		this.msdk_encode = msdk_encode;
+		return this;
+	}
+
+	public CudaBO getCuda_encode() {
+		return cuda_encode;
+	}
+
+	public H264BO setCuda_encode(CudaBO cuda_encode) {
+		this.cuda_encode = cuda_encode;
 		return this;
 	}
 	

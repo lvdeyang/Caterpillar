@@ -28,6 +28,10 @@ public class H265BO extends BaseEncodeBO<H265BO>{
 	
 	private Ux265BO ux265;
 	
+	private SvtBO svt;
+	
+	private CudaBO cuda_encode;
+	
 	private GpuIntelBO msdk_encode;
 
 	public String getProfile() {
@@ -117,6 +121,24 @@ public class H265BO extends BaseEncodeBO<H265BO>{
 
 	public H265BO setMsdk_encode(GpuIntelBO msdk_encode) {
 		this.msdk_encode = msdk_encode;
+		return this;
+	}
+
+	public SvtBO getSvt() {
+		return svt;
+	}
+
+	public H265BO setSvt(SvtBO svt) {
+		this.svt = svt;
+		return this;
+	}
+
+	public CudaBO getCuda_encode() {
+		return cuda_encode;
+	}
+
+	public H265BO setCuda_encode(CudaBO cuda_encode) {
+		this.cuda_encode = cuda_encode;
 		return this;
 	}
 	

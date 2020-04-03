@@ -83,7 +83,7 @@ public class CameraController {
      */
     @RequestMapping(value = "isOpen/{id}", method = {RequestMethod.POST, RequestMethod.PUT})
     public Map<String, Object> isOpen(@PathVariable Long id) throws Exception {
-        cameraService.isOpen(id);
+       
         return Result.success();
     }
 
@@ -168,7 +168,7 @@ public class CameraController {
     //测试创建流
     @RequestMapping(value = "testCreate", method = {RequestMethod.POST, RequestMethod.PUT})
     public Map<String, Object> testCreateTask() throws Exception {
-        cameraService.testCeateTask();
+
         return Result.success();
     }
     //测试切换流

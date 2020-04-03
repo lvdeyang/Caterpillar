@@ -408,10 +408,33 @@
                     </div>
                 </div>
                 
-                
+               <div class="layui-form-item">
+		               <div class="layui-inline">
+		                    	<label class="layui-form-label" style="width:200px !important;">
+		 							是否限制每天预约门票数:
+		                    	</label>
+		                    	<div class="layui-input-inline" onclick="changeNums()">
+		                        	<input type="checkbox" name="numTicketsByDayType" lay-skin="switch" id="numTicketsByDayType" lay-text="ON|OFF" lay-filter="switchTest" value="1" >
+		                        	<div class="layui-unselect	layui-form-switch" lay-skin="_switch" >
+		                        	<em>OFF</em>
+		                        	<i></i>
+		                        	</div>
+		                    	</div>
+		                    </div>
+               
+		                <div class="layui-inline" >
+		                    <label class="layui-form-label" style="width:200px !important;">
+		 						每天可预约门票数量:
+		                    </label>
+		                    <div class="layui-input-inline">
+		                        	<input type="text" id="numTicketsByDay" name="numTicketsByDay"  placeholder="个数"
+		                        	autocomplete="off" class="layui-input" disabled="disabled">
+		                    </div>
+		                </div>
+             	</div>   
                 <div class="layui-form-item">
                     <label class="layui-form-label">
- 						推荐：
+ 						推荐:
                     </label>
                     <div class="layui-input-block">
                         <input type="checkbox" name="like[productIndexRecommend]" checked="checked" value="1" id="productIndexRecommend" title="首页推荐">
@@ -854,6 +877,19 @@
 					
            		}
            }
+            function changeNums(){
+         		if($("#numTicketsByDayType").prop("checked")){
+         		console.log("进来了");
+         			$("#numTicketsByDay").removeAttr("disabled");
+         			$("#Stocks").removeAttr("style");
+         		}else{
+         			$("#numTicketsByDay").prop("disabled", "disabled");
+         			$("#Stocks").prop("style", "color:#757575");
+					$("#numTicketsByDay").val("");
+			
+         		}
+            }
+         
            
            function changeGroup(){
            		if($("#group").prop("checked")){
@@ -922,6 +958,14 @@
 						layer.msg("库存为整数字！",{time: 5000, icon:5});
 						return false;
 				}
+				
+				//可预约数量
+				var Stocks =$("#numTicketsByDay").val();
+				if(!( /^\d+(\.\d+)?$/).test(Stocks)){
+						layer.msg("预约数量为数字！",{time: 5000, icon:5});
+						return false;
+				}
+				
 				
 				//最低购买数量限制 5/1 张羽 新增
 				var restrict =$("#productRestrictNumber").val();

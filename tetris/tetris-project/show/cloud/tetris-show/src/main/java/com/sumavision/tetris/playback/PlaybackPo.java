@@ -1,7 +1,6 @@
 package com.sumavision.tetris.playback;
 
 import com.sumavision.tetris.orm.po.AbstractBasePO;
-import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

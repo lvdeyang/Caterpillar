@@ -1,7 +1,6 @@
 package com.sumavision.tetris.show;
 
 import com.sumavision.tetris.mvc.converter.AbstractBaseVO;
-import lombok.Data;
 
 
 public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {
@@ -25,7 +24,16 @@ public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {
     private Integer isRecommend;
     /*0：未直播， 1：直播中 ，2：已被封停 */
     private Integer status;
-
+    
+    private int recordstatus;
+    
+    private long tempId;
+    
+    private String anchorName;
+    private String statusStr;
+    private String recordstatusStr;
+    private String tempName;
+    
     public String getTitle() {
 		return title;
 	}
@@ -116,10 +124,63 @@ public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {
         this.setPeoNum(entity.getPeoNum());
         this.setPlayback(entity.getPlayback());
         this.setStatus(entity.getStatus());
+        this.setStatusStr(entity.getStatus()==0?"未开始":"直播中");
         this.setTitle(entity.getTitle());
         this.setType(entity.getType());
         this.setUrlHttp(entity.getUrlHttp());
         this.setUrlRtmp(entity.getUrlRtmp());
+        this.setRecordstatus(entity.getRecordstatus());
+        this.setRecordstatusStr(entity.getRecordstatus()==0?"未录制":"正在录制");
+        this.setTempId(entity.getTempId());
         return this;
     }
+
+	public int getRecordstatus() {
+		return recordstatus;
+	}
+
+	public void setRecordstatus(int recordstatus) {
+		this.recordstatus = recordstatus;
+	}
+
+	public long getTempId() {
+		return tempId;
+	}
+
+	public void setTempId(long tempId) {
+		this.tempId = tempId;
+	}
+
+	public String getAnchorName() {
+		return anchorName;
+	}
+
+	public void setAnchorName(String anchorName) {
+		this.anchorName = anchorName;
+	}
+
+	public String getStatusStr() {
+		return statusStr;
+	}
+
+	public void setStatusStr(String statusStr) {
+		this.statusStr = statusStr;
+	}
+
+	public String getRecordstatusStr() {
+		return recordstatusStr;
+	}
+
+	public void setRecordstatusStr(String recordstatusStr) {
+		this.recordstatusStr = recordstatusStr;
+	}
+
+	public String getTempName() {
+		return tempName;
+	}
+
+	public void setTempName(String tempName) {
+		this.tempName = tempName;
+	}
+	
 }

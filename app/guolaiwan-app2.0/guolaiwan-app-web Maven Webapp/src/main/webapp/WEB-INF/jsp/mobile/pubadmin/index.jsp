@@ -1095,9 +1095,9 @@ html, body {
 		
 
 		$(document).on('click','.modal',function(){
-
+          
 		    var ids=this.id.split('-');
-
+             
 		    location.href=window.BASEPATH + 'pubnum/admin/product?code='+ids[1];
 
 		});
@@ -1274,10 +1274,12 @@ html, body {
 
 		                success: function (res) {
 
-
-
 		                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-
+		                    if(result.indexOf(",") != -1){
+		                    var values = result.split(',')
+		                    	result=values[1]
+		                    }
+                      
 		                    ydNow(result);
 
 		                  
@@ -1314,7 +1316,7 @@ html, body {
 
 				if(data){
 
-				    if(data=='TESTED'){
+				    if(data.state=='TESTED'){
 
 				       $.toast("验单通过");
 
@@ -1322,7 +1324,7 @@ html, body {
 
 				   
 
-					       location.href=window.BASEPATH + "pubnum/admin/orderinfo?orderId="+orderNo;
+					       location.href=window.BASEPATH + "pubnum/admin/orderinfo?orderId="+data.orderId;
 
 					   
 
@@ -1585,7 +1587,19 @@ html, body {
 
 			  </a>
 
-			  
+		  	 <a id="scan" class="weui-cell weui-cell_access" href="product/package/admin/sellOffline">
+
+			    <div class="weui-cell__bd">
+	
+			      <p>线下售票</p>
+	
+			    </div>
+	
+			    <div class="weui-cell__ft">
+	
+			    </div>
+
+			  </a>
 
 			  <a id="scan" class="weui-cell weui-cell_access" href="pubnum/admin/olchat">
 
@@ -1600,7 +1614,8 @@ html, body {
 			    </div>
 
 			  </a>
-
+			  
+	 	
 
 
 			  <a id="numchecklist" class="weui-cell weui-cell_access" href="pubnum/admin/numchecklist/${muserId}" >

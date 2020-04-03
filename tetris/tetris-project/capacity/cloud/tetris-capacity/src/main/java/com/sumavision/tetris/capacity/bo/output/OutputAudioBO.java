@@ -12,8 +12,6 @@ public class OutputAudioBO {
 	
 	private String encode_id;
 	
-	private String codec;
-	
 	private Integer bitrate;
 
 	public String getTask_id() {
@@ -31,15 +29,6 @@ public class OutputAudioBO {
 
 	public OutputAudioBO setEncode_id(String encode_id) {
 		this.encode_id = encode_id;
-		return this;
-	}
-
-	public String getCodec() {
-		return codec;
-	}
-
-	public OutputAudioBO setCodec(String codec) {
-		this.codec = codec;
 		return this;
 	}
 

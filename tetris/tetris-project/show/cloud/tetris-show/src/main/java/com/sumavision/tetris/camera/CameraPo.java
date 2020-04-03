@@ -3,7 +3,6 @@ package com.sumavision.tetris.camera;
 import com.sumavision.tetris.orm.po.AbstractBasePO;
 import com.sumavision.tetris.show.LivePo;
 import com.sumavision.tetris.show.LiveVo;
-import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -16,7 +15,6 @@ import javax.persistence.Table;
  **/
 @Entity
 @Table(name = "TETRIS_CAMERA")
-@Data
 public class CameraPo extends AbstractBasePO {
     private static final long serialVersionUID = 1L;
     //url
@@ -144,4 +142,7 @@ public class CameraPo extends AbstractBasePO {
         this.setUserId(entity.getUserId());
         return this;
     }
+    
+    
+    
 }

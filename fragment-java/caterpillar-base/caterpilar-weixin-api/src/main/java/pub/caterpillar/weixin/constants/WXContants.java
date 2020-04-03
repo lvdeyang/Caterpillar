@@ -28,6 +28,6 @@ public class WXContants {
     
     //public final static boolean istest=true;
 
-    public final static boolean istest=true;
+    public final static boolean istest=false;
     
 }

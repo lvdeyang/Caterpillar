@@ -49,17 +49,26 @@ import com.sumavision.tetris.capacity.bo.request.PutRealIndexRequest;
 import com.sumavision.tetris.capacity.bo.response.AllResponse;
 import com.sumavision.tetris.capacity.bo.task.AacBO;
 import com.sumavision.tetris.capacity.bo.task.EncodeBO;
+import com.sumavision.tetris.capacity.bo.task.FontBO;
 import com.sumavision.tetris.capacity.bo.task.H264BO;
+import com.sumavision.tetris.capacity.bo.task.OsdBO;
+import com.sumavision.tetris.capacity.bo.task.PictureOsdObjectBO;
 import com.sumavision.tetris.capacity.bo.task.PreProcessingBO;
 import com.sumavision.tetris.capacity.bo.task.ResampleBO;
+import com.sumavision.tetris.capacity.bo.task.StaticPictureOsdBO;
 import com.sumavision.tetris.capacity.bo.task.TaskBO;
 import com.sumavision.tetris.capacity.bo.task.TaskSourceBO;
+import com.sumavision.tetris.capacity.bo.task.TextOsdBO;
 import com.sumavision.tetris.capacity.config.CapacityProps;
 import com.sumavision.tetris.capacity.service.CapacityService;
 import com.sumavision.tetris.capacity.service.ResponseService;
 import com.sumavision.tetris.commons.exception.BaseException;
 import com.sumavision.tetris.commons.util.wrapper.ArrayListWrapper;
 import com.sumavision.tetris.commons.util.wrapper.StringBufferWrapper;
+import com.sumavision.tetris.temp.GlsDao;
+import com.sumavision.tetris.temp.GlsPo;
+import com.sumavision.tetris.temp.TempDao;
+import com.sumavision.tetris.temp.TempPo;
 
 /**
  * 流透传<br/>
@@ -96,12 +105,13 @@ public class StreamPassbyService {
      * @param srcPubNames 按照机位顺序放入ArrayList【机位的发布名】
      * @param dstPubName  注意所有的dstPubname不可以与srcPubname重名
      */
-    public void createTask(Long taskId, List<String> srcPubNames, String dstPubName) {
+    public void createTask(Long taskId, List<String> srcPubNames, String dstPubName,
+    		String resolution,int bitrate,int fps,String hw) {
         try {
             // 创建输入源
             List<InputBO> inputBOs = new ArrayList<InputBO>();
             for (String pubName : srcPubNames) {
-                InputBO inputBO = stream2InputBO(pubName, "rtmp://www.guolaiwan.net/live/" + pubName);
+                InputBO inputBO = stream2InputBO(pubName, "rtmp://127.0.0.1/live/" + pubName);
                 inputBOs.add(inputBO);
             }
             // 创建备份源关系了
@@ -115,20 +125,35 @@ public class StreamPassbyService {
             String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(taskId).toString();
 
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
-            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput);
+            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
+            		,resolution, bitrate, fps, hw,null);
+            
+            
+            
             // 创建输出了
             String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
             OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
                     dstPubName);
-            // 创建录制
-            //OutputBO recordOutputBo=record2OutputBO(taskId, taskBOs, recordPath);
-            // 发送命令了
+            
+            
 
+            ///OutputBO recordOutputBo = record2OutputBO(taskId+"", taskBOs, "/home/hls");
+            
             AllRequest allRequest = new AllRequest();
             allRequest.setInput_array(inputBOs);
             allRequest.setTask_array(taskBOs);
             allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
 
+            String[] pullServerList=capacityProps.getPip().split(",");
+            int index=1;
+            for (String url : pullServerList) {
+            	String destPubUrl="rtmp://"+url+"/live/"+dstPubName;
+            	OutputBO temOutputBO = streamUrlRtmp2OutputBO(outputId+"-"+index, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+            			destPubUrl);
+            	allRequest.getOutput_array().add(temOutputBO);
+            	index++;
+			}
+            
             AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
                     capacityProps.getPort());
 
@@ -140,6 +165,76 @@ public class StreamPassbyService {
         }
 
     }
+    
+    @Autowired
+    TempDao tempDao;
+    @Autowired
+    GlsDao glsDao;
+    
+    public void createTempTask(Long taskId, List<String> srcPubNames, String dstPubName,
+    		long tempId) {
+        try {
+            // 创建输入源
+            List<InputBO> inputBOs = new ArrayList<InputBO>();
+            for (String pubName : srcPubNames) {
+                InputBO inputBO = stream2InputBO(pubName, "rtmp://127.0.0.1/live/" + pubName);
+                inputBOs.add(inputBO);
+            }
+            // 创建备份源关系了
+            InputBO backInput = stream2BackInputBO(taskId, srcPubNames);
+            inputBOs.add(backInput);
+            // 创建任务了
+            String videoTaskId = new StringBufferWrapper().append("task-video-").append(taskId).toString();
+
+            String audioTaskId = new StringBufferWrapper().append("task-audio-").append(taskId).toString();
+
+            String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(taskId).toString();
+
+            String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
+            
+            TempPo tempPo=tempDao.findOne(tempId);
+            List<GlsPo> glsPos=glsDao.findByTempId(tempId);
+            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
+            		,tempPo.getX()+","+tempPo.getY(), tempPo.getRate(),tempPo.getFrame(),tempPo.getRatio(),glsPos);
+            
+            
+            
+            // 创建输出了
+            String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
+            OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+                    dstPubName);
+            
+            
+
+            ///OutputBO recordOutputBo = record2OutputBO(taskId+"", taskBOs, "/home/hls");
+            
+            AllRequest allRequest = new AllRequest();
+            allRequest.setInput_array(inputBOs);
+            allRequest.setTask_array(taskBOs);
+            allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
+
+            String[] pullServerList=capacityProps.getPip().split(",");
+            int index=1;
+            for (String url : pullServerList) {
+            	String destPubUrl="rtmp://"+url+"/live/"+dstPubName;
+            	OutputBO temOutputBO = streamUrlRtmp2OutputBO(outputId+"-"+index, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+            			destPubUrl);
+            	allRequest.getOutput_array().add(temOutputBO);
+            	index++;
+			}
+            
+            AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
+                    capacityProps.getPort());
+
+            responseService.allResponseProcess(allResponse);
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+    
 
     /**
      * 创建录制任务【mr】
@@ -147,11 +242,12 @@ public class StreamPassbyService {
      * @param pubName    发布名称【要录制视频的发布名称】
      * @param recordPath 录制路径
      */
-    public void createRecordTask(String pubName, String recordPath) {
+    public void createRecordTask(String pubName, String recordPath,
+    		String resolution,int bitrate,int fps,String hw) {
         try {
             // 创建输入源
             List<InputBO> inputBOs = new ArrayList<InputBO>();
-            InputBO inputBO = stream2InputBO(pubName, "rtmp://www.guolaiwan.net/live/" + pubName);
+            InputBO inputBO = stream2InputBO(pubName, "rtmp://127.0.0.1/live/" + pubName);
             inputBOs.add(inputBO);
 
 
@@ -163,7 +259,7 @@ public class StreamPassbyService {
             String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(pubName).toString();
 
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(pubName).toString();
-            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
+            List<TaskBO> taskBOs = stream2PassbyTaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
 
 
             // 创建录制
@@ -265,7 +361,7 @@ public class StreamPassbyService {
     private OutputBO streamRtmp2OutputBO(String outputId, String videoTaskId, String audioTaskId, String encodeVideoId,
                                          String encodeAudioId, String name) throws Exception {
 
-        OutputRtmpBO rtmp = new OutputRtmpBO().setServer_url("rtmp://www.guolaiwan.net/live/" + name)
+        OutputRtmpBO rtmp = new OutputRtmpBO().setServer_url("rtmp://127.0.0.1/live/" + name)
                 .setAud_exist(true).setVid_exist(true);
 
         BaseMediaBO vmedia = new BaseMediaBO().setEncode_id(encodeVideoId).setTask_id(videoTaskId);
@@ -277,6 +373,22 @@ public class StreamPassbyService {
 
         return output;
     }
+    
+	private OutputBO streamUrlRtmp2OutputBO(String outputId, String videoTaskId, String audioTaskId,
+			String encodeVideoId, String encodeAudioId, String nameurl) throws Exception {
+
+		OutputRtmpBO rtmp = new OutputRtmpBO().setServer_url(nameurl).setAud_exist(true)
+				.setVid_exist(true);
+
+		BaseMediaBO vmedia = new BaseMediaBO().setEncode_id(encodeVideoId).setTask_id(videoTaskId);
+		BaseMediaBO amedia = new BaseMediaBO().setEncode_id(encodeAudioId).setTask_id(audioTaskId);
+
+		rtmp.setMedia_array(new ArrayListWrapper().add(vmedia).add(amedia).getList());
+
+		OutputBO output = new OutputBO().setId(outputId).setRtmp(rtmp);
+
+		return output;
+	}
 
     /**
      * 备份输入<br/>
@@ -297,9 +409,9 @@ public class StreamPassbyService {
         int count = 0;
         for (String inputId : srcPubNames) {
 
-            ProgramElementBO velementBO = new ProgramElementBO().setPid(1).setProgram_switch_array(
+            ProgramElementBO velementBO = new ProgramElementBO().setType("audio").setPid(1).setProgram_switch_array(
                     new ArrayListWrapper<PidIndexBO>().addAll(generatePidIndex(2, 0)).getList());
-            ProgramElementBO aelementBO = new ProgramElementBO().setPid(2).setProgram_switch_array(
+            ProgramElementBO aelementBO = new ProgramElementBO().setType("video").setPid(2).setProgram_switch_array(
                     new ArrayListWrapper<PidIndexBO>().addAll(generatePidIndex(2, 1)).getList());
             List<ProgramElementBO> elementBOs = new ArrayList<ProgramElementBO>();
             elementBOs.add(velementBO);
@@ -363,7 +475,17 @@ public class StreamPassbyService {
         DeleteOutputsRequest deleteOutputsRequest = new DeleteOutputsRequest();
         List<IdRequest> outIdRequests = new ArrayList<IdRequest>();
         outIdRequests.add(new IdRequest().setId(outputId));
+        
+        
+        String[] pullServerList=capacityProps.getPip().split(",");
+        int index=1;
+        for (String url : pullServerList) {
+        	String tempOutId = new StringBufferWrapper().append("output-").append(taskId).append("-"+index).toString();
+        	outIdRequests.add(new IdRequest().setId(tempOutId));
+        	index++;
+		}
         deleteOutputsRequest.setOutput_array(outIdRequests);
+        
         capacityService.deleteOutputsAddMsgId(deleteOutputsRequest);
         // 删除任务
         String videoTaskId = new StringBufferWrapper().append("task-video-").append(taskId).toString();
@@ -400,200 +522,7 @@ public class StreamPassbyService {
 
     /* 上面都是MR黄写的 */
 
-    /**
-     * 透传<br/>
-     * <b>作者:</b>wjw<br/>
-     * <b>版本：</b>1.0<br/>
-     * <b>日期：</b>2019年11月13日 下午5:09:32
-     *
-     * @param String rtmpUrl rtmp流地址
-     * @param String name 发布名称
-     * @param String storageUrl 存储地址
-     */
-    public String createRtmp2hls(String uuid, String rtmpUrl, String name, String storageUrl) throws Exception {
-
-        // 参数在这里设是因为区分不了音视频（passby）
-        String inputId = new StringBufferWrapper().append("input-").append(uuid).toString();
-
-        String videoTaskId = new StringBufferWrapper().append("task-video-").append(uuid).toString();
-
-        String audioTaskId = new StringBufferWrapper().append("task-audio-").append(uuid).toString();
-
-        String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(uuid).toString();
-
-        String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(uuid).toString();
-
-        String outputId = new StringBufferWrapper().append("output-").append(uuid).toString();
-
-        save(uuid, inputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, outputId, rtmpUrl, name, storageUrl,
-                BusinessType.LIVE);
-
-        return uuid;
-
-    }
-
-    /**
-     * 添加任务流程 -- 一个输入，多个任务，多个输出， 输入计数+1（并发）， 输出直接存储（不管并发）
-     * 说明：联合unique校验insert（rtmpUrl）； 数据行锁（乐观锁version）校验update<br/>
-     * <b>作者:</b>wjw<br/>
-     * <b>版本：</b>1.0<br/>
-     * <b>日期：</b>2019年11月29日 下午1:41:25
-     *
-     * @param taskUuid
-     * @param inputId
-     * @param videoTaskId
-     * @param audioTaskId
-     * @param encodeVideoId
-     * @param encodeAudioId
-     * @param outputId
-     * @param rtmpUrl
-     * @param name
-     * @param storageUrl
-     * @param businessType
-     */
-    public void save(String taskUuid, String inputId, String videoTaskId, String audioTaskId, String encodeVideoId,
-                     String encodeAudioId, String outputId, String rtmpUrl, String name, String storageUrl,
-                     BusinessType businessType) throws Exception {
-
-        TaskInputPO input = taskInputDao.findByUniq(rtmpUrl);
-
-        if (input == null) {
-
-            AllRequest allRequest = new AllRequest();
-            InputBO inputBO = new InputBO();
-            List<TaskBO> taskBOs = new ArrayList<TaskBO>();
-            OutputBO outputBO = new OutputBO();
-            try {
-
-                inputBO = stream2InputBO(inputId, rtmpUrl);
-
-                taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
-
-                outputBO = stream2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, name,
-                        storageUrl);
-
-                input = new TaskInputPO();
-                input.setUpdateTime(new Date());
-                input.setUniq(rtmpUrl);
-                input.setTaskUuid(taskUuid);
-                input.setInput(JSON.toJSONString(inputBO));
-                input.setType(businessType);
-                taskInputDao.save(input);
-
-                TaskOutputPO output = new TaskOutputPO();
-                output.setInputId(input.getId());
-                output.setOutput(JSON.toJSONString(outputBO));
-                output.setTask(JSON.toJSONString(taskBOs));
-                output.setTaskUuid(taskUuid);
-                output.setType(businessType);
-                output.setUpdateTime(new Date());
-
-                taskOutputDao.save(output);
-
-                allRequest.setInput_array(new ArrayListWrapper<InputBO>().add(inputBO).getList());
-                allRequest.setTask_array(new ArrayListWrapper<TaskBO>().addAll(taskBOs).getList());
-                allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
-
-                AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
-                        capacityProps.getPort());
-
-                responseService.allResponseProcess(allResponse);
-
-            } catch (ConstraintViolationException e) {
-
-                // 数据已存在（ip，port校验）
-                System.out.println("校验输入已存在");
-                Thread.sleep(300);
-                save(taskUuid, inputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, outputId, rtmpUrl, name,
-                        storageUrl, businessType);
-
-            } catch (BaseException e) {
-
-                capacityService.deleteAllAddMsgId(allRequest, capacityProps.getIp(), capacityProps.getPort());
-
-            } catch (Exception e) {
-
-                if (!(e instanceof ConstraintViolationException)) {
-                    throw e;
-                }
-
-            }
-
-        } else {
-
-            AllRequest allRequest = new AllRequest();
-            InputBO inputBO = new InputBO();
-            List<TaskBO> taskBOs = new ArrayList<TaskBO>();
-            OutputBO outputBO = new OutputBO();
-            try {
-
-                if (input.getCount().equals(0)) {
-                    // 转输入
-                    inputBO = stream2InputBO(inputId, rtmpUrl);
-                } else {
-                    inputBO = JSONObject.parseObject(input.getInput(), InputBO.class);
-                }
-
-                taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, inputBO);
-
-                outputBO = stream2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, name,
-                        storageUrl);
-
-                if (input.getCount().equals(0)) {
-                    input.setInput(JSON.toJSONString(inputBO));
-                    input.setTaskUuid(taskUuid);
-                    input.setType(businessType);
-                }
-                input.setUpdateTime(new Date());
-                input.setCount(input.getCount() + 1);
-                taskInputDao.save(input);
-
-                TaskOutputPO output = new TaskOutputPO();
-                output.setInputId(input.getId());
-                output.setOutput(JSON.toJSONString(outputBO));
-                output.setTask(JSON.toJSONString(taskBOs));
-                output.setTaskUuid(taskUuid);
-                output.setType(businessType);
-                output.setUpdateTime(new Date());
-
-                taskOutputDao.save(output);
-
-                if (input.getCount().equals(0)) {
-
-                    allRequest.setInput_array(new ArrayListWrapper<InputBO>().add(inputBO).getList());
-
-                }
-
-                allRequest.setTask_array(new ArrayListWrapper<TaskBO>().addAll(taskBOs).getList());
-                allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
-
-                AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
-                        capacityProps.getPort());
-
-                responseService.allResponseProcess(allResponse);
-
-            } catch (ObjectOptimisticLockingFailureException e) {
-
-                // 版本不对，version校验
-                System.out.println("save校验version版本不对");
-                Thread.sleep(300);
-                save(taskUuid, inputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, outputId, rtmpUrl, name,
-                        storageUrl, businessType);
-
-            } catch (BaseException e) {
-
-                capacityService.deleteAllAddMsgId(allRequest, capacityProps.getIp(), capacityProps.getPort());
-
-            } catch (Exception e) {
-
-                if (!(e instanceof ObjectOptimisticLockingFailureException)) {
-                    throw e;
-                }
-            }
-        }
-
-    }
-
+   
     /**
      * 删除透传任务<br/>
      * <b>作者:</b>wjw<br/>
@@ -716,7 +645,8 @@ public class StreamPassbyService {
      * @return
      */
     public List<TaskBO> stream2TaskBO(String videoTaskId, String audioTaskId, String encodeVideoId,
-                                      String encodeAudioId, InputBO input) throws Exception {
+                                      String encodeAudioId, InputBO input,
+                                      String resolution,int bitrate,int fps,String hw,List<GlsPo> glsList) throws Exception {
 
         List<TaskBO> tasks = new ArrayList<TaskBO>();
 
@@ -726,18 +656,50 @@ public class StreamPassbyService {
                 .setElement_pid(input.getProgram_array().get(0).getVideo_array().get(0).getPid());
 
         TaskBO videoTask = new TaskBO().setId(videoTaskId).setType("video").setRaw_source(videoSource)
-                .setEncode_array(new ArrayList<EncodeBO>());
+                .setEncode_array(new ArrayList<EncodeBO>())
+                .setDecode_process_array(new ArrayList<PreProcessingBO>());
 
-        H264BO h264 = new H264BO().setBitrate(Integer.valueOf(1500000))
-                .setRatio("16:9")
-                .setFps("20")
-                .setWidth(640)
-                .setHeight(360);
+        String[] res=resolution.split(",");
+        H264BO h264 = new H264BO().setBitrate(Integer.valueOf(bitrate))
+                .setRatio(hw)
+                .setFps(fps+"")
+                .setMax_bframe(0)
+                .setWidth(Integer.parseInt(res[0]))
+                .setHeight(Integer.parseInt(res[1]));
 
         EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId).setH264(h264);
 
         videoTask.getEncode_array().add(videoEncode);
+        
+        //字幕
+        if(glsList!=null){
+        	for (GlsPo gls : glsList) {
+        		if(gls.getType()==0){
+        			OsdBO osdBO=new OsdBO().setHeight(gls.getHeight()).setWidth(gls.getWidth()).setX(gls.getX()).setY(gls.getY())
+        	        		.setHas_background(false).setBackground_color(gls.getBackgroundColor())
+        	        		.setTrack_type(gls.getTrackType()).setTrack_speed(gls.getRollSpead())
+        	        		.setFont(new FontBO().setFamily(gls.getFontFamily()).
+        	        				setColor(gls.getFontColor()).setSize(gls.getFontSize())
+        	        				.setHas_border(false).setBorder_color("(255,255,255,60)"))
+        	        		.setContent(gls.getContent());
+        	        TextOsdBO textOsdBO=new TextOsdBO().setText_osds(new ArrayListWrapper().add(osdBO).getList());
+        	        PreProcessingBO preProcessingBO=new PreProcessingBO().setText_osd(textOsdBO);
+        	        videoTask.getDecode_process_array().add(preProcessingBO);
+        		}else{
+        			PictureOsdObjectBO pObjectBO=new PictureOsdObjectBO().setAuto_scale(true)
+        	        		.setHeight(gls.getHeight()).setWidth(gls.getWidth()).setX(gls.getX()).setY(gls.getY()).setTransparent(0)
+        	        		.setPath(gls.getLogoPath());
+        	        StaticPictureOsdBO staticPictureOsdBO=new StaticPictureOsdBO()
+        	        		.setStatic_pic_osds(new ArrayListWrapper().add(pObjectBO).getList());
+        	        PreProcessingBO preProcessingBOlogo=new PreProcessingBO().setStatic_pic_osd(staticPictureOsdBO);
+        	        videoTask.getDecode_process_array().add(preProcessingBOlogo);  
+        		}
+				
+			}
+        }
+        
 
+        
         tasks.add(videoTask);
 
         // 音频
@@ -770,45 +732,57 @@ public class StreamPassbyService {
     }
 
     /**
-     * 输出<br/>
-     * <b>作者:</b>wjw<br/>
-     * <b>版本：</b>1.0<br/>
-     * <b>日期：</b>2019年11月13日 下午5:03:36
-     *
-     * @param outputId
-     * @param videoTaskId
-     * @param audioTaskId
-     * @param encodeVideoId
-     * @param encodeAudioId
-     * @param name
-     * @return
-     */
-    public OutputBO stream2OutputBO(String outputId, String videoTaskId, String audioTaskId, String encodeVideoId,
-                                    String encodeAudioId, String name, String storageUrl) throws Exception {
-
-        OutputHlsBO hls = new OutputHlsBO().setPrimary_m3u8(name).setVideo_array(new ArrayList<OutputVideoBO>())
-                .setAudio_array(new ArrayList<OutputAudioBO>()).setMedia_group(new ArrayList<OutputMediaGroupBO>())
-                .setStorage(new ArrayList<OutputStorageBO>());
-
-        OutputVideoBO video = new OutputVideoBO().setTask_id(videoTaskId).setEncode_id(encodeVideoId);
-
-        OutputAudioBO audio = new OutputAudioBO().setTask_id(audioTaskId).setEncode_id(encodeAudioId);
-
-        OutputIndexBO index = new OutputIndexBO().setIndex(0);
-
-        OutputMediaGroupBO media = new OutputMediaGroupBO().setVideo(0)
-                .setAudio(new ArrayListWrapper<OutputIndexBO>().add(index).getList());
-
-        OutputStorageBO storage = new OutputStorageBO().setUrl(storageUrl);
-
-        hls.getAudio_array().add(audio);
-        hls.getVideo_array().add(video);
-        hls.getMedia_group().add(media);
-        hls.getStorage().add(storage);
-
-        OutputBO output = new OutputBO().setId(outputId).setHls(hls);
-
-        return output;
-    }
+	 * 任务<br/>
+	 * <b>作者:</b>wjw<br/>
+	 * <b>版本：</b>1.0<br/>
+	 * <b>日期：</b>2019年11月13日 下午4:44:02
+	 * @param id
+	 * @param input
+	 * @return
+	 */
+	public List<TaskBO> stream2PassbyTaskBO(String videoTaskId, String audioTaskId, String encodeVideoId, String encodeAudioId, InputBO input) throws Exception{
+		
+		List<TaskBO> tasks = new ArrayList<TaskBO>();
+		
+		//视频
+		TaskSourceBO videoSource = new TaskSourceBO().setInput_id(input.getId())
+													 .setProgram_number(input.getProgram_array().get(0).getProgram_number())
+													 .setElement_pid(input.getProgram_array().get(0).getVideo_array().get(0).getPid());
+		
+		TaskBO videoTask = new TaskBO().setId(videoTaskId)
+									   .setType("passby")
+									   .setEs_source(videoSource)
+									   .setEncode_array(new ArrayList<EncodeBO>());
+		
+		EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId)
+											 .setPassby(new JSONObject());
+		
+		videoTask.getEncode_array().add(videoEncode);
+		
+		tasks.add(videoTask);
+		
+		//音频
+		TaskSourceBO audioSource = new TaskSourceBO().setInput_id(input.getId())
+													 .setProgram_number(input.getProgram_array().get(0).getProgram_number())
+													 .setElement_pid(input.getProgram_array().get(0).getAudio_array().get(0).getPid());
+		
+		TaskBO audioTask = new TaskBO().setId(audioTaskId)
+									   .setType("passby")
+									   .setEs_source(audioSource)
+									   .setEncode_array(new ArrayList<EncodeBO>());
+		
+		EncodeBO audioEncode = new EncodeBO().setEncode_id(encodeAudioId)
+				                             .setPassby(new JSONObject());
+		
+		audioTask.getEncode_array().add(audioEncode);
+		
+		tasks.add(audioTask);
+		
+		return tasks;
+		
+	}
+    
+    
+   
 
 }

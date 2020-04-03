@@ -378,7 +378,31 @@
                     	</div>
                     </div>
                 </div>
-                
+          
+                     <div class="layui-form-item">
+		               <div class="layui-inline">
+		                    	<label class="layui-form-label" style="width:200px !important;">
+		 							是否限制每天预约门票数:
+		                    	</label>
+		                    	<div class="layui-input-inline" onclick="changeNums()">
+		                        	<input type="checkbox" name="numTicketsByDayType" lay-skin="switch" id="numTicketsByDayType" lay-text="ON|OFF" lay-filter="switchTest" value="${product.numTicketsByDayType}" >
+		                        	<div class="layui-unselect	layui-form-switch" lay-skin="_switch" >
+		                        	<em>OFF</em>
+		                        	<i></i>
+		                        	</div>
+		                    	</div>
+		                    </div>
+               
+		                <div class="layui-inline" >
+		                    <label class="layui-form-label" style="width:200px !important;">
+		 						每天可预约门票数量:
+		                    </label>
+		                    <div class="layui-input-inline">
+		                        	<input type="text" id="numTicketsByDay" name="numTicketsByDay"  placeholder="个数"
+		                        	autocomplete="off" class="layui-input" disabled="disabled" value="${product.numTicketsByDay}">
+		                    </div>
+		                </div>
+             	</div>  
                 
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -692,16 +716,24 @@
              		$("#productLimitNum").removeAttr("disabled");
            			$("#LimitNum").removeAttr("style");
             }
-            
+               if($("#productLimitType").val()=="0"){
+             		$("#productLimitNum").val("");
+            }
+              //是否预购
+               console.log($("#numTicketsByDayType").val());
+            if($("#numTicketsByDayType").val()=="1"){
+             		$("#numTicketsByDayType").prop("checked",true);
+             		$("#numTicketsByDay").removeAttr("disabled");
+            }else{
+             		$("#numTicketsByDay").val("");
+            }
              //是否拼团
             if($("#group").val()=="1"){
              		$("#group").prop("checked",true);
             }
-            
-            if($("#productLimitType").val()=="0"){
-             		$("#productLimitNum").val("");
-            }
-            console.log($("#productIsShow").val());
+           
+         
+           
             //是否显示
             if($("#productIsShow").val()=="1"){
              		$("#productIsShow").prop("checked",true);
@@ -808,6 +840,19 @@
 					
            		}
            }
+            function changeNums(){
+         		if($("#numTicketsByDayType").prop("checked")){
+         		console.log("修改");
+         			$("#numTicketsByDay").removeAttr("disabled");
+         			$("#Stocks").removeAttr("style");
+         		}else{
+         			$("#numTicketsByDay").prop("disabled", "disabled");
+         			$("#Stocks").prop("style", "color:#757575");
+					$("#numTicketsByDay").val("");
+			
+         		}
+            }
+         
            function changeGroup(){
            		if($("#group").prop("checked")){
            			$("#group").val(1);
@@ -867,7 +912,7 @@
 						layer.msg("库存为整数字！",{time: 5000, icon:5});
 						return false;
 				}
-				
+		
 				//最低购买数量限制 5/1 张羽 新增
 				var restrict =$("#productRestrictNumber").val();
 				if(!(/^([1-9]\d*|[0]{1,1})$/).test(restrict)){
@@ -909,7 +954,13 @@
 						layer.msg("限购数量为大于0的数字！",{time: 5000, icon:5});
 						return false;
 				} 
-				
+							//可预约数量
+				var Stocks =$("#numTicketsByDay").val();
+			if(!(/^[0-9]*[1-9][0-9]*$/).test(Stocks)&&$("#numTicketsByDayType").prop("checked")){
+		/* 		if(!(/^([1-9]\d*|[0]{1,1})$/).test(Stocks)){ */
+						layer.msg("预约数量为数字！",{time: 5000, icon:5});
+						return false;
+				}
 				//提成
 				var CommissionPrice =$("#productCommissionPrice").val();
 				if(!(/^\d+(\.\d+)?$/).test(CommissionPrice)){

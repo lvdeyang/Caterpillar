@@ -59,7 +59,7 @@ public class ApiProcessLiveController {
 		
 		UserVO user = userQuery.current();
 		
-		String id = streamPassbyService.createRtmp2hls(__processInstanceId__, rtmpUrl, name, storageUrl);
+		//String id = streamPassbyService.createRtmp2hls(__processInstanceId__, rtmpUrl, name, storageUrl);
 		
 		return null;
 	}

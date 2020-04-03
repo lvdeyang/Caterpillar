@@ -26,6 +26,10 @@ public class ProgramVideoBO {
 	
 	/** 解码方式 cpu/msdk/cuda */
 	private String decode_mode;
+	
+	private Integer nv_card_idx;
+	
+	private String deinterlace_mode;
 
 	public Integer getPid() {
 		return pid;
@@ -87,6 +91,24 @@ public class ProgramVideoBO {
 
 	public ProgramVideoBO setDecode_mode(String decode_mode) {
 		this.decode_mode = decode_mode;
+		return this;
+	}
+
+	public Integer getNv_card_idx() {
+		return nv_card_idx;
+	}
+
+	public ProgramVideoBO setNv_card_idx(Integer nv_card_idx) {
+		this.nv_card_idx = nv_card_idx;
+		return this;
+	}
+
+	public String getDeinterlace_mode() {
+		return deinterlace_mode;
+	}
+
+	public ProgramVideoBO setDeinterlace_mode(String deinterlace_mode) {
+		this.deinterlace_mode = deinterlace_mode;
 		return this;
 	}
 	

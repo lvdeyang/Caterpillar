@@ -14,7 +14,7 @@ public class BackUpPassByBO {
 	private String input_id;
 	
 	/** 备份节目数组 */
-	private List<ProgramBO> program_array;
+	private List<BackUpProgramBO> program_array;
 
 	public String getMode() {
 		return mode;
@@ -43,11 +43,11 @@ public class BackUpPassByBO {
 		return this;
 	}
 
-	public List<ProgramBO> getProgram_array() {
+	public List<BackUpProgramBO> getProgram_array() {
 		return program_array;
 	}
 
-	public BackUpPassByBO setProgram_array(List<ProgramBO> program_array) {
+	public BackUpPassByBO setProgram_array(List<BackUpProgramBO> program_array) {
 		this.program_array = program_array;
 		return this;
 	}

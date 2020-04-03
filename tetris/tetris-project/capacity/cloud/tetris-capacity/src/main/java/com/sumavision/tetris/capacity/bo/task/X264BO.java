@@ -12,8 +12,8 @@ public class X264BO {
 	
 	private Integer keyint_max;
 	
-	/** 质量模式 slow/middle/fast */
-	private String refine;
+	/** 质量模式 */
+	private Integer refine;
 	
 	/** 原始数据格式 yuv420/yuv422/yuv420_10bit/yuv422_10bit */
 	private String pixel_format;
@@ -46,11 +46,11 @@ public class X264BO {
 		return this;
 	}
 
-	public String getRefine() {
+	public Integer getRefine() {
 		return refine;
 	}
 
-	public X264BO setRefine(String refine) {
+	public X264BO setRefine(Integer refine) {
 		this.refine = refine;
 		return this;
 	}
