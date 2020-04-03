@@ -2,6 +2,7 @@ package com.guolaiwan.app.web.business.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.zxing.WriterException;
 import com.guolaiwan.app.aoyou.AoYouV1Service;
 import com.guolaiwan.app.aoyou.AoYouV2Service;
 import com.guolaiwan.app.aoyou.bo.AoYouOrder;
@@ -70,6 +73,7 @@ import com.guolaiwan.bussiness.admin.po.MessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductComboPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
+import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 
@@ -77,6 +81,8 @@ import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
 import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 
 import cn.hutool.json.JSONUtil;
+import pub.caterpillar.commons.file.oss.OSSUtils;
+import pub.caterpillar.commons.qrcode.QRCodeGenerator;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 
@@ -762,7 +768,7 @@ public class ProductPackageController extends BaseController {
 				long beginTime = productPO.getProductBeginDate().getTime();
 				long endTime = productPO.getProductEnddate().getTime();
 				long buyTime = sdf.parse(buyDate).getTime();
-				if (buyTime > beginTime && buyTime < endTime) {
+				if (buyTime >= beginTime && buyTime <= endTime) {
 					map.put("result", 1);// 日期符合
 				} else {
 					map.put("result", 0);// 日期不符合
@@ -774,7 +780,7 @@ public class ProductPackageController extends BaseController {
 				long beginTime = aRelPO.getBeginDate().getTime();
 				long endTime = aRelPO.getEndDate().getTime();
 				long buyTime = sdf.parse(buyDate).getTime();
-				if (buyTime > beginTime && buyTime < endTime) {
+				if (buyTime >= beginTime && buyTime <= endTime) {
 					map.put("result", 1);// 日期符合
 				} else {
 					map.put("result", 0);// 日期不符合
@@ -1269,5 +1275,256 @@ public class ProductPackageController extends BaseController {
 			return hashMap;
 		}
 
+	}
+	
+	
+	
+	/**
+	 * 预约购票新增
+	 * 
+	 */
+	//查询是否限制每天预约票数
+	@RequestMapping(value = "/getNumTicketsByDayType", method = RequestMethod.GET)
+	public Map<String, Object> getNumTicketsByDayType(Long id) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		ProductPO productPO = productDao.get(id);
+		map.put("numTicketsByDayType", productPO.getNumTicketsByDayType());
+		return map;
+	}
+	//每天预约剩余票数实时计算
+	@RequestMapping(value = "/getNumTicketsByDay", method = RequestMethod.POST)
+	public JSONArray getNumTicketsByDay(long id, long choice, String start, String end) {
+		String reStr = "";
+		
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			// 判断票的类型
+			// 普通票
+			if (choice == 0) {
+				ProductPO productPO = productDao.get(id);
+				int numTicketsByDay = productPO.getNumTicketsByDay();
+				Date startDate = productPO.getProductBeginDate();
+				Date endDate = productPO.getProductEnddate();
+				Date startD = dateFormat.parse(start);
+				Date endD = dateFormat.parse(end);
+				//判断哪个日期在前
+				Calendar calendar = Calendar.getInstance();
+				if(startDate.after(startD) ){
+					calendar.setTime(startDate);
+				} else {
+					calendar.setTime(startD);
+				}
+				if(endD.before(endDate)){
+					endDate = endD;
+				}
+				
+		        List list = new ArrayList();
+		        while(calendar.getTime().before(endDate)) {
+		        	Map<String, Object> map = new HashMap<String, Object>();
+		            map.put("date" , dateFormat.format(calendar.getTime()));
+		            int count = conn_orif.countProductNumByDate(id, dateFormat.format(calendar.getTime()));
+		            map.put("data" , (numTicketsByDay-count));
+		            list.add(map);
+		            calendar.add(Calendar.DAY_OF_MONTH, 1);
+		        }
+		        reStr = JSONObject.toJSONString(list);
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		System.out.println(reStr);
+		JSONArray reArray = JSONArray.parseArray(reStr);
+		return reArray;
+	}
+	/**
+	 * 商户中心 线下售票
+	 * 
+	 */
+	//商户中心 线下售票页面
+	@RequestMapping(value = "/admin/sellOffline")
+	public ModelAndView adminProduct(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubadmin/sellOffline");
+		return mv;
+	}
+	//线下售票商户票查询
+	@RequestMapping(value = "/getMerchantPro", method = RequestMethod.GET)
+	public Object queryPro(HttpServletRequest request) throws Exception {
+		Long merchantId = Long.parseLong(request.getSession().getAttribute("merchantId").toString());
+		MerchantPO merchant = merchantDao.get(merchantId);
+		List<ProductPO> productPOs = conn_product.getProductsByMerAndModar(merchantId, merchant.getModularCode());
+		List<ProductVO> vos = ProductVO.getConverter(ProductVO.class).convert(productPOs, ProductVO.class);
+		SysConfigPO sysConfigPO = conn_sys.getSysConfig();
+		for (ProductVO productVO : vos) {
+			productVO.setProductShowPic(sysConfigPO.getWebUrl() + productVO.getProductShowPic());
+		}
+		return vos;
+	}
+	//线下售票 提交订单
+	@RequestMapping(value = "/order/sellOffline", method = RequestMethod.POST)
+	public Map<String, Object> sellOffline(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		String id = pageObject.getString("id");
+		String num = pageObject.getString("productNum");
+		String name = pageObject.getString("name");
+		String idcard = pageObject.getString("idcard");
+		String ticketid = pageObject.getString("ticketid");
+		Date bookDate = new Date();
+
+		OrderInfoPO orderInfoPO = conn_orif.getByField("targetId", ticketid);
+		if(orderInfoPO != null) {
+			return ERROR("该票已售出，无法重复使用");
+		}
+		
+		OrderInfoPO order = new OrderInfoPO();
+
+		ProductPO productPO = null;
+		// 库存进行修改
+		productPO = productDao.get(Long.parseLong(id));
+		// 是否限购
+		if (1 == productPO.getProductLimitType()) {
+			// 限购
+			productPO.setProductLimitNum(productPO.getProductLimitNum() - Long.parseLong(num));
+			productPO.setProductStock(productPO.getProductStock() - Long.parseLong(num));
+		} else {
+			productPO.setProductStock(productPO.getProductStock() - Long.parseLong(num));
+		}
+		productDao.update(productPO);
+		
+		// 支付的金额
+		Long productprice = null;
+		productprice = productPO.getProductPrice();
+			
+		if (num == null) {
+			num = "1";
+		}
+		
+		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date date = new Date();
+		// 支付金额
+		long payMoney = Integer.parseInt(num) * productprice;
+		// 订单总金额
+		long orderAllMoney = payMoney;
+		//订单开始日期
+		String orderStartDate = pageObject.getString("startDate");
+		if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
+			order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.defaultDatePattern));
+		}
+		// 获取商家
+		MerchantPO merchant = merchantDao.get(productPO.getProductMerchantID());
+		// 订单用户id放商家id
+		order.setUserId(merchant.getId());
+		order.setUserName(merchant.getShopName());
+		// 订单号（商家id+板块Code+时间戳+商家ID）
+		String orderNO = merchant.getId() + productPO.getProductModularCode() + df.format(date) + merchant.getId();
+		order.setOrderNO(orderNO);
+		// 下单时间
+		order.setCreateDate(date);
+		order.setUpdateTime(date);
+		// 供应商ID
+		order.setShopId(merchant.getId());
+		// 供应商名称
+		order.setShopName(merchant.getShopName());
+		// 商品ID
+		order.setProductId(productPO.getId());
+		// 商品图片
+		order.setProductPic(productPO.getProductShowPic());
+		// 商品名称
+		order.setProductName(productPO.getProductName());
+		// 商品数量
+		order.setProductNum(Long.parseLong(num));
+
+		order.setComId(1L);
+		// 商品单价
+		order.setProductPrice(productprice);
+		// 所属板块DI
+		order.setBkCode(productPO.getProductModularCode());
+		// 所属板块名称
+		order.setBkName(productPO.getProductModularCodeName());
+
+		long proportion = productPO.getProductCommissionPrice();
+		if (productPO.getProductCommissionCode() == 1) {
+			order.setProportion(proportion);
+		}
+		// 提成方式（0：佣金1：比例）
+		order.setRoyaltyName(productPO.getProductCommissionCode());
+		// 积分数
+		long integralNum = Integer.parseInt(num) * productPO.getProductntegral();
+		order.setIntegralNum(integralNum);
+		// 订单佣金金额(分)
+		long proportionMoney;
+		if (productPO.getProductCommissionCode() == 1) {
+			proportionMoney = Integer.parseInt(num) * productPO.getProductPrice() * proportion / 100;
+		} else {
+			proportionMoney = Integer.parseInt(num) * proportion;
+		}
+		order.setProportionMoney(proportionMoney);
+		// 支付金额
+		order.setPayMoney(payMoney);
+		// 订单总金额
+		order.setOrderAllMoney(orderAllMoney);
+		// 订单说明
+		if (request.getParameter("orderRemark") != null && request.getParameter("orderRemark").length() > 0) {
+			order.setOrderRemark(request.getParameter("orderRemark"));
+		}
+		// 订单状态
+		order.setOrderState(OrderStateType.PAYSUCCESS);
+		// 是否评价
+		order.setCommentIs(0);
+		// 预订日期
+		order.setOrderBookDate(bookDate);
+		order.setOrderType(OrderType.MERCHANT);
+		//订单来源
+		order.setSource(OrderSource.UNLINE);
+		
+		String ydNO = ydNoCode(ticketid);
+		order.setTargetId(ticketid);
+		order.setYdNO(ydNO);
+		order.setPayDate(new Date());
+		
+		productPO.setProductSaleNum(productPO.getProductSaleNum() + 1);
+		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
+		
+		productDao.update(productPO);
+		conn_orif.saveOrUpdate(order);
+			
+		//购票人信息
+		MessagePO mes = new MessagePO();
+		mes.setUserId(merchant.getId());
+		mes.setName(name);
+		mes.setNumber(idcard);
+		mes.setState("0");
+		mes.setOderId(order.getId().toString());
+		conn_message.save(mes);
+		
+		data.put("orderId", order.getId());
+		return success(data);
+	}
+	//复制过来的生成验单码的方法
+	protected String ydNoCode(String orderNO) throws WriterException, IOException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+		//内容
+		String content = orderNO;
+		//路径
+		Date d = new Date();
+		String datepath =sdf.format(d); 
+		String fileName = orderNO+".png";
+		String ydNO = File.separator+"orderNO"+File.separator+datepath+File.separator+fileName;
+		String path = conn_sysConfig.getSysConfig().getFolderUrl()+ydNO;
+		//生成二维码
+		QRCodeGenerator.generate(path, content);
+		File newFile=new File(path);
+		OSSUtils.createFolder("glw-old-file", "file/orderNO/"+datepath+"/");
+		OSSUtils.uploadObjectOSS("file/orderNO/"+datepath+"/", fileName,newFile, new FileInputStream(newFile));
+		return ydNO;
 	}
 }

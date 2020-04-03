@@ -175,6 +175,12 @@ public class ProductController extends BaseController {
 		ProductVO productV = new ProductVO().set(productp);
 		//张羽  将购买商品的最低购买数量带到页面
 		productV.setProductRestrictNumber(productp.getProductRestrictNumber());
+		
+		//预约购票新增
+		productV.setNumTicketsByDay(productp.getNumTicketsByDay());
+		productV.setNumTicketsByDayType(productp.getNumTicketsByDayType());
+//		productV.setNumByOnePerson(productp.getNumByOnePerson());
+		
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		String beginDate = sdf.format(productp.getProductBeginDate());
 		String ectiveDate = sdf.format(productp.getProductEctivedate());
@@ -268,6 +274,12 @@ public class ProductController extends BaseController {
 		String distributeId=request.getParameter("distributeId");
 		//张羽 新增 5/1 商品购买最低数量限制
 		String productRestrictNumber=request.getParameter("productRestrictNumber");
+		
+		//预约购票新增
+		String numTicketsByDay=request.getParameter("numTicketsByDay");
+		String numTicketsByDayType=request.getParameter("numTicketsByDayType");
+//		String numByOnePerson=request.getParameter("numByOnePerson");		
+		
 		int isgroup=0;
 		//是不是拼团的商品
 		if(request.getParameter("group")!=null&&request.getParameter("group")!=""){
@@ -280,6 +292,11 @@ public class ProductController extends BaseController {
 		}
 		
 		product.setProductRestrictNumber(Integer.parseInt(productRestrictNumber));
+		
+		//预约购票新增
+		product.setNumTicketsByDay(Integer.parseInt(numTicketsByDay));
+		product.setNumTicketsByDayType(Integer.parseInt(numTicketsByDayType));
+//		product.setNumByOnePerson(Integer.parseInt(numByOnePerson));
 		
 		product.setRegionId(Long.parseLong(regionFirst));
 		
@@ -553,6 +570,7 @@ public class ProductController extends BaseController {
 		//最低购买数量 张羽 5/1
 		int productRestrictNumber=Integer.parseInt(request.getParameter("productRestrictNumber"));
 		product.setProductRestrictNumber(productRestrictNumber);
+		
 		// 时间
 		String productBeginDate = request.getParameter("productBeginDate");
 		String productEnddate = request.getParameter("productEnddate");
@@ -599,6 +617,24 @@ public class ProductController extends BaseController {
 		}
 		product.setProductLimitType(productLimitType);
 
+		//预约购票新增
+		int numTicketsByDayType;
+		if (request.getParameter("numTicketsByDayType") == null) {
+			numTicketsByDayType = 0;
+		} else {
+			numTicketsByDayType = 1;
+			int numTicketsByDay = 0;
+			if (request.getParameter("numTicketsByDay") == null) {
+				numTicketsByDay = 0;
+			} else {
+				numTicketsByDay = Integer.parseInt(request.getParameter("numTicketsByDay"));
+			}
+			product.setNumTicketsByDay(numTicketsByDay);
+		}
+		product.setNumTicketsByDayType(numTicketsByDayType);
+//		String numByOnePerson=request.getParameter("numByOnePerson");
+//		product.setNumByOnePerson(Integer.parseInt(numByOnePerson));
+		
 		// 浏览量、排序、销量、积分
 		if (!(request.getParameter("productShowNum") == "" || request.getParameter("productShowNum") == null)) {
 			long productShowNum = Long.parseLong(request.getParameter("productShowNum"));
@@ -846,6 +882,12 @@ public class ProductController extends BaseController {
 		ProductPO product = conn_product.get(uuid);
 		ProductVO productV = new ProductVO().set(product);
 		productV.setProductRestrictNumber(product.getProductRestrictNumber());
+		
+		//预约购票新增
+		productV.setNumTicketsByDay(product.getNumTicketsByDay());
+		productV.setNumTicketsByDayType(product.getNumTicketsByDayType());
+//		productV.setNumByOnePerson(product.getNumByOnePerson());
+				
 		String beginDate = sdf.format(product.getProductBeginDate());
 		String ectiveDate = sdf.format(product.getProductEctivedate());
 		String endDate = sdf.format(product.getProductEnddate());
@@ -905,6 +947,12 @@ public class ProductController extends BaseController {
 		String ectiveDate = sdf.format(product.getProductEctivedate());
 		String endDate = sdf.format(product.getProductEnddate());
 		productV.setProductRestrictNumber(product.getProductRestrictNumber());
+		
+		//预约购票新增
+		productV.setNumTicketsByDay(product.getNumTicketsByDay());
+		productV.setNumTicketsByDayType(product.getNumTicketsByDayType());
+//		productV.setNumByOnePerson(product.getNumByOnePerson());
+				
 		if(conn_groupbuydao.findByProductId(productV.getId())!=null){
 			GroupBuyPO groupBuyPO = conn_groupbuydao.findByProductId(productV.getId());
 			strMap.put("groupbuypo", groupBuyPO);
@@ -929,6 +977,12 @@ public class ProductController extends BaseController {
 		ProductPO product = conn_product.get(id);
 		ProductVO productV = new ProductVO().set(product);
 		productV.setProductRestrictNumber(product.getProductRestrictNumber());
+		
+		//预约购票新增
+		productV.setNumTicketsByDay(product.getNumTicketsByDay());
+		productV.setNumTicketsByDayType(product.getNumTicketsByDayType());
+//		productV.setNumByOnePerson(product.getNumByOnePerson());
+		
 		SysConfigPO sysConfig = conn_sysConfig.getSysConfig();
 		String beginDate = sdf.format(product.getProductBeginDate());
 		String ectiveDate = sdf.format(product.getProductEctivedate());

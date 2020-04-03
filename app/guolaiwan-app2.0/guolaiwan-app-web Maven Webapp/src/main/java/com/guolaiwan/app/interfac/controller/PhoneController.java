@@ -3512,8 +3512,17 @@ public class PhoneController extends WebBaseControll {
 
 		String userId = pageObject.getString("userId");
 		String orderNO = pageObject.getString("orderNo");
+		
 		// 获取订单
-		orderInfoPO = conn_order.get(Long.parseLong(orderNO));
+		String DIGIT_REGEX = "[0-9]+";
+		if(orderNO.matches(DIGIT_REGEX)) {
+			//纯数字根据订单号查订单
+			orderInfoPO = conn_order.get(Long.parseLong(orderNO));
+		} else {
+			//否则根据验单码查订单
+			orderInfoPO = conn_order.getByField("targetId", orderNO);
+		}
+		
 		if (orderInfoPO != null) {
 
 			// 判断商家id是否一致
@@ -3549,7 +3558,10 @@ public class PhoneController extends WebBaseControll {
 			orderInfoPO.setYdDate(date);
 			conn_order.saveOrUpdate(orderInfoPO);
 			sendMessage(orderInfoPO);
-			return success(orderInfoPO.getOrderState());
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("state", orderInfoPO.getOrderState());
+			data.put("orderId", orderInfoPO.getId());
+			return success(data);
 		} else {
 			String message = "订单信息不对！";
 			return FORBIDDEN(message);
