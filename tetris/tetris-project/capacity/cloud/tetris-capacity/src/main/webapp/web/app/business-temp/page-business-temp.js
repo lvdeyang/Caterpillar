@@ -28,6 +28,13 @@ define([
         new Vue({
             el: '#' + pageId + '-wrapper',
             data: {
+            	typeOptions:[{
+            		label:'转码',
+            		value:'transcode'
+            	},{
+            		label:'推流',
+            		value:'push'
+            	}],
                 menus: context.getProp('menus'),
                 user: context.getProp('user'),
                 groups: context.getProp('groups'),
@@ -76,6 +83,7 @@ define([
                     var row = scope.row;
                     self.dialog.edittemp.id = row.id;
                     self.dialog.edittemp.x = row.x;
+                    self.dialog.edittemp.type = row.type;
                     self.dialog.edittemp.y = row.y;
                     self.dialog.edittemp.ratio = row.ratio;
                     self.dialog.edittemp.rate = row.rate;
@@ -160,6 +168,7 @@ define([
                     self.dialog.addtemp.ratio = '';
                     self.dialog.addtemp.rate = '';
                     self.dialog.addtemp.frame = '';
+                    self.dialog.addtemp.type = '';
                     self.dialog.addtemp.name = '';
                     self.dialog.addtemp.visible = false;
                 },
@@ -172,6 +181,7 @@ define([
                         ratio:self.dialog.addtemp.ratio,
                         rate:self.dialog.addtemp.rate,
                         frame:self.dialog.addtemp.frame,
+                        type:self.dialog.addtemp.type,
                         name:self.dialog.addtemp.name
                     }, function(data, status){
                         self.dialog.addtemp.loading = false;
@@ -190,6 +200,7 @@ define([
                     self.dialog.edittemp.rate = '';
                     self.dialog.edittemp.frame = '';
                     self.dialog.edittemp.name = '';
+                    self.dialog.edittemp.type = '';
                     self.dialog.edittemp.visible = false;
                 },
                 handleEdittempCommit:function(){
@@ -201,6 +212,7 @@ define([
 	                    ratio:self.dialog.edittemp.ratio,
 	                    rate:self.dialog.edittemp.rate,
 	                    frame:self.dialog.edittemp.frame,
+	                    type:self.dialog.edittemp.type,
 	                    name:self.dialog.edittemp.name
                     }, function(data, status){
                         self.dialog.edittemp.loading = false;

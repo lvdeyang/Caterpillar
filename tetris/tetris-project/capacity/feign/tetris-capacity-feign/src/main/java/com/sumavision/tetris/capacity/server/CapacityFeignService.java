@@ -129,4 +129,12 @@ public class CapacityFeignService {
     public List<TempVo> tempList() throws Exception{
         return JsonBodyResponseParser.parseArray(capacityFeign.tempList(),TempVo.class);
     }
+    
+    public List<TempVo> pushtempList() throws Exception{
+        return JsonBodyResponseParser.parseArray(capacityFeign.pushtempList(),TempVo.class);
+    }
+    
+    public List<TempVo> transcodetempList() throws Exception{
+        return JsonBodyResponseParser.parseArray(capacityFeign.transcodetempList(),TempVo.class);
+    }
 }

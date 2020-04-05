@@ -52,6 +52,9 @@
                        <el-table-column
                                label="帧率"
                                prop="frame">
+                       <el-table-column
+                               label="类型"
+                               prop="type">
                        </el-table-column>
                              
                              <el-table-column
@@ -95,6 +98,16 @@
                 width="500px"
                 :before-close="handleAddtempClose">
             <el-form ref="form" label-width="70px">
+                <el-form-item label="类型">
+                	  <el-select v-model="dialog.addtemp.type" placeholder="请选择">
+			              <el-option
+			                v-for="item in typeOptions"
+			                :key="item.value"
+			                :label="item.label"
+			                :value="item.value">
+			              </el-option>
+			          </el-select>
+                </el-form-item>
                 <el-form-item label="名称">
                     <el-input v-model="dialog.addtemp.name"></el-input>
                 </el-form-item>
@@ -129,6 +142,16 @@
                 :before-close="handleEdittempClose">
 
             <el-form ref="form" label-width="70px">
+            	<el-form-item label="类型">
+                	  <el-select v-model="dialog.edittemp.type" placeholder="请选择">
+			              <el-option
+			                v-for="item in typeOptions"
+			                :key="item.value"
+			                :label="item.label"
+			                :value="item.value">
+			              </el-option>
+			          </el-select>
+                </el-form-item>
                 <el-form-item label="名称">
                     <el-input v-model="dialog.edittemp.name"></el-input>
                 </el-form-item>

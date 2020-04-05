@@ -116,5 +116,11 @@ public interface CapacityFeign {
     
     @RequestMapping(value = "/capacity/live/temp/list")
     public JSONObject tempList() throws Exception;
+    
+    @RequestMapping(value = "/capacity/live/pushtemp/list")
+    public JSONObject pushtempList() throws Exception;
+    
+    @RequestMapping(value = "/capacity/live/transcodetemp/list")
+    public JSONObject transcodetempList() throws Exception;
 
 }

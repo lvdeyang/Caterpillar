@@ -15,6 +15,7 @@ public class TempPo extends AbstractBasePO {
     private int rate;//码率bps
     private int frame;//帧率
     private String name;//模板名称
+    private String type;//push 推流，transcode 转码
 	public int getX() {
 		return x;
 	}
@@ -50,6 +51,12 @@ public class TempPo extends AbstractBasePO {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
     
     

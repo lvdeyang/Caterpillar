@@ -12,7 +12,6 @@ import com.sumavision.tetris.show.LiveVo;
 import com.sumavision.tetris.user.UserQuery;
 import com.sumavision.tetris.user.UserVO;
 
-import org.apache.hadoop.mapred.gethistory_jsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,6 +62,19 @@ public class AndriodController {
     
     @GetMapping("/findAllTemps")
     public Map<String, Object> findAllTemps() throws Exception {
+    	UserVO user=userQuery.current();
+    	return Result.sussess(cameraService.tempList());
+    }
+    
+    
+    @GetMapping("/findAllPushTemps")
+    public Map<String, Object> findAllPushTemps() throws Exception {
+    	UserVO user=userQuery.current();
+    	return Result.sussess(cameraService.tempList());
+    }
+    
+    @GetMapping("/findAllTranscodeTemps")
+    public Map<String, Object> findAllTranscodeTemps() throws Exception {
     	UserVO user=userQuery.current();
     	return Result.sussess(cameraService.tempList());
     }

@@ -84,6 +84,21 @@ public class ApiServerLiveController {
         return tempDao.findAll();
     }
     
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/pushtemp/list")
+    public Object pushtempList(HttpServletRequest request) throws Exception {
+        return tempDao.findAllByType("push");
+    }
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/transcodetemp/list")
+    public Object transcodetempList(HttpServletRequest request) throws Exception {
+        return tempDao.findAllByType("transcode");
+    }
+    
 
     @JsonBody
     @ResponseBody

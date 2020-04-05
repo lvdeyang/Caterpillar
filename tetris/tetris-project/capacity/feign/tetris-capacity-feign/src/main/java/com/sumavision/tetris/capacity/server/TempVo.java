@@ -10,6 +10,7 @@ public class TempVo{
     private int rate;//码率bps
     private int frame;//帧率
     private String name;//模板名称
+    private String type;
     
 	public int getX() {
 		return x;
@@ -71,6 +72,14 @@ public class TempVo{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

@@ -88,6 +88,16 @@ public class CameraService {
     public List<TempVo> tempList() throws Exception {
         return capacityService.tempList();
     }
+    
+    public List<TempVo> pushtempList() throws Exception {
+        return capacityService.pushtempList();
+    }
+    
+    public List<TempVo> transcodetempList() throws Exception {
+        return capacityService.transcodetempList();
+    }
+    
+    
 
    
 

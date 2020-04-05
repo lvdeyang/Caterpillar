@@ -9,6 +9,7 @@ public class TempVo extends AbstractBaseVO<TempVo, TempPo>{
     private int rate;//码率bps
     private int frame;//帧率
     private String name;//模板名称
+    private String type;
     
 	public int getX() {
 		return x;
@@ -68,7 +69,17 @@ public class TempVo extends AbstractBaseVO<TempVo, TempPo>{
 	public TempVo set(TempPo entity) throws Exception {
 		// TODO Auto-generated method stub
 		this.setX(entity.getX()).setY(entity.getY()).setFrame(entity.getFrame())
-		.setName(entity.getName()).setRate(entity.getRate()).setRatio(entity.getRatio()).setId(entity.getId());
+		.setName(entity.getName()).setRate(entity.getRate()).setRatio(entity.getRatio()).
+		setId(entity.getId()).setType(entity.getType());
+		return this;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public TempVo setType(String type) {
+		this.type = type;
 		return this;
 	}
 
