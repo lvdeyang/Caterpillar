@@ -70,13 +70,13 @@ public class AndriodController {
     @GetMapping("/findAllPushTemps")
     public Map<String, Object> findAllPushTemps() throws Exception {
     	UserVO user=userQuery.current();
-    	return Result.sussess(cameraService.tempList());
+    	return Result.sussess(cameraService.pushtempList());
     }
     
     @GetMapping("/findAllTranscodeTemps")
     public Map<String, Object> findAllTranscodeTemps() throws Exception {
     	UserVO user=userQuery.current();
-    	return Result.sussess(cameraService.tempList());
+    	return Result.sussess(cameraService.transcodetempList());
     }
     
     @GetMapping("/findLive")

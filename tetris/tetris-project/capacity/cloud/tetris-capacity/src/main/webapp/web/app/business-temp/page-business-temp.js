@@ -56,6 +56,7 @@ define([
                         frame:'',
                         rate:'',
                         name:'',
+                        type:'',
                         loading:false
                     },
                     edittemp:{
@@ -63,6 +64,7 @@ define([
                         id:'',
                         x:'',
                         y:'',
+                        type:'',
                         ratio:'',
                         frame:'',
                         rate:'',
