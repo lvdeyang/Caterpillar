@@ -345,7 +345,8 @@ $(function() {
 	   }
 	   //住宿
 	   if(ModularCode == "0002"){
-	   location.href=window.BASEPATH +'business/buyproduct?productId='+id;
+	   //location.href=window.BASEPATH +'business/buyproduct?productId='+id;
+	   location.href=window.BASEPATH + 'business/gotolect?merchantId=${merchantId}';
 	   }
 	   //采摘
 	   if(ModularCode == "2126"){

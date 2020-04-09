@@ -235,8 +235,12 @@ public class PubNumController extends WebBaseControll {
 			userInfo = JSON.parseObject(result);
             System.out.println(result);
             
+            //关闭强制关注
+            isfans=true;
+            //关闭强制关注
             
-            if(userInfo.getInteger("subscribe").equals(1)){ //未关注
+            
+            if(userInfo.getInteger("subscribe").equals(1)){ //已关注
             	isfans=true;
             	
             }
@@ -1237,7 +1241,7 @@ public class PubNumController extends WebBaseControll {
 		DecimalFormat df = new DecimalFormat("0.00");
 
 		JSONObject obj = new JSONObject();
-		obj.put("touser", "opVUYv0IKcoKT8TXWbtDP00MBOkw");
+		obj.put("touser", "opVUYv776IoYcxY41-eIRxvktd-Q");
 		obj.put("template_id", "GxkZ1LE6s6UxF9nsT8mesUc3Vk73KZwAzU8pFz4Pl8U");
 		obj.put("url", "");
 		JSONObject microProObj = new JSONObject();
@@ -1323,6 +1327,43 @@ public class PubNumController extends WebBaseControll {
 		dataObject1.put("remark", remarkObj1);
 		obj1.put("data", dataObject1);
 		SendMsgUtil.sendTemplate(obj1.toJSONString());
+		
+		
+		
+		JSONObject obj2 = new JSONObject();
+		obj2.put("touser", "opVUYv9LtqKAbiaXInBqI01hlpYg");
+		obj2.put("template_id", "GxkZ1LE6s6UxF9nsT8mesUc3Vk73KZwAzU8pFz4Pl8U");
+		obj2.put("url", "");
+		JSONObject microProObj2 = new JSONObject();
+		microProObj2.put("appid", "");
+		microProObj2.put("pagepath", "");
+		obj.put("miniprogram", microProObj2);
+		JSONObject dataObject2 = new JSONObject();
+		JSONObject firstObj2 = new JSONObject();
+		firstObj2.put("value", "用户申请退款,订单号:" + orderInfoPO.getId());
+		firstObj2.put("color", "");
+		dataObject2.put("first", firstObj2);
+
+		JSONObject nameObj2 = new JSONObject();
+		nameObj2.put("value", reason);
+		nameObj2.put("color", "");
+		dataObject2.put("reason", nameObj2);
+
+		JSONObject accountTypeObj2 = new JSONObject();
+		accountTypeObj2.put("value", df.format(amount));
+		accountTypeObj2.put("color", "");
+		dataObject1.put("refund", accountTypeObj2);
+
+		JSONObject remarkObj2 = new JSONObject();
+		remarkObj2.put("value",
+				(productPO == null ? "到店支付订单:" + merchantPO.getShopName() : productPO.getProductName()) + "-用户:"
+						+ userNameStr + "(" + userPhoneStr + ")");
+
+		remarkObj2.put("color", "");
+		dataObject2.put("remark", remarkObj2);
+		obj2.put("data", dataObject2);
+		SendMsgUtil.sendTemplate(obj2.toJSONString());
+		
 
 	}
 

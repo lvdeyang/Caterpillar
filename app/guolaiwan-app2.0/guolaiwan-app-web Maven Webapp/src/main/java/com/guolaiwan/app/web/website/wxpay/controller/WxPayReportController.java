@@ -1455,7 +1455,7 @@ public class WxPayReportController extends WebBaseControll {
 		SendMsgUtil.sendTemplate(obj2.toJSONString());
 
 		JSONObject obj3 = new JSONObject();
-		obj3.put("touser", "opVUYv0IKcoKT8TXWbtDP00MBOkw");
+		obj3.put("touser", "opVUYv3nODu4o8ejUmHoiluoEHec");
 		obj3.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
 		obj3.put("url", "");
 		JSONObject microProObj3 = new JSONObject();

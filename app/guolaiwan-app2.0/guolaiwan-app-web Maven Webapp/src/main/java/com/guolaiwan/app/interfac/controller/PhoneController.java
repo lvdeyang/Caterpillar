@@ -3692,6 +3692,42 @@ public class PhoneController extends WebBaseControll {
 		SendMsgUtil.sendTemplate(obj.toJSONString());
 
 		// opVUYv9LtqKAbiaXInBqI01hlpYg
+		
+		
+		
+		JSONObject obj1 = new JSONObject();
+		obj1.put("touser", "opVUYv3nODu4o8ejUmHoiluoEHec");
+		obj1.put("template_id", "imgTupyObgSuKRYqZrc8VAXgzGePPEeuqwVG7IF_Rzw");
+		obj1.put("url", "");
+		JSONObject microProObj1 = new JSONObject();
+		microProObj1.put("appid", "");
+		microProObj1.put("pagepath", "");
+		obj1.put("miniprogram", microProObj1);
+		JSONObject dataObject1 = new JSONObject();
+		JSONObject firstObj1 = new JSONObject();
+		firstObj1.put("value", "订单验单完成");
+		firstObj1.put("color", "");
+		dataObject1.put("first", firstObj1);
+		
+
+		JSONObject nameObj1 = new JSONObject();
+		nameObj1.put("value", nowDate);
+		nameObj1.put("color", "");
+		dataObject1.put("keyword2", nameObj1);
+
+		JSONObject accountTypeObj1 = new JSONObject();
+		accountTypeObj1.put("value", orderInfoPO.getId());
+		accountTypeObj1.put("color", "");
+		dataObject1.put("keyword1", accountTypeObj1);
+
+		JSONObject remarkObj1 = new JSONObject();
+		remarkObj1.put("value", productPO == null ? "到店支付订单:" + merchantPO.getShopName()
+				: productPO.getProductName() + "(" + df.format(amount) + "元)");
+		remarkObj1.put("color", "");
+		dataObject1.put("remark", remarkObj1);
+		obj1.put("data", dataObject1);
+		SendMsgUtil.sendTemplate(obj1.toJSONString());
+		
 	}
 
 	/**
