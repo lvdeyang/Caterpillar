@@ -175,10 +175,13 @@ html, body {
 
 </script>
 <script type="text/javascript">
+    var share={};
+    var proName='';
+    var proPic='';
     $(function(){
 	  getallteam(); 
 	  getComment();
-	  var vConsole = new VConsole();
+	  //var vConsole = new VConsole();
   })
 	 //全局获取商品内容 
 	 function getallteam(){
@@ -192,6 +195,7 @@ html, body {
 		var str = pics[i].split('.');
 		if(str[3]!="mp4"&&str[3]!="MP4"){ 
 		html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+merchantPic+''+pics[i]+'" alt=""></div>');
+		proPic=merchantPic+''+pics[i];
 		}else{
 		html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+merchantPic+''+pics[i]+'" controls="controls" ></div>');
 		}
@@ -210,6 +214,7 @@ html, body {
        var html = []; 
        
        
+     	proName=prouctMessage[0].productName;
      	
        html.push('<ul>');
        html.push('<li><p style="font-size:18px;">'+prouctMessage[0].productName+'</p></li>');
@@ -273,6 +278,7 @@ html, body {
 	  htl.push('</div>');
 	  $(".dianping").append(htl.join(""));	
 	  }
+	  initShare();
 	})	
  }  
   //立即预定
@@ -286,6 +292,59 @@ html, body {
      location.href=window.BASEPATH + 'product/package/payment/jump?merchantId=${merchantId}&proId='+id+'&choice=0&isCombo='+isCombo; 
     }          
     }
+    
+    
+        
+		function initShare(){
+			var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+		  
+	    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			    $.get(_uri, null, function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					if(data){
+					    
+						share=data;
+						doScanShare();
+					}
+					
+				});
+		    
+	    }
+	    
+	    function doScanShare(){
+            wx.config({
+	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            appId : share.appId, // 必填，公众号的唯一标识
+	            timestamp : share.timestamp, // 必填，生成签名的时间戳
+	            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+	            signature : share.signature,// 必填，签名，见附录1
+	            jsApiList : ['checkJsApi', 'onMenuShareTimeline' , 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        	});
+	        wx.ready(function() {
+	
+
+	            wx.onMenuShareTimeline({
+                            title: proName, // 分享标题
+                            link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: proPic, // 分享图标
+                            success: function () {
+                                
+                            }
+                        });
+	            wx.onMenuShareAppMessage({
+					title : proName, // 分享标题
+					desc: '畅游华夏，尽在过来玩-联系电话:0315-6681288/6686299', // 分享描述
+					link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: proPic, // 分享图标
+					success : function() {
+						
+					}
+				});
+	            
+	       });
+        }
 	  
 	
 </script>

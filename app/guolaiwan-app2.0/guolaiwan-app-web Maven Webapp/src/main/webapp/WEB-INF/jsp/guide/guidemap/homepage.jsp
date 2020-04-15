@@ -109,10 +109,18 @@
 
 <script type="text/javascript">
     $(function() {
-      //此操作会调起app并阻止接下来的js执行，进入已安装的app  ?userId=${userId}&merchantId=15&longitude=117.625103&latitude=40.188278&merchantName=万佛园
+       var ua = navigator.userAgent.toLowerCase();
+	   var isWeixin = ua.indexOf('micromessenger') != -1;
+	 
+        
+       //此操作会调起app并阻止接下来的js执行，进入已安装的app  ?userId=${userId}&merchantId=15&longitude=117.625103&latitude=40.188278&merchantName=万佛园
        $('body').append("<iframe src='app://media_resource_system.guolaiwan/guideActivity' style='display:none' target='' ></iframe>");
-        //没有安装应用会执行下面的语句
-        setTimeout(function(){window.location='http://www.guolaiwan.net/download/guolaiwan.apk'},10000);  
+       //没有安装应用会执行下面的语句
+       setTimeout(function(){
+           if (!isWeixin) {
+		      window.location='http://www.guolaiwan.net/download/guolaiwan.apk';
+	       }
+	   },10000);  
     });
     </script>
 

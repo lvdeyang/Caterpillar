@@ -528,8 +528,9 @@ html, body {
 	      param.phone=$('#addressphone').val();
 	      param.password=$('#password').val();	
 	      param.auto='${auto}';	
+	      $.showLoading("正在登陆");
 		  $.post(_urilogin, $.toJSON(param), function(data){
-				
+				$.hideLoading();
 				if(data.status != 200) {
 				   $.toast(data.message,"forbidden");
 				}else{

@@ -182,8 +182,11 @@ html, body {
 			    para.content = val;
 			    para.merchantId = '${merchantId}';
 				$.post(uri, $.toJSON(para), function(data){
-                $.showLoading("反馈成功!");
-				  window.location.href="business/merchant/strategys?merchantId="+'${merchantId}';
+	                $.showLoading("反馈成功!");
+	                setTimeout(function(){
+	                    $.hideLoading();
+	                    window.location.href="business/merchant/strategys?merchantId="+'${merchantId}';
+	                },1000);
 				});  
 		    }else{
 	 		   $.toast("请输入反馈信息!", "cancel");
@@ -191,7 +194,7 @@ html, body {
    });
    $(document).on('click','#return', function() { //返回
      	  history.back();
-  });
+   });
 </script>
 
 
