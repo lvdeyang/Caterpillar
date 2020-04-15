@@ -1331,7 +1331,7 @@ public class PubNumController extends WebBaseControll {
 		
 		
 		JSONObject obj2 = new JSONObject();
-		obj2.put("touser", "opVUYv9LtqKAbiaXInBqI01hlpYg");
+		obj2.put("touser", "opVUYv3nODu4o8ejUmHoiluoEHec");
 		obj2.put("template_id", "GxkZ1LE6s6UxF9nsT8mesUc3Vk73KZwAzU8pFz4Pl8U");
 		obj2.put("url", "");
 		JSONObject microProObj2 = new JSONObject();
