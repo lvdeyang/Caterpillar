@@ -33,6 +33,8 @@ public class LivePo extends AbstractBasePO {
     private int recordstatus;//是否开始录制1：开始0：停止
     
     private long tempId;
+    
+    private String recordPath;
 
     public String getTitle() {
         return title;
@@ -127,6 +129,7 @@ public class LivePo extends AbstractBasePO {
         this.setUrlRtmp(entity.getUrlRtmp());
         this.setRecordstatus(entity.getRecordstatus());
         this.setTempId(entity.getTempId());
+        this.setRecordPath(entity.getRecordPath());
         return this;
     }
 
@@ -144,6 +147,14 @@ public class LivePo extends AbstractBasePO {
 
 	public void setTempId(long tempId) {
 		this.tempId = tempId;
+	}
+
+	public String getRecordPath() {
+		return recordPath;
+	}
+
+	public void setRecordPath(String recordPath) {
+		this.recordPath = recordPath;
 	}
 	
 	

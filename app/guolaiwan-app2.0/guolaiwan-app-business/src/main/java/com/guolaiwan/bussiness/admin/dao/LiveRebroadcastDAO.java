@@ -47,5 +47,15 @@ public class LiveRebroadcastDAO extends AbstractBaseDao<LiveRebroadcastPO> {
 			return null;
 		return rebroadcast;
 	}
+	
+	public List<LiveRebroadcastPO> findByLiveIdOrder(Long liveId) {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("liveId",Condition.eq,liveId);
+		hql.orderBy("updateTime", true);
+		List<LiveRebroadcastPO> rebroadcast = findByHql(hql);
+		if (rebroadcast == null || rebroadcast.size() <= 0)
+			return null;
+		return rebroadcast;
+	}
 
 }

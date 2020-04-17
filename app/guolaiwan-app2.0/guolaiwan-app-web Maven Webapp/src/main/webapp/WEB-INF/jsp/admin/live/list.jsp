@@ -160,7 +160,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		{type:'checkbox'}
         		,{field: 'id',title: '直播Id',align:  'center',sort: true,width:120}
         		,{field: 'liveName',title: '直播名称',align:  'center',sort: true,width:120,edit: 'text'}
-        		,{field: 'leshiyunId',title: '乐视云Id',align:  'center',sort: true,width:120,edit: 'text'}
+        		,{field: 'leshiyunId',title: '直播平台Id',align:  'center',sort: true,width:120,edit: 'text'}
         		,{field: 'userId',title: '用户Id',align:  'center',sort: true,width:120}
         		,{field: 'merchantId',title: '商户Id',align:  'center',sort: true,width:120}
         		,{field: 'pubName',title: '发布名称',align:  'center',sort: true,width:120}

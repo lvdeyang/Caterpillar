@@ -29,6 +29,8 @@ public class LiveRebroadcastPO extends AbstractBasePO{
 		private long comId;
 		//上传说明
 		private String comName;
+		
+		private long liveId;
 
 		public String getOldName() {
 			return oldName;
@@ -84,6 +86,12 @@ public class LiveRebroadcastPO extends AbstractBasePO{
 		}
 		public void setComName(String comName) {
 			this.comName = comName;
+		}
+		public long getLiveId() {
+			return liveId;
+		}
+		public void setLiveId(long liveId) {
+			this.liveId = liveId;
 		}
 		
 	}

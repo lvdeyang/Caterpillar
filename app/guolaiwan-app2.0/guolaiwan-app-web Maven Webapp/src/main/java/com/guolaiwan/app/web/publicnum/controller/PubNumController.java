@@ -196,7 +196,6 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/index2", method = RequestMethod.GET)
 	public ModelAndView index2(String code, String state, HttpServletRequest request) throws Exception {
 		List<SystenCachePo> cachePos = conn_systemcache.findByField("wxKey", state);
-		System.out.println("我就想看看istest到底是什么-------" + istest);
 		String rUrl = "";
 		if (!cachePos.isEmpty()) {
 			rUrl = cachePos.get(0).getWxVal();

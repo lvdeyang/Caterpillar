@@ -34,6 +34,8 @@ public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {
     private String recordstatusStr;
     private String tempName;
     
+    private String recordPath;
+    
     public String getTitle() {
 		return title;
 	}
@@ -132,6 +134,7 @@ public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {
         this.setRecordstatus(entity.getRecordstatus());
         this.setRecordstatusStr(entity.getRecordstatus()==0?"未录制":"正在录制");
         this.setTempId(entity.getTempId());
+        this.setRecordPath(entity.getRecordPath());
         return this;
     }
 
@@ -181,6 +184,14 @@ public class LiveVo extends AbstractBaseVO<LiveVo, LivePo> {
 
 	public void setTempName(String tempName) {
 		this.tempName = tempName;
+	}
+
+	public String getRecordPath() {
+		return recordPath;
+	}
+
+	public void setRecordPath(String recordPath) {
+		this.recordPath = recordPath;
 	}
 	
 }

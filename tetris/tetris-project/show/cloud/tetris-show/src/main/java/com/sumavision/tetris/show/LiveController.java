@@ -5,12 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import com.alibaba.fastjson.JSONObject;
+import com.sumavision.tetris.capacity.server.CapacityFeignService;
 import com.sumavision.tetris.commons.util.wrapper.HashMapWrapper;
 
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
 import com.sumavision.tetris.user.UserVO;
+import com.sumavision.tetris.util.http.HttpUtil;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -74,14 +79,21 @@ public class LiveController {
     LiveService liveService;
     @Autowired
     LiveDao liveDao;
+    @Autowired
+    CapacityFeignService CapacityFeignService;
     
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/startRecord/{id}", method = {RequestMethod.POST})
     public Object startRecord(@PathVariable Long id) throws Exception {
         LivePo livePo=liveDao.findOne(id);
+        String recordPath="/home/hls/"+UUID.randomUUID();
+        File recordDic=new File(recordPath);
+        if(!recordDic.exists())	recordDic.mkdir();
         livePo.setRecordstatus(1);
+        livePo.setRecordPath(recordPath);
         liveDao.save(livePo);
+        CapacityFeignService.createRecordTask("camera"+livePo.getAnchorId(), recordPath);
         return new LiveVo().set(livePo);
     }
     @JsonBody
@@ -91,6 +103,11 @@ public class LiveController {
     	LivePo livePo=liveDao.findOne(id);
         livePo.setRecordstatus(0);
         liveDao.save(livePo);
+        CapacityFeignService.deleteRecordTask("camera"+livePo.getAnchorId());
+        JSONObject jsonParam=new JSONObject();
+        jsonParam.put("liveId", livePo.getId());
+        jsonParam.put("url", "http://47.95.241.89:6690/"+livePo.getRecordPath()+"/vod.m3u8");
+        HttpUtil.httpPost("http://www.guolaiwan.net/phoneApp/addrecord", jsonParam);
         return new LiveVo().set(livePo);
     }
     

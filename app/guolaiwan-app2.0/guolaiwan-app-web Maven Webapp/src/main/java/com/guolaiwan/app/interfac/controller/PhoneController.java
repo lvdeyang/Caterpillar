@@ -6843,4 +6843,36 @@ public class PhoneController extends WebBaseControll {
 		}
 
 	}
+	
+	//数码录制注入接口
+	@Autowired
+	LiveRebroadcastDAO recordDao;
+	
+	@ResponseBody
+	@RequestMapping(value = "/addrecord")
+	public Object addRecord(HttpServletRequest request) throws Exception {
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		long liveId = json.getLong("liveId");
+		String url = json.getString("url");
+		LiveRebroadcastPO liveRebroadcastPO=new LiveRebroadcastPO();
+		liveRebroadcastPO.setLiveId(liveId);
+		liveRebroadcastPO.setWebUrl(url);
+		liveRebroadcastPO.setOldName(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm"));
+		recordDao.save(liveRebroadcastPO);
+		return liveRebroadcastPO;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/recordList")
+	public Object recordList(HttpServletRequest request) throws Exception {
+		Long liveId=Long.parseLong(request.getParameter("liveId"));
+		List<LiveRebroadcastPO> rdvertisement = conn_rdvertisementDao.findByLiveIdOrder(liveId);
+		List<LiveRebroadcastVO> rdvertisementvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class)
+				.convert(rdvertisement, LiveRebroadcastVO.class);
+		return success(rdvertisementvo);
+	}
+	
+	
+	
+	
 }

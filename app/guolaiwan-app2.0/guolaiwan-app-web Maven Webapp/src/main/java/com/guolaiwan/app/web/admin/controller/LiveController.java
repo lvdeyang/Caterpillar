@@ -543,6 +543,7 @@ public class LiveController extends BaseController {
 	@RequestMapping(value = "/rebroadcastslist", method = RequestMethod.GET)
 	public ModelAndView rebroadcastsList(HttpServletRequest request, Model model) throws Exception {
 		ModelAndView mv = new ModelAndView("admin/live/rebroadcastsList");
+		mv.addObject("liveId", request.getParameter("liveId"));
 		return mv;
 	}
 

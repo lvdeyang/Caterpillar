@@ -1006,7 +1006,7 @@ html, body {
 					<!-- 礼物 -->
 					<div id="btn2" class="btn2"></div>
 					<!-- 回放 -->
-					<a href="<%=basePath%>admin/live/rebroadcastslist"><div
+					<a href="<%=basePath%>admin/live/rebroadcastslist?liveId=${live.leshiyunId}"><div
 							id="btn3" class="btn3"></div></a>
 				</div>
 			</div>
