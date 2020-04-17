@@ -103,11 +103,10 @@ public class ApiServerLiveController {
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/create/record")
-    public Object createTask(HttpServletRequest request, String pubName, String path,
-    		String resolution,int bitrate,int fps,String hw) throws Exception {
+    public Object createTask(HttpServletRequest request, String pubName, String path) throws Exception {
 
 
-        streamPassbyService.createRecordTask(pubName, path, resolution, bitrate, fps, hw);
+        streamPassbyService.createRecordTask(pubName, path);
 
         return null;
     }

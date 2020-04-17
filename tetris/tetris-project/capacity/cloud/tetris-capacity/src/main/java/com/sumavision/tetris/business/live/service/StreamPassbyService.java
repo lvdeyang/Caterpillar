@@ -242,8 +242,7 @@ public class StreamPassbyService {
      * @param pubName    发布名称【要录制视频的发布名称】
      * @param recordPath 录制路径
      */
-    public void createRecordTask(String pubName, String recordPath,
-    		String resolution,int bitrate,int fps,String hw) {
+    public void createRecordTask(String pubName, String recordPath) {
         try {
             // 创建输入源
             List<InputBO> inputBOs = new ArrayList<InputBO>();

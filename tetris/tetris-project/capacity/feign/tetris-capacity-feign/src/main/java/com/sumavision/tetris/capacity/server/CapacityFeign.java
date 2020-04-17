@@ -100,7 +100,7 @@ public interface CapacityFeign {
      * @创建人 yud
      * @创建时间 2020/2/6
      */
-    @RequestMapping(value = "/api/server/live/create/record")
+    @RequestMapping(value = "/capacity/live/create/record")
     public JSONObject createRecordTask(@RequestParam("pubName") String pubName, @RequestParam("path") String path) throws Exception;
 
     /**
@@ -110,7 +110,7 @@ public interface CapacityFeign {
      *@创建人  yud
      *@创建时间  2020/2/6
      */
-    @RequestMapping(value = "/api/server/live/delete/recordTask")
+    @RequestMapping(value = "/capacity/live/live/delete/recordTask")
     public JSONObject deleteRecordTask(@RequestParam("pubName") String pubName) throws Exception;
 
     
