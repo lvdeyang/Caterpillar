@@ -160,7 +160,6 @@ public class PubNumController extends WebBaseControll {
 	@RequestMapping(value = "/index1", method = RequestMethod.GET)
 	public ModelAndView index1(HttpServletRequest request, String rUrl) throws Exception {
 
-		System.out.println("***********index1************"+DateUtil.format(new Date()));
 		ModelAndView mv = null;
 		if (!istest) {
 			String gState = new Date().getTime() + "";
@@ -172,7 +171,7 @@ public class PubNumController extends WebBaseControll {
 				conn_systemcache.save(cachePo);
 			}
 
-			String redirect = "http://" + WXContants.Website + "/guolaiwan/pubnum/index3";
+			String redirect = "http://" + WXContants.Website + "/guolaiwan/pubnum/index2";
 			redirect = URLEncoder.encode(redirect);
 			StringBufferWrapper weixinLogin = new StringBufferWrapper()
 					.append("https://open.weixin.qq.com/connect/oauth2/authorize?appid=").append(WxConfig.appId)
@@ -186,27 +185,16 @@ public class PubNumController extends WebBaseControll {
 			cachePo.setWxKey(gState);
 			cachePo.setWxVal(rUrl);
 			conn_systemcache.save(cachePo);
-			mv = new ModelAndView("redirect:index3");
+			mv = new ModelAndView("redirect:index2");
 		}
 		return mv;
 	}
 
 	@Autowired
 	private UserInfoDAO conn_user;
-	
-	@RequestMapping(value = "/index3", method = RequestMethod.GET)
-	public ModelAndView index3(String code, String state, HttpServletRequest request) throws Exception {
-		System.out.println("***********index3************"+DateUtil.format(new Date()));
-
-		ModelAndView mv = new ModelAndView("redirect:index2?code="+code+"&state="+state);
-	    return mv;
-	}
-	
 
 	@RequestMapping(value = "/index2", method = RequestMethod.GET)
 	public ModelAndView index2(String code, String state, HttpServletRequest request) throws Exception {
-		System.out.println("***********index2************"+DateUtil.format(new Date()));
-
 		List<SystenCachePo> cachePos = conn_systemcache.findByField("wxKey", state);
 		String rUrl = "";
 		if (!cachePos.isEmpty()) {
