@@ -110,7 +110,7 @@ public interface CapacityFeign {
      *@创建人  yud
      *@创建时间  2020/2/6
      */
-    @RequestMapping(value = "/capacity/live/live/delete/recordTask")
+    @RequestMapping(value = "/capacity/live/delete/recordTask")
     public JSONObject deleteRecordTask(@RequestParam("pubName") String pubName) throws Exception;
 
     

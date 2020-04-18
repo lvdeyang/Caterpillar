@@ -297,7 +297,7 @@ public class ProductPackageController extends BaseController {
 		List<ProductVO> pr_vo = new ProductVO().getConverter(ProductVO.class).convert(productPOs, ProductVO.class);
 		// 判断商品是否为购票产品
 		for (int i = 0; i < pr_vo.size(); i++) {
-			if ("0001".equals(pr_vo.get(i).getProductModularCode())) {
+			if (pr_vo.get(i).getProductModularCode().indexOf("0001")!=-1) {
 				continue;
 			} else {
 				pr_vo.remove(i);
@@ -329,8 +329,13 @@ public class ProductPackageController extends BaseController {
 		while (feedback < 95) {
 			feedback = random.nextInt(100);
 		}
-		map.put("distance", getDistance(Double.parseDouble(merchantPOs.get(0).getShopLatitude()),
-				Double.parseDouble(merchantPOs.get(0).getShopLongitude()), latitude, longitude));
+		if(merchantPOs.get(0).getShopLatitude()!=null
+				&&!merchantPOs.get(0).getShopLatitude().isEmpty()
+				&&merchantPOs.get(0).getShopLongitude()!=null
+				&&!merchantPOs.get(0).getShopLongitude().isEmpty()){
+			map.put("distance", getDistance(Double.parseDouble(merchantPOs.get(0).getShopLatitude()),
+					Double.parseDouble(merchantPOs.get(0).getShopLongitude()), latitude, longitude));
+		}
 		/*
 		 * map.put("beginTime", merchantPOs.get(0).getBeginTimeDate().split(" "
 		 * )[1]); map.put("endTime", merchantPOs.get(0).getEndTimeDate().split(

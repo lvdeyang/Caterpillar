@@ -73,7 +73,7 @@
 	})
 	
 	function getAdvertisement(){
-	     var _uriRecomment = window.BASEPATH + 'phoneApp/recordList?liveId=';
+	     var _uriRecomment = window.BASEPATH + 'phoneApp/recordList?liveId=${liveId}';
 		
 		 $.post(_uriRecomment, null, function(data){
 				data = parseAjaxResult(data);

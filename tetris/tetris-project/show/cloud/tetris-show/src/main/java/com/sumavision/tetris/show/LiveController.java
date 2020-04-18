@@ -106,7 +106,7 @@ public class LiveController {
         CapacityFeignService.deleteRecordTask("camera"+livePo.getAnchorId());
         JSONObject jsonParam=new JSONObject();
         jsonParam.put("liveId", livePo.getId());
-        jsonParam.put("url", "http://47.95.241.89:6690/"+livePo.getRecordPath()+"/vod.m3u8");
+        jsonParam.put("url", "http://47.95.241.89:6690/"+livePo.getRecordPath().replace("/home/hls/", "")+"/stream.m3u8");
         HttpUtil.httpPost("http://www.guolaiwan.net/phoneApp/addrecord", jsonParam);
         return new LiveVo().set(livePo);
     }
