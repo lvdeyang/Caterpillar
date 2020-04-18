@@ -72,7 +72,7 @@ public class SessionFilter implements Filter {
 
 		if (condition) {
 			if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")
-					|| hrequest.getRequestURI().contains("layui/UEditor")) {
+					|| hrequest.getRequestURI().contains("index3")|| hrequest.getRequestURI().contains("layui/UEditor")) {
 				chain.doFilter(request, response);
 			} else {
 				// 测试
