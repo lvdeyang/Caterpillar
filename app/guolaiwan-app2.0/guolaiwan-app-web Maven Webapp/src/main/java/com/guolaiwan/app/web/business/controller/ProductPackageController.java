@@ -335,6 +335,8 @@ public class ProductPackageController extends BaseController {
 				&&!merchantPOs.get(0).getShopLongitude().isEmpty()){
 			map.put("distance", getDistance(Double.parseDouble(merchantPOs.get(0).getShopLatitude()),
 					Double.parseDouble(merchantPOs.get(0).getShopLongitude()), latitude, longitude));
+		}else{
+			map.put("distance",0);
 		}
 		/*
 		 * map.put("beginTime", merchantPOs.get(0).getBeginTimeDate().split(" "
