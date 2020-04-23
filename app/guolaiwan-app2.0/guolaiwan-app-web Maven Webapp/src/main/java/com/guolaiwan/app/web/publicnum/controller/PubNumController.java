@@ -141,6 +141,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 public class PubNumController extends WebBaseControll {
 
 	private boolean istest = WXContants.istest;
+	private int serverNo=2;
 	@Autowired
 	private SystemCacheDao conn_systemcache;
 	@Autowired
@@ -171,7 +172,8 @@ public class PubNumController extends WebBaseControll {
 				conn_systemcache.save(cachePo);
 			}
 
-			String redirect = "http://" + WXContants.Website + "/guolaiwan/pubnum/index2";
+			String redirect = "http://" + WXContants.Website + "/guolaiwan/pubnum/index"+serverNo;
+			
 			redirect = URLEncoder.encode(redirect);
 			StringBufferWrapper weixinLogin = new StringBufferWrapper()
 					.append("https://open.weixin.qq.com/connect/oauth2/authorize?appid=").append(WxConfig.appId)
@@ -308,6 +310,124 @@ public class PubNumController extends WebBaseControll {
 		
 		return mv;
 	}
+	
+	//扩展服务器
+	@RequestMapping(value = "/index3", method = RequestMethod.GET)
+	public ModelAndView index3(String code, String state, HttpServletRequest request) throws Exception {
+		List<SystenCachePo> cachePos = conn_systemcache.findByField("wxKey", state);
+		String rUrl = "";
+		if (!cachePos.isEmpty()) {
+			rUrl = cachePos.get(0).getWxVal();
+		}
+		conn_systemcache.delete(cachePos.get(0));
+		ModelAndView mv = null;
+		String openid = "";
+		String nickname = "";
+		String headimgurl = "";
+		JSONObject userInfo = null;
+		boolean isfans =false;
+		HttpSession session = request.getSession();
+		// 获取授权access_token
+		if (!istest) {
+			JSONObject params = new JSONObject();
+			params.put("appid", WxConfig.appId);
+			params.put("secret", WxConfig.appsrcret);
+			params.put("code", code);
+			params.put("grant_type", "authorization_code");
+			String result = HttpClient.get("https://api.weixin.qq.com/sns/oauth2/access_token", params);
+			JSONObject accessTokenInfo = JSON.parseObject(result);
+			String access_token = accessTokenInfo.getString("access_token");
+			openid = accessTokenInfo.getString("openid");
+			//判断用户是否关注
+            if(openid==null){
+            	openid=session.getAttribute("openid").toString();
+            }
+			String uu = "https://api.weixin.qq.com/cgi-bin/token?appid=" + WxConfig.appId + "&secret=" + WxConfig.appsrcret  + "&grant_type=client_credential";
+            String dd = HttpClient.get(uu);
+            JSONObject jj = JSON.parseObject(dd);
+            String token = String.valueOf(jj.get("access_token"));
+			System.out.println("token:"+token);
+            String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+token+"&openid="+openid+"&lang=zh_CN";
+            params = new JSONObject();
+            result = HttpClient.get(url, params);
+			userInfo = JSON.parseObject(result);
+            System.out.println(result);
+            
+            //关闭强制关注
+            isfans=true;
+            //关闭强制关注
+            
+            
+            if(userInfo.getInteger("subscribe").equals(1)){ //已关注
+            	isfans=true;
+            	
+            }
+            if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
+            	session.setAttribute("type", "PHONENUM");
+            }else{
+            	session.setAttribute("type", null);
+            	
+            }
+            
+            params = new JSONObject();
+			params.put("access_token", access_token);
+			params.put("openid", openid);
+			params.put("lang", "zh_CN");
+			result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
+			userInfo = JSON.parseObject(result);
+            
+			try {
+				nickname = EmojiFilter.emoji(userInfo.getString("nickname"));
+			} catch (Exception e) {
+				// TODO: handle exception
+				nickname = "无法获取用户名";
+			}
+            
+			headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
+		} else {
+			session.setAttribute("type", "PHONENUM");
+			openid = "opVUYv7wr-zPKl92ilFpqB8yS82I";
+		}
+
+		UserInfoPO userInfoPO = null;
+		List<UserInfoPO> users = conn_user.getUsersByOpenId(openid);
+		if (users != null) {
+			for (UserInfoPO userInfoPO2 : users) {
+				MerchantPO merchantPO = conn_merchant.getMerByUser(userInfoPO2);
+				if (merchantPO == null) {
+					userInfoPO = userInfoPO2;
+				}
+			}
+		}
+		if (userInfoPO == null) {
+			userInfoPO = new UserInfoPO();
+			userInfoPO.setUpdateTime(new Date());
+			userInfoPO.setUserOpenID(openid);
+			// 测试
+			if (!istest) {
+				userInfoPO.setUserHeadimg(headimgurl);
+				userInfoPO.setUserNickname(nickname);
+			}
+			conn_user.save(userInfoPO);
+		}else{
+			if (!istest) {
+				userInfoPO.setUserHeadimg(headimgurl);
+				userInfoPO.setUserNickname(nickname);
+				conn_user.saveOrUpdate(userInfoPO);
+			}
+		}
+
+		session.setAttribute("userId", userInfoPO.getId());
+		session.setAttribute("openid", openid);
+		if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
+			mv = new ModelAndView("redirect:" + rUrl);
+		}else{
+			mv = new ModelAndView("mobile/business/focuson");
+		}
+		
+		return mv;
+	}
+	
 
 	@RequestMapping(value = "/index")
 	public ModelAndView pubHome(HttpServletRequest request, String comCode) throws Exception {

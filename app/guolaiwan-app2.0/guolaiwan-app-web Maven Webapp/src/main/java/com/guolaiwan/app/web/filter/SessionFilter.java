@@ -22,6 +22,7 @@ import com.guolaiwan.bussiness.operation.dao.WebsiteRecordDAO;
 import com.guolaiwan.bussiness.operation.po.WebsiteRecord;
 
 import pub.caterpillar.commons.context.SpringContext;
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.weixin.constants.WXContants;
 
 public class SessionFilter implements Filter {
@@ -51,6 +52,10 @@ public class SessionFilter implements Filter {
 		HttpServletRequest hrequest = (HttpServletRequest) request;
 		HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) response);
 		
+		System.out.println("******************"+hrequest.getRemoteAddr());
+		System.out.println("******************"+hrequest.getSession().getId());
+		System.out.println(DateUtil.format(new Date())+"*****************"+hrequest.getRequestURI());
+		
 		String userAgent = "";
 		if (hrequest.getHeader("user-agent") != null) {
 			userAgent = hrequest.getHeader("user-agent").toLowerCase();
@@ -72,12 +77,13 @@ public class SessionFilter implements Filter {
 
 		if (condition) {
 			if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")
-					|| hrequest.getRequestURI().contains("layui/UEditor")) {
+					|| hrequest.getRequestURI().contains("index3")|| hrequest.getRequestURI().contains("layui/UEditor")) {
 				chain.doFilter(request, response);
 			} else {
 				// 测试
 				
 				if (!istest) {
+					
 					wrapper.sendRedirect(
 							"http://"+WXContants.Website+"/pubnum/index1?rUrl=" + hrequest.getRequestURL().toString()+"?"+hrequest.getQueryString());
 				} else {

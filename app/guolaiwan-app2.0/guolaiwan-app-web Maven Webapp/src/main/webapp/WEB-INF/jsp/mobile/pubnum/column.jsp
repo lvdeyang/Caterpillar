@@ -595,9 +595,10 @@ html, body {
 		
 		$(document).on('click','.topmod',function(){
 	       var codes=this.id.split('-');
+	       var tempModCode='${modularCode}';
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
-	       }else if('${modularCode}' == "0001"){	      
+	       }else if(tempModCode.indexOf("0001")!=-1){	      
 	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=0001';
 	       }else if('${modularCode}' == 0003){//美食模块 
 	        location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[1];	     
@@ -717,11 +718,12 @@ html, body {
 		
 		$(document).on('click','.merchant',function(){
 	       var codes=this.id.split('-');
+	       var tempMod='${modularCode}';
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
 	       //景点模块
-	       if('${modularCode}' == "0001"){	      
+	       if(tempMod.indexOf("0001")!=-1){	      
 	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=${modularCode}';
 	          }
 	      /*  //住宿模块
@@ -749,11 +751,12 @@ html, body {
 	    
 	    $(document).on('click','.merchant1',function(){
 	       var codes=this.id.split('-');
+	       var tempMod='${modularCode}';
 	       if(codes[1]==387){
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
 	          //景点模块
-	       if('${modularCode}' == "0001"){	      
+	       if(tempMod.indexOf("0001")!=-1){	      
 	         //location.href=window.BASEPATH + 'product/package/purchase/jump?merchantId='+codes[1];
 	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=0001';
 	       }

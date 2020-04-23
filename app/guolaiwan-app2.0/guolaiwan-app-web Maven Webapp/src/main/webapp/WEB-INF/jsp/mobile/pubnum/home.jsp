@@ -948,7 +948,7 @@ html, body {
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
 	        //景点模块	       
-	       if(codes[2] == '0001'){	      
+	       if(codes[2].indexOf('0001')!=-1){	      
 	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=${modularCode}';
 	          }
 	      /*  //住宿模块
@@ -981,7 +981,7 @@ html, body {
 	          location.href='http://www.yueba.net.cn/chenxisoft/home/mobile/index';
 	       }else{
 	        //景点模块	       
-	       if(codes[2] == '0001'){	      
+	       if(codes[2].indexOf('0001')!=-1){	      
 	         location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+codes[1]+'&comCode=0001';
 	          }
 	       /* //住宿模块
