@@ -747,7 +747,10 @@ public class PhoneController extends WebBaseControll {
 		List<MerchantPO> merchants = new ArrayList<MerchantPO>();
 		List<ColumnPO> columnPOs = conn_column.getsortindex(modularCode);
 		for (ColumnPO columnPO : columnPOs) {
-			merchants.add(conn_merchant.get(columnPO.getMerchantId()));
+			MerchantPO merchantPO=conn_merchant.get(columnPO.getMerchantId());
+			if(merchantPO!=null){
+				merchants.add(merchantPO);
+			}
 		}
 		List<MerchantVO> _merchants = MerchantVO.getConverter(MerchantVO.class).convert(merchants, MerchantVO.class);
 		for (MerchantVO merchantVO : _merchants) {
