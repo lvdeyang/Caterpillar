@@ -468,8 +468,16 @@ $(function() {
       location.href=window.BASEPATH + 'smart/merchant/parking?merchantId=${merchantId}';   
    }
    $(document).on('click',' #guide',function(){
-	  window.location.href="guide/visitors/app?userId="+${userId}; 
+       var _uri = window.BASEPATH + 'guide/setNeeded?merchantId=${merchantId}';
+	   $.get(_uri, null, function(data){
+	        window.location.href="guide/visitors/app?userId="+${userId}; 
+	   });
    });
+   
+   
+   
+   
+   
    $(document).on('click',' #pname',function(){ //导航
 	  window.location.href="guide/visitors/app?userId="+${userId}; 
    });

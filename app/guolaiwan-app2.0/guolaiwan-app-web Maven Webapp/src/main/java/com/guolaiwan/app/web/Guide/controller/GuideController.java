@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,8 @@ import com.guolaiwan.bussiness.admin.po.ChildProductPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+
+import pub.caterpillar.commons.util.date.DateUtil;
 
 @Controller
 @RequestMapping("/guide")
@@ -137,11 +140,14 @@ public class GuideController extends WebBaseControll  {
 		AppMessagePO  Message =  App_message.getMessage();
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (Message != null) {
-			map.put("userId", Message.getUserId()); //用户id
-			map.put("merchantId", Message.getMerchantId());//景区id
-			map.put("merchantName", Message.getMerchantName());//景区id
-			map.put("Latitude", Message.getLocationLatitude()); //经度
-			map.put("Longitude", Message.getLocationLongitude());//纬度
+			long dis=new Date().getTime()- Message.getUpdateTime().getTime();
+			if(dis/1000<300){
+				map.put("userId", Message.getUserId()); //用户id
+				map.put("merchantId", Message.getMerchantId());//景区id
+				map.put("merchantName", Message.getMerchantName());//景区id
+				map.put("Latitude", Message.getLocationLatitude()); //经度
+				map.put("Longitude", Message.getLocationLongitude());//纬度
+			}
 		}
 		return success(map);
 	}
