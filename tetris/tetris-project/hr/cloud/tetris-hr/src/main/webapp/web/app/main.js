@@ -11,7 +11,7 @@ require.config({
         'element-ui':window.LIBPATH + 'ui/element-ui/element-ui-2.4.3.min',
 
         'TweenLite':window.LIBPATH + 'TweenMax/cmd/TweenLite',
-
+        'echarts':window.LIBPATH + 'echarts/echarts.min',
         /* commons */
         'context':window.COMMONSPATH + 'context/context',
         'page-wrapper':window.COMMONSPATH + 'page/page-wrapper',
@@ -50,7 +50,10 @@ require.config({
         'page-hr-sche':window.APPPATH + 'sche/page-hr-sche',
         'page-hr-set':window.APPPATH + 'set/page-hr-set',
         'page-hr-device':window.APPPATH + 'device/page-hr-device',
-        'page-hr-attend':window.APPPATH + 'set/page-hr-attend'
+        'page-hr-attend':window.APPPATH + 'set/page-hr-attend',
+        'page-bvc-monitor':window.APPPATH + 'monitor/page-bvc-monitor',
+        'page-bvc-detail':window.APPPATH + 'monitor/page-bvc-detail',
+        'page-bvc-report':window.APPPATH + 'monitor/page-bvc-report'
     },
     shim:{
         'vue':{
