@@ -141,7 +141,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 public class PubNumController extends WebBaseControll {
 
 	private boolean istest = WXContants.istest;
-	private int serverNo=2;
+	private int serverNo=3;
 	@Autowired
 	private SystemCacheDao conn_systemcache;
 	@Autowired
