@@ -320,6 +320,7 @@ html, body {
 <link href="<%=request.getContextPath()%>/layui/UEditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 	<script>
 	(function(){
+	
 	var calendarDate = {};
 	var riliHtml = '';
 	calendarDate.today = new Date();
@@ -546,6 +547,10 @@ html, body {
 })(jQuery)
 	</script>
 <script>	 
+$(function() {
+//隐藏头部电话
+$("#phone").hide();
+});
   		var limt=0;
 		var ifFace=0;
      	var resNum=${resNum};

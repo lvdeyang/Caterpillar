@@ -179,6 +179,8 @@ html, body {
     var proName='';
     var proPic='';
     $(function(){
+    //隐藏头部电话
+$("#phone").hide();
 	  getallteam(); 
 	  getComment();
 	  //var vConsole = new VConsole();

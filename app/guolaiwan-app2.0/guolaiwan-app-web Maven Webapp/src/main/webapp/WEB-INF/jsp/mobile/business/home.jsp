@@ -188,6 +188,9 @@ html, body {
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script type="text/javascript">
 $(function() {
+//隐藏头部电话
+$("#phone").hide();
+
 	  //禁止软键盘弹出
 	   $(".inp").focus(function(){
         document.activeElement.blur();
@@ -345,8 +348,7 @@ $(function() {
 	   }
 	   //住宿
 	   if(ModularCode == "0002"){
-	   //location.href=window.BASEPATH +'business/buyproduct?productId='+id;
-	   location.href=window.BASEPATH + 'business/gotolect?merchantId=${merchantId}';
+	   location.href=window.BASEPATH +'business/buyproduct?productId='+id;
 	   }
 	   //采摘
 	   if(ModularCode == "2126"){
@@ -468,16 +470,8 @@ $(function() {
       location.href=window.BASEPATH + 'smart/merchant/parking?merchantId=${merchantId}';   
    }
    $(document).on('click',' #guide',function(){
-       var _uri = window.BASEPATH + 'guide/setNeeded?merchantId=${merchantId}';
-	   $.get(_uri, null, function(data){
-	        window.location.href="guide/visitors/app?userId="+${userId}; 
-	   });
+	  window.location.href="guide/visitors/app?userId="+${userId}; 
    });
-   
-   
-   
-   
-   
    $(document).on('click',' #pname',function(){ //导航
 	  window.location.href="guide/visitors/app?userId="+${userId}; 
    });
