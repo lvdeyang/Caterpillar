@@ -404,6 +404,7 @@ public class BusinessController extends WebBaseControll {
 				}
 			}
 		}
+		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 		for (int i = 0; i < arr.length; i++) {
 			Map<String, Object> hashMap = new HashMap<String, Object>();
 			hashMap.put("ProductName", productlist.get(arr[i]).getProductName());
@@ -415,6 +416,7 @@ public class BusinessController extends WebBaseControll {
 			hashMap.put("url", productlist.get(arr[i]).getProductShowPic());
 			hashMap.put("id", productlist.get(arr[i]).getId());
 			hashMap.put("pingfen", orderInfoDao.GetCountbyPage(id)/100);
+			hashMap.put("weburl",sysConfigPO.getWebUrl());
 			// 根据id统计多少人来个
 			List<OrderInfoPO> newgetAllOrder = orderInfoDao.newgetAllOrder(productlist.get(arr[i]).getId());
 

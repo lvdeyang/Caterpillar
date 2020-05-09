@@ -456,12 +456,12 @@ html, body {
 		           html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
 		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
 		         if(pro_pro[1] == "act"){
-		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,1)"/> ');
+		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="${weburl}'+list[i].productShowPic+'" onclick="commodity(this.id,1)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,1)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
 		           }else{
-		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
+		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="${weburl}'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span>');
@@ -517,12 +517,12 @@ html, body {
 		           html.push('<div class="youxuan"  style="width:48%;border-radius:6px;height:auto;float:left;margin:10px 1%;background:#fff;position: relative;overflow: hidden;">');
 		           html.push('<div class="goupiao" style="position: relative;width:100%;height:180px;border:none;border-left:none;border-right:none;margin:0 auto;">');
 		         if(pro_pro[1] == "act"){
-		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,1)"/> ');
+		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="${weburl}'+list[i].productShowPic+'" onclick="commodity(this.id,1)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,1)" style="font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>'); 
 		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span><span style="color:#fff;background:#EC6D1E;float:right;margin-right:15px;border-radius:16px;padding:0 5px;">活动</span></p>');
 		           }else{
-		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="http://www.guolaiwan.net/file/'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
+		           html.push('<img id="mg-'+list[i].id+'" style="height:150px;width:100%;border-radius:6px;vertical-align: middle;display: inline-block;" src="${weburl}'+list[i].productShowPic+'" onclick="commodity(this.id,0)"/> ');
 		           html.push('<div class="youxuan-in">');		           	           
 		           html.push('<p  id="p-'+list[i].id+'" onclick="commodity(this.id,0)" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:85%;font-size:16px;margin:10px 0 0 3%;font-weight:bold;">'+pro_pro[0]+'</p>');
 		           html.push('<p style="font-size:12px;margin:10px 0 0 3%;"><span>距您'+distance+'km</span>'); 
