@@ -406,7 +406,7 @@ $("#phone").hide();
 				   var pingfen=(data[i].pingfen+46)/10;
 				   if(pingfen>5)pingfen=5;
 			       html.push("<div style='position: relative;overflow:hidden;width:90%;height:180px;line-height:180px;border:none;border-bottom:1px solid #C0C0C0;border-left:none;border-right:none;margin:0 auto;'>");
-			       html.push("<img style='height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;' src='http://www.guolaiwan.net/file"+data[i].url+"'/>");
+			       html.push("<img style='height:130px;width:45%;border-radius:6px;vertical-align: middle;display: inline-block;' src='"+data[i].weburl+data[i].url+"'/>");
 			       html.push("<div class='youxuan-in' style='display: inline-block;'>");
 			       html.push("<p style='position: absolute;top:-40px;font-size:14px;max-width:45%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>"+data[i].ProductName+"</p>");
 			       html.push("<p style='position: absolute;top:0px;font-size:12px;color:#C0C0C0;'><span style='color:#EC6D1E;'>"+pingfen+"分</span>   <span>"+data[i].number+"人来过</span></p>");

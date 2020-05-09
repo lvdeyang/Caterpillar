@@ -137,6 +137,8 @@ public class ProductPackageController extends BaseController {
 		String merchanId = request.getParameter("merchantId");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("productMerchantID", merchanId);
+		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
+		map.put("weburl", sysConfigPO.getWebUrl());
 		return new ModelAndView("mobile/business/purchase", map);
 	}
 
@@ -825,6 +827,15 @@ public class ProductPackageController extends BaseController {
 				mesMidClien.setUserId(Long.parseLong(userId));
 				mesMidClien.setProId(Long.parseLong(proId));
 				conn_mesMidleClien.save(mesMidClien);
+				if(i==0){
+					MessagePO messagePO=conn_message.get(mesMidClien.getMessageId());
+					if(messagePO!=null){
+						OrderInfoPO orderInfoPO=conn_orif.get(Long.parseLong(oderId));
+						orderInfoPO.setUserTel(messagePO.getPhone());
+						orderInfoPO.setUserName(messagePO.getName());
+						conn_orif.update(orderInfoPO);
+					}
+				}
 			}
 
 		}
