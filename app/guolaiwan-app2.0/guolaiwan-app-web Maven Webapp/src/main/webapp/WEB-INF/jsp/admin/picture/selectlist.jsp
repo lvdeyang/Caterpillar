@@ -141,9 +141,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
  		function sel(folde,url)
  		{
- 		  parent.$("#${sel}").val("/"+folde+"/"+url);
- 		  parent.$("input[name='${sel}']").val("/"+folde+"/"+url);
- 		  parent.$("#${imgurl}").attr("src",webpath+"/"+folde+"/"+url);
+ 		  if(parent.$){
+	 		  parent.$("#${sel}").val("/"+folde+"/"+url);
+	 		  parent.$("input[name='${sel}']").val("/"+folde+"/"+url);
+	 		  parent.$("#${imgurl}").attr("src",webpath+"/"+folde+"/"+url);
+ 		  }else{
+ 		      $(parent.document.getElementById("${sel}")).val("/"+folde+"/"+url);
+ 		      $(parent.document.getElementById("${imgurl}")).attr("src",webpath+"/"+folde+"/"+url);
+ 		  }
+ 		  
  		  console.log("${sel}");
  		  parent.layer.close(index);
  		}
