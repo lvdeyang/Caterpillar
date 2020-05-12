@@ -2,6 +2,7 @@ package com.guolaiwan.app.gonghui.app.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,13 +24,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.CompanyVO;
 import com.guolaiwan.app.web.admin.vo.PictureVO;
+import com.guolaiwan.app.web.publicnum.util.EmojiFilter;
+import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
+import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.po.ClassPO;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.PicturePO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.gonghui.dao.ArticleDao;
 import com.guolaiwan.bussiness.gonghui.dao.ClassesDao;
 import com.guolaiwan.bussiness.gonghui.dao.OnlineClassesDao;
@@ -40,6 +48,7 @@ import com.guolaiwan.bussiness.gonghui.po.OnlineClassesPo;
 import com.guolaiwan.bussiness.gonghui.po.RecordPo;
 
 import pub.caterpillar.commons.file.oss.OSSUtils;
+import pub.caterpillar.communication.http.client.HttpClient;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
@@ -47,7 +56,60 @@ import pub.caterpillar.mvc.controller.BaseController;
 public class AppArticleContoller extends BaseController {
 	@Autowired ArticleDao conn_article;
 	@Autowired ClassesDao conn_classes;
-
+	@Autowired UserInfoDAO conn_user;
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		String openid="";
+		JSONObject userInfo = null;
+		String nickname="";
+		String headimgurl="";
+		
+		String code=request.getParameter("code");
+		JSONObject params = new JSONObject();
+		params.put("appid", WxConfig.appId);
+		params.put("secret", WxConfig.appsrcret);
+		params.put("code", code);
+		params.put("grant_type", "authorization_code");
+		String result = HttpClient.get("https://api.weixin.qq.com/sns/oauth2/access_token", params);
+		JSONObject accessTokenInfo = JSON.parseObject(result);
+		String access_token = accessTokenInfo.getString("access_token");
+		openid = accessTokenInfo.getString("openid");
+        params = new JSONObject();
+		params.put("access_token", access_token);
+		params.put("openid", openid);
+		params.put("lang", "zh_CN");
+		result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
+		userInfo = JSON.parseObject(result);
+        
+		try {
+			nickname = EmojiFilter.emoji(userInfo.getString("nickname"));
+		} catch (Exception e) {
+			// TODO: handle exception
+			nickname = "无法获取用户名";
+		}
+		headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
+	
+		UserInfoPO userInfoPO = null;
+		List<UserInfoPO> users = conn_user.getUsersByOpenId(openid);
+		
+		if (users == null||users.isEmpty()) {
+			userInfoPO = new UserInfoPO();
+			userInfoPO.setUpdateTime(new Date());
+			userInfoPO.setUserOpenID(openid);
+			conn_user.save(userInfoPO);
+		}else{
+			userInfoPO.setUserHeadimg(headimgurl);
+			userInfoPO.setUserNickname(nickname);
+			conn_user.saveOrUpdate(userInfoPO);
+		}
+		return success(userInfo);
+	}
+	
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/getTopClasses", method = RequestMethod.GET)

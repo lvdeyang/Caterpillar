@@ -805,7 +805,8 @@ html, body {
 			    $.get(_uri, null, function(data){
 			          /* /*  window.location.href=  window.BASEPATH +"guide/visitors/app"; * */
 			   });
-			   window.location.href=  window.BASEPATH +"guide/visitors/app"
+			   //window.location.href=  window.BASEPATH +"guide/visitors/app"
+			   window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=app.guolaiwan.com.guolaiwan";
         });
         
         /*显示隐藏切换  */
