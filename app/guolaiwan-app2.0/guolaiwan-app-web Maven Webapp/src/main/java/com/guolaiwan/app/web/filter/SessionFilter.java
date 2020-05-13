@@ -52,9 +52,9 @@ public class SessionFilter implements Filter {
 		HttpServletRequest hrequest = (HttpServletRequest) request;
 		HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) response);
 		
-		System.out.println("******************"+hrequest.getRemoteAddr());
-		System.out.println("******************"+hrequest.getSession().getId());
-		System.out.println(DateUtil.format(new Date())+"*****************"+hrequest.getRequestURI());
+		//System.out.println("******************"+hrequest.getRemoteAddr());
+		//System.out.println("******************"+hrequest.getSession().getId());
+		//System.out.println(DateUtil.format(new Date())+"*****************"+hrequest.getRequestURI());
 		
 		String userAgent = "";
 		if (hrequest.getHeader("user-agent") != null) {
@@ -77,7 +77,9 @@ public class SessionFilter implements Filter {
 
 		if (condition) {
 			if (hrequest.getRequestURI().contains("index1") || hrequest.getRequestURI().contains("index2")
-					|| hrequest.getRequestURI().contains("index3")|| hrequest.getRequestURI().contains("layui/UEditor")) {
+					|| hrequest.getRequestURI().contains("index3")|| hrequest.getRequestURI().contains("layui/UEditor")
+					|| hrequest.getRequestURI().contains("recordapp")) {
+				
 				chain.doFilter(request, response);
 			} else {
 				// 测试

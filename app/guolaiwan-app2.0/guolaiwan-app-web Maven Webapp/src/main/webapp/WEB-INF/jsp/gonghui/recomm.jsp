@@ -77,7 +77,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               
 			  table.render({
 			    elem: '#dataTable'
-			    ,url:'/chenxisoft/recomm/list'
+			    ,url:'recomm/list'
 			    ,title: '推荐列表'
 			    ,cols: [[
 			      {type: 'checkbox', fixed: 'left'}

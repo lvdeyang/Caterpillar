@@ -41,10 +41,12 @@ import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.gonghui.dao.ArticleDao;
 import com.guolaiwan.bussiness.gonghui.dao.ClassesDao;
 import com.guolaiwan.bussiness.gonghui.dao.OnlineClassesDao;
+import com.guolaiwan.bussiness.gonghui.dao.RecommDao;
 import com.guolaiwan.bussiness.gonghui.dao.RecordDao;
 import com.guolaiwan.bussiness.gonghui.po.ArticlePo;
 import com.guolaiwan.bussiness.gonghui.po.ClassesPo;
 import com.guolaiwan.bussiness.gonghui.po.OnlineClassesPo;
+import com.guolaiwan.bussiness.gonghui.po.RecommPo;
 import com.guolaiwan.bussiness.gonghui.po.RecordPo;
 
 import pub.caterpillar.commons.file.oss.OSSUtils;
@@ -122,10 +124,20 @@ public class AppArticleContoller extends BaseController {
 		return success(classesPos);
 	}
 	
+	@Autowired
+	RecommDao conn_recomm;
+	
 	@ResponseBody
 	@RequestMapping(value = "/getTopArticles", method = RequestMethod.GET)
 	public Map<String, Object> getTopArticles(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<ArticlePo> articlePos=conn_article.findAll(1, 15);
+		List<ArticlePo> articlePos=new ArrayList<ArticlePo>();
+		List<RecommPo> recommPos=conn_recomm.findAll();
+		for (RecommPo recommPo : recommPos) {
+			ArticlePo articlePo=conn_article.get(recommPo.getContentId());
+			if(articlePo!=null){
+				articlePos.add(articlePo);
+			}
+		}
 		return success(articlePos);
 	}
 

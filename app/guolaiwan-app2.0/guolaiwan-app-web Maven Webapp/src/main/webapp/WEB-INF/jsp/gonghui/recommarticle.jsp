@@ -97,7 +97,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               
 			  table.render({
 			    elem: '#dataTable'
-			    ,url:'/chenxisoft/article/list'
+			    ,url:'article/list'
 			    ,title: '文章列表'
 			    ,cols: [[
 			      {type: 'checkbox', fixed: 'left'}
