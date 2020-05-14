@@ -25,7 +25,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <input class="layui-input" name="id" id="searchtxt" autocomplete="off">
 	  </div>
 	  <button class="layui-btn" id="search" data-type="reload">搜索</button>
-	  <button class="layui-btn" id="addRecomm" lay-event="addRecomm">添加推荐</button>
+	  <button class="layui-btn" id="addRecomm" lay-event="addRecomm">添加文章推荐</button>
+	  <button class="layui-btn" id="addClassRecomm" lay-event="addClassRecomm">添加分类推荐</button>
 	</div>
 	<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
     
@@ -39,6 +40,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           
           $('#addRecomm').on('click',function(){
              addRecomm('recomm/article/index');
+          });
+          $('#addClassRecomm').on('click',function(){
+             addRecomm('recomm/class/index');
           });
 		   
 		   
@@ -83,7 +87,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			      {type: 'checkbox', fixed: 'left'}
 			      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
 			      ,{field:'contentName', title:'内容名称', width:500, edit: 'text'}
-			      ,{field:'moudular', title:'所属板块', width:200, edit: 'text'}
+			      ,{field:'type', title:'推荐类型', width:200, edit: 'text'}
 			      ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}
 			    ]]
 			    ,page: true

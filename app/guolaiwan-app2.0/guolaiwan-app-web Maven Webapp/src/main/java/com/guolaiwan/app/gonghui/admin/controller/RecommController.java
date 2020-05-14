@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.bussiness.gonghui.dao.ArticleDao;
+import com.guolaiwan.bussiness.gonghui.dao.ClassesDao;
 import com.guolaiwan.bussiness.gonghui.dao.RecommDao;
+import com.guolaiwan.bussiness.gonghui.enumeration.RecomType;
 import com.guolaiwan.bussiness.gonghui.po.ArticlePo;
+import com.guolaiwan.bussiness.gonghui.po.ClassesPo;
 import com.guolaiwan.bussiness.gonghui.po.RecommPo;
 
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
@@ -40,12 +43,19 @@ public class RecommController {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/class/index", method = RequestMethod.GET)
+	public ModelAndView classindex(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		ModelAndView mv = new ModelAndView("gonghui/recommclasses", strMap);
+		return mv;
+	}
+	
 	@Autowired
 	RecommDao conn_recomm;
 	
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public Object getActivityProducts(HttpServletRequest request, HttpServletResponse response, int page, int limit)
+	public Object getRecomms(HttpServletRequest request, HttpServletResponse response, int page, int limit)
 			throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		strMap.put("count", conn_recomm.countAll());
@@ -70,6 +80,7 @@ public class RecommController {
 				RecommPo recommPo=new RecommPo();
 				recommPo.setContentId(articlePo.getId());
 				recommPo.setContentName(articlePo.getTitle());
+				recommPo.setType(RecomType.ARTICLE);
 				conn_recomm.save(recommPo);
 			}
 		}
@@ -78,6 +89,57 @@ public class RecommController {
 	
 		return "success";
 	}
+	
+	@Autowired
+	ClassesDao conn_classes;
+	
+	@ResponseBody
+	@RequestMapping(value="/addClass.do", method= RequestMethod.POST)
+	public String addClass(HttpServletRequest request) throws Exception {
+		if(request.getParameter("ids")!=null){
+			String ids=request.getParameter("ids");
+			
+			String[] idlist=ids.split(",");
+			for (String idStr : idlist) {
+				long resId=Long.parseLong(idStr);
+				ClassesPo classesPo=conn_classes.get(resId);
+				RecommPo recommPo=new RecommPo();
+				recommPo.setContentId(classesPo.getId());
+				recommPo.setContentName(classesPo.getName());
+				recommPo.setType(RecomType.COLUMN);
+				conn_recomm.save(recommPo);
+			}
+		}
+		
+		
+	
+		return "success";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/addTopClass.do", method= RequestMethod.POST)
+	public String addTopClass(HttpServletRequest request) throws Exception {
+		if(request.getParameter("ids")!=null){
+			String ids=request.getParameter("ids");
+			
+			String[] idlist=ids.split(",");
+			for (String idStr : idlist) {
+				long resId=Long.parseLong(idStr);
+				ClassesPo classesPo=conn_classes.get(resId);
+				RecommPo recommPo=new RecommPo();
+				recommPo.setContentId(classesPo.getId());
+				recommPo.setContentName(classesPo.getName());
+				recommPo.setType(RecomType.HOME);
+				conn_recomm.save(recommPo);
+			}
+		}
+		
+		
+	
+		return "success";
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value="/del.do", method= RequestMethod.POST)

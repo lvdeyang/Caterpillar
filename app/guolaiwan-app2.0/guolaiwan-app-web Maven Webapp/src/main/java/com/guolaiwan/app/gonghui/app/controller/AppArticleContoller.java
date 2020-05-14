@@ -43,6 +43,7 @@ import com.guolaiwan.bussiness.gonghui.dao.ClassesDao;
 import com.guolaiwan.bussiness.gonghui.dao.OnlineClassesDao;
 import com.guolaiwan.bussiness.gonghui.dao.RecommDao;
 import com.guolaiwan.bussiness.gonghui.dao.RecordDao;
+import com.guolaiwan.bussiness.gonghui.enumeration.RecomType;
 import com.guolaiwan.bussiness.gonghui.po.ArticlePo;
 import com.guolaiwan.bussiness.gonghui.po.ClassesPo;
 import com.guolaiwan.bussiness.gonghui.po.OnlineClassesPo;
@@ -65,62 +66,62 @@ public class AppArticleContoller extends BaseController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		String openid="";
-		JSONObject userInfo = null;
-		String nickname="";
-		String headimgurl="";
-		
-		String code=request.getParameter("code");
-		JSONObject params = new JSONObject();
-		params.put("appid", WxConfig.appId);
-		params.put("secret", WxConfig.appsrcret);
-		params.put("code", code);
-		params.put("grant_type", "authorization_code");
-		String result = HttpClient.get("https://api.weixin.qq.com/sns/oauth2/access_token", params);
-		JSONObject accessTokenInfo = JSON.parseObject(result);
-		String access_token = accessTokenInfo.getString("access_token");
-		openid = accessTokenInfo.getString("openid");
-        params = new JSONObject();
-		params.put("access_token", access_token);
-		params.put("openid", openid);
-		params.put("lang", "zh_CN");
-		result = HttpClient.get("https://api.weixin.qq.com/sns/userinfo", params);
-		userInfo = JSON.parseObject(result);
-        
-		try {
-			nickname = EmojiFilter.emoji(userInfo.getString("nickname"));
-		} catch (Exception e) {
-			// TODO: handle exception
-			nickname = "无法获取用户名";
-		}
-		headimgurl = URLDecoder.decode(userInfo.getString("headimgurl"));
-	
-		UserInfoPO userInfoPO = null;
-		List<UserInfoPO> users = conn_user.getUsersByOpenId(openid);
+
+		String openId=request.getParameter("openId");
+		String nickname=request.getParameter("nickname");
+		String headimgurl=request.getParameter("headimgurl");
+		UserInfoPO userInfoPO=null;
+		List<UserInfoPO> users = conn_user.getUsersByOpenId(openId);
 		
 		if (users == null||users.isEmpty()) {
 			userInfoPO = new UserInfoPO();
 			userInfoPO.setUpdateTime(new Date());
-			userInfoPO.setUserOpenID(openid);
+			userInfoPO.setUserOpenID(openId);
+			userInfoPO.setUserHeadimg(headimgurl);
+			userInfoPO.setUserNickname(nickname);
 			conn_user.save(userInfoPO);
 		}else{
+			userInfoPO=users.get(0);
 			userInfoPO.setUserHeadimg(headimgurl);
 			userInfoPO.setUserNickname(nickname);
 			conn_user.saveOrUpdate(userInfoPO);
 		}
-		return success(userInfo);
+		return success(userInfoPO);
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getHotClasses", method = RequestMethod.GET)
+	public Map<String, Object> getHotClasses(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<ClassesPo> classesPos=new ArrayList<ClassesPo>();
+		List<RecommPo> recommPos=conn_recomm.findByField("type", RecomType.HOME);
+		
+		SysConfigPO sysConfigPO=conn_sysConfig.getSysConfig();
+		for (RecommPo recommPo : recommPos) {
+			ClassesPo classesPo=conn_classes.get(recommPo.getContentId());
+			classesPo.setPic(sysConfigPO.getWebUrl()+classesPo.getPic());
+			classesPos.add(classesPo);
+		}
+			
+		
+		return success(classesPos);
+	}
 	
 	
 	@ResponseBody
 	@RequestMapping(value = "/getTopClasses", method = RequestMethod.GET)
 	public Map<String, Object> getTopClasses(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<ClassesPo> classesPos=conn_classes.findAll(1, 6);
+		List<ClassesPo> classesPos=new ArrayList<ClassesPo>();
+		List<RecommPo> recommPos=conn_recomm.findByField("type", RecomType.COLUMN);
+		
 		SysConfigPO sysConfigPO=conn_sysConfig.getSysConfig();
-		for (ClassesPo classesPo : classesPos) {
+		for (RecommPo recommPo : recommPos) {
+			ClassesPo classesPo=conn_classes.get(recommPo.getContentId());
 			classesPo.setPic(sysConfigPO.getWebUrl()+classesPo.getPic());
+			classesPos.add(classesPo);
 		}
+			
+		
 		return success(classesPos);
 	}
 	
@@ -131,7 +132,7 @@ public class AppArticleContoller extends BaseController {
 	@RequestMapping(value = "/getTopArticles", method = RequestMethod.GET)
 	public Map<String, Object> getTopArticles(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		List<ArticlePo> articlePos=new ArrayList<ArticlePo>();
-		List<RecommPo> recommPos=conn_recomm.findAll();
+		List<RecommPo> recommPos=conn_recomm.findByField("type", RecomType.ARTICLE);
 		for (RecommPo recommPo : recommPos) {
 			ArticlePo articlePo=conn_article.get(recommPo.getContentId());
 			if(articlePo!=null){

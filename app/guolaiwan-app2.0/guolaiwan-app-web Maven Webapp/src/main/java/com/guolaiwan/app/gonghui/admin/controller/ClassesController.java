@@ -37,6 +37,17 @@ public class ClassesController {
 		return strMap;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/pagelist", method = RequestMethod.GET)
+	public Map<String, Object> pagelist(int page, int limit) throws Exception {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("count", conn_classes.countAll());
+		strMap.put("data", conn_classes.findAll(page, limit));
+		strMap.put("code", 0);
+		strMap.put("msg", "");
+		return strMap;
+	}
+	
 
 	@RequestMapping("/add")
 	public ModelAndView addClasses(){
