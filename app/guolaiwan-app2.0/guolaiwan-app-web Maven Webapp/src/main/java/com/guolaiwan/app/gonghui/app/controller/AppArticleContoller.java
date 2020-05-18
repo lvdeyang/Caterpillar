@@ -28,6 +28,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.CompanyVO;
 import com.guolaiwan.app.web.admin.vo.PictureVO;
+import com.guolaiwan.app.web.admin.vo.UserInfoVO;
 import com.guolaiwan.app.web.publicnum.util.EmojiFilter;
 import com.guolaiwan.app.web.weixin.WxConfig;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
@@ -86,7 +87,9 @@ public class AppArticleContoller extends BaseController {
 			userInfoPO.setUserNickname(nickname);
 			conn_user.saveOrUpdate(userInfoPO);
 		}
-		return success(userInfoPO);
+	    UserInfoVO userinfo=new UserInfoVO();
+	    userinfo.set(userInfoPO);
+		return success(userinfo);
 	}
 	
 	
@@ -208,7 +211,7 @@ public class AppArticleContoller extends BaseController {
 		}
 		//上传
 		File newFile=new File(path+"/"+newName);
-		String config = conn_sysConfig.getSysConfig().getWebUrl()+"/"+folderName+"/"+newName;
+		String httpUrl = conn_sysConfig.getSysConfig().getWebUrl()+"/"+folderName+"/"+newName;
 		file.transferTo(newFile);           //写
 
 		//写数据库
@@ -216,7 +219,7 @@ public class AppArticleContoller extends BaseController {
 		//PicturePO picture = new PicturePO();
         recordPo.setArticleId(Long.parseLong(request.getParameter("articleId").toString()));
         recordPo.setUserId(Long.parseLong(request.getParameter("userId").toString()));
-		recordPo.setRecordUrl(path+"/"+newName);
+		recordPo.setRecordUrl(httpUrl);
 		conn_record.save(recordPo);
 		//上传到阿里云oss
 		OSSUtils.createFolder("glw-old-file", "file/"+folderName+"/");
