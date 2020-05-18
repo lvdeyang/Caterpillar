@@ -1,6 +1,7 @@
 package com.guolaiwan.app.web.website.wxpay.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
+import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.commons.qrcode.QRCodeGenerator;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -151,6 +153,10 @@ public class WxPayController extends BaseController {
 			// }
 			//
 			// conn_basket.saveAll(baskets);
+			File file=new File(path);
+			
+			OSSUtils.createFolder("glw-old-file", "file/wxPayCode/");
+			OSSUtils.uploadObjectOSS("file/wxPayCode/", fileName,file, new FileInputStream(file));
 
 			result.put("imagePath", sysConfig.getWebUrl() + "/wxPayCode/" + fileName);
 

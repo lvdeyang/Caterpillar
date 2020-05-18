@@ -226,14 +226,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    
                 </div>
             </div>
-            <c:if test="${state==1}">
+            <!--<c:if test="${state==1}">
 				<div class="count-all-info">
 					<label style="display:none;" for="check-all"><input id="check-all" type="checkbox" /> 全选</label>
 					<span>合计：￥</span><span id="total-price"></span>
 					<button id="count-all">去结算</button>
 					<form id="count-all-form" action="<%=path %>/user/order/submit/batch" method="POST"></form>
 				</div>
-			</c:if>
+			</c:if>-->
         </div>
     </div>
 </section>
