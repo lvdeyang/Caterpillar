@@ -179,6 +179,9 @@ public class AliPayReportController extends WebBaseControll {
 
 			// 南湖存储二维码
 			OrderInfoPO nhOrder = conn_orderInfo.getByRoderNo(out_trade_no);
+			if(nhOrder==null){
+				nhOrder=conn_orderInfo.get(Long.parseLong(out_trade_no));
+			}
 			System.out.println("南湖存储二维码中...");
 			isNhTicket(nhOrder);
 			// 南湖存储二维码

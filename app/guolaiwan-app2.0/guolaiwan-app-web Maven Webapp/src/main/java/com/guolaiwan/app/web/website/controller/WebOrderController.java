@@ -245,6 +245,8 @@ public class WebOrderController extends WebBaseControll{
 			order.setUserId(user.getId());
 			//会员手机号
 			order.setUserTel(user.getUserPhone());
+			
+			order.setComId(merchant.getComId());
 			//会员信息
 			//会员坐标经度
 			//会员坐标维度
