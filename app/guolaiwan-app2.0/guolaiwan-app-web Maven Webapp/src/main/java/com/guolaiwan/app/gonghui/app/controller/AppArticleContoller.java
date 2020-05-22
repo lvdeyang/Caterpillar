@@ -41,12 +41,15 @@ import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.gonghui.dao.ArticleDao;
 import com.guolaiwan.bussiness.gonghui.dao.ClassesDao;
+import com.guolaiwan.bussiness.gonghui.dao.LikeDao;
 import com.guolaiwan.bussiness.gonghui.dao.OnlineClassesDao;
 import com.guolaiwan.bussiness.gonghui.dao.RecommDao;
 import com.guolaiwan.bussiness.gonghui.dao.RecordDao;
+import com.guolaiwan.bussiness.gonghui.enumeration.LikeType;
 import com.guolaiwan.bussiness.gonghui.enumeration.RecomType;
 import com.guolaiwan.bussiness.gonghui.po.ArticlePo;
 import com.guolaiwan.bussiness.gonghui.po.ClassesPo;
+import com.guolaiwan.bussiness.gonghui.po.LikePo;
 import com.guolaiwan.bussiness.gonghui.po.OnlineClassesPo;
 import com.guolaiwan.bussiness.gonghui.po.RecommPo;
 import com.guolaiwan.bussiness.gonghui.po.RecordPo;
@@ -227,5 +230,52 @@ public class AppArticleContoller extends BaseController {
 		map.put("record", recordPo);
 		return map;
 	}
+	
+	@Autowired
+	LikeDao likeDao;
+	
+	@ResponseBody
+	@RequestMapping(value = "/likerecord", method = RequestMethod.GET)
+	public Map<String, Object> likerecord(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		LikePo likePo=new LikePo();
+		likePo.setContentId(Long.parseLong(request.getParameter("recordId").toString()));
+		likePo.setUserId(Long.parseLong(request.getParameter("userId").toString()));
+		likePo.setType(LikeType.RECORD);
+		likeDao.save(likePo);
+		return success(likePo);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/cancellike", method = RequestMethod.GET)
+	public Map<String, Object> cancellike(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<LikePo> likePos=likeDao.findLikeByUserAndContent(Long.parseLong(request.getParameter("userId").toString()), 
+				Long.parseLong(request.getParameter("recordId").toString()));
+		
+		likeDao.deleteAll(likePos);
+		return success();
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/records", method = RequestMethod.GET)
+	public Map<String, Object> records(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		int index=Integer.parseInt(request.getParameter("index").toString());
+		int size=Integer.parseInt(request.getParameter("size").toString());
+		long userId=Long.parseLong(request.getParameter("userId").toString());
+		List<RecordPo> recordPos=conn_record.findAll(index, size);
+		for (RecordPo recordPo : recordPos) {
+			
+			List<LikePo> likePos=likeDao.findLikeByUserAndContent(userId, recordPo.getId());
+			if(likePos!=null&&!likePos.isEmpty()){
+				recordPo.setHasLike(1);
+			}else{
+				recordPo.setHasLike(0);
+			}
+			
+			recordPo.setLikeCount(likeDao.countByField("contentId", recordPo.getId()));
+		}
+		return success(recordPos);
+	}
+	
 	
 }
