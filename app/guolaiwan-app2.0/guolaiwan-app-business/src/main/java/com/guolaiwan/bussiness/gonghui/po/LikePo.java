@@ -10,7 +10,7 @@ import com.guolaiwan.bussiness.gonghui.enumeration.LikeType;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 @Entity
-@Table(name = "like")
+@Table(name = "likePo")
 public class LikePo extends AbstractBasePO {
 	private long contentId;
 	private long userId;
