@@ -15,6 +15,7 @@ public class RecordPo extends AbstractBasePO {
 	private long articleId;
 	private String articleName;
 	private String name;
+	private String userName;
 	@Transient
 	private int hasLike;//是否点赞，0，未赞，1，已赞
 	@Transient
@@ -63,6 +64,12 @@ public class RecordPo extends AbstractBasePO {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 	

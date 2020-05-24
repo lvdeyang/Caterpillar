@@ -226,6 +226,8 @@ public class AppArticleContoller extends BaseController {
         recordPo.setArticleName(article.getTitle());
         recordPo.setName(request.getParameter("name"));
 		recordPo.setRecordUrl(httpUrl);
+		UserInfoPO userinfo=conn_userInfo.get(recordPo.getUserId());
+		recordPo.setUserName(userinfo.getUserNickname());
 		conn_record.save(recordPo);
 		//上传到阿里云oss
 		OSSUtils.createFolder("glw-old-file", "file/"+folderName+"/");
@@ -258,6 +260,8 @@ public class AppArticleContoller extends BaseController {
 		return success();
 	}
 	
+	@Autowired
+	UserInfoDAO conn_userInfo;
 	
 	@ResponseBody
 	@RequestMapping(value = "/records", method = RequestMethod.GET)
@@ -275,6 +279,7 @@ public class AppArticleContoller extends BaseController {
 				recordPo.setHasLike(0);
 			}
 			
+
 			recordPo.setLikeCount(likeDao.countByField("contentId", recordPo.getId()));
 		}
 		return success(recordPos);
