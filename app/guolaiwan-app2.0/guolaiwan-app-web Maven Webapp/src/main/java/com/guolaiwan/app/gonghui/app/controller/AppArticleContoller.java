@@ -222,6 +222,9 @@ public class AppArticleContoller extends BaseController {
 		//PicturePO picture = new PicturePO();
         recordPo.setArticleId(Long.parseLong(request.getParameter("articleId").toString()));
         recordPo.setUserId(Long.parseLong(request.getParameter("userId").toString()));
+        ArticlePo article=conn_article.get(recordPo.getArticleId());
+        recordPo.setArticleName(article.getTitle());
+        recordPo.setName(request.getParameter("name"));
 		recordPo.setRecordUrl(httpUrl);
 		conn_record.save(recordPo);
 		//上传到阿里云oss
