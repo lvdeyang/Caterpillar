@@ -414,7 +414,7 @@
 		 							是否限制每天预约门票数:
 		                    	</label>
 		                    	<div class="layui-input-inline" onclick="changeNums()">
-		                        	<input type="checkbox" name="numTicketsByDayType" lay-skin="switch" id="numTicketsByDayType" lay-text="ON|OFF" lay-filter="switchTest" value="1" >
+		                        	<input type="checkbox" name="numTicketsByDayType" lay-skin="switch" id="numTicketsByDayType" lay-text="ON|OFF" lay-filter="switchTest" value="0" >
 		                        	<div class="layui-unselect	layui-form-switch" lay-skin="_switch" >
 		                        	<em>OFF</em>
 		                        	<i></i>
@@ -885,7 +885,7 @@
          		}else{
          			$("#numTicketsByDay").prop("disabled", "disabled");
          			$("#Stocks").prop("style", "color:#757575");
-					$("#numTicketsByDay").val("");
+					$("#numTicketsByDay").val(0);
 			
          		}
             }
@@ -961,10 +961,14 @@
 				
 				//可预约数量
 				var Stocks =$("#numTicketsByDay").val();
+				if(Stocks==''){
+					Stocks=0
+				}
+				console.log(Stocks)
 				if(!( /^\d+(\.\d+)?$/).test(Stocks)){
 						layer.msg("预约数量为数字！",{time: 5000, icon:5});
 						return false;
-				}
+				} 
 				
 				
 				//最低购买数量限制 5/1 张羽 新增
@@ -1054,6 +1058,12 @@
 					cprice = cprice/100
 				}
 				data.field.productCommissionPrice = cprice.toFixed(2);
+				if(data.field.numTicketsByDayType==undefined){
+					data.field.numTicketsByDayType='1'
+				}
+				if(data.field.numTicketsByDay==""){
+					data.field.numTicketsByDay=0
+				}
 				console.log(data.field);
                 $.ajax({
                 	  type:"post",

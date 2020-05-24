@@ -725,7 +725,7 @@
              		$("#numTicketsByDayType").prop("checked",true);
              		$("#numTicketsByDay").removeAttr("disabled");
             }else{
-             		$("#numTicketsByDay").val("");
+             		$("#numTicketsByDay").val("0");
             }
              //是否拼团
             if($("#group").val()=="1"){
@@ -848,7 +848,7 @@
          		}else{
          			$("#numTicketsByDay").prop("disabled", "disabled");
          			$("#Stocks").prop("style", "color:#757575");
-					$("#numTicketsByDay").val("");
+					$("#numTicketsByDay").val("0");
 			
          		}
             }
@@ -985,7 +985,12 @@
 					cprice = cprice/100
 				}
 				data.field.productCommissionPrice = cprice.toFixed(2);
-				
+				if(data.field.numTicketsByDayType==undefined){
+					data.field.numTicketsByDayType='1'
+				}
+				if(data.field.numTicketsByDay==""){
+					data.field.numTicketsByDay=0
+				}
 				console.log(data.field);
                 $.ajax({
                 	  type:"post",
