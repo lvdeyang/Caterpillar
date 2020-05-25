@@ -1,6 +1,9 @@
 package com.guolaiwan.app.web.listener;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -169,7 +172,8 @@ public class ContextListener extends InitLoader {
 								} else if (productPO.getProductCommissionCode() == 1) {
 									accured += productPO.getProductCommissionPrice() * order.getProductNum();
 								} else {
-									accured += order.getPayMoney() * productPO.getProductCommissionPrice() / 100;
+									BigDecimal bigDecimal = new BigDecimal(order.getPayMoney() * productPO.getProductCommissionPrice() / 100).setScale(2, RoundingMode.HALF_UP);
+									accured += bigDecimal.doubleValue();
 								}
 							}else{
 								List<ProductPO> productPOs2=conn_Product.findByMerchantId(order.getShopId());
@@ -178,7 +182,8 @@ public class ContextListener extends InitLoader {
 									if (productPO.getProductCommissionCode() == 1) {
 										accured += productPO.getProductCommissionPrice() * order.getProductNum();
 									} else {
-										accured += order.getPayMoney() * productPO.getProductCommissionPrice() / 100;
+										BigDecimal bigDecimal = new BigDecimal(order.getPayMoney() * productPO.getProductCommissionPrice() / 100).setScale(2, RoundingMode.HALF_UP);
+										accured += bigDecimal.doubleValue() ;
 									}
 								}
 

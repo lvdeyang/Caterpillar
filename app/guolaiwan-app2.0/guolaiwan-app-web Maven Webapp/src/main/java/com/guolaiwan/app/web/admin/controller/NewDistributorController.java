@@ -87,8 +87,8 @@ public class NewDistributorController extends BaseController {
 		DistributorVo vo = new DistributorVo();
 		vo.set(distributorPo);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
-		vo.setContractPicUrl(sysConfigPO.getWebUrl()+vo.getContractPicUrl());
-		vo.setContractUrl(sysConfigPO.getWebUrl()+vo.getContractUrl());
+		vo.setContractPicUrl(sysConfigPO.getWebUrl()+"/"+vo.getContractPicUrl());
+		vo.setContractUrl(sysConfigPO.getWebUrl()+"/"+vo.getContractUrl());
 		strMap.put("distributor", vo);
 
 		ModelAndView mv = new ModelAndView("admin/newDistributor/check");

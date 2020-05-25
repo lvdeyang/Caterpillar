@@ -1,6 +1,7 @@
 package com.guolaiwan.app.web.distribute.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -79,6 +80,7 @@ import com.sun.jna.platform.win32.Netapi32Util.UserInfo;
 
 import pub.caterpillar.commons.exception.BaseException;
 import pub.caterpillar.commons.exception.code.enumeration.StatusCode;
+import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.commons.util.binary.ByteUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
@@ -245,21 +247,24 @@ public class NEWDistributorController {
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		//设置缓冲区大小，这里是4kb
-		factory.setSizeThreshold(4096); 
+		factory.setSizeThreshold(40960); 
 		//设置缓冲区目录
 		factory.setRepository(null);
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		//设置最大文件尺寸，这里是8MB
-		upload.setSizeMax(8194304); 
+		//设置最大文件尺寸，这里是80MB
+		upload.setSizeMax(81943040); 
 		//得到所有的文件
 		List<FileItem> items = upload.parseRequest(request);
 		Iterator<FileItem> i = items.iterator();
+		File fileIt=null;
 		while (i.hasNext()) {
 			FileItem fi = (FileItem) i.next();
 			url=uploadFile(fi);
 		}
+		
+		
 		SysConfigPO sys=conn_sys.getSysConfig();
-		String webPath=sys.getWebUrl()+url;
+		String webPath=sys.getWebUrl()+"/"+url;
 		JSONObject obj=new JSONObject();
 		obj.put("url", url);
 		obj.put("webPath", webPath);
@@ -268,6 +273,10 @@ public class NEWDistributorController {
 
 
 	private String uploadFile(FileItem file){
+		
+		
+		
+		
 		SysConfigPO sys=conn_sys.getSysConfig();
 
 		String url="licence"+File.separator+file.getName();
@@ -289,6 +298,10 @@ public class NEWDistributorController {
 			os.flush();
 			os.close();
 			is.close();
+			
+			File newFile=new File(sys.getFolderUrl()+url);
+			OSSUtils.createFolder("glw-old-file", "file/licence/");
+			OSSUtils.uploadObjectOSS("file/licence/", file.getName(),newFile, new FileInputStream(newFile));
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
