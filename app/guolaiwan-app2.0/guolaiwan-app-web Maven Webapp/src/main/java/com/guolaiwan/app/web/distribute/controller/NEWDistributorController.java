@@ -447,7 +447,7 @@ public class NEWDistributorController {
 		for (DistributeOrderVo distributeOrderVo : vos) {
 			DistributeProduct pro=conn_dispro.get(distributeOrderVo.getProductId());
 			distributeOrderVo.setName(pro.getProduct().getProductName());
-			distributeOrderVo.setPic(sysConfigPO.getWebUrl()+pro.getProduct().getProductShowPic());
+			distributeOrderVo.setPic(sysConfigPO.getWebUrl()+"/"+pro.getProduct().getProductShowPic());
 		}
 		return vos;
 	}
