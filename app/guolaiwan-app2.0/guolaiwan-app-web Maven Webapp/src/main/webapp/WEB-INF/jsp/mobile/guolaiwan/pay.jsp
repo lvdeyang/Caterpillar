@@ -489,7 +489,7 @@ html, body {
 		
 			
 		function payPublic(orderId){
-			$.get(window.BASEPATH +"distributor/prev/pay/${orderId}", null, function(data){
+			$.get(window.BASEPATH +"pubnum/prev/dispay/${orderId}", null, function(data){
 				prepay_id = data.prepay_id;
 		        paySign = data.paySign;
 		        appId = data.appId;

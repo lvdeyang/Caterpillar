@@ -544,7 +544,7 @@ html, body {
 <script type="text/javascript">
 	$(function() {
 	    $(document).on('click','#pay',function(){
-	       location.href=window.BASEPATH + 'distributor/pay/index/${order.id}';
+	       location.href=window.BASEPATH + 'pubnum/dispay/index/${order.id}';
 	    });
 	    $(document).on('click','#modify',function(){
 	    

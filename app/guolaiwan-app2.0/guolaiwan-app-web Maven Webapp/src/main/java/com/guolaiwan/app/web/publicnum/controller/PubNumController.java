@@ -47,6 +47,7 @@ import com.guolaiwan.app.web.admin.vo.ChildProductVO;
 import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
+import com.guolaiwan.app.web.distribute.vo.DistributeOrderVo;
 import com.guolaiwan.app.web.publicnum.util.EmojiFilter;
 import com.guolaiwan.app.web.publicnum.vo.BundleOrderVo;
 import com.guolaiwan.app.web.publicnum.vo.LiveMessageVo;
@@ -118,6 +119,12 @@ import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.SystenCachePo;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
+import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
+import com.guolaiwan.bussiness.distribute.dao.DistributorOrderDao;
+import com.guolaiwan.bussiness.distribute.dao.RegionDao;
+import com.guolaiwan.bussiness.distribute.po.DistributeProduct;
+import com.guolaiwan.bussiness.distribute.po.DistributorOrder;
+import com.guolaiwan.bussiness.distribute.po.RegionPo;
 import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
 import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
 import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
@@ -721,7 +728,52 @@ public class PubNumController extends WebBaseControll {
 		map.put("orderNo", orderNo);
 		return map;
 	}
+	
+	
+	@Autowired
+	private DistributorOrderDao disOrderDao;
+	
+	@ResponseBody
+	@RequestMapping(value = "/prev/dispay/{id}")
+	public Object prevDisPay(@PathVariable String id, String cip, HttpServletRequest request) throws Exception {
+		DistributorOrder order=disOrderDao.get(id);
 
+		String orderNo="distribute-"+id;
+		Long userId=Long.parseLong(request.getSession().getAttribute("userId").toString());
+		UserInfoPO user= conn_user.get(userId);
+		Double amount=order.getPrice()*order.getCount();
+		YuebaWxPayConstants.set("http://"+WXContants.Website+"/pubnum/wxreport/payreport", WxConfig.appId, WxConfig.appsrcret);
+		//统一下单，返回xml，用return_code判断统一下单结果,获取prepay_id等预支付成功信息
+		String prePayInfoXml = com.guolaiwan.app.web.weixin.YuebaWxUtil.unifiedOrder("WxPay", orderNo, 1, "192.165.56.64", user.getUserOpenID());
+		//生成包含prepay_id的map，map传入前端
+		java.util.Map<String, Object> map = YuebaWxUtil.getPayMap(prePayInfoXml);
+		//将订单号放入map，用以支付后处理
+		map.put("orderNo",orderNo);
+		return map;
+	}
+	
+	@Autowired
+	private RegionDao conn_region;
+	@Autowired 
+	private DistributeProductDao conn_dispro;
+	@RequestMapping(value = "/dispay/index/{orderId}")
+	public ModelAndView payIndex(
+			HttpServletRequest request,@PathVariable long orderId) throws Exception{
+		ModelAndView mv = null;
+
+		mv = new ModelAndView("mobile/guolaiwan/pay");
+		DistributorOrder order=disOrderDao.get(orderId);
+		DistributeOrderVo vo=new DistributeOrderVo();
+		vo.set(order);
+		DistributeProduct pro=conn_dispro.get(vo.getProductId());
+		vo.setName(pro.getProduct().getProductName());
+		RegionPo region=conn_region.get(vo.getRegionId());
+		vo.setRegion(region.getName());
+		mv.addObject("order",vo);
+		return mv;
+
+	}
+	
 	// 停车预定支付
 	@Autowired
 	private OrderDao Order;

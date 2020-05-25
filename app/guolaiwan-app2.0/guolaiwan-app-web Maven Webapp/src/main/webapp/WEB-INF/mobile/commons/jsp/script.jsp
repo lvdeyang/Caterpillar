@@ -45,7 +45,7 @@
 		   href.indexOf("distributor/offorder/edit")==-1&&
 		   href.indexOf("distributor/order/check")==-1&&
 		   href.indexOf("distributor/order/checkadmin")==-1&&
-		   href.indexOf("distributor/pay/index")==-1&&
+		   href.indexOf("pubnum/dispay/index")==-1&&
 		   href.indexOf("distributor/mod/product/index")==-1){
 		   initMenu();
 		}

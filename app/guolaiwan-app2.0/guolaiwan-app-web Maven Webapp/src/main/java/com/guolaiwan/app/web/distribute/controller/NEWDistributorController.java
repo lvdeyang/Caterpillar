@@ -447,7 +447,7 @@ public class NEWDistributorController {
 		for (DistributeOrderVo distributeOrderVo : vos) {
 			DistributeProduct pro=conn_dispro.get(distributeOrderVo.getProductId());
 			distributeOrderVo.setName(pro.getProduct().getProductName());
-			distributeOrderVo.setPic(sysConfigPO.getWebUrl()+"/"+pro.getProduct().getProductShowPic());
+			distributeOrderVo.setPic(sysConfigPO.getWebUrl()+pro.getProduct().getProductShowPic());
 		}
 		return vos;
 	}
@@ -461,8 +461,8 @@ public class NEWDistributorController {
 		DistributeOrderVo vo=new DistributeOrderVo();
 		vo.set(order);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
-		vo.setContractPicUrl(sysConfigPO.getWebUrl()+vo.getContractPicUrl());
-		vo.setContractVideoUrl(sysConfigPO.getWebUrl()+vo.getContractVideoUrl());
+		vo.setContractPicUrl(sysConfigPO.getWebUrl()+"/"+vo.getContractPicUrl());
+		vo.setContractVideoUrl(sysConfigPO.getWebUrl()+"/"+vo.getContractVideoUrl());
 
 		DistributeProduct pro=conn_dispro.get(vo.getProductId());
 		vo.setName(pro.getProduct().getProductName());
@@ -483,8 +483,8 @@ public class NEWDistributorController {
 		DistributeOrderVo vo=new DistributeOrderVo();
 		vo.set(order);
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
-		vo.setContractPicUrl(sysConfigPO.getWebUrl()+vo.getContractPicUrl());
-		vo.setContractVideoUrl(sysConfigPO.getWebUrl()+vo.getContractVideoUrl());
+		vo.setContractPicUrl(sysConfigPO.getWebUrl()+"/"+vo.getContractPicUrl());
+		vo.setContractVideoUrl(sysConfigPO.getWebUrl()+"/"+vo.getContractVideoUrl());
 
 		DistributeProduct pro=conn_dispro.get(vo.getProductId());
 		vo.setName(pro.getProduct().getProductName());

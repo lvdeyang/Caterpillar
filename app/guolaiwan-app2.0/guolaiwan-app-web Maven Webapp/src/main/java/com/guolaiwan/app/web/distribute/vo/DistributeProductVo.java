@@ -1,5 +1,6 @@
 package com.guolaiwan.app.web.distribute.vo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -171,6 +172,7 @@ public class DistributeProductVo extends AbstractBaseVO<DistributeProductVo, Dis
 	@Override
 	public DistributeProductVo set(DistributeProduct entity) throws Exception {
 		// TODO Auto-generated method stub
+		
 		this.setId(entity.getId())
 		.setName(entity.getProduct().getProductName())
 		.setPic(entity.getProduct().getProductShowPic())
@@ -182,7 +184,7 @@ public class DistributeProductVo extends AbstractBaseVO<DistributeProductVo, Dis
 		.setRetailRepertory(entity.getRetailRepertory())
 		.setProleft(entity.getProleft())
 		.setOpenTime(DateUtil.format(entity.getProduct().getProductEctivedate()))
-		.setPrice(entity.getPrice());
+		.setPrice(new BigDecimal(entity.getPrice()/100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 		
 		this.setPolicys(new ArrayList<DistributePolicyVo>());
 		for (DistributePolicy distributePolicy : entity.getDistributePolicies()) {
