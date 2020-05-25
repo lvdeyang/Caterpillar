@@ -475,7 +475,10 @@ html, body {
 	
 		$(document).on('click','#doPay',function(){
 		    //此处调用app接口进行支付
-		   payPublic();
+		    $.confirm("确定支付？", function() {
+				payPublic();
+			}, function() {});
+		   
 		});
 		
 		var prepay_id;
@@ -515,7 +518,8 @@ html, body {
 		        },
 		        function(res){
 		            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-		                $.confirm("确定支付？");
+
+		                
 		                //每五秒刷新订单状态
 						setInterval(function(){ 
                                 $.get(window.BASEPATH +"distributor/order/status?orderId="+orderNo, null, function(data){

@@ -736,7 +736,7 @@ public class PubNumController extends WebBaseControll {
 	@ResponseBody
 	@RequestMapping(value = "/prev/dispay/{id}")
 	public Object prevDisPay(@PathVariable String id, String cip, HttpServletRequest request) throws Exception {
-		DistributorOrder order=disOrderDao.get(id);
+		DistributorOrder order=disOrderDao.get(Long.parseLong(id));
 
 		String orderNo="distribute-"+id;
 		Long userId=Long.parseLong(request.getSession().getAttribute("userId").toString());
