@@ -845,6 +845,15 @@ div.warp_con:not(.active)>span{
 					$("#yesterdayCount").html("150");
 					$("#userCount").html("23854");
 					$("#countTodayRecord").html("2216");
+					setInterval(function(){
+					    var randomNum=Math.floor(Math.random()*10);
+					    var count=parseInt($("#countTodayRecord").html())+randomNum;
+						$("#countTodayRecord").html(count);
+						
+						var num1=parseInt($("#todayCount").html())+1;
+						$("#todayCount").html(num1);
+						
+					},2000)
 					$("#countYesterdayRecord").html("5630");
 					$("#countRecord").html("4151911");
 				}
