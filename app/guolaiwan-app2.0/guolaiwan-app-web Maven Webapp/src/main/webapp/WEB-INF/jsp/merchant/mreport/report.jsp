@@ -518,7 +518,8 @@ div.warp_con:not(.active)>span{
 }
 
 </style>
-
+<script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+<link href="http://vjs.zencdn.net/5.5.3/video-js.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -624,12 +625,24 @@ div.warp_con:not(.active)>span{
 	<div id="map" class="map" ></div>
 	
 	<div class="center_people" >
-		<span class="text_sp">游客趋势分析</span>
-		<a class="center_people_title"></a>
-		<div class="people_div">
-			<span class="text_sp align_right tit_sp" style="margin-right: 100px;" id="yearData"></span>
-			<span class="text_sp align_right tit_sp">日期/人数</span>
-			<div id="people" class="people"></div>
+	    <span class="text_sp" style="float:left;width:100%">景区监控</span>
+		<video id="my-video" style="color:black;width:45%;height:80%;float:left;margin-left:3%;margin-top:2%" class="video-js" autoplay controls preload="auto" width="750" height="350" data-setup="{}">
+		    <source src='rtmp://47.95.241.89/live/camera2' type='rtmp/flv'/>
+		</video>
+		
+				
+	    <video id="my-video1" style="color:black;width:45%;height:80%;float:left;margin-left:5%;margin-top:2%" class="video-js" autoplay controls preload="auto" width="750" height="350" data-setup="{}">
+		    <source src='rtmp://47.95.241.89/live/camera2' type='rtmp/flv'/>
+		</video>
+				
+	    <div style="display:none;">
+			<span class="text_sp">游客趋势分析</span>
+			<a class="center_people_title"></a>
+			<div class="people_div">
+				<span class="text_sp align_right tit_sp" style="margin-right: 100px;" id="yearData"></span>
+				<span class="text_sp align_right tit_sp">日期/人数</span>
+				<div id="people" class="people"></div>
+			</div>
 		</div>
 	</div>
 

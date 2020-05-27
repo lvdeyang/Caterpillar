@@ -224,7 +224,8 @@ public class AppArticleContoller extends BaseController {
         recordPo.setUserId(Long.parseLong(request.getParameter("userId").toString()));
         ArticlePo article=conn_article.get(recordPo.getArticleId());
         recordPo.setArticleName(article.getTitle());
-        recordPo.setName(request.getParameter("name"));
+        String sName = new String((request.getParameter("name")).getBytes("iso-8859-1"), "utf-8");
+        recordPo.setName(sName);
 		recordPo.setRecordUrl(httpUrl);
 		UserInfoPO userinfo=conn_userInfo.get(recordPo.getUserId());
 		recordPo.setUserName(userinfo.getUserNickname());
