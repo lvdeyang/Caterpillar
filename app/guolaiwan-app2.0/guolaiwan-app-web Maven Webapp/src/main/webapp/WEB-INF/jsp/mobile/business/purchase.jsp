@@ -78,8 +78,8 @@ a, a:link, a:active, a:visited, a:hover {
 
 html, body {
 	width: 100%;
-	min-height:auto;
-	background-color: #DFDFDF !important; 
+	min-height: auto;
+	background-color: #DFDFDF !important;
 	position: relative;
 	-webkit-text-size-adjust: none;
 	text-decoration: none !important;
@@ -107,7 +107,7 @@ html, body {
 }
 
 .header-content {
-	height:auto;
+	height: auto;
 	width: 100%;
 	position: absolute;
 	left: 0;
@@ -118,46 +118,46 @@ html, body {
 	z-index: 0;
 }
 
-  .swiper-container {
-    width: 100%;
-    padding:0;
-    margin:0;
-    height:200px;
-  } 
-
-  .swiper-container img {
-    display: block;
-    width: 100%;
-  }
-    
-.weui-navbar{
- display: none !important;
+.swiper-container {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	height: 200px;
 }
-  .inp::-webkit-input-placeholder{
-        text-align: center;
-}  
 
+.swiper-container img {
+	display: block;
+	width: 100%;
+}
 
- 
-  .gotop {
-	    position: fixed;
-	    right: 20px;
-	    bottom: 50px;
-	    display: block;
-	    width: 50px;
-	    height: 50px;
-	    opacity: 0.8;
-	    z-index:111111;
-	}
-	.jieshao ul li p{
-	 margin:0;
-	 font-weight: bold;
-	}
+.weui-navbar {
+	display: none !important;
+}
 
-	.jieshao ul li{
-	 line-height: 40px;
-	 border-bottom:1px solid #DFDFDF;
-	}
+.inp::-webkit-input-placeholder {
+	text-align: center;
+}
+
+.gotop {
+	position: fixed;
+	right: 20px;
+	bottom: 50px;
+	display: block;
+	width: 50px;
+	height: 50px;
+	opacity: 0.8;
+	z-index: 111111;
+}
+
+.jieshao ul li p {
+	margin: 0;
+	font-weight: bold;
+}
+
+.jieshao ul li {
+	line-height: 40px;
+	border-bottom: 1px solid #DFDFDF;
+}
 </style>
 
 </head>
@@ -165,177 +165,208 @@ html, body {
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 <script type="text/javascript" src="lib/bootstrap.js" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="lib/bootstrap.css"/>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap.css" />
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
+<script type="text/javascript"
+	src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<!-- <script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script> -->
 <script type="text/javascript">
-
-
-     var distance=0;
-   
-	$(function() {
-	 getRecomment();	
-	var iscollect;
-	  window.BASEPATH = '<%=basePath%>';
-	  var comCode='${comCode}';
-	  var parseAjaxResult = function(data){
-			if(data.status !== 200){
+    $(function(){
+    /* 	var vConsole = new VConsole(); */
+	    var shareShopName='';
+	    var shareShopImg='';
+	    var shareShopDesc='';
+    	getRecomment();
+	var distance = 0;
+		var iscollect;
+		window.BASEPATH = '<%=basePath%>';
+		var comCode = '${comCode}';
+		var parseAjaxResult = function(data) {
+			if (data.status !== 200) {
 				$.toptip('data.message', 'error');
 				return -1;
-			}else{
-				return data.data;		
+			} else {
+				return data.data;
 			}
-	  };
-	
-	  if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-		    getloca();
-	  } else {
-		    if(comCode=='0000'){
-			    comCode='0001';
+		};
+		if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+			getloca();
+		} else {
+			if (comCode == '0000') {
+				comCode = '0001';
 			}
 			getCom();
-            getRecomment();
+			getRecomment();
 			getActivityBundle();
-			initSharewx();
-	  }
-	
-	  
-	  
-		
-	 
-	
-	  var loca={};
-	  function getloca(){
-	      
-		  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	
-		  var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
-		    $.get(_uri, null, function(data){
+			/* initSharewx(); */
+		}
+
+
+
+
+
+
+		var loca = {};
+		function getloca() {
+			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
 				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data){
-					loca=data;
-					
+				if (data === -1) return;
+				if (data) {
+					loca = data;
+
 				}
-				
-		  });
-	  
-	  }
-	  
-	  
-	 
-	  
-	  function getCity(la,lo){
-	  
-	     $.ajax({  
-            url: 'http://api.map.baidu.com/geocoder/v2/?ak=yPjZB3eElPXn7zXRjcfqGCze6LCPlkmn&callback=renderReverse&location=' + la + ',' + lo + '&output=json&pois=1',  
-            type: "get",  
-            dataType: "jsonp",  
-            jsonp: "callback",  
-            success: function (data) {  
-                console.log(data);  
-                var province = data.result.addressComponent.province;  
-                var cityname = (data.result.addressComponent.city);  
-                var district = data.result.addressComponent.district;  
-                var street = data.result.addressComponent.street;  
-                var street_number = data.result.addressComponent.street_number;  
-                var formatted_address = data.result.formatted_address;  
-                if(comCode=='0000'){
-				    if(district.indexOf('平谷')!=-1){
-					    comCode='1003';
-					    $('#headerName').html('全域休闲');
-					    $('#phone').html('010-89991991');
-					}else{
-					    comCode='0001';
+
+			});
+
+		}
+
+
+
+
+		function getCity(la, lo) {
+			$.ajax({
+				url : 'http://api.map.baidu.com/geocoder/v2/?ak=yPjZB3eElPXn7zXRjcfqGCze6LCPlkmn&callback=renderReverse&location=' + la + ',' + lo + '&output=json&pois=1',
+				type : "get",
+				dataType : "jsonp",
+				jsonp : "callback",
+				success : function(data) {
+					var province = data.result.addressComponent.province;
+					var cityname = (data.result.addressComponent.city);
+					var district = data.result.addressComponent.district;
+					var street = data.result.addressComponent.street;
+					var street_number = data.result.addressComponent.street_number;
+					var formatted_address = data.result.formatted_address;
+					if (comCode == '0000') {
+						if (district.indexOf('平谷') != -1) {
+							comCode = '1003';
+							$('#headerName').html('全域休闲');
+							$('#phone').html('010-89991991');
+						} else {
+							comCode = '0001';
+						}
 					}
+
+
+					getCom();
+					getRecomment();
+					getActivityBundle();
+					/* initSharewx(); */
 				}
-				
-				
-				getCom();
-                getRecomment();
-				getActivityBundle();
-				initSharewx();
-            }  
-        });  
-	  
-	  }
-	  
-	  function getCom(){
-	     var _uricoms = window.BASEPATH + 'pubnum/getComs';
-		
-		 $.get(_uricoms, null, function(data){
+			});
+
+		}
+
+		function getCom() {
+			var _uricoms = window.BASEPATH + 'pubnum/getComs';
+
+			$.get(_uricoms, null, function(data) {
 				data = parseAjaxResult(data);
-				if(data === -1) return;
-				if(data && data.length>0){
-				    var html=[];
-				   
-					for(var i=0; i<data.length; i++){
-					    if(data[i].comCode==comCode){
-					        $('#selCom').html(data[i].comName);
-					    }
-					    	
-					    html.push('<li><a data="'+data[i].comCode+'" href="javascript:void(0)" class="comSel">'+data[i].comName+'</a></li>');
-					    
+				if (data === -1) return;
+				if (data && data.length > 0) {
+					var html = [];
+
+					for (var i = 0; i < data.length; i++) {
+						if (data[i].comCode == comCode) {
+							$('#selCom').html(data[i].comName);
+						}
+
+						html.push('<li><a data="' + data[i].comCode + '" href="javascript:void(0)" class="comSel">' + data[i].comName + '</a></li>');
+
 					}
 					$('#com').append(html.join(''));
 				}
-				
-		  });
-	  
-	  }
-	  
 
-      /**/
-		
-	  function getRecomment(){
-	      var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${productMerchantID}&userId=${userId}';
-		
-		$.get(_uriMerchantInfo, null, function(data){
-			data = parseAjaxResult(data);
-			merchantName = data.shopName + '-过来玩';
-			merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
-			merchantUrl = window.location.href;
-			if(data === -1) return;
-			if(data){
-			    var html=[];
-			    var pics=data.shopMpic.split(',');
-				for(var i=0; i<pics.length; i++){
-					var str = pics[i].split('.');
-					if(str[3]!="mp4"&&str[3]!="MP4"){ 
-					html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="'+pics[i]+'" alt=""></div>');
-					}else{
-					html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="'+pics[i]+'" controls="controls" ></div>');
-					}
-				}
-			    $('.header-content').html(data.shopName);
-				$('.swiper-wrapper').append(html.join(''));
-				$(".swiper-container").swiper({
-			        loop: true,
-			        autoplay: 3000
-			    });
-			    }
-			    });
-	  }
-		
-
-	    var share={};
-	    function initSharewx(){
-	        var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
-	  
-	    	var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
-			    $.get(_uri, null, function(data){
-					data = parseAjaxResult(data);
-					if(data === -1) return;
-					if(data){
-					    
-						share=data;
-						
-					}
-					
 			});
-	    
-	    }	    	  	
+
+		}
+
+
+		/**/
+
+		function getRecomment() {
+			var _uriMerchantInfo = window.BASEPATH + 'phoneApp/merchantInfo?merchantID=${productMerchantID}&userId=${userId}';
+
+			$.get(_uriMerchantInfo, null, function(data) {
+				data = parseAjaxResult(data);
+				merchantName = data.shopName + '-过来玩';
+				merchantPic = 'http://<%=weburl%>/file/' + data.shopHeading;
+				merchantUrl = window.location.href;
+				if (data === -1) return;
+				if (data) {
+					var html = [];
+					var pics = data.shopMpic.split(',');
+					for (var i = 0; i < pics.length; i++) {
+						var str = pics[i].split('.');
+						if (str[3] != "mp4" && str[3] != "MP4") {
+							html.push('<div class="swiper-slide" style="height:200px;"><img class="exampleImg" style="height:200px;" id="imgTest" src="' + pics[i] + '" alt=""></div>');
+						} else {
+							html.push('<div class="swiper-slide" style="height:200px;"><video class="exampleImg" style="height:200px;width:100%;" src="' + pics[i] + '" controls="controls" ></div>');
+						}
+					}
+					$('.header-content').html(data.shopName);
+					$('.swiper-wrapper').append(html.join(''));
+					$(".swiper-container").swiper({
+						loop : true,
+						autoplay : 3000
+					});
+				   shareShopName=data.shopName;
+				   shareShopDesc=data.shopAddress;
+				   shareShopImg=data.shopHeading;
+				   initSharewx();
+				}
+			});
+		}
+
+//下面的方法是微信分享的方法
+		var share = {};
+		function initSharewx() {
+			var reqUrl = location.href.split('#')[0].replace(/&/g, "FISH");
+
+			var _uri = window.BASEPATH + 'pubnum/prev/scan?url=' + reqUrl;
+			$.get(_uri, null, function(data) {
+				data = parseAjaxResult(data);
+				if (data === -1) return;
+				if (data) {
+                   
+					share = data;
+					doScanShare();	
+				}
+
+			});
+
+		}
+	    function doScanShare(){
+            wx.config({
+	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	            appId : share.appId, // 必填，公众号的唯一标识
+	            timestamp : share.timestamp, // 必填，生成签名的时间戳
+	            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+	            signature : share.signature,// 必填，签名，见附录1
+	            jsApiList : ['checkJsApi', 'onMenuShareTimeline' , 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        	});
+	        wx.ready(function() {
+	            wx.onMenuShareTimeline({
+                       title: shareShopName, // 分享标题
+                       link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                       imgUrl: 'http://<%=weburl%>/file/'+shareShopImg, // 分享图标
+                       success: function () {
+                          	
+                       }
+                        });
+	            wx.onMenuShareAppMessage({
+					title : shareShopName, // 分享标题
+					desc : shareShopDesc, // 分享描述
+					link : location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					imgUrl : 'http://<%=weburl%>/file/'+shareShopImg, // 分享图标
+					success : function() {}
+				});
+	            
+	       });
+        }
 	});
 </script>
 <script>
@@ -550,48 +581,53 @@ html, body {
    }
 </script>
 <body>
-		 <!-- 主页 -->
-		    <div class="header">
-			<div class="wrapper">
+	<!-- 主页 -->
+	<div class="header">
+		<div class="wrapper">
 			<a class="link-left" href="#side-menu"><span
-					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">商户</div>
+				class="icon-reorder icon-large"></span></a>
+			<div class="header-content">商户</div>
+		</div>
+	</div>
+
+
+
+
+	<div class="content" id="content">
+		<div class="swiper-container" id="headerSwiper"
+			data-space-between='10' data-pagination='.swiper-pagination'
+			data-autoplay="1000">
+			<div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
 			</div>
 		</div>
-		
-		
-		
-	
-		<div class="content" id="content" >
-			<div class="swiper-container" id="headerSwiper" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
-			  <div class="swiper-wrapper" id="headerWrapper" style="height:200px;">
-			  </div>
-			</div>
-		</div>
-		
-	</div>     
-	     
-	    <div class="jieshao" style="height:auto;width:100%;padding:0 5%;background: #fff;">
-	        
-	     </div>
-	     
-	  
-	     
-               <!--  购票  -->
-	           <div id="contents" ></div>	 	        	    
-          <!-- 置顶 -->
-			<div><a href="javascript:;" class="gotop" style="display:none;"><img style="width:100%;height:100%;" alt="" src="lib/images/hometop.png"></a></div>
-        
-         <div class="weui-loadmore" hidden="hidden" style="position:fixed;bottom: 5%;left:18%;z-index: 10000">
-			  <i class="weui-loading"></i>
-			  <span class="weui-loadmore__tips">正在加载</span>
 	</div>
-	<div class="weui-loadmores" hidden="hidden" style="position:fixed;bottom: 7%;left:50%;margin-left:-40px;z-index: 10000">
-			  <span class="weui-loadmore__tips">没有内容了</span>
+
 	</div>
-	</div>	
-	
-   
+
+	<div class="jieshao"
+		style="height:auto;width:100%;padding:0 5%;background: #fff;"></div>
+
+
+
+	<!--  购票  -->
+	<div id="contents"></div>
+	<!-- 置顶 -->
+	<div>
+		<a href="javascript:;" class="gotop" style="display:none;"><img
+			style="width:100%;height:100%;" alt="" src="lib/images/hometop.png"></a>
+	</div>
+
+	<div class="weui-loadmore" hidden="hidden"
+		style="position:fixed;bottom: 5%;left:18%;z-index: 10000">
+		<i class="weui-loading"></i> <span class="weui-loadmore__tips">正在加载</span>
+	</div>
+	<div class="weui-loadmores" hidden="hidden"
+		style="position:fixed;bottom: 7%;left:50%;margin-left:-40px;z-index: 10000">
+		<span class="weui-loadmore__tips">没有内容了</span>
+	</div>
+	</div>
+
+
 </body>
 
 

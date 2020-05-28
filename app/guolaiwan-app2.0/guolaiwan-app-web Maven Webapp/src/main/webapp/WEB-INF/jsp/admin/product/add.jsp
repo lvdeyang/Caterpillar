@@ -1059,7 +1059,8 @@
 				}
 				data.field.productCommissionPrice = cprice.toFixed(2);
 				if(data.field.numTicketsByDayType==undefined){
-					data.field.numTicketsByDayType='1'
+				/*0代表关闭 1代表启动  */
+					data.field.numTicketsByDayType='0'
 				}
 				if(data.field.numTicketsByDay==""){
 					data.field.numTicketsByDay=0
