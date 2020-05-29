@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/Tetris.player.css"/>
+    <style type="text/css">
+        html, body{width:100%; height:100%; margin:0; padding:0;}
+        .container{width:65%; height:60%; position:absolute; left:100px; top:100px;}
+        .testDrag{width:100px; height:50px; border:1px solid black; line-height:50px; cursor:pointer; font-size:20px; text-align:center;}
+    </style>
+</head>
+<body>
+    <div class="container" id="myPlayer"></div>
+    <div class="testDrag" draggable="true">请拖拽我</div>
+
+    <div id="embed" style="width:0; height:0; position:relative; z-index:0;">
+        <embed width="100%" height="100%" style="z-index:0" type="application/media-suma-sip" id="webPlayer_1"/>
+    </div>
+</body>
+<script type="text/javascript" src="../../../../../lib/frame/jQuery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="Tetris.date.ext.js"></script>
+<script type="text/javascript" src="../js/Tetris.player.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var _playeTime = 0;
+
+        $('#myPlayer')['Tetris.player']('create', {
+            'class':'noLayoutSet noPtzctrl',
+            'splitSelect':'singleSelect',
+            'settings':{
+                'split':{
+                    'num':6,
+                    'layout':[
+                        /*[0.66, 0.6599],[0.25, 0.25],[0.25, 0.25],[0.25, 0.25],[0.25, 0.25],[0.25, 0.25]*/
+                        /*[0.25, 0.25],[0.25, 0.25],*/
+                        /*[0.5, 0.499],[0.25, 0.25],[0.25, 0.25],
+                        [0.25, 0.25],[0.25, 0.25],[0.25, 0.25],[0.25, 0.25],
+                        [0.25, 0.25],[0.25, 0.25],[0.25, 0.25],[0.25, 0.25],
+                        [0.25, 0.25],[0.25, 0.25],[0.25, 0.249],[0.25, 0.249],*/
+                    ]
+                }
+            },
+            'event':{
+                'setFolder':function($embed, srcList){
+                    alert('setFolder');
+                },
+                'openFolder':function($embed, srcList){
+                    alert('openFolder');
+                },
+                'printScreen':function($embed, srcList){
+                    alert('printScreen');
+                },
+                'goPrev':function($embed, srcList, complete){
+                    alert('goPrev');
+                    complete();
+                },
+                'goNext':function($embed, srcList, complete){
+                    alert('goNext');
+                    complete();
+                },
+                'onStop':function($embed, srcList, complete){
+                    _playeTime = 0;
+                    complete();
+                },
+                'onPlay':function($embed, srcList, status, complete){
+                    alert(_playeTime);
+                    complete();
+                },
+                'onresize':function(){
+                    console.log('resize');
+                },
+                'layoutSet':function(srcList){
+                    alert('分屏设置');
+                    console.log(srcList);
+                },
+                'ptzctrl':function(srcList){
+                    alert('云台');
+                    console.log(srcList);
+                },
+                'onDrop':function($embed, serialNum, oldData, event){
+                    alert(serialNum);
+                    console.log($embed);
+                    console.log(oldData);
+                },
+                'seek':function($embed, time_ms, e){
+                    _playeTime = time_ms;
+                }
+            },
+            'interface':{
+                'info':function(title, message){
+                    alert(title);
+                    alert(message);
+                },
+                getDuration:function(){
+                    return Date.prototype.subtraction('2016-06-03 18:05:07' ,'2016-06-03 18:03:22') * 1000;
+                },
+                getPlayTime:function(){
+                    _playeTime += 1000;
+                    return _playeTime;
+                },
+                getStartTime:function(){
+                    //return Date.prototype.parse('2016-06-03 18:03:22').getTime();
+                    return 0;
+                }
+            }
+        });
+
+        $('#myPlayer')['Tetris.player']('set', [{
+            'serialNum':1,
+            'format':{
+                'bodyUp':'文件1/组织1/设备1',
+                'bodyDown':'2016-03-02 15:03:00 至 2016-03-02 15:03:00'
+            }
+        },{
+            'serialNum':2,
+            'format':{
+                'bodyUp':'文件1/组织1/设备1',
+                'bodyDown':'2016-03-02 15:03:00 至 2016-03-02 15:03:00'
+            }
+        },{
+            'serialNum':3,
+            'format':{
+                'bodyUp':'文件1/组织1/设备1',
+                'bodyDown':'2016-03-02 15:03:00 至 2016-03-02 15:03:00'
+            }
+        },{
+            'serialNum':4,
+            'format':{
+                'bodyUp':'文件1/组织1/设备1',
+                'bodyDown':'2016-03-02 15:03:00 至 2016-03-02 15:03:00'
+            }
+        },{
+            'serialNum':5,
+            'format':{
+                'bodyUp':'文件1/组织1/设备1',
+                'bodyDown':'2016-03-02 15:03:00 至 2016-03-02 15:03:00'
+            }
+        },{
+            'serialNum':6,
+            'format':{
+                'bodyUp':'文件1/组织1/设备1',
+                'bodyDown':'2016-03-02 15:03:00 至 2016-03-02 15:03:00'
+            }
+        },{
+            'serialNum':7,
+            'format':{
+                'bodyUp':'文件1/组织1/设备1',
+                'bodyDown':'2016-03-02 15:03:00 至 2016-03-02 15:03:00'
+            }
+        }], true);
+
+        $('#myPlayer')['Tetris.player']('setEmbed', $('#embed'));
+
+        //console.log($('#myPlayer')['Tetris.player']('remove'));
+    });
+</script>
+</html>

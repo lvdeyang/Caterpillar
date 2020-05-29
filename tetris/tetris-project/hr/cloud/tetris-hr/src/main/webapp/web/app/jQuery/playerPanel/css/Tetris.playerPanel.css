@@ -1,0 +1,33 @@
+/* ========================================================================
+ * Tetris.player.css: version 1.0.0
+ * 视频播放器插件样式单
+ * ========================================================================
+ * created by lvdeyang
+ * 2016年12月02日
+ * ======================================================================== */
+
+/*******************
+ ****** reset ******
+ *******************/
+
+.tetris.playerPanel *{box-sizing:border-box; margin:0; padding:0;}
+.tetris.playerPanel .float_l{float:left;}
+.tetris.playerPanel .float_r{float:right;}
+
+/*******************
+ ****** base *******
+ *******************/
+
+.tetris.playerPanel{width:100%; height:100%; overflow:hidden;}
+.tetris.playerPanel .wrapper{width:110%; height:110%;}
+.tetris.playerPanel .panel.split{padding:5px; background:transparent;}
+
+/*******************
+ ****** size *******
+ *******************/
+.tetris.playerPanel.noPadding .panel.split{padding:0;}
+
+
+/*******************
+ ****** theme ******
+ *******************/

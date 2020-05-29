@@ -1,0 +1,49 @@
+<div class="bvc2-monitor-terminal5g-live" style="width:100%; height:100%; padding:10px; box-sizing:border-box;">
+    <div style="width:100%; height:100%; position:relative;">
+        <div style="position:absolute; left:0; top:0; right:390px; bottom:0;">
+            <div style="width:100%; height:100%; position:relative;">
+                <div style="position:absolute; left:0; top:0; right:0; bottom:100px;">
+                    <div style="width:100%; height:100%; position:relative;">
+                        <div style="width:100%; height:100%;" id="player-container">
+                            <!-- 播放器插件 -->
+                        </div>
+                    </div>
+                </div>
+                <div style="width:100%; height:100px; position:absolute; left:0; bottom:0; padding:5px;">
+                    <div class="monitor92-l02" style="width:100%; height:100%; border:1px solid #ebeef5; background-color:#fff; padding:9px;">
+                        <div class="bvc2-layout-buttons">
+                            <div v-for="button in buttons" :class="button.active?'bvc2-layout-button active':'bvc2-layout-button'" :data-id="button.id" @click="layoutChange(button)">
+                                <div class="bvc2-layout-button-icon"></div>
+                                <div class="bvc2-layout-button-text">{{button.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="monitor92-l02" style="width:380px; height:100%; position:absolute; top:0; right:0; border:1px solid #ebeef5; background-color:#fff;">
+            <div class="monitor92-m01 monitor92-f03 monitor92-h4" style="line-height:40px; text-align:center; border-bottom:1px solid #ebeef5;">
+                资源列表
+            </div>
+            <div style="position:absolute; left:0; top:41px; right:0; bottom:0;">
+                <el-scrollbar style="height:100%;">
+                    <el-tree
+                            :data="tree.data"
+                            :props="tree.props">
+                        <span class="custom-tree-node" slot-scope="{node, data}">
+                            <span v-if="data.type === 'FOLDER'" style="cursor:pointer;">
+                                <span :class="data.icon"></span>
+                                <span>{{node.label}}</span>
+                            </span>
+                            <span v-else style="cursor:move;" draggable="true" @dragstart="handleDragStart(data, $event)">
+                                <span :class="data.icon" :style="data.style"></span>
+                                <span>{{node.label}}</span>
+                            </span>
+                        </span>
+                    </el-tree>
+                </el-scrollbar>
+            </div>
+        </div>
+    </div>
+
+</div>

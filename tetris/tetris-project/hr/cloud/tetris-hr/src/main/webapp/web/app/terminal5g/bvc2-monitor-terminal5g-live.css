@@ -1,0 +1,6 @@
+/* reset */
+.bvc2-monitor-terminal-live *{box-sizing:border-box!important;}
+.bvc2-monitor-terminal-live .el-scrollbar__wrap{overflow-x: hidden;}
+.bvc2-monitor-terminal-live-osd-tooltip{max-width:220px; word-break:break-all;}
+
+.bvc2-monitor-terminal-live .decodeBind .el-dialog{margin-top:50px!important; border-radius:0!important;}

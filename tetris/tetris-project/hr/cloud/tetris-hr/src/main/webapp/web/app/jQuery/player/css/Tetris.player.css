@@ -1,0 +1,159 @@
+/* ========================================================================
+ * Tetris.player.css: version 1.0.0
+ * ???????????????
+ * ========================================================================
+ * created by lvdeyang
+ * 2016??2??2??
+ * ======================================================================== */
+
+/*******************
+ ****** reset ******
+ *******************/
+
+.tetris.player *{box-sizing:border-box; margin:0; padding:0;}
+.tetris.player button:focus, button:active:focus{outline:none;}
+.tetris.player button{background:transparent; border:0; cursor:pointer;}
+.tetris.player button[disabled]{cursor:not-allowed; opacity:0.5;}
+.tetris.player .float_l{float:left;}
+.tetris.player .float_r{float:right;}
+.tetris.player .hidden{display:none!important;}
+
+/*******************
+ ****** base *******
+ *******************/
+
+/* player */
+.tetris.player{width:100%; height:100%; position:relative;}
+.tetris.player .head{width:100%;}
+.tetris.player .body{position:absolute; left:0; right:0;}
+.tetris.player .wrapper{width:100%; height:100%; position:static;}
+.tetris.player .wrapper>iframe{width:100%; height:100%; background:transparent; position:absolute; left:0; top:0; z-index:1;}
+.tetris.player .wrapper>.splitList{width:100%; height:100%; position:absolute; left:0; top:0; z-index:2; overflow:hidden;}
+.tetris.player .wrapper>.splitList .wrapper{width:110%; height:110%;}
+.tetris.player.playing .wrapper>.splitList{opacity:0; transition: opacity 0.2s ease-in;}
+.tetris.player.playing.max-size .wrapper>.splitList{opacity:0!important;}
+.tetris.player.playing.duringDrag .wrapper>.splitList{opacity:1; transition: opacity 0.2s ease-in;}
+.tetris.player.playing .body:hover .wrapper>.splitList{opacity:1; transition: opacity 0.2s ease-in;}
+.tetris.player .wrapper>.splitList .split{position:relative; transition:border 0.1s ease-in, background-color 0.1s ease-in;}
+.tetris.player .wrapper>.splitList .split .dragArea{width:100%; height:100%; position:absolute; left:0; top:0; z-index:2;}
+.tetris.player .wrapper>.splitList .split>button{position:absolute; right:0; z-index:3;}
+.tetris.player .wrapper>.splitList .split .noSetting, .tetris.player .wrapper>.splitList .split .dataInfo{width:100%; position:relative; top:50%; text-align:center; z-index:1;}
+.tetris.player .wrapper>.splitList .split .dataInfo>div{width:100%;}
+.tetris.player .foot{width:100%; position:absolute; z-index:2; bottom:0;}
+
+/* progress */
+.tetris.player .progressBar{width:100%;}
+.tetris.player .progressBar>span{display:inline-block; position:relative; float:left;}
+.tetris.player .progressBar>span>button{position:relative; cursor:pointer; transition:background 0.1s ease-in; float:right;}
+.tetris.player .time{width:100%;}
+
+/* opration */
+.tetris.player .opration{width:100%; text-align:center;}
+
+/*******************
+ ****** size *******
+ *******************/
+
+/* player */
+.tetris.player{border-radius:0px;}
+.tetris.player .head{height:30px; border-radius: 0px 0px 0px 0;}
+.tetris.player .body{top:30px; bottom:60px;}
+.tetris.player.noProgress.max-size .body,
+.tetris.player.max-size .body{top:0; bottom:0;}
+.tetris.player.max-size .head,
+.tetris.player.max-size .foot{opacity:0;}
+.tetris.player.max-size:hover .foot{opacity:1;}
+.tetris.player.max-size .foot.show{opacity:1;}
+.tetris.player.noProgress .body{bottom:30px;}
+.tetris.player .wrapper>.splitList .split .noSetting{height:30px; margin-top:-15px; font-size:22px; font-weight:900;}
+.tetris.player .wrapper>.splitList .split .noSetting.lg{height:40px; margin-top:-20px; font-size:30px;}
+.tetris.player .wrapper>.splitList .split .dataInfo{height:60px; margin-top:-30px;}
+.tetris.player .wrapper>.splitList .split .dataInfo>div{height:30px; font-size:16px; font-weight:700; text-align:center;}
+.tetris.player .wrapper>.splitList .split .dataInfo>div.only{margin-top:15px;}
+.tetris.player .wrapper>.splitList .split>button{width:28px; height:28px;}
+.tetris.player .foot{height:61px; border-radius:0 0 0px 0px;}
+.tetris.player.noProgress .foot{height:30px;}
+
+/* progress */
+.tetris.player .progressBar{height:14px;}
+.tetris.player .progressBar>span{width:14px; height:12px; top:1px; border-radius:0 14px 14px 0;}
+.tetris.player .progressBar>span>button{border-radius:100%; width:14px; height:14px; right:0px; bottom:1px;}
+.tetris.player .time{height:16px;}
+.tetris.player .time>span{font-size:10px; padding-left:5px; padding-right:5px;}
+
+/* opration */
+.tetris.player .opration{height:30px;}
+.tetris.player .head button, .tetris.player .opration button{width:30px; height:30px;}
+
+/* ?????*/
+.tetris.player.rightAngle{border-radius:0;}
+.tetris.player.rightAngle .head{border-radius:0;}
+.tetris.player.rightAngle .foot{border-radius:0;}
+
+/*******************
+ ****** theme ******
+ *******************/
+
+/* player */
+.tetris.player{border-color:#030F13; border:1px solid #030F13; box-shadow:1px 1px 1px #888;}
+.tetris.player .head{background-color:#0E3C4A; border-bottom:1px solid #07242D; color:#fff; text-align:center; font-size:12px;}
+.tetris.player.dark .head{background-color:#16191E;}
+.tetris.player .head>.text{line-height:30px; max-width:220px; display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.tetris.player .body{background-color:#126883;}
+.tetris.player.dark .body{background-color:#24292D;}
+.tetris.player .wrapper>.splitList .split{background-color:#126883; border:1px solid #1D5D71;}
+.tetris.player.dark .wrapper>.splitList .split{background-color:#24292D; border:1px solid #16191E;}
+.tetris.player .wrapper>.splitList .split.highLight{border:1px solid #eee;}
+.tetris.player .wrapper>.splitList .split.selected{background-color:#124862;}
+.tetris.player.dark .wrapper>.splitList .split.selected{background-color:#4d4f50;}
+.tetris.player .wrapper>.splitList .split .noSetting{color:rgba(0,0,0,0.5);}
+.tetris.player .foot{background-color:#0E3C4A;}
+.tetris.player.dark .foot{background-color:#16191E;}
+.tetris.player.noProgress .foot{border-top:1px solid #eee;}
+
+/* progress */
+.tetris.player .progressBar{box-shadow:inset 1px 1px 1px #888;}
+.tetris.player .progressBar.gradient{
+    background: linear-gradient(#ccc, #fff, #ccc);
+    background: -webkit-linear-gradient(#ccc, #fff, #ccc);
+    background: -o-linear-gradient(#ccc, #fff, #ccc);
+    background: -moz-linear-gradient(#ccc, #fff, #ccc);
+}
+.tetris.player .progressBar>span.gradient{
+    background: linear-gradient(#F7FDFB,#79B39B);
+    background: -webkit-linear-gradient(#F7FDFB,#79B39B);
+    background: -o-linear-gradient(#F7FDFB,#79B39B);
+    background: -moz-linear-gradient(#F7FDFB,#79B39B);
+}
+.tetris.player.dark .progressBar>span.gradient{
+    background: linear-gradient(#F7FDFB,#909090);
+    background: -webkit-linear-gradient(#F7FDFB,#909090);
+    background: -o-linear-gradient(#F7FDFB,#909090);
+    background: -moz-linear-gradient(#F7FDFB,#909090);
+}
+.tetris.player .progressBar>span>button{border:1px solid #eee; background-color:#96C1BD; box-shadow:1px 1px 2px #000;}
+.tetris.player.dark .progressBar>span>button{background-color:#FFF;}
+.tetris.player .progressBar>span>button:hover{background:#eee;}
+.tetris.player .time>span{color:#fff;}
+
+/* opration */
+.tetris.player .head button:focus, .tetris.player .split button:focus, .tetris.player .opration button:focus{outline:auto; outline-color:cornflowerblue;}
+.tetris.player .remove{background:url(../images/sm/removeBtn_sm.png) center center no-repeat;}
+.tetris.player .audio{background:url(../images/sm/volume_sm.png) center center no-repeat;}
+.tetris.player .mute{background:url(../images/sm/noVoice_sm.png) center center no-repeat;}
+.tetris.player .goPrev{background:url(../images/sm/goPrev_sm.png) center center no-repeat;}
+.tetris.player .goSlow{background:url(../images/sm/goSlow_sm.png) center center no-repeat;}
+.tetris.player .play{background:url(../images/sm/start_sm.png) center center no-repeat;}
+.tetris.player .pause{background:url(../images/sm/pause_sm.png) center center no-repeat;}
+.tetris.player .stop{background:url(../images/sm/stop_sm.png) center center no-repeat;}
+.tetris.player .goFast{background:url(../images/sm/goFast_sm.png) center center no-repeat;}
+.tetris.player .goNext{background:url(../images/sm/goNext_sm.png) center center no-repeat;}
+.tetris.player .fullScreen{background:url(../images/sm/fullScreen_sm.png) center center no-repeat;}
+.tetris.player .ptzctrl{background:url(../images/sm/ptzctrl_sm.png) center center no-repeat;}
+.tetris.player .layoutSet{background:url(../images/sm/layout_sm.png) center center no-repeat;}
+.tetris.player .printScreen{background:url(../images/sm/printScreen_sm.png) center center no-repeat;}
+.tetris.player .openFolder{background:url(../images/sm/openFolder_sm.png) center center no-repeat;}
+.tetris.player .setFolder{background:url(../images/sm/setFolder_sm.png) center center no-repeat;}
+
+/* speed text */
+.tetris.player .speedWrap{display:inline-block; font-size:12px; line-height:1.5em; border:1px solid #fff; color:#fff; padding-left:5px; padding-right:5px; margin:5px; border-radius:4px;}

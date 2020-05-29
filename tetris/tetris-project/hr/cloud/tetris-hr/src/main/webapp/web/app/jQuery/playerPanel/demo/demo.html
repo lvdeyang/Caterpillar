@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../player/css/Tetris.player.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/Tetris.playerPanel.css"/>
+    <style type="text/css">
+        html, body{width:100%; height:100%; margin:0; padding:0;}
+        .container{width:65%; height:70%; position:absolute; left:100px; top:100px;}
+    </style>
+</head>
+<body>
+    <div class="container" id="myPlayerPanel"></div>
+</body>
+<script type="text/javascript" src="../../../../../lib/frame/jQuery/jquery-2.2.3.min.js"></script>
+<script type="application/javascript" src="Tetris.date.ext.js"></script>
+<script type="text/javascript" src="../js/Tetris.playerPanel.js"></script>
+<script type="text/javascript" src="../../player/js/Tetris.player.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#myPlayerPanel')['Tetris.playerPanel']('create', {
+            'split':{
+                'layout':[
+                    [0.5, 0.499],[0.25, 0.25],[0.25, 0.25],
+                    [0.25, 0.25],[0.25, 0.25],[0.25, 0.25],[0.25, 0.25],
+                    [0.25, 0.25],[0.25, 0.25],[0.25, 0.25],[0.25, 0.25],
+                    [0.25, 0.25],[0.25, 0.25],[0.25, 0.25],[0.25, 0.25]
+                ],
+            },
+            'player':{
+                'event':{
+                    'onPlay':function($embed, srcList, complete){
+                        alert('callback play');
+                        complete();
+                    },
+                    'onresize':function($embed){
+                        console.log('resize');
+                    },
+                    'layoutSet':function(srcList){
+                        alert('分屏设置');
+                        console.log(srcList);
+                    },
+                    'ptzctrl':function(srcList){
+                        alert('云台');
+                        console.log(srcList);
+                    },
+                    'onDrop':function($embed, serialNum, oldData, event){
+                        alert(serialNum);
+                        console.log($embed);
+                        console.log(oldData);
+                    }
+                },
+                'interface':{
+                    'info':function(title, message){
+                        alert(title);
+                        alert(message);
+                    }
+                }
+            },
+            'interface':{
+                'createPlayer':function(config){
+                    $(this)['Tetris.player']('create', config);
+                }
+            }
+        });
+
+    });
+</script>
+</html>
