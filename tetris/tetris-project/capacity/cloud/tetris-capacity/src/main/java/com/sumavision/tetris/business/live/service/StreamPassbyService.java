@@ -754,6 +754,14 @@ public class StreamPassbyService {
 
         EncodeBO videoEncode = new EncodeBO().setEncode_id(encodeVideoId).setH264(h264);
 
+        
+        ScaleBO scaleBO=new ScaleBO().setHeight(Integer.parseInt(res[1])).setWidth(Integer.parseInt(res[0]))
+        		.setPlat("cpu").setNv_card_idx(0).setMode("slow");
+        PreProcessingBO encodepreProcessingBO=new PreProcessingBO();
+        encodepreProcessingBO.setScale(scaleBO);
+        List<PreProcessingBO> encodepreProcessingBOs=new ArrayList<PreProcessingBO>();
+        encodepreProcessingBOs.add(encodepreProcessingBO);
+        videoEncode.setProcess_array(encodepreProcessingBOs);
         videoTask.getEncode_array().add(videoEncode);
         
         //字幕
@@ -785,13 +793,8 @@ public class StreamPassbyService {
         
 
         //添加缩放
-        ScaleBO scaleBO=new ScaleBO().setHeight(Integer.parseInt(res[1])).setWidth(Integer.parseInt(res[0]))
-        		.setPlat("cpu").setNv_card_idx(0).setMode("slow");
-        PreProcessingBO preProcessingBO=new PreProcessingBO();
-        preProcessingBO.setScale(scaleBO);
-        List<PreProcessingBO> preProcessingBOs=new ArrayList<PreProcessingBO>();
-        preProcessingBOs.add(preProcessingBO);
-        videoTask.setDecode_process_array(preProcessingBOs);
+        
+        //videoTask.setDecode_process_array(preProcessingBOs);
         
         
         tasks.add(videoTask);
