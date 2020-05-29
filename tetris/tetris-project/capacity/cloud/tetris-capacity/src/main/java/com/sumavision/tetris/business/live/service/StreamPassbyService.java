@@ -55,6 +55,7 @@ import com.sumavision.tetris.capacity.bo.task.OsdBO;
 import com.sumavision.tetris.capacity.bo.task.PictureOsdObjectBO;
 import com.sumavision.tetris.capacity.bo.task.PreProcessingBO;
 import com.sumavision.tetris.capacity.bo.task.ResampleBO;
+import com.sumavision.tetris.capacity.bo.task.ScaleBO;
 import com.sumavision.tetris.capacity.bo.task.StaticPictureOsdBO;
 import com.sumavision.tetris.capacity.bo.task.TaskBO;
 import com.sumavision.tetris.capacity.bo.task.TaskSourceBO;
@@ -165,6 +166,67 @@ public class StreamPassbyService {
         }
 
     }
+    
+    
+    public void createRtspTask(Long taskId, List<String> srcUrls, String dstPubName,
+    		String resolution,int bitrate,int fps,String hw) {
+        try {
+            // 创建输入源
+            List<InputBO> inputBOs = new ArrayList<InputBO>();
+            List<String> inputIds=new ArrayList<String>();
+            int index=1;
+            for (String srcurl : srcUrls) {
+                InputBO inputBO = stream2RstpInputBO(taskId+"-"+index, srcurl);
+                inputIds.add(taskId+"-"+index);
+                inputBOs.add(inputBO);
+                index++;
+            }
+            // 创建备份源关系了
+            InputBO backInput = stream2BackInputBO(taskId, inputIds);
+            inputBOs.add(backInput);
+            // 创建任务了
+            String videoTaskId = new StringBufferWrapper().append("task-video-").append(taskId).toString();
+
+            String audioTaskId = new StringBufferWrapper().append("task-audio-").append(taskId).toString();
+
+            String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(taskId).toString();
+
+            String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
+            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
+            		,resolution, bitrate, fps, hw,null);
+            
+            
+            
+            // 创建输出了
+            String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
+            OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+                    dstPubName);
+            AllRequest allRequest = new AllRequest();
+            allRequest.setInput_array(inputBOs);
+            allRequest.setTask_array(taskBOs);
+            allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
+
+            /*String[] pullServerList=capacityProps.getPip().split(",");
+
+            for (String url : pullServerList) {
+            	String destPubUrl="rtmp://"+url+"/live/"+dstPubName;
+            	OutputBO temOutputBO = streamUrlRtmp2OutputBO(outputId+"-"+index, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+            			destPubUrl);
+            	allRequest.getOutput_array().add(temOutputBO);
+			}*/
+            
+            AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
+                    capacityProps.getPort());
+
+            responseService.allResponseProcess(allResponse);
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+    
     
     @Autowired
     TempDao tempDao;
@@ -632,6 +694,30 @@ public class StreamPassbyService {
         return input;
 
     }
+    
+    
+    public InputBO stream2RstpInputBO(String inputId, String rtmpUrl) throws Exception {
+
+        SourceUrlBO rtsp = new SourceUrlBO().setUrl(rtmpUrl);
+
+        InputBO input = new InputBO().setRtsp(rtsp).setId(inputId).setMedia_type_once_map(new JSONObject())
+                .setProgram_array(new ArrayList<ProgramBO>()).setMedia_type_once_map(new JSONObject());
+
+        ProgramBO program = new ProgramBO().setProgram_number(1).setVideo_array(new ArrayList<ProgramVideoBO>())
+                .setAudio_array(new ArrayList<ProgramAudioBO>());
+
+        ProgramVideoBO video = new ProgramVideoBO().setPid(2).setDecode_mode("cpu");
+        ProgramAudioBO audio = new ProgramAudioBO().setPid(1).setDecode_mode("cpu");
+
+        program.getVideo_array().add(video);
+        program.getAudio_array().add(audio);
+
+        input.getProgram_array().add(program);
+
+        return input;
+
+    }
+    
 
     /**
      * 任务<br/>
@@ -698,6 +784,15 @@ public class StreamPassbyService {
         }
         
 
+        //添加缩放
+        ScaleBO scaleBO=new ScaleBO().setHeight(Integer.parseInt(res[1])).setWidth(Integer.parseInt(res[0]))
+        		.setPlat("cpu").setNv_card_idx(0).setMode("slow");
+        PreProcessingBO preProcessingBO=new PreProcessingBO();
+        preProcessingBO.setScale(scaleBO);
+        List<PreProcessingBO> preProcessingBOs=new ArrayList<PreProcessingBO>();
+        preProcessingBOs.add(preProcessingBO);
+        videoTask.setDecode_process_array(preProcessingBOs);
+        
         
         tasks.add(videoTask);
 

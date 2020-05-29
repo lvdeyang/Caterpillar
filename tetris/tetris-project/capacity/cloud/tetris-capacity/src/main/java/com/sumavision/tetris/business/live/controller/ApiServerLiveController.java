@@ -44,6 +44,37 @@ public class ApiServerLiveController {
     
     @JsonBody
     @ResponseBody
+    @RequestMapping(value = "/create/rtsptask")
+    public Object creatertspTask(HttpServletRequest request, String list, Long userId) throws Exception {
+
+    	List<String> array=Arrays.asList(list.split(","));
+    	
+    	
+        streamPassbyService.createRtspTask(userId,
+        		array,
+                "camera" + userId,"720,576", 500000, 25, "4:3");
+
+        return null;
+    }
+    
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/create/rtask")
+    public Object createrTask(HttpServletRequest request, String list, Long userId,
+    		String resolution,int bitrate,int fps,String hw) throws Exception {
+
+    	List<String> array=Arrays.asList(list.split(","));
+        streamPassbyService.createTask(userId,
+        		array,
+                "camera" + userId,resolution, bitrate, fps, hw);
+        return null;
+    }
+    
+    
+    
+    @JsonBody
+    @ResponseBody
     @RequestMapping(value = "/create/task")
     public Object createTask(HttpServletRequest request, String list, Long userId,
     		String resolution,int bitrate,int fps,String hw) throws Exception {

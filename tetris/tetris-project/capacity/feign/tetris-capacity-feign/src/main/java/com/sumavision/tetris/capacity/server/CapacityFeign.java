@@ -69,6 +69,10 @@ public interface CapacityFeign {
     public JSONObject createTask(@RequestParam("list") String list, @RequestParam("userId") Long userId) throws Exception;
 
     
+    @RequestMapping(value = "/capacity/live/create/rtsptask")
+    public JSONObject createRtspTask(@RequestParam("list") String list, @RequestParam("userId") Long userId) throws Exception;
+
+    
     @RequestMapping(value = "/capacity/live/create/temptask")
     public JSONObject createTempTask(@RequestParam("list") String list, @RequestParam("userId") Long userId, @RequestParam("tempId") Long tempId) throws Exception;
 

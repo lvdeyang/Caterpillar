@@ -47,8 +47,9 @@ require.config({
 
         /* pages */
        
-        'page-business-show':window.APPPATH + 'business-show/page-business-show'
-      
+        'page-business-show':window.APPPATH + 'business-show/page-business-show',
+        'page-show-monitor':window.APPPATH + 'monitor/page-show-monitor'
+
     },
     shim:{
         'vue':{
