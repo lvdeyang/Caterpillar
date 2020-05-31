@@ -473,8 +473,9 @@ $("#phone").hide();
 	   //window.location.href="guide/visitors/app?userId="+${userId}; 
 	   var _uri = window.BASEPATH + 'guide/setNeeded?merchantId=${merchantId}';
 	   $.get(_uri, null, function(data){
+	       window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=app.guolaiwan.com.guolaiwan";
 	   });
-	   window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=app.guolaiwan.com.guolaiwan";
+	   
    });
    $(document).on('click',' #pname',function(){ //导航
 	  //window.location.href="guide/visitors/app?userId="+${userId}; 
