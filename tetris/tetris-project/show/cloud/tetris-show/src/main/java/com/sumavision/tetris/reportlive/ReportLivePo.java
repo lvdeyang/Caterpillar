@@ -12,6 +12,7 @@ public class ReportLivePo extends AbstractBasePO{
 	private String name;
 	private String moniterIds;
 	private int cinterval;
+	private int isOld=0;
 	public String getName() {
 		return name;
 	}
@@ -29,6 +30,12 @@ public class ReportLivePo extends AbstractBasePO{
 	}
 	public void setCinterval(int cinterval) {
 		this.cinterval = cinterval;
+	}
+	public int getIsOld() {
+		return isOld;
+	}
+	public void setIsOld(int isOld) {
+		this.isOld = isOld;
 	}
 	
 	
