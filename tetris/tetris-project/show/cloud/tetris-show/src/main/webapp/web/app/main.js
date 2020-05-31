@@ -48,7 +48,8 @@ require.config({
         /* pages */
        
         'page-business-show':window.APPPATH + 'business-show/page-business-show',
-        'page-show-monitor':window.APPPATH + 'monitor/page-show-monitor'
+        'page-show-monitor':window.APPPATH + 'monitor/page-show-monitor',
+        'page-show-reportlive':window.APPPATH + 'monitor/page-show-reportlive'
 
     },
     shim:{

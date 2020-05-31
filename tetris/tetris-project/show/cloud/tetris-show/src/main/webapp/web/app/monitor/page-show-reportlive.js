@@ -2,7 +2,7 @@
  * Created by ldy on 2019/3/2 0024.
  */
 define([
-    'text!' + window.APPPATH + 'monitor/page-show-monitor.html',
+    'text!' + window.APPPATH + 'monitor/page-show-reportlive.html',
     'config',
     'jquery',
     'restfull',
@@ -12,10 +12,10 @@ define([
     'element-ui',
     'date',
     'mi-frame',
-    'css!' + window.APPPATH + 'device/page-show-monitor.css'
+    'css!' + window.APPPATH + 'monitor/page-show-reportlive.css'
 ], function(tpl, config, $, ajax, context, commons, Vue){
 
-    var pageId = 'page-show-monitor';
+    var pageId = 'page-show-reportlive';
 
     var init = function(){
 
@@ -74,10 +74,8 @@ define([
                     var row = scope.row;
                     self.dialog.editdevice.id = row.id;
                     self.dialog.editdevice.name = row.name;
-                    self.dialog.editdevice.ip = row.ip;
-                    self.dialog.editdevice.port = row.port;
-                    self.dialog.editdevice.userName = row.userName;
-                    self.dialog.editdevice.passwrod = row.password;
+                    self.dialog.editdevice.moniterIds = row.moniterIds;
+                    self.dialog.editdevice.cinterval = row.cinterval;
                     self.dialog.editdevice.visible = true;
                 },
                 rowDelete:function(scope){
@@ -99,7 +97,7 @@ define([
                         beforeClose:function(action, instance, done){
                             instance.confirmButtonLoading = true;
                             if(action === 'confirm'){
-                                ajax.post('/show/monitor/remove/' + row.id, null, function(data, status){
+                                ajax.post('/show/reportlive/remove/' + row.id, null, function(data, status){
                                     instance.confirmButtonLoading = false;
                                     done();
                                     if(status !== 200) return;
@@ -134,7 +132,7 @@ define([
                 loaddevice:function(){
                     var self = this;
                     self.table.data.splice(0, self.table.data.length);
-                    ajax.post('/show/monitor/list', {
+                    ajax.post('/show/reportlive/list', {
                         currentPage:self.table.page.currentPage,
                         pageSize:self.table.page.size
                     }, function(data){
@@ -151,21 +149,17 @@ define([
                 handleAdddeviceClose:function(){
                     var self = this;
                     self.dialog.adddevice.name = '';
-                    self.dialog.adddevice.ip = '';
-                    self.dialog.adddevice.port = '';
-                    self.dialog.adddevice.userName = '';
-                    self.dialog.adddevice.password = '';
+                    self.dialog.adddevice.moniterIds = '';
+                    self.dialog.adddevice.cinterval = '';
                     self.dialog.adddevice.visible = false;
                 },
                 handleAdddeviceCommit:function(){
                     var self = this;
                     self.dialog.adddevice.loading = true;
-                    ajax.post('/show/monitor/add', {
+                    ajax.post('/show/reportlive/add', {
                         name:self.dialog.adddevice.name,
-                        ip:self.dialog.adddevice.ip,
-                        port:self.dialog.adddevice.port,
-                        userName:self.dialog.adddevice.userName,
-                        password:self.dialog.adddevice.password
+                        moniterIds:self.dialog.adddevice.moniterIds,
+                        cinterval:self.dialog.adddevice.cinterval
                     }, function(data, status){
                         self.dialog.adddevice.loading = false;
                         if(status !== 200) return;
@@ -177,22 +171,17 @@ define([
                 handleEditdeviceClose:function(){
                     var self = this;
                     self.dialog.editdevice.id = '';
-                    self.dialog.editdevice.name = '';
-                    self.dialog.editdevice.ip = '';
-                    self.dialog.editdevice.port = '';
-                    self.dialog.editdevice.userName = '';
-                    self.dialog.editdevice.password = '';
+                    self.dialog.editdevice.moniterIds = '';
+                    self.dialog.editdevice.cinterval = '';
                     self.dialog.editdevice.visible = false;
                 },
                 handleEditdeviceCommit:function(){
                     var self = this;
                     self.dialog.editdevice.loading = true;
-                    ajax.post('/show/monitor/edit/' + self.dialog.editdevice.id, {
+                    ajax.post('/show/reportlive/edit/' + self.dialog.editdevice.id, {
                         name:self.dialog.editdevice.name,
-                        ip:self.dialog.editdevice.ip,
-                        port:self.dialog.adddevice.port,
-                        userName:self.dialog.adddevice.userName,
-                        password:self.dialog.adddevice.password
+                        moniterIds:self.dialog.editdevice.moniterIds,
+                        cinterval:self.dialog.editdevice.cinterval
                     }, function(data, status){
                         self.dialog.editdevice.loading = false;
                         if(status !== 200) return;

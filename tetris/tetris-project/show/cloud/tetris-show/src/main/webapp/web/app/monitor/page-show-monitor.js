@@ -12,7 +12,7 @@ define([
     'element-ui',
     'date',
     'mi-frame',
-    'css!' + window.APPPATH + 'device/page-show-monitor.css'
+    'css!' + window.APPPATH + 'monitor/page-show-monitor.css'
 ], function(tpl, config, $, ajax, context, commons, Vue){
 
     var pageId = 'page-show-monitor';
@@ -77,7 +77,7 @@ define([
                     self.dialog.editdevice.ip = row.ip;
                     self.dialog.editdevice.port = row.port;
                     self.dialog.editdevice.userName = row.userName;
-                    self.dialog.editdevice.passwrod = row.password;
+                    self.dialog.editdevice.password = row.password;
                     self.dialog.editdevice.visible = true;
                 },
                 rowDelete:function(scope){
@@ -190,9 +190,9 @@ define([
                     ajax.post('/show/monitor/edit/' + self.dialog.editdevice.id, {
                         name:self.dialog.editdevice.name,
                         ip:self.dialog.editdevice.ip,
-                        port:self.dialog.adddevice.port,
-                        userName:self.dialog.adddevice.userName,
-                        password:self.dialog.adddevice.password
+                        port:self.dialog.editdevice.port,
+                        userName:self.dialog.editdevice.userName,
+                        password:self.dialog.editdevice.password
                     }, function(data, status){
                         self.dialog.editdevice.loading = false;
                         if(status !== 200) return;
