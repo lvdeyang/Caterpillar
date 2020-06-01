@@ -54,13 +54,13 @@ public class ApiServerLiveController {
         		array,
                 "camera" + userId,"720,576", 500000, 25, "4:3");
 
-        Thread.sleep(3000);
+        /*Thread.sleep(3000);
         int count=1000;
         int index=0;
         while (index<count) {
         	 streamPassbyService.switchTask(userId,count++%2);
         	 Thread.sleep(3000);
-		}
+		}*/
         return null;
     }
     

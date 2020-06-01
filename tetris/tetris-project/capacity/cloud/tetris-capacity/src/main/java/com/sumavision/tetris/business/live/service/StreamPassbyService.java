@@ -471,9 +471,9 @@ public class StreamPassbyService {
         for (String inputId : srcPubNames) {
 
             ProgramElementBO velementBO = new ProgramElementBO().setType("audio").setPid(1).setProgram_switch_array(
-                    new ArrayListWrapper<PidIndexBO>().addAll(generatePidIndex(2, 0)).getList());
+                    new ArrayListWrapper<PidIndexBO>().addAll(generatePidIndex(srcPubNames.size(), 0)).getList());
             ProgramElementBO aelementBO = new ProgramElementBO().setType("video").setPid(2).setProgram_switch_array(
-                    new ArrayListWrapper<PidIndexBO>().addAll(generatePidIndex(2, 1)).getList());
+                    new ArrayListWrapper<PidIndexBO>().addAll(generatePidIndex(srcPubNames.size(), 1)).getList());
             List<ProgramElementBO> elementBOs = new ArrayList<ProgramElementBO>();
             elementBOs.add(velementBO);
             elementBOs.add(aelementBO);

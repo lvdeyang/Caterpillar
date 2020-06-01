@@ -54,7 +54,7 @@ public class ShowInitialization implements SystemInitialization{
             	int index=0;
                 while(checkMap.get(tempReportLive.getId())){
                 	try {
-                		//service.switchTask(tempReportLive.getId(), index);
+                		service.switchTask(10000+tempReportLive.getId(), index);
                 		System.out.println("监控轮询【"+tempReportLive.getId()+"】"+"切换到："+index);
                 		index++;
                 		if(index==count){
@@ -125,7 +125,8 @@ public class ShowInitialization implements SystemInitialization{
 							
 						}
 						try {
-							//service.createRtspTask(list, reportLivePo.getId());
+							
+							service.createRtspTask(list, 10000+reportLivePo.getId());
 							System.out.println("监控轮询创建【"+reportLivePo.getId()+"】");
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
