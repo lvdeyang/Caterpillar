@@ -75,6 +75,41 @@ public class ShowInitialization implements SystemInitialization{
 	
 	@Override
 	public void init() {
+		/*List<ReportLivePo> reportLiveList=reportliveDao.findAll();
+		for (ReportLivePo reportLivePo : reportLiveList) {
+			if(reportLivePo.getIsOld()==0){
+				reportLivePo.setIsOld(1);
+				reportliveDao.save(reportLivePo);
+				String list="";
+				String[] monitors=reportLivePo.getMoniterIds().split(",");
+				int index=0;
+				for (String monitor : monitors) {
+					MonitorPo monitorPo=monitorDao.findOne(Long.parseLong(monitor));
+					if(monitorPo==null){
+						continue;
+					}
+					if(index!=0){
+						list+=",";
+					}
+					index++;
+					list+="rtsp://"+monitorPo.getUserName()+":"+monitorPo.getPassword()+"@"+
+					monitorPo.getIp()+":"+monitorPo.getPort();
+					
+					
+				}
+				try {
+					service.createRtspTask(list, 10000+reportLivePo.getId());
+					System.out.println("监控轮询创建【"+reportLivePo.getId()+"】");	
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+			startSwitch(reportLivePo);
+			
+		}*/
 		
 
 		fixedThreadPool.execute(new Runnable() {
@@ -125,14 +160,17 @@ public class ShowInitialization implements SystemInitialization{
 							
 						}
 						try {
-							
+							Thread.sleep(5000);
 							service.createRtspTask(list, 10000+reportLivePo.getId());
 							System.out.println("监控轮询创建【"+reportLivePo.getId()+"】");
+							
+							startSwitch(reportLivePo);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						startSwitch(reportLivePo);
+						
+						
 					}
 					try {
 						Thread.sleep(5000);
@@ -145,11 +183,6 @@ public class ShowInitialization implements SystemInitialization{
 			}
 		});
 	
-		List<ReportLivePo> reportLiveList=reportliveDao.findAll();
-		for (ReportLivePo reportLivePo : reportLiveList) {
-			startSwitch(reportLivePo);
-			
-		}
 		
 	}
 
