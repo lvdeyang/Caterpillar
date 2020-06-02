@@ -256,6 +256,7 @@ public class StreamPassbyService {
             
             TempPo tempPo=tempDao.findOne(tempId);
             List<GlsPo> glsPos=glsDao.findByTempId(tempId);
+            
             List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
             		,tempPo.getX()+","+tempPo.getY(), tempPo.getRate(),tempPo.getFrame(),tempPo.getRatio(),glsPos);
             
@@ -767,6 +768,10 @@ public class StreamPassbyService {
         //字幕
         if(glsList!=null){
         	for (GlsPo gls : glsList) {
+        		if(gls.getWidth()==0||gls.getHeight()==0){
+        			continue;
+        		}
+
         		if(gls.getType()==0){
         			OsdBO osdBO=new OsdBO().setHeight(gls.getHeight()).setWidth(gls.getWidth()).setX(gls.getX()).setY(gls.getY())
         	        		.setHas_background(false).setBackground_color(gls.getBackgroundColor())
