@@ -5514,11 +5514,26 @@ public class AppController extends WebBaseControll {
 	@RequestMapping(value = "/updateVersion", method = RequestMethod.GET)
 	public Map<String, Object> updateVersion(HttpServletRequest request) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		strMap.put("versionCode", 9);
-		strMap.put("versionName", "9");
+		File file = new File("/usr/sbin/guolaiwan/tomcat/apache-tomcat-7.0.85-windows-x64/apache-tomcat-7.0.85/webapps/download");//File类型可以是文件也可以是文件夹
+		File[] fileList = file.listFiles();
+		String version="";
+		String fileName="";
+		for (File file2 : fileList) {
+			if(file2.getName().contains(".apk")){
+				String[] versions=file2.getName().split("\\.");
+				if(versions.length!=3){
+					continue;
+				}
+				version=versions[1];
+				fileName=file2.getName();
+				break;
+			}
+		}
+		strMap.put("versionCode", version);
+		strMap.put("versionName", version);
 		strMap.put("content", "");
 		strMap.put("forceUpdate", true);
-		strMap.put("url", "http://" + WXContants.Website + "/download/guolaiwan.apk");
+		strMap.put("url", "http://" + WXContants.Website + "/download/"+fileName);
 
 		return success(strMap);
 	}
