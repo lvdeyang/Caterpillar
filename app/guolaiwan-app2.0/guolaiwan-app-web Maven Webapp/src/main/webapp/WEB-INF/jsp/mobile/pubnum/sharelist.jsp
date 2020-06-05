@@ -541,7 +541,7 @@ html, body {
 			}else{
 				$("#jiaoyin").empty();
 			}
-			
+			getadaohang(data);
 		});
 		function generateProduct(data) {
 			for (var i = 0; i < data.childList.length; i++) {
@@ -559,22 +559,22 @@ html, body {
 				html.push('<br />');
 			$('#viewText').append(html.join(''));
 			}
-			getadaohang(data);
+			
 		}
 		function getadaohang(data) {
 				var html = [];
 				html.push('<div style="text-align: center;">');
-				html.push('<a href="http://apis.map.qq.com/tools/routeplan/eword='+data.ProName+'&epointx='+data.LO+'&epointy='+data.LA+'?referer=myapp&key=2FNBZ-52HR4-OHEUW-XT2S7-ZJABQ-OJFIJ"><img class="modal" style="width:100%;height:20%" src="http://<%=weburl%>/guolaiwan/lib/images/guide.jpg"></a>');
+				html.push('<a href="https://a.app.qq.com/o/simple.jsp?pkgname=app.guolaiwan.com.guolaiwan" class="weui-btn weui-btn_primary">进入APP</a>');
 				html.push("</div>");
 				html.push('<br />');
 			$('#adaohang').append(html.join(''));
 		}
 		function geturl(data){
 			var html = [];
-				html.push('<div style="text-align: center;">');
-				html.push('<a href="http://<%=weburl%>/guolaiwan/pubnum/product/index/'+data.merId+'"><img class="modal" style="width:100%;height:20%" src="http://<%=weburl%>/guolaiwan/lib/images/logo.jpg"></a>');
-				html.push("</div>");
-				html.push('<br />');
+				//html.push('<div style="margin:0 auto">');
+				//html.push('<a href="javascript:void(0)"><img class="modal" style="width:100%;height:20%" src="http://<%=weburl%>/guolaiwan/lib/images/logo.jpg"></a>');
+				//html.push("</div>");
+				//html.push('<br />');
 			$('#geturl').append(html.join(''));
 		}
 	});
@@ -598,6 +598,6 @@ html, body {
 		<span style="color: green;font-size: 25px;">留下的脚印</span>
 	</div>
 	<table id="viewText" style="margin-top:15px;"></table>
-	<table id="adaohang" style="margin-top:15px;"></table>
+	<div id="adaohang" style="margin-top:15px;width:100%;padding:2%"></div>
 </body>
 </html>
