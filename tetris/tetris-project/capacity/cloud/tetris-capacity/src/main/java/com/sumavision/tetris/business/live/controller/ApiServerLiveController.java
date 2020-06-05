@@ -27,20 +27,7 @@ public class ApiServerLiveController {
     private StreamPassbyService streamPassbyService;
 
    
-    @JsonBody
-    @ResponseBody
-    @RequestMapping(value = "/create/easytask")
-    public Object createTask(HttpServletRequest request, String list, Long userId) throws Exception {
 
-    	List<String> array=Arrays.asList(list.split(","));
-    	
-    	
-        streamPassbyService.createTask(userId,
-        		array,
-                "camera" + userId,"544,960", 500000, 20, "9:16");
-
-        return null;
-    }
     
     @JsonBody
     @ResponseBody
@@ -50,9 +37,9 @@ public class ApiServerLiveController {
     	List<String> array=Arrays.asList(list.split(","));
     	
     	
-        streamPassbyService.createRtspTask(userId,
+        streamPassbyService.createTask(userId,
         		array,
-                "camera" + userId,"720,576", 500000, 25, "4:3");
+                "camera" + userId,"720,576", 500000, 25, "4:3","rtsp");
 
         /*Thread.sleep(3000);
         int count=1000;
@@ -67,36 +54,26 @@ public class ApiServerLiveController {
     
     @JsonBody
     @ResponseBody
-    @RequestMapping(value = "/create/rtask")
-    public Object createrTask(HttpServletRequest request, String list, Long userId,
-    		String resolution,int bitrate,int fps,String hw) throws Exception {
-
-    	List<String> array=Arrays.asList(list.split(","));
-        streamPassbyService.createTask(userId,
-        		array,
-                "camera" + userId,resolution, bitrate, fps, hw);
-        return null;
-    }
-    
-    
-    
-    @JsonBody
-    @ResponseBody
-    @RequestMapping(value = "/create/task")
-    public Object createTask(HttpServletRequest request, String list, Long userId,
-    		String resolution,int bitrate,int fps,String hw) throws Exception {
+    @RequestMapping(value = "/create/rtmptask")
+    public Object creatertmpTask(HttpServletRequest request, String list, Long userId) throws Exception {
 
     	List<String> array=Arrays.asList(list.split(","));
     	
     	
         streamPassbyService.createTask(userId,
         		array,
-                "camera" + userId,resolution, bitrate, fps, hw);
+                "camera" + userId,"720,576", 500000, 25, "4:3","rtmp");
 
+        Thread.sleep(3000);
+        int count=1000;
+        int index=0;
+        while (index<count) {
+        	 streamPassbyService.switchTask(userId,count++%2);
+        	 Thread.sleep(3000);
+		}
         return null;
     }
-    
-    
+ 
     @JsonBody
     @ResponseBody
     @RequestMapping(value = "/create/temptask")

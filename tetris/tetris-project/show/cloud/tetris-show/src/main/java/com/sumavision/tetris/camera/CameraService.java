@@ -282,23 +282,7 @@ public class CameraService {
         return cameraPo1;
     }
 
-    /**
-     * @描述
-     * @参数 开始推流
-     * @返回值
-     * @创建人 yud
-     * @创建时间 2020/2/7
-     */
-    public Object createTask(long userId) throws Exception {
-        List<CameraPo> list = cameraDao.findByUserId(userId);
-        StringBuffer sb=new StringBuffer();
-        for (CameraPo cameraPo : list) {
-            //list1.add("test" + cameraPo.getUserId().toString() + cameraPo.getId().toString());
-        	sb.append(cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
-        }
-        capacityService.createTask(sb.toString(), list.get(0).getUserId());
-        return null;
-    }
+   
     
     public Object createTempTask(long userId,long tempId) throws Exception {
         List<CameraPo> list = cameraDao.findByUserId(userId);

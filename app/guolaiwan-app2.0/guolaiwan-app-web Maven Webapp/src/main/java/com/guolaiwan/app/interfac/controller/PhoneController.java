@@ -6055,7 +6055,7 @@ public class PhoneController extends WebBaseControll {
 		List<ShareVO> volist = ShareVO.getConverter(ShareVO.class).convert(polist, ShareVO.class);
 		String childIds = volist.get(0).getChildIds();
 		List<ChildProductPO> list = new ArrayList<ChildProductPO>();
-		if (!"".equals(childIds)) {
+		if (childIds!=null&!"".equals(childIds)) {
 			String[] splits = childIds.split(",");
 			for (String str : splits) {
 				List<ChildProductPO> childlist = conn_childProduct.getChildsList(Long.parseLong(str));

@@ -102,25 +102,6 @@ public class AndriodController {
 
     @Autowired
     LiveDao liveDao;
-    /**
-     * 开始直播
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/startShow", method = {RequestMethod.POST, RequestMethod.PUT})
-    public Map<String, Object> startShow() throws Exception {
-    	UserVO user=userQuery.current();
-    	
-    	List<LivePo> livePo=liveDao.getByAnchorId(user.getId());
-    	if(livePo!=null&&!livePo.isEmpty()){
-    		livePo.get(0).setStatus(1);
-    		liveDao.save(livePo.get(0));
-    	}
-		
-    	//调用capacityfein开始任务
-    	cameraService.createTask(user.getId());
-        return Result.success();
-    }
     
     
     @RequestMapping(value = "/startTempShow/{tempId}", method = {RequestMethod.POST, RequestMethod.PUT})

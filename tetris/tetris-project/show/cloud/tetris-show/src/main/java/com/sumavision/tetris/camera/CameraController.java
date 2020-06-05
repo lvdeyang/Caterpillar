@@ -111,11 +111,7 @@ public class CameraController {
         cameraService.stop(userId);
         return Result.success();
     }
-    @RequestMapping(value = "createTask/{userId}", method = {RequestMethod.POST, RequestMethod.PUT})
-    public Map<String, Object> createTask(@PathVariable Long userId) throws Exception {
-        cameraService.createTask(userId);
-        return Result.success();
-    }
+   
     /**
      *@描述   创建录制
      *@参数  id 机位id

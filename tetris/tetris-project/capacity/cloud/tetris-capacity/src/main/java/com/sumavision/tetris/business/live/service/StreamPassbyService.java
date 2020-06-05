@@ -106,6 +106,7 @@ public class StreamPassbyService {
      * @param srcPubNames 按照机位顺序放入ArrayList【机位的发布名】
      * @param dstPubName  注意所有的dstPubname不可以与srcPubname重名
      */
+    @Deprecated
     public void createTask(Long taskId, List<String> srcPubNames, String dstPubName,
     		String resolution,int bitrate,int fps,String hw) {
         try {
@@ -167,16 +168,26 @@ public class StreamPassbyService {
 
     }
     
-    
-    public void createRtspTask(Long taskId, List<String> srcUrls, String dstPubName,
-    		String resolution,int bitrate,int fps,String hw) {
+    /***
+     * 
+     * @param taskId
+     * @param srcUrls
+     * @param dstPubName
+     * @param resolution
+     * @param bitrate
+     * @param fps
+     * @param hw
+     * @param sourceType rtsp rtmp
+     */
+    public void createTask(Long taskId, List<String> srcUrls, String dstPubName,
+    		String resolution,int bitrate,int fps,String hw,String sourceType) {
         try {
             // 创建输入源
             List<InputBO> inputBOs = new ArrayList<InputBO>();
             List<String> inputIds=new ArrayList<String>();
             int index=1;
             for (String srcurl : srcUrls) {
-                InputBO inputBO = stream2RstpInputBO(taskId+"-"+index, srcurl);
+                InputBO inputBO = stream2InputBO(taskId+"-"+index, srcurl,sourceType);
                 inputIds.add(taskId+"-"+index);
                 inputBOs.add(inputBO);
                 index++;
@@ -194,9 +205,7 @@ public class StreamPassbyService {
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
             List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
             		,resolution, bitrate, fps, hw,null);
-            
-            
-            
+
             // 创建输出了
             String outputId = new StringBufferWrapper().append("output-").append(taskId).toString();
             OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
@@ -205,15 +214,6 @@ public class StreamPassbyService {
             allRequest.setInput_array(inputBOs);
             allRequest.setTask_array(taskBOs);
             allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
-
-            /*String[] pullServerList=capacityProps.getPip().split(",");
-
-            for (String url : pullServerList) {
-            	String destPubUrl="rtmp://"+url+"/live/"+dstPubName;
-            	OutputBO temOutputBO = streamUrlRtmp2OutputBO(outputId+"-"+index, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
-            			destPubUrl);
-            	allRequest.getOutput_array().add(temOutputBO);
-			}*/
             
             AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
                     capacityProps.getPort());
@@ -226,6 +226,8 @@ public class StreamPassbyService {
         }
 
     }
+    
+    
     
     
     @Autowired
@@ -696,12 +698,26 @@ public class StreamPassbyService {
 
     }
     
-    
-    public InputBO stream2RstpInputBO(String inputId, String rtmpUrl) throws Exception {
+    /***
+     * 
+     * @param inputId
+     * @param rtmpUrl
+     * @param sourceType rtsp rtmp
+     * @return
+     * @throws Exception
+     */
+    public InputBO stream2InputBO(String inputId, String url,String sourceType) throws Exception {
 
-        SourceUrlBO rtsp = new SourceUrlBO().setUrl(rtmpUrl);
+        SourceUrlBO source = new SourceUrlBO().setUrl(url);
 
-        InputBO input = new InputBO().setRtsp(rtsp).setId(inputId).setMedia_type_once_map(new JSONObject())
+        InputBO input = new InputBO();
+        if(sourceType.equals("rtmp")){
+        	input.setRtmp(source);
+        }else if(sourceType.equals("rtsp")){
+        	input.setRtsp(source);
+        }
+        		
+        input.setId(inputId).setMedia_type_once_map(new JSONObject())
                 .setProgram_array(new ArrayList<ProgramBO>()).setMedia_type_once_map(new JSONObject());
 
         ProgramBO program = new ProgramBO().setProgram_number(1).setVideo_array(new ArrayList<ProgramVideoBO>())
