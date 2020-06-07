@@ -680,7 +680,8 @@ html, body {
 		
 		$(window).scroll(function(){
 　　			//判断是否滑动到页面底部
-		     if($(window).scrollTop() === $(document).height() - $(window).height()){
+	/* 	     if($(window).scrollTop() === $(document).height() - $(window).height()){ */
+		     if($(window).scrollTop() + $(window).height() +10>= $(document).height()){
 				var flag=$('.flag').val();
 				if(flag==2){
 				   $('.weui-loadmores').fadeIn().addClass("show")
