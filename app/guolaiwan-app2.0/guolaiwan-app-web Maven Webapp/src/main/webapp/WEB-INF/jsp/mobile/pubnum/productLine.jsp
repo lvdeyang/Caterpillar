@@ -510,12 +510,10 @@ html, body {
 	background: #a9a9a9;
 }
 #proContent img{
-    width:280px;
-    height:280px;
+    width:85%;
 }
 #proContent image{
-    width:280px;
-    height:280px;
+    width:85%;
 }
 </style>
 
