@@ -460,6 +460,9 @@ $("#phone").hide();
    function picking(){
    		location.href=window.BASEPATH + 'business/gotopicking?merchantId=${merchantId}';
    }
+   function distribute(){
+   		location.href=window.BASEPATH + 'pubnum/mechant/distribute/index?merchantId=${merchantId}';
+   }
    function question(){
    	  location.href=window.BASEPATH + 'business/merchant/strategys?merchantId=${merchantId}';
    }
@@ -526,7 +529,7 @@ $("#phone").hide();
    	     <li onclick="accommodation()"><span>住宿</span></li>
          <li><span onclick="paking()">停车</span></li>
          <li onclick="cate()"><span>美食</span></li>
-         <li><span>分销</span></li>
+         <li onclick="distribute()"><span>分销</span></li>
          <li onclick="activity()"><img src="lib/images/huodongs.png"/></li>
    	     <li onclick="group()"><img src="lib/images/pintuans.png"/></li>
          <li onclick="picking()"><img src="lib/images/caizhais.png"/></li>

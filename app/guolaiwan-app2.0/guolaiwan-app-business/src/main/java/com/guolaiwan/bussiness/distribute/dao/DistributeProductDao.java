@@ -49,6 +49,13 @@ public class DistributeProductDao extends AbstractBaseDao<DistributeProduct> {
 		return this.findByHql(hql);
 	}
 	
+	public List<DistributeProduct> queryAllByMerchant(long merchantId){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("online", Condition.eq, 1);
+		hql.andBy("product.productMerchantID",Condition.eq,merchantId);
+		return this.findByHql(hql);
+	}
+	
 	
 	
 	// 获取某个公司下的所有产品数量

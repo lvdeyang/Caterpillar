@@ -48,6 +48,7 @@ import com.guolaiwan.app.web.admin.vo.MerchantVO;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.distribute.vo.DistributeOrderVo;
+import com.guolaiwan.app.web.distribute.vo.DistributorVo;
 import com.guolaiwan.app.web.publicnum.util.EmojiFilter;
 import com.guolaiwan.app.web.publicnum.vo.BundleOrderVo;
 import com.guolaiwan.app.web.publicnum.vo.LiveMessageVo;
@@ -120,10 +121,12 @@ import com.guolaiwan.bussiness.admin.po.SystenCachePo;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
+import com.guolaiwan.bussiness.distribute.dao.DistributorDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributorOrderDao;
 import com.guolaiwan.bussiness.distribute.dao.RegionDao;
 import com.guolaiwan.bussiness.distribute.po.DistributeProduct;
 import com.guolaiwan.bussiness.distribute.po.DistributorOrder;
+import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 import com.guolaiwan.bussiness.distribute.po.RegionPo;
 import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
 import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
@@ -3346,4 +3349,42 @@ public class PubNumController extends WebBaseControll {
 		}
 
 	}
+	
+	@Autowired
+	DistributorDao conn_distributor;
+	@Autowired
+	DistributeProductDao conn_disproduct;
+	
+	//分销相关~
+	@RequestMapping(value = "/mechant/distribute/index")
+	public ModelAndView merdisindex(long merchantId) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubnum/dismerchant");
+		mv.addObject("merchantId", merchantId);
+		return mv;
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getDisBymerchant", method = RequestMethod.POST)
+	public Object getDisBymerchant(long merchantId) {
+		List<DistributeProduct> products=conn_disproduct.queryAllByMerchant(merchantId);
+		List<DistributorPo> distributorPos=new ArrayList<DistributorPo>();
+		for (DistributeProduct distributeProduct : products) {
+			distributorPos.add(conn_distributor.get(distributeProduct.getDistributorId()));
+		}
+		try {
+			List<DistributorVo>  vOs =  new DistributorVo().getConverter(DistributorVo.class)
+			        .convert(distributorPos, DistributorVo.class);
+			return vOs;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ArrayList<DistributorVo>();
+
+	}
+	
+	
 }
