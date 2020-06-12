@@ -141,6 +141,7 @@ import pub.caterpillar.commons.util.binary.Sha1Util;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
 import pub.caterpillar.communication.http.client.HttpClient;
+import pub.caterpillar.mvc.controller.DistributorPO;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 import pub.caterpillar.mvc.util.HttpServletRequestParser;
 import pub.caterpillar.weixin.constants.WXContants;
@@ -3368,15 +3369,24 @@ public class PubNumController extends WebBaseControll {
 	
 	@ResponseBody
 	@RequestMapping(value = "/getDisBymerchant", method = RequestMethod.POST)
-	public Object getDisBymerchant(long merchantId) {
+	public Object getDisBymerchant(HttpServletRequest request) {
+		long merchantId=Long.parseLong(request.getParameter("merchantId").toString());
 		List<DistributeProduct> products=conn_disproduct.queryAllByMerchant(merchantId);
 		List<DistributorPo> distributorPos=new ArrayList<DistributorPo>();
 		for (DistributeProduct distributeProduct : products) {
-			distributorPos.add(conn_distributor.get(distributeProduct.getDistributorId()));
+			DistributorPo distributorPo=conn_distributor.get(distributeProduct.getDistributorId());
+			if(distributorPo!=null){
+				distributorPos.add(distributorPo);
+			}
+			
 		}
 		try {
 			List<DistributorVo>  vOs =  new DistributorVo().getConverter(DistributorVo.class)
 			        .convert(distributorPos, DistributorVo.class);
+			SysConfigPO sysConfigPO=conn_sys.getSysConfig();
+			for (DistributorVo distributorVo : vOs) {
+				distributorVo.setLicenseUrl(sysConfigPO.getWebUrl()+"/"+distributorVo.getLicenseUrl());
+			}
 			return vOs;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -3386,5 +3396,52 @@ public class PubNumController extends WebBaseControll {
 
 	}
 	
+	@RequestMapping(value = "/mechant/distributorhome/index")
+	public ModelAndView distributehome(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		long disId=Long.parseLong(request.getParameter("disId"));
+		mv = new ModelAndView("mobile/pubnum/distributorhome");
+		mv.addObject("disId", disId);
+		return mv;
+	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/dismerchantInfo", method = RequestMethod.POST)
+	public Object dismerchantInfo(HttpServletRequest request) {
+		long disId=Long.parseLong(request.getParameter("disId").toString());
+		DistributorPo distributorPO=conn_distributor.get(disId);
+		DistributorVo vo;
+		try {
+			vo = new DistributorVo().set(distributorPO);
+			SysConfigPO sysConfigPO=conn_sys.getSysConfig();
+			vo.setLicenseUrl(sysConfigPO.getWebUrl()+"/"+vo.getLicenseUrl());
+			return vo;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getProductsBydis", method = RequestMethod.POST)
+	public Object getProductsBydis(HttpServletRequest request) {
+		long disId=Long.parseLong(request.getParameter("disId").toString());
+		List<DistributeProduct> distributeProducts=conn_disproduct.queryOnlineByDistributor(disId);
+		List<ProductVO> productVOs=new ArrayList<ProductVO>();
+        for (DistributeProduct distributeProduct : distributeProducts) {
+			try {
+				ProductVO proVo=new ProductVO().set(distributeProduct.getProduct());
+				productVOs.add(proVo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return productVOs;
+	}
+	
+
 }

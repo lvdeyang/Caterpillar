@@ -710,14 +710,14 @@ html, body {
 	  
 	  
 	  //test
-	    /*if(comCode=='0000'){
+	    if(comCode=='0000'){
 		    comCode='0001';
 		}
 		getCom();
 	    getRecomment();
 	    getModal();
 		getActivityBundle();
-		initSharewx();*/
+		initSharewx();
       /**/
 		
 	  function getRecomment(){

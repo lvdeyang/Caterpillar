@@ -524,7 +524,7 @@ $("#phone").hide();
    	     <li onclick="accommodation()"><img src="lib/images/zhusus.png"/></li>
          <li onclick="paking()"><img src="lib/images/tingchess.png"/></li>
          <li><img onclick="cate()" src="lib/images/meishis.png"/></li>
-         <li><img src="lib/images/fenxiaos.png"/></li>
+         <li onclick="distribute()"><img src="lib/images/fenxiaos.png"/></li>
          <li><span onclick="ticket()">购票</span></li>
    	     <li onclick="accommodation()"><span>住宿</span></li>
          <li><span onclick="paking()">停车</span></li>
