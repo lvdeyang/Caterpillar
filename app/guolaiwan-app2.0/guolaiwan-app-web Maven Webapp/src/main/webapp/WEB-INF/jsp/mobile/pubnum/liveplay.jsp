@@ -629,11 +629,15 @@ html, body {
 			
 			               
 			            wx.onMenuShareTimeline({
-		                            title: '${live.liveName}', // 分享标题
+		                            title: '${live.liveName}-分享领红包', // 分享标题
 		                            link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 		                            imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
 		                            success: function () {
-		                                
+		                                 var sendred= window.BASEPATH + 'pubnum/sendRedPacket';
+									     var params={};
+									     $.post(sendred, $.toJSON(params), function(data){
+											$.alert(data.status);
+										 }); 
 		                            }
 		                        });
 			            wx.onMenuShareAppMessage({
@@ -642,7 +646,11 @@ html, body {
 							link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 		                    imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
 							success : function() {
-								
+								 var sendred= window.BASEPATH + 'pubnum/sendRedPacket';
+							     var params={};
+							     $.post(sendred, $.toJSON(params), function(data){
+									$.alert(data.status);
+								 }); 
 							}
 						});
 			            

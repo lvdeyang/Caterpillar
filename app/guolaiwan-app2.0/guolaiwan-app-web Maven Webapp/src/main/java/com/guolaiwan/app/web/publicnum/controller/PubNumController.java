@@ -1,5 +1,7 @@
 package com.guolaiwan.app.web.publicnum.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -7,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -18,14 +21,29 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
+import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +67,7 @@ import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.app.web.distribute.vo.DistributeOrderVo;
 import com.guolaiwan.app.web.distribute.vo.DistributorVo;
+import com.guolaiwan.app.web.publicnum.util.CommonUtil;
 import com.guolaiwan.app.web.publicnum.util.EmojiFilter;
 import com.guolaiwan.app.web.publicnum.vo.BundleOrderVo;
 import com.guolaiwan.app.web.publicnum.vo.LiveMessageVo;
@@ -3443,5 +3462,187 @@ public class PubNumController extends WebBaseControll {
 		return productVOs;
 	}
 	
+	//直播领红包
+	private static long amount=0;
+	@ResponseBody
+	@RequestMapping("/sendRedPacket")
+    public Object sendRedPacket(HttpServletRequest request){
+    	Map<String, Object> ret=new HashMap<String, Object>();
+    	if(amount<=0){
+    		ret.put("status","感谢分享,红包已经被抢完~");
+    		return ret;
+    	}
+    	Random random=new Random();
+		int thisturn=random.nextInt(200)+1;
+		amount-=thisturn;
+    	HttpSession session = request.getSession();
+        UserInfoPO userInfoPO =conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
+    	if(userInfoPO.getFirstTime()==1){
+    		ret.put("status","感谢分享,老用户不要太贪心哦~");
+    		return ret;
+    	}
+    	ret.put("status","感谢您的分享，收下大红包~");
+    	userInfoPO.setFirstTime(1);
+    	conn_user.save(userInfoPO);
+    	
+        try{
+            
+            //公众号的appid
+            String appid = WXContants.AppId;
+            /**
+             * 根据APPID获取access_token
+             * 我的access_token是做了一个定时器，每隔两个小时刷新一次access_token的值，
+             * 并且保存在redis当中（需要详情的话请留言）。
+             */
+            String access_token = "";
+            //发给谁，该用户的openid
+            String openid = userInfoPO.getUserOpenID();
+            //红包的值，最低100分
+            Integer redValue = thisturn;
+            //开始发送红包
+
+            SortedMap<Object, Object> parameters = new TreeMap<Object, Object>();
+            /** 当前时间 yyyyMMddHHmmss */
+            String currTime = CommonUtil.getCurrTime();
+            /** 8位日期 */
+            String strTime = currTime.substring(8, currTime.length());
+            /** 四位随机数 */
+            String strRandom = CommonUtil.buildRandom(4) + "";
+            //商户订单号
+            parameters.put("mch_billno",strTime + strRandom);
+            /** 商户号 */
+            String mch_id = WXContants.MchId;
+            parameters.put("mch_id", mch_id);
+            /** 随机字符串 */
+            parameters.put("nonce_str", CommonUtil.getNonceStr());
+            /** 公众号APPID */
+            parameters.put("wxappid", appid);
+            /** 商户名称 */
+            String mch_name = "过来玩";
+            parameters.put("send_name",mch_name);
+            /** 用户openid */
+            parameters.put("re_openid",openid);
+            /** 付款金额 */
+            parameters.put("total_amount",redValue);
+            /** 红包发放总人数 */
+            parameters.put("total_num",1);
+            /** 红包祝福语 */
+            parameters.put("wishing","感谢您分享");
+            /** 调用接口的机器Ip地址 */
+            parameters.put("client_ip",request.getRemoteAddr());
+            /** 活动名称 */
+            String activityName = "分享领红包";
+            parameters.put("act_name",activityName);
+            /** 备注 */
+            parameters.put("remark","江山父老能容我，不使人间造孽钱。");
+            /** 场景id  发放红包使用场景，红包金额大于200时必传
+             * PRODUCT_1:商品促销 PRODUCT_2:抽奖 PRODUCT_4:企业内部福利  PRODUCT_5:渠道分润 */
+            //parameters.put("scene_id","PRODUCT_2");
+            /** 资金授权商户号 */
+            //parameters.put("consume_mch_id","");
+            /** 活动信息  资金授权商户号，服务商替特约商户发放时使用*/
+            //parameters.put("risk_info","");
+            /** MD5进行签名，必须为UTF-8编码，注意上面几个参数名称的大小写 */
+            String api_key = WXContants.AppKey;
+            String sign = CommonUtil.createSign("UTF-8", parameters,api_key);
+            String requestJsonStr = JSON.toJSONString(parameters);
+            parameters.put("sign", sign);//
+            /** 生成xml结构的数据，用于统一下单接口的请求 */
+            String requestXML = CommonUtil.getRequestXml(parameters);
+            /**
+             * 读取证书
+             * 
+             */
+            CloseableHttpClient httpclient = null;
+            Map<String,String> result = new HashMap<String,String>();
+            try {
+                KeyStore keyStore = KeyStore.getInstance("PKCS12");
+                String pathname = "/usr/sbin/guolaiwan/tomcat/apache-tomcat-7.0.85-windows-x64/apache-tomcat-7.0.85/webapps/guolaiwan/WEB-INF/classes/apiclient_cert.p12";
+                FileInputStream instream = new FileInputStream(new File(pathname)); //此处为证书所放的绝对路径
+                try {
+                    keyStore.load(instream, mch_id.toCharArray());
+                } finally {
+                    instream.close();
+                }
+                // Trust own CA and all self-signed certs
+                SSLContext sslcontext = SSLContexts.custom()
+                        .loadKeyMaterial(keyStore, mch_id.toCharArray())
+                        .build();
+                // Allow TLSv1 protocol only
+                SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                        sslcontext,
+                        new String[]{"TLSv1"},
+                        null,
+                        SSLConnectionSocketFactory.getDefaultHostnameVerifier());//SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER
+                httpclient = HttpClients.custom()
+                        .setSSLSocketFactory(sslsf)
+                        .build();
+            }
+            catch (Exception e){
+              
+                e.printStackTrace();
+            }
+            try {
+                String requestUrl = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
+                HttpPost httpPost = new HttpPost(requestUrl);
+                StringEntity reqEntity  = new StringEntity(requestXML, "utf-8");
+                // 设置类型
+                reqEntity.setContentType("application/x-www-form-urlencoded");
+                httpPost.setEntity(reqEntity);
+               
+                CloseableHttpResponse response = httpclient.execute(httpPost);
+                try {
+                    HttpEntity entity = response.getEntity();
+                    System.out.println(response.getStatusLine());
+                    if (entity != null) {
+                        // 从request中取得输入流
+                        InputStream inputStream = entity.getContent();
+                        // 读取输入流
+                        SAXReader reader = new SAXReader();
+                        Document document = reader.read(inputStream);
+                        // 得到xml根元素
+                        Element root = document.getRootElement();
+                        // 得到根元素的所有子节点
+                        List<Element> elementList = root.elements();
+                        // 遍历所有子节点
+                        for (Element e : elementList)
+                        {
+                            result.put(e.getName(), e.getText());
+                        }
+                        System.out.println(result);
+                        // 释放资源
+                        inputStream.close();
+                    }
+                    EntityUtils.consume(entity);
+                }
+                finally {
+                    if(response!=null) {
+                        response.close();
+                    }
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                try {
+                    httpclient.close();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+           
+            //假如发送成功的话，保存发送的信息
+            if(result.get("return_msg").equals("发放成功")) {
+                return ret;
+                }
+            else {
+                return ret;
+            }
+        }
+        catch (Exception e){
+            return ret;
+        }
+    }
 
 }
