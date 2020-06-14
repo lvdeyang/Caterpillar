@@ -735,6 +735,11 @@ html, body {
 				$('.jishu').text(num); */ 
 			})
 			
+			$('#redpackPic').click(function(){
+			    $(this).hide();
+			});
+			
+			
 			$('#btn2').click(function(){
 				if( $(".pushGift").hasClass("show") ){
 		            // 执行隐藏
@@ -1025,6 +1030,8 @@ html, body {
 
 		</div>
 	</div>
+	<image id="redpackPic" src="lib/images/redpack.png" 
+	style="width:80%;height:400px;position:absolute;left:10%;top:80px;z-index:2500;margin:0 auto">
 </body>
 
 
