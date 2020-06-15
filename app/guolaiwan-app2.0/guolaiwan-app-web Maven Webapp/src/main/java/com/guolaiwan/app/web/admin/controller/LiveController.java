@@ -256,7 +256,14 @@ public class LiveController extends BaseController {
 			live.setLiveName(value);
 		} else if (field.equals("leshiyunId")) {
 			live.setLeshiyunId(value);
-		} else {
+		} else if(field.equals("amountRed")){
+			live.setAmountRed(Long.parseLong(value));
+		} else if(field.equals("amountRed")){
+			live.setMaxRed(Long.parseLong(value));
+		}else if (field.equals("pubName")) {
+			live.setPubName(value);
+		} 
+		else {
 			live.setLiveStatusType(LiveStatusType.fromString(value));
 		}
 

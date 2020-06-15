@@ -53,6 +53,11 @@ public class LivePO extends AbstractBasePO {
 	//点赞数 张羽 5/3
 	private long giveLike;
 	
+	//红包池钱数，单位分
+	private long amountRed;
+	//最大红包额度，单位分
+	private long maxRed;
+	
 	
 	
 	public long getGiveLike() {
@@ -140,6 +145,18 @@ public class LivePO extends AbstractBasePO {
 	}
 	public void setLeshiyunId(String leshiyunId) {
 		this.leshiyunId = leshiyunId;
+	}
+	public long getAmountRed() {
+		return amountRed;
+	}
+	public void setAmountRed(long amountRed) {
+		this.amountRed = amountRed;
+	}
+	public long getMaxRed() {
+		return maxRed;
+	}
+	public void setMaxRed(long maxRed) {
+		this.maxRed = maxRed;
 	}
 	
 

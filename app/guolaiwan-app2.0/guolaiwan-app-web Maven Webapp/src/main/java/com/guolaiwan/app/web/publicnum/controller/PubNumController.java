@@ -3463,24 +3463,32 @@ public class PubNumController extends WebBaseControll {
 	}
 	
 	//直播领红包
-	private static long amount=0;
+	
 	@ResponseBody
 	@RequestMapping("/sendRedPacket")
     public Object sendRedPacket(HttpServletRequest request){
+		
+		long liveId=Long.parseLong(request.getParameter("liveId").toString());
+		long amount=0;
+		LivePO livePO=conn_live.get(liveId);
+		amount=livePO.getAmountRed();
+		
     	Map<String, Object> ret=new HashMap<String, Object>();
     	if(amount<=0){
     		ret.put("status","感谢分享,红包已经被抢完~");
     		return ret;
     	}
-    	Random random=new Random();
-		int thisturn=random.nextInt(200)+1;
-		amount-=thisturn;
     	HttpSession session = request.getSession();
         UserInfoPO userInfoPO =conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
     	if(userInfoPO.getFirstTime()==1){
     		ret.put("status","感谢分享,老用户不要太贪心哦~");
     		return ret;
     	}
+    	Random random=new Random();
+		int thisturn=random.nextInt((int)livePO.getMaxRed())+1;
+		amount-=thisturn;
+    	livePO.setAmountRed(amount);
+    	conn_live.saveOrUpdate(livePO);
     	ret.put("status","感谢您的分享，收下大红包~");
     	userInfoPO.setFirstTime(1);
     	conn_user.save(userInfoPO);

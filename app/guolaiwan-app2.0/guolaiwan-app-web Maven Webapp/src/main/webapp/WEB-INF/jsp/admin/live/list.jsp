@@ -161,12 +161,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		,{field: 'id',title: '直播Id',align:  'center',sort: true,width:120}
         		,{field: 'liveName',title: '直播名称',align:  'center',sort: true,width:120,edit: 'text'}
         		,{field: 'leshiyunId',title: '直播平台Id',align:  'center',sort: true,width:120,edit: 'text'}
-        		,{field: 'userId',title: '用户Id',align:  'center',sort: true,width:120}
-        		,{field: 'merchantId',title: '商户Id',align:  'center',sort: true,width:120}
-        		,{field: 'pubName',title: '发布名称',align:  'center',sort: true,width:120}
-        		,{field: 'liveType',title: '主播类型',align:  'center',sort: true,width:120}
-        		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180,templet:'#switchTpl'}
-        		,{field: 'liveStatusType',title: '状态',align:  'center',sort: true,width:180}
+        		,{field: 'pubName',title: '发布名称',align:  'center',sort: true,width:220,edit: 'text'}
+        		,{field: 'amountRed',title: '红包总数剩余(分)',align:  'center',sort: true,width:220,edit: 'text'}
+        		,{field: 'maxRed',title: '最大红包额度(分)',align:  'center',sort: true,width:220,edit: 'text'}
         		,{field: 'liveStatusType',title: '开播/停播',align:  'center',sort: true,width:180,templet:'#startandstop'}
         		,{field: 'delectMessage',title: '评论管理',align:  'center',sort: true,width:180,templet:'#zsgc'}
         		,{field: 'sendMessage',title: '直播推送通知',align:  'center',sort: true,width:180,templet:'#zbtstz'}
@@ -292,9 +289,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/html" id="zbtstz">
 	<a title="推送通知编辑" href="javascript:;" onclick="stock_show('推送通知编辑--直播间：{{d.id}}','<%=path%>/admin/live/addWxMessage','{{d.id}}','','5100')" class="layui-btn layui-btn-xs">推送通知编辑</a>
 </script>
-	<script type="text/html" id="switchTpl">
-	<input type="checkbox" name="liveStatusType" id='{{d.id}}' value='{{ d.liveStatusType }}'  lay-skin="switch" lay-text="正常|封号" lay-filter="enable" {{ d.liveStatusType == 'FORBID' ? '' : 'checked' }} >
-</script>
+	
      <script type="text/html" id="startandstop">
 	<input type="checkbox" name="liveStatusType" id='{{d.id}}' value='{{ d.liveStatusType }}'  lay-skin="switch" lay-text="开播|停播" lay-filter="enable1" {{ d.liveStatusType == 'STOP'||d.liveStatusType == 'FORBID' ? '' : 'checked' }} >
 </script>
