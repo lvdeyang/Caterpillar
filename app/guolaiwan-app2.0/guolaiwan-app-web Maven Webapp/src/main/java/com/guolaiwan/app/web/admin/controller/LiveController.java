@@ -272,7 +272,7 @@ public class LiveController extends BaseController {
 			live.setLeshiyunId(value);
 		} else if(field.equals("amountRed")){
 			live.setAmountRed(Long.parseLong(value));
-		} else if(field.equals("amountRed")){
+		} else if(field.equals("maxRed")){
 			live.setMaxRed(Long.parseLong(value));
 		}else if (field.equals("pubName")) {
 			live.setPubName(value);

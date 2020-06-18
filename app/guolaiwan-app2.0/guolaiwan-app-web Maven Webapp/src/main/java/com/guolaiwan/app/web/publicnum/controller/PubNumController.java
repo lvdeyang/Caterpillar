@@ -3485,6 +3485,7 @@ public class PubNumController extends WebBaseControll {
     		return ret;
     	}
     	Random random=new Random();
+    	
 		int thisturn=random.nextInt((int)livePO.getMaxRed())+1;
 		amount-=thisturn;
     	livePO.setAmountRed(amount);

@@ -639,11 +639,15 @@ html, body {
 		                            link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 		                            imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
 		                            success: function () {
-		                                 var sendred= window.BASEPATH + 'pubnum/sendRedPacket?liveId=${live.id}';
-									     var params={};
-									     $.post(sendred, $.toJSON(params), function(data){
-											$.alert(data.status);
-										 }); 
+		                
+				                         if(isred==1){
+									        var sendred= window.BASEPATH + 'pubnum/sendRedPacket?liveId=${live.id}';
+										     var params={};
+										     $.post(sendred, $.toJSON(params), function(data){
+												$.alert(data.status);
+											 }); 
+									     }
+		                                 
 		                            }
 		                        });
 			            wx.onMenuShareAppMessage({
@@ -652,11 +656,15 @@ html, body {
 							link: location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 		                    imgUrl: 'http://<%=weburl%>/lib/images/logo.jpg', // 分享图标
 							success : function() {
-								 var sendred= window.BASEPATH + 'pubnum/sendRedPacket?liveId=${live.id}';
-							     var params={};
-							     $.post(sendred, $.toJSON(params), function(data){
-									$.alert(data.status);
-								 }); 
+						
+							     if(isred==1){
+							        var sendred= window.BASEPATH + 'pubnum/sendRedPacket?liveId=${live.id}';
+								     var params={};
+								     $.post(sendred, $.toJSON(params), function(data){
+										$.alert(data.status);
+									 }); 
+							     }
+								 
 							}
 						});
 			            
@@ -1036,7 +1044,7 @@ html, body {
 
 		</div>
 	</div>
-	<image id="redpackPic" src="https://glw-old-file.oss-cn-beijing.aliyuncs.com/file/${live.redCover}" 
+	<image id="redpackPic" src="https://glw-old-file.oss-cn-beijing.aliyuncs.com/file${live.redCover}" 
 	style="display:none;width:80%;height:400px;position:absolute;left:10%;top:80px;z-index:2500;margin:0 auto">
 </body>
 
