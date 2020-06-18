@@ -141,10 +141,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 })
                 layer.tips(this.value+' : '+str,obj.othis);
               });
-		});
-		
-		
-		form.on('switch(enablered)', function(obj){
+              
+              
+              form.on('switch(enablered)', function(obj){
                 layer.load();
                 var str;
                 var bl = obj.elem.checked;
@@ -159,7 +158,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 console.log(str)
                 $.ajax({
                     type:'post',
-                    url:'edit.do',
+                    url:'edit2.do',
                     data:{'id':this.id,'value':val},
                     success:function(msg){
                         layer.closeAll("loading"); 
@@ -172,7 +171,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 })
                 layer.tips(this.value+' : '+str,obj.othis);
               });
+              
 		});
+		
+		
+		
+	
 		
 
 		
@@ -328,7 +332,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<input type="checkbox" name="liveStatusType" id='{{d.id}}' value='{{ d.liveStatusType }}'  lay-skin="switch" lay-text="开播|停播" lay-filter="enable1" {{ d.liveStatusType == 'STOP'||d.liveStatusType == 'FORBID' ? '' : 'checked' }} >
 </script>
 <script type="text/html" id="isredornot">
-	<input type="checkbox" name="isOpenRed" id='{{d.id}}' value='{{ d.isOpenRed }}'  lay-skin="switch" lay-text="是否红包" lay-filter="enablered" {{ d.isOpenRed == 0' ? '' : 'checked' }} >
+
+	<input type="checkbox" name="isOpenRed" id='{{d.id}}' value='{{ d.isOpenRed }}'  lay-skin="switch" lay-text="红包|取消" lay-filter="enablered"  {{ d.isOpenRed == '0' ? '' : 'checked' }}>
 </script>
 
 
@@ -346,18 +351,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </script>
 
 <script type="text/html" id="picTpls">
- <a href="javascript:show_picc('caIm{{d.id}}')"><img id="caIm{{d.id}}"  src= "https://glw-old-file.oss-cn-beijing.aliyuncs.com/file/{{ d.cover}}" alt="" style="width:35px;height:35px"></a>
+ <a href="javascript:show_picc('caIm{{d.id}}')"><img id="caIm{{d.id}}"  src= "https://glw-old-file.oss-cn-beijing.aliyuncs.com/file{{ d.cover}}" alt="" style="width:35px;height:35px"></a>
 </script>
 
 <script type="text/html" id="redpicTpls">
- <a href="javascript:show_picc('redcaIm{{d.id}}')"><img id="redcaIm{{d.id}}"  src= "https://glw-old-file.oss-cn-beijing.aliyuncs.com/file/{{ d.redCover}}" alt="" style="width:35px;height:35px"></a>
+ <a href="javascript:show_picc('redcaIm{{d.id}}')"><img id="redcaIm{{d.id}}"  src= "https://glw-old-file.oss-cn-beijing.aliyuncs.com/file{{ d.redCover}}" alt="" style="width:35px;height:35px"></a>
 </script>
 
 
 <script type="text/html" id="zsgcTpl">
 	
 	<a class='layui-btn layui-btn-xs' href="javascript:open_win('选择礼物图片','<%=path%>/admin/picture/addlist?sImg=caIm{{d.id}}&sId={{ d.id }}&source=live2','600','500')">选择礼物图片</a>
-    <a class='layui-btn layui-btn-xs' href="javascript:open_win('选择红包图片','<%=path%>/admin/picture/addlist?sImg=redcaIm{{d.id}}&sId={{ d.id }}&source=live2','600','500')">选择红包图片</a>
+    <a class='layui-btn layui-btn-xs' href="javascript:open_win('选择红包图片','<%=path%>/admin/picture/addlist?sImg=redcaIm{{d.id}}&sId={{ d.id }}&source=live3','600','500')">选择红包图片</a>
 				
 </script>
 

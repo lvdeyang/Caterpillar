@@ -243,7 +243,21 @@ public class LiveController extends BaseController {
 		conn_live.save(live);
 		return "success";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/edit2.do", method = RequestMethod.POST)
+	public String edit2(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		String value = request.getParameter("value");
 
+		LivePO live = conn_live.get(id);
+
+		live.setIsOpenRed(Integer.parseInt(value));
+
+		conn_live.save(live);
+		return "success";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/edit1.do", method = RequestMethod.POST)
 	public String edit1(HttpServletRequest request) throws Exception {
