@@ -262,7 +262,11 @@ public class LiveController extends BaseController {
 			live.setMaxRed(Long.parseLong(value));
 		}else if (field.equals("pubName")) {
 			live.setPubName(value);
-		} 
+		}else if(field.equals("redName")){
+			live.setRedName(value);
+		}else if(field.equals("isOpenRed")){
+			live.setIsOpenRed(Integer.parseInt(value));
+		}
 		else {
 			live.setLiveStatusType(LiveStatusType.fromString(value));
 		}
@@ -726,7 +730,23 @@ public class LiveController extends BaseController {
 		}
 		return "liveImg";
 	}
+	@ResponseBody
+	@RequestMapping(value = "/addredImg.do", method = RequestMethod.POST)
+	public String addredImg(HttpServletRequest request) {
 
+		try {
+			String pic = request.getParameter("pic");
+			long id = Long.parseLong(request.getParameter("id"));
+			LivePO live = conn_live.get(id);
+			live.setRedCover(pic);
+			conn_live.saveOrUpdate(live);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
+		return "liveImg";
+	}
+	
 	// 添加数据页面
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView addv(HttpServletRequest request) {

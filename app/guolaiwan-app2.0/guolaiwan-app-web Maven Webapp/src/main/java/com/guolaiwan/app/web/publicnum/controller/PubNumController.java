@@ -3535,17 +3535,17 @@ public class PubNumController extends WebBaseControll {
             /** 红包发放总人数 */
             parameters.put("total_num",1);
             /** 红包祝福语 */
-            parameters.put("wishing","感谢您分享");
+            parameters.put("wishing","感谢您参与");
             /** 调用接口的机器Ip地址 */
             parameters.put("client_ip",request.getRemoteAddr());
             /** 活动名称 */
-            String activityName = "分享领红包";
+            String activityName = livePO.getRedName();
             parameters.put("act_name",activityName);
             /** 备注 */
             parameters.put("remark","江山父老能容我，不使人间造孽钱。");
             /** 场景id  发放红包使用场景，红包金额大于200时必传
              * PRODUCT_1:商品促销 PRODUCT_2:抽奖 PRODUCT_4:企业内部福利  PRODUCT_5:渠道分润 */
-            //parameters.put("scene_id","PRODUCT_2");
+            parameters.put("scene_id","PRODUCT_1");
             /** 资金授权商户号 */
             //parameters.put("consume_mch_id","");
             /** 活动信息  资金授权商户号，服务商替特约商户发放时使用*/

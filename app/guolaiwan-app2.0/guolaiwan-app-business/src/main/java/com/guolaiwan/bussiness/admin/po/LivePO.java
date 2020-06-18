@@ -57,7 +57,13 @@ public class LivePO extends AbstractBasePO {
 	private long amountRed;
 	//最大红包额度，单位分
 	private long maxRed;
+	//是否打开红包
+	private int isOpenRed;
+	//红包名称
+	private String redName;
 	
+	//直播封面
+    private String redCover;
 	
 	
 	public long getGiveLike() {
@@ -157,6 +163,24 @@ public class LivePO extends AbstractBasePO {
 	}
 	public void setMaxRed(long maxRed) {
 		this.maxRed = maxRed;
+	}
+	public int getIsOpenRed() {
+		return isOpenRed;
+	}
+	public void setIsOpenRed(int isOpenRed) {
+		this.isOpenRed = isOpenRed;
+	}
+	public String getRedName() {
+		return redName;
+	}
+	public void setRedName(String redName) {
+		this.redName = redName;
+	}
+	public String getRedCover() {
+		return redCover;
+	}
+	public void setRedCover(String redCover) {
+		this.redCover = redCover;
 	}
 	
 

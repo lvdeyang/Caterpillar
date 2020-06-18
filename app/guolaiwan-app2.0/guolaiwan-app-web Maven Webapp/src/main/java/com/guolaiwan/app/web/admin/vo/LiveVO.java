@@ -34,6 +34,14 @@ public class LiveVO extends AbstractBaseVO<LiveVO, LivePO> {
 	private long amountRed;
 	//最大红包额度，单位分
 	private long maxRed;
+
+	//是否打开红包
+	private int isOpenRed;
+	//红包名称
+	private String redName;
+	
+	//直播封面
+    private String redCover;
 	
 	public String getLeshiyunId() {
 		return leshiyunId;
@@ -135,6 +143,34 @@ public class LiveVO extends AbstractBaseVO<LiveVO, LivePO> {
 		return this;
 	}
 
+	
+	public int getIsOpenRed() {
+		return isOpenRed;
+	}
+
+	public LiveVO setIsOpenRed(int isOpenRed) {
+		this.isOpenRed = isOpenRed;
+		return this;
+	}
+
+	public String getRedName() {
+		return redName;
+	}
+
+	public LiveVO setRedName(String redName) {
+		this.redName = redName;
+		return this;
+	}
+
+	public String getRedCover() {
+		return redCover;
+	}
+
+	public LiveVO setRedCover(String redCover) {
+		this.redCover = redCover;
+		return this;
+	}
+
 	@Override
 	public LiveVO set(LivePO entity) throws Exception {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -150,6 +186,9 @@ public class LiveVO extends AbstractBaseVO<LiveVO, LivePO> {
 		.setLeshiyunId(entity.getLeshiyunId())
 		.setAmountRed(entity.getAmountRed())
 		.setMaxRed(entity.getMaxRed())
+		.setIsOpenRed(entity.getIsOpenRed())
+		.setRedName(entity.getRedName())
+		.setRedCover(entity.getRedCover())
 		.setUserId(entity.getUserId());
 		return this;
 

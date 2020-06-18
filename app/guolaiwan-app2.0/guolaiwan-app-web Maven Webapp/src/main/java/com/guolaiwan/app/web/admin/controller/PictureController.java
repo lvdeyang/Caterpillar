@@ -195,6 +195,9 @@ public class PictureController extends BaseController{
 		else if(source.equals("live2")){
 			strMap.put("source", "live");
 			strMap.put("picdo", "addImg.do");
+		}else if(source.equals("live3")){
+			strMap.put("source", "live");
+			strMap.put("picdo", "addredImg.do");
 		}
 		else if(source.equals("vote")){
 			strMap.put("source", "vote");

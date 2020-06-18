@@ -545,6 +545,12 @@ html, body {
 	$(function() {
 	
 	  var usrid='${live.userId}';
+	  var isred=${live.isOpenRed};
+	  
+	  if(isred==1){
+	     $('#redpackPic').show();
+	  }
+	  
 	  if(usrid==100000){
 	     $('#player').show();
 	   
@@ -1030,8 +1036,8 @@ html, body {
 
 		</div>
 	</div>
-	<image id="redpackPic" src="lib/images/redpack.png" 
-	style="width:80%;height:400px;position:absolute;left:10%;top:80px;z-index:2500;margin:0 auto">
+	<image id="redpackPic" src="https://glw-old-file.oss-cn-beijing.aliyuncs.com/file/${live.redCover}" 
+	style="display:none;width:80%;height:400px;position:absolute;left:10%;top:80px;z-index:2500;margin:0 auto">
 </body>
 
 
