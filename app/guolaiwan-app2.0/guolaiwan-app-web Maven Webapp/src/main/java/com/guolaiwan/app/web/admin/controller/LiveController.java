@@ -36,6 +36,7 @@ import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveRebroadcastDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveRedRecordDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
@@ -258,6 +259,9 @@ public class LiveController extends BaseController {
 		return "success";
 	}
 	
+	@Autowired
+	LiveRedRecordDAO connLiveRed;
+	
 	@ResponseBody
 	@RequestMapping(value = "/edit1.do", method = RequestMethod.POST)
 	public String edit1(HttpServletRequest request) throws Exception {
@@ -283,6 +287,9 @@ public class LiveController extends BaseController {
 		}
 		else {
 			live.setLiveStatusType(LiveStatusType.fromString(value));
+			if(LiveStatusType.STOP.equals(live.getLiveStatusType())){
+				connLiveRed.deleteByField("liveId", id);
+			}
 		}
 
 		conn_live.save(live);

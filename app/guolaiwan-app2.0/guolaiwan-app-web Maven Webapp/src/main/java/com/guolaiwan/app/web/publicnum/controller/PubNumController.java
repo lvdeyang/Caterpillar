@@ -93,6 +93,7 @@ import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveRedRecordDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveServerDAO;
 import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantBusinessDAO;
@@ -126,6 +127,7 @@ import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.LiveGiftPO;
 import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
 import com.guolaiwan.bussiness.admin.po.LivePO;
+import com.guolaiwan.bussiness.admin.po.LiveRedRecord;
 import com.guolaiwan.bussiness.admin.po.LiveServerPO;
 import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
@@ -139,6 +141,7 @@ import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.SystenCachePo;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
+import com.guolaiwan.bussiness.admin.po.live.LiveRecordPO;
 import com.guolaiwan.bussiness.distribute.dao.DistributeProductDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributorDao;
 import com.guolaiwan.bussiness.distribute.dao.DistributorOrderDao;
@@ -3463,7 +3466,8 @@ public class PubNumController extends WebBaseControll {
 	}
 	
 	//直播领红包
-	
+	@Autowired
+	LiveRedRecordDAO conn_liveredrecord;
 	@ResponseBody
 	@RequestMapping("/sendRedPacket")
     public Object sendRedPacket(HttpServletRequest request){
@@ -3480,7 +3484,10 @@ public class PubNumController extends WebBaseControll {
     	}
     	HttpSession session = request.getSession();
         UserInfoPO userInfoPO =conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
-    	if(userInfoPO.getFirstTime()==1){
+        String[] fields={"liveId","userId"};
+        Object[] values={liveId,userInfoPO.getId()};
+    	List<LiveRedRecord> liveRedRecordhave=conn_liveredrecord.findByFields(fields, values);
+        if(liveRedRecordhave!=null&&!liveRedRecordhave.isEmpty()){
     		ret.put("status","感谢参与,老用户不要太贪心哦~");
     		return ret;
     	}
@@ -3491,8 +3498,11 @@ public class PubNumController extends WebBaseControll {
     	livePO.setAmountRed(amount);
     	conn_live.saveOrUpdate(livePO);
     	ret.put("status","感谢您的参与，您获得红包"+thisturn/100+"元，请进入过来玩公众号查看");
-    	userInfoPO.setFirstTime(1);
-    	conn_user.save(userInfoPO);
+    
+    	LiveRedRecord liveRedRecord=new LiveRedRecord();
+    	liveRedRecord.setLiveId(liveId);
+    	liveRedRecord.setUserId(userInfoPO.getId());
+    	conn_liveredrecord.save(liveRedRecord);
     	
         try{
             
