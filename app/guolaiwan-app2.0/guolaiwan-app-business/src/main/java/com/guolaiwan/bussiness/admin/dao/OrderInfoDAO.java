@@ -390,7 +390,7 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 			} else if (entry.getKey().equals("source")) {
 				hql.andBy(entry.getKey(), Condition.eq, OrderSource.fromName(entry.getValue().toString()));
 			} else if (entry.getKey().equals("comId")) {
-				if(!entry.getValue().equals(1)){
+				if(!entry.getValue().equals("1")){
 					hql.andBy(entry.getKey(), Condition.eq, Long.parseLong(entry.getValue().toString()));
 				}
 				

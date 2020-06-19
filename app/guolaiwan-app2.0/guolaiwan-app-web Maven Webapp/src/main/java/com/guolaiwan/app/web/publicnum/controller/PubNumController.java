@@ -3475,13 +3475,13 @@ public class PubNumController extends WebBaseControll {
 		
     	Map<String, Object> ret=new HashMap<String, Object>();
     	if(amount<=0){
-    		ret.put("status","感谢分享,红包已经被抢完~");
+    		ret.put("status","感谢参与,红包已经被抢完~");
     		return ret;
     	}
     	HttpSession session = request.getSession();
         UserInfoPO userInfoPO =conn_user.get(Long.parseLong(session.getAttribute("userId").toString()));
     	if(userInfoPO.getFirstTime()==1){
-    		ret.put("status","感谢分享,老用户不要太贪心哦~");
+    		ret.put("status","感谢参与,老用户不要太贪心哦~");
     		return ret;
     	}
     	Random random=new Random();
@@ -3490,7 +3490,7 @@ public class PubNumController extends WebBaseControll {
 		amount-=thisturn;
     	livePO.setAmountRed(amount);
     	conn_live.saveOrUpdate(livePO);
-    	ret.put("status","感谢您的分享，收下大红包~");
+    	ret.put("status","感谢您的参与，您获得红包"+thisturn/100+"元，请进入过来玩公众号查看");
     	userInfoPO.setFirstTime(1);
     	conn_user.save(userInfoPO);
     	

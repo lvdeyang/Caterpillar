@@ -583,21 +583,21 @@ html, body {
 	  $(document).on('click','#save',function(){
 	      if($(".pushGift").hasClass("show")){
 	      
-	      			$('.readyBuy').fadeOut().removeClass("show");
-		            // 其他
-		            $('.giftNumber').val(1);
-		            $(".pushGift").fadeOut().removeClass("show");
+      			$('.readyBuy').fadeOut().removeClass("show");
+	            // 其他
+	            $('.giftNumber').val(1);
+	            $(".pushGift").fadeOut().removeClass("show");
 	      
 	      }else{
 	      		if(/^\s*$/.test($('#message').val())){
 	      			$.alert("输入内容不能为空！");
 	      			return;
 	      		}
-		      var _uriaddMsg = window.BASEPATH + 'phoneApp/addMessage';
-			  var params={};
-			  params.liveId=${live.id};
-			  params.userId=${userId};
-			  params.message=$('#message').val();
+		        var _uriaddMsg = window.BASEPATH + 'phoneApp/addMessage';
+			  	var params={};
+			  	params.liveId=${live.id};
+			  	params.userId=${userId};
+			  	params.message=$('#message').val();
 				$.post(_uriaddMsg, $.toJSON(params), function(data){
 					data = parseAjaxResult(data);
 				
@@ -622,14 +622,14 @@ html, body {
 					    
 						share=data;
 						wx.config({
-	            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	            appId : share.appId, // 必填，公众号的唯一标识
-	            timestamp : share.timestamp, // 必填，生成签名的时间戳
-	            nonceStr : share.nonceStr, // 必填，生成签名的随机串
-	            signature : share.signature,// 必填，签名，见附录1
-	            jsApiList : ['checkJsApi', 'onMenuShareTimeline' ,'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        	});
+				            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				            appId : share.appId, // 必填，公众号的唯一标识
+				            timestamp : share.timestamp, // 必填，生成签名的时间戳
+				            nonceStr : share.nonceStr, // 必填，生成签名的随机串
+				            signature : share.signature,// 必填，签名，见附录1
+				            jsApiList : ['checkJsApi', 'onMenuShareTimeline' ,'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			        	});
 	  
 			  wx.ready(function() {
 			
@@ -641,13 +641,12 @@ html, body {
 		                            success: function () {
 		                
 				                         if(isred==1){
-									        var sendred= window.BASEPATH + 'pubnum/sendRedPacket?liveId=${live.id}';
+									         var sendred= window.BASEPATH + 'pubnum/sendRedPacket?liveId=${live.id}';
 										     var params={};
 										     $.post(sendred, $.toJSON(params), function(data){
 												$.alert(data.status);
 											 }); 
-									     }
-		                                 
+									     } 
 		                            }
 		                        });
 			            wx.onMenuShareAppMessage({
@@ -658,10 +657,10 @@ html, body {
 							success : function() {
 						
 							     if(isred==1){
-							        var sendred= window.BASEPATH + 'pubnum/sendRedPacket?liveId=${live.id}';
+							         var sendred= window.BASEPATH + 'pubnum/sendRedPacket?liveId=${live.id}';
 								     var params={};
 								     $.post(sendred, $.toJSON(params), function(data){
-										$.alert(data.status);
+										 $.alert(data.status);
 									 }); 
 							     }
 								 
@@ -750,6 +749,7 @@ html, body {
 			})
 			
 			$('#redpackPic').click(function(){
+			    $.alert("请分享到朋友圈或分享给好友领取红包");
 			    $(this).hide();
 			});
 			
