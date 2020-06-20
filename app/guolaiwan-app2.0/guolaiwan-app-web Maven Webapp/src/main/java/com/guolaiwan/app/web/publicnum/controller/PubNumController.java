@@ -3492,12 +3492,14 @@ public class PubNumController extends WebBaseControll {
     		return ret;
     	}
     	Random random=new Random();
-    	
-		int thisturn=random.nextInt((int)livePO.getMaxRed())+1;
+    	int base=(int) ((100-livePO.getMaxRed())/10);
+		int thisturn=(int) (random.nextInt(base)+livePO.getMaxRed());
 		amount-=thisturn;
     	livePO.setAmountRed(amount);
     	conn_live.saveOrUpdate(livePO);
-    	ret.put("status","感谢您的参与，您获得红包"+thisturn/100+"元，请进入过来玩公众号查看");
+    	
+    	DecimalFormat df=new DecimalFormat("0.00");
+    	ret.put("status","感谢您的参与，您获得红包"+df.format((double)thisturn/100)+"元，请进入过来玩公众号查看");
     
     	LiveRedRecord liveRedRecord=new LiveRedRecord();
     	liveRedRecord.setLiveId(liveId);

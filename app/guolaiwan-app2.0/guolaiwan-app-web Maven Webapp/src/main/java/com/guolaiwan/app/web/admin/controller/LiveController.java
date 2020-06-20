@@ -240,6 +240,7 @@ public class LiveController extends BaseController {
 		LivePO live = conn_live.get(id);
 
 		live.setLiveStatusType(LiveStatusType.fromString(value));
+		connLiveRed.deleteByField("liveId", id);
 
 		conn_live.save(live);
 		return "success";
