@@ -166,6 +166,7 @@ define([
                         var total = data.total;
                         if(rows && rows.length>0){
                             for(var i=0; i<rows.length; i++){
+							    rows[i].contentcopy=rows[i].content.substr(0,15)+"...";
                                 self.table.data.push(rows[i]);
                             }
                         }
