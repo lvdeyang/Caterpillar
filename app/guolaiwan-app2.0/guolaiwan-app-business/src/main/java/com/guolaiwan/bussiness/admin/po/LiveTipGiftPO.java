@@ -11,6 +11,8 @@ import pub.caterpillar.orm.po.AbstractBasePO;
 public class LiveTipGiftPO extends AbstractBasePO{
 	private static final long serialVersionUID = 1L;
 	
+	private long userId;
+	
 	private String username;
 	
 	private int price;
@@ -71,6 +73,14 @@ public class LiveTipGiftPO extends AbstractBasePO{
 
 	public void setGiftname(String giftname) {
 		this.giftname = giftname;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 	
 

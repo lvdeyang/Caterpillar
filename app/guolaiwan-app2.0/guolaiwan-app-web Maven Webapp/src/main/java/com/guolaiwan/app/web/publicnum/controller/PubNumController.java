@@ -2464,6 +2464,7 @@ public class PubNumController extends WebBaseControll {
 		order.setGiftnumber(num);
 		order.setLiveid(liveId);
 		order.setPrice(price);
+		order.setUserId(userId);
 		order.setUsername(conn_user.get(userId).getUserNickname());
 		conn_liveTipGiftDao.save(order);
 		return order;

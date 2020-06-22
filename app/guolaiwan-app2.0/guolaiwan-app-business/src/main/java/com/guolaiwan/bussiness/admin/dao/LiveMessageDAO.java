@@ -35,7 +35,7 @@ public class LiveMessageDAO extends AbstractBaseDao<LiveMessagePO> {
 		QueryHql hql = newQueryHql();
 		hql.andBy("liveId", Condition.eq, liveId);
 		hql.orderBy("updateTime", true);
-		return findByHqlPage(hql, 1, 200);
+		return findByHqlPage(hql, 1, 20);
 	}
 	
 	

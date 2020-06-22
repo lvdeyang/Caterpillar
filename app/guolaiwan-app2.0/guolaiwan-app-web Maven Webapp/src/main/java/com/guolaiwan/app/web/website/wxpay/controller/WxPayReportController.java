@@ -47,6 +47,8 @@ import com.guolaiwan.bussiness.admin.dao.AddTheRoomDAO;
 import com.guolaiwan.bussiness.admin.dao.AoYouOrderDao;
 import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveMessageDAO;
+import com.guolaiwan.bussiness.admin.dao.LiveTipGiftDAO;
 import com.guolaiwan.bussiness.admin.dao.MealListDao;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantUserDao;
@@ -63,6 +65,8 @@ import com.guolaiwan.bussiness.admin.po.AddTheRoomPO;
 import com.guolaiwan.bussiness.admin.po.AoYouOrderPO;
 import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
+import com.guolaiwan.bussiness.admin.po.LiveMessagePO;
+import com.guolaiwan.bussiness.admin.po.LiveTipGiftPO;
 import com.guolaiwan.bussiness.admin.po.MealListPo;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.MerchantUser;
@@ -633,6 +637,13 @@ public class WxPayReportController extends WebBaseControll {
 		return stringBuffer.toString();
 	}
 
+	@Autowired
+	LiveTipGiftDAO conn_liveTipGiftDao;
+	
+	@Autowired
+	LiveMessageDAO conn_liveMessage;
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/giftPayreport", method = RequestMethod.POST)
 	// TODO
@@ -662,6 +673,15 @@ public class WxPayReportController extends WebBaseControll {
 				// 获取订单号
 				String vehicle = null;
 				String tradeNum = respData.get("out_trade_no");
+				long orderId=Long.parseLong(tradeNum.split("-")[1]);
+				LiveTipGiftPO order = conn_liveTipGiftDao.get(orderId);
+				LiveMessagePO liveMessagePO=new LiveMessagePO();
+				liveMessagePO.setUserName(order.getUsername());
+				liveMessagePO.setUserId(order.getUserId());
+				liveMessagePO.setLiveId(order.getLiveid());
+				liveMessagePO.setMessage("赠送了礼物:【"+order.getGiftname()+"】x"+order.getGiftnumber());
+				conn_liveMessage.save(liveMessagePO);
+				
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("SUCCESS");
 				stringBuffer.append("]]></return_code>");

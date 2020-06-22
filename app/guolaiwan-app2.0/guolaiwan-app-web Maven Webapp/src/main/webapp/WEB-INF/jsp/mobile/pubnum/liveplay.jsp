@@ -605,7 +605,7 @@ html, body {
 					   $.toast("评论成功!");
 					} 
 					 $('#message').val('');
-					  refreshMsg();	
+					  //refreshMsg();	
 				});
 			}
 	  });
@@ -675,8 +675,10 @@ html, body {
 	   
 	  
 	  
+	  setInterval(function(){
+	     refreshMsg();
+	  },2000);
 	  
-	  refreshMsg();
 	  
 	  function refreshMsg(){
 	  		var _uriMsg = window.BASEPATH + 'pubnum/getLiveMessage?liveId=${live.id}';
