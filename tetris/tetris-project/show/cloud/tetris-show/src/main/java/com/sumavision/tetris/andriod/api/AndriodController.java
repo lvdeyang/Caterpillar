@@ -15,6 +15,7 @@ import com.sumavision.tetris.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -135,6 +136,12 @@ public class AndriodController {
     		livePo.get(0).setStatus(0);
     		liveDao.save(livePo.get(0));
     	}
+    	//删除直播残留文件
+    	File file=new File("/home/hls/live");
+    	File[] subfiles=file.listFiles();
+    	for (File file2 : subfiles) {
+			file2.delete();
+		}
     	//调用capacityfein停止任务
     	cameraService.deleteTask(user.getId());
         return Result.success();
