@@ -562,8 +562,7 @@ html, body {
 	  window.BASEPATH = '<%=basePath%>';
 	  var parseAjaxResult = function(data){
 			if(data.status != 200){
-			  $.toast("评论失败!");
-				$.toptip(data.message, 'error');
+			 
 				valve = 0;
 				return -1;
 			}else{

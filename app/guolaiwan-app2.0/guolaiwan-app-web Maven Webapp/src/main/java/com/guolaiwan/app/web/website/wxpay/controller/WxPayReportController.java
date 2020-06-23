@@ -675,12 +675,17 @@ public class WxPayReportController extends WebBaseControll {
 				String tradeNum = respData.get("out_trade_no");
 				long orderId=Long.parseLong(tradeNum.split("-")[1]);
 				LiveTipGiftPO order = conn_liveTipGiftDao.get(orderId);
-				LiveMessagePO liveMessagePO=new LiveMessagePO();
-				liveMessagePO.setUserName(order.getUsername());
-				liveMessagePO.setUserId(order.getUserId());
-				liveMessagePO.setLiveId(order.getLiveid());
-				liveMessagePO.setMessage("赠送了礼物:【"+order.getGiftname()+"】x"+order.getGiftnumber());
-				conn_liveMessage.save(liveMessagePO);
+				if(order.getFlg()==0){
+					order.setFlg(1);
+					conn_liveTipGiftDao.save(order);
+					LiveMessagePO liveMessagePO=new LiveMessagePO();
+					liveMessagePO.setUserName(order.getUsername());
+					liveMessagePO.setUserId(order.getUserId());
+					liveMessagePO.setLiveId(order.getLiveid());
+					liveMessagePO.setMessage("赠送了礼物:【"+order.getGiftname()+"】x"+order.getGiftnumber());
+					conn_liveMessage.save(liveMessagePO);
+				}
+				
 				
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("SUCCESS");

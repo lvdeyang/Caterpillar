@@ -24,6 +24,8 @@ public class LiveTipGiftPO extends AbstractBasePO{
 	private long giftnumber;
 	
 	private long liveid;
+	
+	private int flg=0;
 
 	public String getUsername() {
 		return username;
@@ -81,6 +83,14 @@ public class LiveTipGiftPO extends AbstractBasePO{
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+
+	public int getFlg() {
+		return flg;
+	}
+
+	public void setFlg(int flg) {
+		this.flg = flg;
 	}
 	
 
