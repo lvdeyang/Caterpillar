@@ -96,11 +96,11 @@ public class TempController {
 	@RequestMapping(value = "/add")
 	public Object add(
 			int x,int y,String ratio,String name, int rate,int frame,
-			String type,HttpServletRequest request) throws Exception{
+			String type,String filePath,HttpServletRequest request) throws Exception{
 		
 		UserVO user = userQuery.current();
 		//TODO 权限校验
-		TempPo tempPo =tempService.add(x,y,ratio,name,rate,frame,type);
+		TempPo tempPo =tempService.add(x,y,ratio,name,rate,frame,type,filePath);
 		return new TempVo().set(tempPo);
 	}	
 	
@@ -111,7 +111,7 @@ public class TempController {
 	@RequestMapping(value = "/edit/{id}")
 	public Object edit(
 			@PathVariable Long id,
-			int x,int y,String ratio,String name, int rate,int frame,String type,
+			int x,int y,String ratio,String name, int rate,int frame,String type,String filePath,
 			HttpServletRequest request) throws Exception{
 		
 		UserVO user = userQuery.current();
@@ -119,7 +119,7 @@ public class TempController {
 		TempPo tempPo = tempDao.findOne(id);
 	
 		
-		tempPo = tempService.edit(tempPo, x,y,ratio,name,rate,frame,type);
+		tempPo = tempService.edit(tempPo, x,y,ratio,name,rate,frame,type,filePath);
 		
 		return new TempVo().set(tempPo);
 	}

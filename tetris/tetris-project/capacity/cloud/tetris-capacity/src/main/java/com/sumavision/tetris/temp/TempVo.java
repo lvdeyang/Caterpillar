@@ -10,6 +10,7 @@ public class TempVo extends AbstractBaseVO<TempVo, TempPo>{
     private int frame;//帧率
     private String name;//模板名称
     private String type;
+    private String filePath;
     
 	public int getX() {
 		return x;
@@ -70,7 +71,7 @@ public class TempVo extends AbstractBaseVO<TempVo, TempPo>{
 		// TODO Auto-generated method stub
 		this.setX(entity.getX()).setY(entity.getY()).setFrame(entity.getFrame())
 		.setName(entity.getName()).setRate(entity.getRate()).setRatio(entity.getRatio()).
-		setId(entity.getId()).setType(entity.getType());
+		setId(entity.getId()).setFilePath(entity.getFilePath()).setType(entity.getType());
 		return this;
 	}
 
@@ -80,6 +81,15 @@ public class TempVo extends AbstractBaseVO<TempVo, TempPo>{
 
 	public TempVo setType(String type) {
 		this.type = type;
+		return this;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public TempVo setFilePath(String filePath) {
+		this.filePath = filePath;
 		return this;
 	}
 

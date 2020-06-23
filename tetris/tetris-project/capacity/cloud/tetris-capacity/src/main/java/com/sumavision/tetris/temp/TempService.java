@@ -13,7 +13,7 @@ public class TempService {
 	private TempDao tempDao;
 	
 	public TempPo add(
-			int x,int y,String ratio,String name, int rate,int frame,String type 
+			int x,int y,String ratio,String name, int rate,int frame,String type,String filePath 
 			) throws Exception{
 		
 		TempPo temp = new TempPo();
@@ -24,6 +24,7 @@ public class TempService {
 		temp.setFrame(frame);
 		temp.setName(name);
 		temp.setType(type);
+		temp.setFilePath(filePath);
 		tempDao.save(temp);
 		return temp;
 	}
@@ -32,7 +33,7 @@ public class TempService {
 	 
 	public TempPo edit(
 			TempPo temp, 
-			int x,int y,String ratio,String name, int rate,int frame,String type ) throws Exception{
+			int x,int y,String ratio,String name, int rate,int frame,String type,String filePath ) throws Exception{
 		
 		temp.setX(x);
 		temp.setY(y);
@@ -41,6 +42,7 @@ public class TempService {
 		temp.setFrame(frame);
 		temp.setName(name);
 		temp.setType(type);
+		temp.setFilePath(filePath);
 		tempDao.save(temp);
 		return temp;
 	}
