@@ -16,6 +16,7 @@ public class TempPo extends AbstractBasePO {
     private int frame;//帧率
     private String name;//模板名称
     private String type;//push 推流，transcode 转码
+    private String filePath;//垫片路径
 	public int getX() {
 		return x;
 	}
@@ -57,6 +58,12 @@ public class TempPo extends AbstractBasePO {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getFilePath() {
+		return filePath;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
     
     

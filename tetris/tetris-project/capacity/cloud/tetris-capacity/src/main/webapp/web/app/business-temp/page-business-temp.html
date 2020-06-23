@@ -56,6 +56,11 @@
                                label="类型"
                                prop="type">
                        </el-table-column>
+                       <el-table-column
+                               label="垫片路径"
+                               prop="filePath">
+                       </el-table-column>
+                       
                              
                              <el-table-column
                                      label="操作"
@@ -126,6 +131,9 @@
 	            <el-form-item label="帧率">
 	            	<el-input style="width:100%" v-model="dialog.addtemp.frame"></el-input>
 	            </el-form-item>
+	            <el-form-item label="垫片路径">
+	            	<el-input style="width:100%" v-model="dialog.addtemp.filePath"></el-input>
+	            </el-form-item>
             </el-form>
 
             <span slot="footer" class="dialog-footer">
@@ -169,6 +177,9 @@
 	            </el-form-item>
 	            <el-form-item label="帧率">
 	            	<el-input style="width:100%" v-model="dialog.edittemp.frame"></el-input>
+	            </el-form-item>
+	            <el-form-item label="垫片路径">
+	            	<el-input style="width:100%" v-model="dialog.edittemp.filePath"></el-input>
 	            </el-form-item>
             </el-form>
 

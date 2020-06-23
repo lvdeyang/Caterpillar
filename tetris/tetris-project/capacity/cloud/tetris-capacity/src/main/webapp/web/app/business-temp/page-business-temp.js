@@ -57,6 +57,7 @@ define([
                         rate:'',
                         name:'',
                         type:'',
+                        filePath:'',
                         loading:false
                     },
                     edittemp:{
@@ -69,6 +70,7 @@ define([
                         frame:'',
                         rate:'',
                         name:'',
+                        filePath:'',
                         loading:false
                     }
                 }
@@ -91,6 +93,7 @@ define([
                     self.dialog.edittemp.rate = row.rate;
                     self.dialog.edittemp.frame = row.frame;
                     self.dialog.edittemp.name = row.name;
+                    self.dialog.edittemp.filePath = row.filePath;
                     self.dialog.edittemp.visible = true;
                 },
                 rowDelete:function(scope){
@@ -172,6 +175,7 @@ define([
                     self.dialog.addtemp.frame = '';
                     self.dialog.addtemp.type = '';
                     self.dialog.addtemp.name = '';
+                    self.dialog.addtemp.filePath = '';
                     self.dialog.addtemp.visible = false;
                 },
                 handleAddtempCommit:function(){
@@ -184,7 +188,8 @@ define([
                         rate:self.dialog.addtemp.rate,
                         frame:self.dialog.addtemp.frame,
                         type:self.dialog.addtemp.type,
-                        name:self.dialog.addtemp.name
+                        name:self.dialog.addtemp.name,
+                        filePath:self.dialog.addtemp.filePath
                     }, function(data, status){
                         self.dialog.addtemp.loading = false;
                         if(status !== 200) return;
@@ -203,6 +208,7 @@ define([
                     self.dialog.edittemp.frame = '';
                     self.dialog.edittemp.name = '';
                     self.dialog.edittemp.type = '';
+                    self.dialog.edittemp.filePath = '';
                     self.dialog.edittemp.visible = false;
                 },
                 handleEdittempCommit:function(){
@@ -215,7 +221,8 @@ define([
 	                    rate:self.dialog.edittemp.rate,
 	                    frame:self.dialog.edittemp.frame,
 	                    type:self.dialog.edittemp.type,
-	                    name:self.dialog.edittemp.name
+	                    name:self.dialog.edittemp.name,
+	                    filePath:self.dialog.edittemp.filePath
                     }, function(data, status){
                         self.dialog.edittemp.loading = false;
                         if(status !== 200) return;

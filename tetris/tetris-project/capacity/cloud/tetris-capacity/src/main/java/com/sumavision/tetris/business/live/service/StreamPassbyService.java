@@ -21,6 +21,7 @@ import com.sumavision.tetris.business.common.service.LockService;
 import com.sumavision.tetris.business.record.vo.RecordVO;
 import com.sumavision.tetris.capacity.bo.input.BackUpBO;
 import com.sumavision.tetris.capacity.bo.input.BackUpEsAndRawBO;
+import com.sumavision.tetris.capacity.bo.input.BackUpFileBO;
 import com.sumavision.tetris.capacity.bo.input.BackUpProgramBO;
 import com.sumavision.tetris.capacity.bo.input.InputBO;
 import com.sumavision.tetris.capacity.bo.input.PidIndexBO;
@@ -117,7 +118,7 @@ public class StreamPassbyService {
                 inputBOs.add(inputBO);
             }
             // 创建备份源关系了
-            InputBO backInput = stream2BackInputBO(taskId, srcPubNames);
+            InputBO backInput = stream2BackInputBO(taskId, srcPubNames,null);
             inputBOs.add(backInput);
             // 创建任务了
             String videoTaskId = new StringBufferWrapper().append("task-video-").append(taskId).toString();
@@ -193,7 +194,7 @@ public class StreamPassbyService {
                 index++;
             }
             // 创建备份源关系了
-            InputBO backInput = stream2BackInputBO(taskId, inputIds);
+            InputBO backInput = stream2BackInputBO(taskId, inputIds,null);
             inputBOs.add(backInput);
             // 创建任务了
             String videoTaskId = new StringBufferWrapper().append("task-video-").append(taskId).toString();
@@ -244,8 +245,9 @@ public class StreamPassbyService {
                 InputBO inputBO = stream2InputBO(pubName, "rtmp://127.0.0.1/live/" + pubName);
                 inputBOs.add(inputBO);
             }
+            TempPo tempPo=tempDao.findOne(tempId);
             // 创建备份源关系了
-            InputBO backInput = stream2BackInputBO(taskId, srcPubNames);
+            InputBO backInput = stream2BackInputBO(taskId, srcPubNames,tempPo.getFilePath());
             inputBOs.add(backInput);
             // 创建任务了
             String videoTaskId = new StringBufferWrapper().append("task-video-").append(taskId).toString();
@@ -256,7 +258,7 @@ public class StreamPassbyService {
 
             String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(taskId).toString();
             
-            TempPo tempPo=tempDao.findOne(tempId);
+           
             List<GlsPo> glsPos=glsDao.findByTempId(tempId);
             
             List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
@@ -463,7 +465,7 @@ public class StreamPassbyService {
      * @param srcPubNames
      * @return
      */
-    public InputBO stream2BackInputBO(Long taskId, List<String> srcPubNames) throws Exception {
+    public InputBO stream2BackInputBO(Long taskId, List<String> srcPubNames,String filePath) throws Exception {
 
         String backInputId = new StringBufferWrapper().append("backup-").append(taskId).toString();
 
@@ -490,6 +492,9 @@ public class StreamPassbyService {
             count++;
         }
 
+        if(filePath!=null&&!filePath.isEmpty()){
+            back_up_es.setFile(new BackUpFileBO().setUrl(filePath));
+        }
 
         // 创建输入
         InputBO input = new InputBO().setBack_up_raw(back_up_es).setId(backInputId)
