@@ -147,6 +147,13 @@ public class AndriodController {
         return Result.success();
     }
 
+    @RequestMapping(value = "/switchVod", method = {RequestMethod.POST, RequestMethod.PUT})
+    public Map<String, Object> switchVod() throws Exception {
+    	UserVO user=userQuery.current();
+    	cameraService.switchVod(user.getId());
+        return Result.success();
+    }
+    
     
     @RequestMapping(value = "switch/{oldId}/{newId}", method = {RequestMethod.POST, RequestMethod.PUT})
     public Map<String, Object> Switch(@PathVariable Long oldId, @PathVariable Long newId) throws Exception {

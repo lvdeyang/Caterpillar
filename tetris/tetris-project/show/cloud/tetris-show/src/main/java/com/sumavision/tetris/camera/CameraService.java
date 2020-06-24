@@ -281,6 +281,15 @@ public class CameraService {
 
         return cameraPo1;
     }
+    
+    
+    public boolean switchVod(Long userId) throws Exception {
+       
+        capacityService.switchTask(userId, -1);
+
+        return true;
+    }
+    
 
    
     

@@ -586,7 +586,13 @@ public class StreamPassbyService {
     public void switchTask(Long taskId, int index) throws Exception {
         String backInputId = new StringBufferWrapper().append("backup-").append(taskId).toString();
 
-        capacityService.changeBackUp(backInputId, index + "", capacityProps.getIp(), capacityProps.getPort());
+        String switchTarget="";
+        if(index==-1){
+        	switchTarget="file";
+        }else{
+        	switchTarget=index + "";
+        }
+        capacityService.changeBackUp(backInputId, switchTarget, capacityProps.getIp(), capacityProps.getPort());
     }
 
     /* 上面都是MR黄写的 */
