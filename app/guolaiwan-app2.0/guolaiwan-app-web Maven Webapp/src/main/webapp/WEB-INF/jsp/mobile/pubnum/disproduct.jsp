@@ -871,7 +871,7 @@ $(function() {
 
 					    choose: function(datas){ //选择日期完毕的回调
 
-			
+					
 
 					    }
 
@@ -1621,48 +1621,38 @@ $(function() {
 			var bDate = new Date(document.getElementById("bookDate").value.replace(/-/g, '/')).getTime();
 			var sDate = new Date(document.getElementById("startDate").value.replace(/-/g, '/')).getTime();
     		var eDate = new Date(document.getElementById("endDate").value.replace(/-/g, '/')).getTime();
-    		if(isUseDate == 1){    		
-    		if(sDate >= eDate)
-		    {
-			     $.toast("离店时间不能小于开始时间", "forbidden");
-			     return false;
-		    }
-		    if(sDate < new Date)
-		    {
-		    	$.toast("入住时间不能早于当前时间", "forbidden");
-			     return false;
-		    }
-		    if(bDate < new Date)
-		    {
-		    	$.toast("预定时间不能早于当前时间", "forbidden");
-			     return false;
-		    }
-		    }
+    		
 			  if(bookdiv!="none")  
 			  {
-				  if($("#bookDate").val()==''){
-				  	$.toast("请选择预定日期", "forbidden");
-				  	return false;
-				  }else{
-         			$('#selAddress').popup(); 
-         			$('.modDiv').hide();
-         			$('#addressFitst').show();
-					
-				  }
-			  }else if(startdiv!="none")
-			  {
-			  	if($("#startDate").val()=='')	{
-			  		$.toast("请选择入住日期", "forbidden");
-			  		return false;
-			  	}else if($("#endDate").val()==''){
-			  		$.toast("请选择离店日期", "forbidden");
-			  		return false;
-			  	}else{
-         			$('#selAddress').popup(); 
-         			$('.modDiv').hide();
-         			$('#addressFitst').show();
-					
-			  	}      
+					  if($("#bookDate").val()==''){
+					  	$.toast("请选择预定日期", "forbidden");
+					  	return false;
+					  }else if(bDate < new Date){
+					    $.toast("预定时间不能早于当前时间", "forbidden");
+						return false;
+					  }else{
+	         			$('#selAddress').popup(); 
+	         			$('.modDiv').hide();
+	         			$('#addressFitst').show();
+					  }
+			  }else if(startdiv!="none"){
+				  	if($("#startDate").val()=='')	{
+				  		$.toast("请选择入住日期", "forbidden");
+				  		return false;
+				  	}else if($("#endDate").val()==''){
+				  		$.toast("请选择离店日期", "forbidden");
+				  		return false;
+				  	}else if(sDate >= eDate){
+					    $.toast("离店时间不能小于开始时间", "forbidden");
+					    return false;
+				    }else if(sDate < new Date){
+				    	$.toast("入住时间不能早于当前时间", "forbidden");
+					    return false;
+				    }else{
+	         			$('#selAddress').popup(); 
+	         			$('.modDiv').hide();
+	         			$('#addressFitst').show();
+				  	}      
 			  }else{
 			  	$('#selAddress').popup(); 
 			  	$('.modDiv').hide();
@@ -2363,15 +2353,28 @@ $(function() {
 			   
 			  </div>
 			</div>
+			<div
+				style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">分销商信息</div>
+			<div style="font-size:12px;padding:12px;float:left;width:100%;overflow-x:scroll">
+				<div id="disAddr"
+					style="font-size:12px;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;margin-left:12px;margin-top:15px;width:96%;">
+					<i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp;${distributor.address}</div>
+				<div id="disPhone"
+					style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;">
+					<span class="icon-mobile-phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;${distributor.phone}</div>
+					
 			
-			
+			</div>
+
 			<div
 				style="width:90%;font-size:14px;font-weight:bold;margin-left:12px;float:left;margin-top:15px;">商家信息</div>
 			<div style="font-size:12px;padding:12px;float:left;width:100%;overflow-x:scroll">
 				<div id="address1"
-					style="font-size:12px;color: #FF0000;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;margin-left:12px;margin-top:15px;width:96%;"></div>
+					style="font-size:12px;color: #FF0000;-webkit-line-clamp: 1;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;white-space: normal;margin-left:12px;margin-top:15px;width:96%;">
+					</div>
 				<div id="addressphone1"
-					style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;"></div>
+					style="font-size:12px;margin-left:12px;margin-top:15px;width:90%;">
+					</div>
 					
 				<div
 					style="width:90%;margin-top:20px;margin-left:11px;font-size:14px;">

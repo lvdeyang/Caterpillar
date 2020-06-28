@@ -525,6 +525,7 @@ html, body {
 			    $('#largeYd').attr('src',data.order.ydNO);
 			    $('#orderNo').html(data.order.id);
 			    $('#orderDate').html(data.order.payDate);
+			    
 			    $('#combo').html(data.order.comboName);
 			    $('#logistics').html(data.order.logisticsName);
 			    $('#cuserName').html(data.address.consigneeName);
@@ -572,7 +573,7 @@ html, body {
 				}
 			    $('#largeYd').attr('src',data.order.ydNO);
 			    $('#orderNo').html(data.order.id);
-			    $('#orderDate').html(data.order.orderBookDate);
+			    $('#orderDate').html(data.order.payDate);
 			    $('#logistics').html(data.order.logisticsName);
 			    $('#cuserName').html(data.address.consigneeName);
 			    $('#cphone').html(data.address.consigneePhone);

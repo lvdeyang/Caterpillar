@@ -637,6 +637,7 @@ public class PubNumController extends WebBaseControll {
 		  productVO.setProductStock(distributeProduct.getRetailRepertory());
 		}
 		mv.addObject("disPro",distributeProduct);
+		mv.addObject("distributor",conn_distributor.get(distributeProduct.getDistributorId()));
 		
 		mv.addObject("productLimitNum", productLimitNum);
 		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
