@@ -1,6 +1,8 @@
 package com.guolaiwan.app.web.admin.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.guolaiwan.app.web.admin.Utils.ExportExcelSeedBack;
 import com.guolaiwan.app.web.admin.vo.BalanceVO;
+import com.guolaiwan.app.web.admin.vo.CommercialSettlementVO;
 import com.guolaiwan.app.web.admin.vo.OrderInfoVO;
 import com.guolaiwan.app.web.admin.vo.ProductVO;
 import com.guolaiwan.bussiness.admin.dao.BalanceDAO;
@@ -72,6 +75,72 @@ public class NEWCommercialSettlementController extends BaseController {
 		return mv;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/checkBalance", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	public Map<String, Object> checkBalance(HttpServletRequest request){
+		long merchantId=Long.parseLong(request.getParameter("merchantId").toString());
+		List<MerchantPO> merchantPOs = new ArrayList<MerchantPO>();
+		List<ProductPO> productPOs = new ArrayList<ProductPO>();
+		List<OrderInfoPO> orderInfoPOs = new ArrayList<OrderInfoPO>();
+		List<CommercialSettlementVO> volist = new ArrayList<CommercialSettlementVO>();
+		String num = "";
+		int count;
+		merchantPOs = conn_Merchant.findByField("id", merchantId);
+
+		if (merchantPOs != null) {
+
+			for (int i = 0; i < merchantPOs.size(); i++) {
+				// Mr黄擦涛的屁股
+				List<OrderInfoPO> balanceOrders = conn_OrderInfo
+						.getOrdersByMerBalanced(merchantPOs.get(i).getId());
+				double totalBalance = 0;
+				double accured = 0;
+				for (OrderInfoPO order : balanceOrders) {
+					totalBalance += order.getPayMoney();
+					if (order.getProductId() > 0) {
+						ProductPO productPO = conn_Product.get(order.getProductId());
+						if (order.getActivityId() != 0) {
+
+						} else if (productPO.getProductCommissionCode() == 1) {
+							accured += productPO.getProductCommissionPrice() * order.getProductNum();
+						} else {
+							BigDecimal bigDecimal = new BigDecimal(order.getPayMoney() * productPO.getProductCommissionPrice() / 100).setScale(2, RoundingMode.HALF_UP);
+							accured += bigDecimal.doubleValue();
+						}
+					}else{
+						List<ProductPO> productPOs2=conn_Product.findByMerchantId(order.getShopId());
+						if(!productPOs2.isEmpty()){
+							ProductPO productPO = productPOs2.get(0);
+							if (productPO.getProductCommissionCode() == 1) {
+								accured += productPO.getProductCommissionPrice() * order.getProductNum();
+							} else {
+								BigDecimal bigDecimal = new BigDecimal(order.getPayMoney() * productPO.getProductCommissionPrice() / 100).setScale(2, RoundingMode.HALF_UP);
+								accured += bigDecimal.doubleValue() ;
+							}
+						}
+
+					}
+					order.setBalance(1);
+					order.setSettleDate(new Date());
+					conn_OrderInfo.saveOrUpdate(order);
+				}
+				if (balanceOrders.size() != 0) {
+					BalancePO balancePO = new BalancePO();
+					balancePO.setAmount(totalBalance - accured);
+					balancePO.setBankNo(merchantPOs.get(i).getShopBankId());
+					balancePO.setMerchantId(merchantPOs.get(i).getId());
+					balancePO.setMerchantName(merchantPOs.get(i).getShopName());
+					balancePO.setAccrued(accured);
+					balancePO.setSettleDate(new Date());
+					conn_Balance.save(balancePO);
+				}
+			}
+
+		}
+		return new HashMap<String, Object>();
+	}
+	
+	
 	// 异步读取列表分页
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
