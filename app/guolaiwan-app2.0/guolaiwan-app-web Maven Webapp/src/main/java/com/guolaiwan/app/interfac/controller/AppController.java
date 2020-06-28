@@ -2637,6 +2637,277 @@ public class AppController extends WebBaseControll {
 			return ERROR("系统错误！");
 		}
 	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/disorder/add", method = RequestMethod.POST)
+	public Map<String, Object> addDisOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+		String productId = pageObject.getString("productId");
+		String num = pageObject.getString("productNum");
+		Long userId = Long.parseLong(pageObject.getString("userId"));
+		String paytype = pageObject.getString("paytype");
+		String activityId = pageObject.getString("activityId");
+
+		String comboId = pageObject.getString("comboId");
+		String logisticsId = pageObject.getString("logisticsId");
+		/*
+		 * String productId = request.getParameter("productId"); String num =
+		 * request.getParameter("num"); String paytype =
+		 * request.getParameter("payType"); Long userId =
+		 * Long.parseLong(request.getParameter("userId"));
+		 */
+		String roomId = pageObject.getString("roomId");
+		String roomName = pageObject.getString("roomName");
+		ProductPO productPO = conn_product.get(Long.parseLong(productId));
+		if (num == null) {
+			num = "1";
+		}
+
+		OrderInfoPO order = new OrderInfoPO();
+
+		if (logisticsId != null) {
+			order.setLogisticsId(Long.parseLong(logisticsId));
+		}
+		if (comboId != null) {
+			order.setComboId(Long.parseLong(comboId));
+		}
+
+		String orderStartDate = pageObject.getString("startDate");
+		if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
+			orderStartDate = orderStartDate.replace("T", " ");
+			order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.dateTimePattenWithoutSecind));
+		}
+		String endBookDate = pageObject.getString("endDate");
+		if (endBookDate != null && endBookDate != "" && endBookDate.length() != 0) {
+			endBookDate = endBookDate.replace("T", " ");
+			order.setEndBookDate(DateUtil.parse(endBookDate, DateUtil.dateTimePattenWithoutSecind));
+		}
+		if (roomId != null && roomId != "" && roomId.length() != 0) {
+
+			order.setRoomId(Long.parseLong(roomId));
+			order.setRoomName(roomName);
+
+			RoomStatusPO roomStatus = new RoomStatusPO();
+			roomStatus.setStartDate(order.getOrderBookDate());
+			roomStatus.setEndDate(order.getEndBookDate());
+			roomStatus.setRoomId(order.getRoomId());
+			roomStatus.setStatus(1);
+			conn_roomstatus.save(roomStatus);
+			order.setRoomStatusId(roomStatus.getId());
+		}
+
+		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date date = new Date();
+
+		long productprice = productPO.getProductPrice();
+		// 支付金额
+		long payMoney = Integer.parseInt(num) * productprice;
+		// 订单总金额
+		long orderAllMoney = payMoney;
+		// 获取产品
+
+		// 获取商家
+		MerchantPO merchant = conn_merchant.get(productPO.getProductMerchantID());
+		UserInfoPO user = conn_user.get(userId);
+		String orderBookDate = pageObject.getString("bookDate");
+		if (orderBookDate != null && orderBookDate != "" && orderBookDate.length() != 0) {
+			orderBookDate = orderBookDate.replace("T", " ");
+			order.setOrderBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
+		}
+
+		// 会员ID
+		order.setUserId(userId);
+		if (user.getUserPhone() != null) {
+			// 会员手机号
+			order.setUserTel(user.getUserPhone());
+			// 会员信息
+			// 会员坐标经度
+			// 会员坐标维度
+			// 提成金额比例
+		}
+		if (user.getUserNickname() != null) {
+			order.setUserName(user.getUserNickname());
+		}
+
+		// 订单号（城市编码+商家id+板块Code+时间戳+用户ID）
+		String orderNO = getCityCodeByDomain() + merchant.getId() + productPO.getProductModularCode() + df.format(date)
+				+ userId;
+		order.setOrderNO(orderNO);
+		// 验单码
+
+		// 下单时间
+		order.setCreateDate(date);
+		order.setUpdateTime(date);
+		// 验单时间
+
+		// 供应商ID
+		order.setShopId(merchant.getId());
+		// 供应商名称
+		order.setShopName(merchant.getShopName());
+		// 站点ID
+		// 站点名称
+		// 商品ID
+		order.setProductId(productPO.getId());
+		// 商品图片
+		order.setProductPic(productPO.getProductShowPic());
+		// 商品名称
+		order.setProductName(productPO.getProductName());
+		// 商品数量
+		order.setProductNum(Long.parseLong(num));
+		if (comboId != null && !comboId.equals("0")) {
+			ProductComboPO comboPO = conn_combo.get(Long.parseLong(comboId));
+			payMoney = Integer.parseInt(num) * (comboPO.getComboprice());
+			orderAllMoney = payMoney;
+			productprice = comboPO.getComboprice();
+		}
+		// 获取用户
+		if (activityId != null) {
+
+			UserOneDayBuyPO buyPO = new UserOneDayBuyPO();
+			buyPO.setUpdateTime(new Date());
+			buyPO.setUserId(userId);
+			buyPO.setProId(Long.parseLong(activityId));
+			if (orderBookDate != null && orderBookDate != "" && orderBookDate.length() != 0) {
+				orderBookDate = orderBookDate.replace("T", " ");
+				buyPO.setBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
+			}
+			conn_userone.save(buyPO);
+			order.setActivityId(Long.parseLong(activityId));
+			conn_surpportbuy.delSurpport(userId, Long.parseLong(activityId));
+
+			ActivityRelPO activityRelPO = new ActivityRelPO();
+			activityRelPO = conn_activityRel.get(Long.parseLong(activityId));
+			payMoney = Integer.parseInt(num) * (activityRelPO.getPrice());
+			orderAllMoney = payMoney;
+			productprice = activityRelPO.getPrice();
+		}
+
+		if (order.getOrderBookDate() != null && order.getEndBookDate() != null) {
+			long bet = DateUtil.daysBetween(order.getOrderBookDate(), order.getEndBookDate());
+			payMoney = payMoney * (bet + 1);
+			orderAllMoney = payMoney;
+		}
+
+		// 商品单价
+		order.setProductPrice(productprice);
+		// 所属板块DI
+		order.setBkCode(productPO.getProductModularCode());
+		// 所属板块名称
+		order.setBkName(productPO.getProductModularCodeName());
+
+		// 套餐ID
+		// 套餐名称
+
+		long proportion = productPO.getProductCommissionPrice();
+		if (productPO.getProductCommissionCode() == 1) {
+			order.setProportion(proportion);
+		}
+		// 提成方式（0：佣金1：比例）
+		order.setRoyaltyName(productPO.getProductCommissionCode());
+		// 积分数
+		long integralNum = Integer.parseInt(num) * productPO.getProductntegral();
+		order.setIntegralNum(integralNum);
+		// 订单佣金金额(分)
+		long proportionMoney;
+		if (productPO.getProductCommissionCode() == 1) {
+			proportionMoney = Integer.parseInt(num) * productPO.getProductPrice() * proportion / 100;
+		} else {
+			proportionMoney = Integer.parseInt(num) * proportion;
+		}
+		order.setProportionMoney(proportionMoney);
+		// 支付金额
+		order.setPayMoney(payMoney);
+		// 订单总金额
+		order.setOrderAllMoney(orderAllMoney);
+		// 订单说明
+		if (request.getParameter("orderRemark") != null && request.getParameter("orderRemark").length() > 0) {
+			order.setOrderRemark(request.getParameter("orderRemark"));
+		}
+		// 订单状态
+		order.setOrderState(OrderStateType.NOTPAY);
+		// 订单支付类型 //ALIPAY WEICHAT
+		order.setPayMode(PayType.fromString(paytype));
+		// 有效期
+		// 配送信息
+		if (pageObject.getString("addressId") != null && pageObject.getString("addressId") != "") {
+			Long addressId = Long.parseLong(pageObject.getString("addressId"));
+			order.setMailAddress(addressId);
+		}
+		// 是否评价
+		order.setCommentIs(0);
+		// // 预订日期
+		// order.setOrderBookDate(date);
+
+		String photo = pageObject.getString("photo");
+		String idNum = pageObject.getString("idNum");
+		if (photo != null) {
+			order.setPhoto(URLDecoder.decode(photo));
+		}
+		if (idNum != null) {
+			order.setIdNum(idNum);
+		}
+
+		if (pageObject.getString("source") != null) {
+			order.setSource(OrderSource.fromString(pageObject.getString("source")));
+		} else {
+			// 订单来源
+			order.setSource(OrderSource.APP);
+		}
+		order.setOrderType(OrderType.MERCHANT);
+		productPO.setProductSaleNum(productPO.getProductSaleNum() + 1);
+		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
+		
+		order.setDistributeProId(Long.parseLong(request.getParameter("disProId")));
+		
+		conn_product.update(productPO);
+		conn_order.saveOrUpdate(order);
+
+		JSONArray array = pageObject.getJSONArray("idnums");
+		if (array != null) {
+			for (Object obj : array) {
+				JSONObject jobj = (JSONObject) obj;
+				OrderPeoplePo orderPeoplePo = new OrderPeoplePo();
+				orderPeoplePo.setIdNum(jobj.getString("idNum"));
+				orderPeoplePo.setPhoto(URLDecoder.decode(jobj.getString("photo")));
+				orderPeoplePo.setOrderId(order.getId());
+				orderPeoplePo.setName(jobj.getString("name"));
+				conn_orderPeople.save(orderPeoplePo);
+			}
+		}
+
+		long PayMoney = order.getPayMoney();
+		/* String tradeNum=order.getOrderNO(); */
+		String orderIdStr = String.valueOf(order.getId());
+		// 调微信和支付宝
+		if (paytype.equals("WEICHAT")) { // 微信
+			Map<String, String> weichatPay = weichatPay(PayMoney, orderIdStr);
+			weichatPay.put("orderId", order.getId() + "");
+			return success(weichatPay);
+		} else if (paytype.equals("ALIPAY")) {
+			String productnum = String.valueOf(order.getProductNum());
+			String pname = order.getProductName();
+			// String num,Long allMoney,String productName,String orderNo
+			String sign = AliAppOrderInfo.getInstance().getSign(productnum, PayMoney, pname, orderIdStr);
+			data.put("orderId", order.getId());
+			data.put("orderInfo", sign);
+			return success(data);
+		} else {
+			return ERROR("系统错误！");
+		}
+	}
+	
+	
+	
     @Autowired
     CurrentRoomSateDao conn_roomSateDao;
 	

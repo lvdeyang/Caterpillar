@@ -600,6 +600,54 @@ public class PubNumController extends WebBaseControll {
 		mv.addObject("userId", userId);
 		return mv;
 	}
+	
+	@RequestMapping(value = "/disproduct/index")
+	public ModelAndView disproductIndex(HttpServletRequest request, long id,long disId) throws Exception {
+		
+		ModelAndView mv = null;
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		String userHeadimg = conn_user.get(userId).getUserHeadimg();
+		
+		mv = new ModelAndView("mobile/pubnum/disproduct");
+		
+		DistributeProduct distributeProduct=conn_dispro.queryOnlineByDisAndProId(disId,id);
+		
+		List<ProductPO>  _products = conn_product.findByField("id", id);
+		List<ProductVO>  productVOs =  new ProductVO().getConverter(ProductVO.class)
+		                 .convert(_products, ProductVO.class);
+		long productLimitNum = productVOs.get(0).getProductLimitNum();
+		   
+		//对采摘商品时间进行处理
+		for(ProductVO productVO: productVOs){
+		  if("006".equals(productVO.getProductClassCode())){
+			 String startTimeStr =	productVO.getProductBeginDate();
+			 String endTimeStr =	productVO.getProductEnddate();
+			 //剔除"年"
+			 String startSubTimeStr =  startTimeStr.substring(4, startTimeStr.length());
+			 String endSubTimeStr =  endTimeStr.substring(4, endTimeStr.length());
+			 //获取当前年份
+			 Date nowDate = new Date();
+			 String nowDateStr  =   DateUtil.format(nowDate, "yyyy-MM-dd");
+			 String  nowSubTimeStr =  nowDateStr.substring(0, 4);
+			 productVO.setProductBeginDate(nowSubTimeStr.concat(startSubTimeStr));
+			 productVO.setProductEnddate(nowSubTimeStr.concat(endSubTimeStr));
+			 
+		  }	
+		  productVO.setProductPrice(new DecimalFormat("0.00").format(distributeProduct.getPrice()));
+		}
+		mv.addObject("disPro",distributeProduct);
+		
+		mv.addObject("productLimitNum", productLimitNum);
+		mv.addObject("productRestrictNumber", conn_product.get(id).getProductRestrictNumber());
+		mv.addObject("merchantId", conn_product.get(id).getProductMerchantID());
+		mv.addObject("id", id);
+		mv.addObject("userHeadimg", userHeadimg);
+		mv.addObject("products", productVOs.get(0));
+		mv.addObject("userId", userId);
+		
+		return mv;
+	}
+	
 
 	@RequestMapping(value = "product/index/line")
 	public ModelAndView productLineIndex(HttpServletRequest request, long id) throws Exception {
@@ -3452,9 +3500,11 @@ public class PubNumController extends WebBaseControll {
 		long disId=Long.parseLong(request.getParameter("disId").toString());
 		List<DistributeProduct> distributeProducts=conn_disproduct.queryOnlineByDistributor(disId);
 		List<ProductVO> productVOs=new ArrayList<ProductVO>();
+		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
         for (DistributeProduct distributeProduct : distributeProducts) {
 			try {
 				ProductVO proVo=new ProductVO().set(distributeProduct.getProduct());
+				proVo.setProductShowPic(sysConfigPO.getWebUrl()+proVo.getProductShowPic());
 				productVOs.add(proVo);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

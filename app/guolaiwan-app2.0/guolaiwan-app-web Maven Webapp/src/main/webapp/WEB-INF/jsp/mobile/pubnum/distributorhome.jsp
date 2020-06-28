@@ -607,8 +607,8 @@ html, body {
 		
 		
 		$(document).on('click','.product',function(){
-	 
-		   location.href=window.BASEPATH + 'pubnum/product/index?id='+codes[1];
+	 	   var ids=this.id.split('-');
+		   location.href=window.BASEPATH + 'pubnum/disproduct/index?id='+ids[1]+"&disId=${disId}";
 	    });
 	    $(document).on('click','#addressphone',function(){
 	       var phones=$('#addressphone').data('phone').split('/');
@@ -618,7 +618,7 @@ html, body {
 		function getProduct(){
 		    var _uriproduct = window.BASEPATH + 'pubnum/getProductsBydis?disId=${disId}';
 		
-			$.get(_uriproduct, null, function(data){
+			$.post(_uriproduct, null, function(data){
 				
 				if(data){
 				   var pros=data;

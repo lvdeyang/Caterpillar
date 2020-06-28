@@ -55,6 +55,7 @@
     	
 		var href=location.href;
 		if(href.indexOf('pubnum/product/index')==-1&&
+		   href.indexOf('pubnum/disproduct/index')==-1&&
 		   href.indexOf('pubnum/address/index')==-1&&
 		   href.indexOf('pubnum/address/edit')==-1&&
 		   href.indexOf('pubnum/basket/index')==-1&&

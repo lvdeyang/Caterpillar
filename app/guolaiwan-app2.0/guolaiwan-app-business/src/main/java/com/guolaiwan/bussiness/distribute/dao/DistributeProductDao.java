@@ -28,6 +28,19 @@ public class DistributeProductDao extends AbstractBaseDao<DistributeProduct> {
 		hql.andBy("online", Condition.eq, 1);
 		return this.findByHql(hql);
 	}
+	
+	public DistributeProduct queryOnlineByDisAndProId(long disId,long proId){
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("product.id",Condition.eq,proId);
+		hql.andBy("distributorId", Condition.eq, disId);
+		hql.andBy("online", Condition.eq, 1);
+		List<DistributeProduct> distributeProducts=this.findByHql(hql);
+		if(!distributeProducts.isEmpty()){
+			return distributeProducts.get(0);
+		}
+		return null;
+	}
+	
 	public List<DistributeProduct> queryOnlineByRegionAndRecomm(Long regionId,long proRegionId,RecommendType type){
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("recommendType", Condition.eq, type);
