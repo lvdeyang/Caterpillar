@@ -633,7 +633,8 @@ public class PubNumController extends WebBaseControll {
 			 productVO.setProductEnddate(nowSubTimeStr.concat(endSubTimeStr));
 			 
 		  }	
-		  productVO.setProductPrice(new DecimalFormat("0.00").format(distributeProduct.getPrice()));
+		  productVO.setProductPrice(new DecimalFormat("0.00").format(distributeProduct.getRetailPrice()));
+		  productVO.setProductStock(distributeProduct.getRetailRepertory());
 		}
 		mv.addObject("disPro",distributeProduct);
 		
@@ -3505,6 +3506,8 @@ public class PubNumController extends WebBaseControll {
 			try {
 				ProductVO proVo=new ProductVO().set(distributeProduct.getProduct());
 				proVo.setProductShowPic(sysConfigPO.getWebUrl()+proVo.getProductShowPic());
+				proVo.setProductPrice(new DecimalFormat("0.00").format(distributeProduct.getRetailPrice()));
+				proVo.setProductOldPrice(new DecimalFormat("0.00").format(distributeProduct.getRetailPrice()));
 				productVOs.add(proVo);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

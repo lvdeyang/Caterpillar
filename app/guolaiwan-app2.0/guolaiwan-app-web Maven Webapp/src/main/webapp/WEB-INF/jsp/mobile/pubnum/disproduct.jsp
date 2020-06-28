@@ -736,7 +736,8 @@ $(function() {
 			merchantId = data.product.productMerchantID;
 			modularCode = data.merchant.modularCode;
 			product =  data.product.productModularCode;
-			data.product.productPrice=${products.productPrice}
+			data.product.productPrice=${products.productPrice};
+			data.product.ProductStock=${products.ProductStock};
 			if(modularCode == "0001" || modularCode == "0002"){ //跳进新版
      	    	  $("#newpage").show();
 		   }
