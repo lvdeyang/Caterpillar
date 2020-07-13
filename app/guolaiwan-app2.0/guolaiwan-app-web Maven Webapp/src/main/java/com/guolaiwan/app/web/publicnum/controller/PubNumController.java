@@ -1488,7 +1488,7 @@ public class PubNumController extends WebBaseControll {
 		DecimalFormat df = new DecimalFormat("0.00");
 
 		JSONObject obj = new JSONObject();
-		obj.put("touser", "opVUYv776IoYcxY41-eIRxvktd-Q");
+		obj.put("touser", "opVUYv5yGAOHbP8SYDPSjQxx8Wwk");
 		obj.put("template_id", "GxkZ1LE6s6UxF9nsT8mesUc3Vk73KZwAzU8pFz4Pl8U");
 		obj.put("url", "");
 		JSONObject microProObj = new JSONObject();

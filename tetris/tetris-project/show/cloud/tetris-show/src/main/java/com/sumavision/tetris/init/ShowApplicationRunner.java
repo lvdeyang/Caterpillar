@@ -83,13 +83,14 @@ public class ShowApplicationRunner implements ApplicationRunner {
 						list+=",";
 					}
 					index++;
-					list+="rtsp://"+monitorPo.getUserName()+":"+monitorPo.getPassword()+"@"+
-					monitorPo.getIp()+":"+monitorPo.getPort();
-					
+					//list+="rtsp://"+monitorPo.getUserName()+":"+monitorPo.getPassword()+"@"+
+					//monitorPo.getIp()+":"+monitorPo.getPort();
+					list+="rtmp://"+monitorPo.getIp()+"/live/"+monitorPo.getUserName();
+
 					
 				}
 				try {
-					service.createRtspTask(list, 10000+reportLivePo.getId());
+					service.createRtmpTask(list, 10000+reportLivePo.getId());
 					System.out.println("监控轮询创建【"+reportLivePo.getId()+"】");	
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

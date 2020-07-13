@@ -21,6 +21,10 @@ public class CapacityFeignService {
         JsonBodyResponseParser.parseObject(capacityFeign.createRtspTask(list, userId), null);
     }
     
+    public void createRtmpTask(String list, Long userId) throws Exception {
+        JsonBodyResponseParser.parseObject(capacityFeign.createRtmpTask(list, userId), null);
+    }
+    
     
     public void createTempTask(String list, Long userId,Long tempId) throws Exception {
         JsonBodyResponseParser.parseObject(capacityFeign.createTempTask(list, userId,tempId), null);

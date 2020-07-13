@@ -2900,7 +2900,7 @@ public class PhoneController extends WebBaseControll {
 		// 下单时间
 		order.setCreateDate(date);
 		order.setUpdateTime(date);
-		
+		order.setPayDate(date);
 		// 验单时间
 
 		// 供应商ID
