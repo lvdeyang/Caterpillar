@@ -31,6 +31,36 @@ public class ShowApplicationRunner implements ApplicationRunner {
 	private static final ExecutorService fixedThreadPool = Executors.newFixedThreadPool(50);
 	
 	
+	//测试代码2
+	/*@Override
+	public void run(ApplicationArguments args) throws Exception {
+		final ReportLivePo tempReportLive=reportliveDao.findAll().get(0);
+		fixedThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+            	int count=tempReportLive.getMoniterIds().split(",").length;
+            	int index=0;
+                while(true){
+                	try {
+                		service.switchTask(10000+tempReportLive.getId(), index);
+                		System.out.println("监控轮询【"+tempReportLive.getId()+"】"+"切换到："+index);
+                		index++;
+                		if(index==count){
+                			index=0;
+                		}
+						Thread.sleep(10000);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+
+
+            }
+        });
+	}*/
+	
+	//正式代码
 	
 	private void startSwitch(ReportLivePo reportLivePo){
 		checkMap.put(reportLivePo.getId(), true);
@@ -146,8 +176,9 @@ public class ShowApplicationRunner implements ApplicationRunner {
 								list+=",";
 							}
 							index++;
-							list+="rtsp://"+monitorPo.getUserName()+":"+monitorPo.getPassword()+"@"+
-							monitorPo.getIp()+":"+monitorPo.getPort();
+							//list+="rtsp://"+monitorPo.getUserName()+":"+monitorPo.getPassword()+"@"+
+							//monitorPo.getIp()+":"+monitorPo.getPort();
+							list+="rtmp://"+monitorPo.getIp()+"/live/"+monitorPo.getUserName();
 							
 							
 						}
