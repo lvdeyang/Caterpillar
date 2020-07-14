@@ -139,9 +139,11 @@ public class AndriodController {
     	//删除直播残留文件
     	File file=new File("/home/hls/live");
     	File[] subfiles=file.listFiles();
-    	for (File file2 : subfiles) {
-			file2.delete();
-		}
+    	if(subfiles!=null){
+    		for (File file2 : subfiles) {
+    			file2.delete();
+    		}
+    	}
     	//调用capacityfein停止任务
     	cameraService.deleteTask(user.getId());
         return Result.success();

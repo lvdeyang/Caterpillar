@@ -55,6 +55,31 @@ public class CameraService {
     }
 
 
+    public List<CameraVo> createCameras(Long userId,int count) throws Exception {
+        List<CameraPo> list = cameraDao.findByUserId(userId);
+        for (CameraPo cameraPo : list) {
+			cameraDao.delete(cameraPo);
+		}
+
+        for (int i = 0; i < count; i++) {
+            CameraPo cameraPo = new CameraPo();
+            cameraPo.setUserId(userId);
+            cameraPo.setCameraName("机位" + (i + 1));
+            
+            cameraPo.setUserId(userId);
+            cameraPo.setIsInUse(0);
+            cameraPo.setType(0);
+            cameraPo.setUpdateTime(new Date());
+            cameraDao.save(cameraPo);
+            cameraPo.setHttpUrl("http://47.95.241.89:6690/live/" + userId + cameraPo.getId()+".m3u8");
+            cameraPo.setRtmpUrl("rtmp://47.95.241.89/live/" + userId + cameraPo.getId());
+            cameraDao.save(cameraPo);
+        }
+        List<CameraPo> cameraPoList = cameraDao.findByUserId(userId);
+        return generateRootCameras(cameraDao.findByUserId(userId));
+    }
+    
+    
     public List<CameraVo> findByUserId(Long userId) throws Exception {
         List<CameraPo> list = cameraDao.findByUserId(userId);
         List<String> stringList = new ArrayList<>();
