@@ -58,6 +58,7 @@ import com.guolaiwan.app.aoyou.AoYouV1Service;
 import com.guolaiwan.app.aoyou.AoYouV2Service;
 import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.interfac.util.HttpUtils;
+import com.guolaiwan.app.qingdongling.QingDLAppUtil;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
 import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.BalanceVO;
@@ -2690,24 +2691,53 @@ public class PubNumController extends WebBaseControll {
 			}else if(merchatId==386){
 				System.out.println("调用了皮影乐园的接口");
 				result = TianShiTongChengAPI.sendPYLYPost(id, distributeId,buynum, userName, userTel, startDate);
+			}else if(merchatId==40){
+				System.out.println("调用了清东陵的接口");
+
+				List<MessageMiddleClientPO> clientPOs = conn_messageclient.findByField("orderId", order.getId());
+				MessagePO messagePO = null;
+				if (clientPOs != null && !clientPOs.isEmpty()) {
+					messagePO = conn_message.get(clientPOs.get(0).getMessageId());
+				}
+				
+				 
+				try {
+					String resultqdl=QingDLAppUtil.orderSubmit("89130", "213536", order.getUuid(), order.getProductPrice()+"", 
+							order.getProductNum()+"", order.getOrderBookDate(), "", messagePO!=null?messagePO.getPhone():"", 
+									messagePO!=null?messagePO.getName():"",messagePO!=null?messagePO.getPhone():"", 
+									"0", "0",  "0", "", "", "0", "0", messagePO!=null?messagePO.getNumber():"", "", "");
+					
+					JSONObject parseObject = JSON.parseObject(resultqdl);
+					String qrcode = parseObject.get("UUqrcodeIMG").toString();
+					String orders_id = parseObject.get("UUordernum").toString();
+					order.setDistributeQcode(qrcode);
+					order.setDistributeId(orders_id);
+					conn_order.saveOrUpdate(order);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			System.out.println("接口返回参数：");
-			System.err.println(result);
-		    JSONObject parseObject = JSON.parseObject(result);
-			String success = parseObject.get("success").toString();
-			if(success.equals("true")){
-				System.out.println("接口调用成功 获取qcode存起来");
-				String info = parseObject.get("info").toString();
-				JSONObject infojson = JSON.parseObject(info);
-				String qrcode = infojson.get("qrcode").toString();
-				String orders_id = infojson.get("id").toString();
-				order.setDistributeQcode(qrcode);
-				order.setDistributeId(orders_id);
-				conn_order.saveOrUpdate(order);
-				System.out.println("购买成功");
-			}else{
-				System.out.println("接口调用失败");
+			if (merchatId == 358||merchatId == 386) {
+				System.out.println("接口返回参数：");
+				System.err.println(result);
+			    JSONObject parseObject = JSON.parseObject(result);
+				String success = parseObject.get("success").toString();
+				if(success.equals("true")){
+					System.out.println("接口调用成功 获取qcode存起来");
+					String info = parseObject.get("info").toString();
+					JSONObject infojson = JSON.parseObject(info);
+					String qrcode = infojson.get("qrcode").toString();
+					String orders_id = infojson.get("id").toString();
+					order.setDistributeQcode(qrcode);
+					order.setDistributeId(orders_id);
+					conn_order.saveOrUpdate(order);
+					System.out.println("购买成功");
+				}else{
+					System.out.println("接口调用失败");
+				}
 			}
+			
 		}
 	}
 	

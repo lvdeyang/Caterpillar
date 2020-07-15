@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletInputStream;
@@ -16,11 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.qingdongling.QingDLAppUtil;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
 import com.guolaiwan.app.web.website.wxpay.controller.WxPayController;
+import com.guolaiwan.bussiness.admin.dao.MessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
+import com.guolaiwan.bussiness.admin.po.MessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
+import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 
 import pub.caterpillar.weixin.constants.WXContants;
 import pub.caterpillar.weixin.wxpay.GuolaiwanWxPay;
@@ -120,6 +126,10 @@ public class TianShiController {
 		}
 	}
 	
+	@Autowired
+	MessageMiddleClientDao conn_messageclient;
+	@Autowired
+	MessageDAO conn_message;
 	/**
 	 * 判断是不是分销商品 是的话归属哪一家
 	 */
@@ -142,22 +152,38 @@ public class TianShiController {
 			}else if(merchatId==386){
 				System.out.println("调用了皮影乐园的退款接口");
 				result = TianShiTongChengAPI.refundPYLYPost(distributeId);
+			}else if(merchatId==40){
+				System.out.println("调用清东陵退款接口");
+				List<MessageMiddleClientPO> clientPOs = conn_messageclient.findByField("orderId", order.getId());
+				MessagePO messagePO = null;
+				if (clientPOs != null && !clientPOs.isEmpty()) {
+					messagePO = conn_message.get(clientPOs.get(0).getMessageId());
+				}
+				try {
+					QingDLAppUtil.orderChangePro(distributeId,"0", messagePO.getPhone());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			System.out.println("接口返回参数：");
-			System.err.println(result);
-			JSONObject parseObject = JSON.parseObject(result);
-			String success = parseObject.get("success").toString();
-			if(success.equals("true")){
-				System.out.println("接口调用成功");
-				String info = parseObject.get("info").toString();
-				JSONObject infojson = JSON.parseObject(info);
-				String status = infojson.get("status").toString();
-				if(status.equals("3"))return "success";
-				if(status.equals("2"))return "later";
-			}else{
-				System.out.println("接口调用失败");
-				return "lose";
+			if(merchatId==358||merchatId==386){
+				System.out.println("接口返回参数：");
+				System.err.println(result);
+				JSONObject parseObject = JSON.parseObject(result);
+				String success = parseObject.get("success").toString();
+				if(success.equals("true")){
+					System.out.println("接口调用成功");
+					String info = parseObject.get("info").toString();
+					JSONObject infojson = JSON.parseObject(info);
+					String status = infojson.get("status").toString();
+					if(status.equals("3"))return "success";
+					if(status.equals("2"))return "later";
+				}else{
+					System.out.println("接口调用失败");
+					return "lose";
+				}
 			}
+			
 		}else{
 			//不是分销的订单
 			System.out.println("不是分销的订单");
