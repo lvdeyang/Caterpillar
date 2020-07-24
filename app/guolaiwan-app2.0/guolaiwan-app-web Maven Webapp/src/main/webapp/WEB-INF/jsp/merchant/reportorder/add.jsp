@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -9,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <head>
         <meta charset="utf-8">
         <title>
-            城市管理
+            大数据订单管理
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -25,29 +26,72 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <form class="layui-form layui-form-pane">
                 <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
-                                                             城市称名
+                                                                      姓名
                     </label>
                     <div class="layui-input-block">
-                        <input type="text" id="L_title" name="cityName" required lay-verify="required"
+                        <input type="text" id="L_title" name="name" required lay-verify="required"
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
  
  				<div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
-                                                           域名
+                                                           身份证号
                     </label>
                     <div class="layui-input-block">
-                        <input type="text" id="L_title" name="cityDomain" required lay-verify="required"
+                        <input type="text" id="L_title" name="idCard" required lay-verify="required"
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
-              
-             
- 
+                
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                           选择商品
+                    </label>
+                    <div class="layui-input-block">
+                        <select id="productId" name="productId" lay-filter="productId" required lay-verify="required">
+	                    	<c:forEach items="${pros}" var="pro" varStatus="prosta">
+								<option value="${pro.id}">${pro.productName}</option>
+							</c:forEach>
+                    	</select>
+                    </div>
+                </div>
+                
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                          价格(分)
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="L_title" name="price" required lay-verify="required"
+                        autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                          数量
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" id="L_title" name="count" required lay-verify="required"
+                        autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                           选择类型
+                    </label>
+                    <div class="layui-input-block">
+                        <select id="type" name="type" lay-filter="type" required lay-verify="required">
+	                    	<option value="0">线下</option>
+							<option value="1">旅行社</option>
+							<option value="2">三方OTA</option>
+                    	</select>
+                    </div>
+                </div> 
                 <div class="layui-form-item">
                     <button class="layui-btn" lay-filter="add" lay-submit>
-                        保存
+                                                                        保存
                     </button>
                 </div>
             </form>
