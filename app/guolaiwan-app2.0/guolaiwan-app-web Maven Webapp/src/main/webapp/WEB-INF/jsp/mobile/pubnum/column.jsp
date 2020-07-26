@@ -693,6 +693,7 @@ html, body {
 				
 		           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
 				var classId=$('.chengjie').val();
+				pageNumber+=1;
 				var page=pageNumber;
 				var params={};
 				if(classId!=0){
@@ -708,7 +709,7 @@ html, body {
 					  getLine(data);
 					 $('.weui-loadmore').fadeIn().addClass("show")
 					setTimeout(function(){$('.weui-loadmore').fadeOut().addClass("show")},3000);
-					pageNumber+=1;
+					
 						}
 					});
 			     }

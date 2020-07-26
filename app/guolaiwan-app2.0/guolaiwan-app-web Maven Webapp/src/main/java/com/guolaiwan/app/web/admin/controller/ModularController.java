@@ -139,6 +139,8 @@ public class ModularController extends BaseController{
 		String modularName = request.getParameter("modularName");
 		String modularPic  = request.getParameter("modularPic");
 		String sortIndex = request.getParameter("sortIndex");
+		String modularCode=request.getParameter("modularCode");
+		modular.setModularCode(modularCode);
 		modular.setModularName(modularName);
 		modular.setModularPic(modularPic);
 		modular.setSortindex(Long.parseLong(sortIndex));

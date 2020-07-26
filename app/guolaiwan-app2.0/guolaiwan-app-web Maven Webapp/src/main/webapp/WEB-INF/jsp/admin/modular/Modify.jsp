@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	<div style="margin: 0 auto;width:500px">
             <form class="layui-form layui-form-pane">
             <input type="hidden" name="uuid" value="${list.uuid}">
-                <%-- <div class="layui-form-item">
+                <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                                              标识
                     </label>
@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <input type="text" id="L_title" name="modularCode" required lay-verify="title" value="${list.modularCode}"
                         autocomplete="off" class="layui-input">
                     </div>
-                </div> --%>
+                </div> 
  <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                                              板块名称
