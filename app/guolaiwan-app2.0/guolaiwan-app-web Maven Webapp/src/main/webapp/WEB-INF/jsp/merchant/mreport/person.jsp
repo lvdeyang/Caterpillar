@@ -75,6 +75,14 @@ String weburl=WXContants.Website;
 	             </div>
 	             <div class="side_c">
 	                <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/renlian_kuang.png">
+	                <div style="width:100%;height:100%;margin-top:0;left:0">
+	                   <image src="<%= request.getContextPath() %>/lib/images/icon_renlian.png" 
+	                   style="width:12%;height:38%;margin-top:12%;margin-left:15%;float:left;">
+	                   <div style="float:left;margin-top:14%;margin-left:5%;text-align:center">
+	                      <span style="color:#FFF">人脸抓拍总数</span><br><span style="color:#00FF26;line-height:50px;font-size:20px">&nbsp;&nbsp;24000</span>
+	                   </div>
+	                </div>
+	                
 	             </div>
 	             <div class="side_c">
 	                <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/xinbie_kuang.png">
@@ -82,31 +90,45 @@ String weburl=WXContants.Website;
 	             </div>
 	             <div class="side_c">
 	                <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/jiudian_kuang.png">
+	                <div id="jiudian" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	             </div>
 	        </div>
 	        <div class="layui-col-md6" style="height:100%;">
 	            <div class="center_c">
 	                <image class="innerimage_c" src="<%= request.getContextPath() %>/lib/images/keliuliang.png"> 
+	                 <div id="jinrikeliu" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	            </div>
 	            <div class="center_c">
 	                <image class="innerimage_c" src="<%= request.getContextPath() %>/lib/images/jingdiantongji.png">
+	                <div id="jingqu" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	            </div>
 	            <div class="center_c">
 	                 <image class="innerimage_c" src="<%= request.getContextPath() %>/lib/images/qitianliuliang.png">
+	                 <div id="qitiantongji" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	            </div>
 	        </div>
 	        <div class="layui-col-md3" style="height:100%;">
 	             <div class="side_c">
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheliangzhuapai.png"> 
+	                 <div style="width:100%;height:100%;margin-top:0;left:0">
+	                   <image src="<%= request.getContextPath() %>/lib/images/icon_qiche.png" 
+	                   style="width:12%;height:38%;margin-top:12%;margin-left:15%;float:left;">
+	                   <div style="float:left;margin-top:14%;margin-left:5%;text-align:center">
+	                      <span style="color:#FFF">车辆抓拍总数</span><br><span style="color:#00FF26;line-height:50px;font-size:20px">24000</span>
+	                   </div>
+	                </div>
 	             </div>
 	             <div class="side_c">
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/chetongji.png"> 
+	                 <div id="cheliang" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	             </div>
 	             <div class="side_c">
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheguishudi.png"> 
+	                 <div id="guishu" style="width:100%;height:120%;margin-top:0;left:0"></div>
 	             </div>
 	             <div class="side_c">
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/jinqingfenxi.png"> 
+	                 <div id="jingqing" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	             </div>
 	        </div>
 	      </div>
@@ -216,7 +238,329 @@ String weburl=WXContants.Website;
 		
 		xingbieChart.setOption(optionxingbie)
 		
+		//酒店人流
+		var jiudianeChart = echarts.init(document.getElementById('jiudian')); 
+	
+		var jiudianoption = {
+		    grid:{
+		       x:50,
+		       y:50,
+		       x1:50,
+		       y1:50,
+		       borderWidth:0
+		    },
+		    xAxis: {
+		        splitLine:{show: false},
+		        type: 'category',
+		        data: ['汤泉宫', '建国', '国际', '天元'],
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    yAxis: {
+		        splitLine:{show: false},
+		        type: 'value',
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    series: [{
+		        data: [520, 700, 650, 580],
+		        type: 'bar',
+		        showBackground: true,
+		        backgroundStyle: {
+		            color: 'rgba(220, 220, 220, 0.8)'
+		        }
+		    },{
+		        data: [120, 200, 150, 80],
+		        type: 'bar',
+		        showBackground: true,
+		        backgroundStyle: {
+		            color: 'rgba(220, 220, 220, 0.8)'
+		        }
+		    }]
+		};
+		jiudianeChart.setOption(jiudianoption);
 		
+		
+		//今日客流
+		var jinrikeliueChart = echarts.init(document.getElementById('jinrikeliu')); 
+		var jinrikeliuoption = {
+		    grid:{
+		       borderWidth:0
+		    },
+		    xAxis: {
+		        splitLine:{show: false},
+		        type: 'category',
+		        boundaryGap: false,
+		        data: ['1', '2', '3', '4', '5', '6', '7','1', '2', '3', '4', '5', '6', '7'],
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    yAxis: {
+		        splitLine:{show: false},
+		        type: 'value',
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    series: [{
+		        data: [820, 932, 901, 934, 1290, 1330, 1320,820, 932, 901, 934, 1290, 1330, 1320],
+		        type: 'line',
+		        areaStyle: {}
+		    }]
+		};
+		jinrikeliueChart.setOption(jinrikeliuoption);
+		
+		
+		//景区人流
+		var jingqueChart = echarts.init(document.getElementById('jingqu')); 
+	
+		var jingquoption = {
+		    grid:{
+		       borderWidth:0
+		    },
+		    xAxis: {
+		        splitLine:{show: false},
+		        type: 'category',
+		        data: ['清东陵', '万佛园', '禅林寺', '南山常乐谷','独乐寺','南湖','清东陵', '万佛园', '禅林寺', '南山常乐谷','独乐寺','南湖'],
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    yAxis: {
+		        splitLine:{show: false},
+		        type: 'value',
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    series: [{
+		        data: [520, 700, 650, 580,990,285,520, 700, 650, 580,990,285],
+		        type: 'bar',
+		        showBackground: true,
+		        backgroundStyle: {
+		            color: 'rgba(220, 220, 220, 0.8)'
+		        }
+		    },{
+		        data: [120, 200, 150, 80,25,87,120, 200, 150, 80,25,87],
+		        type: 'bar',
+		        showBackground: true,
+		        backgroundStyle: {
+		            color: 'rgba(220, 220, 220, 0.8)'
+		        }
+		    }]
+		};
+		jingqueChart.setOption(jingquoption);
+		
+		
+		//七天统计
+		var qitiantongjieChart = echarts.init(document.getElementById('qitiantongji')); 
+		var qitiantongjioption = {
+		    grid:{
+		       borderWidth:0
+		    },
+		    xAxis: {
+		        splitLine:{show: false},
+		        type: 'category',
+		        boundaryGap: false,
+		        data: ['7.1', '7.2', '7.3', '7.4', '7.5', '7.6', '7.7'],
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    yAxis: {
+		        splitLine:{show: false},
+		        type: 'value',
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    series: [{
+		        data: [820, 932, 901, 934, 1290, 1330, 1320],
+		        type: 'line',
+		        areaStyle: {}
+		    },{
+		        data: [120, 132, 201, 334, 590, 1530, 720],
+		        type: 'line',
+		        areaStyle: {}
+		    }]
+		};
+		qitiantongjieChart.setOption(qitiantongjioption);
+		
+		
+		
+		//车辆统计
+		var cheliangChart = echarts.init(document.getElementById('cheliang')); 
+		var optioncheliang = {
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b}: {c} ({d}%)'
+		    },
+		    legend: {
+		         orient: 'horizontal',                  
+		         data: ['大型车', '小型车'],
+		         x : '70%',
+		         y : '30%',
+		         textStyle: {
+			        color: '#FFF'       // 图例文字颜色
+			     }
+		    },
+		    series: [
+		        {
+		            name: '车辆类型',
+		            type: 'pie',
+		            radius: ['50%', '70%'],
+		            avoidLabelOverlap: false,
+		            label: {
+		                show: false,
+		                position: 'right'
+		            },
+		            emphasis: {
+		                label: {
+		                    show: true,
+		                    fontSize: '30',
+		                    fontWeight: 'bold'
+		                }
+		            },
+		            labelLine: {
+		                show: false
+		            },
+		            data: [
+		                {value: 835, name: '大型车'},
+		                {value: 310, name: '小型车'}
+		            ]
+		        }
+		    ]
+		};
+		cheliangChart.setOption(optioncheliang)
+		
+		//警情统计
+		var jingqingChart = echarts.init(document.getElementById('jingqing')); 
+		var optionjingqing = {
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b}: {c} ({d}%)'
+		    },
+		    legend: {
+		         orient: 'horizontal',                  
+		         data: ['清东陵', '禅林寺', '南湖', '飞机场', '客运站'],
+		         x : '70%',
+		         y : '30%',
+		         textStyle: {
+			        color: '#FFF'       // 图例文字颜色
+			     }
+		    },
+		    series: [
+		        {
+		            name: '车辆类型',
+		            type: 'pie',
+		            radius: ['50%', '70%'],
+		            avoidLabelOverlap: false,
+		            label: {
+		                show: false,
+		                position: 'right'
+		            },
+		            emphasis: {
+		                label: {
+		                    show: true,
+		                    fontSize: '30',
+		                    fontWeight: 'bold'
+		                }
+		            },
+		            labelLine: {
+		                show: false
+		            },
+		            data: [
+		                {value: 835, name: '清东陵'},
+		                {value: 310, name: '禅林寺'},
+		                {value: 210, name: '南湖'},
+		                {value: 110, name: '飞机场'},
+		                {value: 710, name: '客运站'}
+		            ]
+		        }
+		    ]
+		};
+		
+		jingqingChart.setOption(optionjingqing)
+		
+		//车辆归属地
+		var guishuChart = echarts.init(document.getElementById('guishu')); 
+		var guishuoption = {
+		    title: {
+		        text: '',
+		        subtext: ''
+		    },
+
+		    tooltip: {
+		        trigger: 'axis',
+		        axisPointer: {
+		            type: 'shadow'
+		        }
+		    },
+		    grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '3%',
+		        containLabel: true,
+		        borderWidth:0
+		    },
+		    xAxis: {
+	            splitLine:{show: false},	    
+		        type: 'value',
+		        boundaryGap: [0, 0.01],
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    yAxis: {
+		        splitLine:{show: false},
+		        type: 'category',
+		        data: ['河北', '北京', '天津', '河南', '浙江', '辽宁'],
+		        axisLabel: {
+                     interval:0,
+					 textStyle: {
+	                     color: '#fff'
+	                 }
+		        }
+		    },
+		    series: [
+		        {
+		          
+		            type: 'bar',
+		            data: [18203, 23489, 29034, 104970, 131744, 630230]
+		        }
+		    ]
+		};
+		guishuChart.setOption(guishuoption)
 		
 	});
 	
