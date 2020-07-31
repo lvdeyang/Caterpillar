@@ -56,6 +56,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	</select>
                     </div>
                 </div> 
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                           选择年龄
+                    </label>
+                    <div class="layui-input-block">
+                        <select id="type" name="age" lay-filter="age" required lay-verify="required">
+	                    	<option value="0-15">幼年</option>
+							<option value="15-64">青年-中年</option>
+							<option value="65">老年</option>
+                    	</select>
+                    </div>
+                </div> 
  				
                 <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">

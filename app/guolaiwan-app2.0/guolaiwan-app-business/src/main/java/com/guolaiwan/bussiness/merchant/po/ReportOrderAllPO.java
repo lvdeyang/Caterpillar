@@ -32,6 +32,7 @@ public class ReportOrderAllPO extends AbstractBasePO {
 	private String productName;
 	private long merchantId;
 	private String merchantName;
+	private String age;
 	public int getCount() {
 		return count;
 	}
@@ -85,6 +86,12 @@ public class ReportOrderAllPO extends AbstractBasePO {
 	}
 	public void setMerchantName(String merchantName) {
 		this.merchantName = merchantName;
+	}
+	public String getAge() {
+		return age;
+	}
+	public void setAge(String age) {
+		this.age = age;
 	}
 	
 	

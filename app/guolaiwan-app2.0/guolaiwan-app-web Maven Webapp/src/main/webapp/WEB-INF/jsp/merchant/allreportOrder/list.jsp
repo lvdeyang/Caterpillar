@@ -68,6 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						,{field:"productName",title:"商品名"}
    						,{field:"merchantName",title:"商户名"}
                         ,{field:"typeString",title:"来源"}
+                        ,{field:"age",title:"年龄段"}
    						,{title:"操作",templet:"#zsgc"}
    					]]
    					,done:function(res, curr, count){

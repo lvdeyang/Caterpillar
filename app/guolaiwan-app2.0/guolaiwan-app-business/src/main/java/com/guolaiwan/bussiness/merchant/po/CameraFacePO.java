@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.merchant.po;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -23,7 +24,20 @@ public class CameraFacePO extends AbstractBasePO {
 
 	private static final long serialVersionUID = 1L;
 
-	
+	private Date countDate;
+	private int count;
+	public Date getCountDate() {
+		return countDate;
+	}
+	public void setCountDate(Date countDate) {
+		this.countDate = countDate;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 
 	
 }

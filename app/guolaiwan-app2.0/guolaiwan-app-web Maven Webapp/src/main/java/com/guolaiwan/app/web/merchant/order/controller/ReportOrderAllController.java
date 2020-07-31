@@ -100,6 +100,7 @@ public class ReportOrderAllController extends BaseController{
 		String countStr = request.getParameter("count");
 		String productIdStr = request.getParameter("productId");
 		String sexStr=request.getParameter("sex");
+		String ageStr=request.getParameter("age");
 		MerchantPO merchantPO=conn_merchant.get(merId);
 		ProductPO productPO=conn_pro.get(Long.parseLong(productIdStr));
 		ReportOrderAllPO reportOrderPO=new ReportOrderAllPO();
@@ -110,6 +111,7 @@ public class ReportOrderAllController extends BaseController{
         reportOrderPO.setProductName(productPO.getProductName());
         reportOrderPO.setMerchantId(merchantPO.getId());
         reportOrderPO.setMerchantName(merchantPO.getShopName());
+        reportOrderPO.setAge(ageStr);
         //根据身份证获取年龄，性别，地区
         reportOrderPO.setSex(sexStr);
         
