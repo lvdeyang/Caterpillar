@@ -86,10 +86,10 @@ String weburl=WXContants.Website;
 	             </div>
 	             <div class="side_c">
 	                <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/xinbie_kuang.png">
-	                <div id="xingbie" style="width:100%;height:100%;margin-top:0;left:0"></div>
+	                <div id="xingbie" style="width:100%;height:100%;padding-top:2%;left:0"></div>
 	             </div>
-	             <div class="side_c">
-	                <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/jiudian_kuang.png">
+	             <div class="side_c" style="height:30%">
+	                <image style="height:30%" class="innerimage" src="<%= request.getContextPath() %>/lib/images/jiudian_kuang.png">
 	                <div id="jiudian" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	             </div>
 	        </div>
@@ -102,8 +102,8 @@ String weburl=WXContants.Website;
 	                <image class="innerimage_c" src="<%= request.getContextPath() %>/lib/images/jingdiantongji.png">
 	                <div id="jingqu" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	            </div>
-	            <div class="center_c">
-	                 <image class="innerimage_c" src="<%= request.getContextPath() %>/lib/images/qitianliuliang.png">
+	            <div class="center_c" style="height:32%">
+	                 <image style="height:32%" class="innerimage_c" src="<%= request.getContextPath() %>/lib/images/qitianliuliang.png">
 	                 <div id="qitiantongji" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	            </div>
 	        </div>
@@ -112,7 +112,7 @@ String weburl=WXContants.Website;
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheliangzhuapai.png"> 
 	                 <div style="width:100%;height:100%;margin-top:0;left:0">
 	                   <image src="<%= request.getContextPath() %>/lib/images/icon_qiche.png" 
-	                   style="width:12%;height:38%;margin-top:12%;margin-left:15%;float:left;">
+	                   style="width:12%;height:34%;margin-top:14%;margin-left:15%;float:left;">
 	                   <div style="float:left;margin-top:14%;margin-left:5%;text-align:center">
 	                      <span style="color:#FFF">车辆抓拍总数</span><br><span style="color:#00FF26;line-height:50px;font-size:20px">24000</span>
 	                   </div>
@@ -120,14 +120,14 @@ String weburl=WXContants.Website;
 	             </div>
 	             <div class="side_c">
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/chetongji.png"> 
-	                 <div id="cheliang" style="width:100%;height:100%;margin-top:0;left:0"></div>
+	                 <div id="cheliang" style="width:100%;height:100%;padding-top:2%;left:0"></div>
 	             </div>
 	             <div class="side_c">
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheguishudi.png"> 
 	                 <div id="guishu" style="width:100%;height:120%;margin-top:0;left:0"></div>
 	             </div>
-	             <div class="side_c">
-	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/jinqingfenxi.png"> 
+	             <div class="side_c" style="height:30%">
+	                 <image style="height:30%" class="innerimage" src="<%= request.getContextPath() %>/lib/images/jinqingfenxi.png"> 
 	                 <div id="jingqing" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	             </div>
 	        </div>
@@ -231,7 +231,23 @@ String weburl=WXContants.Website;
 		                {value: 835, name: '男'},
 		                {value: 310, name: '女'},
 		              
-		            ]
+		            ],
+		            itemStyle: {
+                          emphasis: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                           },
+                          normal:{
+                              color:function(params) {
+                              //自定义颜色
+                              var colorList = [          
+                                      '#04AFFF','#FF63CD'
+                                  ];
+                                  return colorList[params.dataIndex]
+                               }
+                          }
+                    }
 		        }
 		    ]
 		};
@@ -276,6 +292,14 @@ String weburl=WXContants.Website;
 		        showBackground: true,
 		        backgroundStyle: {
 		            color: 'rgba(220, 220, 220, 0.8)'
+		        },
+		        itemStyle: {
+		            normal: {
+		                color: function(params) {
+		                    var colorList = ['#2360FF','#2360FF','#2360FF','#2360FF','#2360FF','#2360FF'];
+		                    return colorList[params.dataIndex]
+		                }
+		            }
 		        }
 		    },{
 		        data: [120, 200, 150, 80],
@@ -283,6 +307,14 @@ String weburl=WXContants.Website;
 		        showBackground: true,
 		        backgroundStyle: {
 		            color: 'rgba(220, 220, 220, 0.8)'
+		        },
+		        itemStyle: {
+		            normal: {
+		                color: function(params) {
+		                    var colorList = ['#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF'];
+		                    return colorList[params.dataIndex]
+		                }
+		            }
 		        }
 		    }]
 		};
@@ -320,7 +352,9 @@ String weburl=WXContants.Website;
 		    series: [{
 		        data: [820, 932, 901, 934, 1290, 1330, 1320,820, 932, 901, 934, 1290, 1330, 1320],
 		        type: 'line',
-		        areaStyle: {}
+		        areaStyle: {
+					
+				}
 		    }]
 		};
 		jinrikeliueChart.setOption(jinrikeliuoption);
@@ -360,6 +394,14 @@ String weburl=WXContants.Website;
 		        showBackground: true,
 		        backgroundStyle: {
 		            color: 'rgba(220, 220, 220, 0.8)'
+		        },
+		        itemStyle: {
+		            normal: {
+		                color: function(params) {
+		                    var colorList = ['#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760'];
+		                    return colorList[params.dataIndex]
+		                }
+		            }
 		        }
 		    },{
 		        data: [120, 200, 150, 80,25,87,120, 200, 150, 80,25,87],
@@ -367,6 +409,14 @@ String weburl=WXContants.Website;
 		        showBackground: true,
 		        backgroundStyle: {
 		            color: 'rgba(220, 220, 220, 0.8)'
+		        },
+		        itemStyle: {
+		            normal: {
+		                color: function(params) {
+		                    var colorList = ['#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF'];
+		                    return colorList[params.dataIndex]
+		                }
+		            }
 		        }
 		    }]
 		};
@@ -404,11 +454,26 @@ String weburl=WXContants.Website;
 		    series: [{
 		        data: [820, 932, 901, 934, 1290, 1330, 1320],
 		        type: 'line',
-		        areaStyle: {}
+		        areaStyle: {},
+		        
+		        itemStyle: {
+		            normal: {
+		                lineStyle: {
+							color: '#00FFFF' //改变折线颜色
+						}
+		            }
+		        }
 		    },{
 		        data: [120, 132, 201, 334, 590, 1530, 720],
 		        type: 'line',
-		        areaStyle: {}
+		        areaStyle: {},
+		        itemStyle: {
+		            normal: {
+			            lineStyle: {
+							color: '#FFF600' //改变折线颜色
+						}
+		            }
+		        }
 		    }]
 		};
 		qitiantongjieChart.setOption(qitiantongjioption);
@@ -454,7 +519,23 @@ String weburl=WXContants.Website;
 		            data: [
 		                {value: 835, name: '大型车'},
 		                {value: 310, name: '小型车'}
-		            ]
+		            ],
+		            itemStyle: {
+                          emphasis: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                           },
+                          normal:{
+                              color:function(params) {
+                              //自定义颜色
+                              var colorList = [          
+                                      '#FA903C','#EAEA3C','#F66465','#30A7FB'
+                                  ];
+                                  return colorList[params.dataIndex]
+                               }
+                          }
+                    }
 		        }
 		    ]
 		};
@@ -502,7 +583,23 @@ String weburl=WXContants.Website;
 		                {value: 210, name: '南湖'},
 		                {value: 110, name: '飞机场'},
 		                {value: 710, name: '客运站'}
-		            ]
+		            ],
+		            itemStyle: {
+                          emphasis: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                           },
+                          normal:{
+                              color:function(params) {
+                              //自定义颜色
+                              var colorList = [          
+                                      '#73FE94','#FF4C68','#D8FE70','#FE71D5','#70D9FE','#C987FF','#FF9758'
+                                  ];
+                                  return colorList[params.dataIndex]
+                               }
+                          }
+                    }
 		        }
 		    ]
 		};
@@ -544,7 +641,7 @@ String weburl=WXContants.Website;
 		    yAxis: {
 		        splitLine:{show: false},
 		        type: 'category',
-		        data: ['河北', '北京', '天津', '河南', '浙江', '辽宁'],
+		        data: [ '北京', '天津', '河南', '浙江', '辽宁'],
 		        axisLabel: {
                      interval:0,
 					 textStyle: {
@@ -556,7 +653,15 @@ String weburl=WXContants.Website;
 		        {
 		          
 		            type: 'bar',
-		            data: [18203, 23489, 29034, 104970, 131744, 630230]
+		            data: [ 23489, 29034, 104970, 131744, 630230],
+			        itemStyle: {
+			            normal: {
+			                color: function(params) {
+			                    var colorList = ['#00E67D','#FA903C','#EAEA3C','#F66465','#31A7FB'];
+			                    return colorList[params.dataIndex]
+			                }
+			            }
+			        }
 		        }
 		    ]
 		};
