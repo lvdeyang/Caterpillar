@@ -58,6 +58,13 @@ String weburl=WXContants.Website;
 </head>
 <body>
 <div class="container" style="position:absolute;top:0;">
+    <div style="width:100%;height:10%;position:absolute;left:0;top:0;z-index:5000">
+          <image style="width:8%;height:25%;margin-left:30%;margin-top:2%" src="<%= request.getContextPath() %>/lib/images/ditu.png"/>
+          <image style="width:10%;height:30%;margin-left:7%;margin-top:2%" src="<%= request.getContextPath() %>/lib/images/keliuliangtongji.png"/>
+          <image style="width:8%;height:25%;margin-left:6%;margin-top:2%" src="<%= request.getContextPath() %>/lib/images/tongjifenxi.png"/>
+          
+    </div>
+    
 	<image class="img" src="<%= request.getContextPath() %>/lib/images/dakuang.png"/>
 
  
@@ -107,7 +114,7 @@ String weburl=WXContants.Website;
 	                 <div id="qitiantongji" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	            </div>
 	        </div>
-	        <div class="layui-col-md3" style="height:100%;">
+	        <div class="layui-col-md3" style="height:100%;margin-top:-5%">
 	             <div class="side_c">
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheliangzhuapai.png"> 
 	                 <div style="width:100%;height:100%;margin-top:0;left:0">
@@ -122,8 +129,8 @@ String weburl=WXContants.Website;
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/chetongji.png"> 
 	                 <div id="cheliang" style="width:100%;height:100%;padding-top:2%;left:0"></div>
 	             </div>
-	             <div class="side_c">
-	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheguishudi.png"> 
+	             <div class="side_c" style="height:30%">
+	                 <image  style="height:30%" class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheguishudi.png"> 
 	                 <div id="guishu" style="width:100%;height:120%;margin-top:0;left:0"></div>
 	             </div>
 	             <div class="side_c" style="height:30%">
@@ -398,7 +405,7 @@ String weburl=WXContants.Website;
 		        itemStyle: {
 		            normal: {
 		                color: function(params) {
-		                    var colorList = ['#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760'];
+		                    var colorList = ['#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760'];
 		                    return colorList[params.dataIndex]
 		                }
 		            }
@@ -413,7 +420,7 @@ String weburl=WXContants.Website;
 		        itemStyle: {
 		            normal: {
 		                color: function(params) {
-		                    var colorList = ['#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF'];
+		                    var colorList = ['#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF'];
 		                    return colorList[params.dataIndex]
 		                }
 		            }
@@ -621,9 +628,9 @@ String weburl=WXContants.Website;
 		        }
 		    },
 		    grid: {
-		        left: '3%',
-		        right: '4%',
-		        bottom: '3%',
+		        left: '0%',
+		        right: '0%',
+		        bottom: '0%',
 		        containLabel: true,
 		        borderWidth:0
 		    },
@@ -641,7 +648,7 @@ String weburl=WXContants.Website;
 		    yAxis: {
 		        splitLine:{show: false},
 		        type: 'category',
-		        data: [ '北京', '天津', '河南', '浙江', '辽宁'],
+		        data: [ '北京', '天津', '河南', '浙江'],
 		        axisLabel: {
                      interval:0,
 					 textStyle: {
@@ -653,7 +660,9 @@ String weburl=WXContants.Website;
 		        {
 		          
 		            type: 'bar',
-		            data: [ 23489, 29034, 104970, 131744, 630230],
+		            data: [ 23489, 29034, 104970, 131744],
+		            barWidth : 5,//柱图宽度
+		            barGap:'100%',//柱图间距
 			        itemStyle: {
 			            normal: {
 			                color: function(params) {

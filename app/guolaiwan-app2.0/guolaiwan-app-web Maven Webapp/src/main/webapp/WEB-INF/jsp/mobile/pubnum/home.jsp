@@ -569,11 +569,6 @@ html, body {
 	
 	  if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
 		    getloca();
-		    //临时
-		    //if(comCode=='0000'){
-			//    comCode='0001';
-			//}
-			//initFirstPage();
 	  } else {
 		    if(comCode=='0000'){
 			    comCode='0001';
@@ -685,14 +680,6 @@ html, body {
 	  
 	  
 	  function getCom(){
-	  
-	     //临时
-	     $('#com').children().remove();
-	     //var html=[];
-	     //html.push('<li><a data="0001" href="javascript:void(0)" class="comSel">传奇遵化</a></li>');
-	     //$('#com').append(html.join(''));
-	     //$('#selCom').html('传奇遵化');
-	     //return false;
 	     var _uricoms = window.BASEPATH + 'pubnum/getComs';
 		
 		 $.get(_uricoms, null, function(data){
@@ -723,14 +710,14 @@ html, body {
 	  
 	  
 	  //test
-	    if(comCode=='0000'){
+	    /*if(comCode=='0000'){
 		    comCode='0001';
 		}
 		getCom();
 	    getRecomment();
 	    getModal();
 		getActivityBundle();
-		initSharewx();
+		initSharewx();*/
       /**/
 		
 	  function getRecomment(){
@@ -825,6 +812,7 @@ html, body {
 				   }
 				   
 				   generateModMerchant(modals[index].modularCode);
+	sleep(50)
 				}
 				$('#columnWrapper').append(html.join(''));
 				$("#columnSwiper").swiper({
@@ -837,7 +825,23 @@ html, body {
 		});
 	  
 	  }
-	  
+	 
+                 
+
+                 function sleep(numberMillis) { 
+                 
+                       var now = new Date(); 
+                       var exitTime = now.getTime() + numberMillis; 
+                       while (true) { 
+                             now = new Date(); 
+                            if (now.getTime() > exitTime) {
+                                 break; 
+                             } 
+                       }
+                 }
+
+
+
 	  function generateModMerchant(modularCode){
 	        var _uriModpro = window.BASEPATH + 'phoneApp/getModularMerchants?modularCode='+modularCode;
 		    
