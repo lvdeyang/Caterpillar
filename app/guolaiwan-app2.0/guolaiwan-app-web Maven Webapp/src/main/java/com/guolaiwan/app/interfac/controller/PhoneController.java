@@ -3263,7 +3263,7 @@ public class PhoneController extends WebBaseControll {
 		if (uType.equals("USER")) {
 			switch (type) {
 			case 1:// 未支付
-				List<OrderInfoPO> orderingOrderpos = conn_order.getOrdersByState(userId, OrderStateType.NOTPAY);
+				List<OrderInfoPO> orderingOrderpos = conn_order.getBasOrdersByState(userId);
 				List<OrderInfoVO> orderingOrders = OrderInfoVO.getConverter(OrderInfoVO.class).convert(orderingOrderpos,
 						OrderInfoVO.class);
 				List<OrderInfoVO> checkOrders = new ArrayList<OrderInfoVO>();
@@ -3276,13 +3276,17 @@ public class PhoneController extends WebBaseControll {
 					if(productPO!=null){
 						String distributeId = productPO.getDistributeId();
 						if(distributeId!=null&&!distributeId.equals("")){
-							conn_order.delete(orderInfoVO.getId());
+							OrderInfoPO orderInfoPO=conn_order.get(orderInfoVO.getId());
+							orderInfoPO.setInbas(0);
+							conn_order.update(orderInfoPO);
 							continue;
 						}
 					}
 
 					if(productPO==null&&orderInfoVO.getRoomId()==0){
-						conn_order.delete(orderInfoVO.getId());
+						OrderInfoPO orderInfoPO=conn_order.get(orderInfoVO.getId());
+						orderInfoPO.setInbas(0);
+						conn_order.update(orderInfoPO);
 						continue;
 					}
 					
@@ -3305,7 +3309,9 @@ public class PhoneController extends WebBaseControll {
 							}
 							
 							
-							conn_order.delete(orderInfoVO.getId());
+							OrderInfoPO orderInfoPO=conn_order.get(orderInfoVO.getId());
+							orderInfoPO.setInbas(0);
+							conn_order.update(orderInfoPO);
 							continue;
 						}
 					}
