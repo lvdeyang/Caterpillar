@@ -76,10 +76,14 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
-
+import com.guolaiwan.bussiness.merchant.dao.ReportOrderAllDAO;
+import com.guolaiwan.bussiness.merchant.dao.ReportOrderDAO;
+import com.guolaiwan.bussiness.merchant.po.ReportOrderAllPO;
+import com.guolaiwan.bussiness.merchant.po.ReportOrderPO;
 import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
 import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 
+import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.json.JSONUtil;
 import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.commons.qrcode.QRCodeGenerator;
@@ -1365,6 +1369,14 @@ public class ProductPackageController extends BaseController {
 		mv = new ModelAndView("mobile/pubadmin/sellOffline");
 		return mv;
 	}
+	
+	@RequestMapping(value = "/admin/sellAllOffline")
+	public ModelAndView sellAllOffline(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/pubadmin/sellAllOffline");
+		return mv;
+	}
+	
 	//线下售票商户票查询
 	@RequestMapping(value = "/getMerchantPro", method = RequestMethod.GET)
 	public Object queryPro(HttpServletRequest request) throws Exception {
@@ -1378,6 +1390,10 @@ public class ProductPackageController extends BaseController {
 		}
 		return vos;
 	}
+	
+	@Autowired
+	ReportOrderDAO conn_reportOrder;
+	
 	//线下售票 提交订单
 	@RequestMapping(value = "/order/sellOffline", method = RequestMethod.POST)
 	public Map<String, Object> sellOffline(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -1395,137 +1411,99 @@ public class ProductPackageController extends BaseController {
 		String name = pageObject.getString("name");
 		String idcard = pageObject.getString("idcard");
 		String ticketid = pageObject.getString("ticketid");
+		String type = pageObject.getString("type");
 		Date bookDate = new Date();
+		ProductPO productPO=productDao.get(Long.parseLong(id));
+		MerchantPO merchantPO=merchantDao.get(productPO.getProductMerchantID());
+		ReportOrderPO reportOrderPO=new ReportOrderPO();
+		reportOrderPO.setName(name);
+		reportOrderPO.setCount(Integer.parseInt(num));
+		reportOrderPO.setPrice(productPO.getProductPrice());
+		reportOrderPO.setAmount(reportOrderPO.getPrice()*reportOrderPO.getCount());
+        reportOrderPO.setType(Integer.parseInt(type));
+        reportOrderPO.setProductId(productPO.getId());
+        reportOrderPO.setProductName(productPO.getProductName());
+        reportOrderPO.setMerchantId(merchantPO.getId());
+        reportOrderPO.setMerchantName(merchantPO.getShopName());
+        reportOrderPO.setIdCard(idcard);
+        //根据身份证获取年龄，性别，地区
+        reportOrderPO.setSex(IdcardUtil.getGenderByIdCard(idcard));
+        reportOrderPO.setAge(IdcardUtil.getAgeByIdCard(idcard));
+        reportOrderPO.setRegion(IdcardUtil.getProvinceByIdCard(idcard));
+        
+        if(reportOrderPO.getSex()==1){
+        	reportOrderPO.setSexString("男");
+        }else{
+        	reportOrderPO.setSexString("女");
+        }
 
-		OrderInfoPO orderInfoPO = conn_orif.getByField("targetId", ticketid);
-		if(orderInfoPO != null && !orderInfoPO.getOrderState().equals(OrderStateType.REFUNDED)) {
-			return ERROR("该票已售出，无法重复使用");
-		}
-		
-		OrderInfoPO order = new OrderInfoPO();
+        if(reportOrderPO.getType()==0){
+        	reportOrderPO.setTypeString("线下");
+        }else if(reportOrderPO.getType()==1){
+        	reportOrderPO.setTypeString("旅行社");
+        }else{
+        	reportOrderPO.setTypeString("三方OTA");
+        }
+        
+        conn_reportOrder.save(reportOrderPO);
 
-		ProductPO productPO = null;
-		// 库存进行修改
-		productPO = productDao.get(Long.parseLong(id));
-		// 是否限购
-		if (1 == productPO.getProductLimitType()) {
-			// 限购
-			productPO.setProductLimitNum(productPO.getProductLimitNum() - Long.parseLong(num));
-			productPO.setProductStock(productPO.getProductStock() - Long.parseLong(num));
-		} else {
-			productPO.setProductStock(productPO.getProductStock() - Long.parseLong(num));
-		}
-		productDao.update(productPO);
 		
-		// 支付的金额
-		Long productprice = null;
-		productprice = productPO.getProductPrice();
-			
-		if (num == null) {
-			num = "1";
-		}
-		
-		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-		Date date = new Date();
-		// 支付金额
-		long payMoney = Integer.parseInt(num) * productprice;
-		// 订单总金额
-		long orderAllMoney = payMoney;
-		//订单开始日期
-		String orderStartDate = pageObject.getString("startDate");
-		if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
-			order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.defaultDatePattern));
-		}
-		// 获取商家
-		MerchantPO merchant = merchantDao.get(productPO.getProductMerchantID());
-		// 订单用户id放商家id
-		order.setUserId(merchant.getId());
-		order.setUserName(merchant.getShopName());
-		// 订单号（商家id+板块Code+时间戳+商家ID）
-		String orderNO = merchant.getId() + productPO.getProductModularCode() + df.format(date) + merchant.getId();
-		order.setOrderNO(orderNO);
-		// 下单时间
-		order.setCreateDate(date);
-		order.setUpdateTime(date);
-		// 供应商ID
-		order.setShopId(merchant.getId());
-		// 供应商名称
-		order.setShopName(merchant.getShopName());
-		// 商品ID
-		order.setProductId(productPO.getId());
-		// 商品图片
-		order.setProductPic(productPO.getProductShowPic());
-		// 商品名称
-		order.setProductName(productPO.getProductName());
-		// 商品数量
-		order.setProductNum(Long.parseLong(num));
-
-		order.setComId(1L);
-		// 商品单价
-		order.setProductPrice(productprice);
-		// 所属板块DI
-		order.setBkCode(productPO.getProductModularCode());
-		// 所属板块名称
-		order.setBkName(productPO.getProductModularCodeName());
-
-		long proportion = productPO.getProductCommissionPrice();
-		if (productPO.getProductCommissionCode() == 1) {
-			order.setProportion(proportion);
-		}
-		// 提成方式（0：佣金1：比例）
-		order.setRoyaltyName(productPO.getProductCommissionCode());
-		// 积分数
-		long integralNum = Integer.parseInt(num) * productPO.getProductntegral();
-		order.setIntegralNum(integralNum);
-		// 订单佣金金额(分)
-		long proportionMoney;
-		if (productPO.getProductCommissionCode() == 1) {
-			proportionMoney = Integer.parseInt(num) * productPO.getProductPrice() * proportion / 100;
-		} else {
-			proportionMoney = Integer.parseInt(num) * proportion;
-		}
-		order.setProportionMoney(proportionMoney);
-		// 支付金额
-		order.setPayMoney(0);
-		// 订单总金额
-		order.setOrderAllMoney(0);
-		// 订单说明
-		if (request.getParameter("orderRemark") != null && request.getParameter("orderRemark").length() > 0) {
-			order.setOrderRemark(request.getParameter("orderRemark"));
-		}
-		// 订单状态
-		order.setOrderState(OrderStateType.PAYSUCCESS);
-		// 是否评价
-		order.setCommentIs(0);
-		// 预订日期
-		order.setOrderBookDate(bookDate);
-		order.setOrderType(OrderType.MERCHANT);
-		//订单来源
-		order.setSource(OrderSource.UNLINE);
-		
-		String ydNO = ydNoCode(ticketid);
-		order.setTargetId(ticketid);
-		order.setYdNO(ydNO);
-		order.setPayDate(new Date());
-		
-		productPO.setProductSaleNum(productPO.getProductSaleNum() + 1);
-		productPO.setProductShowNum(productPO.getProductShowNum() + 1);
-		
-		productDao.update(productPO);
-		conn_orif.saveOrUpdate(order);
-			
-		//购票人信息
-		MessagePO mes = new MessagePO();
-		mes.setUserId(merchant.getId());
-		mes.setName(name);
-		mes.setNumber(idcard);
-		mes.setState("0");
-		mes.setOderId(order.getId().toString());
-		conn_message.save(mes);
-		
-		data.put("orderId", order.getId());
+		data.put("orderId", reportOrderPO.getId());
 		return success(data);
 	}
+	@Autowired
+	ReportOrderAllDAO reportOrderAllDAO;
+	
+	//线下售票 提交订单
+	@RequestMapping(value = "/order/sellAllOffline", method = RequestMethod.POST)
+	public Map<String, Object> ordersellAllOffline(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		String param = getRequestJson(request);
+		if (param.indexOf("\\") >= 0) {
+			param = param.replaceAll("\\\\", "");
+			param = param.substring(1, param.length() - 1);
+		}
+		JSONObject pageObject = JSON.parseObject(param);
+
+		String typeStr = pageObject.getString("type");
+		String countStr = pageObject.getString("count");
+		String productIdStr = pageObject.getString("id");
+		String sexStr=pageObject.getString("sex");
+		String ageStr=pageObject.getString("age");
+	
+		ProductPO productPO=productDao.get(Long.parseLong(productIdStr));
+		MerchantPO merchantPO=merchantDao.get(productPO.getProductMerchantID());
+		ReportOrderAllPO reportOrderPO=new ReportOrderAllPO();
+
+		reportOrderPO.setCount(Integer.parseInt(countStr));
+        reportOrderPO.setType(Integer.parseInt(typeStr));
+        reportOrderPO.setProductId(productPO.getId());
+        reportOrderPO.setProductName(productPO.getProductName());
+        reportOrderPO.setMerchantId(merchantPO.getId());
+        reportOrderPO.setMerchantName(merchantPO.getShopName());
+        reportOrderPO.setAge(ageStr);
+        //根据身份证获取年龄，性别，地区
+        reportOrderPO.setSex(sexStr);
+        
+       
+        if(reportOrderPO.getType()==0){
+        	reportOrderPO.setTypeString("线下");
+        }else if(reportOrderPO.getType()==1){
+        	reportOrderPO.setTypeString("旅行社");
+        }else{
+        	reportOrderPO.setTypeString("三方OTA");
+        }
+        
+        reportOrderAllDAO.save(reportOrderPO);
+		
+		data.put("orderId", reportOrderPO.getId());
+		return success(data);
+	}
+	
+	
+	
 	//复制过来的生成验单码的方法
 	protected String ydNoCode(String orderNO) throws WriterException, IOException{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
