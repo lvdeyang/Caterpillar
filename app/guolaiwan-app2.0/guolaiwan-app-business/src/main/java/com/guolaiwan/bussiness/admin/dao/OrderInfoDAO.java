@@ -116,6 +116,19 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		List<OrderInfoPO> orders = findByHql(hql);
 		return orders;
 	}
+	
+	
+	public List<OrderInfoPO> getBasOrdersByState(long userId) {
+
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("userId", Condition.eq, userId);
+		hql.andBy("orderState", Condition.eq, OrderStateType.NOTPAY);
+		hql.andBy("inbas",Condition.eq,1);
+		hql.orderBy("createDate", true);
+		List<OrderInfoPO> orders = findByHql(hql);
+		return orders;
+	}
+	
 
 	public List<OrderInfoPO> getOrdersByMerBalanced(long merchantId) {
 

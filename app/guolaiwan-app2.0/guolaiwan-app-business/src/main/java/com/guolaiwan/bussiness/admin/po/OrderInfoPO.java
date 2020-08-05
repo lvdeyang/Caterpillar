@@ -169,7 +169,7 @@ public class OrderInfoPO extends AbstractBasePO {
 	//分销商品关联ID
 	private long distributeProId = 0;
 	
-	
+	private int inbas = 1;
 	
 	public long getDistributorId() {
 		return distributorId;
@@ -714,6 +714,14 @@ public class OrderInfoPO extends AbstractBasePO {
 
 	public void setIdNum(String idNum) {
 		this.idNum = idNum;
+	}
+
+	public int getInbas() {
+		return inbas;
+	}
+
+	public void setInbas(int inbas) {
+		this.inbas = inbas;
 	}
 
 }
