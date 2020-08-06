@@ -34,6 +34,7 @@ public class ReportOrderPO extends AbstractBasePO {
 	private int sex;//0女1男
 	private String sexString;
 	private int age;
+	private String ageString;
 	private String region;
 	private int type;//0线下，1旅行社，2三方ota
 	private String typeString;
@@ -126,6 +127,12 @@ public class ReportOrderPO extends AbstractBasePO {
 	}
 	public void setTypeString(String typeString) {
 		this.typeString = typeString;
+	}
+	public String getAgeString() {
+		return ageString;
+	}
+	public void setAgeString(String ageString) {
+		this.ageString = ageString;
 	}
 	
 
