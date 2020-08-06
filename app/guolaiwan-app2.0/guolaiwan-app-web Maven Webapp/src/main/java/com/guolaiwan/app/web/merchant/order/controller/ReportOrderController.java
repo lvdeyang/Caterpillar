@@ -118,6 +118,15 @@ public class ReportOrderController extends BaseController{
         reportOrderPO.setAge(IdcardUtil.getAgeByIdCard(idCardStr));
         reportOrderPO.setRegion(IdcardUtil.getProvinceByIdCard(idCardStr));
         
+        if(reportOrderPO.getAge()<=15){
+        	reportOrderPO.setAgeString("15岁以下");
+        	
+        }else if(reportOrderPO.getAge()<=65){
+        	reportOrderPO.setAgeString("0-15");
+        }else{
+        	reportOrderPO.setAgeString("65岁以上");
+        }
+        
         if(reportOrderPO.getSex()==1){
         	reportOrderPO.setSexString("男");
         }else{

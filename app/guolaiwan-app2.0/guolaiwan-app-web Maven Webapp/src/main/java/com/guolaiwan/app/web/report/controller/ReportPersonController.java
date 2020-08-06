@@ -28,6 +28,9 @@ import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
+import com.guolaiwan.bussiness.merchant.dao.ReportOrderAllDAO;
+import com.guolaiwan.bussiness.merchant.dao.ReportOrderDAO;
+import com.guolaiwan.bussiness.merchant.dto.ReportDTO;
 import com.guolaiwan.bussiness.operation.dao.WebsiteRecordDAO;
 
 import pub.caterpillar.commons.util.date.DateUtil;
@@ -46,6 +49,27 @@ public class ReportPersonController extends BaseController {
 		return mv;
 	}
 
+	
+	@Autowired
+	ReportOrderDAO reportOrderDAO;
+	@Autowired
+	ReportOrderAllDAO reportorderAllDao;
+	
+	@ResponseBody
+	@RequestMapping(value = "/getsexData")
+	public Map<String, Object> getsexData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReportDTO> result=reportOrderDAO.getSexData(1, 10);
+		return success(result);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getageData")
+	public Map<String, Object> getageData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReportDTO> result=reportOrderDAO.getageData(1, 10);
+		return success(result);
+	}
 	
 
 }

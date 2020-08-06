@@ -1493,11 +1493,11 @@ html, body {
 
 			  </a>
 			  
- 				<a id="scan-off" class="weui-cell weui-cell_access" href="javascript:void(0);">
+ 				<a id="scan-off" class="weui-cell weui-cell_access" href="product/package/admin/sellAllOffline">
 
 			    <div class="weui-cell__bd">
 
-			      <p>线下退票</p>
+			      <p>线下批量售票</p>
 
 			    </div>
 

@@ -714,30 +714,19 @@ html, body {
 		
 				/* 提交 */
 				$(document).on('click','.btn',function(){
-				 var re = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X|x)$/; 
-				if($('.selectList').val()==''){
-				alert('请选择商品')
+			    if($('#_count').val()==''){
+				alert('请输入数量')
 				return;
-				}else if($('#_name').val()==''){
-				alert('请输入购票人姓名')
-				return;
-				}else if($('#_idcard').val()==''){
-				alert('请输入购票人身份证号码')
-				return;
-				}else if(re.test($('#_idcard').val())==false){
-			      alert("身份证号码有误，请重新输入");  
-			       return;  		    
-			    }
+				}
 				
 				    	
 					var param={};
 			  			param.id=$('.selectList').val();
-			  			param.productNum=1; 
-			 			param.name=$('#_name').val();
-			  			param.idcard=$('#_idcard').val();
-			     		param.ticketid=$('#_ticketid').val(); 
+			 			param.count=$('#_count').val();
+			  			param.sex=$('#_sex').val();
+			     		param.age=$('#_age').val(); 
 			            param.type=$('#_type').val(); 
-			        	var _uriPay = window.BASEPATH + 'product/package/order/sellOffline';
+			        	var _uriPay = window.BASEPATH + 'product/package/order/sellAllOffline';
 			  			$.post(_uriPay, $.toJSON(param), function(data){
 			  			if(data.status ==200){
 				  			alert("下单成功")
@@ -771,25 +760,24 @@ html, body {
 					    	<p style="position: absolute;top:23.5px;left:10%;">选择商品</p>
 					    </li>
 						<li>
-							<input id="_name" type="text" placeholder="请输入您的姓名"
+							<input id="_count" type="text" placeholder="数量"
 							minlength="4" maxlength="4" style="">
-							<p style="position: absolute;top:93px;left:10%;">购买人姓名</p>
+							<p style="position: absolute;top:93px;left:10%;">游客数量</p>
 						</li>
 						<li>
-							<input id="_idcard" class="pid" type="text"
-							placeholder="请输入身份证号码" minlength="18" maxlength="18" style="">
-							<img id="face"
-							style="height:25px;height:25px;position: absolute;top:164px;right:10%;"
-							src="lib/images/zhaoxiang.png">
-							<p style="position: absolute;top:163px;left:10%;">身份证号码</p>
+							<select id="_age">
+								<option value="0-15">幼年</option>
+								<option value="15-64">青年-中年</option>
+								<option value="65">老年</option>
+							</select>
+							<p style="position: absolute;top:163px;left:10%;">游客年龄</p>
 						</li>
 						<li>
-							<input id="_ticketid"  type="text"
-							placeholder="请输入票码(不必须)"  style="">
-							<img id="ticket"
-							style="height:25px;height:25px;position: absolute;top:234px;right:10%;"
-							src="lib/images/zhaoxiang.png">
-							<p style="position: absolute;top:233px;left:10%;">票码</p>
+							<select id="_sex">
+								<option value="男">男</option>
+								<option value="女">女</option>
+							</select>
+							<p style="position: absolute;top:233px;left:10%;">游客性别</p>
 						</li>
 						<li>
 					    	<select id="_type">
