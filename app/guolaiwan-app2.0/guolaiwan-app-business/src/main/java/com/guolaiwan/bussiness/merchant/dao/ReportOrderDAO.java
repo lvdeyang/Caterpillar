@@ -57,4 +57,20 @@ public class ReportOrderDAO extends AbstractBaseDao<ReportOrderPO> {
 		query.setMaxResults(pageSize);
 		return query.list();
 	}
+	
+	public List<ReportDTO> getregionData(int pageNum, int pageSize) {
+		StringBufferWrapper sqlWrapper = new StringBufferWrapper().append(
+				"select SUM(count) acount,region from t_sys_reportorder GROUP BY region ORDER BY acount desc");
+		
+		SQLQuery query = getCurrentSession().createSQLQuery(sqlWrapper.toString())
+				.addScalar("region", StandardBasicTypes.STRING).addScalar("acount", StandardBasicTypes.INTEGER);
+		query.setResultTransformer(Transformers.aliasToBean(ReportDTO.class));
+
+		// 分页
+		int firstResult = (pageNum - 1) * pageSize;
+		query.setFirstResult(firstResult);
+		query.setMaxResults(pageSize);
+		return query.list();
+	}
+	
 }

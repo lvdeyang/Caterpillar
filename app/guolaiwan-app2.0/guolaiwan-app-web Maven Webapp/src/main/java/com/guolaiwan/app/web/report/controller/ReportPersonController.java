@@ -71,5 +71,13 @@ public class ReportPersonController extends BaseController {
 		return success(result);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/getregionData")
+	public Map<String, Object> getregionData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReportDTO> result=reportOrderDAO.getageData(1, 10);
+		return success(result);
+	}
+	
 
 }
