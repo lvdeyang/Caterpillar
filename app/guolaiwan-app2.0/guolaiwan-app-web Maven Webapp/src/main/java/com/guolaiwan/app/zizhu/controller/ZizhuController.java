@@ -229,8 +229,8 @@ public class ZizhuController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/payPreVoucher", method = RequestMethod.POST)
-    public String refundPreVoucher(@RequestBody RefundVoucherPo po){
+	@RequestMapping(value = "/refundVoucher", method = RequestMethod.POST)
+    public String refundVoucher(@RequestBody RefundVoucherPo po){
 		RefundVoucherVo vo=new RefundVoucherVo();
 		RefundVoucherVo.Error error=vo.getError();
 		Map refundData=new HashMap<String, Object>();
