@@ -59,9 +59,9 @@ String weburl=WXContants.Website;
 <body>
 <div class="container" style="position:absolute;top:0;">
     <div style="width:100%;height:10%;position:absolute;left:0;top:0;z-index:5000">
-          <image style="width:8%;height:25%;margin-left:30%;margin-top:2%" src="<%= request.getContextPath() %>/lib/images/ditu.png"/>
+          <image style="width:8%;height:25%;margin-left:30%;margin-top:2%" onclick="location.href='http://www.guolaiwan.net/download/dist/index.html?num=0'" src="<%= request.getContextPath() %>/lib/images/ditu.png"/>
           <image style="width:10%;height:30%;margin-left:7%;margin-top:2%" src="<%= request.getContextPath() %>/lib/images/keliuliangtongji.png"/>
-          <image style="width:8%;height:25%;margin-left:6%;margin-top:2%" src="<%= request.getContextPath() %>/lib/images/tongjifenxi.png"/>
+          <image style="width:8%;height:25%;margin-left:6%;margin-top:2%" onclick="location.href='http://www.guolaiwan.net/download/dist/index.html?num=2'" src="<%= request.getContextPath() %>/lib/images/tongjifenxi.png"/>
           
     </div>
     
