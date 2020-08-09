@@ -1,4 +1,4 @@
-<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
+﻿<%@page import="pub.caterpillar.weixin.constants.WXContants"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
@@ -35,7 +35,8 @@ String weburl=WXContants.Website;
 	.container{
 		width:100%;height:100%;top:0;
 		background:url("<%= request.getContextPath() %>/lib/images/bg.png") no-repeat;
-	}
+	        background-size:100% 100%;
+        }
 	.img{
 		width:100%;height:100%;position:absolute;top:0;
 	}
@@ -68,12 +69,12 @@ String weburl=WXContants.Website;
 	<image class="img" src="<%= request.getContextPath() %>/lib/images/dakuang.png"/>
 
  
-	      <div class="layui-row grid-demo" style="height:90%;margin-top:6%">
+	      <div class="layui-row grid-demo" style="height:90%;margin-top:8%">
 	        <div class="layui-col-md3" style="height:100%;">
 	             <div class="side_c">
 	                <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/tianqi_kuang.png">
 	                <div style="position:absolute;width:100%;height:20%;top:0;left:0">
-		                <iframe style="margin-left:5%;margin-top:15%;float:left;" width="50%" scrolling="no" height="100%" frameborder="0" allowtransparency="true" 
+		                <iframe style="margin-left:5%;margin-top:20%;float:left;" width="50%" scrolling="no" height="100%" frameborder="0" allowtransparency="true" 
 							src="//i.tianqi.com/index.php?c=code&id=8&color=%23FFFFFF&bgc=%23&bdc=%23&icon=1&num=1&site=19">
 						</iframe>
 						<div id="server_time" style="width:30%;height:5%;float:left;color:#FFF;margin-top:20%;margin-left:5%"></div>
@@ -84,8 +85,8 @@ String weburl=WXContants.Website;
 	                <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/renlian_kuang.png">
 	                <div style="width:100%;height:100%;margin-top:0;left:0">
 	                   <image src="<%= request.getContextPath() %>/lib/images/icon_renlian.png" 
-	                   style="width:12%;height:38%;margin-top:12%;margin-left:15%;float:left;">
-	                   <div style="float:left;margin-top:14%;margin-left:5%;text-align:center">
+	                   style="width:12%;height:38%;margin-top:16%;margin-left:15%;float:left;">
+	                   <div style="float:left;margin-top:18%;margin-left:5%;text-align:center">
 	                      <span style="color:#FFF">人脸抓拍总数</span><br><span style="color:#00FF26;line-height:50px;font-size:20px">&nbsp;&nbsp;24000</span>
 	                   </div>
 	                </div>
@@ -119,8 +120,8 @@ String weburl=WXContants.Website;
 	                 <image class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheliangzhuapai.png"> 
 	                 <div style="width:100%;height:100%;margin-top:0;left:0">
 	                   <image src="<%= request.getContextPath() %>/lib/images/icon_qiche.png" 
-	                   style="width:12%;height:34%;margin-top:14%;margin-left:15%;float:left;">
-	                   <div style="float:left;margin-top:14%;margin-left:5%;text-align:center">
+	                   style="width:12%;height:34%;margin-top:16%;margin-left:15%;float:left;">
+	                   <div style="float:left;margin-top:16%;margin-left:5%;text-align:center">
 	                      <span style="color:#FFF">车辆抓拍总数</span><br><span style="color:#00FF26;line-height:50px;font-size:20px">24000</span>
 	                   </div>
 	                </div>
@@ -131,7 +132,7 @@ String weburl=WXContants.Website;
 	             </div>
 	             <div class="side_c" style="height:30%">
 	                 <image  style="height:30%" class="innerimage" src="<%= request.getContextPath() %>/lib/images/cheguishudi.png"> 
-	                 <div id="guishu" style="width:100%;height:120%;margin-top:0;left:0"></div>
+	                 <div id="guishu" style="width:100%;height:100%;margin-top:0;left:0"></div>
 	             </div>
 	             <div class="side_c" style="height:30%">
 	                 <image style="height:30%" class="innerimage" src="<%= request.getContextPath() %>/lib/images/jinqingfenxi.png"> 
