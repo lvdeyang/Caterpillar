@@ -1,10 +1,15 @@
 package com.guolaiwan.app.zizhu.controller;
 
+import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.app.zhaji.ZhajiService;
 import com.guolaiwan.app.zizhu.GlwHttpUtils;
@@ -27,10 +35,24 @@ import com.guolaiwan.app.zizhu.bean.RefundPo;
 import com.guolaiwan.app.zizhu.bean.RefundVo;
 import com.guolaiwan.app.zizhu.bean.RefundVoucherPo;
 import com.guolaiwan.app.zizhu.bean.RefundVoucherVo;
+import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
+import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
+import com.guolaiwan.bussiness.admin.enumeration.OrderType;
+import com.guolaiwan.bussiness.admin.enumeration.PayType;
+import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.MerchantPO;
+import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.admin.po.OrderPeoplePo;
+import com.guolaiwan.bussiness.admin.po.ProductComboPO;
+import com.guolaiwan.bussiness.admin.po.ProductPO;
+import com.guolaiwan.bussiness.admin.po.RoomStatusPO;
+import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 import com.guolaiwan.app.zizhu.bean.CreateVoucherPo;
 import com.guolaiwan.app.zizhu.bean.CreateVoucherVo;
 
 import cn.hutool.core.date.DateTime;
+import pub.caterpillar.commons.util.date.DateUtil;
 
 @Controller
 @RequestMapping("/ticketSales")
@@ -295,4 +317,132 @@ public class ZizhuController {
 		}
 		return JSONObject.toJSONString(vo);
     }
+	
+	
+	
+	public Map<String, Object> addOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		Map<String, Object> data = new HashMap<String, Object>();
+		return data;
+		//String productId = pageObject.getString("productId");
+		//String num = pageObject.getString("productNum");
+		//ProductPO productPO = conn_product.get(Long.parseLong(productId));
+		//if (num == null) {
+		//	num = "1";
+		//}
+		//OrderInfoPO order = new OrderInfoPO();
+		// 4/26添加comId 张羽 4/28 添加退款限制
+		//ProductPO productPO2 = conn_product.get(Long.parseLong(productId));
+		//order.setComId(productPO2.getComId());
+		//order.setProductIsRefund(productPO2.getProductIsRefund());
+		//String orderStartDate = pageObject.getString("startDate");
+		//if (orderStartDate != null && orderStartDate != "" && orderStartDate.length() != 0) {
+		//	orderStartDate = orderStartDate.replace("T", " ");
+		//	order.setOrderBookDate(DateUtil.parse(orderStartDate, DateUtil.dateTimePattenWithoutSecind));
+		//}
+		//long productprice = productPO.getProductPrice();
+		// 支付金额
+		//long payMoney = Integer.parseInt(num) * productprice;
+		// 订单总金额
+		//long orderAllMoney = payMoney;
+		// 获取商家
+		//MerchantPO merchant = conn_merchant.get(productPO.getProductMerchantID());
+		//String orderBookDate = pageObject.getString("bookDate");
+		//order.setOrderBookDate(DateUtil.parse(orderBookDate, DateUtil.dateTimePattenWithoutSecind));
+		// 订单号（城市编码+商家id+板块Code+时间戳+用户ID）
+		//String orderNO = getCityCodeByDomain() + merchant.getId() + productPO.getProductModularCode() + df.format(date)
+		//		+ userId;
+		//order.setOrderNO(orderNO);
+		// 下单时间
+		//order.setCreateDate(date);
+		//order.setUpdateTime(date);
+		// 供应商ID
+		//order.setShopId(merchant.getId());
+		// 供应商名称
+		//order.setShopName(merchant.getShopName());
+		// 站点ID
+		// 站点名称
+		// 商品ID
+		//order.setProductId(productPO.getId());
+		// 商品图片
+		//order.setProductPic(productPO.getProductShowPic());
+		// 商品名称
+		//order.setProductName(productPO.getProductName());
+		// 商品数量
+		//order.setProductNum(Long.parseLong(num));
+		//orderAllMoney = payMoney;
+		//System.out.println(orderAllMoney + "-------------------------");
+		// 商品单价
+		//order.setProductPrice(productprice);
+		// 所属板块DI
+		//order.setBkCode(productPO.getProductModularCode());
+		// 所属板块名称
+		//order.setBkName(productPO.getProductModularCodeName());
+		// 提成方式（0：佣金1：比例）
+		//order.setRoyaltyName(productPO.getProductCommissionCode());
+		// 订单佣金金额(分)
+		//long proportionMoney;
+		//if (productPO.getProductCommissionCode() == 1) {
+		//	proportionMoney = Integer.parseInt(num) * productPO.getProductPrice() * proportion / 100;
+		//} else {
+		//	proportionMoney = Integer.parseInt(num) * proportion;
+		//}
+		//order.setProportionMoney(proportionMoney);
+		// 支付金额
+		//order.setPayMoney(payMoney);
+		// 订单总金额
+		//order.setOrderAllMoney(orderAllMoney);
+		// 订单说明
+		//if (request.getParameter("orderRemark") != null && request.getParameter("orderRemark").length() > 0) {
+			//order.setOrderRemark(request.getParameter("orderRemark"));
+		//}
+		// 订单状态
+		//order.setOrderState(OrderStateType.NOTPAY);
+		// 订单支付类型 //ALIPAY WEICHAT
+		//order.setPayMode(PayType.fromString(paytype));
+		// 是否评价
+		//order.setCommentIs(0);
+		//if (photo != null) {
+		//	order.setPhoto(URLDecoder.decode(photo));
+		//}
+		//if (idNum != null) {
+		//	order.setIdNum(idNum);
+		//}
+
+		//if (pageObject.getString("source") != null) {
+		//	order.setSource(OrderSource.fromString(pageObject.getString("source")));
+		//} else {
+			// 订单来源
+		//	order.setSource(OrderSource.APP);
+		//}
+		//order.setOrderType(OrderType.MERCHANT);
+		//productPO.setProductSaleNum(productPO.getProductSaleNum() + 1);
+		//productPO.setProductShowNum(productPO.getProductShowNum() + 1);
+		//conn_product.update(productPO);
+		//conn_order.saveOrUpdate(order);
+		//JSONArray array = pageObject.getJSONArray("idnums");
+		//if (array != null) {
+		//	for (Object obj : array) {
+		//		JSONObject jobj = (JSONObject) obj;
+		//		OrderPeoplePo orderPeoplePo = new OrderPeoplePo();
+		//		orderPeoplePo.setIdNum(jobj.getString("idNum"));
+		//		orderPeoplePo.setPhoto(URLDecoder.decode(jobj.getString("photo")));
+		//		orderPeoplePo.setOrderId(order.getId());
+		//		orderPeoplePo.setName(jobj.getString("name"));
+		//		conn_orderPeople.save(orderPeoplePo);
+		//	}
+		//}
+		//long PayMoney = order.getPayMoney();
+		/* String tradeNum=order.getOrderNO(); */
+		//String orderIdStr = String.valueOf(order.getId());
+		// 调微信和支付宝
+		//if (paytype.equals("WEICHAT")) { // 微信
+			
+		//} else if (paytype.equals("ALIPAY")) {
+			
+		//	return success(data);
+		//} else {
+		//	return ERROR("系统错误！");
+		//}
+	}
 }
