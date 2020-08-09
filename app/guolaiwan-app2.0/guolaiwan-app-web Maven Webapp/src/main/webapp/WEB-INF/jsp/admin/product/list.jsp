@@ -145,6 +145,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
   //获取产品列表
   getProductList();
+  
+        table.on("edit(productList)",function(obj){
+              		//加载
+              		layer.msg('加载中', {
+ 						 icon: 16
+  						,shade: 0.01
+					})
+              		var data = obj.data,
+              		value = obj.value,
+              		field = obj.field;
+              		
+              		$.ajax({
+              			type:"post",
+              			url:"editsort.do",
+              			data:{"id":data.id,"value":value,"field":field},
+              			success:function(msg){
+              				layer.closeAll("loading");
+              				if(msg=="success"){
+              					layer.msg("修改成功！",{icon:1});
+              				}else{
+              					layer.msg("系统错误！",{icon:2});
+              				}
+              			
+              			}
+              		})
+              })
+  
+  
   //表单提交
   form.on('submit(getPro)',function(data){
    layer.load();
@@ -285,6 +313,7 @@ function getProductList(){
     ,{field: 'id', title: 'ID',sort: true,width:60} 
     ,{field: 'productName', title: '商品名称',sort: true,templet:'#productNameTpl'}  
     ,{field: 'productMerchantName', title: '商家',sort: true} 
+    ,{field: 'productSort', title: '排序',width:100,edit:"text"} 
     ,{title: '板块',width:160,templet:'#bankuaiTpl'} 
     ,{field: 'productOldPrice', title: '原价',width:100,sort: true} 
     ,{field: 'productPrice', title: '现价',width:100,sort: true} 
@@ -296,6 +325,10 @@ function getProductList(){
     ]]
   });
 }
+
+   
+
+
 
 function getProductListByf(data){
 	table.render({               
@@ -314,6 +347,7 @@ function getProductListByf(data){
    ,{field: 'productName', title: '商品名称',sort: true,templet:'#productNameTpl'}  
    ,{field: 'productCityName', title: '城市',sort: true, width:80}
    ,{field: 'productMerchantName', title: '商家',sort: true} 
+   ,{field: 'productSort', title: '排序',width:100,edit:"text"} 
    ,{title: '板块',width:160,templet:'#bankuaiTpl'} 
    ,{field: 'productOldPrice', title: '原价',width:100,sort: true} 
    ,{field: 'productPrice', title: '现价',width:100,sort: true} 

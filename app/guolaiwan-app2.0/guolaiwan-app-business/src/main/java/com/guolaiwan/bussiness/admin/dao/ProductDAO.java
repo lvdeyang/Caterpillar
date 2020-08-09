@@ -637,7 +637,7 @@ public class ProductDAO extends AbstractBaseDao<ProductPO> {
 				hql.andBy(entry.getKey(), Condition.eq, entry.getValue());
 			
 		}
-		
+		hql.orderBy("productSort", true);
 		List<ProductPO> productPos = findByHqlPage(hql, pageNum, pageSize);
 		return productPos;
 	}

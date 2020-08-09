@@ -52,6 +52,7 @@ import com.guolaiwan.bussiness.admin.dao.ProductRegionDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.ProductSaleType;
 import com.guolaiwan.bussiness.admin.enumeration.ShopAuditStateType;
+import com.guolaiwan.bussiness.admin.po.ActivityPO;
 import com.guolaiwan.bussiness.admin.po.ChildPicAndContentPO;
 import com.guolaiwan.bussiness.admin.po.ChildProductPO;
 import com.guolaiwan.bussiness.admin.po.CityInfoPO;
@@ -516,7 +517,21 @@ public class ProductController extends BaseController {
 
 		return "success";
 	}
-
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/editsort.do", method = RequestMethod.POST)
+	public String editsort(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		ProductPO product = conn_product.get(id);
+		String field = request.getParameter("field");
+		String value = request.getParameter("value");
+		product.setProductSort(Long.parseLong(value));
+		conn_product.save(product);
+		return "success";
+		
+	}
 	// 修改数据
 	@ResponseBody
 	@RequestMapping(value = "/modify.do", method = RequestMethod.POST)
