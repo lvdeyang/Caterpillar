@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.guolaiwan.app.zhaji.AvailablePo;
 import com.guolaiwan.app.zhaji.ZhajiService;
+import com.guolaiwan.bussiness.admin.dao.DeviceDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
+import com.guolaiwan.bussiness.admin.po.DevicePO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 
@@ -31,6 +34,9 @@ import pub.caterpillar.commons.util.date.DateUtil;
 @RequestMapping("/zhaji")
 public class ZhajiController {
 	
+	@Autowired
+	DeviceDAO conn_device;
+	
 	@ResponseBody
 	@RequestMapping(value = "/checkIn", method = RequestMethod.GET)
     public String checkIn(HttpServletRequest request){
@@ -39,10 +45,14 @@ public class ZhajiController {
 		JSONObject response=new JSONObject();
 		JSONObject data=new JSONObject();
 		JSONObject error=new JSONObject();
+		List<DevicePO> devicePOs=conn_device.findByField("deviceCode", uniqueCode);
+		if(devicePOs==null||devicePOs.isEmpty()){
+			//这里返回失败，找不到设备。@宋
+		}
 		//闸机名称
-		data.put("gateName", "通道1");
+		data.put("gateName", devicePOs.get(0).getDeviceName());
 		//商家名称
-		data.put("siteName", "万佛园");
+		data.put("siteName", devicePOs.get(0).getMerchantName());
 		//刷卡事件间隔
 		data.put("swipeInterval", 0);
 		//验证方式 0 - 常规验证, 1 - 过人计数, 2 - 常开验证, 3 - 手持验证，4 - 身份采样
@@ -63,46 +73,23 @@ public class ZhajiController {
 	@ResponseBody
 	@RequestMapping(value = "/checkAvailable", method = RequestMethod.POST)
     public String checkAvailable(HttpServletRequest request){
-		
-	    String result = "";
-		try {
-            InputStreamReader insr = new InputStreamReader(request.getInputStream(),"utf-8");
-            int respInt = insr.read();
-            System.out.println(respInt);
-            while(respInt != -1){
-                result += (char)respInt;
-                respInt = insr.read();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-		JSONObject jsonObject=new JSONObject(result);
+		String serialNumber = request.getParameter("serialNumber");
+		String uniqueCode = request.getParameter("uniqueCode");
 		OrderInfoPO orderInfo=null;
-		try {
-			orderInfo=ydnow(jsonObject.getStr("serialNumber"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		JSONObject response=new JSONObject();
 		JSONObject data=new JSONObject();
 		JSONObject error=new JSONObject();
-		//唯一标识
-		data.put("guid", orderInfo.getId());
-		//进出方向0进，1,2出方向
-		//data.put("accessDir", jsonObject.getStr("accessDir"));
-		//票号
-		data.put("serialNumber", jsonObject.getStr("serialNumber"));
-		//此票是否可以开门 0 - 可进，1 - 不可进
-		if(orderInfo!=null){
-			data.put("accessDir", 1);
-		}else{
-			data.put("accessDir", 0);
+		try {
+			orderInfo=ydnow(serialNumber,uniqueCode);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+		e.printStackTrace();   
 		}
 		
-		//产品名称
-		data.put("productName", orderInfo.getProductName());
+		//进出方向0进，1,2出方向
+		//data.put("accessDir", jsonObject.getStr("accessDir"));000000000000
+		//票号
+		data.put("serialNumber", serialNumber);	
 		//0 - 默认类型，1 - 票，2 - 卡
 		data.put("cardType", 1);
 		//卡类型 0	普通
@@ -118,8 +105,28 @@ public class ZhajiController {
 		//单次消费次数
 		data.put("singleTimes", 1);
 		//剩余次数
-		error.put("code", 0);
-		error.put("message", "success");
+		data.put("remainTimes", 1);
+	
+		if(orderInfo!=null){
+			//唯一标识
+			data.put("guid", orderInfo.getId());
+			//此票是否可以开门 0 - 可进，1 - 不可进
+			data.put("accessDir", 1);
+			//产品名称
+			data.put("productName", orderInfo.getProductName());
+			error.put("code", 0);
+			error.put("message", "success");
+		}else{
+			//唯一标识
+			data.put("guid", "");
+			//此票是否可以开门 0 - 可进，1 - 不可进
+			data.put("accessDir", 1);
+			//产品名称
+			data.put("productName", "");
+			data.put("accessDir", 0);
+			error.put("code", 1);
+			error.put("message", "查无此票");
+		}	
 		response.put("data", data);
 		response.put("error", error);
 		return response.toString();      
@@ -145,13 +152,21 @@ public class ZhajiController {
 	@Autowired
 	OrderInfoDAO conn_order;
 	
-	private OrderInfoPO ydnow(String orderNO) throws ParseException{
+	private OrderInfoPO ydnow(String orderNO,String deviceCode) throws ParseException{
 		OrderInfoPO orderInfoPO = null;
-
+		List<DevicePO> devicePOs=conn_device.findByField("deviceCode", deviceCode);
+		if(devicePOs==null||devicePOs.isEmpty()){
+			return null;
+		}
 		
 		// 获取订单
 		orderInfoPO = conn_order.get(Long.parseLong(orderNO));
 		if (orderInfoPO != null) {
+			
+			if(devicePOs.get(0).getMerchantId()!=orderInfoPO.getShopId()){
+				return null;
+			}
+			
 
 			if (orderInfoPO.getOrderBookDate() != null) {
 
