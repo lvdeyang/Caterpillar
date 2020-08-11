@@ -1,30 +1,20 @@
 package com.guolaiwan.app.zhaji.controller;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.alibaba.fastjson.JSON;
-import com.guolaiwan.app.zhaji.AvailablePo;
-import com.guolaiwan.app.zhaji.ZhajiService;
 import com.guolaiwan.bussiness.admin.dao.DeviceDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.DevicePO;
-import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 
 import cn.hutool.json.JSONObject;
@@ -47,26 +37,30 @@ public class ZhajiController {
 		JSONObject error=new JSONObject();
 		List<DevicePO> devicePOs=conn_device.findByField("deviceCode", uniqueCode);
 		if(devicePOs==null||devicePOs.isEmpty()){
-			//这里返回失败，找不到设备。@宋
+			error.put("code", 1);
+			error.put("message", "验票机未注册");
+			response.put("data", data);
+			response.put("error", error);
+		}else{
+			//闸机名称
+			data.put("gateName", devicePOs.get(0).getDeviceName());
+			//商家名称
+			data.put("siteName", devicePOs.get(0).getMerchantName());
+			//刷卡事件间隔
+			data.put("swipeInterval", 0);
+			//验证方式 0 - 常规验证, 1 - 过人计数, 2 - 常开验证, 3 - 手持验证，4 - 身份采样
+			data.put("workMode", 3);
+			//网络模式1 - 离线, 0 - 在线, 2 - 离线+在线
+			data.put("networkMode", 2);
+			//通道类型  0 - 常规通道，1 - 场次通道，2 - 常规+场次
+			data.put("accessType", 2);
+			//服务器时间
+			data.put("systemDate",DateUtil.format(new Date(),DateUtil.dateTimePattern));
+			error.put("code", 0);
+			error.put("message", "success");
+			response.put("data", data);
+			response.put("error", error);
 		}
-		//闸机名称
-		data.put("gateName", devicePOs.get(0).getDeviceName());
-		//商家名称
-		data.put("siteName", devicePOs.get(0).getMerchantName());
-		//刷卡事件间隔
-		data.put("swipeInterval", 0);
-		//验证方式 0 - 常规验证, 1 - 过人计数, 2 - 常开验证, 3 - 手持验证，4 - 身份采样
-		data.put("workMode", 3);
-		//网络模式1 - 离线, 0 - 在线, 2 - 离线+在线
-		data.put("networkMode", 2);
-		//通道类型  0 - 常规通道，1 - 场次通道，2 - 常规+场次
-		data.put("accessType", 2);
-		//服务器时间
-		data.put("systemDate",DateUtil.format(new Date(),DateUtil.dateTimePattern));
-		error.put("code", 0);
-		error.put("message", "success");
-		response.put("data", data);
-		response.put("error", error);
 		return response.toString(); 
     }
 	
@@ -79,54 +73,65 @@ public class ZhajiController {
 		JSONObject response=new JSONObject();
 		JSONObject data=new JSONObject();
 		JSONObject error=new JSONObject();
+		List<DevicePO> devicePOs=conn_device.findByField("deviceCode", uniqueCode);
 		try {
 			orderInfo=ydnow(serialNumber,uniqueCode);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 		e.printStackTrace();   
 		}
-		
-		//进出方向0进，1,2出方向
-		//data.put("accessDir", jsonObject.getStr("accessDir"));000000000000
-		//票号
-		data.put("serialNumber", serialNumber);	
-		//0 - 默认类型，1 - 票，2 - 卡
-		data.put("cardType", 1);
-		//卡类型 0	普通
-		data.put("cardUsage", 0);
-		//卡状态 0	普通票
-		data.put("cardState", 0);
-		//过闸方式 0 - 一刷一人 1 - 一次刷完 2 - 一单一刷 3 - 刷卡落杆
-		data.put("passWay", 0 );
-		//开始时间
-		data.put("startTime", "2019-07-12 09:29:30");
-		//结束时间
-		data.put("endTime",  "2019-11-12 09:29:30");
-		//单次消费次数
-		data.put("singleTimes", 1);
-		//剩余次数
-		data.put("remainTimes", 1);
-	
-		if(orderInfo!=null){
-			//唯一标识
-			data.put("guid", orderInfo.getId());
-			//此票是否可以开门 0 - 可进，1 - 不可进
-			data.put("accessDir", 1);
-			//产品名称
-			data.put("productName", orderInfo.getProductName());
-			error.put("code", 0);
-			error.put("message", "success");
-		}else{
-			//唯一标识
-			data.put("guid", "");
-			//此票是否可以开门 0 - 可进，1 - 不可进
-			data.put("accessDir", 1);
-			//产品名称
-			data.put("productName", "");
-			data.put("accessDir", 0);
+		//判断扫码设备是否存在
+		if(devicePOs==null||devicePOs.isEmpty()){
 			error.put("code", 1);
-			error.put("message", "查无此票");
-		}	
+			error.put("message", "验票机未注册");
+			response.put("data", data);
+			response.put("error", error);
+		}else{
+			//判断扫描是否存在票单
+			if(orderInfo==null){
+				error.put("code", 1);
+				error.put("message", "查无此票");
+				response.put("data", data);
+				response.put("error", error);
+			}else{
+				//判断扫码设备所在商家是否与票单商家一致
+				if(devicePOs.get(0).getMerchantId()!=orderInfo.getShopId()){
+					error.put("code", 1);
+					error.put("message", "验票失败");
+					response.put("data", data);
+					response.put("error", error);
+				}else{
+					//进出方向0进，1,2出方向
+					//data.put("accessDir", jsonObject.getStr("accessDir"));000000000000
+					//票号
+					data.put("serialNumber", serialNumber);	
+					//0 - 默认类型，1 - 票，2 - 卡
+					data.put("cardType", 1);
+					//卡类型 0	普通
+					data.put("cardUsage", 0);
+					//卡状态 0	普通票
+					data.put("cardState", 0);
+					//过闸方式 0 - 一刷一人 1 - 一次刷完 2 - 一单一刷 3 - 刷卡落杆
+					data.put("passWay", 0 );
+					//开始时间
+					data.put("startTime", "2019-07-12 09:29:30");
+					//结束时间
+					data.put("endTime",  "2019-11-12 09:29:30");
+					//单次消费次数
+					data.put("singleTimes", 1);
+					//剩余次数
+					data.put("remainTimes", 1);
+					//唯一标识
+					data.put("guid", orderInfo.getId());
+					//此票是否可以开门 0 - 可进，1 - 不可进
+					data.put("accessDir", 1);
+					//产品名称
+					data.put("productName", orderInfo.getProductName());
+					error.put("code", 0);
+					error.put("message", "success");
+				}
+			}
+		}
 		response.put("data", data);
 		response.put("error", error);
 		return response.toString();      
