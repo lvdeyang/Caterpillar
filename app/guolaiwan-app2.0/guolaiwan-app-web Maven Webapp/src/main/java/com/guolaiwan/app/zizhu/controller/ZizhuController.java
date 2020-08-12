@@ -22,7 +22,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
-import com.guolaiwan.app.zhaji.ZhajiService;
 import com.guolaiwan.app.zizhu.GlwHttpUtils;
 import com.guolaiwan.app.zizhu.bean.CancelVoucherPo;
 import com.guolaiwan.app.zizhu.bean.CancleVoucherVo;
