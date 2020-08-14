@@ -102,6 +102,8 @@ import com.guolaiwan.bussiness.admin.po.VPRelPO;
 import com.guolaiwan.bussiness.admin.po.VideoPicPO;
 import com.guolaiwan.bussiness.coupleback.dao.CoupleBackDao;
 import com.guolaiwan.bussiness.coupleback.po.CoupleBackPO;
+import com.guolaiwan.bussiness.merchant.dao.ReportOrderAllDAO;
+import com.guolaiwan.bussiness.merchant.po.ReportOrderAllPO;
 import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
 import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
 import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
@@ -379,6 +381,9 @@ public class BusinessController extends WebBaseControll {
 		}
 		return list;
 	}
+	
+	@Autowired
+	ReportOrderAllDAO conn_reportOrderAll;
 
 	// 封装猜你喜欢的数据,随机4条数据返回页面------都是属于南山公司
 	@ResponseBody
@@ -415,7 +420,12 @@ public class BusinessController extends WebBaseControll {
 			hashMap.put("productModularCode", productlist.get(arr[i]).getProductModularCode());
 			hashMap.put("url", productlist.get(arr[i]).getProductShowPic());
 			hashMap.put("id", productlist.get(arr[i]).getId());
-			hashMap.put("pingfen", orderInfoDao.GetCountbyPage(id)/100);
+			int count=orderInfoDao.GetCountbyPage(id);
+			List<ReportOrderAllPO> reportOrderAllPOs=conn_reportOrderAll.findByField("productId", productlist.get(arr[i]).getId());
+			for (ReportOrderAllPO reportOrderAllPO : reportOrderAllPOs) {
+				count+=reportOrderAllPO.getCount();
+			}
+			hashMap.put("pingfen", count/100);
 			hashMap.put("weburl",sysConfigPO.getWebUrl());
 			// 根据id统计多少人来个
 			List<OrderInfoPO> newgetAllOrder = orderInfoDao.newgetAllOrder(productlist.get(arr[i]).getId());
