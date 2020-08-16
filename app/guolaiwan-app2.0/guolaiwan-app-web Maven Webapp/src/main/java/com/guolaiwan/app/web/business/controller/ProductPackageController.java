@@ -146,6 +146,8 @@ public class ProductPackageController extends BaseController {
 		return new ModelAndView("mobile/business/purchase", map);
 	}
 
+	@Autowired
+	private ReportOrderAllDAO conn_reportOrderAll;
 	// 查询商品信息
 	@RequestMapping(value = "/list")
 	public Map<String, Object> findPackageName(HttpServletRequest request) throws NumberFormatException, Exception {
@@ -226,6 +228,10 @@ public class ProductPackageController extends BaseController {
 				// 获取该商品的所有订单
 				DecimalFormat defs = new DecimalFormat("0.0");
 				int count = conn_orif.countByField("productId", pro.getId());
+				List<ReportOrderAllPO> reportOrderAllPOs=conn_reportOrderAll.findByField("productId", pro.getId());
+				for (ReportOrderAllPO reportOrderAllPO : reportOrderAllPOs) {
+					count+=reportOrderAllPO.getCount();
+				}
 				int gradeSegment = count % 3;
 				switch (gradeSegment) {
 				case 0:
