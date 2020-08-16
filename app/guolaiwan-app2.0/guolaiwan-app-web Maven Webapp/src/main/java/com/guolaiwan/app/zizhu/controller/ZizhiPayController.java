@@ -1,7 +1,10 @@
 package com.guolaiwan.app.zizhu.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -9,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -58,37 +63,49 @@ public class ZizhiPayController {
 	@ResponseBody
 	@RequestMapping(value = "/wxpay/scanPay", method = RequestMethod.POST)
     public String payCodeWx(HttpServletRequest request){
-		PayCodeVo vo=new PayCodeVo();
-		Map payData=new HashMap<String,Object>();
-		if (request!=null) {
-			payData=GlwHttpUtils.getPayCode(request);
+//		PayCodeVo vo=new PayCodeVo();
+		JSONObject responseJsonObject=new JSONObject();
+		JSONObject dataJsonObject=new JSONObject();
+		String json=getRequestJson(request);
+		JSONObject pageObject = JSON.parseObject(json);
+		String urlString;
+		try {
+			urlString = wxpay(Long.parseLong(pageObject.getString("trade_no").toString()));
+			OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(pageObject.getString("trade_no").toString()));
+			dataJsonObject.put("mchid", AlipayConfig.merchant_private_key);
+			dataJsonObject.put("appid",AlipayConfig.app_id);
+			dataJsonObject.put("qrcode_url","");
+			dataJsonObject.put("qrcode_data",urlString);
+			dataJsonObject.put("trans_time",new DateTime());
+			dataJsonObject.put("trans_status","SUCCESS");
+			dataJsonObject.put("trans_no",pageObject.getString("trade_no"));
+			dataJsonObject.put("trade_no",pageObject.getString("trade_no"));
+			dataJsonObject.put("referNo",pageObject.getString("trade_no"));
+			dataJsonObject.put("amount", orderInfoPO.getPayMoney());
+			dataJsonObject.put("memo","");
+			responseJsonObject.put("code", "SUCCESS");
+			responseJsonObject.put("msg", "二维码获取成功");
+			responseJsonObject.put("trans_no", pageObject.getString("trade_no"));
+			responseJsonObject.put("data", dataJsonObject);
+		}  catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			dataJsonObject.put("mchid", AlipayConfig.merchant_private_key);
+			dataJsonObject.put("appid",AlipayConfig.app_id);
+			dataJsonObject.put("qrcode_url","");
+			dataJsonObject.put("qrcode_data","");
+			dataJsonObject.put("trans_time",new DateTime());
+			dataJsonObject.put("trans_status","FAIL");
+			dataJsonObject.put("trans_no","");
+			dataJsonObject.put("trade_no","");
+			dataJsonObject.put("referNo","");
+			dataJsonObject.put("memo","");
+			responseJsonObject.put("code", "FAIL");
+			responseJsonObject.put("msg", "二维码获取失败");
+			responseJsonObject.put("trans_no", "");
+			responseJsonObject.put("data", dataJsonObject);
 		}
-		if (!payData.isEmpty()) {
-			
-			try {
-				String urlString=wxpay(Long.parseLong(request.getParameter("trade_no").toString()));
-				vo.setCode("SUCCESS");
-				vo.setMsg("获取成功");
-				
-				vo.setMchid(WXContants.MchId);
-				vo.setAppid(WXContants.AppId);
-				vo.setQrcode_url(urlString);
-				vo.setTrans_status((String)payData.get("TRADING"));
-				vo.setTrans_time((DateTime)payData.get("trans_time"));
-				vo.setMemo((String)payData.get("memo"));
-			}  catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				vo.setCode("FAIL");
-				vo.setMsg("获取失败");
-			}
-			
-		}else{
-		
-			vo.setCode("FAIL");
-			vo.setMsg("获取失败");
-		}
-		return JSONObject.toJSONString(vo);
+		return responseJsonObject.toJSONString();
     }
 	
 	/**
@@ -100,31 +117,28 @@ public class ZizhiPayController {
 	@RequestMapping(value = "/alipay/scanPay", method = RequestMethod.GET)
     public String payCodeAli(HttpServletRequest request){
 		PayCodeVo vo=new PayCodeVo();
-		Map payData=new HashMap<String,Object>();
-		if (request!=null) {
-			payData=GlwHttpUtils.getPayCode(request);
-		}
-		if (!payData.isEmpty()) {
-			String urlString;
-			try {
-				urlString = alipay(Long.parseLong(request.getParameter("trade_no").toString()));
-				vo.setMchid(AlipayConfig.merchant_private_key);
-				vo.setAppid(AlipayConfig.app_id);
-				vo.setQrcode_url(urlString);
-				vo.setTrans_status((String)payData.get("TRADING"));
-				vo.setTrans_time((DateTime)payData.get("trans_time"));
-				vo.setMemo((String)payData.get("memo"));
-				vo.setCode("SUCCESS");
-				vo.setMsg("支付成功");
-			}  catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				vo.setCode("FAIL");
-				vo.setMsg("支付失败");
-			}
-		
-		
-		}else{
+		String json=getRequestJson(request);
+		JSONObject pageObject = JSON.parseObject(json);
+		String urlString;
+		try {
+			urlString = alipay(Long.parseLong(request.getParameter("trade_no").toString()));
+			vo.setMchid(AlipayConfig.merchant_private_key);
+			vo.setAppid(AlipayConfig.app_id);
+			vo.setQrcode_url(urlString);
+			vo.setTrans_status("SUCCESS");
+			vo.setTrans_time(new DateTime());
+			vo.setMemo("");
+			vo.setCode("SUCCESS");
+			vo.setMsg("支付成功");
+		}  catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			vo.setMchid(AlipayConfig.merchant_private_key);
+			vo.setAppid(AlipayConfig.app_id);
+			vo.setQrcode_url("");
+			vo.setTrans_status("TRADING");
+			vo.setTrans_time(new DateTime());
+			vo.setMemo("");
 			vo.setCode("FAIL");
 			vo.setMsg("支付失败");
 		}
@@ -181,7 +195,7 @@ public class ZizhiPayController {
 
 			String content = resData.get("code_url");
 
-			QRCodeGenerator.generate(path, content); // 本地路径下生成二维码
+			//QRCodeGenerator.generate(path, content); // 本地路径下生成二维码
 			//
 			// order表中存二维码的本地路径
 			// for (BasketPO basketPO : baskets) {
@@ -190,12 +204,13 @@ public class ZizhiPayController {
 			// }
 			//
 			// conn_basket.saveAll(baskets);
-			File file=new File(path);
+			//File file=new File(path);
 			
-			OSSUtils.createFolder("glw-old-file", "file/wxPayCode/");
-			OSSUtils.uploadObjectOSS("file/wxPayCode/", fileName,file, new FileInputStream(file));
+			//OSSUtils.createFolder("glw-old-file", "file/wxPayCode/");
+			//OSSUtils.uploadObjectOSS("file/wxPayCode/", fileName,file, new FileInputStream(file));
 
-			result=sysConfig.getWebUrl() + "/wxPayCode/" + fileName;
+			//result=sysConfig.getWebUrl() + "/wxPayCode/" + fileName;
+			result=content;
 
 			//
 		} catch (Exception e) {
@@ -305,5 +320,20 @@ public class ZizhiPayController {
 		}
 		return object.toJSONString();
 	}
-	
+	private String getRequestJson(HttpServletRequest request) {
+		try {
+			BufferedReader br;
+			br = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream(), "utf-8"));
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+			request.getInputStream().close();
+			br.close();
+			return sb.toString();
+		} catch (IOException e) {
+			return "";
+		}
+	}
 }
