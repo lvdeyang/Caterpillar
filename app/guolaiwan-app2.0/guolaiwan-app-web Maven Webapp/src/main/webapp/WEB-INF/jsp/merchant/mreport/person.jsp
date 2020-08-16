@@ -200,67 +200,80 @@ String weburl=WXContants.Website;
 		}
 		
 		//性别统计
-		var xingbieChart = echarts.init(document.getElementById('xingbie')); 
-		var optionxingbie = {
-		    tooltip: {
-		        trigger: 'item',
-		        formatter: '{a} <br/>{b}: {c} ({d}%)'
-		    },
-		    legend: {
-		         orient: 'horizontal',                  
-		         data: ['男', '女'],
-		         x : '70%',
-		         y : '20%',
-		         textStyle: {
-			        color: '#FFF'       // 图例文字颜色
-			     }
-		    },
-		    series: [
-		        {
-		            name: '游客性别',
-		            type: 'pie',
-		            radius: ['50%', '70%'],
-		            avoidLabelOverlap: false,
-		            label: {
-		                show: false,
-		                position: 'right'
-		            },
-		            emphasis: {
-		                label: {
-		                    show: true,
-		                    fontSize: '30',
-		                    fontWeight: 'bold'
-		                }
-		            },
-		            labelLine: {
-		                show: false
-		            },
-		            data: [
-		                {value: 835, name: '男'},
-		                {value: 310, name: '女'},
-		              
-		            ],
-		            itemStyle: {
-                          emphasis: {
-                              shadowBlur: 10,
-                              shadowOffsetX: 0,
-                              shadowColor: 'rgba(0, 0, 0, 0.5)'
-                           },
-                          normal:{
-                              color:function(params) {
-                              //自定义颜色
-                              var colorList = [          
-                                      '#04AFFF','#FF63CD'
-                                  ];
-                                  return colorList[params.dataIndex]
-                               }
-                          }
-                    }
-		        }
-		    ]
-		};
 		
-		xingbieChart.setOption(optionxingbie)
+		
+		
+		
+		
+		$.ajax({
+			url : "getsexData",
+			type : "get",
+			cache : false,
+			success : function(result) {
+				var xingbieChart = echarts.init(document.getElementById('xingbie')); 
+				var optionxingbie = {
+				    tooltip: {
+				        trigger: 'item',
+				        formatter: '{a} <br/>{b}: {c} ({d}%)'
+				    },
+				    legend: {
+				         orient: 'horizontal',                  
+				         data: ['男', '女'],
+				         x : '70%',
+				         y : '20%',
+				         textStyle: {
+					        color: '#FFF'       // 图例文字颜色
+					     }
+				    },
+				    series: [
+				        {
+				            name: '游客性别',
+				            type: 'pie',
+				            radius: ['50%', '70%'],
+				            avoidLabelOverlap: false,
+				            label: {
+				                show: false,
+				                position: 'right'
+				            },
+				            emphasis: {
+				                label: {
+				                    show: true,
+				                    fontSize: '30',
+				                    fontWeight: 'bold'
+				                }
+				            },
+				            labelLine: {
+				                show: false
+				            },
+				            data: [
+				                {value: result.values[0], name: result.keys[0]},
+				                {value: result.values[1], name: result.keys[1]},
+				              
+				            ],
+				            itemStyle: {
+		                          emphasis: {
+		                              shadowBlur: 10,
+		                              shadowOffsetX: 0,
+		                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                           },
+		                          normal:{
+		                              color:function(params) {
+		                              //自定义颜色
+		                              var colorList = [          
+		                                      '#04AFFF','#FF63CD'
+		                                  ];
+		                                  return colorList[params.dataIndex]
+		                               }
+		                          }
+		                    }
+				        }
+				    ]
+				};
+				
+				xingbieChart.setOption(optionxingbie)
+			}
+		});
+		
 		
 		//酒店人流
 		var jiudianeChart = echarts.init(document.getElementById('jiudian')); 
@@ -330,42 +343,53 @@ String weburl=WXContants.Website;
 		
 		
 		//今日客流
-		var jinrikeliueChart = echarts.init(document.getElementById('jinrikeliu')); 
-		var jinrikeliuoption = {
-		    grid:{
-		       borderWidth:0
-		    },
-		    xAxis: {
-		        splitLine:{show: false},
-		        type: 'category',
-		        boundaryGap: false,
-		        data: ['1', '2', '3', '4', '5', '6', '7','1', '2', '3', '4', '5', '6', '7'],
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    yAxis: {
-		        splitLine:{show: false},
-		        type: 'value',
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    series: [{
-		        data: [820, 932, 901, 934, 1290, 1330, 1320,820, 932, 901, 934, 1290, 1330, 1320],
-		        type: 'line',
-		        areaStyle: {
-					
-				}
-		    }]
-		};
-		jinrikeliueChart.setOption(jinrikeliuoption);
+		$.ajax({
+			url : "todaydata",
+			type : "get",
+			cache : false,
+			success : function(result) {
+				var jinrikeliueChart = echarts.init(document.getElementById('jinrikeliu')); 
+				var jinrikeliuoption = {
+				    grid:{
+				       borderWidth:0
+				    },
+				    xAxis: {
+				        splitLine:{show: false},
+				        type: 'category',
+				        boundaryGap: false,
+				        data: result.keys,
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    yAxis: {
+				        splitLine:{show: false},
+				        type: 'value',
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    series: [{
+				        data: result.values,
+				        type: 'line',
+				        areaStyle: {
+							
+						}
+				    }]
+				};
+				jinrikeliueChart.setOption(jinrikeliuoption);
+			}
+		});
+		
+		
+		
+		
 		
 		
 		//景区人流

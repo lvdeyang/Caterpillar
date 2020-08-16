@@ -1,5 +1,6 @@
 package com.guolaiwan.bussiness.merchant.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +72,14 @@ public class ReportOrderDAO extends AbstractBaseDao<ReportOrderPO> {
 		query.setFirstResult(firstResult);
 		query.setMaxResults(pageSize);
 		return query.list();
+	}
+	
+	public int GetCountByHour(Date start,Date end) {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("updateTime", Condition.ge, start);
+		cHql.andBy("updateTime", Condition.le, start);
+		int allcount = this.countByHql(cHql);
+		return allcount;
 	}
 	
 }

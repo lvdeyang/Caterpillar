@@ -59,7 +59,33 @@ public class ReportPersonController extends BaseController {
 	@RequestMapping(value = "/getsexData")
 	public Map<String, Object> getsexData(HttpServletRequest request) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
+		List<String> keys=new ArrayList<String>();
+		List<Integer> values=new ArrayList<Integer>();
 		List<ReportDTO> result=reportOrderDAO.getSexData(1, 10);
+		List<ReportDTO> result1=reportorderAllDao.getSexData(1,10);
+		
+		keys.add("男");
+		keys.add("女");
+		int nancount=0;
+		int nvcount=0;
+		for (ReportDTO reportDTO : result1) {
+		   	if(reportDTO.getSexString().equals("男")){
+		   		nancount+=reportDTO.getAcount();
+		   	}else{
+		   		nvcount+=reportDTO.getAcount();
+		   	}
+		}
+        for (ReportDTO reportDTO1 : result) {
+        	if(reportDTO1.getSexString().equals("男")){
+		   		nancount+=reportDTO1.getAcount();
+		   	}else{
+		   		nvcount+=reportDTO1.getAcount();
+		   	}
+		}
+        values.add(nancount);
+        values.add(nvcount);
+        map.put("keys", keys);
+        map.put("values", values);
 		return success(result);
 	}
 	
@@ -77,6 +103,39 @@ public class ReportPersonController extends BaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<ReportDTO> result=reportOrderDAO.getageData(1, 10);
 		return success(result);
+	}
+	@Autowired
+	OrderInfoDAO conn_orderinfo;
+	
+	@ResponseBody
+	@RequestMapping(value = "/todaydata")
+	public Map<String, Object> getTodayAmount(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReportDTO> result=reportOrderDAO.getageData(1, 10);
+		List<Integer> keys=new ArrayList<Integer>();
+		List<Integer> values=new ArrayList<Integer>();
+		Date today=new Date();
+		String dateStr=DateUtil.format(today, "yyyy-MM-dd");
+		for(int i=0;i<24;i++){
+			keys.add(i+1);
+			Date start=DateUtil.parse(dateStr+" "+getHourStr(i)+":00:00", "yyyy-MM-dd HH:mm:ss");
+			Date end=DateUtil.parse(dateStr+" "+getHourStr(i)+":00:00", "yyyy-MM-dd HH:mm:ss");
+			int count1=conn_orderinfo.GetCountByHour(start,end);
+			int count2=reportOrderDAO.GetCountByHour(start,end);
+			int count3=reportorderAllDao.GetCountByHour(start, end);
+			values.add(count1+count2+count3);
+			
+		}
+		map.put("keys", keys);
+		map.put("values", values);
+		return map;
+	}
+	private String getHourStr(Integer i){
+		if(i<10){
+			return "0"+i;
+		}else{
+			return i+"";
+		}
 	}
 	
 
