@@ -542,7 +542,9 @@ $(function(){
 		    				float:left; width:100%; box-sizing:border-box;">&nbsp;</span>
 	        			<c:if test="${comps != null}">
 	        				<c:forEach items="${comps}" var="comp">
-	        					<input class="company-infos" type="hidden" value="${comp.pic}" data-href="<%=path %>/index?com=${comp.comCode}" data-name="${comp.comName}" />
+	        				    <c:if test="${comp.comCode == '0001'}">
+	        					    <input class="company-infos" type="hidden" value="${comp.pic}" data-href="<%=path %>/index?com=${comp.comCode}" data-name="${comp.comName}" />
+	        				    </c:if>
 	        				</c:forEach>
 	        			</c:if>
 	        		</a>
