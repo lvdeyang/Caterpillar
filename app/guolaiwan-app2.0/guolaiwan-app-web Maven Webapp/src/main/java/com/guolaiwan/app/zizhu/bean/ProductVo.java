@@ -1,10 +1,16 @@
 package com.guolaiwan.app.zizhu.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductVo {
 	private List<Data> data;
     private Error error;
+    public ProductVo() {
+		// TODO Auto-generated constructor stub
+    	error = new Error();
+    	data =new ArrayList<Data>();
+	}
     public void setData(List<Data> data) {
          this.data = data;
      }
@@ -37,7 +43,7 @@ public class ProductVo {
     	     }
 
     	}
-     public class Data {
+     public static class Data {
     	//产品Id
         private int id;
     	//产品代码

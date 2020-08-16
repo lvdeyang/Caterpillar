@@ -3,7 +3,8 @@ package com.guolaiwan.app.zizhu;
 import java.util.List;
 import java.util.Map;
 
-import com.guolaiwan.app.zizhu.bean.PayCodePo;
+import javax.servlet.http.HttpServletRequest;
+
 import com.guolaiwan.app.zizhu.bean.ProductVo.Data;
 import com.guolaiwan.app.zizhu.bean.RefundPo;
 import com.guolaiwan.app.zizhu.bean.RefundVoucherPo;
@@ -48,7 +49,7 @@ public final static String POST_REFUND="";
 	 * @param merchanId
 	 * @return
 	 */
-	public static Map getPayCode(PayCodePo paycodepo) {
+	public static Map getPayCode(HttpServletRequest paycodepo) {
 		String response=null;
 		String Url=IP+GET_PAYCODE;
 		response=HttpUtil.get(Url);

@@ -580,7 +580,7 @@ html, body {
 		          location.href=window.BASEPATH + 'pubnum/product/index/line?id='+codes[1];
 		       }else if(modularData == '0003'){
 		          location.href=window.BASEPATH + 'business/gotodelicacystore?merchantId='+codes[2];	     
-		       }else if(modularData=='0001'||modularData=='10001'){      
+		       }else if(modularData=='0001'||modularData=='10001'||modularData=='30001'){      
 			       //普通票
 			       location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=0';
 		       }		       
@@ -590,7 +590,7 @@ html, body {
 	       
 	       }else{	       	          	          
 	          if(relDatas[1]==0){
-		           if(modularData=='0001'||modularData=='10001'){    
+		           if(modularData=='0001'||modularData=='10001'||modularData=='30001'){    
 			           //普通票
 			           location.href=window.BASEPATH + '/product/package/commodity/jump?merchantId='+codes[2]+'&proId='+codes[1]+'&choice=1';
 			       }
@@ -608,7 +608,7 @@ html, body {
 	   $(document).on('click','.merchant',function(){
 	      var ids=this.id.split('-');
      
-	       if(ids[2]=='0001'){
+	       if(ids[2]=='0001'||ids[2]=='30001'){
 	           location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+ids[1]+'&comCode=0001';
 	       }else if(ids[2]=='10001'){
 	           location.href=window.BASEPATH + 'business/merchant/nsAndView?merchantId='+ids[1]+'&comCode=10001';

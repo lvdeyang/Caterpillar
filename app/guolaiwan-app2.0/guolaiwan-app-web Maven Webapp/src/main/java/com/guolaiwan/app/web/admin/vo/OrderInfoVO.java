@@ -763,7 +763,7 @@ public class OrderInfoVO extends AbstractBaseVO<OrderInfoVO,OrderInfoPO> impleme
 		.setDealDate(dealDate)
 		.setSendDate(sendDate)
 		.setRefundReason(entity.getRefundReason())
-		.setSource(entity.getSource().getName())
+		.setSource(entity.getSource()==null?"":entity.getSource().getName())
 		.setUserName(entity.getUserName())
 		.setOrderType(entity.getOrderType().getName())
 		.setActivityId(entity.getActivityId())

@@ -1,9 +1,14 @@
 package com.guolaiwan.app.zizhu.bean;
 
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CreateVoucherVo {
+	public CreateVoucherVo(){
+		error=new Error();
+		data=new Data();
+	}
 	private Data data;
     private Error error;
     public class Error {
@@ -25,7 +30,7 @@ public class CreateVoucherVo {
          }
 
     }
-    public class Data {
+    public static class Data {
     	//凭证号
         private String voucherNumber;
         //创建时间
@@ -35,7 +40,7 @@ public class CreateVoucherVo {
         //总金额
         private double totalAmount;
         private List<Details> details;
-        public class Details {
+        public static  class Details {
         	//产品Id
             private int productId;
             //门票票号
