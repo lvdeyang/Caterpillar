@@ -221,7 +221,10 @@ public class WxPayReportController extends WebBaseControll {
 						// 中青旅==========================================================================================================
 						isAoYou(order);
 						// 中青旅==========================================================================================================
-						sendMessage(order);
+						if(order.getUserId()!=0){
+							sendMessage(order);
+						}
+						
 					}
 				}
 				stringBuffer.append("<xml><return_code><![CDATA[");
