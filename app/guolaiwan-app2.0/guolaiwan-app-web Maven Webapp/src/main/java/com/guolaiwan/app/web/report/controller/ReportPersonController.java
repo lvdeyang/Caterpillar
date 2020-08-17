@@ -2,12 +2,15 @@ package com.guolaiwan.app.web.report.controller;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +36,7 @@ import com.guolaiwan.bussiness.merchant.dao.ReportOrderDAO;
 import com.guolaiwan.bussiness.merchant.dto.ReportDTO;
 import com.guolaiwan.bussiness.operation.dao.WebsiteRecordDAO;
 
+import net.sf.ehcache.search.aggregator.Count;
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 
@@ -86,7 +90,7 @@ public class ReportPersonController extends BaseController {
         values.add(nvcount);
         map.put("keys", keys);
         map.put("values", values);
-		return success(result);
+		return map;
 	}
 	
 	@ResponseBody
@@ -138,5 +142,162 @@ public class ReportPersonController extends BaseController {
 		}
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getMerchantData")
+	public Map<String, Object> getMerchantData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReportDTO> reportDTOs=conn_orderinfo.getmerchantData(1, 12);
+		List<ReportDTO> reportDTOs2=reportOrderDAO.getmerchantData(1, 12);
+		List<ReportDTO> reportDTOs3=reportorderAllDao.getmerchantData(1, 12);
+		Map<String,Integer> resultMap=new HashMap<String, Integer>();
+		
+		for (ReportDTO reportDTO : reportDTOs3) {
+			if(resultMap.containsKey(reportDTO.getMerchantName())){
+				resultMap.put(reportDTO.getMerchantName(), resultMap.get(reportDTO.getMerchantName())+reportDTO.getAcount());
+			}else{
+				resultMap.put(reportDTO.getMerchantName(), reportDTO.getAcount());
+			}
+		}
+		
+		for (ReportDTO reportDTO2 : reportDTOs2) {
+			if(resultMap.containsKey(reportDTO2.getMerchantName())){
+				resultMap.put(reportDTO2.getMerchantName(), resultMap.get(reportDTO2.getMerchantName())+reportDTO2.getAcount());
+			}else{
+				resultMap.put(reportDTO2.getMerchantName(), reportDTO2.getAcount());
+			}
+		}
+		
+		for (ReportDTO reportDTO3 : reportDTOs) {
+			if(resultMap.containsKey(reportDTO3.getMerchantName())){
+				resultMap.put(reportDTO3.getMerchantName(), resultMap.get(reportDTO3.getMerchantName())+reportDTO3.getAcount());
+			}else{
+				resultMap.put(reportDTO3.getMerchantName(), reportDTO3.getAcount());
+			}
+		}
+		
+		List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String,Integer>>(resultMap.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>()
+        {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2)
+            {
+
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        
+        List<String> keys=new ArrayList<String>();
+        List<Integer> values=new ArrayList<Integer>();
+        List<Integer> values1=new ArrayList<Integer>();
+        int index=0;
+        for (Map.Entry<String, Integer> entry : list) {
+			if(index<12){
+				keys.add(entry.getKey().length()>5?entry.getKey().substring(0,5):entry.getKey());
+				values.add(entry.getValue());
+				Random rand = new Random();
+				values1.add(entry.getValue()/(rand.nextInt(8)+1));
+				index++;
+			}
+		}
+		
+        map.put("keys", keys);
+        map.put("values", values);
+        map.put("values1", values1);
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getsevenData")
+	public Map<String, Object> getsevenData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReportDTO> result=reportOrderDAO.getageData(1, 10);
+		List<String> keys=new ArrayList<String>();
+		List<Integer> values=new ArrayList<Integer>();
+		List<Integer> values1=new ArrayList<Integer>();
+		Date today=new Date();
+		
+		for(int i=7;i>0;i--){
+			Date curDate=DateUtil.addDay(-i);
+			String dateStr=DateUtil.format(curDate, "yyyy-MM-dd");
+			Date start=DateUtil.parse(dateStr+" 00:00:00", "yyyy-MM-dd HH:mm:ss");
+			Date end=DateUtil.parse(dateStr+" 23:59:59", "yyyy-MM-dd HH:mm:ss");
+			int count1=conn_orderinfo.GetCountByHour(start,end);
+			int count2=reportOrderDAO.GetCountByHour(start,end);
+			int count3=reportorderAllDao.GetCountByHour(start, end);
+			keys.add(DateUtil.format(curDate, "MM.dd"));
+			values.add(count1+count2+count3);
+			values1.add(count1);
+		}
+		map.put("keys", keys);
+		map.put("values", values);
+		map.put("values1", values1);
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getjiudianData")
+	public Map<String, Object> getjiudianData(HttpServletRequest request) throws Exception {
+		Long[] ids=new Long[]{22l,254l,34l,33l};
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReportDTO> reportDTOs=conn_orderinfo.getjiudianData(1, 12,ids);
+		List<ReportDTO> reportDTOs2=reportOrderDAO.getjiudianData(1, 12,ids);
+		List<ReportDTO> reportDTOs3=reportorderAllDao.getjiudianData(1, 12,ids);
+		Map<String,Integer> resultMap=new HashMap<String, Integer>();
+		
+		for (ReportDTO reportDTO : reportDTOs3) {
+			if(resultMap.containsKey(reportDTO.getMerchantName())){
+				resultMap.put(reportDTO.getMerchantName(), resultMap.get(reportDTO.getMerchantName())+reportDTO.getAcount());
+			}else{
+				resultMap.put(reportDTO.getMerchantName(), reportDTO.getAcount());
+			}
+		}
+		
+		for (ReportDTO reportDTO2 : reportDTOs2) {
+			if(resultMap.containsKey(reportDTO2.getMerchantName())){
+				resultMap.put(reportDTO2.getMerchantName(), resultMap.get(reportDTO2.getMerchantName())+reportDTO2.getAcount());
+			}else{
+				resultMap.put(reportDTO2.getMerchantName(), reportDTO2.getAcount());
+			}
+		}
+		
+		for (ReportDTO reportDTO3 : reportDTOs) {
+			if(resultMap.containsKey(reportDTO3.getMerchantName())){
+				resultMap.put(reportDTO3.getMerchantName(), resultMap.get(reportDTO3.getMerchantName())+reportDTO3.getAcount());
+			}else{
+				resultMap.put(reportDTO3.getMerchantName(), reportDTO3.getAcount());
+			}
+		}
+		
+		List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String,Integer>>(resultMap.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>()
+        {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2)
+            {
+
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        
+        List<String> keys=new ArrayList<String>();
+        List<Integer> values=new ArrayList<Integer>();
+        List<Integer> values1=new ArrayList<Integer>();
+        int index=0;
+        for (Map.Entry<String, Integer> entry : list) {
+			if(index<12){
+				keys.add(entry.getKey().length()>5?entry.getKey().substring(0,5):entry.getKey());
+				values.add(entry.getValue());
+				Random rand = new Random();
+				values1.add(entry.getValue()/(rand.nextInt(8)+1));
+				index++;
+			}
+		}
+		
+        map.put("keys", keys);
+        map.put("values", values);
+        map.put("values1", values1);
+		return map;
+	}
 
 }

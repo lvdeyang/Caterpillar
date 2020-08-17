@@ -5,6 +5,7 @@ public class ReportDTO {
 	private String sexString;
 	private String ageString;
 	private String region;
+	private String MerchantName;
 	
 	public int getAcount() {
 		return acount;
@@ -29,6 +30,12 @@ public class ReportDTO {
 	}
 	public void setRegion(String region) {
 		this.region = region;
+	}
+	public String getMerchantName() {
+		return MerchantName;
+	}
+	public void setMerchantName(String merchantName) {
+		MerchantName = merchantName;
 	}
 	
 

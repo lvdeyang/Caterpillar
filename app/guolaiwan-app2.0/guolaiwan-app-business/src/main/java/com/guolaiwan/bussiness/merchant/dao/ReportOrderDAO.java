@@ -74,12 +74,55 @@ public class ReportOrderDAO extends AbstractBaseDao<ReportOrderPO> {
 		return query.list();
 	}
 	
+	
+	public List<ReportDTO> getmerchantData(int pageNum, int pageSize) {
+		StringBufferWrapper sqlWrapper = new StringBufferWrapper().append(
+				"select SUM(count) acount,merchantName from t_sys_reportorder GROUP BY merchantId ORDER BY acount desc");
+		
+		SQLQuery query = getCurrentSession().createSQLQuery(sqlWrapper.toString())
+				.addScalar("merchantName", StandardBasicTypes.STRING).addScalar("acount", StandardBasicTypes.INTEGER);
+		query.setResultTransformer(Transformers.aliasToBean(ReportDTO.class));
+
+		// 分页
+		int firstResult = (pageNum - 1) * pageSize;
+		query.setFirstResult(firstResult);
+		query.setMaxResults(pageSize);
+		return query.list();
+	}
+	
 	public int GetCountByHour(Date start,Date end) {
 		CountHql cHql = this.newCountHql();
 		cHql.andBy("updateTime", Condition.ge, start);
 		cHql.andBy("updateTime", Condition.le, start);
 		int allcount = this.countByHql(cHql);
 		return allcount;
+	}
+	
+	
+	public List<ReportDTO> getjiudianData(int pageNum, int pageSize,Long[] merchantIds) {
+		String ids="(";
+		int index=0;
+		for (Long id : merchantIds) {
+			if(index==0){
+				ids+=id;
+			}else{
+				ids+=","+id;
+			}
+			index++;
+		}
+		ids+=")";
+		StringBufferWrapper sqlWrapper = new StringBufferWrapper().append(
+				"select COUNT(*) acount, merchantName from t_sys_reportorder where merchantId in "+ids+" GROUP BY merchantId ORDER BY acount desc");
+		
+		SQLQuery query = getCurrentSession().createSQLQuery(sqlWrapper.toString())
+				.addScalar("merchantName", StandardBasicTypes.STRING).addScalar("acount", StandardBasicTypes.INTEGER);
+		query.setResultTransformer(Transformers.aliasToBean(ReportDTO.class));
+
+		// 分页
+		int firstResult = (pageNum - 1) * pageSize;
+		query.setFirstResult(firstResult);
+		query.setMaxResults(pageSize);
+		return query.list();
 	}
 	
 }

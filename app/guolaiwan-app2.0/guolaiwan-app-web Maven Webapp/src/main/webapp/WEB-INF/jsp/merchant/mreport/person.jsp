@@ -33,7 +33,7 @@ String weburl=WXContants.Website;
 	}
 	
 	.container{
-		width:100%;height:100%;top:0;
+		width:98.5%;height:100%;top:0;left:1.2%;
 		background:url("<%= request.getContextPath() %>/lib/images/bg.png") no-repeat;
 	        background-size:100% 100%;
         }
@@ -276,70 +276,80 @@ String weburl=WXContants.Website;
 		
 		
 		//酒店人流
-		var jiudianeChart = echarts.init(document.getElementById('jiudian')); 
+		
+		$.ajax({
+			url : "getjiudianData",
+			type : "get",
+			cache : false,
+			success : function(result) {
+				var jiudianeChart = echarts.init(document.getElementById('jiudian')); 
 	
-		var jiudianoption = {
-		    grid:{
-		       x:50,
-		       y:50,
-		       x1:50,
-		       y1:50,
-		       borderWidth:0
-		    },
-		    xAxis: {
-		        splitLine:{show: false},
-		        type: 'category',
-		        data: ['汤泉宫', '建国', '国际', '天元'],
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    yAxis: {
-		        splitLine:{show: false},
-		        type: 'value',
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    series: [{
-		        data: [520, 700, 650, 580],
-		        type: 'bar',
-		        showBackground: true,
-		        backgroundStyle: {
-		            color: 'rgba(220, 220, 220, 0.8)'
-		        },
-		        itemStyle: {
-		            normal: {
-		                color: function(params) {
-		                    var colorList = ['#2360FF','#2360FF','#2360FF','#2360FF','#2360FF','#2360FF'];
-		                    return colorList[params.dataIndex]
-		                }
-		            }
-		        }
-		    },{
-		        data: [120, 200, 150, 80],
-		        type: 'bar',
-		        showBackground: true,
-		        backgroundStyle: {
-		            color: 'rgba(220, 220, 220, 0.8)'
-		        },
-		        itemStyle: {
-		            normal: {
-		                color: function(params) {
-		                    var colorList = ['#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF'];
-		                    return colorList[params.dataIndex]
-		                }
-		            }
-		        }
-		    }]
-		};
-		jiudianeChart.setOption(jiudianoption);
+				var jiudianoption = {
+				    grid:{
+				       x:50,
+				       y:50,
+				       x1:50,
+				       y1:50,
+				       borderWidth:0
+				    },
+				    xAxis: {
+				        splitLine:{show: false},
+				        type: 'category',
+				        data: result.keys,
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    yAxis: {
+				        splitLine:{show: false},
+				        type: 'value',
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    series: [{
+				        data: result.values,
+				        type: 'bar',
+				        showBackground: true,
+				        backgroundStyle: {
+				            color: 'rgba(220, 220, 220, 0.8)'
+				        },
+				        itemStyle: {
+				            normal: {
+				                color: function(params) {
+				                    var colorList = ['#2360FF','#2360FF','#2360FF','#2360FF','#2360FF','#2360FF'];
+				                    return colorList[params.dataIndex]
+				                }
+				            }
+				        }
+				    },{
+				        data: result.values1,
+				        type: 'bar',
+				        showBackground: true,
+				        backgroundStyle: {
+				            color: 'rgba(220, 220, 220, 0.8)'
+				        },
+				        itemStyle: {
+				            normal: {
+				                color: function(params) {
+				                    var colorList = ['#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF','#0FC9FF'];
+				                    return colorList[params.dataIndex]
+				                }
+				            }
+				        }
+				    }]
+				};
+				jiudianeChart.setOption(jiudianoption);
+			}
+		});
+		
+		
 		
 		
 		//今日客流
@@ -393,122 +403,140 @@ String weburl=WXContants.Website;
 		
 		
 		//景区人流
-		var jingqueChart = echarts.init(document.getElementById('jingqu')); 
-	
-		var jingquoption = {
-		    grid:{
-		       borderWidth:0
-		    },
-		    xAxis: {
-		        splitLine:{show: false},
-		        type: 'category',
-		        data: ['清东陵', '万佛园', '禅林寺', '南山常乐谷','独乐寺','南湖','清东陵', '万佛园', '禅林寺', '南山常乐谷','独乐寺','南湖'],
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    yAxis: {
-		        splitLine:{show: false},
-		        type: 'value',
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    series: [{
-		        data: [520, 700, 650, 580,990,285,520, 700, 650, 580,990,285],
-		        type: 'bar',
-		        showBackground: true,
-		        backgroundStyle: {
-		            color: 'rgba(220, 220, 220, 0.8)'
-		        },
-		        itemStyle: {
-		            normal: {
-		                color: function(params) {
-		                    var colorList = ['#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760'];
-		                    return colorList[params.dataIndex]
-		                }
-		            }
-		        }
-		    },{
-		        data: [120, 200, 150, 80,25,87,120, 200, 150, 80,25,87],
-		        type: 'bar',
-		        showBackground: true,
-		        backgroundStyle: {
-		            color: 'rgba(220, 220, 220, 0.8)'
-		        },
-		        itemStyle: {
-		            normal: {
-		                color: function(params) {
-		                    var colorList = ['#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF'];
-		                    return colorList[params.dataIndex]
-		                }
-		            }
-		        }
-		    }]
-		};
-		jingqueChart.setOption(jingquoption);
+		
+		$.ajax({
+			url : "getMerchantData",
+			type : "get",
+			cache : false,
+			success : function(result) {
+			    var jingqueChart = echarts.init(document.getElementById('jingqu')); 
+				var jingquoption = {
+				    grid:{
+				       borderWidth:0
+				    },
+				    xAxis: {
+				        splitLine:{show: false},
+				        type: 'category',
+				        data: result.keys,
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    yAxis: {
+				        splitLine:{show: false},
+				        type: 'value',
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    series: [{
+				        data: result.values,
+				        type: 'bar',
+				        showBackground: true,
+				        backgroundStyle: {
+				            color: 'rgba(220, 220, 220, 0.8)'
+				        },
+				        itemStyle: {
+				            normal: {
+				                color: function(params) {
+				                    var colorList = ['#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760','#FD6760'];
+				                    return colorList[params.dataIndex]
+				                }
+				            }
+				        }
+				    },{
+				        data:result.values1,
+				        type: 'bar',
+				        showBackground: true,
+				        backgroundStyle: {
+				            color: 'rgba(220, 220, 220, 0.8)'
+				        },
+				        itemStyle: {
+				            normal: {
+				                color: function(params) {
+				                    var colorList = ['#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF','#0FEBFF'];
+				                    return colorList[params.dataIndex]
+				                }
+				            }
+				        }
+				    }]
+				};
+				jingqueChart.setOption(jingquoption);
+			}
+		});
+		
+		
+		
 		
 		
 		//七天统计
-		var qitiantongjieChart = echarts.init(document.getElementById('qitiantongji')); 
-		var qitiantongjioption = {
-		    grid:{
-		       borderWidth:0
-		    },
-		    xAxis: {
-		        splitLine:{show: false},
-		        type: 'category',
-		        boundaryGap: false,
-		        data: ['7.1', '7.2', '7.3', '7.4', '7.5', '7.6', '7.7'],
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    yAxis: {
-		        splitLine:{show: false},
-		        type: 'value',
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    series: [{
-		        data: [820, 932, 901, 934, 1290, 1330, 1320],
-		        type: 'line',
-		        areaStyle: {},
-		        
-		        itemStyle: {
-		            normal: {
-		                lineStyle: {
-							color: '#00FFFF' //改变折线颜色
-						}
-		            }
-		        }
-		    },{
-		        data: [120, 132, 201, 334, 590, 1530, 720],
-		        type: 'line',
-		        areaStyle: {},
-		        itemStyle: {
-		            normal: {
-			            lineStyle: {
-							color: '#FFF600' //改变折线颜色
-						}
-		            }
-		        }
-		    }]
-		};
-		qitiantongjieChart.setOption(qitiantongjioption);
+		$.ajax({
+			url : "getMerchantData",
+			type : "get",
+			cache : false,
+			success : function(result) {
+			    var qitiantongjieChart = echarts.init(document.getElementById('qitiantongji')); 
+				var qitiantongjioption = {
+				    grid:{
+				       borderWidth:0
+				    },
+				    xAxis: {
+				        splitLine:{show: false},
+				        type: 'category',
+				        boundaryGap: false,
+				        data: result.keys,
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    yAxis: {
+				        splitLine:{show: false},
+				        type: 'value',
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    series: [{
+				        data: result.values,
+				        type: 'line',
+				        areaStyle: {},
+				        
+				        itemStyle: {
+				            normal: {
+				                lineStyle: {
+									color: '#00FFFF' //改变折线颜色
+								}
+				            }
+				        }
+				    },{
+				        data: result.values1,
+				        type: 'line',
+				        areaStyle: {},
+				        itemStyle: {
+				            normal: {
+					            lineStyle: {
+									color: '#FFF600' //改变折线颜色
+								}
+				            }
+				        }
+				    }]
+				};
+				qitiantongjieChart.setOption(qitiantongjioption);
+			}
+		});
+		
 		
 		
 		

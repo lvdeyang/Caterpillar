@@ -114,7 +114,7 @@ public class ReportOrderAllController extends BaseController{
         reportOrderPO.setAge(ageStr);
         //根据身份证获取年龄，性别，地区
         reportOrderPO.setSex(sexStr);
-        
+        reportOrderPO.setSexString(sexStr);
        
         if(reportOrderPO.getType()==0){
         	reportOrderPO.setTypeString("线下");

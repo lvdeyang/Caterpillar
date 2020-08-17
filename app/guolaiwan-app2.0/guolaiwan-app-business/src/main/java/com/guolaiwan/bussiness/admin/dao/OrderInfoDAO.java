@@ -17,6 +17,7 @@ import com.guolaiwan.bussiness.admin.dto.CountGroupDTO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.merchant.dto.ReportDTO;
 
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
@@ -810,4 +811,46 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		}		 
 		return count;
 	}
+	
+	public List<ReportDTO> getmerchantData(int pageNum, int pageSize) {
+		StringBufferWrapper sqlWrapper = new StringBufferWrapper().append(
+				"select COUNT(*) acount,shopName merchantName from t_sys_orderinfo GROUP BY shopId ORDER BY acount desc");
+		
+		SQLQuery query = getCurrentSession().createSQLQuery(sqlWrapper.toString())
+				.addScalar("merchantName", StandardBasicTypes.STRING).addScalar("acount", StandardBasicTypes.INTEGER);
+		query.setResultTransformer(Transformers.aliasToBean(ReportDTO.class));
+
+		// 分页
+		int firstResult = (pageNum - 1) * pageSize;
+		query.setFirstResult(firstResult);
+		query.setMaxResults(pageSize);
+		return query.list();
+	}
+	
+	public List<ReportDTO> getjiudianData(int pageNum, int pageSize,Long[] merchantIds) {
+		String ids="(";
+		int index=0;
+		for (Long id : merchantIds) {
+			if(index==0){
+				ids+=id;
+			}else{
+				ids+=","+id;
+			}
+			index++;
+		}
+		ids+=")";
+		StringBufferWrapper sqlWrapper = new StringBufferWrapper().append(
+				"select COUNT(*) acount,shopName merchantName from t_sys_orderinfo where shopId in "+ids+" GROUP BY shopId ORDER BY acount desc");
+		
+		SQLQuery query = getCurrentSession().createSQLQuery(sqlWrapper.toString())
+				.addScalar("merchantName", StandardBasicTypes.STRING).addScalar("acount", StandardBasicTypes.INTEGER);
+		query.setResultTransformer(Transformers.aliasToBean(ReportDTO.class));
+
+		// 分页
+		int firstResult = (pageNum - 1) * pageSize;
+		query.setFirstResult(firstResult);
+		query.setMaxResults(pageSize);
+		return query.list();
+	}
+	
 }
