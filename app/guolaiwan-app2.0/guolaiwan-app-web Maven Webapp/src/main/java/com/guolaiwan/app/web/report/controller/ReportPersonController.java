@@ -60,6 +60,27 @@ public class ReportPersonController extends BaseController {
 	@Autowired
 	ReportOrderAllDAO reportorderAllDao;
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getFaceData")
+	public Map<String, Object> getFaceData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		Date today=new Date();
+		String dateStr=DateUtil.format(today, "yyyy-MM-dd");
+		
+		Date start=DateUtil.parse(dateStr+" 00:00:00", "yyyy-MM-dd HH:mm:ss");
+		Date end=DateUtil.parse(dateStr+" 23:59:59", "yyyy-MM-dd HH:mm:ss");
+		int count1=conn_orderinfo.GetCountByHour(start,end);
+		int count2=reportOrderDAO.GetCountByHour(start,end);
+		int count3=reportorderAllDao.GetCountByHour(start, end);
+		map.put("count", count1+count2+count3);
+
+		return map;
+	}
+	
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/getsexData")
 	public Map<String, Object> getsexData(HttpServletRequest request) throws Exception {

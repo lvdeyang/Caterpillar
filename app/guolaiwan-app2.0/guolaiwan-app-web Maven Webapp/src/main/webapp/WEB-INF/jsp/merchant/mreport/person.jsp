@@ -87,7 +87,7 @@ String weburl=WXContants.Website;
 	                   <image src="<%= request.getContextPath() %>/lib/images/icon_renlian.png" 
 	                   style="width:12%;height:38%;margin-top:16%;margin-left:15%;float:left;">
 	                   <div style="float:left;margin-top:18%;margin-left:5%;text-align:center">
-	                      <span style="color:#FFF">人脸抓拍总数</span><br><span style="color:#00FF26;line-height:50px;font-size:20px">&nbsp;&nbsp;24000</span>
+	                      <span style="color:#FFF">人脸抓拍总数</span><br><span id="faceCount" style="color:#00FF26;line-height:50px;font-size:20px">&nbsp;&nbsp;24000</span>
 	                   </div>
 	                </div>
 	                
@@ -208,6 +208,15 @@ String weburl=WXContants.Website;
 			cache : false,
 			success : function(result) {
 			    $('#carCount').html(result.count);
+			}
+		});
+		
+		$.ajax({
+			url : "getFaceData",
+			type : "get",
+			cache : false,
+			success : function(result) {
+			    $('#faceCount').html(result.count);
 			}
 		});
 		
@@ -657,9 +666,9 @@ String weburl=WXContants.Website;
 		            data: [
 		                {value: 835, name: '清东陵'},
 		                {value: 310, name: '禅林寺'},
-		                {value: 210, name: '南湖'},
-		                {value: 110, name: '飞机场'},
-		                {value: 710, name: '客运站'}
+		                {value: 210, name: '国际饭店'},
+		                {value: 110, name: '万佛园'},
+		                {value: 710, name: '山里各庄'}
 		            ],
 		            itemStyle: {
                           emphasis: {
