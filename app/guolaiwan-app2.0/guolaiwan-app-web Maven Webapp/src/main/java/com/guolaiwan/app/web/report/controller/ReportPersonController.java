@@ -31,6 +31,7 @@ import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
+import com.guolaiwan.bussiness.merchant.dao.CarMessageDAO;
 import com.guolaiwan.bussiness.merchant.dao.ReportOrderAllDAO;
 import com.guolaiwan.bussiness.merchant.dao.ReportOrderDAO;
 import com.guolaiwan.bussiness.merchant.dto.ReportDTO;
@@ -299,5 +300,61 @@ public class ReportPersonController extends BaseController {
         map.put("values1", values1);
 		return map;
 	}
+	
+	//车辆相关
+	@Autowired
+	CarMessageDAO conn_carmsg;
+	@ResponseBody
+	@RequestMapping(value = "/getallCarData")
+	public Map<String, Object> getallCarData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ReportDTO> reportDTOs=conn_carmsg.getAllCarcount();
+		map.put("count", reportDTOs.get(0).getAcount());
+		return map;
+	}
 
+	
+	@ResponseBody
+	@RequestMapping(value = "/getcartypeData")
+	public Map<String, Object> getcartypeData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<String> keys=new ArrayList<String>();
+		List<Integer> values=new ArrayList<Integer>();
+		List<ReportDTO> result=conn_carmsg.gettypeData(1, 10);
+	
+		keys.add("小型车");
+		keys.add("大型车");
+		int nancount=0;
+		int nvcount=0;
+		for (ReportDTO reportDTO : result) {
+		   	if(reportDTO.getTypeString().equals("大型车")){
+		   		nancount+=reportDTO.getAcount();
+		   	}else{
+		   		nvcount+=reportDTO.getAcount();
+		   	}
+		}
+       
+        values.add(nancount);
+        values.add(nvcount);
+        map.put("keys", keys);
+        map.put("values", values);
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getcarregionData")
+	public Map<String, Object> getcarregionData(HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<String> keys=new ArrayList<String>();
+		List<Integer> values=new ArrayList<Integer>();
+		List<ReportDTO> result=conn_carmsg.getregionData(1, 5);
+	
+		for (ReportDTO reportDTO : result) {
+			keys.add(reportDTO.getRegion());
+			values.add(reportDTO.getAcount());
+		}
+        map.put("keys", keys);
+        map.put("values", values);
+		return map;
+	}
 }

@@ -6,6 +6,7 @@ public class ReportDTO {
 	private String ageString;
 	private String region;
 	private String MerchantName;
+	private String typeString;
 	
 	public int getAcount() {
 		return acount;
@@ -36,6 +37,12 @@ public class ReportDTO {
 	}
 	public void setMerchantName(String merchantName) {
 		MerchantName = merchantName;
+	}
+	public String getTypeString() {
+		return typeString;
+	}
+	public void setTypeString(String typeString) {
+		this.typeString = typeString;
 	}
 	
 

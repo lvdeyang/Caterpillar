@@ -23,13 +23,14 @@ public class CarMessagePO extends AbstractBasePO {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String carNum;
+	private long carNum;
 	private String region;
 	private int type;//0小型车1大型车
-	public String getCarNum() {
+	private String typeString;
+	public long getCarNum() {
 		return carNum;
 	}
-	public void setCarNum(String carNum) {
+	public void setCarNum(long carNum) {
 		this.carNum = carNum;
 	}
 	public String getRegion() {
@@ -46,6 +47,12 @@ public class CarMessagePO extends AbstractBasePO {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public String getTypeString() {
+		return typeString;
+	}
+	public void setTypeString(String typeString) {
+		this.typeString = typeString;
 	}
 	
 	

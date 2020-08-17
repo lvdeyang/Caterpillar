@@ -122,7 +122,7 @@ String weburl=WXContants.Website;
 	                   <image src="<%= request.getContextPath() %>/lib/images/icon_qiche.png" 
 	                   style="width:12%;height:34%;margin-top:16%;margin-left:15%;float:left;">
 	                   <div style="float:left;margin-top:16%;margin-left:5%;text-align:center">
-	                      <span style="color:#FFF">车辆抓拍总数</span><br><span style="color:#00FF26;line-height:50px;font-size:20px">24000</span>
+	                      <span style="color:#FFF">车辆抓拍总数</span><br><span id="carCount" style="color:#00FF26;line-height:50px;font-size:20px">24000</span>
 	                   </div>
 	                </div>
 	             </div>
@@ -202,6 +202,14 @@ String weburl=WXContants.Website;
 		//性别统计
 		
 		
+		$.ajax({
+			url : "getallCarData",
+			type : "get",
+			cache : false,
+			success : function(result) {
+			    $('#carCount').html(result.count);
+			}
+		});
 		
 		
 		
@@ -541,65 +549,74 @@ String weburl=WXContants.Website;
 		
 		
 		//车辆统计
-		var cheliangChart = echarts.init(document.getElementById('cheliang')); 
-		var optioncheliang = {
-		    tooltip: {
-		        trigger: 'item',
-		        formatter: '{a} <br/>{b}: {c} ({d}%)'
-		    },
-		    legend: {
-		         orient: 'horizontal',                  
-		         data: ['大型车', '小型车'],
-		         x : '70%',
-		         y : '30%',
-		         textStyle: {
-			        color: '#FFF'       // 图例文字颜色
-			     }
-		    },
-		    series: [
-		        {
-		            name: '车辆类型',
-		            type: 'pie',
-		            radius: ['50%', '70%'],
-		            avoidLabelOverlap: false,
-		            label: {
-		                show: false,
-		                position: 'right'
-		            },
-		            emphasis: {
-		                label: {
-		                    show: true,
-		                    fontSize: '30',
-		                    fontWeight: 'bold'
-		                }
-		            },
-		            labelLine: {
-		                show: false
-		            },
-		            data: [
-		                {value: 835, name: '大型车'},
-		                {value: 310, name: '小型车'}
-		            ],
-		            itemStyle: {
-                          emphasis: {
-                              shadowBlur: 10,
-                              shadowOffsetX: 0,
-                              shadowColor: 'rgba(0, 0, 0, 0.5)'
-                           },
-                          normal:{
-                              color:function(params) {
-                              //自定义颜色
-                              var colorList = [          
-                                      '#FA903C','#EAEA3C','#F66465','#30A7FB'
-                                  ];
-                                  return colorList[params.dataIndex]
-                               }
-                          }
-                    }
-		        }
-		    ]
-		};
-		cheliangChart.setOption(optioncheliang)
+		
+		$.ajax({
+			url : "getcartypeData",
+			type : "get",
+			cache : false,
+			success : function(result) {
+			    var cheliangChart = echarts.init(document.getElementById('cheliang')); 
+				var optioncheliang = {
+				    tooltip: {
+				        trigger: 'item',
+				        formatter: '{a} <br/>{b}: {c} ({d}%)'
+				    },
+				    legend: {
+				         orient: 'horizontal',                  
+				         data: ['大型车', '小型车'],
+				         x : '70%',
+				         y : '30%',
+				         textStyle: {
+					        color: '#FFF'       // 图例文字颜色
+					     }
+				    },
+				    series: [
+				        {
+				            name: '车辆类型',
+				            type: 'pie',
+				            radius: ['50%', '70%'],
+				            avoidLabelOverlap: false,
+				            label: {
+				                show: false,
+				                position: 'right'
+				            },
+				            emphasis: {
+				                label: {
+				                    show: true,
+				                    fontSize: '30',
+				                    fontWeight: 'bold'
+				                }
+				            },
+				            labelLine: {
+				                show: false
+				            },
+				            data: [
+				                {value: result.values[0], name: result.keys[0]},
+				                {value: result.values[1], name: result.keys[1]}
+				            ],
+				            itemStyle: {
+		                          emphasis: {
+		                              shadowBlur: 10,
+		                              shadowOffsetX: 0,
+		                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                           },
+		                          normal:{
+		                              color:function(params) {
+		                              //自定义颜色
+		                              var colorList = [          
+		                                      '#FA903C','#EAEA3C','#F66465','#30A7FB'
+		                                  ];
+		                                  return colorList[params.dataIndex]
+		                               }
+		                          }
+		                    }
+				        }
+				    ]
+				};
+				cheliangChart.setOption(optioncheliang)
+			}
+		});
+		
 		
 		//警情统计
 		var jingqingChart = echarts.init(document.getElementById('jingqing')); 
@@ -667,67 +684,76 @@ String weburl=WXContants.Website;
 		jingqingChart.setOption(optionjingqing)
 		
 		//车辆归属地
-		var guishuChart = echarts.init(document.getElementById('guishu')); 
-		var guishuoption = {
-		    title: {
-		        text: '',
-		        subtext: ''
-		    },
-
-		    tooltip: {
-		        trigger: 'axis',
-		        axisPointer: {
-		            type: 'shadow'
-		        }
-		    },
-		    grid: {
-		        left: '0%',
-		        right: '0%',
-		        bottom: '0%',
-		        containLabel: true,
-		        borderWidth:0
-		    },
-		    xAxis: {
-	            splitLine:{show: false},	    
-		        type: 'value',
-		        boundaryGap: [0, 0.01],
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    yAxis: {
-		        splitLine:{show: false},
-		        type: 'category',
-		        data: [ '北京', '天津', '河南', '浙江'],
-		        axisLabel: {
-                     interval:0,
-					 textStyle: {
-	                     color: '#fff'
-	                 }
-		        }
-		    },
-		    series: [
-		        {
-		          
-		            type: 'bar',
-		            data: [ 23489, 29034, 104970, 131744],
-		            barWidth : 5,//柱图宽度
-		            barGap:'100%',//柱图间距
-			        itemStyle: {
-			            normal: {
-			                color: function(params) {
-			                    var colorList = ['#00E67D','#FA903C','#EAEA3C','#F66465','#31A7FB'];
-			                    return colorList[params.dataIndex]
-			                }
-			            }
-			        }
-		        }
-		    ]
-		};
-		guishuChart.setOption(guishuoption)
+		
+		$.ajax({
+			url : "getcarregionData",
+			type : "get",
+			cache : false,
+			success : function(result) {
+			    var guishuChart = echarts.init(document.getElementById('guishu')); 
+				var guishuoption = {
+				    title: {
+				        text: '',
+				        subtext: ''
+				    },
+		
+				    tooltip: {
+				        trigger: 'axis',
+				        axisPointer: {
+				            type: 'shadow'
+				        }
+				    },
+				    grid: {
+				        left: '0%',
+				        right: '0%',
+				        bottom: '0%',
+				        containLabel: true,
+				        borderWidth:0
+				    },
+				    xAxis: {
+			            splitLine:{show: false},	    
+				        type: 'value',
+				        boundaryGap: [0, 0.01],
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    yAxis: {
+				        splitLine:{show: false},
+				        type: 'category',
+				        data: result.keys,
+				        axisLabel: {
+		                     interval:0,
+							 textStyle: {
+			                     color: '#fff'
+			                 }
+				        }
+				    },
+				    series: [
+				        {
+				          
+				            type: 'bar',
+				            data: result.values,
+				            barWidth : 5,//柱图宽度
+				            barGap:'100%',//柱图间距
+					        itemStyle: {
+					            normal: {
+					                color: function(params) {
+					                    var colorList = ['#00E67D','#FA903C','#EAEA3C','#F66465','#31A7FB'];
+					                    return colorList[params.dataIndex]
+					                }
+					            }
+					        }
+				        }
+				    ]
+				};
+				guishuChart.setOption(guishuoption)
+			}
+		});
+		
 		
 	});
 	
