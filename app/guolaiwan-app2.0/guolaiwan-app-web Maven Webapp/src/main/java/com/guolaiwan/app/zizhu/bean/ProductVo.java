@@ -57,7 +57,7 @@ public class ProductVo {
     	 //价格类型
          private String priceName;
          //实际售价
-    	 private int price;
+    	 private Double price;
     	 //票面价格
     	 private int basicPrice ;
     	 //有效期数量
@@ -108,10 +108,10 @@ public class ProductVo {
 	         return priceName;
 	     }
 
-	    public void setPrice(int price) {
+	    public void setPrice(Double price) {
 	         this.price = price;
 	     }
-	     public int getPrice() {
+	     public Double getPrice() {
 	         return price;
 	     }
 

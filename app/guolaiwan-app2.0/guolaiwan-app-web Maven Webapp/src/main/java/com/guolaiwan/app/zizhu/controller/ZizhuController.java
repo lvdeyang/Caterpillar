@@ -16,6 +16,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
@@ -123,14 +125,13 @@ public class ZizhuController {
 	@ResponseBody
 	@RequestMapping(value = "/hasHeartbeat", method = RequestMethod.POST)
     public String hasHeartbeat(HttpServletRequest request){
-		String uniqueCode = request.getParameter("uniqueCode");
+	
 		JSONObject response=new JSONObject();
 		JSONObject data=new JSONObject();
 		JSONObject error=new JSONObject();
-		data.put("result", true);
 		error.put("code", 0);
 		error.put("message", "success");
-		response.put("data", data);
+		response.put("data", true);
 		response.put("error", error);
 		return response.toString(); 
 	}
@@ -148,27 +149,29 @@ public class ZizhuController {
     public String queryProduct(HttpServletRequest request){
 		List<ProductVo.Data> list=null;
 		ProductVo vo=new ProductVo();
-		ProductVo.Data data=new Data();
 		if (request!=null) {
 			//String page = request.getParameter("page");
 			String id = request.getParameter("salesWinId");
 			System.out.println("shang hu id"+id);
 			List<ProductPO> products = conn_pro.findByMerchantId(Long.parseLong(id));
 			for (ProductPO productPO : products) {
+				ProductVo.Data data=new Data();
 				data.setId(productPO.getId().intValue());
 				data.setName(productPO.getProductName());
 				data.setCode("123");
 				data.setProductCategory(1);
 				data.setCrowdKindName("普通票");
 				data.setPriceName("全价");
-				data.setPrice(Integer.parseInt((productPO.getProductPrice()/100+"")));
+				Long Longprice=productPO.getProductPrice();
+				Integer Intprice=Longprice.intValue();
+				Double doublePrice=Intprice.doubleValue();
+				data.setPrice(doublePrice/100);
 				data.setBasicPrice(Integer.parseInt((productPO.getProductPrice()/100+"")));
 				data.setValidityNum(Integer.parseInt(productPO.getProductStock()+""));
 				data.setValidityUnits(2);
 				data.setHasUser(true);
 				data.setHasFace(false);
 				vo.getData().add(data);
-			
 			}
 			vo.getError().setCode(0);
 			vo.getError().setMessage("success");
@@ -218,43 +221,45 @@ public class ZizhuController {
 			break;
 		}
 		JSONArray array=pageObject.getJSONArray("details");
+		Double Allprice=0.0;
 		if (!array.isEmpty()) {
-			for (int i = 0; i < array.size(); i++) {
-				int productId=array.getJSONObject(i).getInteger("productId");
-				int productNum=array.getJSONObject(i).getInteger("quantity");
-				OrderInfoPO order;
-				try {
-					order = addOrder(productId,productNum,Paytype);
-					CreateVoucherVo.Data.Details details=new CreateVoucherVo.Data.Details();
-					details.setProductId(array.getJSONObject(i).getIntValue("productId"));
-					details.setTicketNo(order.getId()+"");
-					details.setTicketNoPic("");
-					details.setProductName(order.getProductName());
-					details.setBusinessName("游客");
-					details.setCrowdKindName("成人");
-					details.setPriceName("全价");
-					details.setPrice(Integer.parseInt((order.getProductPrice()/100+"")));
-					details.setBasicPrice(Integer.parseInt((order.getProductPrice()/100+"")));
-					details.setQuantity(array.getJSONObject(i).getIntValue("quantity"));
-					details.setUseEndDate(new Date());
-					details.setUseEndDate(new Date());
-					details.setName(array.getJSONObject(i).getString("name"));
-					details.setIdCard(array.getJSONObject(i).getString("idCard"));
-					details.setPhone(array.getJSONObject(i).getString("phone"));
-					details.setFace("");
-					details.setAmount(order.getPayMoney());
-					vo.getData().getDetails().add(details);
-					vo.getError().setCode(0);
-					vo.getError().setMessage("success");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					vo.getError().setCode(1);
-					vo.getError().setMessage("faile");
-				}
-				
+			int productId=array.getJSONObject(0).getInteger("productId");
+			int productNum=array.getJSONObject(0).getInteger("quantity");
+			OrderInfoPO order;
+			try {
+				order = addOrder(productId,productNum,Paytype);
+				CreateVoucherVo.Data.Details details=new CreateVoucherVo.Data.Details();
+				details.setProductId(array.getJSONObject(0).getIntValue("productId"));
+				details.setTicketNo(order.getId()+"");
+				details.setTicketNoPic("");
+				details.setProductName(order.getProductName());
+				details.setBusinessName("游客");
+				details.setCrowdKindName("成人");
+				details.setPriceName("全价");
+				Long longPrice=order.getOrderAllMoney();
+				Integer IntPrice=longPrice.intValue();
+				Double Doubleprice=IntPrice.doubleValue();
+			    Allprice=Doubleprice/100;
+				details.setPrice(Allprice);
+				details.setBasicPrice(Integer.parseInt((order.getProductPrice()/100+"")));
+				details.setQuantity(array.getJSONObject(0).getIntValue("quantity"));
+				details.setUseEndDate(new Date());
+				details.setName(array.getJSONObject(0).getString("name"));
+				details.setIdCard(array.getJSONObject(0).getString("idCard"));
+				details.setPhone(array.getJSONObject(0).getString("phone"));
+				details.setFace("");
+				details.setAmount(order.getPayMoney());
+				vo.getData().setCreateTime(new DateTime());
+				vo.getData().setTotalAmount(Allprice);
+				vo.getData().setTotalQuantity(array.size());
+				vo.getData().setVoucherNumber(order.getId()+"");
+				vo.getData().getDetails().add(details);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				vo.getError().setCode(1);
+				vo.getError().setMessage("faile");
 			}
-			
 		}else{
 			vo.getError().setCode(1);
 			vo.getError().setMessage("faile");
@@ -300,22 +305,44 @@ public class ZizhuController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/payPreVoucher", method = RequestMethod.POST)
-    public String payPreVoucher(@RequestBody CancelVoucherPo po){
-		PayVoucherVo vo=new PayVoucherVo();
-		List<PayVoucherVo.Data.Details> list=null;
-		PayVoucherVo.Error error=vo.getError();
-		if (po!=null) {
-			list=GlwHttpUtils.payPreVoucher(po.getVoucherNumber());
-		}
-		if (list!=null&&list.size()>0) {
-			vo.getData().setDetails(list);
-			error.setCode(0);
-			error.setMessage("success");
+    public String payPreVoucher(HttpServletRequest request){
+		Map<String, Object> response = new HashMap<String, Object>();
+		Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, Object> details = new HashMap<String, Object>();
+		Map<String, Object> error = new HashMap<String, Object>();
+		String json=getRequestJson(request);
+		JSONObject pageObject = JSON.parseObject(json);
+		String orderIdString=pageObject.getString("voucherNumber");
+		OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(orderIdString));
+		if(orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)){
+			data.put("voucherNumber", orderIdString);
+			data.put("createTime", new Date());
+			data.put("totalQuantity", orderInfoPO.getProductNum());
+			data.put("totalAmount", orderInfoPO.getOrderAllMoney());
+			details.put("productId", orderInfoPO.getProductId());
+			details.put("ticketNos", orderInfoPO.getOrderNO());
+			details.put("ticketNoPics", "");
+			data.put("details", details);
+			error.put("code", 0);
+			error.put("message", "success");
+			response.put("data", data);
+			response.put("error", error);
 		}else{
-			error.setCode(1);
-			error.setMessage("faile");
+			data.put("voucherNumber", null);
+			data.put("createTime", new Date());
+			data.put("totalQuantity", null);
+			data.put("totalAmount",null);
+			details.put("productId", null);
+			details.put("ticketNos", null);
+			details.put("ticketNoPics", null);
+			data.put("details", details);
+			error.put("code", 1);
+			error.put("message", "fail");
+			response.put("data", data);
+			response.put("error",error);
 		}
-		return JSONObject.toJSONString(vo);
+		return JSONObject.toJSONString(response,SerializerFeature.WriteMapNullValue);  
+		
     }
 	
 	

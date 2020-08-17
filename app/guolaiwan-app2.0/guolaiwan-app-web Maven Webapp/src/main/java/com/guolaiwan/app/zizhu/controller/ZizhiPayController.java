@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
@@ -63,7 +64,6 @@ public class ZizhiPayController {
 	@ResponseBody
 	@RequestMapping(value = "/wxpay/scanPay", method = RequestMethod.POST)
     public String payCodeWx(HttpServletRequest request){
-//		PayCodeVo vo=new PayCodeVo();
 		JSONObject responseJsonObject=new JSONObject();
 		JSONObject dataJsonObject=new JSONObject();
 		String json=getRequestJson(request);
@@ -74,7 +74,7 @@ public class ZizhiPayController {
 			OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(pageObject.getString("trade_no").toString()));
 			dataJsonObject.put("mchid", AlipayConfig.merchant_private_key);
 			dataJsonObject.put("appid",AlipayConfig.app_id);
-			dataJsonObject.put("qrcode_url","");
+			dataJsonObject.put("qrcode_url",urlString);
 			dataJsonObject.put("qrcode_data",urlString);
 			dataJsonObject.put("trans_time",new DateTime());
 			dataJsonObject.put("trans_status","SUCCESS");
@@ -116,33 +116,48 @@ public class ZizhiPayController {
 	@ResponseBody
 	@RequestMapping(value = "/alipay/scanPay", method = RequestMethod.GET)
     public String payCodeAli(HttpServletRequest request){
-		PayCodeVo vo=new PayCodeVo();
+		JSONObject responseJsonObject=new JSONObject();
+		JSONObject dataJsonObject=new JSONObject();
 		String json=getRequestJson(request);
 		JSONObject pageObject = JSON.parseObject(json);
 		String urlString;
 		try {
-			urlString = alipay(Long.parseLong(request.getParameter("trade_no").toString()));
-			vo.setMchid(AlipayConfig.merchant_private_key);
-			vo.setAppid(AlipayConfig.app_id);
-			vo.setQrcode_url(urlString);
-			vo.setTrans_status("SUCCESS");
-			vo.setTrans_time(new DateTime());
-			vo.setMemo("");
-			vo.setCode("SUCCESS");
-			vo.setMsg("支付成功");
+			urlString = alipay(Long.parseLong(pageObject.getString("trade_no").toString()));
+			OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(pageObject.getString("trade_no").toString()));
+			dataJsonObject.put("mchid", AlipayConfig.merchant_private_key);
+			dataJsonObject.put("appid",AlipayConfig.app_id);
+			dataJsonObject.put("qrcode_url",urlString);
+			dataJsonObject.put("qrcode_data",urlString);
+			dataJsonObject.put("trans_time",new DateTime());
+			dataJsonObject.put("trans_status","SUCCESS");
+			dataJsonObject.put("trans_no",pageObject.getString("trade_no"));
+			dataJsonObject.put("trade_no",pageObject.getString("trade_no"));
+			dataJsonObject.put("referNo",pageObject.getString("trade_no"));
+			dataJsonObject.put("amount", orderInfoPO.getPayMoney());
+			dataJsonObject.put("memo","");
+			responseJsonObject.put("code", "SUCCESS");
+			responseJsonObject.put("msg", "二维码获取成功");
+			responseJsonObject.put("trans_no", pageObject.getString("trade_no"));
+			responseJsonObject.put("data", dataJsonObject);
 		}  catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			vo.setMchid(AlipayConfig.merchant_private_key);
-			vo.setAppid(AlipayConfig.app_id);
-			vo.setQrcode_url("");
-			vo.setTrans_status("TRADING");
-			vo.setTrans_time(new DateTime());
-			vo.setMemo("");
-			vo.setCode("FAIL");
-			vo.setMsg("支付失败");
+			dataJsonObject.put("mchid", AlipayConfig.merchant_private_key);
+			dataJsonObject.put("appid",AlipayConfig.app_id);
+			dataJsonObject.put("qrcode_url","");
+			dataJsonObject.put("qrcode_data","");
+			dataJsonObject.put("trans_time",new DateTime());
+			dataJsonObject.put("trans_status","FAIL");
+			dataJsonObject.put("trans_no","");
+			dataJsonObject.put("trade_no","");
+			dataJsonObject.put("referNo","");
+			dataJsonObject.put("memo","");
+			responseJsonObject.put("code", "FAIL");
+			responseJsonObject.put("msg", "二维码获取失败");
+			responseJsonObject.put("trans_no", "");
+			responseJsonObject.put("data", dataJsonObject);
 		}
-		return JSONObject.toJSONString(vo);
+		return responseJsonObject.toJSONString();
     }
 
 	@Autowired
@@ -295,30 +310,36 @@ public class ZizhiPayController {
 	@ResponseBody
 	@RequestMapping(value = "/wxpay/query", method = RequestMethod.GET)
     public String QuaryWx(HttpServletRequest request){
-		JSONObject object=new JSONObject();
+		Map<String,Object> response=new HashMap<String, Object>();
+		Map<String,Object> data=new HashMap<String, Object>();
+		Map<String,Object> error=new HashMap<String, Object>();
 		if (request!=null) {
 			String orderIdString=request.getParameter("trade_no");
 			OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(orderIdString));
 			if(orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)){
-				object.put("code", "SUCCESS");
-				object.put("msg", "支付成功");
-				object.put("mchid", orderInfoPO.getRoomId()+"");
-				object.put("appid", WXContants.AppId);
-				object.put("amount", orderInfoPO.getOrderAllMoney());
-				object.put("trans_no", orderInfoPO.getId());
-				object.put("trans_status", "SUCCESS");
-				object.put("trans_type", "00");
-				object.put("trans_time", DateUtil.format(new Date(),DateUtil.dateTimePattern));
-				object.put("trade_no", orderInfoPO.getId()+"");
-				object.put("refer_no",orderInfoPO.getId()+"");
-				object.put("option_type","02");
-				object.put("memo","");
+				data.put("mchid", orderInfoPO.getRoomId()+"");
+				data.put("appid", WXContants.AppId);
+				data.put("amount", orderInfoPO.getOrderAllMoney());
+				data.put("trans_no", orderInfoPO.getId());
+				data.put("trans_status", "SUCCESS");
+				data.put("trans_type", "00");
+				data.put("trans_time", DateUtil.format(new Date(),DateUtil.dateTimePattern));
+				data.put("trade_no", orderInfoPO.getId()+"");
+				data.put("refer_no",orderInfoPO.getId()+"");
+				data.put("option_type","02");
+				data.put("memo","");
+				error.put("code", 0);
+				error.put("message", "success");
+				response.put("error", error);
+				response.put("data", data);
 			}else{
-				object.put("code", "FAIL");
-				object.put("msg", "支付中");
+				error.put("code", 1);
+				error.put("message", "fail");
+				response.put("data", null);
+				response.put("error", error);
 			}
 		}
-		return object.toJSONString();
+		return JSONObject.toJSONString(response,SerializerFeature.WriteMapNullValue);  
 	}
 	private String getRequestJson(HttpServletRequest request) {
 		try {
