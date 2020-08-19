@@ -658,7 +658,7 @@ html, body {
 					    html.push('</div>');
 				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg table" id="pro-'+table_orders[0].id+'-'+table_orders[0].merchantId+'">');
 					    html.push('<div class="weui-media-box__hd">');
-					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="http://www.guolaiwan.net/file/'+tableslist[i].merchant.shopPic+'">');
+					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="http://www.guolaiwan.net/file/'+disList[i].merchant.shopPic+'">');
 					    html.push('</div>');
 					    html.push('<div class="weui-media-box__bd">');
 					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">未订桌</h4>');
