@@ -600,9 +600,9 @@ html, body {
 			html.push('</div>');
 			$('#tab'+type).children().remove();
 			$('#tab'+type).append(html.join(''));
-			
+			 getTableOrder(2);	
 		});	
-		 getTableOrder(2);	
+		
       }
       
         // 美食订单
