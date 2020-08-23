@@ -34,6 +34,7 @@ import com.guolaiwan.app.web.website.alipay.controller.AlipayConfig;
 import com.guolaiwan.app.zizhu.GlwHttpUtils;
 import com.guolaiwan.app.zizhu.bean.PayCodeVo;
 import com.guolaiwan.bussiness.Parking.po.OrderPO;
+import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.ProductDAO;
@@ -41,6 +42,7 @@ import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
+import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
@@ -70,8 +72,26 @@ public class ZizhiPayController {
 		JSONObject pageObject = JSON.parseObject(json);
 		String urlString;
 		try {
-			urlString = wxpay(Long.parseLong(pageObject.getString("trade_no").toString()));
-			OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(pageObject.getString("trade_no").toString()));
+			urlString = wxpay(pageObject.getString("trade_no"));
+			String orderid=pageObject.getString("trade_no").toString();
+			String ordertradeNum="";
+			long allMoney=0l;
+	        if(orderid.indexOf("bundle")!=-1){
+	        	ordertradeNum=orderid;
+	        	String[] ids=orderid.split("-");
+	        	BundleOrder bundleOrder=conn_bundleorder.get(Long.parseLong(ids[1]));
+	        	String[] orderIds=bundleOrder.getOrderStr().split("A");
+	        	
+	        	for (String idStr : orderIds) {
+					OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(idStr));
+					allMoney+=orderInfoPO.getPayMoney();
+				}
+	        }else{
+	        	OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(orderid));
+				allMoney+=orderInfoPO.getPayMoney();
+				ordertradeNum=orderid;
+	        }
+			
 			dataJsonObject.put("mchid", AlipayConfig.merchant_private_key);
 			dataJsonObject.put("appid",AlipayConfig.app_id);
 			dataJsonObject.put("qrcode_url",urlString);
@@ -81,7 +101,7 @@ public class ZizhiPayController {
 			dataJsonObject.put("trans_no",pageObject.getString("trade_no"));
 			dataJsonObject.put("trade_no",pageObject.getString("trade_no"));
 			dataJsonObject.put("referNo",pageObject.getString("trade_no"));
-			dataJsonObject.put("amount", orderInfoPO.getPayMoney());
+			dataJsonObject.put("amount", allMoney);
 			dataJsonObject.put("memo","");
 			responseJsonObject.put("code", "SUCCESS");
 			responseJsonObject.put("msg", "二维码获取成功");
@@ -164,17 +184,37 @@ public class ZizhiPayController {
 	SysConfigDAO conn_sysconfig;
 	@Autowired
 	OrderInfoDAO conn_order;
-	public String wxpay(Long orderid) throws Exception {
+	
+	@Autowired
+	BundleOrderDAO conn_bundleorder;
+	public String wxpay(String orderid) throws Exception {
 
-		OrderInfoPO order = conn_order.get(orderid);
-		if (order == null) {
-			throw new Exception("数据异常，未获取到用户可下的订单信息！");
-		}
+		//OrderInfoPO order = conn_order.get(orderid);
+		//if (order == null) {
+		//	throw new Exception("数据异常，未获取到用户可下的订单信息！");
+		//}
 		// //存支付方式
 		// order.setPayMode(PayType.WEICHAT);
-
+		String ordertradeNum="";
+		long allMoney=0l;
+        if(orderid.indexOf("bundle")!=-1){
+        	ordertradeNum=orderid;
+        	String[] ids=orderid.split("-");
+        	BundleOrder bundleOrder=conn_bundleorder.get(Long.parseLong(ids[1]));
+        	String[] orderIds=bundleOrder.getOrderStr().split("A");
+        	
+        	for (String idStr : orderIds) {
+				OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(idStr));
+				allMoney+=orderInfoPO.getPayMoney();
+			}
+        }else{
+        	OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(orderid));
+			allMoney+=orderInfoPO.getPayMoney();
+			ordertradeNum=orderid;
+        }
+		
 		// 计算总价
-		long PayMoney = order.getPayMoney();
+	
 		String result="";
 	
 		try {
@@ -183,18 +223,15 @@ public class ZizhiPayController {
 
 			Map<String, String> reqData = new HashMap<String, String>();
 
-			String tradeNum = order.getId().toString();// 订单编号UUID.randomUUID().toString().replace("-",
-														// "")
-
 			reqData.put("device_info", "WEB");
 
-			reqData.put("total_fee", String.valueOf((int) PayMoney));
+			reqData.put("total_fee", String.valueOf((int) allMoney));
 
 			reqData.put("attach", "test");
 
 			reqData.put("body", "过来玩");
 
-			reqData.put("out_trade_no", tradeNum);
+			reqData.put("out_trade_no", ordertradeNum);
 
 			reqData.put("spbill_create_ip", "192.165.56.64");
 
@@ -204,7 +241,7 @@ public class ZizhiPayController {
 
 			SysConfigPO sysConfig = conn_sysconfig.getSysConfig();
 
-			String fileName = order.getId() + DateUtil.getCurrentDateTime() + ".png";
+			String fileName = ordertradeNum + DateUtil.getCurrentDateTime() + ".png";
 
 			String path = sysConfig.getFolderUrl() + File.separator + "wxPayCode" + File.separator + fileName;
 
@@ -313,14 +350,35 @@ public class ZizhiPayController {
 		Map<String,Object> response=new HashMap<String, Object>();
 		Map<String,Object> data=new HashMap<String, Object>();
 		Map<String,Object> error=new HashMap<String, Object>();
+		OrderInfoPO orderInfoPO=null;
 		if (request!=null) {
 			String orderIdString=request.getParameter("trade_no");
-			OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(orderIdString));
+			
+			String orderid=orderIdString;
+			long allMoney=0l;
+	        if(orderid.indexOf("bundle")!=-1){
+	        	String[] ids=orderid.split("-");
+	        	BundleOrder bundleOrder=conn_bundleorder.get(Long.parseLong(ids[1]));
+	        	String[] orderIds=bundleOrder.getOrderStr().split("A");
+	    
+	        	
+	        	for (String idStr : orderIds) {
+					orderInfoPO=conn_order.get(Long.parseLong(idStr));
+					allMoney+=orderInfoPO.getPayMoney();
+					
+				}
+	        }else{
+	        	orderInfoPO=conn_order.get(Long.parseLong(orderid));
+				allMoney+=orderInfoPO.getPayMoney();
+	        }
+			
+			
+			
 			if(orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)){
 				data.put("mchid", orderInfoPO.getRoomId()+"");
 				data.put("appid", WXContants.AppId);
-				data.put("amount", orderInfoPO.getOrderAllMoney());
-				data.put("trans_no", orderInfoPO.getId());
+				data.put("amount", allMoney);
+				data.put("trans_no",orderIdString);
 				data.put("trans_status", "SUCCESS");
 				data.put("trans_type", "00");
 				data.put("trans_time", DateUtil.format(new Date(),DateUtil.dateTimePattern));

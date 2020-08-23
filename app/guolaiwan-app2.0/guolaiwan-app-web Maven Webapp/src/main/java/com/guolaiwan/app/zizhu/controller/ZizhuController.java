@@ -46,6 +46,7 @@ import com.guolaiwan.app.zizhu.bean.RefundPo;
 import com.guolaiwan.app.zizhu.bean.RefundVo;
 import com.guolaiwan.app.zizhu.bean.RefundVoucherPo;
 import com.guolaiwan.app.zizhu.bean.RefundVoucherVo;
+import com.guolaiwan.bussiness.admin.dao.BundleOrderDAO;
 import com.guolaiwan.bussiness.admin.dao.DeviceDAO;
 import com.guolaiwan.bussiness.admin.dao.MerchantDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
@@ -55,6 +56,7 @@ import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.OrderType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
 import com.guolaiwan.bussiness.admin.po.ActivityRelPO;
+import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.DevicePO;
 import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
@@ -84,7 +86,9 @@ public class ZizhuController {
 	@ResponseBody
 	@RequestMapping(value = "/checkIn", method = RequestMethod.POST)
     public String checkIn(HttpServletRequest request){
-		String uniqueCode = request.getParameter("uniqueCode");
+		String json=getRequestJson(request);
+		JSONObject pageObject = JSON.parseObject(json);
+		String uniqueCode=pageObject.getString("uniqueCode");
 		JSONObject response=new JSONObject();
 		JSONObject data=new JSONObject();
 		JSONObject error=new JSONObject();
@@ -97,12 +101,23 @@ public class ZizhuController {
 		}else{
 			//服务器时间
 			data.put("systemTime",DateUtil.format(new Date(),DateUtil.dateTimePattern));
-			//站点名称
-			data.put("salesSiteName", devicePOs.get(0).getDeviceName());
-			//地区名称
-			data.put("areaName", devicePOs.get(0).getMerchantName());
-			//销售窗口ID
-			data.put("salesWinId", devicePOs.get(0).getMerchantId());
+			if(uniqueCode.equals("173")){
+				//站点名称
+				data.put("salesSiteName", "集散中心");
+				//地区名称
+				data.put("areaName","遵化市");
+				//销售窗口ID
+				data.put("salesWinId", "1234567");
+				
+			}else{
+				//站点名称
+				data.put("salesSiteName", devicePOs.get(0).getDeviceName());
+				//地区名称
+				data.put("areaName", devicePOs.get(0).getMerchantName());
+				//销售窗口ID
+				data.put("salesWinId", devicePOs.get(0).getMerchantId());
+			}
+			
 			//销售窗口名称
 			data.put("salesWinName", "窗口一");
 			//用户ID
@@ -152,8 +167,12 @@ public class ZizhuController {
 		if (request!=null) {
 			//String page = request.getParameter("page");
 			String id = request.getParameter("salesWinId");
+			List<DevicePO> devicePOs=conn_device.findByField("deviceCode", "173");
 			System.out.println("shang hu id"+id);
-			List<ProductPO> products = conn_pro.findByMerchantId(Long.parseLong(id));
+			List<ProductPO> products = new ArrayList<ProductPO>();
+			for (DevicePO devicePO : devicePOs) {
+				products.addAll(conn_pro.findByMerchantId(devicePO.getMerchantId()));
+			}
 			for (ProductPO productPO : products) {
 				ProductVo.Data data=new Data();
 				data.setId(productPO.getId().intValue());
@@ -198,6 +217,9 @@ public class ZizhuController {
 		}
 	}
 	
+	@Autowired
+	BundleOrderDAO conn_bundleorder;
+	
 	/**
 	 * 创建凭证
 	 * @param request
@@ -222,38 +244,53 @@ public class ZizhuController {
 		}
 		JSONArray array=pageObject.getJSONArray("details");
 		Double Allprice=0.0;
+		
 		if (!array.isEmpty()) {
-			int productId=array.getJSONObject(0).getInteger("productId");
-			int productNum=array.getJSONObject(0).getInteger("quantity");
-			OrderInfoPO order;
+			String orderlistStr="";
+			
 			try {
-				order = addOrder(productId,productNum,Paytype);
-				CreateVoucherVo.Data.Details details=new CreateVoucherVo.Data.Details();
-				details.setProductId(array.getJSONObject(0).getIntValue("productId"));
-				details.setTicketNo(order.getId()+"");
-				details.setTicketNoPic("");
-				details.setProductName(order.getProductName());
-				details.setBusinessName("游客");
-				details.setCrowdKindName("成人");
-				details.setPriceName("全价");
-				Long longPrice=order.getOrderAllMoney();
-				Integer IntPrice=longPrice.intValue();
-				Double Doubleprice=IntPrice.doubleValue();
-			    Allprice=Doubleprice/100;
-				details.setPrice(Allprice);
-				details.setBasicPrice(Integer.parseInt((order.getProductPrice()/100+"")));
-				details.setQuantity(array.getJSONObject(0).getIntValue("quantity"));
-				details.setUseEndDate(new Date());
-				details.setName(array.getJSONObject(0).getString("name"));
-				details.setIdCard(array.getJSONObject(0).getString("idCard"));
-				details.setPhone(array.getJSONObject(0).getString("phone"));
-				details.setFace("");
-				details.setAmount(order.getPayMoney());
+				BundleOrder bundleOrder =new BundleOrder();
+				for (int i=0;i<array.size();i++) {
+					int productId=array.getJSONObject(i).getInteger("productId");
+					int productNum=array.getJSONObject(i).getInteger("quantity");
+					OrderInfoPO order=new OrderInfoPO();
+					order = addOrder(productId,productNum,Paytype,array.getJSONObject(i).getString("idCard"));
+					CreateVoucherVo.Data.Details details=new CreateVoucherVo.Data.Details();
+					details.setProductId(array.getJSONObject(i).getIntValue("productId"));
+					details.setTicketNo(order.getId()+"");
+					details.setTicketNoPic("");
+					details.setProductName(order.getProductName());
+					details.setBusinessName("游客");
+					details.setCrowdKindName("成人");
+					details.setPriceName("全价");
+					Long longPrice=order.getOrderAllMoney();
+					Integer IntPrice=longPrice.intValue();
+					Double Doubleprice=IntPrice.doubleValue();
+				    Allprice+=Doubleprice/100;
+					details.setPrice(Allprice);
+					details.setBasicPrice(Integer.parseInt((order.getProductPrice()/100+"")));
+					details.setQuantity(array.getJSONObject(i).getIntValue("quantity"));
+					details.setUseEndDate(new Date());
+					details.setName(array.getJSONObject(i).getString("name"));
+					details.setIdCard(array.getJSONObject(i).getString("idCard"));
+					details.setPhone(array.getJSONObject(i).getString("phone"));
+					details.setFace("");
+					details.setAmount(order.getPayMoney());
+					vo.getData().getDetails().add(details);
+					if(!orderlistStr.isEmpty()){
+						orderlistStr+="A"+order.getId();
+					}else {
+						orderlistStr+=order.getId();
+					}
+				}
+				bundleOrder.setOrderStr(orderlistStr);
+				conn_bundleorder.save(bundleOrder);
+
 				vo.getData().setCreateTime(new DateTime());
 				vo.getData().setTotalAmount(Allprice);
 				vo.getData().setTotalQuantity(array.size());
-				vo.getData().setVoucherNumber(order.getId()+"");
-				vo.getData().getDetails().add(details);
+				vo.getData().setVoucherNumber("bundle-"+bundleOrder.getId());
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -308,21 +345,63 @@ public class ZizhuController {
     public String payPreVoucher(HttpServletRequest request){
 		Map<String, Object> response = new HashMap<String, Object>();
 		Map<String, Object> data = new HashMap<String, Object>();
-		Map<String, Object> details = new HashMap<String, Object>();
+		
 		Map<String, Object> error = new HashMap<String, Object>();
 		String json=getRequestJson(request);
 		JSONObject pageObject = JSON.parseObject(json);
 		String orderIdString=pageObject.getString("voucherNumber");
-		OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(orderIdString));
-		if(orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)){
+		String orderid=orderIdString;
+		String ordertradeNum="";
+		long allMoney=0l;
+		List<OrderInfoPO> orderList=new ArrayList<OrderInfoPO>();
+        if(orderid.indexOf("bundle")!=-1){
+        	ordertradeNum=orderid;
+        	String[] ids=orderid.split("-");
+        	BundleOrder bundleOrder=conn_bundleorder.get(Long.parseLong(ids[1]));
+        	String[] orderIds=bundleOrder.getOrderStr().split("A");
+        	
+        	for (String idStr : orderIds) {
+				OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(idStr));
+				allMoney+=orderInfoPO.getPayMoney();
+				orderList.add(orderInfoPO);
+			}
+        }else{
+        	OrderInfoPO orderInfoPO=conn_order.get(Long.parseLong(orderid));
+        	orderList.add(orderInfoPO);
+			allMoney+=orderInfoPO.getPayMoney();
+			ordertradeNum=orderid;
+        }
+		if(orderList.get(0).getOrderState().equals(OrderStateType.PAYSUCCESS)){
 			data.put("voucherNumber", orderIdString);
-			data.put("createTime", new Date());
-			data.put("totalQuantity", orderInfoPO.getProductNum());
-			data.put("totalAmount", orderInfoPO.getOrderAllMoney());
-			details.put("productId", orderInfoPO.getProductId());
-			details.put("ticketNos", orderInfoPO.getOrderNO());
-			details.put("ticketNoPics", "");
-			data.put("details", details);
+			data.put("createTime",DateUtil.format(new Date(),DateUtil.defaultDatePattern));
+			data.put("totalQuantity", orderList.size());
+			data.put("totalAmount", allMoney);
+			List<Map<String, Object>> list=new ArrayList<Map<String,Object>>();
+			for (OrderInfoPO order : orderList) {
+				Map<String, Object> details = new HashMap<String, Object>();
+				details.put("productId", order.getProductId());
+				details.put("ticketNo", orderIdString);
+				details.put("ticketNoPic", "");
+				details.put("productName", order.getProductName());
+				details.put("businessName", "景区门票");
+				details.put("crowdKindName", "成人");
+				details.put("priceName", order.getProductName());
+				details.put("price", order.getProductPrice()/100);
+				details.put("basicPrice",  order.getProductPrice());
+				details.put("quantity", order.getProductNum());
+				details.put("amount", order.getProductPrice());
+				details.put("tourTime",DateUtil.format(new Date(),DateUtil.defaultDatePattern));
+				details.put("useStartDate",DateUtil.format(new Date(),DateUtil.defaultDatePattern));
+				details.put("useEndDate",DateUtil.format(new Date(),DateUtil.defaultDatePattern));
+				details.put("name",order.getUserName());
+				details.put("idCard",order.getUserInfo());
+				details.put("phone",order.getUserTel());
+				details.put("face","");
+				list.add(details);
+			}
+			
+			
+			data.put("details", list);
 			error.put("code", 0);
 			error.put("message", "success");
 			response.put("data", data);
@@ -332,9 +411,10 @@ public class ZizhuController {
 			data.put("createTime", new Date());
 			data.put("totalQuantity", null);
 			data.put("totalAmount",null);
+			Map<String, Object> details = new HashMap<String, Object>();
 			details.put("productId", null);
-			details.put("ticketNos", null);
-			details.put("ticketNoPics", null);
+			details.put("ticketNo", null);
+			details.put("ticketNoPic", null);
 			data.put("details", details);
 			error.put("code", 1);
 			error.put("message", "fail");
@@ -379,7 +459,7 @@ public class ZizhuController {
 	MerchantDAO conn_merchant;
 	@Autowired
 	OrderInfoDAO conn_order;
-	public OrderInfoPO addOrder(long productId,int num,PayType payType) throws Exception {
+	public OrderInfoPO addOrder(long productId,int num,PayType payType,String idcard) throws Exception {
 
 		ProductPO productPO2 = conn_product.get(productId);
 		
@@ -426,6 +506,7 @@ public class ZizhuController {
 		order.setBkName(productPO2.getProductModularCodeName());
 		// 提成方式（0：佣金1：比例）
 		order.setRoyaltyName(productPO2.getProductCommissionCode());
+		order.setIdNum(idcard);
 		// 订单佣金金额(分)
 		//long proportionMoney;
 		//if (productPO.getProductCommissionCode() == 1) {
