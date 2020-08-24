@@ -334,7 +334,7 @@ public class tableControll extends WebBaseControll  {
 				map.put("mealList",_merchants);
 			}
 		}else{
-			List<MealListPo> MealListPo = MealList.getMealList(Long.parseLong(orderId),Long.parseLong(TableStatus.getUserId()),TableStatus.getMerchantId());
+			List<MealListPo> MealListPo = MealList.getNotableMealList(TableStatus.getId(),Long.parseLong(TableStatus.getUserId()),TableStatus.getMerchantId());
 			List<MealListVo>  _merchants = MealListVo.getConverter(MealListVo.class).convert(MealListPo,
 					MealListVo.class);
 			for (MealListVo mealListVo : _merchants) {

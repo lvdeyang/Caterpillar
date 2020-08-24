@@ -2429,12 +2429,13 @@ public class BusinessController extends WebBaseControll {
 						List<Object> dishlist2 =  new ArrayList<Object>();
 						//一个商户下多条订单封装
 						
-						List<TableStatusPO> dishStatusPOs2 = new ArrayList<TableStatusPO>();
+						
 						//对应菜订单进行筛选
 						 int index2_1 = -1;
 						 boolean event2_1 = false;
 						 Map<String, Object> dishMap2 = null;
-						  for(int i= 0; i<merchList.size();i++){							  
+						  for(int i= 0; i<merchList.size();i++){	
+							  List<TableStatusPO> dishStatusPOs2 = new ArrayList<TableStatusPO>();
 							  for(int j =0;j<dish_order2.size();j++){								  
 								if((long)merchList.get(i) == dish_order2.get(j).getMerchantId()){
 									if(index2_1 != i){

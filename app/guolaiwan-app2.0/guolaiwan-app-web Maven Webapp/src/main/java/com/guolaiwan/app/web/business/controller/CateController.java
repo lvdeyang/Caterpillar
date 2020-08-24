@@ -275,6 +275,11 @@ public class CateController extends WebBaseControll {
 			table.setUserId(userId+"");
 			table.setType(BookType.fromName(type));
 			Table_Status.saveOrUpdate(table);
+			List<MealListPo> curMealLists=MealList.getCurMealList(userId, merchantId);
+			for (MealListPo mealListPo : curMealLists) {
+				mealListPo.setTableStatusId(table.getId());
+			}
+			MealList.saveAll(curMealLists);
 			orderNo = table.getId()+"";
 		}
 		//对商品进行类型的存储

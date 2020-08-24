@@ -22,6 +22,7 @@ public class MealListPo extends AbstractBasePO {
 	private long userId;   // 用户ID
 	private long merchantId; //商家id
 	private long tableId; //订桌表id
+	private long tableStatusId;
 	
 	
 	
@@ -60,6 +61,12 @@ public class MealListPo extends AbstractBasePO {
 	}
 	public void setMerchantId(long merchantId) {
 		this.merchantId = merchantId;
+	}
+	public long getTableStatusId() {
+		return tableStatusId;
+	}
+	public void setTableStatusId(long tableStatusId) {
+		this.tableStatusId = tableStatusId;
 	}
 	
 	

@@ -511,6 +511,12 @@ html, body {
 	       location.href=window.BASEPATH + 'pubnum/order/info?orderId='+codes[1];
 	    
 	  });
+	  
+	  $(document).on('click','.table',function(){
+	       var codes=this.id.split('-');
+	       location.href=window.BASEPATH + "reservetable/diningtable/tableSuccess?orderId="+codes[1]+"&merchantId="+codes[2];
+	    
+	  });
 	  	
 	  window.onload=function(){
 			getOrder(2);
@@ -649,22 +655,25 @@ html, body {
 					   			    
 			    html.push('<div class="weui-panel__bd">');
 				for(var i=0; i<disList.length; i++){					      					     				      						 					 			          					   
-				        var  table_orders = disList[i].table_orders;				     
-				        html.push('<div class="weui-cells__title">'+disList[i].merchant.shopName);	
-	                    if(type==2){
-						html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+table_orders[0].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
-						html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')							    
-						 } 
-					    html.push('</div>');
-				        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg table" id="pro-'+table_orders[0].id+'-'+table_orders[0].merchantId+'">');
-					    html.push('<div class="weui-media-box__hd">');
-					    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="http://www.guolaiwan.net/file/'+disList[i].merchant.shopPic+'">');
-					    html.push('</div>');
-					    html.push('<div class="weui-media-box__bd">');
-					    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">未订桌</h4>');
-					    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+table_orders[0].tableDate.replace('-','年').replace('-','月')+"日"+'</p>');
-					    html.push('</div>');				  
-					    html.push('</a>');				    
+				        var  table_orders = disList[i].table_orders;	
+				        for(var k=0;k<table_orders.length;k++){
+					        html.push('<div class="weui-cells__title">'+disList[i].merchant.shopName);	
+		                    if(type==2){
+							html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+table_orders[k].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
+							html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')							    
+							 } 
+						    html.push('</div>');
+					        html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg table" id="pro-'+table_orders[k].id+'-'+table_orders[k].merchantId+'">');
+						    html.push('<div class="weui-media-box__hd">');
+						    html.push('<img style="width:60px;height:60px;" class="weui-media-box__thumb" src="http://www.guolaiwan.net/file/'+disList[i].merchant.shopPic+'">');
+						    html.push('</div>');
+						    html.push('<div class="weui-media-box__bd">');
+						    html.push('<h4 class="weui-media-box__title" style="font-size:12px;">未订桌</h4>');
+						    html.push('<p class="weui-media-box__desc" style="margin-top:4px;font-size:12px;">下单时间'+table_orders[k].tableDate.replace('-','年').replace('-','月')+"日"+'</p>');
+						    html.push('</div>');				  
+						    html.push('</a>');	
+				        }			     
+				        			    
 				    
 				}
 				html.push('</div>');
