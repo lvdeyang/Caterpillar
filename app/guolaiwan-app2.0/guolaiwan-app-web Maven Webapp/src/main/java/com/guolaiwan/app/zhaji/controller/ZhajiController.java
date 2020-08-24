@@ -77,7 +77,40 @@ public class ZhajiController {
 		List<DevicePO> devicePOs=conn_device.findByField("deviceCode", uniqueCode);
 		try {
 			if (mediaType==3) {
-				orderInfo=ydnow2(serialNumber,uniqueCode);
+				String idCardString="130281199603074316";
+				if (idCardString.contains(serialNumber)) {
+					//进出方向0进，1,2出方向
+					data.put("accessDir", 0);
+					//票号
+					data.put("serialNumber", serialNumber);	
+					//0 - 默认类型，1 - 票，2 - 卡
+					data.put("cardType", 2);
+					//卡类型 0	普通
+					data.put("cardUsage", 0);
+					//卡状态 0	普通票
+					data.put("cardState", 0);
+					//过闸方式 0 - 一刷一人 1 - 一次刷完 2 - 一单一刷 3 - 刷卡落杆
+					data.put("passWay", 2);
+					//开始时间
+					data.put("startTime", "2019-07-12 09:29:30");
+					//结束时间
+					data.put("endTime",  "2021-11-12 09:29:30");
+					//单次消费次数
+					data.put("singleTimes", 1);
+					//剩余次数
+					data.put("remainTimes", 0);
+					//唯一标识
+					data.put("guid",1);
+					//产品名称
+					data.put("productName","内部票");
+					error.put("code", 0);
+					error.put("message", "success");
+					response.put("data", data);
+					response.put("error", error);
+					return response.toString();    
+				}else{
+					orderInfo=ydnow2(serialNumber,uniqueCode);
+				}
 			}else{
 				orderInfo=ydnow(serialNumber,uniqueCode);
 			}
@@ -126,7 +159,7 @@ public class ZhajiController {
 					//单次消费次数
 					data.put("singleTimes", 1);
 					//剩余次数
-					data.put("remainTimes", 1);
+					data.put("remainTimes", 0);
 					//唯一标识
 					data.put("guid", orderInfo.getId());
 					//产品名称

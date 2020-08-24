@@ -101,7 +101,7 @@ public class ZizhuController {
 		}else{
 			//服务器时间
 			data.put("systemTime",DateUtil.format(new Date(),DateUtil.dateTimePattern));
-			if(uniqueCode.equals("173")){
+			if(uniqueCode.equals("100")){
 				//站点名称
 				data.put("salesSiteName", "集散中心");
 				//地区名称
@@ -164,15 +164,20 @@ public class ZizhuController {
     public String queryProduct(HttpServletRequest request){
 		List<ProductVo.Data> list=null;
 		ProductVo vo=new ProductVo();
+		List<ProductPO> products = new ArrayList<ProductPO>();
 		if (request!=null) {
 			//String page = request.getParameter("page");
 			String id = request.getParameter("salesWinId");
-			List<DevicePO> devicePOs=conn_device.findByField("deviceCode", "173");
-			System.out.println("shang hu id"+id);
-			List<ProductPO> products = new ArrayList<ProductPO>();
-			for (DevicePO devicePO : devicePOs) {
-				products.addAll(conn_pro.findByMerchantId(devicePO.getMerchantId()));
+			if (id.endsWith("1234567")) {
+				List<DevicePO> devicePOs=conn_device.findByField("deviceCode", "100");
+				System.out.println("shang hu id"+id);
+				for (DevicePO devicePO : devicePOs) {
+					products.addAll(conn_pro.findByMerchantId(devicePO.getMerchantId()));
+				}
+			}else{
+				products.addAll(conn_pro.findByMerchantId(Long.parseLong(id)));
 			}
+			
 			for (ProductPO productPO : products) {
 				ProductVo.Data data=new Data();
 				data.setId(productPO.getId().intValue());
@@ -380,7 +385,7 @@ public class ZizhuController {
 			for (OrderInfoPO order : orderList) {
 				Map<String, Object> details = new HashMap<String, Object>();
 				details.put("productId", order.getProductId());
-				details.put("ticketNo", orderIdString);
+				details.put("ticketNo", order.getId());
 				details.put("ticketNoPic", "");
 				details.put("productName", order.getProductName());
 				details.put("businessName", "景区门票");
