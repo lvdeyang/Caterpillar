@@ -1,17 +1,24 @@
 package com.guolaiwan.app.haikang.controller;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.guolaiwan.bussiness.merchant.dao.CameraFaceDAO;
+import com.guolaiwan.bussiness.merchant.dao.CarMessageDAO;
+import com.guolaiwan.bussiness.merchant.po.CameraFacePO;
+import com.guolaiwan.bussiness.merchant.po.CarMessagePO;
 import com.hikvision.artemis.sdk.ArtemisHttpUtil;
 import com.hikvision.artemis.sdk.config.ArtemisConfig;
 
@@ -24,6 +31,12 @@ public class HaokangScheduledTask {
 	private final static String IP="192.168.110.10:10443";
 	private final static String RENLIAN="/api/aiapplication/v1/face/statisticsTotalNumByTime";
 	private final static String CAR="/api/aiapplication/v1/vehicle/queryStatisticsVehiclesByGroupWithPage";
+	
+	@Autowired
+	CarMessageDAO carMessageDAO;
+	
+	@Autowired
+	CameraFaceDAO cameraFaceDAO;
 	/**
 	 * 获取人脸抓拍数量，每天一点执行一次
 	 */
@@ -52,6 +65,26 @@ public class HaokangScheduledTask {
 		/**
 		 * 提交NUMBER
 		 */
+		//此处录入人脸数据
+		//先判断是不是已经录入过今天数据（一天可能要不断的查询，因为要显示一天的实时数据）
+		try {
+			List<CameraFacePO> cameraFacePOs = cameraFaceDAO.findTodydata(new Date());
+			if(cameraFacePOs!=null&&!cameraFacePOs.isEmpty()){
+				//设置取到的数量
+				cameraFacePOs.get(0).setCount(123);
+				cameraFacePOs.get(0).setCountDate(new Date());
+				cameraFaceDAO.update(cameraFacePOs.get(0));
+			}else{
+				CameraFacePO cameraFacePO=new CameraFacePO();
+				cameraFacePO.setCount(123);
+				cameraFacePO.setCountDate(new Date());
+				cameraFaceDAO.save(cameraFacePO);
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	/**
 	 * 获取车辆抓拍数量，每天一点执行一次
@@ -87,6 +120,38 @@ public class HaokangScheduledTask {
 		/**
 		 * 提交NUMBER
 		 */
+		
+		//此处录入车辆数据
+		//先判断是不是已经录入过今天数据（一天可能要不断的查询，因为要显示一天的实时数据）
+	
+		try {
+			List<CarMessagePO> carMessagePOs = carMessageDAO.findTodydata(new Date());
+			if(carMessagePOs!=null&&!carMessagePOs.isEmpty()){
+				//设置取到的数量
+				carMessagePOs.get(0).setCarNum(123);;
+				carMessagePOs.get(0).setUpdateTime(new Date());
+				//设置地区
+				carMessagePOs.get(0).setRegion("河北");
+				//设置车辆类型//0小型车1大型车
+				carMessagePOs.get(0).setType(0);
+				carMessagePOs.get(0).setTypeString("小型车");
+				carMessageDAO.update(carMessagePOs.get(0));
+			}else{
+				CarMessagePO carMessagePO=new CarMessagePO();
+				//设置取到的数量
+				carMessagePO.setCarNum(123);;
+				carMessagePO.setUpdateTime(new Date());
+				//设置地区
+				carMessagePO.setRegion("河北");
+				//设置车辆类型//0小型车1大型车
+				carMessagePO.setType(0);
+				carMessagePO.setTypeString("小型车");
+				carMessageDAO.save(carMessagePO);
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	 /** 
      * 传入Data类型日期，返回字符串类型时间（ISO8601标准时间） 

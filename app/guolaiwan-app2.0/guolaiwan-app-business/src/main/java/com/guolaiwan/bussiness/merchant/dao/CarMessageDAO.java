@@ -1,5 +1,7 @@
 package com.guolaiwan.bussiness.merchant.dao;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +17,11 @@ import com.guolaiwan.bussiness.admin.po.AdminPO;
 import com.guolaiwan.bussiness.admin.po.ColumnPO;
 import com.guolaiwan.bussiness.admin.po.ModularPO;
 import com.guolaiwan.bussiness.merchant.dto.ReportDTO;
+import com.guolaiwan.bussiness.merchant.po.CameraFacePO;
 import com.guolaiwan.bussiness.merchant.po.CarMessagePO;
 import com.guolaiwan.bussiness.merchant.po.ReportOrderPO;
 
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
@@ -67,5 +71,15 @@ public class CarMessageDAO extends AbstractBaseDao<CarMessagePO> {
 		query.setFirstResult(firstResult);
 		query.setMaxResults(pageSize);
 		return query.list();
+	}
+	
+	public List<CarMessagePO> findTodydata(Date today) throws ParseException {
+		QueryHql cHql = this.newQueryHql();
+		cHql.andBy("updateTime", Condition.ge,DateUtil.parse(DateUtil.format(today,"yyyy-MM-dd")+" 00:00:00","yyyy-MM-dd HH:mm:ss"));
+		cHql.andBy("updateTime", Condition.le, DateUtil.parse(DateUtil.format(today,"yyyy-MM-dd")+" 23:59:59","yyyy-MM-dd HH:mm:ss"));
+		int allcount = 0;
+		List<CarMessagePO> reportOrderPOs=this.findByHql(cHql);
+	
+		return reportOrderPOs;
 	}
 }
