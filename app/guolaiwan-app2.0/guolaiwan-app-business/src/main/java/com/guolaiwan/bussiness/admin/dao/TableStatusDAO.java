@@ -35,4 +35,19 @@ public class TableStatusDAO extends AbstractBaseDao<TableStatusPO>{
 		if(tableStatuList==null || tableStatuList.size()<=0) return null;
 		return tableStatuList;
 	}
+	
+	public List<TableStatusPO> findAllBypage(int page,int pageSize) {
+		QueryHql hql = newQueryHql();
+		hql.orderBy("updateTime", true);
+		List<TableStatusPO> tableStatuList = findByHqlPage(hql, page, pageSize);
+		return tableStatuList;
+	}
+	
+	public List<TableStatusPO> findRefundingAllBypage(int page,int pageSize) {
+		QueryHql hql = newQueryHql();
+		hql.andBy("dishState",Condition.eq,"refunding");
+		hql.orderBy("updateTime", true);
+		List<TableStatusPO> tableStatuList = findByHqlPage(hql, page, pageSize);
+		return tableStatuList;
+	}
 }

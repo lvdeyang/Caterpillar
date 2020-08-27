@@ -935,6 +935,14 @@ public class OrderInfoController extends BaseController {
 		conn_OrderInfo.save(orderInfoPO);
 		return "success";
 	}
+	
+	
+	// 桌子退款
+	@RequestMapping(value = "/tablerefundlist", method = RequestMethod.GET)
+	public ModelAndView tablerefundlist(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("admin/orderinfo/tablerefundlist");
+		return mv;
+	}
 
 	// 桌子订单列表
 	@RequestMapping(value = "/tableorderlist", method = RequestMethod.GET)
@@ -943,12 +951,70 @@ public class OrderInfoController extends BaseController {
 		return mv;
 	}
 
+	
+	
+	@ResponseBody
+	@RequestMapping("/allrefundorder")
+	public Map<String, Object> allrefundorder(HttpServletRequest request, int page, int limit) throws Exception {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		List<TableStatusPO> allorders = conn_tablestatus.findRefundingAllBypage(page, limit);
+		int count = conn_tablestatus.countByField("dishState", "refunding");
+		String type = "";
+		List<TableOrderVO> all = new ArrayList<TableOrderVO>();
+		for (TableStatusPO tableStatusPO : allorders) {
+			TableOrderVO vo = new TableOrderVO();
+			vo.setMerchantId(tableStatusPO.getMerchantId());
+			vo.setUserId(tableStatusPO.getUserId());
+			vo.setOrderid(tableStatusPO.getId() + "");
+			vo.setMerchantName(conn_merchant.get(tableStatusPO.getMerchantId()).getShopName() + "");
+			vo.setTableId(tableStatusPO.getTableId() + "");
+			vo.setUserName(tableStatusPO.getUserName() + "");
+			vo.setUserPhone(tableStatusPO.getUserPhone() + "");
+			vo.setType(tableStatusPO.getType().getFiled() + "");
+			vo.setTableDate(tableStatusPO.getTableDate() + "");
+			if (tableStatusPO.getTableState() == null) {
+				vo.setTableState("未预定");
+			} else if (tableStatusPO.getTableState().equals("PAYSUCCESS")) {
+				vo.setTableState("已预订");
+			} else if (tableStatusPO.getTableState().equals("PAST")) {
+				vo.setTableState("已过期");
+			} else if (tableStatusPO.getTableState().equals("NOTPAY")) {
+				vo.setTableState("未支付");
+			}
+			if (tableStatusPO.getTableId() != 0) {
+				vo.setBookPrice(conn_table.get(tableStatusPO.getTableId()).getBookprice() / 100 + "");
+			} else {
+				vo.setBookPrice("0");
+			}
+			if (tableStatusPO.getDishState() == null) {
+				vo.setDishState("未订餐");
+			} else if (tableStatusPO.getDishState().equals("PAYSUCCESS")) {
+				vo.setDishState("已支付");
+			} else if (tableStatusPO.getDishState().equals("PAST")) {
+				vo.setDishState("已过期");
+			} else if (tableStatusPO.getDishState().equals("NOTPAY")) {
+				vo.setDishState("未支付");
+			} else if (tableStatusPO.getDishState().equals("refunding")) {
+				vo.setDishState("申请退款");
+			}
+			vo.setDishPrice(tableStatusPO.getDishMoney() / 100 + "");
+			all.add(vo);
+		}
+		strMap.put("data", all);
+		strMap.put("code", "0");
+		strMap.put("count", count);
+		strMap.put("msg", "");
+		return strMap;
+	}
+	
+	
+	
 	// 获取所有的餐桌订单
 	@ResponseBody
 	@RequestMapping("/alltableorder")
 	public Map<String, Object> allTableOrder(HttpServletRequest request, int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		List<TableStatusPO> allorders = conn_tablestatus.findAll(page, limit);
+		List<TableStatusPO> allorders = conn_tablestatus.findAllBypage(page, limit);
 		int count = conn_tablestatus.countAll();
 		String type = "";
 		List<TableOrderVO> all = new ArrayList<TableOrderVO>();
@@ -980,11 +1046,15 @@ public class OrderInfoController extends BaseController {
 			if (tableStatusPO.getDishState() == null) {
 				vo.setDishState("未订餐");
 			} else if (tableStatusPO.getDishState().equals("PAYSUCCESS")) {
-				vo.setDishState("已预订");
+				vo.setDishState("已支付");
 			} else if (tableStatusPO.getDishState().equals("PAST")) {
 				vo.setDishState("已过期");
 			} else if (tableStatusPO.getDishState().equals("NOTPAY")) {
 				vo.setDishState("未支付");
+			} else if (tableStatusPO.getDishState().equals("refunding")) {
+				vo.setDishState("申请退款");
+			} else if (tableStatusPO.getDishState().equals("refunded")) {
+				vo.setDishState("已退款");
 			}
 			vo.setDishPrice(tableStatusPO.getDishMoney() / 100 + "");
 			all.add(vo);

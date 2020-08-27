@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         	table.render({
             		elem:"#tableorderList"
             		,method:'post'
-   					,url:'alltableorder'
+   					,url:'allrefundorder'
    					,page:true
    					,limits: [10, 20, 30]
             		,limit: 10
@@ -82,20 +82,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	})
 	         }
 	         
+	         function agreeOrder(orderId){
+                 var _urirefund = '../../website/wxpay/refundtable?orderId='+orderId;
+             	$.get(_urirefund,null,function(data){
+             		if(data=="error"||data=="success"){
+			         	 $.get(_urirefund, null, function(data){
+							//changeOrderStatus(obj,orderId,'REFUNDED');
+							layer.msg("已提交微信退款，如果退款成功，刷新数据后订单状态显示退款成功。");
+						 });
+             		}else if(data=="lose"){
+             			layer.msg("退款出错，请技术查看");
+             		}else if(data=="later"){
+             			layer.msg("已申请退款等待审核（天时同城）");
+             		}
+             	})
+					
+             }
+	         
 	         
 	         function open_win(title,url,w,h){
 	         	x_admin_show(title,url,w,h);
 	         }
     		
     
-    function open_win(title,url,w,h){
+    		function open_win(title,url,w,h){
 				x_admin_show(title,url,w,h)
-	}
+			}
             </script>
           
 <script type="text/html" id="zsgc">
  {{#  if(d.dishPrice !=0){ }}
-			<a class="layui-btn layui-btn-xs" href="getdishlist?tableId={{ d.tableId}}&userId={{d.userId}}&merchantId={{d.merchantId}}">预定菜品</a>
+			<a class="layui-btn layui-btn-xs" onclick="agreeOrder({{ d.orderid}})">同意</a>
 
  {{#  } else { }}
 

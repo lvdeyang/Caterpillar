@@ -606,7 +606,7 @@ html, body {
 			html.push('</div>');
 			$('#tab'+type).children().remove();
 			$('#tab'+type).append(html.join(''));
-			 getTableOrder(2);	
+			 getTableOrder(type);	
 		});	
 		
       }
@@ -628,7 +628,7 @@ html, body {
 				        html.push('<div class="weui-cells__title">'+tableslist[i].merchant.shopName);	
 				      		    
 	                    if(type==2){
-						html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+table_order[i].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
+						html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relaytable-'+table_order[i].id+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
 						html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')							    
 						 } 
 					    html.push('</div>');
@@ -659,7 +659,7 @@ html, body {
 				        for(var k=0;k<table_orders.length;k++){
 					        html.push('<div class="weui-cells__title">'+disList[i].merchant.shopName);	
 		                    if(type==2){
-							html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relay-'+table_orders[k].orderId+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
+							html.push('<a style="color:black;font-size:12px;margin-left:15px" id="relaytable-'+table_orders[k].id+'" class="icon-reply" href="javascript:void(0)">&nbsp;&nbsp;申请退款</a>')	   
 							html.push('<a style="font-size:12px;margin-left:15px" href="javascript:void(0)"></a>')							    
 							 } 
 						    html.push('</div>');
@@ -685,14 +685,20 @@ html, body {
 	   }
       
       
-      
+      var ordertype="order";
       $(document).on('click','.icon-reply',function(){
           var ids=this.id.split('-');
           var newIds=[];
           for(var i=1;i<ids.length;i++){
              newIds.push(ids[i]);
           }
-          commOrderId=newIds.join('-');
+          if(ids[0]=="relaytable"){
+             commOrderId=ids[1];
+             ordertype="orderTable";
+          }else{
+             commOrderId=newIds.join('-');
+          }
+          
           $('#rejectContent').popup();
           $('.weui-tab').hide();
           
@@ -722,6 +728,7 @@ html, body {
           var _urichangeorder = window.BASEPATH + 'pubnum/applyReject';
           var params={};
           params.orderId=commOrderId;
+          params.type=ordertype;
           params.reason=$('#reasonContent').val();
           $.post(_urichangeorder, $.toJSON(params), function(data){
 			data = parseAjaxResult(data);

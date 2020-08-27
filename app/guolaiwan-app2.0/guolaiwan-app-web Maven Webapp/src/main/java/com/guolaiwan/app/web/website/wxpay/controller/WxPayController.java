@@ -47,6 +47,7 @@ import com.guolaiwan.bussiness.admin.dao.InvestWalletDAO;
 //import com.guolaiwan.bussiness.user.po.UserPO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
+import com.guolaiwan.bussiness.admin.dao.TableStatusDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.enumeration.PayType;
@@ -54,6 +55,7 @@ import com.guolaiwan.bussiness.admin.po.BundleOrder;
 import com.guolaiwan.bussiness.admin.po.InvestWalletPO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 
 import pub.caterpillar.commons.file.oss.OSSUtils;
@@ -331,6 +333,46 @@ public class WxPayController extends BaseController {
 			return success();
 		}
 	}
+	
+	@Autowired
+	TableStatusDAO conn_tablestatus;
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/refundtable", method = RequestMethod.GET)
+	public Object refundtable(HttpServletRequest request, HttpServletResponse response, String orderId) throws Exception {
+		
+
+		long amount = 0;
+		
+		TableStatusPO tableStatusPO=conn_tablestatus.get(Long.parseLong(orderId));
+		if ("refunding".equals(tableStatusPO.getDishState())) {
+			amount = tableStatusPO.getDishMoney();
+		}
+		
+		String orderNum="buydish-"+orderId;
+		String refundOrderNum = "refund-" + orderNum;
+		
+		
+	    try {
+			GuolaiwanWxPay wxPay = GuolaiwanWxPay.getInstance("http://"+WXContants.Website+"/website/wxreport/payreport");
+			Map<String, String> reqData = new HashMap<String, String>();
+			reqData.put("out_trade_no", orderNum + "");
+			reqData.put("out_refund_no", refundOrderNum);
+			reqData.put("total_fee", amount + "");
+			reqData.put("refund_fee", amount + "");
+			reqData.put("notify_url", "http://"+WXContants.Website+"/website/wxreport/refundtablereport");
+			Map<String, String> resData = wxPay.refund(reqData); // 生成二维码数据
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		
+		return success();
+		
+	}
+	
 	
 	//商家对个人支付 用作提现
 	@ResponseBody

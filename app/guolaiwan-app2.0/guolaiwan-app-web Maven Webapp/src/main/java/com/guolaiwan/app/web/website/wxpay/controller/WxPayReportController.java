@@ -257,7 +257,7 @@ public class WxPayReportController extends WebBaseControll {
 
 		return stringBuffer.toString();
 	}
-
+	
 	@ResponseBody
 	@RequestMapping(value = "/refundreport", method = RequestMethod.POST)
 	public String refundreport(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -309,6 +309,58 @@ public class WxPayReportController extends WebBaseControll {
 				order.setOrderState(OrderStateType.REFUNDED);
 				conn_orderInfo.save(order);
 			}
+			stringBuffer.append("<xml><return_code><![CDATA[");
+			stringBuffer.append("SUCCESS");
+			stringBuffer.append("]]></return_code>");
+			stringBuffer.append("<return_msg><![CDATA[");
+			stringBuffer.append("OK");
+			stringBuffer.append("]]></return_msg>");
+			System.out.println("微信支付退款成功!订单号：" + tradeNum);
+
+			return stringBuffer.toString();
+		}
+		stringBuffer.append("<xml><return_code><![CDATA[");
+		stringBuffer.append("FAIL");
+		stringBuffer.append("]]></return_code>");
+		stringBuffer.append("<return_msg><![CDATA[");
+		stringBuffer.append("fail");
+		stringBuffer.append("]]></return_msg>");
+		return stringBuffer.toString();
+	}
+	
+	@Autowired
+	TableStatusDAO conn_tableStatus;
+	@ResponseBody
+	@RequestMapping(value = "/refundtablereport", method = RequestMethod.POST)
+	public String refundtablereport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		// request.getParameter(arg0);
+		System.out.println("*****************wxreport****************");
+		// Mr.huang 2017/09/12 飞的好低的小蜜蜂
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String xml = "";
+		String tempStr = "";
+		while ((tempStr = reader.readLine()) != null) {
+			xml += tempStr;
+			System.out.println(tempStr);
+		}
+	    GuolaiwanWxPay wxPay = GuolaiwanWxPay
+				.getInstance("http://" + WXContants.Website + "/website/wxreport/payreport");
+		Map<String, String> respData = wxPay.processRefundResponseXml(xml);
+		String returncode = respData.get("return_code");
+		StringBuffer stringBuffer = new StringBuffer();
+		if (returncode.equals("SUCCESS")) {
+			// 获取订单号
+			String tradeNum = respData.get("out_trade_no");
+			String refundNum = respData.get("out_refund_no");
+
+			String[] rIds = tradeNum.split("-");
+			
+			
+			TableStatusPO order = conn_tableStatus.get(Long.parseLong(rIds[1]));
+			order.setDishState("refunded");
+			conn_tableStatus.save(order);
+			
 			stringBuffer.append("<xml><return_code><![CDATA[");
 			stringBuffer.append("SUCCESS");
 			stringBuffer.append("]]></return_code>");

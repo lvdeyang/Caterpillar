@@ -109,6 +109,7 @@ import com.guolaiwan.bussiness.admin.dao.RoomStatusDao;
 import com.guolaiwan.bussiness.admin.dao.SurpportBuyDao;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.SystemCacheDao;
+import com.guolaiwan.bussiness.admin.dao.TableStatusDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.dao.UserOnedayBuyDAO;
 import com.guolaiwan.bussiness.admin.enumeration.ActivityType;
@@ -140,6 +141,7 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SurpportBuyPo;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.SystenCachePo;
+import com.guolaiwan.bussiness.admin.po.TableStatusPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
 import com.guolaiwan.bussiness.admin.po.UserOneDayBuyPO;
 import com.guolaiwan.bussiness.admin.po.live.LiveRecordPO;
@@ -1416,6 +1418,10 @@ public class PubNumController extends WebBaseControll {
 		return success();
 	}
 
+	
+	@Autowired
+	TableStatusDAO conn_tablestatus;
+	
 	@ResponseBody
 	@JsonBody
 	@RequestMapping(value = "/applyReject", method = RequestMethod.POST)
@@ -1424,6 +1430,17 @@ public class PubNumController extends WebBaseControll {
 		JSONObject pageObject = parser.parseJSON();
 		String reason = pageObject.getString("reason");
 		String orderStr = pageObject.getString("orderId");
+		String orderType=pageObject.getString("type");
+		//订桌订单退款
+		if("orderTable".equals(orderType)){
+			TableStatusPO tableStatusPO=conn_tablestatus.get(Long.parseLong(orderStr));
+			tableStatusPO.setDishState("refunding");
+			conn_tablestatus.save(tableStatusPO);
+			return success();
+		}
+		
+		
+		
 		String[] orderids = null;
 		if (orderStr.indexOf("bundle") != -1) {
 			String[] bundleStrs = orderStr.split("-");
