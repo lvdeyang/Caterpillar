@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.guolaiwan.bussiness.admin.dao.DeviceDAO;
+import com.guolaiwan.bussiness.admin.dao.MessageDAO;
 import com.guolaiwan.bussiness.admin.dao.OrderInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.DevicePO;
+import com.guolaiwan.bussiness.admin.po.MessagePO;
 import com.guolaiwan.bussiness.admin.po.OrderInfoPO;
+import com.guolaiwan.bussiness.nanshan.dao.MessageMiddleClientDao;
+import com.guolaiwan.bussiness.nanshan.po.MessageMiddleClientPO;
 
 import cn.hutool.json.JSONObject;
 import pub.caterpillar.commons.util.date.DateUtil;
@@ -223,10 +227,10 @@ public class ZhajiController {
 			}
 
 			// 判断订单状态？？？
-			//if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
+			if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
 				//return "订单状态是：" + orderInfoPO.getOrderState();
-			//	return null;
-			//}
+				return null;
+			}
 			// 更改订单的状态，验单时间
 			orderInfoPO.setOrderState(OrderStateType.TESTED);
 			Date date = new Date();
@@ -238,16 +242,29 @@ public class ZhajiController {
 			return null;
 		}
 	}
+	
+	@Autowired
+	MessageMiddleClientDao conn_messageClient;
+	@Autowired
+	MessageDAO conn_message;
+	
+	
 	private OrderInfoPO ydnow2(String idcard,String deviceCode) throws ParseException{
 		OrderInfoPO orderInfoPO = null;
 		List<DevicePO> devicePOs=conn_device.findByField("deviceCode", deviceCode);
 		if(devicePOs==null||devicePOs.isEmpty()){
 			return null;
 		}
-		
 		// 获取订单
 		List<OrderInfoPO> orderInfoPOs=conn_order.findByField("idNum", idcard);
-		
+	    
+		List<MessagePO> messagePOs=conn_message.findByField("number", idcard);
+		for (MessagePO messagePO : messagePOs) {
+			List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.findByField("messageId",messagePO.getId());
+			for (MessageMiddleClientPO messageMiddleClientPO : messageMiddleClientPOs) {
+				 orderInfoPOs.add(conn_order.get(messageMiddleClientPO.getOrderId()));
+			}
+		}
 		
 		if (orderInfoPOs != null&&!orderInfoPOs.isEmpty()) {
 			
@@ -276,10 +293,10 @@ public class ZhajiController {
 			}
 
 			// 判断订单状态？？？
-			//if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
+			if (!orderInfoPO.getOrderState().equals(OrderStateType.PAYSUCCESS)) {
 				//return "订单状态是：" + orderInfoPO.getOrderState();
-			//	return null;
-			//}
+				return null;
+			}
 			// 更改订单的状态，验单时间
 			orderInfoPO.setOrderState(OrderStateType.TESTED);
 			Date date = new Date();
