@@ -104,7 +104,7 @@ public class ReportOrderAllController extends BaseController{
 		MerchantPO merchantPO=conn_merchant.get(merId);
 		ProductPO productPO=conn_pro.get(Long.parseLong(productIdStr));
 		ReportOrderAllPO reportOrderPO=new ReportOrderAllPO();
-
+		reportOrderPO.setUpdateTime(new Date());
 		reportOrderPO.setCount(Integer.parseInt(countStr));
         reportOrderPO.setType(Integer.parseInt(typeStr));
         reportOrderPO.setProductId(productPO.getId());
