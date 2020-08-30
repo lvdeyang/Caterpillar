@@ -31,7 +31,7 @@ public class ReportOrderAllDAO extends AbstractBaseDao<ReportOrderAllPO> {
 	public int GetCountByHour(Date start,Date end) {
 		QueryHql cHql = this.newQueryHql();
 		cHql.andBy("updateTime", Condition.ge, start);
-		cHql.andBy("updateTime", Condition.le, start);
+		cHql.andBy("updateTime", Condition.le, end);
 		int allcount = 0;
 		List<ReportOrderAllPO> reportOrderPOs=this.findByHql(cHql);
 		for (ReportOrderAllPO reportOrderAllPO : reportOrderPOs) {
@@ -83,7 +83,7 @@ public class ReportOrderAllDAO extends AbstractBaseDao<ReportOrderAllPO> {
 		}
 		ids+=")";
 		StringBufferWrapper sqlWrapper = new StringBufferWrapper().append(
-				"select COUNT(*) acount, merchantName from t_sys_reportorder where merchantId in "+ids+" GROUP BY merchantId ORDER BY acount desc");
+				"select SUM(count) acount, merchantName from t_sys_reportorderall where merchantId in "+ids+" GROUP BY merchantId ORDER BY acount desc");
 		
 		SQLQuery query = getCurrentSession().createSQLQuery(sqlWrapper.toString())
 				.addScalar("merchantName", StandardBasicTypes.STRING).addScalar("acount", StandardBasicTypes.INTEGER);

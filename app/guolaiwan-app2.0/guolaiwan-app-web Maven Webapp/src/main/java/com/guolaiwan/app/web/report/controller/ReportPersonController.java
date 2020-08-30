@@ -145,7 +145,7 @@ public class ReportPersonController extends BaseController {
 		for(int i=0;i<24;i++){
 			keys.add(i+1);
 			Date start=DateUtil.parse(dateStr+" "+getHourStr(i)+":00:00", "yyyy-MM-dd HH:mm:ss");
-			Date end=DateUtil.parse(dateStr+" "+getHourStr(i)+":00:00", "yyyy-MM-dd HH:mm:ss");
+			Date end=DateUtil.parse(dateStr+" "+getHourStr(i+1)+":00:00", "yyyy-MM-dd HH:mm:ss");
 			int count1=conn_orderinfo.GetCountByHour(start,end);
 			int count2=reportOrderDAO.GetCountByHour(start,end);
 			int count3=reportorderAllDao.GetCountByHour(start, end);
@@ -169,7 +169,7 @@ public class ReportPersonController extends BaseController {
 	@RequestMapping(value = "/getMerchantData")
 	public Map<String, Object> getMerchantData(HttpServletRequest request) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<ReportDTO> reportDTOs=conn_orderinfo.getmerchantData(1, 12);
+		//List<ReportDTO> reportDTOs=conn_orderinfo.getmerchantData(1, 12);
 		List<ReportDTO> reportDTOs2=reportOrderDAO.getmerchantData(1, 12);
 		List<ReportDTO> reportDTOs3=reportorderAllDao.getmerchantData(1, 12);
 		Map<String,Integer> resultMap=new HashMap<String, Integer>();
@@ -190,13 +190,13 @@ public class ReportPersonController extends BaseController {
 			}
 		}
 		
-		for (ReportDTO reportDTO3 : reportDTOs) {
+		/*for (ReportDTO reportDTO3 : reportDTOs) {
 			if(resultMap.containsKey(reportDTO3.getMerchantName())){
 				resultMap.put(reportDTO3.getMerchantName(), resultMap.get(reportDTO3.getMerchantName())+reportDTO3.getAcount());
 			}else{
 				resultMap.put(reportDTO3.getMerchantName(), reportDTO3.getAcount());
 			}
-		}
+		}*/
 		
 		List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String,Integer>>(resultMap.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>()
@@ -233,11 +233,9 @@ public class ReportPersonController extends BaseController {
 	@RequestMapping(value = "/getsevenData")
 	public Map<String, Object> getsevenData(HttpServletRequest request) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<ReportDTO> result=reportOrderDAO.getageData(1, 10);
 		List<String> keys=new ArrayList<String>();
 		List<Integer> values=new ArrayList<Integer>();
 		List<Integer> values1=new ArrayList<Integer>();
-		Date today=new Date();
 		
 		for(int i=7;i>0;i--){
 			Date curDate=DateUtil.addDay(-i);

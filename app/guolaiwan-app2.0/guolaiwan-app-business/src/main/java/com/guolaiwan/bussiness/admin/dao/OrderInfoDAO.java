@@ -67,7 +67,7 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 	public int GetCountByHour(Date start,Date end) {
 		CountHql cHql = this.newCountHql();
 		cHql.andBy("ydDate", Condition.ge, start);
-		cHql.andBy("ydDate", Condition.le, start);
+		cHql.andBy("ydDate", Condition.le, end);
 		int allcount = this.countByHql(cHql);
 		return allcount;
 	}
