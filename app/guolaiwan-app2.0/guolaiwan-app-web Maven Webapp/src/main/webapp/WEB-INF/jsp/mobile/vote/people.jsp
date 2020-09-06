@@ -504,7 +504,30 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-	 
+	       var urlpeoplelist=window.BASEPATH + "/pubnum/people/vote/getpeoples";
+		   $.get(urlpeoplelist,null,function(data){
+				var html=[];
+		        html.push('<div style="width:90%;margin-top:10px;margin-left:5%;height:180px;border:1.5px solid #CE6271">');
+			    html.push('<image src="lib/images/ooo.png" style="position:absolute;margin-top:0px;margin-left:0px"/>');
+			    html.push('<div style="position:absolute;margin-top:2px;margin-left:9px;font-weight:bold;color:#FFF">1</div>');
+			
+			    html.push('<image src="https://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=https%3A%2F%2Ftimgsa.baidu.com%2Ftimg%3Fimage%26quality%3D80%26size%3Db9999_10000%26sec%3D1599368766817%26di%3D325ead240cf9e99810b632b8387c9036%26imgtype%3D0%26src%3Dhttp%253A%252F%252Fn.sinaimg.cn%252Fsinacn18%252F655%252Fw730h725%252F20180425%252Fe4da-fzqvvsc3078331.jpg&thumburl=https%3A%2F%2Fss3.bdstatic.com%2F70cFv8Sh_Q1YnxGkpoWK1HF6hhy%2Fit%2Fu%3D1824823051%2C226950026%26fm%3D26%26gp%3D0.jpg"'); 
+			    html.push('style="margin-top:10px;margin-left:10px;width:100px;height:100px;float:left;"/>');
+			    html.push('<div style="font-size:9pt;width:180px;height:100px;margin-top:10px;margin-left:10px;float:left;">');
+			    html.push('   <p>诵读者：杨彪</p>');
+			    html.push('   <p>诵读作品：《虎口脱险》</p>');
+			    html.push('   <p>工作单位：过来玩</p>');
+			    html.push('   <p>作品来源：河北日报</p>');
+			    html.push('   <div style="width:100%;padding-top:5px;font-size:14px">9999票');
+			    html.push('      <image src="lib/images/peopletoupiao.png" style="float:right;margin-right:-15px"/>');
+			    html.push('   </div>');
+			    html.push('</div>');
+			    html.push('<audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
+				html.push('  <source src="http://antiserver.kuwo.cn/anti.s?format=mp3|aac&rid=3453727&type=convert_url&response=res" />');
+				html.push('</audio>');
+			    html.push('</div>');
+			    $('#content').append(html.join(''));
+		   });
 	
 	});
 </script>

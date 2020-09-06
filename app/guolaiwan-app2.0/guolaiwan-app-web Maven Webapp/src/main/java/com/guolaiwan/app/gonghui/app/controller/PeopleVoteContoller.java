@@ -52,6 +52,7 @@ import com.guolaiwan.bussiness.gonghui.po.ArticlePo;
 import com.guolaiwan.bussiness.gonghui.po.ClassesPo;
 import com.guolaiwan.bussiness.gonghui.po.LikePo;
 import com.guolaiwan.bussiness.gonghui.po.OnlineClassesPo;
+import com.guolaiwan.bussiness.gonghui.po.PeopleVotePo;
 import com.guolaiwan.bussiness.gonghui.po.RecommPo;
 import com.guolaiwan.bussiness.gonghui.po.RecordPo;
 
@@ -60,7 +61,7 @@ import pub.caterpillar.communication.http.client.HttpClient;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
-@RequestMapping("/people/vote")
+@RequestMapping("/pubnum/people/vote")
 public class PeopleVoteContoller extends BaseController {
 	@Autowired
 	PeopleVoteDao conn_peoplevote;
@@ -70,6 +71,15 @@ public class PeopleVoteContoller extends BaseController {
 		
 		ModelAndView mv = new ModelAndView("mobile/vote/people", strMap);
 		return mv;
+	}
+	@Autowired
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getpeoples", method = RequestMethod.GET)
+	public Map<String, Object> getpeoples(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<PeopleVotePo> peopleVotePos=conn_peoplevote.findAll();
+		return success(peopleVotePos);
 	}
 	
 	
