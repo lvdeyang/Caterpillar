@@ -13,6 +13,7 @@ public class PeopleVotePo extends AbstractBasePO {
 	private String org;
 	private String articleFrom;
 	private String voice;
+	private String headerimg;
 	public String getName() {
 		return name;
 	}
@@ -43,5 +44,12 @@ public class PeopleVotePo extends AbstractBasePO {
 	public void setVoice(String voice) {
 		this.voice = voice;
 	}
+	public String getHeaderimg() {
+		return headerimg;
+	}
+	public void setHeaderimg(String headerimg) {
+		this.headerimg = headerimg;
+	}
+	
 	
 }
