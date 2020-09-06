@@ -92,7 +92,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function getlist(pagecurr,ilimit){
 		$.ajax({
 			type:"post",
-			url:"picList.do",
+			url:"voiceList.do",
 			async:false,
             data:{'pagecurr':pagecurr,'ilimit':ilimit},
 			success:function(msg){
@@ -131,7 +131,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		function sel(folde,url)
  		{
  		  //parent.$("#${sel}").val("/"+folde+"/"+url);
- 		  parent.$("#${imgurl}").attr("src",webUrl+"/"+folde+"/"+url);
+ 		 
  		  console.log("${sel}");
  		  $.ajax({
 				url:'voice.do?id=${id}&voice='+url,
@@ -141,7 +141,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					layer.closeAll('loading');
 					if(msg=='success'){
 						layer.msg("删除成功！");
-						
+						parent.getactivityList();
 					}	
 				}
 			});
