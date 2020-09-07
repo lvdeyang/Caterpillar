@@ -1674,6 +1674,43 @@ public class WxPayReportController extends WebBaseControll {
 		dataObject5.put("remark", remarkObj);
 		obj5.put("data", dataObject5);
 		SendMsgUtil.sendTemplate(obj5.toJSONString());
+		
+		
+		JSONObject obj6 = new JSONObject();
+		obj6.put("touser", "opVUYv5yGAOHbP8SYDPSjQxx8Wwk");
+		obj6.put("template_id", "hYekXkjHcZjheDGxqUJM2OwIZpXT0DKwPsfNZbF07SA");
+		obj6.put("url", "");
+		JSONObject microProObj6 = new JSONObject();
+		microProObj6.put("appid", "");
+		microProObj6.put("pagepath", "");
+		obj6.put("miniprogram", microProObj6);
+		JSONObject dataObject6 = new JSONObject();
+		JSONObject firstObj6 = new JSONObject();
+		firstObj6.put("value", "新的过来玩订单");
+		firstObj6.put("color", "");
+		dataObject6.put("first", firstObj6);
+
+		// 用户姓名
+		dataObject4.put("keyword1", nameObj);
+
+		JSONObject accountTypeObj6 = new JSONObject();
+		accountTypeObj6.put("value", orderInfoPO.getId());
+		accountTypeObj6.put("color", "");
+		dataObject6.put("keyword2", accountTypeObj6);
+
+		JSONObject accountObj6 = new JSONObject();
+		accountObj6.put("value", df.format(amount));
+		accountObj6.put("color", "");
+		dataObject6.put("keyword3", accountObj2);
+		JSONObject timeObj6 = new JSONObject();
+		timeObj6.put("value", productPO == null ? "到店支付订单:" + merchantPO.getShopName() : productPO.getProductName());
+		timeObj6.put("color", "");
+
+		dataObject6.put("keyword4", timeObj6);
+
+		dataObject6.put("remark", remarkObj);
+		obj6.put("data", dataObject6);
+		SendMsgUtil.sendTemplate(obj6.toJSONString());
 
 	}
 
