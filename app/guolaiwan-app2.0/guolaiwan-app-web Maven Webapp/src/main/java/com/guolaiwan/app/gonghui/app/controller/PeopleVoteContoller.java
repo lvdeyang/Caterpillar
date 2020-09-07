@@ -6,6 +6,8 @@ import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,8 +46,10 @@ import com.guolaiwan.bussiness.gonghui.dao.ClassesDao;
 import com.guolaiwan.bussiness.gonghui.dao.LikeDao;
 import com.guolaiwan.bussiness.gonghui.dao.OnlineClassesDao;
 import com.guolaiwan.bussiness.gonghui.dao.PeopleVoteDao;
+import com.guolaiwan.bussiness.gonghui.dao.PeopleVoteUserDao;
 import com.guolaiwan.bussiness.gonghui.dao.RecommDao;
 import com.guolaiwan.bussiness.gonghui.dao.RecordDao;
+import com.guolaiwan.bussiness.gonghui.dto.PeopleVoteDto;
 import com.guolaiwan.bussiness.gonghui.enumeration.LikeType;
 import com.guolaiwan.bussiness.gonghui.enumeration.RecomType;
 import com.guolaiwan.bussiness.gonghui.po.ArticlePo;
@@ -53,6 +57,7 @@ import com.guolaiwan.bussiness.gonghui.po.ClassesPo;
 import com.guolaiwan.bussiness.gonghui.po.LikePo;
 import com.guolaiwan.bussiness.gonghui.po.OnlineClassesPo;
 import com.guolaiwan.bussiness.gonghui.po.PeopleVotePo;
+import com.guolaiwan.bussiness.gonghui.po.PeopleVoteUserPo;
 import com.guolaiwan.bussiness.gonghui.po.RecommPo;
 import com.guolaiwan.bussiness.gonghui.po.RecordPo;
 
@@ -61,26 +66,40 @@ import pub.caterpillar.communication.http.client.HttpClient;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
-@RequestMapping("/pubnum/people/vote")
+@RequestMapping("/people/vote")
 public class PeopleVoteContoller extends BaseController {
 	@Autowired
 	PeopleVoteDao conn_peoplevote;
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public ModelAndView index(HttpServletRequest request) {
-		Map<String, Object> strMap = new HashMap<String, Object>();
-		
-		ModelAndView mv = new ModelAndView("mobile/vote/people", strMap);
-		return mv;
-	}
-	@Autowired
-	
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getpeoples", method = RequestMethod.GET)
 	public Map<String, Object> getpeoples(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<PeopleVotePo> peopleVotePos=conn_peoplevote.findAll();
-		return success(peopleVotePos);
+		List<PeopleVoteDto> peopleVoteDtos=new ArrayList<PeopleVoteDto>();
+		peopleVoteDtos=conn_peoplevote.getPeoples();
+		
+		return success(peopleVoteDtos);
 	}
 	
+	@Autowired
+	PeopleVoteUserDao conn_peoplevoteuser;
+	
+	@ResponseBody
+	@RequestMapping(value = "/set", method = RequestMethod.POST)
+	public Object setVote(HttpServletRequest request) throws Exception {
+		Long votepeopleId = Long.parseLong(request.getParameter("vpId").toString());
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		
+		int countUsertoday=conn_peoplevoteuser.countUserToday(userId);
+		if(countUsertoday>=5){
+			return "failed";
+		}
+		PeopleVoteUserPo peopleVoteUserPo=new PeopleVoteUserPo();
+		peopleVoteUserPo.setUpdateTime(new Date());
+		peopleVoteUserPo.setUserId(userId);
+		peopleVoteUserPo.setPeoplevoteId(votepeopleId);
+		conn_peoplevoteuser.save(peopleVoteUserPo);
+		
+		return conn_peoplevoteuser.countByField("peoplevoteId", peopleVoteUserPo.getPeoplevoteId());
+	}
 	
 }

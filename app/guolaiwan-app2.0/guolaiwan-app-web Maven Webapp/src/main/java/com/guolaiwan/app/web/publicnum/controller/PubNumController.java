@@ -177,7 +177,7 @@ import pub.caterpillar.weixin.constants.WXContants;
 public class PubNumController extends WebBaseControll {
 
 	private boolean istest = WXContants.istest;
-	private int serverNo=3;
+	private int serverNo=2;
 	@Autowired
 	private SystemCacheDao conn_systemcache;
 	@Autowired
@@ -3767,5 +3767,13 @@ public class PubNumController extends WebBaseControll {
             return ret;
         }
     }
+	
+	@RequestMapping(value = "/people/vote/index", method = RequestMethod.GET)
+	public ModelAndView index(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("webpath", conn_sys.getSysConfig().getWebUrl());
+		ModelAndView mv = new ModelAndView("mobile/vote/people", strMap);
+		return mv;
+	}
 
 }

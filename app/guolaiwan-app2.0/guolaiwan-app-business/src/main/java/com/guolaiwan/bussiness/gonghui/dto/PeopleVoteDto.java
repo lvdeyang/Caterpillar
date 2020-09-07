@@ -1,14 +1,7 @@
-package com.guolaiwan.bussiness.gonghui.po;
+package com.guolaiwan.bussiness.gonghui.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import pub.caterpillar.orm.po.AbstractBasePO;
-@Entity
-@Table(name = "peoplevote")
-public class PeopleVotePo extends AbstractBasePO {
-
+public class PeopleVoteDto {
+	private long id;
 	private String name;
 	private String article;
 	private String org;
@@ -16,7 +9,7 @@ public class PeopleVotePo extends AbstractBasePO {
 	private String voice;
 	private String headerimg;
 	private int rank;
-	private int count;
+	private Integer count;
 	public String getName() {
 		return name;
 	}
@@ -53,23 +46,23 @@ public class PeopleVotePo extends AbstractBasePO {
 	public void setHeaderimg(String headerimg) {
 		this.headerimg = headerimg;
 	}
-	@Transient
 	public int getRank() {
 		return rank;
 	}
 	public void setRank(int rank) {
 		this.rank = rank;
 	}
-	@Transient
-	public int getCount() {
+	public Integer getCount() {
 		return count;
 	}
-	public void setCount(int count) {
+	public void setCount(Integer count) {
 		this.count = count;
 	}
-	
-	
-	
-	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	
 }

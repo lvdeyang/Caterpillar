@@ -28,7 +28,7 @@ import cn.hutool.json.JSONObject;
 @Component
 @EnableScheduling
 public class HaokangScheduledTask {
-	private final static String IP="192.168.110.10:10443";
+	private final static String IP="222.223.23.226:10443";
 	private final static String RENLIAN="/api/aiapplication/v1/face/statisticsTotalNumByTime";
 	private final static String CAR="/api/aiapplication/v1/vehicle/queryStatisticsVehiclesByGroupWithPage";
 	

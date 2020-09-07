@@ -134,7 +134,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		 
  		  console.log("${sel}");
  		  $.ajax({
-				url:'voice.do?id=${id}&voice='+url,
+				url:'voice.do?id=${id}&voice='+folde+"/"+url,
 				type:'post',
 				success:function(msg){
 					console.log(msg);

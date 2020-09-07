@@ -504,29 +504,46 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-	       var urlpeoplelist=window.BASEPATH + "/pubnum/people/vote/getpeoples";
+	       var urlpeoplelist=window.BASEPATH + "/people/vote/getpeoples";
 		   $.get(urlpeoplelist,null,function(data){
 				var html=[];
-		        html.push('<div style="width:90%;margin-top:10px;margin-left:5%;height:180px;border:1.5px solid #CE6271">');
-			    html.push('<image src="lib/images/ooo.png" style="position:absolute;margin-top:0px;margin-left:0px"/>');
-			    html.push('<div style="position:absolute;margin-top:2px;margin-left:9px;font-weight:bold;color:#FFF">1</div>');
-			
-			    html.push('<image src="https://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=https%3A%2F%2Ftimgsa.baidu.com%2Ftimg%3Fimage%26quality%3D80%26size%3Db9999_10000%26sec%3D1599368766817%26di%3D325ead240cf9e99810b632b8387c9036%26imgtype%3D0%26src%3Dhttp%253A%252F%252Fn.sinaimg.cn%252Fsinacn18%252F655%252Fw730h725%252F20180425%252Fe4da-fzqvvsc3078331.jpg&thumburl=https%3A%2F%2Fss3.bdstatic.com%2F70cFv8Sh_Q1YnxGkpoWK1HF6hhy%2Fit%2Fu%3D1824823051%2C226950026%26fm%3D26%26gp%3D0.jpg"'); 
-			    html.push('style="margin-top:10px;margin-left:10px;width:100px;height:100px;float:left;"/>');
-			    html.push('<div style="font-size:9pt;width:180px;height:100px;margin-top:10px;margin-left:10px;float:left;">');
-			    html.push('   <p>诵读者：杨彪</p>');
-			    html.push('   <p>诵读作品：《虎口脱险》</p>');
-			    html.push('   <p>工作单位：过来玩</p>');
-			    html.push('   <p>作品来源：河北日报</p>');
-			    html.push('   <div style="width:100%;padding-top:5px;font-size:14px">9999票');
-			    html.push('      <image src="lib/images/peopletoupiao.png" style="float:right;margin-right:-15px"/>');
-			    html.push('   </div>');
-			    html.push('</div>');
-			    html.push('<audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
-				html.push('  <source src="http://antiserver.kuwo.cn/anti.s?format=mp3|aac&rid=3453727&type=convert_url&response=res" />');
-				html.push('</audio>');
-			    html.push('</div>');
-			    $('#content').append(html.join(''));
+				for(var i=0;i<data.data.length;i++){
+					html.push('<div style="width:90%;margin-top:10px;margin-left:5%;height:220px;border:1.5px solid #CE6271">');
+				    html.push('<image src="lib/images/ooo.png" style="position:absolute;margin-top:0px;margin-left:0px"/>');
+				    html.push('<div style="position:absolute;margin-top:2px;margin-left:9px;font-weight:bold;color:#FFF">'+(i+1)+'</div>');
+				
+				    html.push('<image src="${webpath}'+data.data[i].headerimg+'"'); 
+				    html.push('style="margin-top:10px;margin-left:10px;width:140px;height:140px;float:left;"/>');
+				    html.push('<div style="font-size:9pt;width:160px;height:140px;margin-top:10px;margin-left:10px;float:left;">');
+				    html.push('   <p>诵读者:'+data.data[i].name+'</p>');
+				    html.push('   <p>诵读作品:'+data.data[i].article+'</p>');
+				    html.push('   <p>工作单位:'+data.data[i].org+'</p>');
+				    html.push('   <p>作品来源:'+data.data[i].articleFrom+'</p>');
+				    html.push('   <div style="width:100%;padding-top:5px;font-size:14px"><span id="peopleCount">'+(data.data[i].count==null?0:data.data[i].count)+'</span>票');
+				    html.push('      <image class="toupiao" id="toupiao-'+data.data[i].id+'" src="lib/images/peopletoupiao.png" style="float:right;margin-right:5px;"/>');
+				    html.push('   </div>');
+				    html.push('</div>');
+				    html.push('<div><audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
+					html.push('  <source src="${webpath}'+'/'+data.data[i].voice+'" />');
+					html.push('</audio></div>');
+				    html.push('</div>');
+				}
+		        
+			    $('#peopleContent').append(html.join(''));
+		   });
+		   
+		   
+		   
+		   $(document).on('click','.toupiao',function(){
+		        var ids=this.id.split('-');
+		        var urlvote=window.BASEPATH + "/people/vote/set?vpId="+ids[1];
+		   		$.post(urlvote,null,function(data){
+		   		    if(data=="failed"){
+		   		       alert('每个微信号一天最多投5票');
+		   		    }else{
+		   		       $('#peopleCount').html(data);
+		   		    }
+		   		});
 		   });
 	
 	});
@@ -547,7 +564,7 @@ html, body {
 		<div class="content" style="height:5000px;background:url('') no-repeat;width:100%;">
 			<image src="lib/images/people.png" style="width:100%;height:5000px;position:absolute;margin-top:0px;margin-left:0px">
 			<image src="lib/images/biaoti1.png" style="width:100%;height:5000px;position:absolute;margin-top:265px;margin-left:0px">
-			<div style="width:100%;height:5000px;position:absolute;margin-top:325px;margin-left:0px">
+			<div id="peopleContent" style="width:100%;height:5000px;position:absolute;margin-top:325px;margin-left:0px">
 			
 				<p style="width:93%;font-size:18px;margin:0 auto;">&nbsp;&nbsp;&nbsp;&nbsp;市总工会"弘扬传统文化领悟中华经典"职工诵读活动自3月份开展以来,历时近5个月,受到了全市各级工会和职工朋友的热情响应。截至8月底,共收到400多名职工的诵读作品800余篇,期间经过初评持续对300余篇诵读作品进行了展播。经过专业评审,20名优秀职工朗读者脱颖而出。市总工会将根据评审意见并结合网络投票情况,评选出一、二、三等奖。
 　　<br>&nbsp;&nbsp;&nbsp;&nbsp;谁是你心中的“人气王”？动动手指,快来投票吧！</p>
@@ -559,101 +576,7 @@ html, body {
 			    
 			    </p>
 			
-			<image src="lib/images/cansai.png" style="width:50%;margin-left:25%;margin-top:20px;"/>
-			
-			<div style="width:90%;margin-top:10px;margin-left:5%;height:180px;border:1.5px solid #CE6271">
-			    <image src="lib/images/ooo.png" style="position:absolute;margin-top:0px;margin-left:0px"/>
-			    <div style="position:absolute;margin-top:2px;margin-left:9px;font-weight:bold;color:#FFF">1</div>
-			
-			    <image src="https://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=https%3A%2F%2Ftimgsa.baidu.com%2Ftimg%3Fimage%26quality%3D80%26size%3Db9999_10000%26sec%3D1599368766817%26di%3D325ead240cf9e99810b632b8387c9036%26imgtype%3D0%26src%3Dhttp%253A%252F%252Fn.sinaimg.cn%252Fsinacn18%252F655%252Fw730h725%252F20180425%252Fe4da-fzqvvsc3078331.jpg&thumburl=https%3A%2F%2Fss3.bdstatic.com%2F70cFv8Sh_Q1YnxGkpoWK1HF6hhy%2Fit%2Fu%3D1824823051%2C226950026%26fm%3D26%26gp%3D0.jpg" 
-			    style="margin-top:10px;margin-left:10px;width:100px;height:100px;float:left;"/>
-			    <div style="font-size:9pt;width:180px;height:100px;margin-top:10px;margin-left:10px;float:left;">
-			       <p>诵读者：杨彪</p>
-			       <p>诵读作品：《虎口脱险》</p>
-			       <p>工作单位：过来玩</p>
-			       <p>作品来源：河北日报</p>
-			       <div style="width:100%;padding-top:5px;font-size:14px">9999票
-			          <image src="lib/images/peopletoupiao.png" style="float:right;margin-right:-15px"/>
-			       </div>
-			    </div>
-			    <audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">
-				  <source src="http://antiserver.kuwo.cn/anti.s?format=mp3|aac&rid=3453727&type=convert_url&response=res" />
-				</audio>
-			</div>
-			
-			<div style="width:90%;margin-top:10px;margin-left:5%;height:180px;border:1.5px solid #CE6271">
-			    <image src="lib/images/ooo.png" style="position:absolute;margin-top:0px;margin-left:0px"/>
-			    <div style="position:absolute;margin-top:2px;margin-left:9px;font-weight:bold;color:#FFF">1</div>
-			
-			    <image src="https://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=https%3A%2F%2Ftimgsa.baidu.com%2Ftimg%3Fimage%26quality%3D80%26size%3Db9999_10000%26sec%3D1599368766817%26di%3D325ead240cf9e99810b632b8387c9036%26imgtype%3D0%26src%3Dhttp%253A%252F%252Fn.sinaimg.cn%252Fsinacn18%252F655%252Fw730h725%252F20180425%252Fe4da-fzqvvsc3078331.jpg&thumburl=https%3A%2F%2Fss3.bdstatic.com%2F70cFv8Sh_Q1YnxGkpoWK1HF6hhy%2Fit%2Fu%3D1824823051%2C226950026%26fm%3D26%26gp%3D0.jpg" 
-			    style="margin-top:10px;margin-left:10px;width:100px;height:100px;float:left;"/>
-			    <div style="font-size:9pt;width:180px;height:100px;margin-top:10px;margin-left:10px;float:left;">
-			       <p>诵读者：杨彪</p>
-			       <p>诵读作品：《虎口脱险》</p>
-			       <p>工作单位：过来玩</p>
-			       <p>作品来源：河北日报</p>
-			       <div style="width:100%;padding-top:5px;font-size:14px">9999票
-			          <image src="lib/images/peopletoupiao.png" style="float:right;margin-right:-15px"/>
-			       </div>
-			    </div>
-			    <audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">
-				  <source src="http://antiserver.kuwo.cn/anti.s?format=mp3|aac&rid=3453727&type=convert_url&response=res" />
-				</audio>
-			</div>
-			
-			<div style="width:90%;margin-top:10px;margin-left:5%;height:180px;border:1.5px solid #CE6271">
-			    <image src="lib/images/ooo.png" style="position:absolute;margin-top:0px;margin-left:0px"/>
-			    <div style="position:absolute;margin-top:2px;margin-left:9px;font-weight:bold;color:#FFF">1</div>
-			
-			    <image src="https://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=https%3A%2F%2Ftimgsa.baidu.com%2Ftimg%3Fimage%26quality%3D80%26size%3Db9999_10000%26sec%3D1599368766817%26di%3D325ead240cf9e99810b632b8387c9036%26imgtype%3D0%26src%3Dhttp%253A%252F%252Fn.sinaimg.cn%252Fsinacn18%252F655%252Fw730h725%252F20180425%252Fe4da-fzqvvsc3078331.jpg&thumburl=https%3A%2F%2Fss3.bdstatic.com%2F70cFv8Sh_Q1YnxGkpoWK1HF6hhy%2Fit%2Fu%3D1824823051%2C226950026%26fm%3D26%26gp%3D0.jpg" 
-			    style="margin-top:10px;margin-left:10px;width:100px;height:100px;float:left;"/>
-			    <div style="font-size:9pt;width:180px;height:100px;margin-top:10px;margin-left:10px;float:left;">
-			       <p>诵读者：杨彪</p>
-			       <p>诵读作品：《虎口脱险》</p>
-			       <p>工作单位：过来玩</p>
-			       <p>作品来源：河北日报</p>
-			       <div style="width:100%;padding-top:5px;font-size:14px">9999票
-			          <image src="lib/images/peopletoupiao.png" style="float:right;margin-right:-15px"/>
-			       </div>
-			    </div>
-			    <audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">
-				  <source src="http://antiserver.kuwo.cn/anti.s?format=mp3|aac&rid=3453727&type=convert_url&response=res" />
-				</audio>
-			</div>
-			
-			<div style="width:90%;margin-top:10px;margin-left:5%;height:180px;border:1.5px solid #CE6271">
-			    <image src="lib/images/ooo.png" style="position:absolute;margin-top:0px;margin-left:0px"/>
-			    <div style="position:absolute;margin-top:2px;margin-left:9px;font-weight:bold;color:#FFF">1</div>
-			
-			    <image src="https://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=https%3A%2F%2Ftimgsa.baidu.com%2Ftimg%3Fimage%26quality%3D80%26size%3Db9999_10000%26sec%3D1599368766817%26di%3D325ead240cf9e99810b632b8387c9036%26imgtype%3D0%26src%3Dhttp%253A%252F%252Fn.sinaimg.cn%252Fsinacn18%252F655%252Fw730h725%252F20180425%252Fe4da-fzqvvsc3078331.jpg&thumburl=https%3A%2F%2Fss3.bdstatic.com%2F70cFv8Sh_Q1YnxGkpoWK1HF6hhy%2Fit%2Fu%3D1824823051%2C226950026%26fm%3D26%26gp%3D0.jpg" 
-			    style="margin-top:10px;margin-left:10px;width:100px;height:100px;float:left;"/>
-			    <div style="font-size:9pt;width:180px;height:100px;margin-top:10px;margin-left:10px;float:left;">
-			       <p>诵读者：杨彪</p>
-			       <p>诵读作品：《虎口脱险》</p>
-			       <p>工作单位：过来玩</p>
-			       <p>作品来源：河北日报</p>
-			       <div style="width:100%;padding-top:5px;font-size:14px">9999票
-			          <image src="lib/images/peopletoupiao.png" style="float:right;margin-right:-15px"/>
-			       </div>
-			    </div>
-			    <audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">
-				  <source src="http://antiserver.kuwo.cn/anti.s?format=mp3|aac&rid=3453727&type=convert_url&response=res" />
-				</audio>
-			</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			    <image src="lib/images/cansai.png" style="width:50%;margin-left:25%;margin-top:20px;"/>
 			
 			</div>
 		</div>
