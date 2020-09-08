@@ -533,17 +533,21 @@ html, body {
 		   });
 		   
 		   
-		   
+		   var flg=false;
 		   $(document).on('click','.toupiao',function(){
-		        
+		        if(flg==true){
+		           alert('操作太频繁了');
+		           return;
+		        }
+		        flg=true;
 		        var ids=this.id.split('-');
 		        var urlvote=window.BASEPATH + "/people/vote/set?vpId="+ids[1];
 		   		$.post(urlvote,null,function(data){
-	
+	                flg=false;
 		   		    if(data=="failed"){
 		   		       alert('每个微信号一天最多投5票');
 		   		    }else{
-		   		       alert('今天还有'+(5-parseInt(data.usecount))+"次投票机会");
+		   		       alert('今天还有'+(4-parseInt(data.usecount))+"次投票机会");
 		   		       $('#peopleCount').html(data.allcount);
 		   		    }
 		   		});
