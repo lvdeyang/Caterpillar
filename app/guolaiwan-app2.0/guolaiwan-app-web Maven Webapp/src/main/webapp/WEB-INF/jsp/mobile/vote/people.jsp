@@ -515,12 +515,12 @@ html, body {
 				    html.push('<image src="${webpath}'+data.data[i].headerimg+'"'); 
 				    html.push('style="margin-top:10px;margin-left:10px;width:140px;height:140px;float:left;"/>');
 				    html.push('<div style="font-size:9pt;width:160px;height:140px;margin-top:10px;margin-left:10px;float:left;">');
-				    html.push('   <p>诵读者:'+data.data[i].name+'</p>');
-				    html.push('   <p>诵读作品:'+data.data[i].article+'</p>');
-				    html.push('   <p>工作单位:'+data.data[i].org+'</p>');
-				    html.push('   <p>作品来源:'+data.data[i].articleFrom+'</p>');
-				    html.push('   <div style="width:100%;padding-top:5px;font-size:14px"><span id="peopleCount">'+(data.data[i].count==null?0:data.data[i].count)+'</span>票');
-				    html.push('      <image class="toupiao" id="toupiao-'+data.data[i].id+'" src="lib/images/peopletoupiao.png" style="float:right;margin-right:5px;"/>');
+				    html.push('   <p style="color:#4F5971">诵读者:'+data.data[i].name+'</p>');
+				    html.push('   <p style="color:#4F5971">诵读作品:'+data.data[i].article+'</p>');
+				    html.push('   <p style="color:#4F5971">工作单位:'+data.data[i].org+'</p>');
+				    html.push('   <p style="color:#4F5971">作品来源:'+data.data[i].articleFrom+'</p>');
+				    html.push('   <div style="width:100%;padding-top:5px;font-size:14px"><span style="color:#F8324D" id="peopleCount">'+(data.data[i].count==null?0:data.data[i].count)+'</span>票');
+				    html.push('      <image class="toupiao" style="width:60%;float:right" id="toupiao-'+data.data[i].id+'" src="lib/images/vote.png" style="float:right;margin-right:5px;"/>');
 				    html.push('   </div>');
 				    html.push('</div>');
 				    html.push('<div><audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
@@ -562,13 +562,13 @@ html, body {
 			</div>
 		</div>
 		<div class="content" style="height:5000px;background:url('') no-repeat;width:100%;">
-			<image src="lib/images/people.png" style="width:100%;height:5000px;position:absolute;margin-top:0px;margin-left:0px">
-			<image src="lib/images/biaoti1.png" style="width:100%;height:5000px;position:absolute;margin-top:265px;margin-left:0px">
+			<image src="lib/images/bgs1.png" style="width:100%;height:5000px;position:absolute;margin-top:0px;margin-left:0px">
+			<image src="lib/images/biaoti2.png" style="width:100%;height:5000px;position:absolute;margin-top:265px;margin-left:0px">
 			<div id="peopleContent" style="width:100%;height:5000px;position:absolute;margin-top:325px;margin-left:0px">
 			
 				<p style="width:93%;font-size:18px;margin:0 auto;">&nbsp;&nbsp;&nbsp;&nbsp;市总工会"弘扬传统文化领悟中华经典"职工诵读活动自3月份开展以来,历时近5个月,受到了全市各级工会和职工朋友的热情响应。截至8月底,共收到400多名职工的诵读作品800余篇,期间经过初评持续对300余篇诵读作品进行了展播。经过专业评审,20名优秀职工朗读者脱颖而出。市总工会将根据评审意见并结合网络投票情况,评选出一、二、三等奖。
 　　<br>&nbsp;&nbsp;&nbsp;&nbsp;谁是你心中的“人气王”？动动手指,快来投票吧！</p>
-			    <image src="lib/images/peopletishi .png" style="width:50%;margin-left:25%;margin-top:20px;"/>
+			    <image src="lib/images/Tips.png" style="width:50%;margin-left:25%;margin-top:20px;"/>
 			    <p style="width:93%;font-size:18px;margin:0 auto;">
 			    	   &nbsp;&nbsp;&nbsp;&nbsp;1、投票时间：9月　上午9：00至9月　日21:00止结束。
 					　　<br>&nbsp;&nbsp;&nbsp;&nbsp;2、投票方式：网络投票，每个微信账号每天有一次投票机会，每次可投5票。
@@ -576,7 +576,7 @@ html, body {
 			    
 			    </p>
 			
-			    <image src="lib/images/cansai.png" style="width:50%;margin-left:25%;margin-top:20px;"/>
+			    <image src="lib/images/player.png" style="width:50%;margin-left:25%;margin-top:20px;"/>
 			
 			</div>
 		</div>
