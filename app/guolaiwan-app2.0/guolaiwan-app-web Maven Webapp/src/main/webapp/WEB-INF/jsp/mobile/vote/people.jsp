@@ -535,13 +535,16 @@ html, body {
 		   
 		   
 		   $(document).on('click','.toupiao',function(){
+		        
 		        var ids=this.id.split('-');
 		        var urlvote=window.BASEPATH + "/people/vote/set?vpId="+ids[1];
 		   		$.post(urlvote,null,function(data){
+	
 		   		    if(data=="failed"){
 		   		       alert('每个微信号一天最多投5票');
 		   		    }else{
-		   		       $('#peopleCount').html(data);
+		   		       alert('今天还有'+(5-parseInt(data.usecount))+"次投票机会");
+		   		       $('#peopleCount').html(data.allcount);
 		   		    }
 		   		});
 		   });
@@ -581,6 +584,7 @@ html, body {
 			</div>
 		</div>
 	</div>
+	
 </body>
 
 

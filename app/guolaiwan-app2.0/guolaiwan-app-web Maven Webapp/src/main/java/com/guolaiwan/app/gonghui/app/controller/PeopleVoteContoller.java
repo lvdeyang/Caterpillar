@@ -99,7 +99,10 @@ public class PeopleVoteContoller extends BaseController {
 		peopleVoteUserPo.setPeoplevoteId(votepeopleId);
 		conn_peoplevoteuser.save(peopleVoteUserPo);
 		
-		return conn_peoplevoteuser.countByField("peoplevoteId", peopleVoteUserPo.getPeoplevoteId());
+		Map<String, Integer> ret=new HashMap<String, Integer>();
+		ret.put("allcount", conn_peoplevoteuser.countByField("peoplevoteId", peopleVoteUserPo.getPeoplevoteId()));
+		ret.put("usecount", countUsertoday);
+		return ret;
 	}
 	
 }
