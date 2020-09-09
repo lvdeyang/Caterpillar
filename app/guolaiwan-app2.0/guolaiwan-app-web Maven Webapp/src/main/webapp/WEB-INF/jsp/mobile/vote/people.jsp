@@ -523,13 +523,14 @@ html, body {
 				    html.push('      <image class="toupiao" style="width:60%;float:right" id="toupiao-'+data.data[i].id+'" src="lib/images/vote.png" style="float:right;margin-right:5px;"/>');
 				    html.push('   </div>');
 				    html.push('</div>');
-				    html.push('<div><audio preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
+				    html.push('<div><audio class="paudio" id="paudio-'+data.data[i].id+'" preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
 					html.push('  <source src="${webpath}'+'/'+data.data[i].voice+'" />');
 					html.push('</audio></div>');
 				    html.push('</div>');
 				}
 		        
 			    $('#peopleContent').append(html.join(''));
+			    initAudio();
 		   });
 		   
 		   
@@ -552,7 +553,38 @@ html, body {
 		   		    }
 		   		});
 		   });
-	
+		   
+		   function initAudio(){
+		       var audios=document.getElementsByClassName("paudio");
+		       for(var i=0;i<audios.length;i++){
+		          audios[i].addEventListener("play", function () {   //开始播放时触发
+		              var ids=this.id.split('-');
+			          for(var j=0;j<audios.length;j++){
+			             if(ids[1]!=(j+1)){
+			                audios[j].pause();
+			             }
+			          }
+			      });
+			      
+			      
+			      audios[i].addEventListener("ended", function () {   //当播放完一首歌曲时也会触发
+				      var ids=this.id.split('-');
+			          for(var j=0;j<audios.length;j++){
+			             if(ids[1]==(j+1)){
+			                if(audios[j+1]){
+			                	audios[j+1].play();
+			                }
+			             }
+			          }
+				  });
+			      
+			      
+			      
+		       }
+		   }
+		   
+		   
+		   
 	});
 </script>
 
