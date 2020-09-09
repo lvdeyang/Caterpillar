@@ -523,7 +523,7 @@ html, body {
 				    html.push('      <image class="toupiao" style="width:60%;float:right" id="toupiao-'+data.data[i].id+'" src="lib/images/vote.png" style="float:right;margin-right:5px;"/>');
 				    html.push('   </div>');
 				    html.push('</div>');
-				    html.push('<div><audio class="paudio" id="paudio-'+data.data[i].id+'" preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
+				    html.push('<div><audio class="paudio" id="paudio-'+(i+1)+'" preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
 					html.push('  <source src="${webpath}'+'/'+data.data[i].voice+'" />');
 					html.push('</audio></div>');
 				    html.push('</div>');
