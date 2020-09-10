@@ -520,7 +520,7 @@ html, body {
 				    html.push('   <p style="color:#4F5971">工作单位:'+data.data[i].org+'</p>');
 				    html.push('   <p style="color:#4F5971">作品来源:'+data.data[i].articleFrom+'</p>');
 				    html.push('   <div style="width:100%;padding-top:5px;font-size:14px"><span style="color:#F8324D" id="peopleCount">'+(data.data[i].count==null?0:data.data[i].count)+'</span>票');
-				    html.push('      <image class="toupiao" style="width:60%;float:right;margin:-5px -15px 0 0;" id="toupiao-'+data.data[i].id+'" src="lib/images/vote.png" style="float:right;"/>');
+				    html.push('      <image class="toupiao" style="width:60%;float:right;margin:-5px 0px 0 0;" id="toupiao-'+data.data[i].id+'" src="lib/images/vote.png" style="float:right;"/>');
 				    html.push('   </div>');
 				    html.push('</div>');
 				    html.push('<div><audio class="paudio" id="paudio-'+(i+1)+'" preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
