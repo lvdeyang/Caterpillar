@@ -549,7 +549,7 @@ html, body {
 		   		       alert('每个微信号一天最多投5票');
 		   		    }else{
 		   		       alert('今天还有'+(4-parseInt(data.usecount))+"次投票机会");
-		   		       $('#peopleCount').html(data.allcount);
+		   		       $('#peopleCount').text(data.allcount);
 		   		    }
 		   		});
 		   });
