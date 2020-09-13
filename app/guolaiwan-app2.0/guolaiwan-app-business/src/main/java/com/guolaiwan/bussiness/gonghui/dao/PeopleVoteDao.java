@@ -21,7 +21,7 @@ public class PeopleVoteDao extends AbstractBaseDao<PeopleVotePo> {
 
 	public List<PeopleVoteDto> getPeoples() {
 		StringBufferWrapper sqlWrapper = new StringBufferWrapper().append(
-				"SELECT count,a.* from peoplevote a LEFT JOIN  (SELECT count(*) count, peoplevoteId from peoplevoteuser GROUP BY peoplevoteId ORDER BY count desc) b on a.id=b.peoplevoteId;");
+				"SELECT count,a.* from peoplevote a LEFT JOIN  (SELECT count(*) count, peoplevoteId from peoplevoteuser GROUP BY peoplevoteId) b on a.id=b.peoplevoteId  ORDER BY count desc");
 		
 		SQLQuery query = getCurrentSession().createSQLQuery(sqlWrapper.toString())
 				.addScalar("count", StandardBasicTypes.INTEGER)
