@@ -504,26 +504,28 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-	       var urlpeoplelist=window.BASEPATH + "/people/vote/getpeoples";
-		   $.get(urlpeoplelist,null,function(data){
+		function initPage(){
+			$('.peopleDiv').remove();
+			var urlpeoplelist=window.BASEPATH + "/people/vote/getpeoples";
+		    $.get(urlpeoplelist,null,function(data){
 				var html=[];
 				for(var i=0;i<data.data.length;i++){
-					html.push('<div style="width:90%;margin-top:10px;margin-left:5%;height:220px;border:1.5px solid #CE6271">');
+					html.push('<div class="peopleDiv" style="width:90%;margin-top:10px;margin-left:5%;height:240px;border:1.5px solid #CE6271">');
 				    html.push('<image src="lib/images/ooo.png" style="position:absolute;margin-top:0px;margin-left:0px"/>');
 				    html.push('<div style="position:absolute;margin-top:2px;margin-left:9px;font-weight:bold;color:#FFF">'+(i+1)+'</div>');
 				
 				    html.push('<image src="${webpath}'+data.data[i].headerimg+'"'); 
 				    html.push('style="margin-top:10px;margin-left:10px;width:140px;height:140px;float:left;"/>');
-				    html.push('<div style="font-size:9pt;width:160px;height:140px;margin-top:10px;margin-left:10px;float:left;">');
+				    html.push('<div style="font-size:9pt;width:160px;height:140px;margin-top:10px;margin-left:10px;float:left;position: relative;">');
 				    html.push('   <p style="color:#4F5971">诵读者:'+data.data[i].name+'</p>');
 				    html.push('   <p style="color:#4F5971">诵读作品:'+data.data[i].article+'</p>');
-				    html.push('   <p style="color:#4F5971">工作单位:'+data.data[i].org+'</p>');
+				    html.push('   <p style="color:#4F5971">推荐单位:'+data.data[i].org+'</p>');
 				    html.push('   <p style="color:#4F5971">作品来源:'+data.data[i].articleFrom+'</p>');
 				    html.push('   <div style="width:100%;padding-top:5px;font-size:14px"><span style="color:#F8324D" id="peopleCount">'+(data.data[i].count==null?0:data.data[i].count)+'</span>票');
-				    html.push('      <image class="toupiao" style="width:60%;float:right;margin:-5px 0px 0 0;" id="toupiao-'+data.data[i].id+'" src="lib/images/vote.png" style="float:right;"/>');
+				    html.push('      <image class="toupiao" style="width:60%;float:right;margin-right:10px" id="toupiao-'+data.data[i].id+'" src="lib/images/vote.png" style="float:right;"/>');
 				    html.push('   </div>');
 				    html.push('</div>');
-				    html.push('<div><audio class="paudio" id="paudio-'+(i+1)+'" preload="auto" controls id="audio" style="background:#FFF;width:100%;margin-top:10px">');
+				    html.push('<div><audio class="paudio" id="paudio-'+(i+1)+'" preload="auto" controls id="audio" style="background:#FFF;width:96%;margin-top:30px">');
 					html.push('  <source src="${webpath}'+'/'+data.data[i].voice+'" />');
 					html.push('</audio></div>');
 				    html.push('</div>');
@@ -532,7 +534,9 @@ html, body {
 			    $('#peopleContent').append(html.join(''));
 			    initAudio();
 		   });
-		   
+		}
+	       
+		   initPage();
 		   
 		   var flg=false;
 		   $(document).on('click','.toupiao',function(){
@@ -548,8 +552,9 @@ html, body {
 		   		    if(data=="failed"){
 		   		       alert('每个微信号一天最多投5票');
 		   		    }else{
-		   		       alert('今天还有'+(4-parseInt(data.usecount))+"次投票机会");
-		   		       $('#peopleCount').text(data.allcount);
+		   		       //alert('今天还有'+(4-parseInt(data.usecount))+"次投票机会");
+		   		       //$('#peopleCount').text(data.allcount);
+					   initPage();
 		   		    }
 		   		});
 		   });
@@ -600,18 +605,17 @@ html, body {
 				<div class="header-content">诵读投票评选</div>
 			</div>
 		</div>
-		<div class="content" style="height:5000px;background:url('') no-repeat;width:100%;">
-			<image src="lib/images/bgs1.png" style="width:100%;height:5000px;position:absolute;margin-top:0px;margin-left:0px">
-			<image src="lib/images/biaoti2.png" style="width:100%;height:5000px;position:absolute;margin-top:265px;margin-left:0px">
+		<div class="content" style="height:6000px;width:100%;">
+			<image src="lib/images/bgs1.png" style="width:100%;height:6000px;position:absolute;margin-top:0px;margin-left:0px;">
+			<image src="lib/images/biaoti2.png" style="width:100%;height:5700px;position:absolute;margin-top:265px;margin-left:0px;z-index:5000">
 			<div id="peopleContent" style="width:100%;height:5000px;position:absolute;margin-top:325px;margin-left:0px">
 			
-				<p style="width:93%;font-size:18px;margin:0 auto;">&nbsp;&nbsp;&nbsp;&nbsp;市总工会"弘扬传统文化领悟中华经典"职工诵读活动自3月份开展以来,历时近5个月,受到了全市各级工会和职工朋友的热情响应。截至8月底,共收到400多名职工的诵读作品800余篇,期间经过初评持续对300余篇诵读作品进行了展播。经过专业评审,20名优秀职工朗读者脱颖而出。市总工会将根据评审意见并结合网络投票情况,评选出一、二、三等奖。
-　　<br>&nbsp;&nbsp;&nbsp;&nbsp;谁是你心中的“人气王”？动动手指,快来投票吧！</p>
+				<p style="width:93%;font-size:18px;margin:0 auto;text-align-last:justify;text-align:justify;text-justify:distribute-all-lines;">&nbsp;&nbsp;&nbsp;&nbsp;市总工会"弘扬传统文化&nbsp;领悟中华经典"职工诵读活动自3月份开展以来,历时近5个月,受到了全市各级工会和职工朋友的热情响应。截至8月底,共收到400多名职工的诵读作品800余篇,期间经过初评持续对300余篇诵读作品进行了展播。经过专业评审,20名优秀职工朗读者脱颖而出。市总工会将根据评审意见并结合网络投票情况,评选出一、二、三等奖。
+　　<br>&nbsp;&nbsp;&nbsp;&nbsp;谁是你心中的“人气王”？动动手指,快来投票吧！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 			    <image src="lib/images/Tips.png" style="width:50%;margin-left:25%;margin-top:20px;"/>
-			    <p style="width:93%;font-size:18px;margin:0 auto;">
-			    	   &nbsp;&nbsp;&nbsp;&nbsp;1、投票时间：9月　上午9：00至9月　日21:00止结束。
-					　　<br>&nbsp;&nbsp;&nbsp;&nbsp;2、投票方式：网络投票，每个微信账号每天有一次投票机会，每次可投5票。
-					　(本投票严禁刷票，如有发现一律取消评选资格。)
+			    <p style="width:93%;font-size:18px;margin:0 auto;;text-align-last:justify;text-align:justify;text-justify:distribute-all-lines;">
+			    	   &nbsp;&nbsp;&nbsp;&nbsp;1、投票时间：9月　上午9：00至9月　日21:00止结束。&nbsp;&nbsp;&nbsp;&nbsp;
+					　　<br>&nbsp;&nbsp;&nbsp;&nbsp;2、投票方式：网络投票，每个微信账号每天有一次投票机会，每次可投5票。(本投票严禁刷票，如有发现一律取消评选资格。)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			    
 			    </p>
 			
