@@ -607,7 +607,7 @@ html, body {
 		</div>
 		<div class="content" style="height:6000px;width:100%;">
 			<image src="lib/images/bgs1.png" style="width:100%;height:6000px;position:absolute;margin-top:0px;margin-left:0px;">
-			<image src="lib/images/biaoti2.png" style="width:100%;height:5700px;position:absolute;margin-top:265px;margin-left:0px;z-index:5000">
+			<image src="lib/images/biaoti2.png" style="width:100%;height:5700px;position:absolute;margin-top:265px;margin-left:0px;">
 			<div id="peopleContent" style="width:100%;height:5000px;position:absolute;margin-top:325px;margin-left:0px">
 			
 				<p style="width:93%;font-size:18px;margin:0 auto;text-align-last:justify;text-align:justify;text-justify:distribute-all-lines;">&nbsp;&nbsp;&nbsp;&nbsp;市总工会"弘扬传统文化&nbsp;领悟中华经典"职工诵读活动自3月份开展以来,历时近5个月,受到了全市各级工会和职工朋友的热情响应。截至8月底,共收到400多名职工的诵读作品800余篇,期间经过初评持续对300余篇诵读作品进行了展播。经过专业评审,20名优秀职工朗读者脱颖而出。市总工会将根据评审意见并结合网络投票情况,评选出一、二、三等奖。
