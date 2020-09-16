@@ -60,6 +60,7 @@ public class SessionFilter implements Filter {
 		if (hrequest.getHeader("user-agent") != null) {
 			userAgent = hrequest.getHeader("user-agent").toLowerCase();
 		}
+		
 		if (hrequest.getRequestURI().contains("pubnum") || hrequest.getRequestURI().contains("phoneApp")) {
 			WebsiteRecord record = new WebsiteRecord();
 			record.setUrl(hrequest.getRequestURI());

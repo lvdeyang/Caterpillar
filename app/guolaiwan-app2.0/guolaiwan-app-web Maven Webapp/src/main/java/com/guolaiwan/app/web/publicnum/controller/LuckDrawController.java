@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,7 @@ import com.guolaiwan.app.web.publicnum.util.CommonUtil;
 import com.guolaiwan.app.web.website.controller.WebBaseControll;
 import com.guolaiwan.bussiness.admin.dao.LuckDrawContactDao;
 import com.guolaiwan.bussiness.admin.dao.LuckDrawDao;
+import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.po.LuckDrawContact;
 import com.guolaiwan.bussiness.admin.po.LuckDrawRecord;
@@ -59,8 +61,28 @@ import pub.caterpillar.weixin.constants.WXContants;
 @RequestMapping("/luckdraw")
 public class LuckDrawController extends WebBaseControll {
 
-	
-	@RequestMapping(value = "/index")
+	@Autowired
+	SysConfigDAO conn_sys;
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public ModelAndView index(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("webpath", conn_sys.getSysConfig().getWebUrl());
+		try {
+			Date startDate = DateUtil.parse("2020-09-15 09:00:00","yyyy-MM-dd HH:mm:ss");
+			Date now=new Date();
+			if(now.before(startDate)){
+				ModelAndView mv = new ModelAndView("mobile/vote/notstart", strMap);
+				return mv;
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ModelAndView mv = new ModelAndView("mobile/vote/people", strMap);
+		return mv;
+	}
+	@RequestMapping(value = "/indexx")
 	public ModelAndView luckdraw(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		HttpSession session = request.getSession();
