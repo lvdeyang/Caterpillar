@@ -27,6 +27,7 @@ public class CarMessagePO extends AbstractBasePO {
 	private String region;
 	private int type;//0小型车1大型车
 	private String typeString;
+	private String sigleNo;
 	public long getCarNum() {
 		return carNum;
 	}
@@ -53,6 +54,12 @@ public class CarMessagePO extends AbstractBasePO {
 	}
 	public void setTypeString(String typeString) {
 		this.typeString = typeString;
+	}
+	public String getSigleNo() {
+		return sigleNo;
+	}
+	public void setSigleNo(String sigleNo) {
+		this.sigleNo = sigleNo;
 	}
 	
 	

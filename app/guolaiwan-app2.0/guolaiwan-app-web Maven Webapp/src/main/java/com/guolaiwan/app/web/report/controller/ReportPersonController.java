@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
+import com.guolaiwan.app.web.Guide.controller.integralControll;
 import com.guolaiwan.app.web.admin.vo.OrderInfoEchartVO;
 import com.guolaiwan.app.web.admin.vo.ParkEchartVO;
 import com.guolaiwan.bussiness.Parking.dao.ParkingPositionDao;
@@ -31,10 +32,12 @@ import com.guolaiwan.bussiness.admin.dao.UserInfoDAO;
 import com.guolaiwan.bussiness.admin.enumeration.OrderSource;
 import com.guolaiwan.bussiness.admin.enumeration.OrderStateType;
 import com.guolaiwan.bussiness.admin.po.CompanyPO;
+import com.guolaiwan.bussiness.merchant.dao.CameraFaceDAO;
 import com.guolaiwan.bussiness.merchant.dao.CarMessageDAO;
 import com.guolaiwan.bussiness.merchant.dao.ReportOrderAllDAO;
 import com.guolaiwan.bussiness.merchant.dao.ReportOrderDAO;
 import com.guolaiwan.bussiness.merchant.dto.ReportDTO;
+import com.guolaiwan.bussiness.merchant.po.CameraFacePO;
 import com.guolaiwan.bussiness.operation.dao.WebsiteRecordDAO;
 
 import net.sf.ehcache.search.aggregator.Count;
@@ -60,7 +63,8 @@ public class ReportPersonController extends BaseController {
 	@Autowired
 	ReportOrderAllDAO reportorderAllDao;
 	
-	
+	@Autowired
+	CameraFaceDAO cameraFaceDAO;
 	@ResponseBody
 	@RequestMapping(value = "/getFaceData")
 	public Map<String, Object> getFaceData(HttpServletRequest request) throws Exception {
@@ -74,7 +78,12 @@ public class ReportPersonController extends BaseController {
 		int count1=conn_orderinfo.GetCountByHour(start,end);
 		int count2=reportOrderDAO.GetCountByHour(start,end);
 		int count3=reportorderAllDao.GetCountByHour(start, end);
-		map.put("count", count1+count2+count3);
+		int count4=0;
+		List<CameraFacePO> cameraFacePOs=cameraFaceDAO.findTodydata(new Date());
+		if(cameraFacePOs!=null&&!cameraFacePOs.isEmpty()){
+			count4=cameraFacePOs.get(0).getCount();
+		}
+		map.put("count", count1+count2+count3+count4);
 
 		return map;
 	}
