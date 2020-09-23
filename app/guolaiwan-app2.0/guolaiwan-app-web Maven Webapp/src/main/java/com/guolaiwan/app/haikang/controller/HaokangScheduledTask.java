@@ -34,7 +34,7 @@ import pub.caterpillar.commons.util.date.DateUtil;
 public class HaokangScheduledTask {
 	private final static String IP="222.223.23.226:10443";
 	private final static String RENLIAN="/api/frs/v1/event/face_capture/search";
-	private final static String CAR="/api/resource/v2/vehicle/advance/vehicleList";
+	private final static String CAR="/api/mpc/v1/events/vehicleRecord";
 	
 	@Autowired
 	CarMessageDAO carMessageDAO;
@@ -96,6 +96,7 @@ public class HaokangScheduledTask {
 	 * 获取车辆抓拍数量，每天一点执行一次
 	 */
 	@Scheduled(cron = "0 0/30 * * * ?")
+	//@Scheduled(cron = "0 */1 * * * ?")
 	public void getCars() {
 		int Number=0;
 		JSONObject jsonObject=new JSONObject();
@@ -103,26 +104,11 @@ public class HaokangScheduledTask {
 		jsonObject.put("pageNo", 1);
 		//查询结果每页的数量(不能小于1，cameraIndexcodes为TOTAL时不生效)
 		jsonObject.put("pageSize", 1000);
-//		//查询的起始日期（IOS8601格式yyyy-MM-dd’T’HH:mm:ss.SSSzzz）
-//		jsonObject.put("beginTime", getISO8601Timestamp(new Date()));
-//		//查询的终止日期（IOS8601格式yyyy-MM-dd’T’HH:mm:ss.SSSzzz）
-//		jsonObject.put("endTime", getISO8601Timestamp(DateUtil.addDay(new Date(),1)));
-//		//默认为true
-//		jsonObject.put("nonEmptyRows",true);
-//		//分组类型（cross-按卡口，plate_location-按车牌归属地，vehicle_type-按车辆类型，vehicle_brand-按车辆主品牌）
-//		jsonObject.put("groupBy","cross");
-//		//卡口编号（多个用逗号分隔）
-//		jsonObject.put("crossingIndexCodes","12,22,32,42");//这块不知道写多少
-//		//组织编码（多个用逗号分隔）
-//		jsonObject.put("unitIndexCodes","53c372db1ac34e94a7cf985ac489fa9a");//这块不知道写多少
-//		//区间头类型（year-年报表，month-月报表，day-日报表）
-//		jsonObject.put("headerType", "day");
-//		//时间间隔表达式(1hour-按小时，1day-按天，1month-按月，1year-按年)
-//		jsonObject.put("interval", "1day");
+		//查询的起始日期（IOS8601格式yyyy-MM-dd’T’HH:mm:ss.SSSzzz）
+		jsonObject.put("beginTime", getISO8601Timestamp(getYesterday(new Date())));
+		//查询的终止日期（IOS8601格式yyyy-MM-dd’T’HH:mm:ss.SSSzzz）
+		jsonObject.put("endTime", getISO8601Timestamp(new Date()));
 		String response=request(CAR, jsonObject);
-		if (response!=null&&!response.equals("")) {
-			//System.out.println("==================================="+response+"================================");
-		}
 		/**
 		 * 提交NUMBER
 		 */
@@ -143,7 +129,7 @@ public class HaokangScheduledTask {
 			    	
 			    }else{
 			    	CarMessagePO carMessagePO=new CarMessagePO();
-			    	carMessagePO.setRegion(carJson.getString(""));
+			    	carMessagePO.setRegion(getAddressByCarCard(carJson.getString("plateNo").substring(0,1)));
 			    	carMessagePO.setType(carJson.getString("vehicleType").equals("largeBus")?1:0);
 			    	carMessagePO.setSigleNo(carJson.getString("uuid"));
 			    	carMessageDAO.save(carMessagePO);
@@ -155,6 +141,23 @@ public class HaokangScheduledTask {
 			e.printStackTrace();
 		}
 	}
+	
+	private  String getAddressByCarCard(String no) {
+		String licensePlate[] = { "冀", "晋", "蒙", "辽", "黑", "吉", "苏", "沪", "浙", "皖", "闽", "赣", "鲁", "豫", "鄂", "湘", "粤",
+				"桂", "琼", "渝", "川", "黔", "滇", " 陕", "甘", "青", "宁", "新" };
+		
+		String region[] = { "河北", "山西", "内蒙古", "辽宁", "黑龙江", "吉林", "江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北", "湖南",
+				"广东", "广西", "海南", "重庆", "四川", "贵州", "云南", "陕西", "甘肃省", "宁夏", "新疆" };
+		for(int i=0;i<licensePlate.length;i++){
+			if(no.equalsIgnoreCase(licensePlate[i])){
+				return region[i];
+			}
+		}
+		return "未知";
+	}
+	
+	
+	
 	 /** 
      * 传入Data类型日期，返回字符串类型时间（ISO8601标准时间） 
      * @param date 
