@@ -105,7 +105,7 @@ public class LiveController {
         liveDao.save(livePo);
         CapacityFeignService.deleteRecordTask("camera"+livePo.getAnchorId());
         JSONObject jsonParam=new JSONObject();
-        jsonParam.put("liveId", livePo.getId());
+        jsonParam.put("liveId", 76l);
         File file=new File(livePo.getRecordPath());
         String url="http://47.95.241.89:6690/"+livePo.getRecordPath().replace("/home/hls/", "");
         File[] subfiles=file.listFiles();
