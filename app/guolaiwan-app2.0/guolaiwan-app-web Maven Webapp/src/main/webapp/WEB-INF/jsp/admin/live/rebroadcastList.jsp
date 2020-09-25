@@ -31,7 +31,7 @@
 			<thead>
 				<tr>
 					<th><input type="checkbox" id="chooseAll" onclick="chooseAll()"></th>
-					<th>缩略图</th>
+					<th>海报</th>
 					<th>文件名</th>
 					<th>大小</th>
 					<th>上传时间</th>
@@ -53,25 +53,23 @@
                             <input type="checkbox" value="1" name="">
                         </td>
 						<td>
-                            <video  src={{ item.webUrl }} width="90" height="90">	
+                            <image id="recordImg{{item.id}}" style="width:35px;height:35px" src="{{item.imageUrl}}"/>
                         </td>
                         <td>
                             {{ item.oldName }}
                         </td>
-                        <td>
-                            {{ item.fileSize }}
-                        </td>
+                       
 						<td>
                             {{ item.update }}
                         </td>
-                        <td>
-                            <span id="introduce" style="color: #5FB878">{{ item.introduce }}</span>
-                        </td>
+                       
 						<td>
                         	<a title="删除" href="javascript:;" onclick="pic_del(this,'{{ item.uuid }}')" 
                            	style="text-decoration:none">
                             	<i class="layui-icon">&#xe640;</i>
                         	</a>
+                           	<a class='layui-btn layui-btn-primary layui-btn-xs' href="javascript:open_win('选择海报','../../admin/picture/addlist?&sImg=recordImg{{item.id}}&sId={{ item.id }}&source=record','600','500')">选择海报</a>
+                            <a class='layui-btn layui-btn-primary layui-btn-xs' href="javascript:open_modify({{item.id}})">修改标题</a>
 						</td>
                         
                     </tr>
@@ -84,7 +82,9 @@
 	</div>
 
 	<script src="<%=request.getContextPath() %>/layui/lib/layui/layui.js" charset="utf-8"></script>
+	<script src="<%=request.getContextPath() %>/layui/js/x-layui.js" charset="utf-8"></script>
 	<script>
+	
 		//时间格式化
 		Date.prototype.Format = function (fmt) { //author: meizz 
     var o = {
@@ -117,7 +117,7 @@
  		fenye();	
  			
  			
-                      
+                   
  
  		
  
@@ -257,7 +257,33 @@
 	
 
 	
+	function open_win(title,url,w,h){
+	    x_admin_show(title,url,w,h);
+	}
+	         
 	
+	function open_modify(id){
+	   layer.open({
+		  title: '修改'
+		  ,content: '<div class="layui-form-item"><label class="layui-form-label" style="width:50px;">标题</label><div class="layui-input-block">'+
+                     '<input type="text" id="modifyTitle" placeholder="请输入" autocomplete="off" class="layui-input"></div></div>'
+		  ,btn: ['保存']
+		  ,yes: function(index, layero){
+		    $.ajax({
+        		type:"post",
+        		url:"modifyrecord.do",
+        		data:{"id":id,"title":$('#modifyTitle').val()},
+       			success:function(msg){
+        			if(msg=="success"){
+            			getlist(ipage,ilimit);
+            			layer.close(index);
+            		}
+            	}
+       		}) 
+		    
+		  }
+		});    
+	}
 	
 	function fenye(){
  			laypage.render({

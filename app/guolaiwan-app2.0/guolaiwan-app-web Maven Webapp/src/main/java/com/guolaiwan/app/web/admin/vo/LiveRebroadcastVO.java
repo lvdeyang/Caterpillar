@@ -31,6 +31,7 @@ public class LiveRebroadcastVO extends AbstractBaseVO<LiveRebroadcastVO,LiveRebr
 		//更新日期
 		private String comName;
 		
+		private String imageUrl;
 		
 		
 
@@ -190,6 +191,22 @@ public class LiveRebroadcastVO extends AbstractBaseVO<LiveRebroadcastVO,LiveRebr
 			this.setIntroduce(entity.getIntroduce());
 			this.setComId(entity.getComId());
 			this.setComName(entity.getComName());
+			this.setImageUrl(entity.getImageUrl());
+			return this;
+		}
+
+
+
+
+		public String getImageUrl() {
+			return imageUrl;
+		}
+
+
+
+
+		public LiveRebroadcastVO setImageUrl(String imageUrl) {
+			this.imageUrl = imageUrl;
 			return this;
 		}
 

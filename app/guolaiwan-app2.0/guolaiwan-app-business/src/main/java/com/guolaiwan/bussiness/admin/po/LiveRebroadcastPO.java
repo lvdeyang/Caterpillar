@@ -19,6 +19,8 @@ public class LiveRebroadcastPO extends AbstractBasePO{
 		private String folde; 
 		//项目路径
 		private String webUrl;
+		//海报
+		private String imageUrl;
 		//文件大小
 		private String fileSize;
 		//上传结果
@@ -92,6 +94,12 @@ public class LiveRebroadcastPO extends AbstractBasePO{
 		}
 		public void setLiveId(long liveId) {
 			this.liveId = liveId;
+		}
+		public String getImageUrl() {
+			return imageUrl;
+		}
+		public void setImageUrl(String imageUrl) {
+			this.imageUrl = imageUrl;
 		}
 		
 	}

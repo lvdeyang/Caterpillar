@@ -82,7 +82,7 @@
 				    var html=[];
 				    for(var i=0; i<data.length; i++){
 						html.push('<div >'+data[i].oldName+'</div>');
-						html.push('<div ><video poster="lib/images/huifang.png" src="'+data[i].webUrl+'" x5-video-player-type="h5" controls="controls" width=100% height="200"></video></div>');
+						html.push('<div ><video poster="'+data[i].imageUrl+'" src="'+data[i].webUrl+'" x5-video-player-type="h5" controls="controls" width=100% height="200"></video></div>');
 						html.push('</br>');
 					} 
 					$('.x-body').append(html.join(''));

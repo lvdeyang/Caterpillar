@@ -7164,6 +7164,10 @@ public class PhoneController extends WebBaseControll {
 		List<LiveRebroadcastPO> rdvertisement = conn_rdvertisementDao.findByLiveIdOrder(liveId);
 		List<LiveRebroadcastVO> rdvertisementvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class)
 				.convert(rdvertisement, LiveRebroadcastVO.class);
+		SysConfigPO sysConfigPO=conn_sysConfig.getSysConfig();
+		for (LiveRebroadcastVO liveRebroadcastVO : rdvertisementvo) {
+			liveRebroadcastVO.setImageUrl(sysConfigPO.getWebUrl()+liveRebroadcastVO.getImageUrl());
+		}
 		return success(rdvertisementvo);
 	}
 	

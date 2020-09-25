@@ -223,6 +223,10 @@ public class PictureController extends BaseController{
 			strMap.put("source", "supersell");
 			strMap.put("picdo", "pic.do");
 		}
+		else if(source.equals("record")){
+			strMap.put("source", "live");
+			strMap.put("picdo", "recordPic.do");
+		}
 		else {
 			strMap.put("source", source);
 			strMap.put("picdo", "pic.do");

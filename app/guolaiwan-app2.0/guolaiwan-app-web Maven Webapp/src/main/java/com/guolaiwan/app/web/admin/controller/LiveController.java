@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.druid.stat.TableStat.Name;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.app.web.admin.vo.ActivityVO;
 import com.guolaiwan.app.web.admin.vo.LiveAdvertisementVO;
@@ -55,6 +56,7 @@ import com.guolaiwan.bussiness.admin.po.MerchantPO;
 import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.admin.po.UserInfoPO;
+import com.guolaiwan.bussiness.admin.po.VoteModularPO;
 
 import pub.caterpillar.mvc.controller.BaseController;
 
@@ -462,15 +464,35 @@ public class LiveController extends BaseController {
 	}
 
 	// 后台回放获取 张羽 5/7
+	@Autowired
+	SysConfigDAO conn_sysconfig;
 	@ResponseBody
 	@RequestMapping(value = "/rebroadcastList.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	public Map<String, Object> getRebroadcastList(int pagecurr, int ilimit) throws Exception {
 		List<LiveRebroadcastPO> listpo = conn_liveRebroadcast.getRebroadcastByPage(pagecurr, ilimit);
 		List<LiveRebroadcastVO> listvo = LiveRebroadcastVO.getConverter(LiveRebroadcastVO.class).convert(listpo,
 				LiveRebroadcastVO.class);
+		SysConfigPO sysConfigPO= conn_sysconfig.getSysConfig();
+		for (LiveRebroadcastVO liveRebroadcastVO : listvo) {
+			liveRebroadcastVO.setImageUrl(sysConfigPO.getWebUrl()+liveRebroadcastVO.getImageUrl());
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", listvo);
+		
 		return map;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/recordPic.do", method = RequestMethod.POST)
+	public String recordPic(HttpServletRequest request) {
+		String pic = request.getParameter("pic");
+		long picId = Long.parseLong(request.getParameter("picId"));
+		long id = Long.parseLong(request.getParameter("id"));
+		LiveRebroadcastPO liveRebroadcastPO=conn_liveRebroadcast.get(id);
+		liveRebroadcastPO.setImageUrl(pic);
+		conn_liveRebroadcast.save(liveRebroadcastPO);
+		return "liveImg";
 	}
 
 	// 回放删除 张羽 5/7
@@ -479,6 +501,17 @@ public class LiveController extends BaseController {
 	public String rebroadcastDel(HttpServletRequest request) throws Exception {
 		String uuid = request.getParameter("uuid");
 		conn_liveRebroadcast.deleteByUuid(uuid);
+		return "success";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "modifyrecord.do", method = RequestMethod.POST)
+	public String modifyrecord(HttpServletRequest request) throws Exception {
+		String id = request.getParameter("id");
+		LiveRebroadcastPO liveRebroadcastPO=conn_liveRebroadcast.get(Long.parseLong(id));
+		liveRebroadcastPO.setOldName(request.getParameter("title"));
+		conn_liveRebroadcast.save(liveRebroadcastPO);
 		return "success";
 	}
 

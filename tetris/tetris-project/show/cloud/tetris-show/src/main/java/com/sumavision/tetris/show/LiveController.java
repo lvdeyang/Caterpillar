@@ -106,7 +106,16 @@ public class LiveController {
         CapacityFeignService.deleteRecordTask("camera"+livePo.getAnchorId());
         JSONObject jsonParam=new JSONObject();
         jsonParam.put("liveId", livePo.getId());
-        jsonParam.put("url", "http://47.95.241.89:6690/"+livePo.getRecordPath().replace("/home/hls/", "")+"/stream.m3u8");
+        File file=new File(livePo.getRecordPath());
+        String url="http://47.95.241.89:6690/"+livePo.getRecordPath().replace("/home/hls/", "");
+        File[] subfiles=file.listFiles();
+        for (File file2 : subfiles) {
+			if(file2.isDirectory()){
+				url+="/"+file2.getName()+"/vod.m3u8";
+				break;
+			}
+		}
+        jsonParam.put("url", url);
         HttpUtil.httpPost("http://www.guolaiwan.net/phoneApp/addrecord", jsonParam);
         return new LiveVo().set(livePo);
     }
