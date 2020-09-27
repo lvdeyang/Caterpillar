@@ -158,6 +158,7 @@ public class ContextListener extends InitLoader {
 				if (merchantPOs != null) {
 
 					for (int i = 0; i < merchantPOs.size(); i++) {
+						
 						// Mr黄擦涛的屁股
 						List<OrderInfoPO> balanceOrders = conn_OrderInfo
 								.getOrdersByMerBalanced(merchantPOs.get(i).getId());
@@ -167,6 +168,9 @@ public class ContextListener extends InitLoader {
 							totalBalance += order.getPayMoney();
 							if (order.getProductId() > 0) {
 								ProductPO productPO = conn_Product.get(order.getProductId());
+								if(productPO==null){
+									continue;
+								}
 								if (order.getActivityId() != 0) {
 
 								} else if (productPO.getProductCommissionCode() == 1) {
