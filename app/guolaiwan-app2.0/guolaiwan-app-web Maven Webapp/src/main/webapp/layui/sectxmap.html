@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>普通关键字检索</title>
+    <style type="text/css">
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+        }
+        p {
+            width: 603px;
+            padding-top: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+    </style>
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=XMSBZ-QDDWU-UAHVW-B7WMJ-ABTY3-K7FIB"></script>
+      <script src="../layui/lib/layui/layui.js"></script>
+     <script src="../layui/js/jquery.min.js"></script>
+    
+</head>
+
+<body onload="init()">
+    <script>
+        var searchService, markers = [];
+        var init = function() {
+            var center = new qq.maps.LatLng(40.18897, 117.96583);
+            var map = new qq.maps.Map(document.getElementById('container'), {
+                center: center,
+                zoom: 13
+            });
+            
+
+             qq.maps.event.addListener(map, 'click', function (event) {
+                    //获取点击坐标
+                    var latLng = event.latLng,
+                        lat = latLng.getLat().toFixed(5),
+                        lng = latLng.getLng().toFixed(5);
+                    $("#mapX").val(lat);
+                    $("#mapY").val(lng);
+                    //坐标点添加标记
+                   /*  markers = new qq.maps.markers({
+                        position: latLng,
+                        map: map
+                    }); */
+                    //移除其他标记
+                    qq.maps.event.addListener(map, 'click', function (event) {
+                        markers.setMap(null);
+                    });
+                });
+              
+            var latlngBounds = new qq.maps.LatLngBounds();
+            //设置Poi检索服务，用于本地检索、周边检索
+            searchService = new qq.maps.SearchService({
+                //设置搜索范围为北京
+                location: "遵化市",
+                //设置搜索页码为1
+                pageIndex: 1,
+                //设置每页的结果数为5
+                pageCapacity: 5,
+                //设置展现查询结构到infoDIV上
+                panel: document.getElementById('infoDiv'),
+                //设置动扩大检索区域。默认值true，会自动检索指定城市以外区域。
+                autoExtend: true,
+                //检索成功的回调函数
+                complete: function(results) {
+                    //设置回调函数参数
+                    var pois = results.detail.pois;
+                    for (var i = 0, l = pois.length; i < l; i++) {
+                        var poi = pois[i];
+                        //扩展边界范围，用来包含搜索到的Poi点
+                        latlngBounds.extend(poi.latLng);
+                        var marker = new qq.maps.Marker({
+                            map: map,
+                            position: poi.latLng
+                        });
+
+                        marker.setTitle(i + 1);
+
+                        markers.push(marker);
+
+                    }
+                    //调整地图视野
+                    map.fitBounds(latlngBounds);
+                },
+                //若服务请求失败，则运行以下函数
+                error: function() {
+                    alert("出错了。");
+                }
+            });
+
+            
+
+        }
+
+         //清除地图上的marker
+            function clearOverlays(overlays) {
+                var overlay;
+                while (overlay = overlays.pop()) {
+                    overlay.setMap(null);
+                }
+            }
+            //设置搜索的范围和关键字等属性
+            function searchKeyword() {
+                var keyword = document.getElementById("keyword").value;
+                clearOverlays(markers);
+                //根据输入的城市设置搜索范围
+                searchService.setLocation("唐山");
+                //根据输入的关键字在搜索范围内检索
+                searchService.search(keyword);
+
+               
+            }
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            $(function () { 
+            $('#transmit').on('click', function () {
+                console.log(parent.$('#shopLongitude'))
+                if(parent.$('#shopLongitude')){
+	                parent.$('#seccomLongitude').val($("#mapY").val());
+	                parent.$('#seccomLatitude').val($("#mapX").val());
+                
+                }
+        
+                
+                
+                parent.layer.close(index);
+            });
+            })
+    </script>
+    <div>
+        <input id="keyword" type="text" value="">
+        <input type="button" value="搜索" onclick="searchKeyword()">
+
+        <input id="mapX" type="text" />
+        <input id="mapY" type="text" />
+
+        <input type="button" id="transmit" value="确定" /> 
+
+    </div>
+    <div style="width:1000px;height:600px" id="container"></div>
+    <div style='width: 1000px; height: 100px' id="infoDiv"></div>
+</body>
+
+</html>
