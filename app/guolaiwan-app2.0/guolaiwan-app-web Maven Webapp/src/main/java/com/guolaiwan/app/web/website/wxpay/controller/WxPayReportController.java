@@ -141,6 +141,8 @@ public class WxPayReportController extends WebBaseControll {
 	
 	@Autowired
 	private AoYouOrderDao aoYouOrderDao;
+	
+	private Map<String, String> tempMap=new HashMap<String, String>();
 
 	@ResponseBody
 	@RequestMapping(value = "/payreport", method = RequestMethod.POST)
@@ -172,6 +174,13 @@ public class WxPayReportController extends WebBaseControll {
 				int i = 0;
 				// 获取订单号
 				String tradeNum = respData.get("out_trade_no");
+				if(tempMap.containsKey(tradeNum)){
+					return null;
+				}else{
+					tempMap.put(tradeNum, tradeNum);
+				}
+				
+				
 				String[] orderIds = tradeNum.split("A");
 				// orderNo="bundle-"+order.getId();
 				if (tradeNum.indexOf("bundle") != -1) {
@@ -234,6 +243,7 @@ public class WxPayReportController extends WebBaseControll {
 				stringBuffer.append("OK");
 				stringBuffer.append("]]></return_msg>");
 				System.out.println("微信支付付款成功!" + i + "个订单。订单号：" + tradeNum);
+				tempMap.remove(tradeNum);
 			} else {
 				stringBuffer.append("<xml><return_code><![CDATA[");
 				stringBuffer.append("FAIL");
