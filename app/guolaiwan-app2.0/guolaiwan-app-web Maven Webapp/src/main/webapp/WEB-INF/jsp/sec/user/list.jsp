@@ -27,13 +27,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <span class="layui-breadcrumb">
               <a><cite>首页</cite></a>
               <a><cite>保安公司</cite></a>
-              <a><cite>打卡点列表</cite></a>
+              <a><cite>用户列表</cite></a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
-            <xblock><button class="layui-btn" onclick="open_win('添加打卡点','addv?comId=${id}','1000','600')"><i class="layui-icon">&#xe608;</i>添加打卡点</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
-         	<table id="pointList" lay-filter="pointList"></table>
+            <xblock><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
+         	<table id="userList" lay-filter="userList"></table>
         </div>
         <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
         <script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
@@ -50,38 +50,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               table = layui.table;//模板引擎
               //以上模块根据需要引入
               
-              getpointList();
+              getuserList();
               
               
              
-              table.on("edit(pointList)",function(obj){
-              		//加载
-              		layer.msg('加载中', {
- 						 icon: 16
-  						,shade: 0.01
-					})
-              		var data = obj.data,
-              		value = obj.value,
-              		field = obj.field;
-              		
-              		$.ajax({
-              			type:"post",
-              			url:"edit.do",
-              			data:{"id":data.id,"value":value,"field":field},
-              			success:function(msg){
-              				layer.closeAll("loading");
-              				if(msg=="success"){
-              					layer.msg("修改成功！",{icon:1});
-              				}else{
-              					layer.msg("系统错误！",{icon:2});
-              				}
-              			
-              			}
-              		})
-              })
+             
             });
 	         
-	         function getpointList(){
+	         function getuserList(){
 	         	table.render({
             		elem:"#pointList"
             		,method:'post'
@@ -92,9 +68,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					,cols: [[
    						{type:"checkbox"}
    						,{field:"name",title:"名称"}
-   						,{field:"x",title:"经度",width:160}
-   						,{field:"y",title:"纬度",width:160}
-   						,{field:"distance",title:"公司范围",width:160}
+   						,{field:"phone",title:"手机号",width:160}
+   						,{field:"type",title:"类型",width:160}
+   						,{field:"status",title:"状态",width:160}
    						,{title:"操作",templet:"#zsgc"}
    						]]
    					,done:function(res, curr, count){

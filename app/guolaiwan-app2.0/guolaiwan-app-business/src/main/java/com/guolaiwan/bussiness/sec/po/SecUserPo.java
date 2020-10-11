@@ -14,6 +14,7 @@ public class SecUserPo extends AbstractBasePO {
 	private long userId;
 	private long companyId;
 	private String type;//com.guolaiwan.bussiness.sec.enums.SecUserType
+	private String status;//com.guolaiwan.bussiness.sec.enums.SecUserStatus
 	public String getName() {
 		return name;
 	}
@@ -43,6 +44,12 @@ public class SecUserPo extends AbstractBasePO {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

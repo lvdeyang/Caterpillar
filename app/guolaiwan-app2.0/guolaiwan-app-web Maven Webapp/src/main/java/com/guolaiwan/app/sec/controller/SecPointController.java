@@ -51,16 +51,18 @@ public class SecPointController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView companyList(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("id", request.getParameter("id"));
 		ModelAndView mv = new ModelAndView("sec/point/list", strMap);
 		return mv;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST)
-	public Map<String, Object> AddView(int page, int limit) throws Exception {
+	public Map<String, Object> AddView(HttpServletRequest request,int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		int count = conn_secpoint.countAll();
-		List<SecPointPo> points = conn_secpoint.findAll(page, limit);
+		String comId=request.getParameter("comId");
+		int count = conn_secpoint.countByField("companyId", Long.parseLong(comId));
+		List<SecPointPo> points = conn_secpoint.findByField("companyId", Long.parseLong(comId), page, limit);
 		strMap.put("code", "0");
 		strMap.put("msg", "");
 		strMap.put("count", count);
@@ -72,6 +74,7 @@ public class SecPointController extends BaseController {
 	@RequestMapping(value = "/addv", method = RequestMethod.GET)
 	public ModelAndView addv(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("sec/point/add");
+		mv.addObject("comId", request.getParameter("comId"));
 		return mv;
 	}
 
@@ -80,7 +83,20 @@ public class SecPointController extends BaseController {
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
 	public String add(HttpServletRequest request) throws Exception {
 	
-		
+		String name=request.getParameter("name");
+		String x=request.getParameter("x");
+		String y=request.getParameter("y");
+		String type=request.getParameter("type");
+		long companyId=Long.parseLong(request.getParameter("comId"));
+		long distance=Long.parseLong(request.getParameter("distance"));//打卡范围
+		SecPointPo secPointPo=new SecPointPo();
+		secPointPo.setCompanyId(companyId);
+		secPointPo.setDistance(distance);
+		secPointPo.setName(name);
+		secPointPo.setType(type);
+		secPointPo.setX(x);
+		secPointPo.setY(y);
+		conn_secpoint.save(secPointPo);
 		return "success";
 	}
 

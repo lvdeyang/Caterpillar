@@ -51,17 +51,18 @@ public class SecUserController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView companyList(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("id", request.getParameter("id"));
 		ModelAndView mv = new ModelAndView("sec/user/list", strMap);
 		return mv;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST)
-	public Map<String, Object> AddView(int page, int limit) throws Exception {
+	public Map<String, Object> AddView(HttpServletRequest request,int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		long comId = getLoginInfo().getComId();
-		int count = conn_secuser.countAll();
-		List<SecUserPo> users = conn_secuser.findAll(page, limit);
+		String comId=request.getParameter("comId");
+		int count = conn_secuser.countByField("companyId", Long.parseLong(request.getParameter("comId")));
+		List<SecUserPo> users = conn_secuser.findByField("companyId", Long.parseLong(request.getParameter("comId")),page, limit);
 		strMap.put("code", "0");
 		strMap.put("msg", "");
 		strMap.put("count", count);
@@ -69,23 +70,7 @@ public class SecUserController extends BaseController {
 		return strMap;
 	}
 
-	// 添加数据页面
-	@RequestMapping(value = "/addv", method = RequestMethod.GET)
-	public ModelAndView addv(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("sec/company/add");
-		return mv;
-	}
 
-	// 添加数据页面
-	@ResponseBody
-	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
-	public String add(HttpServletRequest request) throws Exception {
-	
-		
-		return "success";
-	}
-
-	
 	// 删除数据
 	@ResponseBody
 	@RequestMapping(value = "/del.do", method = RequestMethod.POST)

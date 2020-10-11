@@ -65,8 +65,8 @@
                     </label>
                     <div class="layui-input-block">
                     <select id="type" name="type" lay-filter="type" required lay-verify="required">
-						<option value="DAZHE">折扣</option>
-						<option value="JIFEN">积分兑换</option>
+						<option value="WORK">考勤打卡点</option>
+						<option value="CRUISE">巡逻打卡点</option>
                     </select>
                     </div>
                 </div>
@@ -86,6 +86,7 @@
         <script src="<%=request.getContextPath() %>/layui/js/x-layui.js" charset="utf-8">
         </script>
         <script>
+        var comId=${comId};
         	layui.use([ 'form', 'layer','laytpl' ], function() {
         		$ = layui.jquery;
         		var form = layui.form,
@@ -99,7 +100,7 @@
 	        		layer.load();
         			$.ajax({
         				type : "post",
-        				url : "add.do",
+        				url : "add.do?comId="+comId,
         				data : data.field,
         				success : function(msg) {
         					layer.closeAll("loading");
@@ -112,7 +113,7 @@
         							var index = parent.layer.getFrameIndex(window.name);
         							//关闭当前frame
         							parent.layer.close(index);
-        							parent.getcompanyList();
+        							parent.getpointList();
         						});
         					}else{
         						layer.msg("系统错误！",{icon:2,time:3000});
