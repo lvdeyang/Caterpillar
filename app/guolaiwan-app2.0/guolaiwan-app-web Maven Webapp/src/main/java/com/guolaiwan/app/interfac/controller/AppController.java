@@ -5701,6 +5701,20 @@ public class AppController extends WebBaseControll {
 				ChildProductVO.class);
 		return volist.get(0);
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getChildProById/{id}", method = RequestMethod.GET)
+	public Map<String, Object> getChildProById(@PathVariable Long id) throws Exception {
+		ChildProductPO childProductPO=conn_childProduct.get(id);
+		ChildProductVO childProductVO=new ChildProductVO();
+		childProductVO.set(childProductPO);
+		SysConfigPO sysConfigPO=conn_sysConfig.getSysConfig();
+		Map<String, Object> ret=new HashMap<String, Object>();
+		ret.put("vo", childProductVO);
+		ret.put("path", sysConfigPO.getWebUrl());
+		return ret;
+	}
 
 	/**
 	 * CaiCY&Liw 用户清空当前景区导览点
