@@ -58,6 +58,18 @@
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
+                
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                           打卡点类型
+                    </label>
+                    <div class="layui-input-block">
+                    <select id="type" name="type" lay-filter="type" required lay-verify="required">
+						<option value="DAZHE">折扣</option>
+						<option value="JIFEN">积分兑换</option>
+                    </select>
+                    </div>
+                </div>
 				
 				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 200px;bottom: 0">
                     <button class="layui-btn" lay-filter="add" lay-submit>

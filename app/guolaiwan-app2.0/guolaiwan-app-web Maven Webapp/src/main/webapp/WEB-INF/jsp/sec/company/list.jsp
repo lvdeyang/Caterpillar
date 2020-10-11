@@ -138,6 +138,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <script type="text/html" id="zsgc">
 			
 			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
+            <a class='layui-btn layui-btn-danger layui-btn-xs' href='<%=path%>/sec/point/list?id={{ d.id }}'>打卡点管理</a>
      
 		  </script>
 		  
