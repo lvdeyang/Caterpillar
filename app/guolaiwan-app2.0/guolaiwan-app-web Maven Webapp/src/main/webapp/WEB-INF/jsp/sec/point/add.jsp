@@ -35,6 +35,28 @@
                 
                 
                 <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                           打卡开始时间
+                    </label>
+                    
+                    <div class="layui-input-inline">
+                        	<input type="text" id="setTime" name="setTime" placeholder="yyyy-MM-dd HH:mm:ss" required lay-verify="required"
+                        	class="layui-input" >
+                    	</div>
+                </div>
+                
+                <div class="layui-form-item">
+                    <label for="L_title" class="layui-form-label">
+                                                           打卡结束时间
+                    </label>
+                    <div class="layui-input-inline">
+                        	<input type="text" id="setEndTime" name="setEndTime" placeholder="yyyy-MM-dd HH:mm:ss" required lay-verify="required"
+                        	class="layui-input" >
+                    	</div>
+                </div>
+                
+                
+                <div class="layui-form-item">
 					<label for="L_title" class="layui-form-label"> 经度： </label>
 					<div class="layui-input-inline" style="width: 100px;">
 						<input type="text"  name="x" id="seccomLongitude"  autocomplete="off" class="layui-input">
@@ -87,10 +109,11 @@
         </script>
         <script>
         var comId=${comId};
-        	layui.use([ 'form', 'layer','laytpl' ], function() {
+        	layui.use([ 'form', 'layer','laytpl','laydate' ], function() {
         		$ = layui.jquery;
         		var form = layui.form,
         			layer = layui.layer,
+        			laydate = layui.laydate,
         			laytpl = layui.laytpl;
         			
             
@@ -124,7 +147,15 @@
         			return false;
         		});
         		
-        	
+        	  //时间选择器
+			  laydate.render({
+			    elem: '#setTime'
+			    ,type: 'time'
+			  });
+			  laydate.render({
+			    elem: '#setEndTime'
+			    ,type: 'time'
+			  });
         });
         
          function open_win(title,url,w,h){

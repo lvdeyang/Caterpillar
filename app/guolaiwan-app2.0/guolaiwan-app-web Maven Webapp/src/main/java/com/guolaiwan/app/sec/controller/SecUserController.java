@@ -41,7 +41,7 @@ import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
-@RequestMapping("/sec/user")
+@RequestMapping("/sec/secuser")
 public class SecUserController extends BaseController {
 
 	@Autowired
@@ -77,8 +77,23 @@ public class SecUserController extends BaseController {
 	public String del(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
 		// 删除所有推荐的关联表
-		
+		conn_secuser.delete(id);
 		return "success";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/changestate", method = RequestMethod.POST)
+	public String changestate(HttpServletRequest request) throws Exception {
+		long id = Long.parseLong(request.getParameter("id"));
+		String status=request.getParameter("status");
+		SecUserPo secUserPo=conn_secuser.get(id);
+		secUserPo.setStatus(status);
+		// 删除所有推荐的关联表
+		conn_secuser.saveOrUpdate(secUserPo);
+		return "success";
+	}
+	
+	
+	
 
 }

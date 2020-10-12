@@ -95,6 +95,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						,{field:"x",title:"经度",width:160}
    						,{field:"y",title:"纬度",width:160}
    						,{field:"distance",title:"公司范围",width:160}
+   						,{field:"setTimeStr",title:"打卡开始时间",width:160}
+   						,{field:"setEndTimeStr",title:"打卡结束时间",width:160}
    						,{title:"操作",templet:"#zsgc"}
    						]]
    					,done:function(res, curr, count){
@@ -125,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					layer.closeAll('loading');
 					if(msg=='success'){
 						layer.msg("删除成功！");
-						getcompanyList();
+						getpointList();
 					}	
 				}
 			})

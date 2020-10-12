@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import pub.caterpillar.orm.po.AbstractBasePO;
 
@@ -18,6 +19,9 @@ public class SecPointPo extends AbstractBasePO{
 	private long companyId;
 	private long distance;//打卡范围
 	private Date setTime;
+	private Date setEndTime;
+	private String setTimeStr;
+	private String setEndTimeStr;
 	public String getName() {
 		return name;
 	}
@@ -59,6 +63,26 @@ public class SecPointPo extends AbstractBasePO{
 	}
 	public void setSetTime(Date setTime) {
 		this.setTime = setTime;
+	}
+	public Date getSetEndTime() {
+		return setEndTime;
+	}
+	public void setSetEndTime(Date setEndTime) {
+		this.setEndTime = setEndTime;
+	}
+	@Transient
+	public String getSetTimeStr() {
+		return setTimeStr;
+	}
+	public void setSetTimeStr(String setTimeStr) {
+		this.setTimeStr = setTimeStr;
+	}
+	@Transient
+	public String getSetEndTimeStr() {
+		return setEndTimeStr;
+	}
+	public void setSetEndTimeStr(String setEndTimeStr) {
+		this.setEndTimeStr = setEndTimeStr;
 	}
 	
 }

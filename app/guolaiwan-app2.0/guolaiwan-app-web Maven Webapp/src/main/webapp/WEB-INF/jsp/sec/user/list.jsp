@@ -59,7 +59,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         
 	         function getuserList(){
 	         	table.render({
-            		elem:"#pointList"
+            		elem:"#userList"
             		,method:'post'
    					,url:'list.do?comId='+id
    					,page:true
@@ -101,12 +101,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					layer.closeAll('loading');
 					if(msg=='success'){
 						layer.msg("删除成功！");
-						getcompanyList();
+						getuserList();
 					}	
 				}
 			})
 		})
 		
+	}
+	
+	function pass(id){
+	   changeState(id,'PASSED');
+	}
+	function deny(id){
+	   changeState(id,'DENY');
+	}
+	function changeState(id,status){
+		$.ajax({
+			url:'changestate',
+			type:'post',
+			data:{'id':id,'status':status},
+			success:function(msg){
+				console.log(msg);
+				layer.closeAll('loading');
+				if(msg=='success'){
+					layer.msg("审核完成");
+					getuserList();
+				}	
+			}
+		})
 	}
 		
             </script>
@@ -114,7 +136,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <script type="text/html" id="zsgc">
 			
 			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
-     
+     		<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:pass("{{ d.id }}")'>通过</a>
+			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:deny("{{ d.id }}")'>拒绝</a>
 		  </script>
 		  
     </body>

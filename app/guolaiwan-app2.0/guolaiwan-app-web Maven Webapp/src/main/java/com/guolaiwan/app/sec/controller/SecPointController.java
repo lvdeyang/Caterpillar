@@ -63,6 +63,10 @@ public class SecPointController extends BaseController {
 		String comId=request.getParameter("comId");
 		int count = conn_secpoint.countByField("companyId", Long.parseLong(comId));
 		List<SecPointPo> points = conn_secpoint.findByField("companyId", Long.parseLong(comId), page, limit);
+		for (SecPointPo secPointPo : points) {
+			secPointPo.setSetTimeStr(DateUtil.format(secPointPo.getSetTime(),"HH:mm:ss"));
+			secPointPo.setSetEndTimeStr(DateUtil.format(secPointPo.getSetEndTime(),"HH:mm:ss"));
+		}
 		strMap.put("code", "0");
 		strMap.put("msg", "");
 		strMap.put("count", count);
@@ -89,6 +93,8 @@ public class SecPointController extends BaseController {
 		String type=request.getParameter("type");
 		long companyId=Long.parseLong(request.getParameter("comId"));
 		long distance=Long.parseLong(request.getParameter("distance"));//打卡范围
+		String setTime=request.getParameter("setTime");
+		String setEndTime=request.getParameter("setEndTime");
 		SecPointPo secPointPo=new SecPointPo();
 		secPointPo.setCompanyId(companyId);
 		secPointPo.setDistance(distance);
@@ -96,6 +102,8 @@ public class SecPointController extends BaseController {
 		secPointPo.setType(type);
 		secPointPo.setX(x);
 		secPointPo.setY(y);
+		secPointPo.setSetTime(DateUtil.parse(setTime, "HH:mm:ss"));
+		secPointPo.setSetEndTime(DateUtil.parse(setEndTime,"HH:mm:ss"));
 		conn_secpoint.save(secPointPo);
 		return "success";
 	}
@@ -107,7 +115,7 @@ public class SecPointController extends BaseController {
 	public String del(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
 		// 删除所有推荐的关联表
-		
+		conn_secpoint.delete(id);
 		return "success";
 	}
 
