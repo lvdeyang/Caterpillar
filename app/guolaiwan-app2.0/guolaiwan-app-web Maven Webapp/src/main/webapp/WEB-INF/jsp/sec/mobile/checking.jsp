@@ -66,7 +66,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>用户注册</title>
+<title>用户状态</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -493,14 +493,14 @@ html, body {
 </style>
 
 </head>
-<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 
 <!-- 公共脚本引入 -->
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript">
 
 	$(function() {
-	    var parseAjaxResult = function(data){
+	    
+		var parseAjaxResult = function(data){
 			if(data.status !== 200){
 				$.toptip('data.message', 'error');
 				return -1;
@@ -510,21 +510,10 @@ html, body {
 
 	    };
 	
-	    $('#regist').on('click',function(){
-	        var _uri = window.BASEPATH+'/sec/phoneapp/apply';
-		    var param={};
-		    param.name=$('#name').val();
-		    param.phone=$('#sphone').val();
-		    param.companyId=$('#company').val();
-		    param.type=$('#userType').val();
-			$.post(_uri, $.toJSON(param), function(data){
-				data = parseAjaxResult(data);
-				if(data === -1) return;
-		        location.href=window.BASEPATH+'/sec/phoneapp/index';
-	
-			});
+	    $('document').on('click','#redo',function(){
+	        var _uri = window.BASEPATH+'/sec/phoneapp/reapply';
+		    location.href=_uri;
 	    });
-		
 	
 	});
 		
@@ -541,57 +530,25 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">用户注册</div>
+				<div class="header-content">用户状态</div>
 			</div>
 		</div>
 		
 		<div id="content" class="content">
-			<div class="weui-cell weui-cell_vcode">
-			    <div class="weui-cell__hd">
-			      <label class="weui-label">手机号</label>
-			    </div>
-			    <div class="weui-cell__bd">
-			      <input style="height:40px" id="sphone" class="weui-input" type="tel" placeholder="请输入手机号">
-			    </div>
-		   
-  			</div>
-  			<div class="weui-cell weui-cell_vcode">
-			    <div class="weui-cell__hd">
-			      <label class="weui-label">姓名</label>
-			    </div>
-			    <div class="weui-cell__bd">
-			      <input style="height:40px" id="name" class="weui-input" type="text" placeholder="请输入姓名">
-			    </div>
-  			</div>
-  			
-  			
-  			<div class="weui-cell weui-cell_select weui-cell_select-after">
-		        <div class="weui-cell__hd">
-		          <label for="" class="weui-label">选择公司</label>
-		        </div>
-		        <div class="weui-cell__bd">
-		          <select class="weui-select" name="company" id="company">
-		               <c:forEach items="${companys}" var="com">
-					       <option value="${com.id}">${com.name}</option>
-					   </c:forEach>
-		          </select>
-		        </div>
-		    </div>
-		    
-		    <div class="weui-cell weui-cell_select weui-cell_select-after">
-		        <div class="weui-cell__hd">
-		          <label for="" class="weui-label">注册类型</label>
-		        </div>
-		        <div class="weui-cell__bd">
-		          <select class="weui-select" name="uesrType" id="userType">
-		            <option value="SECURITY">员工</option>
-		            <option value="ADMIN">管理员</option>
-		          </select>
-		        </div>
-		    </div>
+			<div style="width:100%;text-align:center">
+			    <c:if test="${status == 'CHECKING'}">
+				   审核中......
+				</c:if>
+				<c:if test="${status == 'DENY'}">
+				   申请被拒绝，请重新申请
+				</c:if>
+			</div>
 		</div>
 	</div>
-	<a id="regist" href="javascript:;" class="weui-btn weui-btn_primary">注册</a>
+	<c:if test="${status == 'DENY'}">
+		<a id="redo" href="javascript:;" class="weui-btn weui-btn_primary">重新注册</a>
+	</c:if>
+	
 	
 </body>
 </html>

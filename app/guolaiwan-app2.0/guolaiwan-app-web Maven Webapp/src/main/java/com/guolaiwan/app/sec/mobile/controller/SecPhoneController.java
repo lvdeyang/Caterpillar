@@ -200,11 +200,14 @@ import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 import com.guolaiwan.bussiness.javacv.GuoliawanLiveServiceWrapper;
 import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
 import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
+import com.guolaiwan.bussiness.sec.dao.SecCompanyDAO;
 import com.guolaiwan.bussiness.sec.dao.SecUserDAO;
 import com.guolaiwan.bussiness.sec.enums.SecUserStatus;
+import com.guolaiwan.bussiness.sec.po.SecCompanyPo;
 import com.guolaiwan.bussiness.sec.po.SecUserPo;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
+import com.sun.jna.platform.win32.WinDef.LONG;
 
 import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.commons.img.VerifyCodeUtils;
@@ -223,28 +226,88 @@ import pub.caterpillar.weixin.wxpay.WXPayUtil;
 public class SecPhoneController extends WebBaseControll {
 	@Autowired
 	SecUserDAO conn_secuser;
+	@Autowired
+	SecCompanyDAO conn_com;
 	
+	@RequestMapping(value = "/index")
+	public ModelAndView index(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
+		if(secUserPos!=null&&!secUserPos.isEmpty()){
+			if(secUserPos.get(0).getStatus().equals(SecUserStatus.CHECKING)||
+					secUserPos.get(0).getStatus().equals(SecUserStatus.DENY)){
+				mv = new ModelAndView("redirect:/sec/phoneapp/checking/index");
+			}else{
+				//跳转到首页
+			}
+		}else{
+			mv = new ModelAndView("redirect:/sec/phoneapp/regist/index");
+		}
+		return mv;
+	}
+	
+
 	@RequestMapping(value = "/regist/index")
 	public ModelAndView registIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("sec/mobile/regist");
-		HttpSession session = request.getSession();
-		String userId=session.getAttribute("userId").toString();
+		List<SecCompanyPo> secCompanyPos=conn_com.findAll();
+		mv.addObject("companys", secCompanyPos);
 		return mv;
 	}
 	
+	@RequestMapping(value = "/checking/index")
+	public ModelAndView checkingIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("sec/mobile/checking");
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
+		mv.addObject("status",secUserPos.get(0).getStatus());
+		return mv;
+	}
+	
+	@RequestMapping(value = "/reapply")
+	public ModelAndView reapply(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("redirect:/sec/phoneapp/index");
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		conn_secuser.deleteByField("userId", Long.parseLong(userId));
+		return mv;
+	}
+	
+	private String getRequestJson(HttpServletRequest request) {
+		try {
+			BufferedReader br;
+			br = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream(), "utf-8"));
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+			request.getInputStream().close();
+			br.close();
+			return sb.toString();
+		} catch (IOException e) {
+			return "";
+		}
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/apply", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	public Map<String, Object> apply(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		String name=request.getParameter("name");
-		String phone=request.getParameter("phone");
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		String name=json.getString("name");
+		String phone=json.getString("phone");
 		HttpSession session = request.getSession();
 		String userId=session.getAttribute("userId").toString();
-		String type=request.getParameter("type");
-		String companyId=request.getParameter("companyId");
+		String type=json.getString("type");
+		String companyId=json.getString("companyId");
 		List<SecUserPo> secUserPos=conn_secuser.findByField("companyId",Long.parseLong(companyId));
 		SecUserPo secUserPo=new SecUserPo();
 		if(!secUserPos.isEmpty()&&secUserPos.size()!=0){
