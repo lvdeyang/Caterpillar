@@ -93,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td>
                             {{ item.childName }}
                         </td>
-						<td>
+						<td style="word-break:break-all;">
 							
 	                        {{ item.childPic }}
                         </td>

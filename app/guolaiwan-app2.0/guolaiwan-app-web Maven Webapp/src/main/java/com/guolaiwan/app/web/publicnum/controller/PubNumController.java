@@ -3775,5 +3775,13 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = new ModelAndView("mobile/vote/people", strMap);
 		return mv;
 	}
+	
+	@RequestMapping(value = "/share/daolan/index", method = RequestMethod.GET)
+	public ModelAndView daolanindex(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		
+		ModelAndView mv = new ModelAndView("daolan/home", strMap);
+		return mv;
+	}
 
 }
