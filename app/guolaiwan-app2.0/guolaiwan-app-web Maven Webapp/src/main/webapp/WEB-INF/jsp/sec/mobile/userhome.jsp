@@ -516,6 +516,13 @@ html, body {
 
 	    };
 	
+	    $('#selectPoint').on('click',function(){
+	       $("#selPoint").popup();
+	    });
+	    
+	    $('.selPoint').on('click',function(){
+	       $.closePopup();
+	    });
 	    
 	
 	});
@@ -539,7 +546,7 @@ html, body {
 		
 		<div id="content" class="content">
 		  <div style="width:100%">
-			  <image style="width:50px;height:50px;float:left;" src="lib/images/caidan.png"/>
+			  <image id="selectPoint" style="width:50px;height:50px;float:left;" src="lib/images/caidan.png"/>
 			  <div style="float:left;line-height:50px;width:200px;">人民银行打卡点</div>
 		  </div>
 		
@@ -683,6 +690,63 @@ html, body {
 				  </div></p>
 			    
 			 </div>
+			 
+			 <div id="selPoint" class="weui-popup__container popup-bottom">
+			  <div class="weui-popup__overlay"></div>
+			  <div class="weui-popup__modal">
+			      <div class="weui-grids">
+					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
+					    <div class="weui-grid__icon">
+					      <img src="lib/images/8.png" alt="">
+					    </div>
+					    <p class="weui-grid__label">
+					      人民银行打卡点
+					    </p>
+					  </a>
+					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
+					    <div class="weui-grid__icon">
+					      <img src="lib/images/8.png" alt="">
+					    </div>
+					    <p class="weui-grid__label">
+					      人民银行打卡点
+					    </p>
+					  </a>
+					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
+					    <div class="weui-grid__icon">
+					      <img src="lib/images/8.png" alt="">
+					    </div>
+					    <p class="weui-grid__label">
+					      人民银行打卡点
+					    </p>
+					  </a>
+					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
+					    <div class="weui-grid__icon">
+					      <img src="lib/images/8.png" alt="">
+					    </div>
+					    <p class="weui-grid__label">
+					      人民银行打卡点
+					    </p>
+					  </a>
+					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
+					    <div class="weui-grid__icon">
+					      <img src="lib/images/8.png" alt="">
+					    </div>
+					    <p class="weui-grid__label">
+					      人民银行打卡点
+					    </p>
+					  </a>
+					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
+					    <div class="weui-grid__icon">
+					      <img src="lib/images/8.png" alt="">
+					    </div>
+					    <p class="weui-grid__label">
+					      人民银行打卡点
+					    </p>
+					  </a>
+					  
+					</div>
+			  </div>
+			</div>
 		</div>
 	</div>
 	
