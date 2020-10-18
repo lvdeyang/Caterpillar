@@ -71,6 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						,{field:"phone",title:"手机号",width:160}
    						,{field:"type",title:"类型",width:160}
    						,{field:"status",title:"状态",width:160}
+   						,{field:"checkreason",title:"审核结果",width:160}
    						,{title:"操作",templet:"#zsgc"}
    						]]
    					,done:function(res, curr, count){
@@ -79,10 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	})
 	         }
 	         
-	         
-	         function open_win(title,url,w,h){
-	         	x_admin_show(title,url,w,h);
-	         }
+	      
 	         
 	         
 	        
@@ -130,14 +128,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		})
 	}
+	 function open_win(title,url,w,h){
+	         	x_admin_show(title,url,w,h);
+	         }
 		
             </script>
           
           <script type="text/html" id="zsgc">
 			
 			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
-     		<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:pass("{{ d.id }}")'>通过</a>
-			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:deny("{{ d.id }}")'>拒绝</a>
+            <a class='layui-btn layui-btn-danger layui-btn-xs' onclick='open_win("审核用户","checkout?id={{d.id}}","600","400")' >审核</a>
+     		
 		  </script>
 		  
     </body>

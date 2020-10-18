@@ -86,14 +86,22 @@ public class SecUserController extends BaseController {
 	public String changestate(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
 		String status=request.getParameter("status");
+		String checkreason=request.getParameter("checkreason");
 		SecUserPo secUserPo=conn_secuser.get(id);
 		secUserPo.setStatus(status);
+		secUserPo.setCheckreason(checkreason);
 		// 删除所有推荐的关联表
 		conn_secuser.saveOrUpdate(secUserPo);
 		return "success";
 	}
 	
-	
+	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
+	public ModelAndView checkout(HttpServletRequest request) {
+		Map<String, Object> strMap = new HashMap<String, Object>();
+		strMap.put("id", request.getParameter("id"));
+		ModelAndView mv = new ModelAndView("sec/user/checkout", strMap);
+		return mv;
+	}
 	
 
 }

@@ -266,6 +266,7 @@ public class SecPhoneController extends WebBaseControll {
 		String userId=session.getAttribute("userId").toString();
 		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
 		mv.addObject("status",secUserPos.get(0).getStatus());
+		mv.addObject("reason",secUserPos.get(0).getCheckreason());
 		return mv;
 	}
 	

@@ -493,6 +493,7 @@ html, body {
 </style>
 
 </head>
+<jsp:include page="../../../mobile/commons/jsp/scriptpubnum.jsp"></jsp:include>
 
 <!-- 公共脚本引入 -->
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
@@ -510,7 +511,7 @@ html, body {
 
 	    };
 	
-	    $('document').on('click','#redo',function(){
+	    $('#redo').on('click',function(){
 	        var _uri = window.BASEPATH+'/sec/phoneapp/reapply';
 		    location.href=_uri;
 	    });
@@ -540,7 +541,7 @@ html, body {
 				   审核中......
 				</c:if>
 				<c:if test="${status == 'DENY'}">
-				   申请被拒绝，请重新申请
+				   申请被拒绝，请重新申请，拒绝原因：${reason}
 				</c:if>
 			</div>
 		</div>
