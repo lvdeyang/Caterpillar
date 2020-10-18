@@ -203,6 +203,7 @@ import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 import com.guolaiwan.bussiness.sec.dao.SecCompanyDAO;
 import com.guolaiwan.bussiness.sec.dao.SecUserDAO;
 import com.guolaiwan.bussiness.sec.enums.SecUserStatus;
+import com.guolaiwan.bussiness.sec.enums.SecUserType;
 import com.guolaiwan.bussiness.sec.po.SecCompanyPo;
 import com.guolaiwan.bussiness.sec.po.SecUserPo;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
@@ -241,6 +242,9 @@ public class SecPhoneController extends WebBaseControll {
 				mv = new ModelAndView("redirect:/sec/phoneapp/checking/index");
 			}else{
 				//跳转到首页
+				if(secUserPos.get(0).getType().equals(SecUserType.ADMIN)){
+					mv=new ModelAndView("redirect:/sec/phoneapp/admin/index");
+				}
 			}
 		}else{
 			mv = new ModelAndView("redirect:/sec/phoneapp/regist/index");
@@ -323,5 +327,10 @@ public class SecPhoneController extends WebBaseControll {
 		conn_secuser.saveOrUpdate(secUserPo);
 		return success(dataMap);
 	}
-
+	@RequestMapping(value = "/admin/index")
+	public ModelAndView adminIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("sec/mobile/adminhome");
+		return mv;
+	}
 }
