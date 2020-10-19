@@ -515,6 +515,7 @@ html, body {
 <script type="text/javascript">
  
 		start()
+		myFunction()
 		$(window).on('scroll', function(){
 		 start()
 		})
@@ -555,7 +556,7 @@ html, body {
 		return $.cookie(str);
 	});  
 
-	$(function() {
+	function myFunction(){
 	  var iscollect;
 	  window.BASEPATH = '<%=basePath%>';
 	  var comCode='${comCode}';
@@ -1209,7 +1210,7 @@ html, body {
 	
 
 	
-	});
+	};
 </script>
 
 
