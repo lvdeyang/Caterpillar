@@ -11,6 +11,7 @@ public class SecUserPointPo extends AbstractBasePO{
 
 	private long secUserId;
 	private long secPointId;
+	private String status;//com.guolaiwan.bussiness.sec.enums.SecUserPointStatus
 	public long getSecUserId() {
 		return secUserId;
 	}
@@ -23,5 +24,12 @@ public class SecUserPointPo extends AbstractBasePO{
 	public void setSecPointId(long secPointId) {
 		this.secPointId = secPointId;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	
 }

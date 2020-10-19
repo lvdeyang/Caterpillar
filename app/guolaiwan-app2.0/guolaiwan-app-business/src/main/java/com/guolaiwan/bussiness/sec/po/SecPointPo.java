@@ -22,6 +22,7 @@ public class SecPointPo extends AbstractBasePO{
 	private Date setEndTime;
 	private String setTimeStr;
 	private String setEndTimeStr;
+	
 	public String getName() {
 		return name;
 	}
