@@ -244,6 +244,8 @@ public class SecPhoneController extends WebBaseControll {
 				//跳转到首页
 				if(secUserPos.get(0).getType().equals(SecUserType.ADMIN)){
 					mv=new ModelAndView("redirect:/sec/phoneapp/admin/index");
+				}else{
+					mv=new ModelAndView("redirect:/sec/phoneapp/user/index");
 				}
 			}
 		}else{
@@ -331,6 +333,18 @@ public class SecPhoneController extends WebBaseControll {
 	public ModelAndView adminIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("sec/mobile/adminhome");
+		return mv;
+	}
+	@RequestMapping(value = "/user/index")
+	public ModelAndView userIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("sec/mobile/userhome");
+		return mv;
+	}
+	@RequestMapping(value = "/personal/index")
+	public ModelAndView personalIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("sec/mobile/userpersonal");
 		return mv;
 	}
 }

@@ -66,7 +66,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>用户状态</title>
+<title>用户个人</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -152,12 +152,10 @@ html, body {
       font-size:xx-small !important;
     }
 
-
 </style>
 
 </head>
 <jsp:include page="../../../mobile/commons/jsp/scriptsec.jsp"></jsp:include>
-
 <!-- 公共脚本引入 -->
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript">
@@ -173,12 +171,12 @@ html, body {
 			}
 
 	    };
-	
-	    $('#redo').on('click',function(){
-	        var _uri = window.BASEPATH+'/sec/phoneapp/reapply';
-		    location.href=_uri;
-	    });
-	
+	    $("#inline-calendar").calendar({
+		  container: "#inline-calendar",
+		  input: "#date3",
+		  dateFormat:'yyyy-mm'
+		});
+	    
 	});
 		
 </script>
@@ -192,24 +190,88 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">用户状态</div>
+				<div class="header-content">用户个人</div>
 			</div>
 		</div>
 		
 		<div id="content" class="content">
-			<div style="width:100%;text-align:center">
-			    <c:if test="${status == 'CHECKING'}">
-				   审核中......
-				</c:if>
-				<c:if test="${status == 'DENY'}">
-				   申请被拒绝，请重新申请，拒绝原因：${reason}
-				</c:if>
+            <div style="width:80px;height:100px;margin:0 auto">
+				<img id="userHead"
+					style="border-radius:50%;width:80px;height:80px;margin-top:10px"
+					class="weui-media-box__thumb" src="lib/images/logo.png">
 			</div>
-		</div>
+			<div style="text-align:center;margin:0 auto">
+			    王芃皓
+			</div>
+			<div style="text-align:center;margin:0 auto;font-size:12px;margin-top:10px;color:#666666">
+			    安邦保安公司
+			</div>
+			<div class="weui-flex" style="margin-top:20px;">
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
+		    </div>
+		    <div class="weui-flex">
+		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">未打卡</div></div>
+		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">迟到</div></div>
+		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">早退</div></div>
+		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">旷工</div></div>
+		    </div>
+            
+            <div class="weui-navbar" style="position:relative !important;margin-top:10px;">
+			  <div class="weui-navbar__item weui_bar__item_on">
+			     打卡记录
+			  </div>
+			  <div class="weui-navbar__item">
+			    巡逻记录
+			  </div>
+			</div>
+            <div class="weui-cell">
+		        <div class="weui-cell__hd"><label for="date3" class="weui-label">日期</label></div>
+		        <div class="weui-cell__bd">
+		          <input class="weui-input" id="date3" type="text" readonly="">
+		        </div>
+		     </div>
+            <div id="inline-calendar"></div>
+            
+            <div id="pointList">
+               <div style="width:50%;font-size:12px;color:#666666;margin-top:10px;">
+	                <div style="margin-left:30px;">
+	                                                         上班时间
+	                </div>
+	                <div style="margin-left:30px;">
+	                   2020-10-19 08:00:00
+	                </div>
+               </div>
+               <div style="width:50%;font-size:12px;color:#666666;margin-top:20px;">
+	                <div style="margin-left:30px;">
+	                                                         下班时间
+	                </div>
+	                <div style="margin-left:30px;">
+	                   2020-10-19 08:00:00
+	                </div>
+               </div>
+               <div style="width:50%;font-size:12px;color:#666666;margin-top:20px;">
+	                <div style="margin-left:30px;">
+	                                                         下班时间
+	                </div>
+	                <div style="margin-left:30px;">
+	                   2020-10-19 08:00:00
+	                </div>
+               </div>
+               <div style="width:50%;font-size:12px;color:#666666;margin-top:20px;">
+	                <div style="margin-left:30px;">
+	                                                         下班时间
+	                </div>
+	                <div style="margin-left:30px;">
+	                   2020-10-19 08:00:00
+	                </div>
+               </div>
+            </div>
+		</div>	
 	</div>
-	<c:if test="${status == 'DENY'}">
-		<a id="redo" href="javascript:;" class="weui-btn weui-btn_primary">重新注册</a>
-	</c:if>
+	
 	
 	
 </body>

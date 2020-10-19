@@ -513,6 +513,7 @@ html, body {
 <script src='https://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script type="text/javascript">
+ 
 		start()
 		$(window).on('scroll', function(){
 		 start()
@@ -568,6 +569,7 @@ html, body {
 	  };
 	
 	  if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+	
 		    getloca();
 	  } else {
 		    if(comCode=='0000'){
