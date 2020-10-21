@@ -348,7 +348,10 @@ public class SecPhoneController extends WebBaseControll {
 	@RequestMapping(value = "/user/index")
 	public ModelAndView userIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
+		List<SecPointPo> secPointPos=conn_secPoint.findAll();
 		mv = new ModelAndView("sec/mobile/userhome");
+		mv.addObject("points", secPointPos);
+		
 		return mv;
 	}
 	@RequestMapping(value = "/personal/index")

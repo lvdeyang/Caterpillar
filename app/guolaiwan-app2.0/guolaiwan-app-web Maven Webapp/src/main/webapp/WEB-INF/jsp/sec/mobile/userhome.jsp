@@ -163,6 +163,11 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	    var pointid=0;
+	    var x='';
+	    var y='';
+	    var type='';
+	    var name='';
 	    
 		var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -179,8 +184,26 @@ html, body {
 	    });
 	    
 	    $('.selPoint').on('click',function(){
+	       initPoint(this);
 	       $.closePopup();
 	    });
+	    
+	    initPoint($('.selPoint')[0]);
+	    
+	    function initPoint(obj){
+	       if(!obj){
+	          $.toptip('没有配置打卡点', 'error');
+	          return false;
+	       }
+	       var ids=$(obj).attr('id').split('-');
+	       pointId=ids[1];
+	       var datas=$(obj).attr('data').split('-');
+	       x=datas[0];
+	       y=datas[1];
+	       type=datas[2];
+	       name=datas[3];
+	       $('#pointName').html(name);
+	    }
 	    
 	    var map = new AMap.Map('container', {
 	        zoom:15,//级别
@@ -267,7 +290,7 @@ html, body {
 		<div id="content" class="content">
 		  <div style="width:100%;">
 			  <image id="selectPoint" style="width:50px;height:50px;float:left;" src="lib/images/caidan.png"/>
-			  <div style="float:left;line-height:50px;width:200px;">人民银行打卡点</div>
+			  <div style="float:left;line-height:50px;width:200px;" id="pointName"></div>
 		  </div>
 		  
 		  <div id="container" style="width:100%;height:500px;"></div>
@@ -277,54 +300,16 @@ html, body {
 			  <div class="weui-popup__overlay"></div>
 			  <div class="weui-popup__modal">
 			      <div class="weui-grids">
-						  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-						    <div class="weui-grid__icon">
-						      <img src="lib/images/8.png" alt="">
-						    </div>
-						    <p class="weui-grid__label">
-						      人民银行打卡点
-						    </p>
-						  </a>
-						  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-						    <div class="weui-grid__icon">
-						      <img src="lib/images/8.png" alt="">
-						    </div>
-						    <p class="weui-grid__label">
-						      人民银行打卡点
-						    </p>
-						  </a>
-						  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-						    <div class="weui-grid__icon">
-						      <img src="lib/images/8.png" alt="">
-						    </div>
-						    <p class="weui-grid__label">
-						      人民银行打卡点
-						    </p>
-						  </a>
-						  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-						    <div class="weui-grid__icon">
-						      <img src="lib/images/8.png" alt="">
-						    </div>
-						    <p class="weui-grid__label">
-						      人民银行打卡点
-						    </p>
-						  </a>
-						  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-						    <div class="weui-grid__icon">
-						      <img src="lib/images/8.png" alt="">
-						    </div>
-						    <p class="weui-grid__label">
-						      人民银行打卡点
-						    </p>
-						  </a>
-						  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-						    <div class="weui-grid__icon">
-						      <img src="lib/images/8.png" alt="">
-						    </div>
-						    <p class="weui-grid__label">
-						      人民银行打卡点
-						    </p>
-						  </a>
+			              <c:forEach items="${points}" var="item" varStatus="status">
+			                  <a href="javascript:void(0)" id="selPoint-${item.id}" data="${item.x}-${item.y}-${item.type}-${item.name}" class="weui-grid js_grid selPoint">
+							    <div class="weui-grid__icon">
+							      <img src="lib/images/8.png" alt="">
+							    </div>
+							    <p class="weui-grid__label">
+							      ${item.name}
+							    </p>
+							  </a>
+			              </c:forEach>
 					</div>
 			  </div>
 			</div>
