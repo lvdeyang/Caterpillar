@@ -27,13 +27,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <span class="layui-breadcrumb">
               <a><cite>首页</cite></a>
               <a><cite>保安公司</cite></a>
-              <a><cite>打卡点列表</cite></a>
+              <a><cite>打卡点时间列表</cite></a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
-            <xblock><button class="layui-btn" onclick="open_win('添加打卡点','addv?comId=${id}','1000','600')"><i class="layui-icon">&#xe608;</i>添加打卡点</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
-         	<table id="pointList" lay-filter="pointList"></table>
+            <xblock><button class="layui-btn" onclick="open_win('添加打卡时间','addv?pointId=${id}','1000','600')"><i class="layui-icon">&#xe608;</i>添加打卡点</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
+         	<table id="pointtimeList" lay-filter="pointtimeList"></table>
         </div>
         <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
         <script src="<%=path %>/layui/js/x-layui.js" charset="utf-8"></script>
@@ -50,11 +50,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               table = layui.table;//模板引擎
               //以上模块根据需要引入
               
-              getpointList();
+              getpointtimeList();
               
               
              
-              table.on("edit(pointList)",function(obj){
+              table.on("edit(pointtimeList)",function(obj){
               		//加载
               		layer.msg('加载中', {
  						 icon: 16
@@ -81,20 +81,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               })
             });
 	         
-	         function getpointList(){
+	         function getpointtimeList(){
 	         	table.render({
-            		elem:"#pointList"
+            		elem:"#pointtimeList"
             		,method:'post'
-   					,url:'list.do?comId='+id
+   					,url:'list.do?pointId='+id
    					,page:true
    					,limits: [10, 20, 30]
             		,limit: 10
    					,cols: [[
    						{type:"checkbox"}
-   						,{field:"name",title:"名称"}
-   						,{field:"x",title:"经度",width:160}
-   						,{field:"y",title:"纬度",width:160}
-   						,{field:"distance",title:"公司范围",width:160}
+   						,{field:"setTimeStr",title:"打卡时间",width:160}
+   						,{field:"setStartTimeStr",title:"打卡结束时间",width:160}
+   						,{field:"setEndTimeStr",title:"打卡结束时间",width:160}
    						,{title:"操作",templet:"#zsgc"}
    						]]
    					,done:function(res, curr, count){
@@ -125,7 +124,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					layer.closeAll('loading');
 					if(msg=='success'){
 						layer.msg("删除成功！");
-						getpointList();
+						getpointtimeList();
 					}	
 				}
 			})
@@ -138,7 +137,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <script type="text/html" id="zsgc">
 			
 			<a class='layui-btn layui-btn-danger layui-btn-xs' href='javascript:del("{{ d.id }}")'>删除</a>
-            <a class='layui-btn layui-btn-danger layui-btn-xs' href='<%=path%>/sec/pointtime/list?id={{ d.id }}'>打卡点时间管理</a>
+     
 		  </script>
 		  
     </body>

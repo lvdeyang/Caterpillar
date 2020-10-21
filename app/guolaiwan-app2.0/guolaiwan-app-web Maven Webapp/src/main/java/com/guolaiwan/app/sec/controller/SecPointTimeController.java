@@ -34,25 +34,27 @@ import com.guolaiwan.bussiness.admin.po.ProductPO;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.sec.dao.SecCompanyDAO;
 import com.guolaiwan.bussiness.sec.dao.SecPointDAO;
+import com.guolaiwan.bussiness.sec.dao.SecPointTimeDAO;
 import com.guolaiwan.bussiness.sec.po.SecCompanyPo;
 import com.guolaiwan.bussiness.sec.po.SecPointPo;
+import com.guolaiwan.bussiness.sec.po.SecPointTimePo;
 
 import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
-@RequestMapping("/sec/point")
-public class SecPointController extends BaseController {
+@RequestMapping("/sec/pointtime")
+public class SecPointTimeController extends BaseController {
 
 	@Autowired
-	private SecPointDAO conn_secpoint;
+	private SecPointTimeDAO conn_secpointtime;
 
 	// 显示添加页面
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView companyList(HttpServletRequest request) {
+	public ModelAndView pointTimeList(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		strMap.put("id", request.getParameter("id"));
-		ModelAndView mv = new ModelAndView("sec/point/list", strMap);
+		ModelAndView mv = new ModelAndView("sec/pointtime/list", strMap);
 		return mv;
 	}
 
@@ -60,25 +62,27 @@ public class SecPointController extends BaseController {
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST)
 	public Map<String, Object> AddView(HttpServletRequest request,int page, int limit) throws Exception {
 		Map<String, Object> strMap = new HashMap<String, Object>();
-		String comId=request.getParameter("comId");
-		int count = conn_secpoint.countByField("companyId", Long.parseLong(comId));
-		List<SecPointPo> points = conn_secpoint.findByField("companyId", Long.parseLong(comId), page, limit);
-		for (SecPointPo secPointPo : points) {
-			//secPointPo.setSetTimeStr(DateUtil.format(secPointPo.getSetTime(),"HH:mm:ss"));
-			//secPointPo.setSetEndTimeStr(DateUtil.format(secPointPo.getSetEndTime(),"HH:mm:ss"));
+		String pointId=request.getParameter("pointId");
+		int count = conn_secpointtime.countByField("secPointId", Long.parseLong(pointId));
+		List<SecPointTimePo> pointTimes = conn_secpointtime.findByField("secPointId", Long.parseLong(pointId), page, limit);
+		for (SecPointTimePo secPointTimePo : pointTimes) {
+			secPointTimePo.setSetTimeStr(DateUtil.format(secPointTimePo.getSetTime(),"HH:mm:ss"));
+			secPointTimePo.setSetEndTimeStr(DateUtil.format(secPointTimePo.getSetEndTime(),"HH:mm:ss"));
+			secPointTimePo.setSetStartTimeStr(DateUtil.format(secPointTimePo.getSetStartTime(),"HH:mm:ss"));
+
 		}
 		strMap.put("code", "0");
 		strMap.put("msg", "");
 		strMap.put("count", count);
-		strMap.put("data", points);
+		strMap.put("data", pointTimes);
 		return strMap;
 	}
 
 	// 添加数据页面
 	@RequestMapping(value = "/addv", method = RequestMethod.GET)
 	public ModelAndView addv(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("sec/point/add");
-		mv.addObject("comId", request.getParameter("comId"));
+		ModelAndView mv = new ModelAndView("sec/pointtime/add");
+		mv.addObject("pointId", request.getParameter("pointId"));
 		return mv;
 	}
 
@@ -86,25 +90,18 @@ public class SecPointController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/add.do", method = RequestMethod.POST)
 	public String add(HttpServletRequest request) throws Exception {
+
+		long pointId=Long.parseLong(request.getParameter("pointId"));
 	
-		String name=request.getParameter("name");
-		String x=request.getParameter("x");
-		String y=request.getParameter("y");
-		String type=request.getParameter("type");
-		long companyId=Long.parseLong(request.getParameter("comId"));
-		long distance=Long.parseLong(request.getParameter("distance"));//打卡范围
 		String setTime=request.getParameter("setTime");
+		String setStartTime=request.getParameter("setStartTime");
 		String setEndTime=request.getParameter("setEndTime");
-		SecPointPo secPointPo=new SecPointPo();
-		secPointPo.setCompanyId(companyId);
-		secPointPo.setDistance(distance);
-		secPointPo.setName(name);
-		secPointPo.setType(type);
-		secPointPo.setX(x);
-		secPointPo.setY(y);
-		//secPointPo.setSetTime(DateUtil.parse(setTime, "HH:mm:ss"));
-		//secPointPo.setSetEndTime(DateUtil.parse(setEndTime,"HH:mm:ss"));
-		conn_secpoint.save(secPointPo);
+		SecPointTimePo secPointTimePo=new SecPointTimePo();
+		secPointTimePo.setSetTime(DateUtil.parse(setTime, "HH:mm:ss"));
+		secPointTimePo.setSetStartTime(DateUtil.parse(setStartTime,"HH:mm:ss"));
+		secPointTimePo.setSetEndTime(DateUtil.parse(setEndTime,"HH:mm:ss"));
+		secPointTimePo.setSecPointId(pointId);
+		conn_secpointtime.save(secPointTimePo);
 		return "success";
 	}
 
@@ -115,7 +112,7 @@ public class SecPointController extends BaseController {
 	public String del(HttpServletRequest request) throws Exception {
 		long id = Long.parseLong(request.getParameter("id"));
 		// 删除所有推荐的关联表
-		conn_secpoint.delete(id);
+		conn_secpointtime.delete(id);
 		return "success";
 	}
 

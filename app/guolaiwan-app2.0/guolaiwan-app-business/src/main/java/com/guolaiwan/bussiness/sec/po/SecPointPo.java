@@ -18,10 +18,10 @@ public class SecPointPo extends AbstractBasePO{
 	private String type;//com.guolaiwan.bussiness.sec.enums.SecPointType
 	private long companyId;
 	private long distance;//打卡范围
-	private Date setTime;
-	private Date setEndTime;
-	private String setTimeStr;
-	private String setEndTimeStr;
+	//private Date setTime;
+	//private Date setEndTime;
+	//private String setTimeStr;
+	//private String setEndTimeStr;
 	
 	public String getName() {
 		return name;
@@ -59,7 +59,7 @@ public class SecPointPo extends AbstractBasePO{
 	public void setDistance(long distance) {
 		this.distance = distance;
 	}
-	public Date getSetTime() {
+	/*public Date getSetTime() {
 		return setTime;
 	}
 	public void setSetTime(Date setTime) {
@@ -84,6 +84,6 @@ public class SecPointPo extends AbstractBasePO{
 	}
 	public void setSetEndTimeStr(String setEndTimeStr) {
 		this.setEndTimeStr = setEndTimeStr;
-	}
+	}*/
 	
 }

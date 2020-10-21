@@ -201,11 +201,21 @@ import com.guolaiwan.bussiness.javacv.GuoliawanLiveServiceWrapper;
 import com.guolaiwan.bussiness.nanshan.dao.CurrentRoomSateDao;
 import com.guolaiwan.bussiness.nanshan.po.CurrentRoomSatePO;
 import com.guolaiwan.bussiness.sec.dao.SecCompanyDAO;
+import com.guolaiwan.bussiness.sec.dao.SecPointDAO;
+import com.guolaiwan.bussiness.sec.dao.SecPointTimeDAO;
 import com.guolaiwan.bussiness.sec.dao.SecUserDAO;
+import com.guolaiwan.bussiness.sec.dao.SecUserPointDAO;
+import com.guolaiwan.bussiness.sec.dao.SecUserPointRecordDAO;
+import com.guolaiwan.bussiness.sec.enums.SecPointType;
+import com.guolaiwan.bussiness.sec.enums.SecUserPointStatus;
 import com.guolaiwan.bussiness.sec.enums.SecUserStatus;
 import com.guolaiwan.bussiness.sec.enums.SecUserType;
 import com.guolaiwan.bussiness.sec.po.SecCompanyPo;
+import com.guolaiwan.bussiness.sec.po.SecPointPo;
+import com.guolaiwan.bussiness.sec.po.SecPointTimePo;
 import com.guolaiwan.bussiness.sec.po.SecUserPo;
+import com.guolaiwan.bussiness.sec.po.SecUserPointPo;
+import com.guolaiwan.bussiness.sec.po.SecUserPointRecordPo;
 import com.guolaiwan.bussiness.website.dao.AddressDAO;
 import com.guolaiwan.bussiness.website.po.AddressPO;
 import com.sun.jna.platform.win32.WinDef.LONG;
@@ -346,5 +356,70 @@ public class SecPhoneController extends WebBaseControll {
 		ModelAndView mv = null;
 		mv = new ModelAndView("sec/mobile/userpersonal");
 		return mv;
+	}
+	@Autowired
+	SecPointTimeDAO conn_secPointTime;
+	@Autowired
+	SecUserPointRecordDAO conn_secuserpointrecord;
+	@Autowired
+	SecUserPointDAO conn_secuserpoint;
+	@Autowired
+	SecPointDAO conn_secPoint;
+	//打卡
+	@ResponseBody
+	@RequestMapping(value = "/setTime", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> setTime(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Date setDate=new Date();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		String pointId=json.getString("pointId");
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
+		List<SecPointTimePo> secPointTimePos=conn_secPointTime.findbyTimeAndPoint(setDate,Long.parseLong(pointId));
+		if(secPointTimePos==null||secPointTimePos.isEmpty()){
+			return ERROR("当前不在打卡时间范围内");
+		}
+		//这个po就是记录一下，详细记录
+		SecUserPointRecordPo secUserPointRecordPo=new SecUserPointRecordPo();
+		secUserPointRecordPo.setSecPointId(Long.parseLong(pointId));
+		secUserPointRecordPo.setSecUserId(Long.parseLong(userId));
+		secUserPointRecordPo.setSetTime(setDate);
+		conn_secuserpointrecord.save(secUserPointRecordPo);
+		//下面这个PO才是真正的记录状态
+		
+	    List<SecUserPointPo> secUserPointPos=conn_secuserpoint.findByField("secPointTimeId", secPointTimePos.get(0).getId());
+	    SecPointPo secPointPo=conn_secPoint.get(Long.parseLong(pointId));
+	    
+		Date time=DateUtil.parse("1970-01-01 "+DateUtil.format(setDate,"HH:mm:ss"),"yyyy-MM-dd HH:mm:ss");
+	    SecPointTimePo secPointTimePo=secPointTimePos.get(0);
+	    if((secUserPointPos!=null||!secUserPointPos.isEmpty())&&!secPointPo.getType().equals(SecPointType.ONWORK)){
+	    	SecUserPointPo secUserPointPo=secUserPointPos.get(0);
+	    	if(time.before(secPointTimePo.getSetStartTime())){
+				secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
+			}
+	    	conn_secuserpoint.saveOrUpdate(secUserPointPo);
+	        
+		}else{
+			SecUserPointPo secUserPointPo=new SecUserPointPo();
+			secUserPointPo.setSecPointId(Long.parseLong(pointId));
+			secUserPointPo.setSecUserId(Long.parseLong(userId));
+			secUserPointPo.setSetTime(setDate);
+			secUserPointPo.setSecPointTimeId(secPointTimePos.get(0).getId());
+			if(secPointPo.getType().equals(SecPointType.ONWORK)){
+				if(time.after(secPointTimePo.getSetEndTime())){
+					secUserPointPo.setStatus(SecUserPointStatus.LATE);
+				}
+			}else if(secPointPo.getType().equals(SecPointType.OFFWORK)){
+				if(time.before(secPointTimePo.getSetStartTime())){
+					secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
+				}
+			}
+			conn_secuserpoint.save(secUserPointPo);
+		}
+		
+		
+		return success(dataMap);
 	}
 }

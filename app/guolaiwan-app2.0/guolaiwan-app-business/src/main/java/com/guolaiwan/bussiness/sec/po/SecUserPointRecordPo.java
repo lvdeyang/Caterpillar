@@ -1,5 +1,7 @@
 package com.guolaiwan.bussiness.sec.po;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -11,6 +13,7 @@ public class SecUserPointRecordPo extends AbstractBasePO{
 
 	private long secUserId;
 	private long secPointId;
+	private Date setTime;
 	public long getSecUserId() {
 		return secUserId;
 	}
@@ -22,6 +25,12 @@ public class SecUserPointRecordPo extends AbstractBasePO{
 	}
 	public void setSecPointId(long secPointId) {
 		this.secPointId = secPointId;
+	}
+	public Date getSetTime() {
+		return setTime;
+	}
+	public void setSetTime(Date setTime) {
+		this.setTime = setTime;
 	}
 	
 }
