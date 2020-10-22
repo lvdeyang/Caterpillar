@@ -163,11 +163,14 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-	    var pointid=0;
+	    var pointId=0;
 	    var x='';
 	    var y='';
 	    var type='';
 	    var name='';
+	    var curx='';
+	    var cury='';
+	    var distance=0;
 	    
 		var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -202,6 +205,7 @@ html, body {
 	       y=datas[1];
 	       type=datas[2];
 	       name=datas[3];
+	       distance=datas[4];
 	       $('#pointName').html(name);
 	    }
 	    
@@ -257,18 +261,78 @@ html, body {
 	       
 	        var str = [];
 	        str.push('定位结果：' + data.position);
+	        cury=data.position.lat;
+	        curx=data.position.lng;
 	        str.push('定位类别：' + data.location_type);
 	        if(data.accuracy){
 	             str.push('精度：' + data.accuracy + ' 米');
 	        }//如为IP精确定位结果则没有精度信息
 	        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-	        alert(str.join('<br>'))
+	        initPointMessage();
 	    }
 	    //解析定位错误信息
 	    function onError(data) {
 	        alert(data.message);
 	    }
 		
+		function initPointMessage(){
+		    if(curx&&cury){
+		       var curdis=getdistance(x,y,curx,cury);
+		       if(curdis>distance){
+		          $('#message').html('不在打卡范围内');
+		          $('#setPoint').hide();
+		       }else{
+		            var _uri = window.BASEPATH+'/sec/phoneapp/checkPointTime';
+				    var param={};
+				    param.pointId=pointId;
+					$.post(_uri, $.toJSON(param), function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+				        if(data.count==0){
+				           $('#message').html('不在打卡时间');
+				           $('#setPoint').hide();
+				        }else{
+				           $('#setPoint').show();
+				           if(type=='ONWORK'){
+				           	  $('#message').html('上班打卡');
+				           }else if(type=='OFFWORK'){
+				              $('#message').html('下班打卡');
+				           }else{
+				              $('#message').html('巡逻打卡');
+				           }
+				        }
+			
+					});
+		          
+		       }
+		    }
+		}
+		//返回米
+	   function getdistance(lat1, lng1, lat2, lng2){
+			var radLat1 = lat1*Math.PI / 180.0;
+			var radLat2 = lat2*Math.PI / 180.0;
+			var a = radLat1 - radLat2;
+			var b = lng1*Math.PI / 180.0 - lng2*Math.PI / 180.0;
+			var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
+			Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+			s = s *6378.137 ;// EARTH_RADIUS;
+			s = Math.round(s * 10000) / 10;
+			return Math.abs(s);
+		}
+		
+		
+		$('#setPoint').on('click',function(){
+			var _uri = window.BASEPATH+'/sec/phoneapp/setTime';
+		    var param={};
+		    param.pointId=pointId;
+			$.post(_uri, $.toJSON(param), function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+	            $.toast("打卡完成");
+	            location.href="";
+			});
+		
+		}); 
 	    
 	});
 		
@@ -294,14 +358,14 @@ html, body {
 		  </div>
 		  
 		  <div id="container" style="width:100%;height:500px;"></div>
-		  <div id="message" style="text-align:center;margin-top:30px;">未在打卡范围</div>
+		  <div id="message" style="text-align:center;margin-top:30px;"></div>
 		  <div id="message-time" style="text-align:center;margin-top:30px;">18:00</div> 
 		  <div id="selPoint" class="weui-popup__container popup-bottom">
 			  <div class="weui-popup__overlay"></div>
 			  <div class="weui-popup__modal">
 			      <div class="weui-grids">
 			              <c:forEach items="${points}" var="item" varStatus="status">
-			                  <a href="javascript:void(0)" id="selPoint-${item.id}" data="${item.x}-${item.y}-${item.type}-${item.name}" class="weui-grid js_grid selPoint">
+			                  <a href="javascript:void(0)" id="selPoint-${item.id}" data="${item.x}-${item.y}-${item.type}-${item.name}-${item.distance}" class="weui-grid js_grid selPoint">
 							    <div class="weui-grid__icon">
 							      <img src="lib/images/8.png" alt="">
 							    </div>
@@ -318,7 +382,7 @@ html, body {
 		</div>	
 	</div>
 	
-    <a id="setPoint" style="position:fixed;bottom:0px;width:100%" href="javascript:;" class="weui-btn weui-btn_primary">立刻打卡</a>
+    <a id="setPoint" style="position:fixed;bottom:0px;width:100%;display:none;" href="javascript:;" class="weui-btn weui-btn_primary">立刻打卡</a>
 	
 	
 </body>

@@ -425,4 +425,22 @@ public class SecPhoneController extends WebBaseControll {
 		
 		return success(dataMap);
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/checkPointTime", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> checkPointTime(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		String pointId=json.getString("pointId");
+		List<SecPointTimePo> secPointTimePos=conn_secPointTime.findbyTimeAndPoint(new Date(), Long.parseLong(pointId));
+		if(secPointTimePos==null||secPointTimePos.isEmpty()){
+			dataMap.put("count", 0);
+		}else{
+			dataMap.put("count", secPointTimePos.size());
+		}
+		return success(dataMap);
+	}
+	
 }
