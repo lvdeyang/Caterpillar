@@ -21,10 +21,16 @@ import pub.caterpillar.commons.util.wrapper.StringBufferWrapper;
 import pub.caterpillar.orm.dao.AbstractBaseDao;
 import pub.caterpillar.orm.hql.Condition;
 import pub.caterpillar.orm.hql.CountHql;
+import pub.caterpillar.orm.hql.Hql;
 import pub.caterpillar.orm.hql.QueryHql;
 
 
 @Repository("com.guolaiwan.bussiness.sec.dao.SecPointDAO")
 public class SecPointDAO extends AbstractBaseDao<SecPointPo> {
 
+	public List<SecPointPo> findByCom(Long comId){
+		QueryHql queryHql=this.newQueryHql();
+		queryHql.andBy("companyId",Condition.eq,comId);
+		return this.findByHql(queryHql);
+	}
 }

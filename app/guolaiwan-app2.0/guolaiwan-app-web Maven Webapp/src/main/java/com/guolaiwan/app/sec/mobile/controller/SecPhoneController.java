@@ -49,6 +49,8 @@ import com.guolaiwan.app.aoyou.util.AoyouIDUtil;
 import com.guolaiwan.app.interfac.alipay.AliAppOrderInfo;
 import com.guolaiwan.app.interfac.util.FilterSensitive;
 import com.guolaiwan.app.interfac.util.KdniaoTrackQueryAPI;
+import com.guolaiwan.app.sec.vo.SecPointVo;
+import com.guolaiwan.app.sec.vo.SecUserPointVo;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
 import com.guolaiwan.app.web.admin.vo.ActiveBundleVO;
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
@@ -357,7 +359,17 @@ public class SecPhoneController extends WebBaseControll {
 	@RequestMapping(value = "/personal/index")
 	public ModelAndView personalIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
+		String userId=request.getParameter("userId");
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
 		mv = new ModelAndView("sec/mobile/userpersonal");
+		if(secUserPos!=null&&!secUserPos.isEmpty()){
+			mv.addObject("userName",secUserPos.get(0).getName());
+			mv.addObject("userId",secUserPos.get(0).getUserId());
+			SecCompanyPo secCompanyPo=conn_com.get(secUserPos.get(0).getCompanyId());
+			mv.addObject("comName",secCompanyPo.getName());
+			mv.addObject("comId",secCompanyPo.getId());
+		}
+		
 		return mv;
 	}
 	@Autowired
@@ -401,6 +413,8 @@ public class SecPhoneController extends WebBaseControll {
 	    	SecUserPointPo secUserPointPo=secUserPointPos.get(0);
 	    	if(time.before(secPointTimePo.getSetStartTime())){
 				secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
+			}else{
+				secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
 			}
 	    	conn_secuserpoint.saveOrUpdate(secUserPointPo);
 	        
@@ -413,10 +427,14 @@ public class SecPhoneController extends WebBaseControll {
 			if(secPointPo.getType().equals(SecPointType.ONWORK)){
 				if(time.after(secPointTimePo.getSetEndTime())){
 					secUserPointPo.setStatus(SecUserPointStatus.LATE);
+				}else{
+					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
 				}
 			}else if(secPointPo.getType().equals(SecPointType.OFFWORK)){
 				if(time.before(secPointTimePo.getSetStartTime())){
 					secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
+				}else{
+					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
 				}
 			}
 			conn_secuserpoint.save(secUserPointPo);
@@ -440,6 +458,39 @@ public class SecPhoneController extends WebBaseControll {
 		}else{
 			dataMap.put("count", secPointTimePos.size());
 		}
+		return success(dataMap);
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getPointVo", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> getPointVo(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		String userId=json.getString("userId");
+		String comId=json.getString("comId");
+		String date=json.getString("date");
+		List<SecPointPo> secPointPos=conn_secPoint.findByCom(Long.parseLong(comId));
+		List<SecPointVo> secPointVos=new ArrayList<SecPointVo>();
+		for (SecPointPo secPointPo : secPointPos) {
+			SecPointVo secPointVo=new SecPointVo().set(secPointPo);
+			List<SecPointTimePo> secPointTimePos=conn_secPointTime.findByField("secPointId", secPointPo.getId());
+			for (SecPointTimePo secPointTimePo : secPointTimePos) {
+				List<SecUserPointPo> secUserPointPos=conn_secuserpoint.findbyUserAndPointTimeAndDate(Long.parseLong(userId),secPointTimePo.getId(),date);
+				if(secUserPointPos!=null&&!secUserPointPos.isEmpty()){
+					SecUserPointVo secUserPointVo=new SecUserPointVo().set(secUserPointPos.get(0));
+					secPointVo.getSecUserPointVos().add(secUserPointVo);
+				}else{
+					SecUserPointVo secUserPointVo=new SecUserPointVo();
+					secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
+					secUserPointVo.setStatus(SecUserPointStatus.NOT);
+					secPointVo.getSecUserPointVos().add(secUserPointVo);
+				}
+			}
+			secPointVos.add(secPointVo);
+		}
+		dataMap.put("message", secPointVos);
 		return success(dataMap);
 	}
 	

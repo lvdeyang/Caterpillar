@@ -151,6 +151,9 @@ html, body {
     .weui-navbar__item{
       font-size:xx-small !important;
     }
+    i.icon{
+      display:inline-block !important;
+    }
 
 </style>
 
@@ -174,8 +177,62 @@ html, body {
 	    $("#inline-calendar").calendar({
 		  container: "#inline-calendar",
 		  input: "#date3",
-		  dateFormat:'yyyy-mm'
+		  dateFormat:'yyyy-mm-dd',
+		  onChange:function(p, values, displayValues){
+		     $('#date3').val(values[0]);
+		     initDatePoint();
+		  }
 		});
+		
+		var pointList=[];
+		
+		function initDatePoint(){
+			var _uri = window.BASEPATH+'/sec/phoneapp/getPointVo';
+		    var param={};
+		    param.userId=${userId};
+		    param.comId=${comId};
+		    param.date=$('#date3').val();
+			$.post(_uri, $.toJSON(param), function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+		        pointList=data.message;
+		        
+	            initPointHtml();
+			});
+		}
+		
+		var type='work';
+		
+		$('.weui-navbar__item').on('click',function(){
+		    $('.weui-navbar__item').removeClass('weui_bar__item_on');
+		    $(this).addClass('weui_bar__item_on');
+		    type=$(this).attr('id');
+		    initPointHtml();
+		});
+		
+		function initPointHtml(){
+		    var types=[];
+		    if(type=='work'){
+		       types.push('ONWORK');
+		       types.push('OFFWORK');
+		    }else{
+		       types.push('CRUISE');
+		    }
+		    var html=[];
+		    for(var i=0;i<pointList.length;i++){
+		        if(types.indexOf(pointList[i].type)!=-1){
+				     html.push('<div style="width:100%;font-size:12px;color:#666666;margin-top:10px;">');
+			         html.push('<div style="margin-left:30px;">'+pointList[i].name+'</div>');
+			         html.push('<div style="margin-left:30px;">');
+			         for(var j=0;j<pointList[i].secUserPointVos.length;j++){
+				         html.push('<div class="weui-cells"><div class="weui-cell"><div class="weui-cell__bd" style="font-size:12px;">');
+						 html.push('<p>'+pointList[i].secUserPointVos[j].setTimeStr+'</p>');
+						 html.push('</div><div class="weui-cell__ft"  style="font-size:12px;">'+pointList[i].secUserPointVos[j].status+'</div></div></div>');
+			         }
+					 html.push('</div></div>');
+		        }
+		    }
+		}
 	    
 	});
 		
@@ -201,10 +258,10 @@ html, body {
 					class="weui-media-box__thumb" src="lib/images/logo.png">
 			</div>
 			<div style="text-align:center;margin:0 auto">
-			    王芃皓
+			    ${userName}
 			</div>
 			<div style="text-align:center;margin:0 auto;font-size:12px;margin-top:10px;color:#666666">
-			    安邦保安公司
+			    ${comName}
 			</div>
 			<div class="weui-flex" style="margin-top:20px;">
 		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
@@ -220,10 +277,10 @@ html, body {
 		    </div>
             
             <div class="weui-navbar" style="position:relative !important;margin-top:10px;">
-			  <div class="weui-navbar__item weui_bar__item_on">
+			  <div class="weui-navbar__item weui_bar__item_on" id="work">
 			     打卡记录
 			  </div>
-			  <div class="weui-navbar__item">
+			  <div class="weui-navbar__item" id="cruize">
 			    巡逻记录
 			  </div>
 			</div>
@@ -236,38 +293,8 @@ html, body {
             <div id="inline-calendar"></div>
             
             <div id="pointList">
-               <div style="width:50%;font-size:12px;color:#666666;margin-top:10px;">
-	                <div style="margin-left:30px;">
-	                                                         上班时间
-	                </div>
-	                <div style="margin-left:30px;">
-	                   2020-10-19 08:00:00
-	                </div>
-               </div>
-               <div style="width:50%;font-size:12px;color:#666666;margin-top:20px;">
-	                <div style="margin-left:30px;">
-	                                                         下班时间
-	                </div>
-	                <div style="margin-left:30px;">
-	                   2020-10-19 08:00:00
-	                </div>
-               </div>
-               <div style="width:50%;font-size:12px;color:#666666;margin-top:20px;">
-	                <div style="margin-left:30px;">
-	                                                         下班时间
-	                </div>
-	                <div style="margin-left:30px;">
-	                   2020-10-19 08:00:00
-	                </div>
-               </div>
-               <div style="width:50%;font-size:12px;color:#666666;margin-top:20px;">
-	                <div style="margin-left:30px;">
-	                                                         下班时间
-	                </div>
-	                <div style="margin-left:30px;">
-	                   2020-10-19 08:00:00
-	                </div>
-               </div>
+               
+              
             </div>
 		</div>	
 	</div>

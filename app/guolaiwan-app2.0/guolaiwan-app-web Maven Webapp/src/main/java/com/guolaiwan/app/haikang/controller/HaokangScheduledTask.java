@@ -61,7 +61,8 @@ public class HaokangScheduledTask {
 		jsonObject.put("pageNo", 1);
 		//查询结果每页的数量(不能小于1，cameraIndexcodes为TOTAL时不生效)
 		jsonObject.put("pageSize", 1000);
-		String response=request(RENLIAN, jsonObject);
+		//String response=request(RENLIAN, jsonObject);
+		String response="";
 		if (response!=null&&!response.equals("")) {
 			//System.out.println("----------------------"+response+"--------------------------");
 		}
@@ -108,7 +109,8 @@ public class HaokangScheduledTask {
 		jsonObject.put("beginTime", getISO8601Timestamp(getYesterday(new Date())));
 		//查询的终止日期（IOS8601格式yyyy-MM-dd’T’HH:mm:ss.SSSzzz）
 		jsonObject.put("endTime", getISO8601Timestamp(new Date()));
-		String response=request(CAR, jsonObject);
+		//String response=request(CAR, jsonObject);
+		String response="";
 		/**
 		 * 提交NUMBER
 		 */
@@ -202,8 +204,9 @@ public class HaokangScheduledTask {
 			}
 		};
 		String contentType = "application/json";
-		String result = ArtemisHttpUtil.doPostStringArtemis(pathMap, body, null, null, contentType , null);
-		return result;
+		//String result = ArtemisHttpUtil.doPostStringArtemis(pathMap, body, null, null, contentType , null);
+		//return result;
+		return "";
 	}
 
 }
