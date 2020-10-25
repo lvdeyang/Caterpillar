@@ -173,6 +173,9 @@ html, body {
 			}
 
 	    };
+	    var comId=${comId};
+	    var pointId=0;
+	    var name='';
 	
 	    $('#selectPoint').on('click',function(){
 	       $("#selPoint").popup();
@@ -180,9 +183,73 @@ html, body {
 	    
 	    $('.selPoint').on('click',function(){
 	       $.closePopup();
+	       initPoint(this);
 	    });
 	    
-	
+	    initPoint($('.selPoint')[0]);
+	    
+	    function initPoint(obj){
+	       if(!obj){
+	          $.toptip('没有配置打卡点', 'error');
+	          return false;
+	       }
+	       pointId=obj.id.split('-')[1];
+	       var datas=$(obj).attr('data').split('-');
+	       name=datas[3];
+	       $('#pointName').html(name);
+	       
+	       var _uri = window.BASEPATH+'/sec/phoneapp/getUserList';
+		   var param={};
+		   param.pointId=pointId;
+		   param.comId=${comId};
+		   $.post(_uri, $.toJSON(param), function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+		        initUserList(data.message);
+		   });
+	       
+	    }
+	    
+	    function initUserList(list){
+	       $('#userList').empty();
+	       var html=[];
+	       for(var i=0;i<list.length;i++){
+	           var workStatus='';
+	           if(list[i].workstatus=='BEFORE'){
+	           	  workStatus='上班早退';
+	           }else if(list[i].workstatus=='LATE'){
+	              workStatus='上班迟到';
+	           }else if(list[i].workstatus=='NORMAL'){
+	              workStatus='上班打卡正常';
+	           }else{
+	              workStatus='上班漏打卡';
+	           }
+	           
+	       
+	       
+		       html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">');
+			   html.push('<div class="weui-media-box__hd"><img class="weui-media-box__thumb" src="lib/images/logo.jpg"></div>');
+			   html.push('<div class="weui-media-box__bd"><h4 class="weui-media-box__title">'+list[i].name+'</h4>');
+			   html.push('<p class="weui-media-box__desc">'+list[i].comName+'</p>');
+			   html.push('<p class="weui-media-box__desc" style="margin-top:5px;color:green;font-size:x-small;font-weight:bold">'+workStatus+'</p></div></a>');
+			   html.push('<p style="width:100%;float:left"><div class="weui-cells weui-cells_checkbox" style="margin-top:0px">');   
+			   html.push('<label class="weui-cell weui-check__label" style="font-size:xx-small">');
+	           html.push('<div class="weui-cell__bd"><p>今日巡逻统计</p></div>');
+	           for(var j=0;j<list[i].secUserPointVos.length;j++){
+	              var secUserPoint=list[i].secUserPointVos[j];
+	              if(secUserPoint.status=='NOT'){
+	                 html.push('<div class="weui-cell__hd"><input type="checkbox" class="weui-check" name="checkbox1" id="point'+secUserPoint.id+'"');
+			         html.push('<i class="weui-icon-checked"></i></div>');
+	              }else{
+	                 html.push('<div class="weui-cell__hd"><input type="checkbox" class="weui-check" name="checkbox1" id="point'+secUserPoint.id+'" checked="checked">');
+			         html.push('<i class="weui-icon-checked"></i></div>');
+	              }
+	              
+	           }
+			   html.push('</label></div></p>');
+	       }
+	       $('#userList').append(html.join(''));
+	    }
 	});
 		
 </script>
@@ -203,202 +270,27 @@ html, body {
 		<div id="content" class="content">
 		  <div style="width:100%">
 			  <image id="selectPoint" style="width:50px;height:50px;float:left;" src="lib/images/caidan.png"/>
-			  <div style="float:left;line-height:50px;width:200px;">人民银行打卡点</div>
+			  <div id="pointName" style="float:left;line-height:50px;width:200px;">人民银行打卡点</div>
 		  </div>
 		
-			 <div class="weui-panel__bd" style="float:left;width:100%">
-			    <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-			      <div class="weui-media-box__hd">
-			        <img class="weui-media-box__thumb" src="lib/images/logo.jpg">
-			      </div>
-			      <div class="weui-media-box__bd">
-			        <h4 class="weui-media-box__title">王芃皓</h4>
-			        <p class="weui-media-box__desc">遵化市人民法院</p>
-			        <p class="weui-media-box__desc" style="margin-top:5px;color:green;font-size:x-small;font-weight:bold">打卡正常</p>
-			        
-			      </div>
-			    </a>
-			    <p style="width:100%;float:left"><div class="weui-cells weui-cells_checkbox" style="margin-top:0px">   
-			          <label class="weui-cell weui-check__label" for="point1" style="font-size:xx-small">
-				        
-				        <div class="weui-cell__bd">
-				          <p>今日巡逻统计</p>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				      </label>
-				      
-				     
-				  </div></p>
-			    
-			    <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-			      <div class="weui-media-box__hd">
-			        <img class="weui-media-box__thumb" src="lib/images/logo.jpg">
-			      </div>
-			      <div class="weui-media-box__bd">
-			        <h4 class="weui-media-box__title">于迪</h4>
-			        <p class="weui-media-box__desc" >遵化市人民法院</p>
-			        <p class="weui-media-box__desc" style="margin-top:5px;color:green;font-size:x-small;font-weight:bold">打卡正常</p>
-			      </div>
-			    </a>
-			    
-			    <p style="width:100%;float:left"><div class="weui-cells weui-cells_checkbox" style="margin-top:0px">   
-			          <label class="weui-cell weui-check__label" for="point1" style="font-size:xx-small">
-				        
-				        <div class="weui-cell__bd">
-				          <p>打卡记录</p>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				      </label>
-				      
-				     
-				  </div></p>
-			    
-			    <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-			      <div class="weui-media-box__hd">
-			        <img class="weui-media-box__thumb" src="lib/images/logo.jpg">
-			      </div>
-			      <div class="weui-media-box__bd">
-			        <h4 class="weui-media-box__title">于迪</h4>
-			        <p class="weui-media-box__desc" >遵化市人民法院</p>
-			        <p class="weui-media-box__desc" style="margin-top:5px;color:green;font-size:x-small;font-weight:bold">打卡正常</p>
-			      </div>
-			    </a>
-			    
-			    <p style="width:100%;float:left"><div class="weui-cells weui-cells_checkbox" style="margin-top:0px">   
-			          <label class="weui-cell weui-check__label" for="point1" style="font-size:xx-small">
-				        
-				        <div class="weui-cell__bd">
-				          <p>打卡记录</p>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				        <div class="weui-cell__hd">
-				          <input type="checkbox" class="weui-check" name="checkbox1" id="point1" checked="checked">
-				          <i class="weui-icon-checked"></i>
-				        </div>
-				      </label>
-				      
-				     
-				  </div></p>
-			    
-			 </div>
+		  <div class="weui-panel__bd" style="float:left;width:100%" id="userList">
+		  
+		  </div>
 			 
 			 <div id="selPoint" class="weui-popup__container popup-bottom">
 			  <div class="weui-popup__overlay"></div>
 			  <div class="weui-popup__modal">
 			      <div class="weui-grids">
-					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/8.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      人民银行打卡点
-					    </p>
-					  </a>
-					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/8.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      人民银行打卡点
-					    </p>
-					  </a>
-					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/8.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      人民银行打卡点
-					    </p>
-					  </a>
-					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/8.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      人民银行打卡点
-					    </p>
-					  </a>
-					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/8.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      人民银行打卡点
-					    </p>
-					  </a>
-					  <a href="javascript:void(0)" class="weui-grid js_grid selPoint">
-					    <div class="weui-grid__icon">
-					      <img src="lib/images/8.png" alt="">
-					    </div>
-					    <p class="weui-grid__label">
-					      人民银行打卡点
-					    </p>
-					  </a>
+					  <c:forEach items="${points}" var="item" varStatus="status">
+			                  <a href="javascript:void(0)" id="selPoint-${item.id}" data="${item.x}-${item.y}-${item.type}-${item.name}-${item.distance}" class="weui-grid js_grid selPoint">
+							    <div class="weui-grid__icon">
+							      <img src="lib/images/8.png" alt="">
+							    </div>
+							    <p class="weui-grid__label">
+							      ${item.name}
+							    </p>
+							  </a>
+			          </c:forEach>
 					  
 					</div>
 			  </div>

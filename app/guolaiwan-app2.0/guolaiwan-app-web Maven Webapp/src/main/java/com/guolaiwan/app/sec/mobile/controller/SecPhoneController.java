@@ -51,6 +51,7 @@ import com.guolaiwan.app.interfac.util.FilterSensitive;
 import com.guolaiwan.app.interfac.util.KdniaoTrackQueryAPI;
 import com.guolaiwan.app.sec.vo.SecPointVo;
 import com.guolaiwan.app.sec.vo.SecUserPointVo;
+import com.guolaiwan.app.sec.vo.SecUserVo;
 import com.guolaiwan.app.tianshitongcheng.api.TianShiTongChengAPI;
 import com.guolaiwan.app.web.admin.vo.ActiveBundleVO;
 import com.guolaiwan.app.web.admin.vo.ActivityRelVO;
@@ -345,6 +346,12 @@ public class SecPhoneController extends WebBaseControll {
 	public ModelAndView adminIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("sec/mobile/adminhome");
+		List<SecPointPo> secPointPos=conn_secPoint.findAll();
+		mv.addObject("points", secPointPos);
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
+		mv.addObject("comId",secUserPos.get(0).getCompanyId());
 		return mv;
 	}
 	@RequestMapping(value = "/user/index")
@@ -482,15 +489,72 @@ public class SecPhoneController extends WebBaseControll {
 					SecUserPointVo secUserPointVo=new SecUserPointVo().set(secUserPointPos.get(0));
 					secPointVo.getSecUserPointVos().add(secUserPointVo);
 				}else{
-					SecUserPointVo secUserPointVo=new SecUserPointVo();
-					secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
-					secUserPointVo.setStatus(SecUserPointStatus.NOT);
-					secPointVo.getSecUserPointVos().add(secUserPointVo);
+					if(new Date().after(secPointTimePo.getSetEndTime())){
+						SecUserPointVo secUserPointVo=new SecUserPointVo();
+						secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
+						secUserPointVo.setStatus(SecUserPointStatus.NOT);
+						secPointVo.getSecUserPointVos().add(secUserPointVo);
+					}
+					
 				}
 			}
 			secPointVos.add(secPointVo);
 		}
 		dataMap.put("message", secPointVos);
+		return success(dataMap);
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getUserList", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> getUserList(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		String comId=json.getString("comId");
+		String pointId=json.getString("pointId");
+		List<SecUserPo> secUserPos=conn_secuser.findByField("companyId", Long.parseLong(comId));
+		SecCompanyPo secCompanyPo=conn_com.get(Long.parseLong(comId));
+		SecPointPo secPointPo=conn_secPoint.get(Long.parseLong(pointId));
+		List<SecUserVo> secUserVos=new ArrayList<SecUserVo>();
+		if(secUserPos!=null){
+			for (SecUserPo secUserPo : secUserPos) {
+				SecUserVo secUserVo=new SecUserVo();
+				secUserVo.setName(secUserPo.getName());
+				secUserVo.setComName(secCompanyPo.getName());
+				List<SecPointTimePo> secPointTimePos=conn_secPointTime.findByField("secPointId", Long.parseLong(pointId));
+				for (SecPointTimePo secPointTimePo : secPointTimePos) {
+					List<SecUserPointPo> secUserPointPos=conn_secuserpoint.findbyUserAndPointTimeAndDate(secUserPo.getUserId(),
+							secPointTimePo.getId(),DateUtil.format(new Date(),"yyyy-MM-dd"));
+					if(secUserPointPos!=null&&!secUserPointPos.isEmpty()){
+						SecUserPointVo secUserPointVo=new SecUserPointVo().set(secUserPointPos.get(0));
+						
+						if(!secPointPo.getType().equals(SecPointType.CRUISE)){
+							if(!secUserPointVo.getStatus().equals(SecUserPointStatus.NORMAL)){
+								secUserVo.setWorkstatus(secUserPointVo.getStatus());
+							}
+						}else{
+							secUserVo.getSecUserPointVos().add(secUserPointVo);
+						}
+					}else{
+						if(new Date().after(secPointTimePo.getSetEndTime())){
+							SecUserPointVo secUserPointVo=new SecUserPointVo();
+							secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
+							secUserPointVo.setStatus(SecUserPointStatus.NOT);
+							
+							if(!secPointPo.getType().equals(SecPointType.CRUISE)){
+								secUserVo.setWorkstatus(secUserPointVo.getStatus());
+							}else{
+								secUserVo.getSecUserPointVos().add(secUserPointVo);
+							}
+						}
+					}
+				}
+				secUserVos.add(secUserVo);
+			}
+		}
+
+		dataMap.put("message", secUserVos);
 		return success(dataMap);
 	}
 	
