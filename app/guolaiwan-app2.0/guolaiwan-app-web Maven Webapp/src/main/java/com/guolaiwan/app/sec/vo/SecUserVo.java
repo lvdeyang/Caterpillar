@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SecUserVo {
+	private long userId;
 	private String name;
 	private String comName;
 	private String workstatus;
@@ -31,6 +32,12 @@ public class SecUserVo {
 	}
 	public void setSecUserPointVos(List<SecUserPointVo> secUserPointVos) {
 		this.secUserPointVos = secUserPointVos;
+	}
+	public long getUserId() {
+		return userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 	
 

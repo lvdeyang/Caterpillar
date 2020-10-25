@@ -520,6 +520,7 @@ public class SecPhoneController extends WebBaseControll {
 		if(secUserPos!=null){
 			for (SecUserPo secUserPo : secUserPos) {
 				SecUserVo secUserVo=new SecUserVo();
+				secUserVo.setUserId(secUserPo.getUserId());
 				secUserVo.setName(secUserPo.getName());
 				secUserVo.setComName(secCompanyPo.getName());
 				List<SecPointTimePo> secPointTimePos=conn_secPointTime.findByField("secPointId", Long.parseLong(pointId));

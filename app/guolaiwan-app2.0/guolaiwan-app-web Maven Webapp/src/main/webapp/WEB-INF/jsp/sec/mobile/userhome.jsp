@@ -237,7 +237,7 @@ html, body {
 		// add方法可以传入一个覆盖物数组，将点标记和矢量圆同时添加到地图上
 		map.add([marker,circle]);
 		
-		
+		//高德定位
 		AMap.plugin('AMap.Geolocation', function() {
 	        var geolocation = new AMap.Geolocation({
 	            enableHighAccuracy: true,//是否使用高精度定位，默认:true
@@ -274,6 +274,63 @@ html, body {
 	    function onError(data) {
 	        alert(data.message);
 	    }
+		
+		//微信定位
+		  var loca={};
+		  function getloca(){
+		      
+			  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+		
+			  var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			    $.get(_uri, null, function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					if(data){
+						loca=data;
+						getLoation();
+					}
+					
+			  });
+		  
+		  }
+		  
+		  
+		  function getLoation(){
+		       wx.config({
+		            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		            appId : loca.appId, // 必填，公众号的唯一标识
+		            timestamp : loca.timestamp, // 必填，生成签名的时间戳
+		            nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+		            signature : loca.signature,// 必填，签名，见附录1
+		            jsApiList : ['checkJsApi','getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	        	});
+		        wx.ready(function() {
+		            wx.getLocation({  
+		                success: function (res) {  
+		                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+		                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+		                    var speed = res.speed; // 速度，以米/每秒计  
+		                    var accuracy = res.accuracy; // 位置精度  
+		                    cury=latitude;
+	                        curx=longitude;
+		                    
+		                },  
+		                cancel: function (e) {  
+		                        //这个地方是用户拒绝获取地理位置  
+		                       
+						}
+		                	
+		             });     
+			         wx.error(function (res) {  
+			             
+					
+			         });     
+		            
+		         });
+		  
+		  
+		  }
 		
 		function initPointMessage(){
 		    if(curx&&cury){

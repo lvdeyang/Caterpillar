@@ -227,7 +227,7 @@ html, body {
 	           
 	       
 	       
-		       html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">');
+		       html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg secuser" id="secuser-'+list[i].userId+'">');
 			   html.push('<div class="weui-media-box__hd"><img class="weui-media-box__thumb" src="lib/images/logo.jpg"></div>');
 			   html.push('<div class="weui-media-box__bd"><h4 class="weui-media-box__title">'+list[i].name+'</h4>');
 			   html.push('<p class="weui-media-box__desc">'+list[i].comName+'</p>');
@@ -250,6 +250,14 @@ html, body {
 	       }
 	       $('#userList').append(html.join(''));
 	    }
+	    
+	    
+	    $('.secuser').on('click',function(){
+	    
+	       var ids=this.id.split('-');
+	       location.href=window.BASEPATH+'/sec/phoneapp/personal/index?userId='+ids[1];
+	    })
+	    
 	});
 		
 </script>
