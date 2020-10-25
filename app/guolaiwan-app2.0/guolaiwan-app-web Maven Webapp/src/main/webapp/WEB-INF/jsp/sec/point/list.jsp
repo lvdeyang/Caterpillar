@@ -94,7 +94,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						,{field:"name",title:"名称"}
    						,{field:"x",title:"经度",width:160}
    						,{field:"y",title:"纬度",width:160}
-   						,{field:"distance",title:"公司范围",width:160}
+   						,{field:"distance",title:"打卡范围",width:160}
+   						,{field:"type",title:"打卡类型",width:160}
    						,{title:"操作",templet:"#zsgc"}
    						]]
    					,done:function(res, curr, count){

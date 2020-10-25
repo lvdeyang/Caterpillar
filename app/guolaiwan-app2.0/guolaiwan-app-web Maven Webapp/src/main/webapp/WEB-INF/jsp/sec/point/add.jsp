@@ -34,7 +34,7 @@
                 </div>
                 
                 
-                <div class="layui-form-item">
+                <!-- <div class="layui-form-item">
                     <label for="L_title" class="layui-form-label">
                                                            打卡开始时间
                     </label>
@@ -53,7 +53,7 @@
                         	<input type="text" id="setEndTime" name="setEndTime" placeholder="yyyy-MM-dd HH:mm:ss" required lay-verify="required"
                         	class="layui-input" >
                     	</div>
-                </div>
+                </div> -->
                 
                 
                 <div class="layui-form-item">
@@ -87,7 +87,8 @@
                     </label>
                     <div class="layui-input-block">
                     <select id="type" name="type" lay-filter="type" required lay-verify="required">
-						<option value="WORK">考勤打卡点</option>
+						<option value="ONWORK">上班打卡点</option>
+						<option value="OFFWORK">下班打卡点</option>
 						<option value="CRUISE">巡逻打卡点</option>
                     </select>
                     </div>

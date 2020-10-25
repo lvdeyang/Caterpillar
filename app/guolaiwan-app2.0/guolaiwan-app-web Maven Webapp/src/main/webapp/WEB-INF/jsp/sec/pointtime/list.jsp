@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
-            <xblock><button class="layui-btn" onclick="open_win('添加打卡时间','addv?pointId=${id}','1000','600')"><i class="layui-icon">&#xe608;</i>添加打卡点</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
+            <xblock><button class="layui-btn" onclick="open_win('添加打卡时间','addv?pointId=${id}','1000','600')"><i class="layui-icon">&#xe608;</i>添加打卡时间</button><span class="x-right" style="line-height:40px">共有数据：<span id="allcount"></span> 条</span></xblock>
          	<table id="pointtimeList" lay-filter="pointtimeList"></table>
         </div>
         <script src="<%=path %>/layui/lib/layui/layui.js" charset="utf-8"></script>
@@ -92,7 +92,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					,cols: [[
    						{type:"checkbox"}
    						,{field:"setTimeStr",title:"打卡时间",width:160}
-   						,{field:"setStartTimeStr",title:"打卡结束时间",width:160}
+   						,{field:"setStartTimeStr",title:"打卡开始时间",width:160}
    						,{field:"setEndTimeStr",title:"打卡结束时间",width:160}
    						,{title:"操作",templet:"#zsgc"}
    						]]

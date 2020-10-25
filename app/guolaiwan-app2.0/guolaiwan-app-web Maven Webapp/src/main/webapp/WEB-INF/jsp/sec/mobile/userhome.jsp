@@ -318,12 +318,12 @@ html, body {
 		                },  
 		                cancel: function (e) {  
 		                        //这个地方是用户拒绝获取地理位置  
-		                       
+		                       console.log(e)
 						}
 		                	
 		             });     
 			         wx.error(function (res) {  
-			             
+			             console.log(res)
 					
 			         });     
 		            
@@ -349,6 +349,7 @@ html, body {
 				           $('#message').html('不在打卡时间');
 				           $('#setPoint').hide();
 				        }else{
+				           $('#message-time').html(data.time);
 				           $('#setPoint').show();
 				           if(type=='ONWORK'){
 				           	  $('#message').html('上班打卡');
@@ -416,7 +417,7 @@ html, body {
 		  
 		  <div id="container" style="width:100%;height:500px;"></div>
 		  <div id="message" style="text-align:center;margin-top:30px;"></div>
-		  <div id="message-time" style="text-align:center;margin-top:30px;">18:00</div> 
+		  <div id="message-time" style="text-align:center;margin-top:30px;"></div> 
 		  <div id="selPoint" class="weui-popup__container popup-bottom">
 			  <div class="weui-popup__overlay"></div>
 			  <div class="weui-popup__modal">

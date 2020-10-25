@@ -211,6 +211,7 @@ html, body {
 		});
 		
 		function initPointHtml(){
+		    $('#pointList').empty();
 		    var types=[];
 		    if(type=='work'){
 		       types.push('ONWORK');
@@ -221,17 +222,32 @@ html, body {
 		    var html=[];
 		    for(var i=0;i<pointList.length;i++){
 		        if(types.indexOf(pointList[i].type)!=-1){
+		             var secstatus="";
+		             
+		             
+		             if(pointList[i].status=='BEFORE'){
+			           	secstatus='早退';
+			         }else if(pointList[i].status=='LATE'){
+			            secstatus='迟到';
+			         }else if(pointList[i].status=='NORMAL'){
+			            secstatus='打卡正常';
+			         }else{
+			            secstatus='漏打卡';
+			         }
+		             
+		             
 				     html.push('<div style="width:100%;font-size:12px;color:#666666;margin-top:10px;">');
 			         html.push('<div style="margin-left:30px;">'+pointList[i].name+'</div>');
 			         html.push('<div style="margin-left:30px;">');
 			         for(var j=0;j<pointList[i].secUserPointVos.length;j++){
 				         html.push('<div class="weui-cells"><div class="weui-cell"><div class="weui-cell__bd" style="font-size:12px;">');
 						 html.push('<p>'+pointList[i].secUserPointVos[j].setTimeStr+'</p>');
-						 html.push('</div><div class="weui-cell__ft"  style="font-size:12px;">'+pointList[i].secUserPointVos[j].status+'</div></div></div>');
+						 html.push('</div><div class="weui-cell__ft"  style="font-size:12px;">'+secstatus+'</div></div></div>');
 			         }
 					 html.push('</div></div>');
 		        }
 		    }
+		    $('#pointList').append(html.join(''));
 		}
 	    
 	});

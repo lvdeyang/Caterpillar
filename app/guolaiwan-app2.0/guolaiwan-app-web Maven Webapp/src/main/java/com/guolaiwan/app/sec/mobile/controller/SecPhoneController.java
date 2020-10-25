@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.aspectj.weaver.ast.Var;
 import org.mp4parser.Container;
 import org.mp4parser.muxer.Movie;
 import org.mp4parser.muxer.Track;
@@ -462,8 +463,10 @@ public class SecPhoneController extends WebBaseControll {
 		List<SecPointTimePo> secPointTimePos=conn_secPointTime.findbyTimeAndPoint(new Date(), Long.parseLong(pointId));
 		if(secPointTimePos==null||secPointTimePos.isEmpty()){
 			dataMap.put("count", 0);
+			dataMap.put("time", "");
 		}else{
 			dataMap.put("count", secPointTimePos.size());
+			dataMap.put("time", secPointTimePos.get(0).getSetTime());
 		}
 		return success(dataMap);
 	}
@@ -478,6 +481,7 @@ public class SecPhoneController extends WebBaseControll {
 		String userId=json.getString("userId");
 		String comId=json.getString("comId");
 		String date=json.getString("date");
+		Date currDate=DateUtil.parse("1970-01-01 "+DateUtil.format(new Date(), "HH:mm:ss"), "yyyy-MM-dd HH:mm:ss");
 		List<SecPointPo> secPointPos=conn_secPoint.findByCom(Long.parseLong(comId));
 		List<SecPointVo> secPointVos=new ArrayList<SecPointVo>();
 		for (SecPointPo secPointPo : secPointPos) {
@@ -489,7 +493,7 @@ public class SecPhoneController extends WebBaseControll {
 					SecUserPointVo secUserPointVo=new SecUserPointVo().set(secUserPointPos.get(0));
 					secPointVo.getSecUserPointVos().add(secUserPointVo);
 				}else{
-					if(new Date().after(secPointTimePo.getSetEndTime())){
+					if(currDate.after(secPointTimePo.getSetEndTime())){
 						SecUserPointVo secUserPointVo=new SecUserPointVo();
 						secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
 						secUserPointVo.setStatus(SecUserPointStatus.NOT);
@@ -517,6 +521,7 @@ public class SecPhoneController extends WebBaseControll {
 		SecCompanyPo secCompanyPo=conn_com.get(Long.parseLong(comId));
 		SecPointPo secPointPo=conn_secPoint.get(Long.parseLong(pointId));
 		List<SecUserVo> secUserVos=new ArrayList<SecUserVo>();
+		Date currDate=DateUtil.parse("1970-01-01 "+DateUtil.format(new Date(), "HH:mm:ss"), "yyyy-MM-dd HH:mm:ss");
 		if(secUserPos!=null){
 			for (SecUserPo secUserPo : secUserPos) {
 				SecUserVo secUserVo=new SecUserVo();
@@ -538,7 +543,7 @@ public class SecPhoneController extends WebBaseControll {
 							secUserVo.getSecUserPointVos().add(secUserPointVo);
 						}
 					}else{
-						if(new Date().after(secPointTimePo.getSetEndTime())){
+						if(currDate.after(secPointTimePo.getSetEndTime())){
 							SecUserPointVo secUserPointVo=new SecUserPointVo();
 							secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
 							secUserPointVo.setStatus(SecUserPointStatus.NOT);

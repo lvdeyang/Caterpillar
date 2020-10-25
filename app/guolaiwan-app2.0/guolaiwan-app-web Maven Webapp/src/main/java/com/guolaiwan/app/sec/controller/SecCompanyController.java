@@ -83,9 +83,9 @@ public class SecCompanyController extends BaseController {
 	    String distance=request.getParameter("distance");
 	    SecCompanyPo secCompanyPo=new SecCompanyPo();
 	    secCompanyPo.setName(name);
-	    secCompanyPo.setX(x);
-	    secCompanyPo.setY(y);
-	    secCompanyPo.setDistance(Long.parseLong(distance));
+	    //secCompanyPo.setX(x);
+	    //secCompanyPo.setY(y);
+	    //secCompanyPo.setDistance(Long.parseLong(distance));
 	    conn_seccompany.save(secCompanyPo);
 		
 		return "success";

@@ -34,7 +34,7 @@
                 </div>
                 
                 
-                <div class="layui-form-item">
+                <!-- <div class="layui-form-item">
 					<label for="L_title" class="layui-form-label"> 经度： </label>
 					<div class="layui-input-inline" style="width: 100px;">
 						<input type="text"  name="x" id="seccomLongitude"  autocomplete="off" class="layui-input">
@@ -57,7 +57,7 @@
                         <input type="text" id="L_title" name="distance" required lay-verify="required"
                         autocomplete="off" class="layui-input">
                     </div>
-                </div>
+                </div> -->
 				
 				<div class="layui-form-item" style="text-align: center;position: absolute;margin-left: 200px;bottom: 0">
                     <button class="layui-btn" lay-filter="add" lay-submit>
