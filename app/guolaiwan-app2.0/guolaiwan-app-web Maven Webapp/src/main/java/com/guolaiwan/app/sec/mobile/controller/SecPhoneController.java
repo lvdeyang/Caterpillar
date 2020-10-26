@@ -347,7 +347,7 @@ public class SecPhoneController extends WebBaseControll {
 	public ModelAndView adminIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("sec/mobile/adminhome");
-		List<SecPointPo> secPointPos=conn_secPoint.findAll();
+		List<SecPointPo> secPointPos=conn_secPoint.findByField("type", SecPointType.CRUISE);
 		mv.addObject("points", secPointPos);
 		HttpSession session = request.getSession();
 		String userId=session.getAttribute("userId").toString();
