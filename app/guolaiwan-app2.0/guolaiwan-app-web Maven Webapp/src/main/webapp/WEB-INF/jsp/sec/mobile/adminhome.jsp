@@ -227,7 +227,7 @@ html, body {
 	           
 	       
 	       
-		       html.push('<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg secuser" id="secuser-'+list[i].userId+'">');
+		       html.push('<a href="javascript:void(0);" class="secuser weui-media-box weui-media-box_appmsg" id="secuser-'+list[i].userId+'">');
 			   html.push('<div class="weui-media-box__hd"><img class="weui-media-box__thumb" src="lib/images/logo.jpg"></div>');
 			   html.push('<div class="weui-media-box__bd"><h4 class="weui-media-box__title">'+list[i].name+'</h4>');
 			   html.push('<p class="weui-media-box__desc">'+list[i].comName+'</p>');
@@ -238,25 +238,26 @@ html, body {
 	           for(var j=0;j<list[i].secUserPointVos.length;j++){
 	              var secUserPoint=list[i].secUserPointVos[j];
 	              if(secUserPoint.status=='NOT'){
-	                 html.push('<div class="weui-cell__hd"><input type="checkbox" class="weui-check" name="checkbox1" id="point'+secUserPoint.id+'"');
-			         html.push('<i class="weui-icon-checked"></i></div>');
+	                 html.push('<div class="weui-cell__hd"><i class="weui-icon-cancel"></i></div>');
 	              }else{
-	                 html.push('<div class="weui-cell__hd"><input type="checkbox" class="weui-check" name="checkbox1" id="point'+secUserPoint.id+'" checked="checked">');
-			         html.push('<i class="weui-icon-checked"></i></div>');
+	                 html.push('<div class="weui-cell__hd"><i class="weui-icon-success"></i></div>');
 	              }
 	              
 	           }
 			   html.push('</label></div></p>');
 	       }
 	       $('#userList').append(html.join(''));
+	       
+	       $('.secuser').on('click',function(){
+	    
+		       var ids=this.id.split('-');
+		       location.href=window.BASEPATH+'/sec/phoneapp/personal/index?userId='+ids[1];
+	       })
+	       
 	    }
 	    
 	    
-	    $('.secuser').on('click',function(){
 	    
-	       var ids=this.id.split('-');
-	       location.href=window.BASEPATH+'/sec/phoneapp/personal/index?userId='+ids[1];
-	    })
 	    
 	});
 		

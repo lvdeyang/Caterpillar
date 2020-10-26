@@ -201,68 +201,75 @@ html, body {
 	       var ids=$(obj).attr('id').split('-');
 	       pointId=ids[1];
 	       var datas=$(obj).attr('data').split('-');
-	       x=datas[0];
-	       y=datas[1];
+	       y=datas[0];
+	       x=datas[1];
+	       addMarker(y,x);
 	       type=datas[2];
 	       name=datas[3];
 	       distance=datas[4];
 	       $('#pointName').html(name);
 	    }
 	    
-	    var map = new AMap.Map('container', {
-	        zoom:15,//级别
-	        center: [116.403322, 39.920255],//中心点坐标
-	        viewMode:'3D'//使用3D视图
-	    });
+	   
 	    
 	    // 构造点标记
-		var marker = new AMap.Marker({
-		    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-		    position: [116.405467, 39.907761]
-		});
-		// 构造矢量圆形
-		var circle = new AMap.Circle({
-		    center: new AMap.LngLat("116.403322", "39.920255"), // 圆心位置
-		    radius: 300,  //半径
-		    strokeColor: "#F33",  //线颜色
-		    strokeOpacity: 1,  //线透明度
-		    strokeWeight: 3,  //线粗细度
-		    fillColor: "#ee2200",  //填充颜色
-		    fillOpacity: 0.35 //填充透明度
-		});
+	    function addMarker(lng,lat){
+		    var map = new AMap.Map('container', {
+		        zoom:15,//级别
+		        center: [lng, lat],//中心点坐标
+		        viewMode:'3D'//使用3D视图
+		    });
+		    var marker = new AMap.Marker({
+			    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+			    position: [lng, lat]
+			});
+			// 构造矢量圆形
+			var circle = new AMap.Circle({
+			    center: new AMap.LngLat(lng, lat), // 圆心位置
+			    radius: 300,  //半径
+			    strokeColor: "#F33",  //线颜色
+			    strokeOpacity: 1,  //线透明度
+			    strokeWeight: 3,  //线粗细度
+			    fillColor: "#ee2200",  //填充颜色
+			    fillOpacity: 0.35 //填充透明度
+			});
+			
+			// 将以上覆盖物添加到地图上
+			// 单独将点标记添加到地图上
+			map.add(marker);
+			// add方法可以传入一个覆盖物数组，将点标记和矢量圆同时添加到地图上
+			map.add([marker,circle]);
+			
+			//高德定位
+			AMap.plugin('AMap.Geolocation', function() {
+		        var geolocation = new AMap.Geolocation({
+		            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+		            timeout: 10000,          //超过10秒后停止定位，默认：5s
+		            buttonPosition:'RB',    //定位按钮的停靠位置
+		            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+		            zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
 		
-		// 将以上覆盖物添加到地图上
-		// 单独将点标记添加到地图上
-		map.add(marker);
-		// add方法可以传入一个覆盖物数组，将点标记和矢量圆同时添加到地图上
-		map.add([marker,circle]);
+		        });
+		        map.addControl(geolocation);
+		        geolocation.getCurrentPosition(function(status,result){
+		            if(status=='complete'){
+		                onComplete(result)
+		            }else{
+		                onError(result)
+		            }
+		        });
+		    });
+	    }
 		
-		//高德定位
-		AMap.plugin('AMap.Geolocation', function() {
-	        var geolocation = new AMap.Geolocation({
-	            enableHighAccuracy: true,//是否使用高精度定位，默认:true
-	            timeout: 10000,          //超过10秒后停止定位，默认：5s
-	            buttonPosition:'RB',    //定位按钮的停靠位置
-	            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-	            zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
-	
-	        });
-	        map.addControl(geolocation);
-	        geolocation.getCurrentPosition(function(status,result){
-	            if(status=='complete'){
-	                onComplete(result)
-	            }else{
-	                onError(result)
-	            }
-	        });
-	    });
+		
+		
 	    //解析定位结果
 	    function onComplete(data) {
 	       
 	        var str = [];
 	        str.push('定位结果：' + data.position);
-	        cury=data.position.lat;
-	        curx=data.position.lng;
+	        curx=data.position.lat;
+	        cury=data.position.lng;
 	        str.push('定位类别：' + data.location_type);
 	        if(data.accuracy){
 	             str.push('精度：' + data.accuracy + ' 米');

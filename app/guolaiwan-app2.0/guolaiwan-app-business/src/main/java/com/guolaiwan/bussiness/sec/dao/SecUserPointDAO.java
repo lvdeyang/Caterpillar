@@ -37,4 +37,11 @@ public class SecUserPointDAO extends AbstractBaseDao<SecUserPointPo> {
 		hql.andBy("setTime",Condition.le,DateUtil.parse(date+" 23:59:59", "yyyy-MM-dd HH:mm:ss"));
 		return this.findByHql(hql);
 	}
+	
+	public int countByUserAndStatus(long userId,String status){
+		CountHql countHql=this.newCountHql();
+		countHql.andBy("secUserId",Condition.eq,userId);
+		countHql.andBy("status",Condition.eq,status);
+		return this.countByHql(countHql);
+	}
 }

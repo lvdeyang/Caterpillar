@@ -280,16 +280,14 @@ html, body {
 			    ${comName}
 			</div>
 			<div class="weui-flex" style="margin-top:20px;">
-		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
-		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
-		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
-		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">0</div></div>
-		    </div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">${notCount}</div></div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">${lateCount}</div></div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">${beforeCount}</div></div>
+            </div>
 		    <div class="weui-flex">
 		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">未打卡</div></div>
 		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">迟到</div></div>
 		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">早退</div></div>
-		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">旷工</div></div>
 		    </div>
             
             <div class="weui-navbar" style="position:relative !important;margin-top:10px;">

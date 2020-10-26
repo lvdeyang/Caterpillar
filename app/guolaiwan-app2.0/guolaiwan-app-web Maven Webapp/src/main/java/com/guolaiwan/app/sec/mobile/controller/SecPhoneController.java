@@ -376,6 +376,12 @@ public class SecPhoneController extends WebBaseControll {
 			SecCompanyPo secCompanyPo=conn_com.get(secUserPos.get(0).getCompanyId());
 			mv.addObject("comName",secCompanyPo.getName());
 			mv.addObject("comId",secCompanyPo.getId());
+		    int lateCount=conn_secuserpoint.countByUserAndStatus(secUserPos.get(0).getUserId(),SecUserPointStatus.LATE);
+		    int beforeCount=conn_secuserpoint.countByUserAndStatus(secUserPos.get(0).getUserId(),SecUserPointStatus.BEFORE);
+		    int notCount=conn_secuserpoint.countByUserAndStatus(secUserPos.get(0).getUserId(),SecUserPointStatus.NOT);
+		    mv.addObject("lateCount",lateCount);
+		    mv.addObject("beforeCount",beforeCount);
+		    mv.addObject("notCount",notCount);
 		}
 		
 		return mv;
