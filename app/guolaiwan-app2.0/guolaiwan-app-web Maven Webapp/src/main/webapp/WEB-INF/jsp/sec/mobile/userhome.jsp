@@ -394,10 +394,15 @@ html, body {
 				data = parseAjaxResult(data);
 				if(data === -1) return;
 	            $.toast("打卡完成");
-	            location.href="";
+	            location.href=window.BASEPATH+'/sec/phoneapp/personal/index?userId=${userId}';
 			});
 		
 		}); 
+		
+		$('#personalHome').on('click',function(){
+			
+			location.href=window.BASEPATH+'/sec/phoneapp/personal/index?userId=${userId}';
+		});
 	    
 	});
 		
@@ -420,9 +425,10 @@ html, body {
 		  <div style="width:100%;">
 			  <image id="selectPoint" style="width:50px;height:50px;float:left;" src="lib/images/caidan.png"/>
 			  <div style="float:left;line-height:50px;width:200px;" id="pointName"></div>
+			  <div style="float:right;margin-top:10px;margin-right:5px"><a id="personalHome" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">个人中心</a></div>
 		  </div>
 		  
-		  <div id="container" style="width:100%;height:500px;"></div>
+		  <div id="container" style="width:100%;height:400px;"></div>
 		  <div id="message" style="text-align:center;margin-top:30px;"></div>
 		  <div id="message-time" style="text-align:center;margin-top:30px;"></div> 
 		  <div id="selPoint" class="weui-popup__container popup-bottom">

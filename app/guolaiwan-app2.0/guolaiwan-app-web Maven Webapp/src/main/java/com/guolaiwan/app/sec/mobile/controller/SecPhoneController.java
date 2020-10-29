@@ -361,7 +361,9 @@ public class SecPhoneController extends WebBaseControll {
 		List<SecPointPo> secPointPos=conn_secPoint.findAll();
 		mv = new ModelAndView("sec/mobile/userhome");
 		mv.addObject("points", secPointPos);
-		
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		mv.addObject("userId", userId);
 		return mv;
 	}
 	@RequestMapping(value = "/personal/index")
@@ -487,7 +489,8 @@ public class SecPhoneController extends WebBaseControll {
 		String userId=json.getString("userId");
 		String comId=json.getString("comId");
 		String date=json.getString("date");
-		Date currDate=DateUtil.parse("1970-01-01 "+DateUtil.format(new Date(), "HH:mm:ss"), "yyyy-MM-dd HH:mm:ss");
+		Date currDate=new Date();
+		
 		List<SecPointPo> secPointPos=conn_secPoint.findByCom(Long.parseLong(comId));
 		List<SecPointVo> secPointVos=new ArrayList<SecPointVo>();
 		for (SecPointPo secPointPo : secPointPos) {
@@ -499,7 +502,8 @@ public class SecPhoneController extends WebBaseControll {
 					SecUserPointVo secUserPointVo=new SecUserPointVo().set(secUserPointPos.get(0));
 					secPointVo.getSecUserPointVos().add(secUserPointVo);
 				}else{
-					if(currDate.after(secPointTimePo.getSetEndTime())){
+					Date currSetDate=DateUtil.parse(date+" "+DateUtil.format(secPointTimePo.getSetEndTime(),"HH:mm:ss"),"yyyy-MM-dd HH:mm:ss");
+					if(currDate.after(currSetDate)){
 						SecUserPointVo secUserPointVo=new SecUserPointVo();
 						secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
 						secUserPointVo.setStatus(SecUserPointStatus.NOT);
