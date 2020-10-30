@@ -474,7 +474,7 @@ public class SecPhoneController extends WebBaseControll {
 			dataMap.put("time", "");
 		}else{
 			dataMap.put("count", secPointTimePos.size());
-			dataMap.put("time", secPointTimePos.get(0).getSetTime());
+			dataMap.put("time", DateUtil.format(secPointTimePos.get(0).getSetTime(),"HH:mm:ss"));
 		}
 		return success(dataMap);
 	}

@@ -171,6 +171,7 @@ html, body {
 	    var curx='';
 	    var cury='';
 	    var distance=0;
+	    var marker=null;
 	    
 		var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -181,6 +182,13 @@ html, body {
 			}
 
 	    };
+	    
+	    
+	    var map = new AMap.Map('container', {
+		        zoom:13,//级别
+		        viewMode:'3D'//使用3D视图
+	    });
+	    
 	
 	    $('#selectPoint').on('click',function(){
 	       $("#selPoint").popup();
@@ -203,30 +211,28 @@ html, body {
 	       var datas=$(obj).attr('data').split('-');
 	       y=datas[0];
 	       x=datas[1];
-	       addMarker(y,x);
 	       type=datas[2];
 	       name=datas[3];
 	       distance=datas[4];
 	       $('#pointName').html(name);
+	       setPointMap(y,x);
 	    }
 	    
 	   
 	    
-	    // 构造点标记
-	    function addMarker(lng,lat){
-		    var map = new AMap.Map('container', {
-		        zoom:15,//级别
-		        center: [lng, lat],//中心点坐标
-		        viewMode:'3D'//使用3D视图
-		    });
-		    var marker = new AMap.Marker({
-			    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-			    position: [lng, lat]
-			});
+	
+	    function setPointMap(lng,lat){
+	        
+	        // 传入经纬度，设置地图中心点
+			var position = new AMap.LngLat(lng, lat);  // 标准写法
+			// 简写 var position = [116, 39]; 
+			map.setCenter(position); 
+		    
+		    
 			// 构造矢量圆形
 			var circle = new AMap.Circle({
 			    center: new AMap.LngLat(lng, lat), // 圆心位置
-			    radius: 300,  //半径
+			    radius: distance,  //半径
 			    strokeColor: "#F33",  //线颜色
 			    strokeOpacity: 1,  //线透明度
 			    strokeWeight: 3,  //线粗细度
@@ -234,14 +240,13 @@ html, body {
 			    fillOpacity: 0.35 //填充透明度
 			});
 			
-			// 将以上覆盖物添加到地图上
-			// 单独将点标记添加到地图上
-			map.add(marker);
 			// add方法可以传入一个覆盖物数组，将点标记和矢量圆同时添加到地图上
-			map.add([marker,circle]);
+			map.add(circle);
 			
+			
+			getloca();
 			//高德定位
-			AMap.plugin('AMap.Geolocation', function() {
+			/*AMap.plugin('AMap.Geolocation', function() {
 		        var geolocation = new AMap.Geolocation({
 		            enableHighAccuracy: true,//是否使用高精度定位，默认:true
 		            timeout: 10000,          //超过10秒后停止定位，默认：5s
@@ -258,7 +263,7 @@ html, body {
 		                onError(result)
 		            }
 		        });
-		    });
+		    });*/
 	    }
 		
 		
@@ -283,13 +288,13 @@ html, body {
 	    }
 		
 		//微信定位
-		  var loca={};
-		  function getloca(){
+		var loca={};
+		function getloca(){
 		      
 			  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
 		
 			  var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
-			    $.get(_uri, null, function(data){
+			  $.get(_uri, null, function(data){
 					data = parseAjaxResult(data);
 					if(data === -1) return;
 					if(data){
@@ -299,10 +304,10 @@ html, body {
 					
 			  });
 		  
-		  }
+		}
 		  
 		  
-		  function getLoation(){
+		function getLoation(){
 		       wx.config({
 		            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 		            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -319,9 +324,24 @@ html, body {
 		                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
 		                    var speed = res.speed; // 速度，以米/每秒计  
 		                    var accuracy = res.accuracy; // 位置精度  
-		                    cury=latitude;
-	                        curx=longitude;
-		                    
+		                    curx=latitude;
+	                        cury=longitude;
+	                        
+	                        if(marker!=null){
+	                        	map.remove(marker);
+	                        }
+	                        
+	                        marker = new AMap.Marker({
+							    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+							    position: [longitude, latitude]
+							});
+							map.add(marker);
+							
+							// 传入经纬度，设置地图中心点
+							var position = new AMap.LngLat(longitude, latitude);  // 标准写法
+							// 简写 var position = [116, 39]; 
+							map.setCenter(position); 
+		                    initPointMessage();
 		                },  
 		                cancel: function (e) {  
 		                        //这个地方是用户拒绝获取地理位置  
@@ -334,10 +354,10 @@ html, body {
 					
 			         });     
 		            
-		         });
+		       });
 		  
 		  
-		  }
+		}
 		
 		function initPointMessage(){
 		    if(curx&&cury){
