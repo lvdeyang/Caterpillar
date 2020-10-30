@@ -34,10 +34,11 @@ public class SecScheduledTask {
 	@Autowired
 	SecUserDAO conn_secuser;
 	
-	//每天晚上23点执行
-	//@Scheduled(cron = "0 0 23 * * ?")
+	
 
-	@Scheduled(cron = "0 * 15 * * ?")//在每天下午2点到下午2:59期间的每1分钟触发
+	//@Scheduled(cron = "0 * 15 * * ?")//在每天下午2点到下午2:59期间的每1分钟触发
+	//每天晚上23点执行
+	@Scheduled(cron = "0 0 23 * * ?")
 	public void SetUserPoint(){
 		try {
 			List<SecPointTimePo> secPointTimePos=conn_secPointTime.findAll();
