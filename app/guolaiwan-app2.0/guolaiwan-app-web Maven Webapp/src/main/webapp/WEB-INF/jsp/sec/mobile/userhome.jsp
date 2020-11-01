@@ -172,6 +172,7 @@ html, body {
 	    var cury='';
 	    var distance=0;
 	    var marker=null;
+	    var circle=null;
 	    
 		var parseAjaxResult = function(data){
 			if(data.status !== 200){
@@ -228,9 +229,12 @@ html, body {
 			// 简写 var position = [116, 39]; 
 			map.setCenter(position); 
 		    
+		    if(circle!=null){
+		       map.remove(circle);
+		    }
 		    
 			// 构造矢量圆形
-			var circle = new AMap.Circle({
+			circle = new AMap.Circle({
 			    center: new AMap.LngLat(lng, lat), // 圆心位置
 			    radius: distance,  //半径
 			    strokeColor: "#F33",  //线颜色

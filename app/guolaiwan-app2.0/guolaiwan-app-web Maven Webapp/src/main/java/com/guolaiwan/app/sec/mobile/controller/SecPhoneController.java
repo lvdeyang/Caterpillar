@@ -329,7 +329,7 @@ public class SecPhoneController extends WebBaseControll {
 		String userId=session.getAttribute("userId").toString();
 		String type=json.getString("type");
 		String companyId=json.getString("companyId");
-		List<SecUserPo> secUserPos=conn_secuser.findByField("companyId",Long.parseLong(companyId));
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
 		SecUserPo secUserPo=new SecUserPo();
 		if(!secUserPos.isEmpty()&&secUserPos.size()!=0){
 			secUserPo=secUserPos.get(0);
@@ -427,9 +427,10 @@ public class SecPhoneController extends WebBaseControll {
 	    SecPointTimePo secPointTimePo=secPointTimePos.get(0);
 	    if((secUserPointPos!=null||!secUserPointPos.isEmpty())&&!secPointPo.getType().equals(SecPointType.ONWORK)){
 	    	SecUserPointPo secUserPointPo=secUserPointPos.get(0);
-	    	if(time.before(secPointTimePo.getSetStartTime())){
-				secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
-			}else{
+	    	if(time.after(secPointTimePo.getSetTime())){
+				secUserPointPo.setStatus(SecUserPointStatus.LATE);
+			}
+	    	else{
 				secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
 			}
 	    	conn_secuserpoint.saveOrUpdate(secUserPointPo);
@@ -441,13 +442,13 @@ public class SecPhoneController extends WebBaseControll {
 			secUserPointPo.setSetTime(setDate);
 			secUserPointPo.setSecPointTimeId(secPointTimePos.get(0).getId());
 			if(secPointPo.getType().equals(SecPointType.ONWORK)){
-				if(time.after(secPointTimePo.getSetEndTime())){
+				if(time.after(secPointTimePo.getSetTime())){
 					secUserPointPo.setStatus(SecUserPointStatus.LATE);
 				}else{
 					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
 				}
 			}else if(secPointPo.getType().equals(SecPointType.OFFWORK)){
-				if(time.before(secPointTimePo.getSetStartTime())){
+				if(time.before(secPointTimePo.getSetTime())){
 					secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
 				}else{
 					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
@@ -500,12 +501,14 @@ public class SecPhoneController extends WebBaseControll {
 				List<SecUserPointPo> secUserPointPos=conn_secuserpoint.findbyUserAndPointTimeAndDate(Long.parseLong(userId),secPointTimePo.getId(),date);
 				if(secUserPointPos!=null&&!secUserPointPos.isEmpty()){
 					SecUserPointVo secUserPointVo=new SecUserPointVo().set(secUserPointPos.get(0));
+					secUserPointVo.setSetTimeStr(DateUtil.format(secUserPointPos.get(0).getSetTime(),"HH:mm:ss"));
 					secPointVo.getSecUserPointVos().add(secUserPointVo);
 				}else{
 					Date currSetDate=DateUtil.parse(date+" "+DateUtil.format(secPointTimePo.getSetEndTime(),"HH:mm:ss"),"yyyy-MM-dd HH:mm:ss");
 					if(currDate.after(currSetDate)){
 						SecUserPointVo secUserPointVo=new SecUserPointVo();
-						secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
+						secUserPointVo.setSetTimeStr(DateUtil.format(secPointTimePo.getSetTime(),"HH:mm:ss"));
+
 						secUserPointVo.setStatus(SecUserPointStatus.NOT);
 						secPointVo.getSecUserPointVos().add(secUserPointVo);
 					}
