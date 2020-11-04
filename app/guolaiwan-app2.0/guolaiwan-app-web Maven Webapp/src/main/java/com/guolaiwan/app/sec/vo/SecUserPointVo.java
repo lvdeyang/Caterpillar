@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.guolaiwan.bussiness.sec.po.SecUserPointPo;
 
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.converter.AbstractBaseVO;
 
 public class SecUserPointVo extends AbstractBaseVO<SecUserPointVo, SecUserPointPo>{
@@ -49,7 +50,7 @@ public class SecUserPointVo extends AbstractBaseVO<SecUserPointVo, SecUserPointP
 		this.setSecPointId(entity.getSecPointId());
 		this.setSecPointTimeId(entity.getSecPointId());
 		this.setSecUserId(entity.getSecUserId());
-		this.setSetTimeStr(entity.getSetTimeStr());
+		this.setSetTimeStr(DateUtil.format(entity.getSetTime(),"HH:mm:ss"));
 		this.setStatus(entity.getStatus());
 		return this;
 	}

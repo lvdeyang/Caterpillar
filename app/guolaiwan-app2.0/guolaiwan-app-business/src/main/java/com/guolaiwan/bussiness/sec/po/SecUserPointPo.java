@@ -15,7 +15,6 @@ public class SecUserPointPo extends AbstractBasePO{
 	private long secPointId;
 	private long secPointTimeId;
 	private Date setTime;
-	private String setTimeStr;
 	private String status;//com.guolaiwan.bussiness.sec.enums.SecUserPointStatus
 	public long getSecUserId() {
 		return secUserId;
@@ -47,12 +46,6 @@ public class SecUserPointPo extends AbstractBasePO{
 	public void setSetTime(Date setTime) {
 		this.setTime = setTime;
 	}
-	public String getSetTimeStr() {
-		return setTimeStr;
-	}
-	public void setSetTimeStr(String setTimeStr) {
-		this.setTimeStr = setTimeStr;
-	}
-	
+
 	
 }

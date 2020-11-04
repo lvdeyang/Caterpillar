@@ -116,7 +116,7 @@
 			if(href.indexOf('pubnum/index')!=-1){
 			  str='<div style="font-size:24px;line-height:40px;position:absolute;margin-top:-42px;z-index:1000;right:10px"><img id="ewmpic" style="height:18px;width:18px;" src="lib/images/ewm.jpg"/></div>';
 			}
-			var nameHeader='万邦安保';
+			var nameHeader='安邦安保';
 			var phone='0315-6681288';
 			//var ccode='${comCode}';
 			//if(ccode=='1003'){

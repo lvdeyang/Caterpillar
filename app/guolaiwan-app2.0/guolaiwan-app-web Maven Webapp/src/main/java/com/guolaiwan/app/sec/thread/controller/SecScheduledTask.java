@@ -53,7 +53,7 @@ public class SecScheduledTask {
 					if(secUserPointPos==null||secUserPointPos.isEmpty()){
 						SecUserPointPo secUserPointPo=new SecUserPointPo();
 						secUserPointPo.setSecPointId(secPointTimePo.getSecPointId());
-						secUserPointPo.setSecUserId(secUserPo.getId());
+						secUserPointPo.setSecUserId(secUserPo.getUserId());
 						secUserPointPo.setSetTime(new Date());
 						secUserPointPo.setSecPointTimeId(secPointTimePo.getId());
 						secUserPointPo.setStatus(SecUserPointStatus.NOT);

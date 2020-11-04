@@ -425,37 +425,34 @@ public class SecPhoneController extends WebBaseControll {
 	    
 		Date time=DateUtil.parse("1970-01-01 "+DateUtil.format(setDate,"HH:mm:ss"),"yyyy-MM-dd HH:mm:ss");
 	    SecPointTimePo secPointTimePo=secPointTimePos.get(0);
-	    if((secUserPointPos!=null||!secUserPointPos.isEmpty())&&!secPointPo.getType().equals(SecPointType.ONWORK)){
-	    	SecUserPointPo secUserPointPo=secUserPointPos.get(0);
-	    	if(time.before(secPointTimePo.getSetStartTime())){
-				secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
-			}else{
-				secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
-			}
-	    	conn_secuserpoint.saveOrUpdate(secUserPointPo);
-	        
+	    SecUserPointPo secUserPointPo=new SecUserPointPo();
+	    if((secUserPointPos!=null&&!secUserPointPos.isEmpty())){
+            secUserPointPo=secUserPointPos.get(0);
 		}else{
-			SecUserPointPo secUserPointPo=new SecUserPointPo();
 			secUserPointPo.setSecPointId(Long.parseLong(pointId));
 			secUserPointPo.setSecUserId(Long.parseLong(userId));
 			secUserPointPo.setSetTime(setDate);
 			secUserPointPo.setSecPointTimeId(secPointTimePos.get(0).getId());
-			if(secPointPo.getType().equals(SecPointType.ONWORK)){
-				if(time.after(secPointTimePo.getSetEndTime())){
-					secUserPointPo.setStatus(SecUserPointStatus.LATE);
-				}else{
-					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
-				}
-			}else if(secPointPo.getType().equals(SecPointType.OFFWORK)){
-				if(time.before(secPointTimePo.getSetStartTime())){
-					secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
-				}else{
-					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
-				}
-			}
-			conn_secuserpoint.save(secUserPointPo);
+			
+			
 		}
-		
+	    //根据时间判断状态
+	    if(secPointPo.getType().equals(SecPointType.ONWORK)){
+			if(time.after(secPointTimePo.getSetEndTime())){
+				secUserPointPo.setStatus(SecUserPointStatus.LATE);
+			}else{
+				secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+			}
+		}else if(secPointPo.getType().equals(SecPointType.OFFWORK)){
+			if(time.before(secPointTimePo.getSetStartTime())){
+				secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
+			}else{
+				secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+			}
+		}else{
+			secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+		}
+	    conn_secuserpoint.saveOrUpdate(secUserPointPo);
 		
 		return success(dataMap);
 	}
@@ -501,15 +498,6 @@ public class SecPhoneController extends WebBaseControll {
 				if(secUserPointPos!=null&&!secUserPointPos.isEmpty()){
 					SecUserPointVo secUserPointVo=new SecUserPointVo().set(secUserPointPos.get(0));
 					secPointVo.getSecUserPointVos().add(secUserPointVo);
-				}else{
-					Date currSetDate=DateUtil.parse(date+" "+DateUtil.format(secPointTimePo.getSetEndTime(),"HH:mm:ss"),"yyyy-MM-dd HH:mm:ss");
-					if(currDate.after(currSetDate)){
-						SecUserPointVo secUserPointVo=new SecUserPointVo();
-						secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
-						secUserPointVo.setStatus(SecUserPointStatus.NOT);
-						secPointVo.getSecUserPointVos().add(secUserPointVo);
-					}
-					
 				}
 			}
 			secPointVos.add(secPointVo);
@@ -534,6 +522,9 @@ public class SecPhoneController extends WebBaseControll {
 		Date currDate=DateUtil.parse("1970-01-01 "+DateUtil.format(new Date(), "HH:mm:ss"), "yyyy-MM-dd HH:mm:ss");
 		if(secUserPos!=null){
 			for (SecUserPo secUserPo : secUserPos) {
+				if(secUserPo.getType().equals(SecUserType.ADMIN)){
+					continue;
+				}
 				SecUserVo secUserVo=new SecUserVo();
 				secUserVo.setUserId(secUserPo.getUserId());
 				secUserVo.setName(secUserPo.getName());
