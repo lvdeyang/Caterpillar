@@ -329,7 +329,7 @@ public class SecPhoneController extends WebBaseControll {
 		String userId=session.getAttribute("userId").toString();
 		String type=json.getString("type");
 		String companyId=json.getString("companyId");
-		List<SecUserPo> secUserPos=conn_secuser.findByField("companyId",Long.parseLong(companyId));
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
 		SecUserPo secUserPo=new SecUserPo();
 		if(!secUserPos.isEmpty()&&secUserPos.size()!=0){
 			secUserPo=secUserPos.get(0);
@@ -428,13 +428,12 @@ public class SecPhoneController extends WebBaseControll {
 	    SecUserPointPo secUserPointPo=new SecUserPointPo();
 	    if((secUserPointPos!=null&&!secUserPointPos.isEmpty())){
             secUserPointPo=secUserPointPos.get(0);
+
 		}else{
 			secUserPointPo.setSecPointId(Long.parseLong(pointId));
 			secUserPointPo.setSecUserId(Long.parseLong(userId));
 			secUserPointPo.setSetTime(setDate);
 			secUserPointPo.setSecPointTimeId(secPointTimePos.get(0).getId());
-			
-			
 		}
 	    //根据时间判断状态
 	    if(secPointPo.getType().equals(SecPointType.ONWORK)){
@@ -497,6 +496,7 @@ public class SecPhoneController extends WebBaseControll {
 				List<SecUserPointPo> secUserPointPos=conn_secuserpoint.findbyUserAndPointTimeAndDate(Long.parseLong(userId),secPointTimePo.getId(),date);
 				if(secUserPointPos!=null&&!secUserPointPos.isEmpty()){
 					SecUserPointVo secUserPointVo=new SecUserPointVo().set(secUserPointPos.get(0));
+					secUserPointVo.setSetTimeStr(DateUtil.format(secUserPointPos.get(0).getSetTime(),"HH:mm:ss"));
 					secPointVo.getSecUserPointVos().add(secUserPointVo);
 				}
 			}
