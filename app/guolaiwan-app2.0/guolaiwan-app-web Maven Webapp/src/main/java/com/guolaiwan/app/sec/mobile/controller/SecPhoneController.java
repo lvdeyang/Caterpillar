@@ -428,30 +428,49 @@ public class SecPhoneController extends WebBaseControll {
 	    SecUserPointPo secUserPointPo=new SecUserPointPo();
 	    if((secUserPointPos!=null&&!secUserPointPos.isEmpty())){
             secUserPointPo=secUserPointPos.get(0);
+            //根据时间判断状态
+		    if(secPointPo.getType().equals(SecPointType.ONWORK)){
+				if(time.after(secPointTimePo.getSetTime())){
+		            //这么写容易懂吧，这种情况下本来应该是迟到，但是之前打过卡了，就不更新状态了
+				}else{
+					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+				}
+			}else if(secPointPo.getType().equals(SecPointType.OFFWORK)){
+				if(time.before(secPointTimePo.getSetTime())){
+					
+				}else{
+					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+				}
+			}else{
+				secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+			}
+		    conn_secuserpoint.saveOrUpdate(secUserPointPo);
 
 		}else{
 			secUserPointPo.setSecPointId(Long.parseLong(pointId));
 			secUserPointPo.setSecUserId(Long.parseLong(userId));
 			secUserPointPo.setSetTime(setDate);
 			secUserPointPo.setSecPointTimeId(secPointTimePos.get(0).getId());
-		}
-	    //根据时间判断状态
-	    if(secPointPo.getType().equals(SecPointType.ONWORK)){
-			if(time.after(secPointTimePo.getSetEndTime())){
-				secUserPointPo.setStatus(SecUserPointStatus.LATE);
+			//根据时间判断状态
+		    if(secPointPo.getType().equals(SecPointType.ONWORK)){
+				if(time.after(secPointTimePo.getSetTime())){
+					secUserPointPo.setStatus(SecUserPointStatus.LATE);
+				}else{
+					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+				}
+			}else if(secPointPo.getType().equals(SecPointType.OFFWORK)){
+				if(time.before(secPointTimePo.getSetTime())){
+					secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
+				}else{
+					secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+				}
 			}else{
 				secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
 			}
-		}else if(secPointPo.getType().equals(SecPointType.OFFWORK)){
-			if(time.before(secPointTimePo.getSetStartTime())){
-				secUserPointPo.setStatus(SecUserPointStatus.BEFORE);
-			}else{
-				secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
-			}
-		}else{
-			secUserPointPo.setStatus(SecUserPointStatus.NORMAL);
+			conn_secuserpoint.save(secUserPointPo);
 		}
-	    conn_secuserpoint.saveOrUpdate(secUserPointPo);
+	    
+	    
 		
 		return success(dataMap);
 	}
@@ -544,7 +563,7 @@ public class SecPhoneController extends WebBaseControll {
 							secUserVo.getSecUserPointVos().add(secUserPointVo);
 						}
 					}else{
-						if(currDate.after(secPointTimePo.getSetEndTime())){
+						if(currDate.after(secPointTimePo.getSetTime())){
 							SecUserPointVo secUserPointVo=new SecUserPointVo();
 							secUserPointVo.setSetTimeStr(secPointTimePo.getSetTimeStr());
 							secUserPointVo.setStatus(SecUserPointStatus.NOT);
