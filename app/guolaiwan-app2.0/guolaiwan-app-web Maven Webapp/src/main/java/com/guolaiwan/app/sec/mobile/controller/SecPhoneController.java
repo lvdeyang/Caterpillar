@@ -646,4 +646,39 @@ public class SecPhoneController extends WebBaseControll {
 		return success(dataMap);
 	}
 	
+	
+	@RequestMapping(value = "/setuser/index")
+	public ModelAndView setuserIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("sec/mobile/setuser");
+		return mv;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/checkUserList", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> checkUserList(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
+		List<SecUserPo> secUserPos2=conn_secuser.findByField("companyId", secUserPos.get(0).getCompanyId());
+		Map<String, Object> result=new HashMap<String, Object>();
+		result.put("message", secUserPos2);
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/user/status", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> userstatus(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Date setDate=new Date();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		
+		SecUserPo secUserPo=conn_secuser.get(json.getLong("id"));
+		secUserPo.setStatus(json.getString("status"));
+		conn_secuser.save(secUserPo);
+		return success(dataMap);
+	}
+	
+	
 }

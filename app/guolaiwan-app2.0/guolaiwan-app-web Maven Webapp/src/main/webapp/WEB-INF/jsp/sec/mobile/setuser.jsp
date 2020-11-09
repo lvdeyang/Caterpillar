@@ -66,7 +66,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>用户个人</title>
+<title>用户管理</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -159,6 +159,8 @@ html, body {
 
 </head>
 <jsp:include page="../../../mobile/commons/jsp/scriptsec.jsp"></jsp:include>
+<script type="text/javascript"
+	src="https://webapi.amap.com/maps?v=1.4.13&key=ff4672efcfc6279cbe3b2815dd70a1ec"></script>
 <!-- 公共脚本引入 -->
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript">
@@ -176,6 +178,80 @@ html, body {
 	    };
 	    
 	    
+	    
+	    initList();
+	    
+	    function initList(){
+	       var _uri = window.BASEPATH+'/sec/phoneapp/checkUserList';
+		   var param={};
+
+		   $.post(_uri, $.toJSON(param), function(data){
+		        var html=[];
+		        $('#userList').children().remove();
+		        for(var i=0;i<data.message.length;i++){
+		            var type="";
+		            var status="";
+
+		            if(data.message[i].type=='SECURITY'){
+		               type+="保安";
+		            }else if(data.message[i].type=='ADMIN'){
+		               type+="管理员";
+		            }
+
+		            if(data.message[i].status=='CHECKING'){
+		            	status='审核中';
+		            }else if(data.message[i].status=='PASSED'){
+		                status='审核通过';
+		            }else{
+		                status='审核未通过';
+		            }
+		            
+		        	html.push('<div class="weui-cell weui-cell_swiped" id="setuser-'+data.message[i].id+'">');
+			        html.push('<div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">');
+			        html.push('<div class="weui-cell">');
+			        html.push('<div class="weui-cell__bd">');
+			        html.push('<p>'+data.message[i].name+':'+type+'('+data.message[i].phone+')'+'&nbsp;&nbsp;'+status+'</p></div>');
+			        html.push('<div class="weui-cell__ft"></div></div></div>');
+			        html.push('<div class="weui-cell__ft">');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" id="deny-'+data.message[i].id+'" href="javascript:">拒绝</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" id="pass-'+data.message[i].id+'"  href="javascript:">通过</a>');
+			        html.push('</div></div>');
+			       
+		        }
+		        $('#userList').append(html.join(''));
+		        $('.weui-cell_swiped').swipeout();
+		        $('.delete-swipeout').on('click',function(){
+		            var ids=this.id.split('-');
+			    	changeStatus(ids[1],'DENY');
+		    	});
+			    $('.close-swipeout').on('click',function(){
+			        var ids=this.id.split('-');
+			    	changeStatus(ids[1],'PASSED');
+			    });
+		        
+		   });
+	    }
+	    
+	    
+	    
+	    function changeStatus(id,status){
+	    
+	       
+	    	var _uri = window.BASEPATH+'/sec/phoneapp/user/status';
+		    var param={};
+		    param.id=id;
+		    param.status=status;
+			$.post(_uri, $.toJSON(param), function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+	            $('.weui-cell_swiped').swipeout('close') //关闭
+	            initList();
+			});
+	    }
+	    
+	  
+	  
+	    
 	});
 		
 </script>
@@ -189,25 +265,14 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">管理中心</div>
+				<div class="header-content">打卡点管理</div>
 			</div>
 		</div>
 		
 		<div id="content" class="content">
-              <a class="weui-cell weui-cell_access" href="javascript:;">
-		            <div class="weui-cell__bd">
-		              <p>用户管理</p>
-		            </div>
-		            <div class="weui-cell__ft">
-		            </div>
-	          </a>
-	          <a class="weui-cell weui-cell_access" href="javascript:;">
-		            <div class="weui-cell__bd">
-		              <p>打卡点管理</p>
-		            </div>
-		            <div class="weui-cell__ft">
-		            </div>
-	          </a>
+		    <div class="weui-cells__title" style="height:30px;">左滑动审核
+		    </div>
+            <div style="width:100%" id="userList"></div>
 		</div>	
 	</div>
 	
