@@ -420,7 +420,7 @@ public class SecPhoneController extends WebBaseControll {
 		conn_secuserpointrecord.save(secUserPointRecordPo);
 		//下面这个PO才是真正的记录状态
 		
-	    List<SecUserPointPo> secUserPointPos=conn_secuserpoint.findByField("secPointTimeId", secPointTimePos.get(0).getId());
+	    List<SecUserPointPo> secUserPointPos=conn_secuserpoint.findbyUserAndPointTimeAndDate(Long.parseLong(userId), secPointTimePos.get(0).getId(), DateUtil.format(new Date(),"yyyy-MM-dd"));
 	    SecPointPo secPointPo=conn_secPoint.get(Long.parseLong(pointId));
 	    
 		Date time=DateUtil.parse("1970-01-01 "+DateUtil.format(setDate,"HH:mm:ss"),"yyyy-MM-dd HH:mm:ss");
@@ -581,6 +581,68 @@ public class SecPhoneController extends WebBaseControll {
 		}
 
 		dataMap.put("message", secUserVos);
+		return success(dataMap);
+	}
+	
+	@RequestMapping(value = "/setpoint/index")
+	public ModelAndView setpointIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("sec/mobile/setpoint");
+		return mv;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/getPointList", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> getPointList(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
+		List<SecPointPo> secPointPos=conn_secPoint.findByCom(secUserPos.get(0).getCompanyId());
+		Map<String, Object> result=new HashMap<String, Object>();
+		result.put("message", secPointPos);
+		return result;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/addPoint", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> addPoint(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Date setDate=new Date();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		String x=json.getString("x");
+		String y=json.getString("y");
+		String name=json.getString("name");
+		String distance=json.getString("distance");
+		String type=json.getString("type");
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
+	    SecPointPo secPointPo=new SecPointPo();
+	    secPointPo.setCompanyId(secUserPos.get(0).getCompanyId());
+	    secPointPo.setX(x);
+	    secPointPo.setY(y);
+	    secPointPo.setType(type);
+	    secPointPo.setName(name);
+	    secPointPo.setDistance(Long.parseLong(distance));
+	    
+	    conn_secPoint.save(secPointPo);
+		
+		return success(dataMap);
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/delPoint", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> delPoint(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Date setDate=new Date();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		
+	    conn_secPoint.delete(json.getLong("id"));
+		
 		return success(dataMap);
 	}
 	
