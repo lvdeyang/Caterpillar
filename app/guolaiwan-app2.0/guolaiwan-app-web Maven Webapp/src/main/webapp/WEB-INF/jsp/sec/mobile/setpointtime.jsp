@@ -66,7 +66,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>用户个人</title>
+<title>打卡点时间管理</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -154,14 +154,27 @@ html, body {
     i.icon{
       display:inline-block !important;
     }
+.dateTimeWrap{
+  width:260px !important;
+  background:#FFF !important;
+}
+.weui-swiped-btn{
+  line-height:85px !important;
+}
 
 </style>
 
 </head>
 <jsp:include page="../../../mobile/commons/jsp/scriptsec.jsp"></jsp:include>
+<script type="text/javascript"
+	src="https://webapi.amap.com/maps?v=1.4.13&key=ff4672efcfc6279cbe3b2815dd70a1ec"></script>
 <!-- 公共脚本引入 -->
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="lib/dateTime.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="lib/dateTime.css">
+
 <script type="text/javascript">
+    
 
 	$(function() {
 	    
@@ -175,6 +188,95 @@ html, body {
 
 	    };
 	    
+	    $("#setStartTime").datetime({
+            type: "time",
+            value: [12, 28]
+    	})
+    	$("#setEndTime").datetime({
+            type: "time",
+            value: [12, 28]
+    	})
+    	$("#setTime").datetime({
+            type: "time",
+            value: [12, 28]
+    	})
+    	
+	    
+	    initList();
+	    
+	    function initList(){
+	       var _uri = window.BASEPATH+'/sec/phoneapp/getPointTime?pointId=${pointId}';
+		   var param={};
+           param.pointId=${pointId};
+		   $.post(_uri, $.toJSON(param), function(data){
+		        var html=[];
+		        $('#pointTimeList').children().remove();
+		        for(var i=0;i<data.message.length;i++){
+		            var bordercss="border-top:1px solid #CCC";
+		            if(i==(data.message.length-1)){
+		            	bordercss="border-top:1px solid #CCC;border-bottom:1px solid #CCC";
+		            }
+		        
+		        	html.push('<div style="'+bordercss+'" class="weui-cell weui-cell_swiped" id="setpointtime-'+data.message[i].id+'">');
+			        html.push('<div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">');
+			        html.push('<div class="weui-cell">');
+			        html.push('<div class="weui-cell__bd">');
+			        html.push('<p style="font-size:13px;height:30px">打卡开始时间:<span style="font-weight:bold">'+data.message[i].setStartTimeStr+'</span></p>');
+			        html.push('<p style="font-size:13px;height:30px">打卡时间:<span style="font-weight:bold">'+data.message[i].setTimeStr+'</span></p>');
+			        html.push('<p style="font-size:13px;height:30px">打卡结束时间:<span style="font-weight:bold">'+data.message[i].setEndTimeStr+'</span></p></div>');
+			        html.push('<div class="weui-cell__ft"></div></div></div>');
+			        html.push('<div class="weui-cell__ft">');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" id="delete-'+data.message[i].id+'" href="javascript:">删除</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout"  href="javascript:">关闭</a>');
+			        html.push('</div></div>');
+			       
+		        }
+		        $('#pointTimeList').append(html.join(''));
+		        $('.weui-cell_swiped').swipeout();
+		        $('.delete-swipeout').on('click',function(){
+			    	var ids=this.id.split('-');
+			    	var _uri = window.BASEPATH+'/sec/phoneapp/delPointTime';
+				    var param={};
+				    param.id=ids[1];
+					$.post(_uri, $.toJSON(param), function(data){
+						data = parseAjaxResult(data);
+						if(data === -1) return;
+			            $('.weui-cell_swiped').swipeout('close') //关闭
+			            initList();
+					});
+		    	});
+			    $('.close-swipeout').on('click',function(){
+			    	$('.weui-cell_swiped').swipeout('close') //关闭
+			    });
+		   });
+	    }
+	    
+	    
+	   
+	    $('#add').on('click',function(){
+	    	$('#editDialog').popup();
+	    });
+	    
+	    $('#save').on('click',function(){
+	        var _uri = window.BASEPATH+'/sec/phoneapp/addPointTime';
+		    var param={};
+		    param.setStartTimeStr=$('#setStartTime').val();
+		    param.setTimeStr=$('#setTime').val();
+		    param.setEndTimeStr=$('#setEndTime').val();
+		    param.pointId=${pointId};
+			$.post(_uri, $.toJSON(param), function(data){
+				data = parseAjaxResult(data);
+				if(data === -1) return;
+	            $.closePopup();
+	            initList();
+			});
+	    	
+	    });
+	    
+	    $('#cancel').on('click',function(){
+	    	$.closePopup();
+	    });
+
 	    
 	});
 		
@@ -189,25 +291,54 @@ html, body {
 			<div class="wrapper">
 				<a class="link-left" href="#side-menu"><span
 					class="icon-reorder icon-large"></span></a>
-				<div class="header-content">管理中心</div>
+				<div class="header-content">打卡点时间管理</div>
 			</div>
 		</div>
 		
 		<div id="content" class="content">
-              <a class="weui-cell weui-cell_access" href="javascript:;">
-		            <div class="weui-cell__bd">
-		              <p>用户管理</p>
-		            </div>
-		            <div class="weui-cell__ft">
-		            </div>
-	          </a>
-	          <a class="weui-cell weui-cell_access" href="javascript:;">
-		            <div class="weui-cell__bd">
-		              <p>打卡点管理</p>
-		            </div>
-		            <div class="weui-cell__ft">
-		            </div>
-	          </a>
+		    <div class="weui-cells__title" style="height:30px;">左滑动删除
+		    <a style="float:right;height:30px;line-height:30px;" id="add" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">添加</a></div>
+            <div style="width:100%" id="pointTimeList"></div>
+            <div id="editDialog" class="weui-popup__container">
+			  <div class="weui-popup__overlay"></div>
+			  <div class="weui-popup__modal">
+			        <header class="demos-header" style="padding:35px 0">
+				      <h1 style="text-align: center;font-size: 34px;color: #3cc51f;font-weight: 400;margin: 0 15%;" class="demos-title">打卡时间设置</h1>
+				    </header>
+			  		<div class="weui-cell weui-cell_vcode" style="margin-top:15px;">
+					    <div class="weui-cell__hd">
+					      <label class="weui-label" style="font-size:13px;">打卡开始时间</label>
+					    </div>
+					    <div class="weui-cell__bd">
+					      <!-- <input style="height:40px" id="setStartTime" class="weui-input" type="time" placeholder=""> -->
+					      <input id="setStartTime"  class="weui-input" type="text"> 
+					      
+					    </div>
+		  			</div>
+		  			<div class="weui-cell weui-cell_vcode" style="margin-top:15px;">
+					    <div class="weui-cell__hd">
+					      <label class="weui-label" style="font-size:13px;">打卡时间</label>
+					    </div>
+					    <div class="weui-cell__bd">
+					      <input id="setTime" class="weui-input" type="text"> 
+					    </div>
+		  			</div>
+		  			<div class="weui-cell weui-cell_vcode" style="margin-top:15px;">
+					    <div class="weui-cell__hd">
+					      <label class="weui-label" style="font-size:13px;">打卡结束时间</label>
+					    </div>
+					    <div class="weui-cell__bd">
+					      <input id="setEndTime" class="weui-input" type="text"> 
+					    </div>
+		  			</div>
+		  			
+				    <div style="width:135px;margin:0 auto"> <a style="" id="save" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">保存</a>
+				    <a style="" id="cancel" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">关闭</a></div>
+				   
+			  </div>
+			</div>
+		
+		
 		</div>	
 	</div>
 	

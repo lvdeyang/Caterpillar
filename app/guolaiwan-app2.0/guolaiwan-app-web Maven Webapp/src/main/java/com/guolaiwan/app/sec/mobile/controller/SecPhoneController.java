@@ -679,6 +679,69 @@ public class SecPhoneController extends WebBaseControll {
 		conn_secuser.save(secUserPo);
 		return success(dataMap);
 	}
+	@RequestMapping(value = "/setpointtime/index")
+	public ModelAndView setpointtimeIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("sec/mobile/setpointtime");
+		mv.addObject("pointId", request.getParameter("pointId"));
+		
+		return mv;
+	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/getPointTime", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> getPointTimeList(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		HttpSession session = request.getSession();
+		String pointId=request.getParameter("pointId");
+		List<SecPointTimePo> secPointPos=conn_secPointTime.findByField("secPointId", Long.parseLong(pointId));
+		Map<String, Object> result=new HashMap<String, Object>();
+		result.put("message", secPointPos);
+		return result;
+	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/addPointTime", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> addPointTime(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		String setStartTimeStr=json.getString("setStartTimeStr");
+		String setTimeStr=json.getString("setTimeStr");
+		String setEndTimeStr=json.getString("setEndTimeStr");
+		
+		SecPointTimePo secPointTimePo=new SecPointTimePo();
+		secPointTimePo.setSecPointId(Long.parseLong(json.getString("pointId")));
+		secPointTimePo.setSetEndTimeStr(setEndTimeStr+":00");
+		secPointTimePo.setSetTimeStr(setTimeStr+":00");
+		secPointTimePo.setSetStartTimeStr(setStartTimeStr+":00");
+		secPointTimePo.setSetStartTime(DateUtil.parse(setStartTimeStr,"HH:mm"));
+		secPointTimePo.setSetTime(DateUtil.parse(setTimeStr,"HH:mm"));
+		secPointTimePo.setSetEndTime(DateUtil.parse(setEndTimeStr,"HH:mm"));
+		
+		conn_secPointTime.save(secPointTimePo);
+		
+		return success(dataMap);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/delPointTime", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public Map<String, Object> delPointTime(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Date setDate=new Date();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		JSONObject json=JSONObject.parseObject(getRequestJson(request));
+		
+	    conn_secPointTime.delete(json.getLong("id"));
+		
+		return success(dataMap);
+	}
+	
+	@RequestMapping(value = "/manage/index")
+	public ModelAndView manageIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("sec/mobile/manage");		
+		return mv;
+	}
 }

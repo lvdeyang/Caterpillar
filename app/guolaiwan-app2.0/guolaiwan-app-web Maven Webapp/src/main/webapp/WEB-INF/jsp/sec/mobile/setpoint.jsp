@@ -198,7 +198,7 @@ html, body {
 		               title+="(巡逻点)";
 		            }
 		        
-		        	html.push('<div class="weui-cell weui-cell_swiped" id="setpoint-'+data.message[i].id+'">');
+		        	html.push('<div class="weui-cell weui-cell_swiped setpoint" id="setpoint-'+data.message[i].id+'">');
 			        html.push('<div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">');
 			        html.push('<div class="weui-cell">');
 			        html.push('<div class="weui-cell__bd">');
@@ -206,7 +206,7 @@ html, body {
 			        html.push('<div class="weui-cell__ft"></div></div></div>');
 			        html.push('<div class="weui-cell__ft">');
 			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" id="delete-'+data.message[i].id+'" href="javascript:">删除</a>');
-			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout"  href="javascript:">关闭</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" id="schedule-'+data.message[i].id+'"  href="javascript:">排期</a>');
 			        html.push('</div></div>');
 			       
 		        }
@@ -225,8 +225,10 @@ html, body {
 					});
 		    	});
 			    $('.close-swipeout').on('click',function(){
-			    	$('.weui-cell_swiped').swipeout('close') //关闭
+			    	var ids=this.id.split('-');
+			        location.href=window.BASEPATH+'/sec/phoneapp/setpointtime/index?pointId='+ids[1];
 			    });
+			    
 		   });
 	    }
 	    
@@ -286,7 +288,7 @@ html, body {
 		</div>
 		
 		<div id="content" class="content">
-		    <div class="weui-cells__title" style="height:30px;">左滑动删除
+		    <div class="weui-cells__title" style="height:30px;">左滑动编辑打卡点
 		    <a style="float:right;height:30px;line-height:30px;" id="add" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">添加</a></div>
             <div style="width:100%" id="pointList"></div>
             <div id="editDialog" class="weui-popup__container">

@@ -174,8 +174,13 @@ html, body {
 			}
 
 	    };
-	    
-	    
+
+	    $('#user').on('click',function(){
+	        location.href=window.BASEPATH+'/sec/phoneapp/setuser/index';
+	    });
+	    $('#point').on('click',function(){
+	        location.href=window.BASEPATH+'/sec/phoneapp/setpoint/index';
+	    });
 	});
 		
 </script>
@@ -194,14 +199,14 @@ html, body {
 		</div>
 		
 		<div id="content" class="content">
-              <a class="weui-cell weui-cell_access" href="javascript:;">
+              <a id="user" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
 		              <p>用户管理</p>
 		            </div>
 		            <div class="weui-cell__ft">
 		            </div>
 	          </a>
-	          <a class="weui-cell weui-cell_access" href="javascript:;">
+	          <a id="point" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
 		              <p>打卡点管理</p>
 		            </div>
