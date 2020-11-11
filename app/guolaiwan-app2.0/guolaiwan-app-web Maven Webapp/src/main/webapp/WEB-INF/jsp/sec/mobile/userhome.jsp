@@ -210,8 +210,8 @@ html, body {
 	       var ids=$(obj).attr('id').split('-');
 	       pointId=ids[1];
 	       var datas=$(obj).attr('data').split('-');
-	       y=datas[0];
-	       x=datas[1];
+	       y=datas[1];
+	       x=datas[0];
 	       type=datas[2];
 	       name=datas[3];
 	       distance=datas[4];

@@ -311,7 +311,7 @@ html, body {
 					    </div>
 					    <div class="weui-cell__bd">
 					      <!-- <input style="height:40px" id="setStartTime" class="weui-input" type="time" placeholder=""> -->
-					      <input id="setStartTime"  class="weui-input" type="text"> 
+					      <input id="setStartTime" readonly  class="weui-input" type="text"> 
 					      
 					    </div>
 		  			</div>
@@ -320,7 +320,7 @@ html, body {
 					      <label class="weui-label" style="font-size:13px;">打卡时间</label>
 					    </div>
 					    <div class="weui-cell__bd">
-					      <input id="setTime" class="weui-input" type="text"> 
+					      <input id="setTime" readonly class="weui-input" type="text"> 
 					    </div>
 		  			</div>
 		  			<div class="weui-cell weui-cell_vcode" style="margin-top:15px;">
@@ -328,7 +328,7 @@ html, body {
 					      <label class="weui-label" style="font-size:13px;">打卡结束时间</label>
 					    </div>
 					    <div class="weui-cell__bd">
-					      <input id="setEndTime" class="weui-input" type="text"> 
+					      <input id="setEndTime" readonly class="weui-input" type="text"> 
 					    </div>
 		  			</div>
 		  			

@@ -234,6 +234,7 @@ html, body {
 	    
 	    
 	    var x,y;
+		var marker=null;
 	    var map = new AMap.Map('container', {
 		    zoom:13,//级别
 		    viewMode:'3D'//使用3D视图
@@ -242,10 +243,90 @@ html, body {
              $('#position').html('经度:'+e.lnglat.getLng() + '&nbsp;&nbsp;' +'纬度:'+ e.lnglat.getLat());
              x=e.lnglat.getLat();
              y=e.lnglat.getLng();
+             
+             if(marker!=null){
+             	map.remove(marker);
+             }
+             marker = new AMap.Marker({
+			    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+			    position: [y, x]
+			});
+			map.add(marker);
     	});
+    	
+    	
+    	//微信定位
+		var loca={};
+		function getloca(){
+		      
+			  var reqUrl=location.href.split('#')[0].replace(/&/g,"FISH");
+		
+			  var _uri = window.BASEPATH + 'pubnum/prev/scan?url='+reqUrl;
+			  $.get(_uri, null, function(data){
+					data = parseAjaxResult(data);
+					if(data === -1) return;
+					if(data){
+						loca=data;
+						getLoation();
+					}
+					
+			  });
+		  
+		}
+		  
+		  
+		function getLoation(){
+		       wx.config({
+		            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		            //                                debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		            appId : loca.appId, // 必填，公众号的唯一标识
+		            timestamp : loca.timestamp, // 必填，生成签名的时间戳
+		            nonceStr : loca.nonceStr, // 必填，生成签名的随机串
+		            signature : loca.signature,// 必填，签名，见附录1
+		            jsApiList : ['checkJsApi','getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	        	});
+		        wx.ready(function() {
+		            wx.getLocation({  
+		                success: function (res) {  
+		                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90  
+		                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。  
+		                    $('#position').html('经度:'+res.longitude + '&nbsp;&nbsp;' +'纬度:'+ res.latitude);
+             				x=res.latitude;
+             				y=res.longitude;
+		                    var speed = res.speed; // 速度，以米/每秒计  
+		                    var accuracy = res.accuracy; // 位置精度  
+	                        if(marker!=null){
+	                        	map.remove(marker);
+	                        }
+	                        marker = new AMap.Marker({
+							    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+							    position: [longitude, latitude]
+							});
+							map.add(marker);
+							var position = new AMap.LngLat(longitude, latitude);  // 标准写法
+							// 简写 var position = [116, 39]; 
+							map.setCenter(position); 
+		                },  
+		                cancel: function (e) {  
+		                        //这个地方是用户拒绝获取地理位置  
+		                       console.log(e)
+						}
+		                	
+		             });     
+			         wx.error(function (res) {  
+			             console.log(res)
+					
+			         });     
+		            
+		       });
+		  
+		  
+		}
+    	
 	    
 	    $('#add').on('click',function(){
 	    	$('#editDialog').popup();
+			getloca();
 	    });
 	    
 	    $('#save').on('click',function(){
@@ -294,7 +375,7 @@ html, body {
             <div id="editDialog" class="weui-popup__container">
 			  <div class="weui-popup__overlay"></div>
 			  <div class="weui-popup__modal">
-			    	<div id="container" style="width:100%;height:450px;"></div>
+			    	<div id="container" style="width:100%;height:400px;"></div>
 					<div class="weui-cell weui-cell_vcode" style="margin-top:15px;">
 					    <div class="weui-cell__hd">
 					      <label class="weui-label">打卡位置</label>
