@@ -148,12 +148,23 @@ html, body {
     .weui-cells_checkbox .weui-icon-checked:before{
        font-size:12px !important;
     }
-    .weui-navbar__item{
-      font-size:xx-small !important;
-    }
+   
     i.icon{
       display:inline-block !important;
     }
+.weui-label{
+font-size:20px !important;
+}
+.weui-input{
+font-size:20px !important;
+}
+.weui-select{
+font-size:20px !important;
+}
+.weui-btn{
+font-size:20px !important;
+}
+
 
 </style>
 
@@ -225,7 +236,7 @@ html, body {
 		             
 		             
 		             
-				     html.push('<div style="width:100%;font-size:12px;color:#666666;margin-top:10px;">');
+				     html.push('<div style="width:100%;font-size:20px;color:#666666;margin-top:10px;">');
 			         html.push('<div style="margin-left:30px;">'+pointList[i].name+'</div>');
 			         html.push('<div style="margin-left:30px;">');
 			         for(var j=0;j<pointList[i].secUserPointVos.length;j++){
@@ -239,9 +250,9 @@ html, body {
 				         }else{
 				            secstatus='漏打卡';
 				         }
-				         html.push('<div class="weui-cells"><div class="weui-cell"><div class="weui-cell__bd" style="font-size:12px;">');
+				         html.push('<div class="weui-cells"><div class="weui-cell"><div class="weui-cell__bd" style="font-size:18px;">');
 						 html.push('<p>'+pointList[i].secUserPointVos[j].setTimeStr+'</p>');
-						 html.push('</div><div class="weui-cell__ft"  style="font-size:12px;">'+secstatus+'</div></div></div>');
+						 html.push('</div><div class="weui-cell__ft"  style="font-size:18px;">'+secstatus+'</div></div></div>');
 			         }
 					 html.push('</div></div>');
 		        }
@@ -272,28 +283,28 @@ html, body {
 					style="border-radius:50%;width:80px;height:80px;margin-top:10px"
 					class="weui-media-box__thumb" src="lib/images/logo.png">
 			</div>
-			<div style="text-align:center;margin:0 auto">
+			<div style="text-align:center;margin:0 auto;font-size:20px;">
 			    ${userName}
 			</div>
-			<div style="text-align:center;margin:0 auto;font-size:12px;margin-top:10px;color:#666666">
+			<div style="text-align:center;margin:0 auto;font-size:18px;margin-top:10px;color:#666666">
 			    ${comName}
 			</div>
 			<div class="weui-flex" style="margin-top:20px;">
-		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">${notCount}</div></div>
-		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">${lateCount}</div></div>
-		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center">${beforeCount}</div></div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center;font-size:20px">${notCount}</div></div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center;font-size:20px">${lateCount}</div></div>
+		      <div class="weui-flex__item"><div style="font-weight:bold;text-align:center;font-size:20px;">${beforeCount}</div></div>
             </div>
 		    <div class="weui-flex">
-		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">未打卡</div></div>
-		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">迟到</div></div>
-		      <div class="weui-flex__item"><div style="font-size:12px;color:#666666;text-align:center">早退</div></div>
+		      <div class="weui-flex__item"><div style="font-size:18px;color:#666666;text-align:center">未打卡</div></div>
+		      <div class="weui-flex__item"><div style="font-size:18px;color:#666666;text-align:center">迟到</div></div>
+		      <div class="weui-flex__item"><div style="font-size:18px;color:#666666;text-align:center">早退</div></div>
 		    </div>
             
             <div class="weui-navbar" style="position:relative !important;margin-top:10px;">
-			  <div class="weui-navbar__item weui_bar__item_on" id="work">
+			  <div class="weui-navbar__item weui_bar__item_on" id="work" style="font-size:20px">
 			     打卡记录
 			  </div>
-			  <div class="weui-navbar__item" id="cruize">
+			  <div class="weui-navbar__item" id="cruize" style="font-size:20px">
 			    巡逻记录
 			  </div>
 			</div>

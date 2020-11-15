@@ -210,11 +210,11 @@ html, body {
 			        html.push('<div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">');
 			        html.push('<div class="weui-cell">');
 			        html.push('<div class="weui-cell__bd">');
-			        html.push('<p>'+data.message[i].name+':'+type+'('+data.message[i].phone+')'+'&nbsp;&nbsp;'+status+'</p></div>');
+			        html.push('<p style="font-size:18px">'+data.message[i].name+':'+type+'('+data.message[i].phone+')'+'&nbsp;&nbsp;'+status+'</p></div>');
 			        html.push('<div class="weui-cell__ft"></div></div></div>');
 			        html.push('<div class="weui-cell__ft">');
-			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" id="deny-'+data.message[i].id+'" href="javascript:">拒绝</a>');
-			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" id="pass-'+data.message[i].id+'"  href="javascript:">通过</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" style="font-size:18px;" id="deny-'+data.message[i].id+'" href="javascript:">拒绝</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" style="font-size:18px" id="pass-'+data.message[i].id+'"  href="javascript:">通过</a>');
 			        html.push('</div></div>');
 			       
 		        }
@@ -270,7 +270,7 @@ html, body {
 		</div>
 		
 		<div id="content" class="content">
-		    <div class="weui-cells__title" style="height:30px;">左滑动审核
+		    <div class="weui-cells__title" style="height:30px;font-size:20px;">左滑动审核
 		    </div>
             <div style="width:100%" id="userList"></div>
 		</div>	

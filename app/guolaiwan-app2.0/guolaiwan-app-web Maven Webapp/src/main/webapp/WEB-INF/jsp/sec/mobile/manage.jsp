@@ -201,14 +201,14 @@ html, body {
 		<div id="content" class="content">
               <a id="user" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
-		              <p>用户管理</p>
+		              <p style="font-size:20px;">用户管理</p>
 		            </div>
 		            <div class="weui-cell__ft">
 		            </div>
 	          </a>
 	          <a id="point" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
-		              <p>打卡点管理</p>
+		              <p style="font-size:20px;">打卡点管理</p>
 		            </div>
 		            <div class="weui-cell__ft">
 		            </div>

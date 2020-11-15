@@ -235,12 +235,12 @@ html, body {
 	       
 		       html.push('<a href="javascript:void(0);" class="secuser weui-media-box weui-media-box_appmsg" id="secuser-'+list[i].userId+'">');
 			   html.push('<div class="weui-media-box__hd"><img class="weui-media-box__thumb" src="lib/images/logo.jpg"></div>');
-			   html.push('<div class="weui-media-box__bd"><h4 class="weui-media-box__title">'+list[i].name+'</h4>');
-			   html.push('<p class="weui-media-box__desc">'+list[i].comName+'</p>');
-			   html.push('<p class="weui-media-box__desc" style="margin-top:5px;color:green;font-size:x-small;font-weight:bold">'+workStatus+'</p></div></a>');
+			   html.push('<div class="weui-media-box__bd"><h4 class="weui-media-box__title" style="font-size:20px">'+list[i].name+'</h4>');
+			   html.push('<p class="weui-media-box__desc" style="font-size:16px">'+list[i].comName+'</p>');
+			   html.push('<p class="weui-media-box__desc" style="margin-top:5px;color:green;font-size:16px;font-weight:bold">'+workStatus+'</p></div></a>');
 			   html.push('<p style="width:100%;float:left"><div class="weui-cells weui-cells_checkbox" style="margin-top:0px">');   
 			   html.push('<label class="weui-cell weui-check__label" style="font-size:xx-small">');
-	           html.push('<div class="weui-cell__bd"><p>今日巡逻统计</p></div>');
+	           html.push('<div class="weui-cell__bd"><p style="font-size:16px">今日巡逻统计</p></div>');
 	           for(var j=0;j<list[i].secUserPointVos.length;j++){
 	              var secUserPoint=list[i].secUserPointVos[j];
 	              if(secUserPoint.status=='NOT'){
@@ -285,7 +285,7 @@ html, body {
 		<div id="content" class="content">
 		  <div style="width:100%">
 			  <image id="selectPoint" style="width:50px;height:50px;float:left;" src="lib/images/caidan.png"/>
-			  <div id="pointName" style="float:left;line-height:50px;width:200px;">人民银行打卡点</div>
+			  <div id="pointName" style="float:left;line-height:50px;width:200px;font-size:20px">人民银行打卡点</div>
 		      <div style="float:right;margin-top:10px;margin-right:5px"><a id="manageHome" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">管理中心</a></div>
 		  </div>
 		
@@ -302,7 +302,7 @@ html, body {
 							    <div class="weui-grid__icon">
 							      <img src="lib/images/8.png" alt="">
 							    </div>
-							    <p class="weui-grid__label">
+							    <p class="weui-grid__label" style="font-size:20px;">
 							      ${item.name}
 							    </p>
 							  </a>

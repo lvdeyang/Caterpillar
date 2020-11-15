@@ -154,6 +154,18 @@ html, body {
     i.icon{
       display:inline-block !important;
     }
+.weui-label{
+font-size:20px !important;
+}
+.weui-input{
+font-size:20px !important;
+}
+.weui-select{
+font-size:20px !important;
+}
+.weui-btn{
+font-size:20px !important;
+}
 
 </style>
 
@@ -202,11 +214,11 @@ html, body {
 			        html.push('<div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">');
 			        html.push('<div class="weui-cell">');
 			        html.push('<div class="weui-cell__bd">');
-			        html.push('<p>'+title+'</p></div>');
+			        html.push('<p style="font-size:18px">'+title+'</p></div>');
 			        html.push('<div class="weui-cell__ft"></div></div></div>');
 			        html.push('<div class="weui-cell__ft">');
-			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" id="delete-'+data.message[i].id+'" href="javascript:">删除</a>');
-			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" id="schedule-'+data.message[i].id+'"  href="javascript:">排期</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" style="font-size:18px" id="delete-'+data.message[i].id+'" href="javascript:">删除</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" style="font-size:18px" id="schedule-'+data.message[i].id+'"  href="javascript:">排期</a>');
 			        html.push('</div></div>');
 			       
 		        }
@@ -369,7 +381,7 @@ html, body {
 		</div>
 		
 		<div id="content" class="content">
-		    <div class="weui-cells__title" style="height:30px;">左滑动编辑打卡点
+		    <div class="weui-cells__title" style="height:30px;font-size:20px">左滑动编辑打卡点
 		    <a style="float:right;height:30px;line-height:30px;" id="add" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">添加</a></div>
             <div style="width:100%" id="pointList"></div>
             <div id="editDialog" class="weui-popup__container">
@@ -410,7 +422,7 @@ html, body {
 				          </select>
 				        </div>
 				    </div>
-				    <div style="width:135px;margin:0 auto"> <a style="" id="save" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">保存</a>
+				    <div style="width:200px;margin:0 auto"> <a style="" id="save" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">保存</a>
 				    <a style="" id="cancel" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">关闭</a></div>
 				   
 			  </div>

@@ -151,6 +151,18 @@ html, body {
     .weui-navbar__item{
       font-size:xx-small !important;
     }
+.weui-label{
+font-size:20px !important;
+}
+.weui-input{
+font-size:20px !important;
+}
+.weui-select{
+font-size:20px !important;
+}
+.weui-btn{
+font-size:20px !important;
+}
 
 
 </style>

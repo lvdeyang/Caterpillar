@@ -448,13 +448,13 @@ html, body {
 		<div id="content" class="content">
 		  <div style="width:100%;">
 			  <image id="selectPoint" style="width:50px;height:50px;float:left;" src="lib/images/caidan.png"/>
-			  <div style="float:left;line-height:50px;width:200px;" id="pointName"></div>
-			  <div style="float:right;margin-top:10px;margin-right:5px"><a id="personalHome" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">个人中心</a></div>
+			  <div style="float:left;line-height:50px;width:200px;font-size:20px" id="pointName"></div>
+			  <div style="float:right;margin-top:10px;margin-right:5px"><a id="personalHome" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary" style="">个人中心</a></div>
 		  </div>
 		  
 		  <div id="container" style="width:100%;height:400px;"></div>
-		  <div id="message" style="text-align:center;margin-top:30px;"></div>
-		  <div id="message-time" style="text-align:center;margin-top:30px;"></div> 
+		  <div id="message" style="text-align:center;margin-top:30px;font-size:20px"></div>
+		  <div id="message-time" style="text-align:center;margin-top:10px;font-size:20px;"></div> 
 		  <div id="selPoint" class="weui-popup__container popup-bottom">
 			  <div class="weui-popup__overlay"></div>
 			  <div class="weui-popup__modal">
@@ -464,7 +464,7 @@ html, body {
 							    <div class="weui-grid__icon">
 							      <img src="lib/images/8.png" alt="">
 							    </div>
-							    <p class="weui-grid__label">
+							    <p class="weui-grid__label" style="font-size:20px;">
 							      ${item.name}
 							    </p>
 							  </a>
@@ -477,7 +477,7 @@ html, body {
 		</div>	
 	</div>
 	
-    <a id="setPoint" style="position:fixed;bottom:0px;width:100%;display:none;" href="javascript:;" class="weui-btn weui-btn_primary">立刻打卡</a>
+    <a id="setPoint" style="position:fixed;bottom:0px;width:100%;font-size:20px;display:none;" href="javascript:;" class="weui-btn weui-btn_primary">立刻打卡</a>
 	
 	
 </body>
