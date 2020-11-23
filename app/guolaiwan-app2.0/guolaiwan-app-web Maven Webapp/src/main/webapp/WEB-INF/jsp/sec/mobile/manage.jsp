@@ -213,14 +213,14 @@ html, body {
 		<div id="content" class="content">
 		      <a id="personal" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
-		              <p>个人信息</p>
+		              <p style="font-size:20px;">个人信息</p>
 		            </div>
 		            <div class="weui-cell__ft">
 		            </div>
 	          </a>
 		      <a id="admin" style="display:none;" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
-		              <p>考勤管理</p>
+		              <p style="font-size:20px;">考勤管理</p>
 		            </div>
 		            <div class="weui-cell__ft">
 		            </div>
