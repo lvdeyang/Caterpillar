@@ -197,7 +197,7 @@ html, body {
 		</div>
 		
 		<div id="content" class="content">
-			<div style="width:100%;text-align:center">
+			<div style="width:100%;text-align:center;font-size:20px;">
 			    <c:if test="${status == 'CHECKING'}">
 				   审核中......
 				</c:if>
@@ -208,7 +208,7 @@ html, body {
 		</div>
 	</div>
 	<c:if test="${status == 'DENY'}">
-		<a id="redo" href="javascript:;" class="weui-btn weui-btn_primary">重新注册</a>
+		<a id="redo" href="javascript:;" class="weui-btn weui-btn_primary" style="font-size:20px;">重新注册</a>
 	</c:if>
 	
 	

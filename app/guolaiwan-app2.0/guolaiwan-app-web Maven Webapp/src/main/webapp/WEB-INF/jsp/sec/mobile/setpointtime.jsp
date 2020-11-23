@@ -161,6 +161,18 @@ html, body {
 .weui-swiped-btn{
   line-height:85px !important;
 }
+.weui-label{
+font-size:20px !important;
+}
+.weui-input{
+font-size:20px !important;
+}
+.weui-select{
+font-size:20px !important;
+}
+.weui-btn{
+font-size:20px !important;
+}
 
 </style>
 
@@ -221,13 +233,13 @@ html, body {
 			        html.push('<div class="weui-cell__bd" style="transform: translate3d(0px, 0px, 0px);">');
 			        html.push('<div class="weui-cell">');
 			        html.push('<div class="weui-cell__bd">');
-			        html.push('<p style="font-size:13px;height:30px">打卡开始时间:<span style="font-weight:bold">'+data.message[i].setStartTimeStr+'</span></p>');
-			        html.push('<p style="font-size:13px;height:30px">打卡时间:<span style="font-weight:bold">'+data.message[i].setTimeStr+'</span></p>');
-			        html.push('<p style="font-size:13px;height:30px">打卡结束时间:<span style="font-weight:bold">'+data.message[i].setEndTimeStr+'</span></p></div>');
+			        html.push('<p style="font-size:13px;height:30px;font-size:18px">打卡开始时间:<span style="font-weight:bold">'+data.message[i].setStartTimeStr+'</span></p>');
+			        html.push('<p style="font-size:13px;height:30px;font-size:18px">打卡时间:<span style="font-weight:bold">'+data.message[i].setTimeStr+'</span></p>');
+			        html.push('<p style="font-size:13px;height:30px;font-size:18px">打卡结束时间:<span style="font-weight:bold">'+data.message[i].setEndTimeStr+'</span></p></div>');
 			        html.push('<div class="weui-cell__ft"></div></div></div>');
 			        html.push('<div class="weui-cell__ft">');
-			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" id="delete-'+data.message[i].id+'" href="javascript:">删除</a>');
-			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout"  href="javascript:">关闭</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" style="font-size:18px" id="delete-'+data.message[i].id+'" href="javascript:">删除</a>');
+			        html.push('<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" style="font-size:18px"  href="javascript:">关闭</a>');
 			        html.push('</div></div>');
 			       
 		        }
@@ -296,7 +308,7 @@ html, body {
 		</div>
 		
 		<div id="content" class="content">
-		    <div class="weui-cells__title" style="height:30px;">左滑动删除
+		    <div class="weui-cells__title" style="height:30px;font-size:20px">左滑动删除
 		    <a style="float:right;height:30px;line-height:30px;" id="add" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">添加</a></div>
             <div style="width:100%" id="pointTimeList"></div>
             <div id="editDialog" class="weui-popup__container">
@@ -307,7 +319,7 @@ html, body {
 				    </header>
 			  		<div class="weui-cell weui-cell_vcode" style="margin-top:15px;">
 					    <div class="weui-cell__hd">
-					      <label class="weui-label" style="font-size:13px;">打卡开始时间</label>
+					      <label class="weui-label" style="font-size:13px;">开始时间</label>
 					    </div>
 					    <div class="weui-cell__bd">
 					      <!-- <input style="height:40px" id="setStartTime" class="weui-input" type="time" placeholder=""> -->
@@ -325,14 +337,14 @@ html, body {
 		  			</div>
 		  			<div class="weui-cell weui-cell_vcode" style="margin-top:15px;">
 					    <div class="weui-cell__hd">
-					      <label class="weui-label" style="font-size:13px;">打卡结束时间</label>
+					      <label class="weui-label" style="font-size:13px;">结束时间</label>
 					    </div>
 					    <div class="weui-cell__bd">
 					      <input id="setEndTime" readonly class="weui-input" type="text"> 
 					    </div>
 		  			</div>
 		  			
-				    <div style="width:135px;margin:0 auto"> <a style="" id="save" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">保存</a>
+				    <div style="width:200px;margin:0 auto"> <a style="" id="save" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">保存</a>
 				    <a style="" id="cancel" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">关闭</a></div>
 				   
 			  </div>

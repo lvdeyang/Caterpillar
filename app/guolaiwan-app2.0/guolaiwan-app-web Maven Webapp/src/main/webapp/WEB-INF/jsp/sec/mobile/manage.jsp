@@ -227,14 +227,14 @@ html, body {
 	          </a>
               <a id="user" style="display:none;" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
-		              <p>用户管理</p>
+		              <p style="font-size:20px;">用户管理</p>
 		            </div>
 		            <div class="weui-cell__ft">
 		            </div>
 	          </a>
 	          <a id="point" style="display:none;" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
-		              <p>打卡点管理</p>
+		              <p style="font-size:20px;">打卡点管理</p>
 		            </div>
 		            <div class="weui-cell__ft">
 		            </div>
