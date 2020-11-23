@@ -425,7 +425,7 @@ html, body {
 		
 		$('#personalHome').on('click',function(){
 			
-			location.href=window.BASEPATH+'/sec/phoneapp/personal/index?userId=${userId}';
+			location.href=window.BASEPATH+'/sec/phoneapp/manage/index';
 		});
 	    
 	});

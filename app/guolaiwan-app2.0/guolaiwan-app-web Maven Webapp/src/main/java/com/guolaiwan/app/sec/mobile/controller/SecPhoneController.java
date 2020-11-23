@@ -256,10 +256,11 @@ public class SecPhoneController extends WebBaseControll {
 				mv = new ModelAndView("redirect:/sec/phoneapp/checking/index");
 			}else{
 				//跳转到首页
-				if(secUserPos.get(0).getType().equals(SecUserType.ADMIN)){
-					mv=new ModelAndView("redirect:/sec/phoneapp/admin/index");
-				}else{
+				if(secUserPos.get(0).getType().indexOf(SecUserType.SECURITY.toString())!=-1){
 					mv=new ModelAndView("redirect:/sec/phoneapp/user/index");
+				}else{
+					
+					mv=new ModelAndView("redirect:/sec/phoneapp/manage/index");
 				}
 			}
 		}else{
@@ -370,6 +371,11 @@ public class SecPhoneController extends WebBaseControll {
 	public ModelAndView personalIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		String userId=request.getParameter("userId");
+		
+		if(userId==null){
+			HttpSession session = request.getSession();
+			userId=session.getAttribute("userId").toString();
+		}
 		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
 		mv = new ModelAndView("sec/mobile/userpersonal");
 		if(secUserPos!=null&&!secUserPos.isEmpty()){
@@ -742,6 +748,12 @@ public class SecPhoneController extends WebBaseControll {
 	public ModelAndView manageIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("sec/mobile/manage");		
+		HttpSession session = request.getSession();
+		String userId=session.getAttribute("userId").toString();
+		List<SecUserPo> secUserPos=conn_secuser.findByField("userId", Long.parseLong(userId));
+		if(secUserPos!=null&&!secUserPos.isEmpty()){
+			mv.addObject("type", secUserPos.get(0).getType());
+		}
 		return mv;
 	}
 }

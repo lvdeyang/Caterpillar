@@ -174,12 +174,24 @@ html, body {
 			}
 
 	    };
+	    var type='${type}';
+	    if(type.indexOf('ADMIN')!=-1){
+	       $('#point').show();
+	       $('#user').show();
+	       $('#admin').show();
+	    }
 
 	    $('#user').on('click',function(){
 	        location.href=window.BASEPATH+'/sec/phoneapp/setuser/index';
 	    });
 	    $('#point').on('click',function(){
 	        location.href=window.BASEPATH+'/sec/phoneapp/setpoint/index';
+	    });
+	    $('#personal').on('click',function(){
+	        location.href=window.BASEPATH+'/sec/phoneapp/personal/index';
+	    });
+	    $('#admin').on('click',function(){
+	        location.href=window.BASEPATH+'/sec/phoneapp/admin/index';
 	    });
 	});
 		
@@ -199,14 +211,28 @@ html, body {
 		</div>
 		
 		<div id="content" class="content">
-              <a id="user" class="weui-cell weui-cell_access" href="javascript:;">
+		      <a id="personal" class="weui-cell weui-cell_access" href="javascript:;">
+		            <div class="weui-cell__bd">
+		              <p>个人信息</p>
+		            </div>
+		            <div class="weui-cell__ft">
+		            </div>
+	          </a>
+		      <a id="admin" style="display:none;" class="weui-cell weui-cell_access" href="javascript:;">
+		            <div class="weui-cell__bd">
+		              <p>考勤管理</p>
+		            </div>
+		            <div class="weui-cell__ft">
+		            </div>
+	          </a>
+              <a id="user" style="display:none;" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
 		              <p>用户管理</p>
 		            </div>
 		            <div class="weui-cell__ft">
 		            </div>
 	          </a>
-	          <a id="point" class="weui-cell weui-cell_access" href="javascript:;">
+	          <a id="point" style="display:none;" class="weui-cell weui-cell_access" href="javascript:;">
 		            <div class="weui-cell__bd">
 		              <p>打卡点管理</p>
 		            </div>

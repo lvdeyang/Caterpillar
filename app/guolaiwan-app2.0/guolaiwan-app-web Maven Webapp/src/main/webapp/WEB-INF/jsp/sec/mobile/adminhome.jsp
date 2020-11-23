@@ -286,8 +286,7 @@ html, body {
 		  <div style="width:100%">
 			  <image id="selectPoint" style="width:50px;height:50px;float:left;" src="lib/images/caidan.png"/>
 			  <div id="pointName" style="float:left;line-height:50px;width:200px;">人民银行打卡点</div>
-		      <div style="float:right;margin-top:10px;margin-right:5px"><a id="manageHome" href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">管理中心</a></div>
-		  </div>
+			  </div>
 		
 		  <div class="weui-panel__bd" style="float:left;width:100%" id="userList">
 		  
