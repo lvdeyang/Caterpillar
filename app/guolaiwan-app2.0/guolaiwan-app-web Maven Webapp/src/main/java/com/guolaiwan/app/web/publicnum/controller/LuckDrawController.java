@@ -63,7 +63,7 @@ public class LuckDrawController extends WebBaseControll {
 
 	@Autowired
 	SysConfigDAO conn_sys;
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@RequestMapping(value = "/indexxx", method = RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
 		Map<String, Object> strMap = new HashMap<String, Object>();
 		strMap.put("webpath", conn_sys.getSysConfig().getWebUrl());
@@ -82,7 +82,7 @@ public class LuckDrawController extends WebBaseControll {
 		ModelAndView mv = new ModelAndView("mobile/vote/people", strMap);
 		return mv;
 	}
-	@RequestMapping(value = "/indexx")
+	@RequestMapping(value = "/index")
 	public ModelAndView luckdraw(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		HttpSession session = request.getSession();
@@ -95,6 +95,11 @@ public class LuckDrawController extends WebBaseControll {
         //是否中奖
         LuckDrawRecord record=conn_luckdraw.getLuckRecordByUser(userInfoPO.getId());
         if(record!=null){
+        	if(record.getDrawProductId()==0){
+        		mv = new ModelAndView("luckdraw/luckresult");
+            	mv.addObject("result","today");
+            	return mv;
+        	}
         	mv = new ModelAndView("luckdraw/luckresult");
         	mv.addObject("result","godloveu");
         	mv.addObject("useit", record.getUseit());
@@ -104,13 +109,13 @@ public class LuckDrawController extends WebBaseControll {
         	return mv;
         }
     	//活动没开始
-    	if (now.getDate()<=16) {
+    	if (now.getDate()<=3) {
     		mv = new ModelAndView("luckdraw/luckresult");
 			mv.addObject("result","notstart");
 			return mv;
 		}
     	//活动结束
-    	if (now.getDate()<17||now.getDate()>21) {
+    	if (now.getDate()<4||now.getDate()>8) {
     		mv = new ModelAndView("luckdraw/luckresult");
     		mv.addObject("result","over");
     		return mv;
@@ -122,7 +127,7 @@ public class LuckDrawController extends WebBaseControll {
         	return mv;
 		}
     	//今日结束
-    	if (now.getHours()>=11) {
+    	/*if (now.getHours()>=11) {
     		if (now.getDate()==1) {
     			mv = new ModelAndView("luckdraw/luckresult");
         		mv.addObject("result","over");
@@ -131,10 +136,10 @@ public class LuckDrawController extends WebBaseControll {
     		mv = new ModelAndView("luckdraw/luckresult");
     		mv.addObject("result","todayover");
         	return mv;
-		}
+		}*/
         if(contact==null){
         	//奖品抽没了
-            if (glassnum>=250&&ticketnum>=100) {
+            if (glassnum>=20&&ticketnum>=20) {
             	if (now.getDate()==1) {
         			mv = new ModelAndView("luckdraw/luckresult");
             		mv.addObject("result","over");
@@ -148,14 +153,14 @@ public class LuckDrawController extends WebBaseControll {
         	return mv;
         }
         //今天抽过了
-        LuckDrawRecord todayRecord=conn_luckdraw.getuserTodayRecord(userInfoPO.getId());
+        /*LuckDrawRecord todayRecord=conn_luckdraw.getuserTodayRecord(userInfoPO.getId());
         if(todayRecord!=null){
         	mv = new ModelAndView("luckdraw/luckresult");
         	mv.addObject("result","today");
         	return mv;
-        }
+        }*/
         //奖品抽没了
-        if (glassnum>=250&&ticketnum>=100) {
+        if (glassnum>=20&&ticketnum>=20) {
         	if (now.getDate()==1) {
     			mv = new ModelAndView("luckdraw/luckresult");
         		mv.addObject("result","over");
@@ -234,9 +239,9 @@ public class LuckDrawController extends WebBaseControll {
 					obj[1] = luckDrawRecords.get(i).getUpdateTime();
 					obj[2] = luckDrawRecords.get(i).getUuid();
 					if (luckDrawRecords.get(i).getDrawProductId()==1) {
-						obj[3] = "电影票";
+						obj[3] = "红酒+餐券";
 					}else if (luckDrawRecords.get(i).getDrawProductId()==2) {
-						obj[3] = "眼镜";
+						obj[3] = "健身月卡";
 					}
 					//if (prizeid!=1) {
 						obj[4] = luckDrawRecords.get(i).getPhone();
@@ -271,15 +276,15 @@ public class LuckDrawController extends WebBaseControll {
         int resultNum=getRandom(1, 10);
         if(resultNum<=pos){
         	//这部分只有电影票
-        	int size=conn_luckdraw.countGodlike(1);
+        	/*int size=conn_luckdraw.countGodlike(1);
     		if(size>=100){
     			result=0;
     		}else{
     			result=1;
-    		}
+    		}*/
         	//下面又有眼镜又有电影票
-        	/*int secondRandom=getRandom(1, 7);
-        	if(secondRandom<=2){
+        	int secondRandom=getRandom(1, 10);
+        	if(secondRandom<=pos){
         		int size=conn_luckdraw.countGodlike(1);
         		if(size>=100){
         			result=0;
@@ -294,7 +299,7 @@ public class LuckDrawController extends WebBaseControll {
         		}else{
         			result=2;
         		}
-        	}*/
+        	}
         }
         LuckDrawRecord luckDrawRecord=new LuckDrawRecord();
         luckDrawRecord.setDrawProductId(result);

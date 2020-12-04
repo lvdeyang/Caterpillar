@@ -40,7 +40,7 @@ $(document).ready(function(){
 	//动态添加大转盘的奖品与奖品区域背景颜色
 	var num=location.hash;//根据接收过来的值判断概率。
 	//	alert(num.substr(1));
-	turnplate.restaraunts = [ "谢谢参与", "电影票", "电影票", "谢谢参与", "电影票","电影票","电影票","电影票", "谢谢参与"];
+	turnplate.restaraunts = [ "谢谢参与", "红酒+餐券", "健身月卡", "谢谢参与", "健身月卡","红酒+餐券","健身月卡","红酒+餐券", "谢谢参与"];
 	turnplate.colors = ["#FBDB00", "#FACA00", "#FBDB00", "#FACA00","#FBDB00", "#FACA00","#FBDB00","#FACA00","#FFEB64"];
 	//turnplate.fontcolors = ["#CB0030", "#FFFFFF", "#CB0030", "#FFFFFF","#CB0030", "#FFFFFF"];
 	
@@ -142,9 +142,9 @@ $(document).ready(function(){
 			success:function(data){
 				var innerdata = {"msg":"谢谢参与"};
 				if(data.data.result==1){
-					innerdata = {"msg":"电影票"};
+					innerdata = {"msg":"红酒+餐券"};
 				}else if(data.data.result==2){
-					innerdata = {"msg":"眼镜"};
+					innerdata = {"msg":"健身月卡"};
 				}
 				
 				//奖品数量等于10,指针落在对应奖品区域的中心角度[252, 216, 180, 144, 108, 72, 36, 360, 324, 288]

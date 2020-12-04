@@ -31,9 +31,9 @@
 		<!-- <button type="button" class="layui-btn" id="deriveglass"
 			onclick="deriveglass()">导出眼镜中奖名单</button> -->
 		<button type="button" class="layui-btn" id="deriveticket"
-			onclick="deriveticket()">导出电影票中奖名单</button>	
+			onclick="deriveticket()">导出红酒+餐券中奖名单</button>	
 		<button type="button" class="layui-btn" id="deriveticket"
-			onclick="deriveclaimticket()">导出电影票兑奖名单</button>		
+			onclick="deriveglass()">导出健身月卡兑奖名单</button>		
 		<div class="layui-inline">
 			<from class="layui-form">
 				<table>
@@ -41,8 +41,8 @@
 						<select class="lay-input-inline" name="sName" lay-verify="required" id="sName">
 	        				<option value="-1">全部</option>
 	        	<%-- 			<c:forEach items="${pmenus}" var="pmenu">   --%>
-	                		<!-- <option  value="眼镜" >眼镜</option>  -->  
-	                		<option  value="电影票" >电影票</option>
+	                		<option  value="健身月卡" >健身月卡</option> 
+	                		<option  value="红酒+餐券" >红酒+餐券</option>
 	               			<!-- </c:forEach>  -->
 	      				</select>
 	      			</td>

@@ -114,13 +114,14 @@
 		var type='${drawProductId}';
 		if(result=='godloveu'){
 		   if(ischeck==0){
-		      $('#result').html('<font size=4px>奖品为：'+(type==1?'电影票':'眼镜')+'<br><br>兑奖码：<br><font size=3px>'+code+'</font><br><br><font color=yellow size=4px>注意：不要自己点兑奖按钮，现场商家使用</font></font>');
+		      $('#result').html('<font size=4px>奖品为：'+(type==2?'健身月卡':'红酒+餐券')+'<br><br>兑奖码：<br><font size=3px>'+code+'</font><br><br><font color=yellow size=4px>注意：不要自己点兑奖按钮，现场商家使用</font></font>');
 		      $('#record_line').show();
 		   }else{
 		      $('#result').html('奖品已领取');
 		   }
 		}else if(result=='today'){
-		   $('#result').html('今天已经抽过奖了，明天再试试');
+		   //$('#result').html('今天已经抽过奖了，明天再试试');
+		   $('#result').html('已经抽过奖了');
 		}else if(result=='time'){
 			$('#ml-main').hide();
 			$('#ml-main1').show();

@@ -19,7 +19,7 @@ public class LuckDrawDao extends AbstractBaseDao<LuckDrawRecord> {
 	public LuckDrawRecord getLuckRecordByUser(Long userId) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("userId", Condition.eq, userId);
-		hql.andBy("drawProductId",Condition.ne,0);
+		//hql.andBy("drawProductId",Condition.ne,0);
 		List<LuckDrawRecord> luckDrawRecords = findByHql(hql);
 		if (luckDrawRecords == null || luckDrawRecords.size() <= 0)
 			return null;
@@ -53,9 +53,9 @@ public class LuckDrawDao extends AbstractBaseDao<LuckDrawRecord> {
 	}
 	public List<LuckDrawRecord> getAllRecordByPrize(String sName,int page,int limit){
 		QueryHql hql = this.newQueryHql();
-		if (sName.equals("电影票")) {
+		if (sName.equals("红酒+餐券")) {
 			hql.andBy("drawProductId",Condition.eq,1);
-		}else if (sName.equals("眼镜")) {
+		}else if (sName.equals("健身月卡")) {
 			hql.andBy("drawProductId",Condition.eq,2);
 		}
 		List<LuckDrawRecord> luckDrawRecords = findByHqlPage(hql,page,limit);
@@ -74,9 +74,9 @@ public class LuckDrawDao extends AbstractBaseDao<LuckDrawRecord> {
 	
 	public int countAllPrizeNum(String sName) {
 		CountHql cHql = this.newCountHql();
-		if (sName.equals("电影票")) {
+		if (sName.equals("红酒+餐券")) {
 			cHql.andBy("drawProductId",Condition.eq,1);
-		}else if (sName.equals("眼镜")) {
+		}else if (sName.equals("健身月卡")) {
 			cHql.andBy("drawProductId",Condition.eq,2);
 		}else if (sName=="") {
 			cHql.andBy("drawProductId", Condition.ne, 0);

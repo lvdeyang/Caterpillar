@@ -75,9 +75,9 @@ public class LuckDrawRecordVO extends AbstractBaseVO<LuckDrawRecordVO, LuckDrawR
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String prize = "";
 		if (entity.getDrawProductId()==1) {
-			prize = "电影票";
+			prize = "红酒+餐券";
 		}else if (entity.getDrawProductId()==2) {
-			prize = "眼镜";
+			prize = "健身月卡";
 		}
 		this.setId(entity.getId())
 		.setUuid(entity.getUuid())
