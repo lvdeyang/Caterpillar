@@ -284,9 +284,9 @@ public class LuckDrawController extends WebBaseControll {
     		}*/
         	//下面又有眼镜又有电影票
         	int secondRandom=getRandom(1, 10);
-        	if(secondRandom<=pos){
+        	if(secondRandom<=5){
         		int size=conn_luckdraw.countGodlike(1);
-        		if(size>=100){
+        		if(size>=20){
         			result=0;
         		}else{
         			result=1;
@@ -294,7 +294,7 @@ public class LuckDrawController extends WebBaseControll {
         		
         	}else{
         		int size=conn_luckdraw.countGodlike(2);
-        		if(size>=250){
+        		if(size>=20){
         			result=0;
         		}else{
         			result=2;

@@ -136,7 +136,7 @@ $(document).ready(function(){
 		
 		$.ajax({
 			type:"get",
-			url:"luckdraw/dodraw?pos=5",
+			url:"luckdraw/dodraw?pos=2",
 			data:"",
 			dataType:"json",
 			success:function(data){
