@@ -1169,8 +1169,8 @@ $(function() {
 			        var dateSpan = endDate - startDate;
 			        var iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
 			        }
-			        if(iDays>0){
-			          daycount+=iDays;
+			        if(iDays>1){
+			          daycount+=iDays-1;
 			        }
 			         $("#payMoney").val(daycount);
 			  }
