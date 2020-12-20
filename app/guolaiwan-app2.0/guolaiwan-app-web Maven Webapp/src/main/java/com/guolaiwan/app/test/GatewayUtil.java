@@ -26,9 +26,9 @@ public class GatewayUtil {
 		// TODO Auto-generated method stub
 		try {
 			JSONObject json=testOpenInvocie("buyerTaxNo123123", "杨彪", "河北省遵化市法院13819078765", "22223333", 
-					"12.00", "0.36", "12.36", "1", "0001");
+					"11.64", "0.36", "12.00", "1", "0004","次","包车费");
 			JSONObject resJson= json.getJSONObject("response");
-			testFormatBuild(resJson.getString("invoiceCode"),resJson.getString("invoiceNo"));
+			testFormatBuild(resJson.getString("invoiceCode"),resJson.getString("invoiceNo"),"0004");
 			//testFormatBuild("013001610011", "75127318");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -38,7 +38,7 @@ public class GatewayUtil {
 	}
 	public static JSONObject testOpenInvocie(String buyerTaxNo,String buyerName,String buyerAddressPhone
 			,String buyerBankAccount,String totalprice,String texPrice,String totalTexPrice,String count,
-			String orderNo) throws Exception {
+			String orderNo,String goodsUnit,String goodsName) throws Exception {
 	    // 公共请求参数
 	    Map<String, String> params = new HashMap<String, String>();
 	    params.put("app_id", appId);
@@ -59,7 +59,7 @@ public class GatewayUtil {
 	    bizContent.put("sellerBankAccount", "农行唐山广场支行5074400140001884");
 	    bizContent.put("sellerAddressPhone", "唐山市路南区车站路134号，03152826646");
 	    bizContent.put("deviceType", "0");
-	    bizContent.put("serialNo", "111222-333444");
+	    bizContent.put("serialNo", orderNo);
 	    bizContent.put("invoiceSpecialMark", "00");
 	    bizContent.put("invoiceTypeCode", "026");
 	    bizContent.put("invoiceTerminalCode", "929908472318");
@@ -110,16 +110,16 @@ public class GatewayUtil {
 	    detail.put("goodsLineNo", "1");
 	    detail.put("goodsLineNature", "0");
 	    //商品编码
-	    detail.put("goodsCode", "1020101000000000000");  // 商品编码不能小于19位
+	    detail.put("goodsCode", "3010101020102000000");  // 商品编码不能小于19位
 	    //自行编码
 	    detail.put("goodsExtendCode", "112211");
-	    detail.put("goodsName", "车票");
+	    detail.put("goodsName", goodsName);
 	    //商品税目
 	    detail.put("goodsTaxItem", "");
 	    //规格型号
 	    detail.put("goodsSpecification", "");
 	    //计量单位
-	    detail.put("goodsUnit", "张");
+	    detail.put("goodsUnit", goodsUnit);
 	    //商品数量
 	    //detail.put("goodsQuantity", "1");
 	    //单价
@@ -164,7 +164,7 @@ public class GatewayUtil {
 	}
 
 	
-	public static void testFormatBuild(String invoiceCode,String invoiceNo) throws Exception {
+	public static void testFormatBuild(String invoiceCode,String invoiceNo,String orderNo) throws Exception {
 	    // 公共请求参数
 	    Map<String, String> params = new HashMap<String, String>();
 	    params.put("app_id", appId);
@@ -180,7 +180,7 @@ public class GatewayUtil {
 	    Map<String, Object> bizContent = new HashMap<>();
 
 	    bizContent.put("sellerTaxNo","9113020080479255X6");
-	    bizContent.put("serialNo","111222-333444");
+	    bizContent.put("serialNo",orderNo);
 	    bizContent.put("invoiceCode",invoiceCode);
 	    bizContent.put("invoiceNo",invoiceNo);
 	    bizContent.put("pushType","0");
