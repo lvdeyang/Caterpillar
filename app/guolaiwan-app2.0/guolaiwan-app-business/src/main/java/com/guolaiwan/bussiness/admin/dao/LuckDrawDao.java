@@ -19,7 +19,7 @@ public class LuckDrawDao extends AbstractBaseDao<LuckDrawRecord> {
 	public LuckDrawRecord getLuckRecordByUser(Long userId) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("userId", Condition.eq, userId);
-		//hql.andBy("drawProductId",Condition.ne,0);
+		hql.andBy("drawProductId",Condition.ne,0);
 		List<LuckDrawRecord> luckDrawRecords = findByHql(hql);
 		if (luckDrawRecords == null || luckDrawRecords.size() <= 0)
 			return null;

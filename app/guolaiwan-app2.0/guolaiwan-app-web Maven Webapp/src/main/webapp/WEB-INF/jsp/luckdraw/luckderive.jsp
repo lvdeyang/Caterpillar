@@ -41,7 +41,7 @@
 						<select class="lay-input-inline" name="sName" lay-verify="required" id="sName">
 	        				<option value="-1">全部</option>
 	        	<%-- 			<c:forEach items="${pmenus}" var="pmenu">   --%>
-	                		<option  value="健身月卡" >健身月卡</option> 
+	                		<option   value="健身月卡" selected>健身月卡</option> 
 	                		<option  value="红酒+餐券" >红酒+餐券</option>
 	               			<!-- </c:forEach>  -->
 	      				</select>
@@ -67,7 +67,7 @@
 			table = layui.table;
 			form = layui.form;
 			laydate = layui.laydate;
-	
+	        
 			getCommercialList();
 			active = {
 				reload : function() {

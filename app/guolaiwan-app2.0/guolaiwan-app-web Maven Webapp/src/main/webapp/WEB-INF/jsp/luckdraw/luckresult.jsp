@@ -120,8 +120,8 @@
 		      $('#result').html('奖品已领取');
 		   }
 		}else if(result=='today'){
-		   //$('#result').html('今天已经抽过奖了，明天再试试');
-		   $('#result').html('已经抽过奖了');
+		   $('#result').html('今天已经抽过奖了，明天再试试');
+		   //$('#result').html('已经抽过奖了');
 		}else if(result=='time'){
 			$('#ml-main').hide();
 			$('#ml-main1').show();
