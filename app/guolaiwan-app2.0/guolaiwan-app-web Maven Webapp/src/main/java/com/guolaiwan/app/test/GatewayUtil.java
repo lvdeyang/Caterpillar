@@ -25,10 +25,11 @@ public class GatewayUtil {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
+			String orderNo="0009";
 			JSONObject json=testOpenInvocie("buyerTaxNo123123", "杨彪", "河北省遵化市法院13819078765", "22223333", 
-					"11.64", "0.36", "12.00", "1", "0004","次","包车费");
+					"12.00", "", "12.00", "1", orderNo,"次","旅客运输服务");
 			JSONObject resJson= json.getJSONObject("response");
-			testFormatBuild(resJson.getString("invoiceCode"),resJson.getString("invoiceNo"),"0004");
+			testFormatBuild(resJson.getString("invoiceCode"),resJson.getString("invoiceNo"),orderNo);
 			//testFormatBuild("013001610011", "75127318");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -110,7 +111,7 @@ public class GatewayUtil {
 	    detail.put("goodsLineNo", "1");
 	    detail.put("goodsLineNature", "0");
 	    //商品编码
-	    detail.put("goodsCode", "3010101020102000000");  // 商品编码不能小于19位
+	    detail.put("goodsCode", "3010101020101010000");  // 商品编码不能小于19位
 	    //自行编码
 	    detail.put("goodsExtendCode", "112211");
 	    detail.put("goodsName", goodsName);
@@ -134,11 +135,11 @@ public class GatewayUtil {
 	    detail.put("goodsTotalPrice", totalTexPrice);
 	    detail.put("goodsTotalTax", texPrice);
 	    
-	    detail.put("goodsTaxRate", "0.03");
+	    detail.put("goodsTaxRate", "0");
 	    detail.put("goodsDiscountLineNo", "");
 	    detail.put("priceTaxMark", "1");
 	    detail.put("vatSpecialManagement", "");
-	    detail.put("freeTaxMark", "");
+	    detail.put("freeTaxMark", "3");
 	    detail.put("preferentialMark", "0");
 	    list.add(detail);
 	    bizContent.put("invoiceDetailsList", list);
