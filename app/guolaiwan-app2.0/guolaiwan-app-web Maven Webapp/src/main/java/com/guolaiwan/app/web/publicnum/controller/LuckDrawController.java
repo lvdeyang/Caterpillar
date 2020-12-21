@@ -135,7 +135,7 @@ public class LuckDrawController extends WebBaseControll {
 		}*/
         if(contact==null){
         	//奖品抽没了
-            if (glassnum>=20&&ticketnum>=20) {
+            if (glassnum>=16&&ticketnum>=36) {
             	if (now.getDate()==1) {
         			mv = new ModelAndView("luckdraw/luckresult");
             		mv.addObject("result","over");
@@ -156,7 +156,7 @@ public class LuckDrawController extends WebBaseControll {
         	return mv;
         }
         //奖品抽没了
-        if (glassnum>=20&&ticketnum>=20) {
+        if (glassnum>=16&&ticketnum>=36) {
         	if (now.getDate()==1) {
     			mv = new ModelAndView("luckdraw/luckresult");
         		mv.addObject("result","over");
@@ -181,6 +181,14 @@ public class LuckDrawController extends WebBaseControll {
 	public ModelAndView luckderive(HttpServletRequest request){
 
 		ModelAndView mv = new ModelAndView("luckdraw/luckderive");
+		return mv;
+		
+	}
+	
+	@RequestMapping(value = "/index2")
+	public ModelAndView luckuse(HttpServletRequest request){
+
+		ModelAndView mv = new ModelAndView("luckdraw/luckuse");
 		return mv;
 		
 	}
@@ -213,6 +221,25 @@ public class LuckDrawController extends WebBaseControll {
 		map.put("count", count);
 		return map;
 	}
+	
+	
+	// 异步读取列表分页
+		@ResponseBody
+		@RequestMapping(value = "/list1.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+		public Map<String, Object> getList1(HttpServletRequest request, int page, int limit) throws Exception {
+
+			List<LuckDrawRecord> luckDrawRecords = conn_luckdraw.getAlluse(page,limit);
+		
+			List<LuckDrawRecordVO> luckDrawRecordVOs = LuckDrawRecordVO.getConverter(LuckDrawRecordVO.class).convert(luckDrawRecords, LuckDrawRecordVO.class);
+			
+			int count = conn_luckdraw.countAlluse();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("data", luckDrawRecordVOs);
+			map.put("code", 0);
+			map.put("count", count);
+			return map;
+		}
+	
 	
 	@RequestMapping(value = "/derive/{prizeid}")
 	public String derive(@PathVariable int prizeid,HttpServletRequest request,HttpServletResponse response) throws Exception{
@@ -290,7 +317,7 @@ public class LuckDrawController extends WebBaseControll {
         		
         	}else{
         		int size=conn_luckdraw.countGodlike(2);
-        		if(size>=20){
+        		if(size>=15){
         			result=0;
         		}else{
         			result=2;

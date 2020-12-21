@@ -51,6 +51,26 @@ public class LuckDrawDao extends AbstractBaseDao<LuckDrawRecord> {
 			return null;
 		return luckDrawRecords;
 	}
+	
+	
+	public List<LuckDrawRecord> getAlluse(int page,int limit){
+		QueryHql hql = this.newQueryHql();
+		
+		hql.andBy("useit",Condition.eq,1);
+		List<LuckDrawRecord> luckDrawRecords = findByHqlPage(hql,page,limit);
+		if (luckDrawRecords == null || luckDrawRecords.size() <= 0)
+			return null;
+		return luckDrawRecords;
+	}
+	
+	
+	public int countAlluse() {
+		CountHql cHql = this.newCountHql();
+		cHql.andBy("useit",Condition.eq,1);
+		int count =countByHql(cHql);
+		return count;
+	}
+	
 	public List<LuckDrawRecord> getAllRecordByPrize(String sName,int page,int limit){
 		QueryHql hql = this.newQueryHql();
 		if (sName.equals("红酒+餐券")) {
