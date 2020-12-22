@@ -25,7 +25,7 @@ public class GatewayUtil {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
-			String orderNo="0009";
+			String orderNo="0011";
 			JSONObject json=testOpenInvocie("buyerTaxNo123123", "杨彪", "河北省遵化市法院13819078765", "22223333", 
 					"12.00", "", "12.00", "1", orderNo,"次","旅客运输服务");
 			JSONObject resJson= json.getJSONObject("response");
@@ -138,9 +138,9 @@ public class GatewayUtil {
 	    detail.put("goodsTaxRate", "0");
 	    detail.put("goodsDiscountLineNo", "");
 	    detail.put("priceTaxMark", "1");
-	    detail.put("vatSpecialManagement", "");
-	    detail.put("freeTaxMark", "3");
-	    detail.put("preferentialMark", "0");
+	    detail.put("vatSpecialManagement", "免税");
+	    detail.put("freeTaxMark", "1");
+	    detail.put("preferentialMark", "1");
 	    list.add(detail);
 	    bizContent.put("invoiceDetailsList", list);
 	    params.put("biz_content", JSON.toJSONString(bizContent));
