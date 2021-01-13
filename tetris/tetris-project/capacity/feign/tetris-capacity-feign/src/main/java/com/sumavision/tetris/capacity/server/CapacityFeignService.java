@@ -29,6 +29,10 @@ public class CapacityFeignService {
     public void createTempTask(String list, Long userId,Long tempId) throws Exception {
         JsonBodyResponseParser.parseObject(capacityFeign.createTempTask(list, userId,tempId), null);
     }
+    
+    public void createLiveTask(String json) throws Exception {
+        JsonBodyResponseParser.parseObject(capacityFeign.createLiveTask(json), null);
+    }
 
     /**
      * 创建推流<br/>

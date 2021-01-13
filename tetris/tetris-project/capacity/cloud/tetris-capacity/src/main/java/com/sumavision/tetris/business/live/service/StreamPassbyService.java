@@ -302,6 +302,61 @@ public class StreamPassbyService {
 
     }
     
+    
+    public void createLiveTask(Long liveId, List<String> srcPubNames, 
+    		String dstPubName,TempPo tempPo,List<GlsPo> glsPos) {
+        try {
+            // 创建输入源
+            List<InputBO> inputBOs = new ArrayList<InputBO>();
+            for (String pubName : srcPubNames) {
+                InputBO inputBO = stream2InputBO(pubName, "rtmp://127.0.0.1/live/" + pubName);
+                inputBOs.add(inputBO);
+            }
+            // 创建备份源关系了
+            InputBO backInput = stream2BackInputBO(liveId, srcPubNames,tempPo.getFilePath());
+            inputBOs.add(backInput);
+            // 创建任务了
+            String videoTaskId = new StringBufferWrapper().append("task-video-").append(liveId).toString();
+
+            String audioTaskId = new StringBufferWrapper().append("task-audio-").append(liveId).toString();
+
+            String encodeVideoId = new StringBufferWrapper().append("encode-video-").append(liveId).toString();
+
+            String encodeAudioId = new StringBufferWrapper().append("encode-audio-").append(liveId).toString();
+            List<TaskBO> taskBOs = stream2TaskBO(videoTaskId, audioTaskId, encodeVideoId, encodeAudioId, backInput
+            		,tempPo.getX()+","+tempPo.getY(), tempPo.getRate(),tempPo.getFrame(),tempPo.getRatio(),glsPos);
+            // 创建输出了
+            String outputId = new StringBufferWrapper().append("output-").append(liveId).toString();
+            OutputBO outputBO = streamRtmp2OutputBO(outputId, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+                    dstPubName);
+            ///OutputBO recordOutputBo = record2OutputBO(taskId+"", taskBOs, "/home/hls");
+            AllRequest allRequest = new AllRequest();
+            allRequest.setInput_array(inputBOs);
+            allRequest.setTask_array(taskBOs);
+            allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
+
+            String[] pullServerList=capacityProps.getPip().split(",");
+            int index=1;
+            for (String url : pullServerList) {
+            	String destPubUrl="rtmp://"+url+"/live/"+dstPubName;
+            	OutputBO temOutputBO = streamUrlRtmp2OutputBO(outputId+"-"+index, videoTaskId, audioTaskId, encodeVideoId, encodeAudioId,
+            			destPubUrl);
+            	allRequest.getOutput_array().add(temOutputBO);
+            	index++;
+			}
+            
+            AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
+                    capacityProps.getPort());
+
+            responseService.allResponseProcess(allResponse);
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+    
 
     /**
      * 创建录制任务【mr】

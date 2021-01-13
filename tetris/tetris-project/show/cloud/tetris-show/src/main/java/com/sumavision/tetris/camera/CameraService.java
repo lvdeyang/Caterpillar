@@ -3,6 +3,7 @@ package com.sumavision.tetris.camera;
 
 import com.sumavision.tetris.capacity.server.CapacityFeignService;
 import com.sumavision.tetris.capacity.server.TempVo;
+import com.sumavision.tetris.commons.util.date.DateUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -162,6 +163,15 @@ public class CameraService {
         // OSSUtils.createFolder(OSSUtils.bucketName, "file/live/" + path);
         capacityService.createRecordTask(pubName, path);
     }
+    
+    public void createRecordLive(String pubName) throws Exception {
+
+       
+        //path  =  record  / userId / date (YYYY-MM-dd) /cameraId
+        String path="/home/live/"+DateUtil.format(new Date(), "yyyyMMdd")+"/"+pubName;
+        // OSSUtils.createFolder(OSSUtils.bucketName, "file/live/" + path);
+        capacityService.createRecordTask(pubName, path);
+    }
 
     /**
      * @描述 根据用户查询他所有的录制视频
@@ -203,6 +213,10 @@ public class CameraService {
     public void deleteRecordTask(long id) throws Exception {
         CameraPo cameraPo = cameraDao.findOne(id);
         String pubName = "camera" + cameraPo.getUserId();
+        capacityService.deleteRecordTask(pubName);
+    }
+    
+    public void deleteRecordLive(String pubName) throws Exception {
         capacityService.deleteRecordTask(pubName);
     }
 
@@ -327,6 +341,18 @@ public class CameraService {
         }
         capacityService.createTempTask(sb.toString(), list.get(0).getUserId(),tempId);
         return null;
+    }
+    
+    public Object createLiveTask(String json) throws Exception {
+        capacityService.createLiveTask(json);
+        return null;
+    }
+    
+    public boolean switchCamera(Long liveId, int index) throws Exception {
+        
+        capacityService.switchTask(liveId, index);
+
+        return true;
     }
 
 

@@ -1,6 +1,7 @@
 package com.sumavision.tetris.capacity.server;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,6 +24,9 @@ public interface CapacityFeign {
     @RequestMapping(value = "/capacity/live/create/temptask")
     public JSONObject createTempTask(@RequestParam("list") String list, @RequestParam("userId") Long userId, @RequestParam("tempId") Long tempId) throws Exception;
 
+
+    @RequestMapping(value = "/capacity/live/create/livetask")
+    public JSONObject createLiveTask(@RequestBody String json) throws Exception;
 
     /**
      * @描述

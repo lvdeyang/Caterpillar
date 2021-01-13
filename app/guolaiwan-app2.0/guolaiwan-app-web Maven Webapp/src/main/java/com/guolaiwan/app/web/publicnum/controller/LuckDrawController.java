@@ -105,13 +105,14 @@ public class LuckDrawController extends WebBaseControll {
         	return mv;
         }
     	//活动没开始
-    	if (now.getDate()<=13) {
-    		mv = new ModelAndView("luckdraw/luckresult");
-			mv.addObject("result","notstart");
-			return mv;
-		}
+    	//if (now.getDate()<=13) {
+    		//mv = new ModelAndView("luckdraw/luckresult");
+			//mv.addObject("result","notstart");
+			//return mv;
+		//}
     	//活动结束
-    	if (now.getDate()<14||now.getDate()>18) {
+    	//if (now.getDate()<14||now.getDate()>18) {
+        if (now.getDate()>=1&&now.getDate()<=31) {
     		mv = new ModelAndView("luckdraw/luckresult");
     		mv.addObject("result","over");
     		return mv;

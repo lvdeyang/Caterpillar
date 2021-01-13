@@ -10,10 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
 import com.sumavision.tetris.business.live.service.StreamPassbyService;
 import com.sumavision.tetris.commons.util.wrapper.ArrayListWrapper;
 import com.sumavision.tetris.mvc.ext.response.json.aop.annotation.JsonBody;
+import com.sumavision.tetris.temp.GlsPo;
 import com.sumavision.tetris.temp.TempDao;
+import com.sumavision.tetris.temp.TempPo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,6 +160,33 @@ public class ApiServerLiveController {
 
         return null;
     }
+    
+    //下面是新直播平台接口
+    
+    @JsonBody
+    @ResponseBody
+    @RequestMapping(value = "/create/livetask")
+    public Object createLiveTask(HttpServletRequest request, @RequestBody String json) throws Exception {
 
+    	JSONObject jsonObj=JSONObject.parseObject(json);
+        Long liveId=jsonObj.getLong("liveId");
+        String destPubName="glwlive"+liveId;
+    	List<String> srcPubNames=new ArrayList<String>();
+    	JSONArray arr=jsonObj.getJSONArray("cameras");
+    	for (Object obj : arr) {
+			JSONObject cameraJson=(JSONObject)obj;
+			srcPubNames.add(cameraJson.getString("pubName"));
+		}
+    	TempPo tempPo=JSONObject.toJavaObject(jsonObj.getJSONObject("template"), TempPo.class);
+    	List<GlsPo> glsPos=new ArrayList<GlsPo>();
+    	JSONArray glsArr=jsonObj.getJSONArray("gls");
+    	for (Object obj : glsArr) {
+			JSONObject glsJson=(JSONObject)obj;
+			glsPos.add(JSONObject.toJavaObject(glsJson, GlsPo.class));
+		}
+        streamPassbyService.createLiveTask(jsonObj.getLong("liveId"), srcPubNames, destPubName, tempPo, glsPos);
+
+        return null;
+    }
 
 }

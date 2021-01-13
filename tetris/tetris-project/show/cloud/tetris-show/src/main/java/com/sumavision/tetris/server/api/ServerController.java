@@ -138,6 +138,46 @@ public class ServerController {
     public Map<String, Object> Switch(@PathVariable Long oldId, @PathVariable Long newId) throws Exception {
         return Result.sussess(cameraService.switchCamera(oldId, newId));
     }
+    
+    
+    //对接过来玩新平台接口
+    @RequestMapping(value = "/startLive", method = {RequestMethod.POST, RequestMethod.PUT})
+    public Map<String, Object> startLiveShow(String json) throws Exception {
+    	UserVO user=userQuery.current();
+    	//调用capacityfein开始任务
+    	cameraService.createLiveTask(json);
+        return Result.success();
+    }
+    
+    @RequestMapping(value = "/stopLive", method = {RequestMethod.POST, RequestMethod.PUT})
+    public Map<String, Object> stopLiveShow(Long liveId) throws Exception {
+    	//调用capacityfein开始任务
+    	cameraService.deleteTask(liveId);
+        return Result.success();
+    }
+    
+    @RequestMapping(value = "/switch", method = {RequestMethod.POST, RequestMethod.PUT})
+    public Map<String, Object> switchCamera(Long liveId,Integer index) throws Exception {
+    	//调用capacityfein开始任务
+    	cameraService.switchCamera(liveId,index);
+        return Result.success();
+    }
+    
+    
+    
+    @RequestMapping(value = "/startRecord", method = {RequestMethod.POST, RequestMethod.PUT})
+    public Map<String, Object> startLiveRecord(String pubName) throws Exception {
+    	//调用capacityfein开始任务
+    	cameraService.createRecordLive(pubName);
+        return Result.success();
+    }
+    
+    @RequestMapping(value = "/stopRecord", method = {RequestMethod.POST, RequestMethod.PUT})
+    public Map<String, Object> stopLiveRecord(String pubName) throws Exception {
+    	//调用capacityfein开始任务
+    	cameraService.deleteRecordLive(pubName);
+        return Result.success();
+    }
 
     
 }
