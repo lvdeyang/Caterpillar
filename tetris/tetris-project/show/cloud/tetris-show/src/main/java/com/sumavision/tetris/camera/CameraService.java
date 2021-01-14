@@ -169,6 +169,8 @@ public class CameraService {
        
         //path  =  record  / userId / date (YYYY-MM-dd) /cameraId
         String path="/home/live/"+DateUtil.format(new Date(), "yyyyMMdd")+"/"+pubName;
+        File recordDic=new File(path);
+        if(!recordDic.exists())	recordDic.mkdir();
         // OSSUtils.createFolder(OSSUtils.bucketName, "file/live/" + path);
         capacityService.createRecordTask(pubName, path);
     }

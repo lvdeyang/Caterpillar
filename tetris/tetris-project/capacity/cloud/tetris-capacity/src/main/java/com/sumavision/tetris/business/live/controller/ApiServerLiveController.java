@@ -170,7 +170,7 @@ public class ApiServerLiveController {
 
     	JSONObject jsonObj=JSONObject.parseObject(json);
         Long liveId=jsonObj.getLong("liveId");
-        String destPubName="glwlive"+liveId;
+        String destPubName=jsonObj.getString("pubName");
     	List<String> srcPubNames=new ArrayList<String>();
     	JSONArray arr=jsonObj.getJSONArray("cameras");
     	for (Object obj : arr) {
