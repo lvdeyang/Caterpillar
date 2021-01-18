@@ -350,7 +350,7 @@ public class CameraService {
         return null;
     }
     
-    public boolean switchCamera(Long liveId, int index) throws Exception {
+    public boolean switchCameraNodatabase(Long liveId, int index) throws Exception {
         
         capacityService.switchTask(liveId, index);
 

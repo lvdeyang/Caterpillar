@@ -159,7 +159,7 @@ public class ServerController {
     @RequestMapping(value = "/switch", method = {RequestMethod.POST, RequestMethod.PUT})
     public Map<String, Object> switchCamera(Long liveId,Integer index) throws Exception {
     	//调用capacityfein开始任务
-    	cameraService.switchCamera(liveId,index);
+    	cameraService.switchCameraNodatabase(liveId,index);
         return Result.success();
     }
     
