@@ -372,7 +372,7 @@ public class CameraService {
             capacityService.deleteTask(sb.toString(), cameraPoList.get(0).getUserId());
 
         }else{
-            capacityService.deleteTask(srcPubNames, cameraPoList.get(0).getUserId());
+            capacityService.deleteTask(srcPubNames, userId);
 
         }
     }
