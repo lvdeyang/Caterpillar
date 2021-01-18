@@ -1,6 +1,7 @@
 package com.sumavision.tetris.camera;
 
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.sumavision.tetris.capacity.server.CapacityFeignService;
 import com.sumavision.tetris.capacity.server.TempVo;
 import com.sumavision.tetris.commons.util.date.DateUtil;
@@ -359,7 +360,7 @@ public class CameraService {
 
 
     
-    public void deleteTask(Long userId) throws Exception {
+    public void deleteTask(Long userId,String srcPubNames) throws Exception {
         List<CameraPo> cameraPoList = cameraDao.findByUserId(userId);
         List<String> list = new ArrayList<>();
         StringBuffer sb=new StringBuffer();
@@ -367,7 +368,13 @@ public class CameraService {
         	sb.append(cameraPo.getUserId().toString() + cameraPo.getId().toString()+",");
             //list.add(cameraPo.getUserId().toString() + cameraPo.getId().toString() + "");
         }
-        capacityService.deleteTask(sb.toString(), cameraPoList.get(0).getUserId());
+        if(srcPubNames==null){
+            capacityService.deleteTask(sb.toString(), cameraPoList.get(0).getUserId());
+
+        }else{
+            capacityService.deleteTask(srcPubNames, cameraPoList.get(0).getUserId());
+
+        }
     }
     
     public Object findByShowId(Long showId) throws Exception {

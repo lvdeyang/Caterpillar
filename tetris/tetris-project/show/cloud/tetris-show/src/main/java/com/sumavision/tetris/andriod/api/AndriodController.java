@@ -145,7 +145,7 @@ public class AndriodController {
     		}
     	}
     	//调用capacityfein停止任务
-    	cameraService.deleteTask(user.getId());
+    	cameraService.deleteTask(user.getId(),null);
         return Result.success();
     }
 

@@ -122,7 +122,7 @@ public class ServerController {
     	}
     	
     	//调用capacityfein停止任务
-    	cameraService.deleteTask(user.getId());
+    	cameraService.deleteTask(user.getId(),null);
         return Result.success();
     }
 
@@ -150,9 +150,9 @@ public class ServerController {
     }
     
     @RequestMapping(value = "/stopLive", method = {RequestMethod.POST, RequestMethod.PUT})
-    public Map<String, Object> stopLiveShow(Long liveId) throws Exception {
+    public Map<String, Object> stopLiveShow(Long liveId,String srcPubNames) throws Exception {
     	//调用capacityfein开始任务
-    	cameraService.deleteTask(liveId);
+    	cameraService.deleteTask(liveId,srcPubNames);
         return Result.success();
     }
     
