@@ -3,6 +3,7 @@ package com.sumavision.tetris.server.api;
 import com.sumavision.tetris.camera.CameraService;
 import com.sumavision.tetris.capacity.server.CapacityFeign;
 import com.sumavision.tetris.capacity.server.CapacityFeignService;
+import com.sumavision.tetris.commons.util.date.DateUtil;
 import com.sumavision.tetris.result.Result;
 import com.sumavision.tetris.show.LiveDao;
 import com.sumavision.tetris.show.LivePo;
@@ -14,8 +15,11 @@ import com.sumavision.tetris.user.UserVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -178,6 +182,28 @@ public class ServerController {
     	cameraService.deleteRecordLive(pubName);
         return Result.success();
     }
+    
+    //上传文件
+    @RequestMapping(value = "/uploadMedia", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> importFiles(@RequestParam("filePoster") MultipartFile uploadFile) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		try {
+			String fileName=uploadFile.getOriginalFilename();
+		    String dateStr=DateUtil.format(new Date(),"yyyyMMddHHmmss");
+		    String newFileName=dateStr+"_"+fileName;
+			File dest=new File("/home/hls/media/"+newFileName);
+			if(!dest.exists()){
+				dest.createNewFile();
+			}
+			uploadFile.transferTo(dest);
+			data.put("Url", "http://47.95.241.89:6690/media/"+newFileName);
+		} catch (Exception e) {
+
+		}
+
+		return data;
+	}
 
     
 }
