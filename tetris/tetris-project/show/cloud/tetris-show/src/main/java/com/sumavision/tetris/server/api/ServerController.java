@@ -4,6 +4,7 @@ import com.sumavision.tetris.camera.CameraService;
 import com.sumavision.tetris.capacity.server.CapacityFeign;
 import com.sumavision.tetris.capacity.server.CapacityFeignService;
 import com.sumavision.tetris.commons.util.date.DateUtil;
+import com.sumavision.tetris.mvc.wrapper.JSONHttpServletRequestWrapper;
 import com.sumavision.tetris.result.Result;
 import com.sumavision.tetris.show.LiveDao;
 import com.sumavision.tetris.show.LivePo;
@@ -22,6 +23,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName AndriodController
@@ -146,23 +149,31 @@ public class ServerController {
     
     //对接过来玩新平台接口
     @RequestMapping(value = "/startLive", method = {RequestMethod.POST, RequestMethod.PUT})
-    public Map<String, Object> startLiveShow(String json) throws Exception {
+    public Map<String, Object> startLiveShow(HttpServletRequest request) throws Exception {
     	UserVO user=userQuery.current();
+    	JSONHttpServletRequestWrapper wrapper=new JSONHttpServletRequestWrapper(request);
+    	String json=wrapper.getParametersStr();
     	//调用capacityfein开始任务
     	cameraService.createLiveTask(json);
         return Result.success();
     }
     
     @RequestMapping(value = "/stopLive", method = {RequestMethod.POST, RequestMethod.PUT})
-    public Map<String, Object> stopLiveShow(Long liveId,String srcPubNames) throws Exception {
+    public Map<String, Object> stopLiveShow(HttpServletRequest request) throws Exception {
     	//调用capacityfein开始任务
+    	JSONHttpServletRequestWrapper wrapper=new JSONHttpServletRequestWrapper(request);
+    	Long liveId=wrapper.getLong("liveId");
+    	String srcPubNames=wrapper.getString("srcPubNames");
     	cameraService.deleteTask(liveId,srcPubNames);
         return Result.success();
     }
     
     @RequestMapping(value = "/switch", method = {RequestMethod.POST, RequestMethod.PUT})
-    public Map<String, Object> switchCamera(Long liveId,Integer index) throws Exception {
+    public Map<String, Object> switchCamera(HttpServletRequest request) throws Exception {
     	//调用capacityfein开始任务
+    	JSONHttpServletRequestWrapper wrapper=new JSONHttpServletRequestWrapper(request);
+    	Long liveId=wrapper.getLong("liveId");
+    	Integer index=wrapper.getInteger("index");
     	cameraService.switchCameraNodatabase(liveId,index);
         return Result.success();
     }
@@ -170,15 +181,19 @@ public class ServerController {
     
     
     @RequestMapping(value = "/startRecord", method = {RequestMethod.POST, RequestMethod.PUT})
-    public Map<String, Object> startLiveRecord(String pubName) throws Exception {
+    public Map<String, Object> startLiveRecord(HttpServletRequest request) throws Exception {
     	//调用capacityfein开始任务
+    	JSONHttpServletRequestWrapper wrapper=new JSONHttpServletRequestWrapper(request);
+    	String pubName=wrapper.getString("pubName");
     	cameraService.createRecordLive(pubName);
         return Result.success();
     }
     
     @RequestMapping(value = "/stopRecord", method = {RequestMethod.POST, RequestMethod.PUT})
-    public Map<String, Object> stopLiveRecord(String pubName) throws Exception {
+    public Map<String, Object> stopLiveRecord(HttpServletRequest request) throws Exception {
     	//调用capacityfein开始任务
+    	JSONHttpServletRequestWrapper wrapper=new JSONHttpServletRequestWrapper(request);
+    	String pubName=wrapper.getString("pubName");
     	cameraService.deleteRecordLive(pubName);
         return Result.success();
     }

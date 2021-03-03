@@ -334,8 +334,8 @@ public class StreamPassbyService {
             allRequest.setInput_array(inputBOs);
             allRequest.setTask_array(taskBOs);
             allRequest.setOutput_array(new ArrayListWrapper<OutputBO>().add(outputBO).getList());
-
-            String[] pullServerList=capacityProps.getPip().split(",");
+           
+            /*String[] pullServerList=capacityProps.getPip().split(",");
             int index=1;
             for (String url : pullServerList) {
             	String destPubUrl="rtmp://"+url+"/live/"+dstPubName;
@@ -343,7 +343,7 @@ public class StreamPassbyService {
             			destPubUrl);
             	allRequest.getOutput_array().add(temOutputBO);
             	index++;
-			}
+			}*/
             
             AllResponse allResponse = capacityService.createAllAddMsgId(allRequest, capacityProps.getIp(),
                     capacityProps.getPort());

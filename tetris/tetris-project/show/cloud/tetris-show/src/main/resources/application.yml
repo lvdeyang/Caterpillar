@@ -15,14 +15,14 @@ spring:
     #      uri: http://192.165.56.71:8081
     #      fail-fast: true
     client:
-      ipAddress: 192.168.0.185
+      ipAddress: 192.165.56.64
   #  profiles:
   #    active: pro
   datasource:
     base:
       url: jdbc:mysql://localhost:3306/show?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&&useSSL=true
       username: root
-      password: root
+      password: sumavisionrd
       driver-class-name: com.mysql.jdbc.Driver
       initial-size: 10
       min-idle: 20

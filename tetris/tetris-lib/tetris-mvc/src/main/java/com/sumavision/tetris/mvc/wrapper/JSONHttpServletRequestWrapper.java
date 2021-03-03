@@ -100,4 +100,8 @@ public class JSONHttpServletRequestWrapper extends HttpServletRequestWrapper{
 		return this.params.getFloatValue(name);
 	}
 	
+	public String getParametersStr() {
+		return this.params.toJSONString();
+	}
+	
 }

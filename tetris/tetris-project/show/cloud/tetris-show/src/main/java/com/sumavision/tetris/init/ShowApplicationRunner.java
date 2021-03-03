@@ -96,7 +96,7 @@ public class ShowApplicationRunner implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		// TODO Auto-generated method stub
 		
-		List<ReportLivePo> reportLiveList=reportliveDao.findAll();
+		/*List<ReportLivePo> reportLiveList=reportliveDao.findAll();
 		for (ReportLivePo reportLivePo : reportLiveList) {
 			if(reportLivePo.getIsOld()==0){
 				reportLivePo.setIsOld(1);
@@ -203,7 +203,7 @@ public class ShowApplicationRunner implements ApplicationRunner {
 				}
 				
 			}
-		});
+		});*/
 	
 	}
 
