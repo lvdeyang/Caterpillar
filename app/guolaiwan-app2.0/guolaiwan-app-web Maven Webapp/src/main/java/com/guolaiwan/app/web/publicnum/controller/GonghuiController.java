@@ -45,12 +45,7 @@ public class GonghuiController {
 	@Autowired
 	VideoDao conn_video;
 
-	@RequestMapping(value = "/video/index")
-	public ModelAndView homeIndex(HttpServletRequest request) throws Exception {
-		ModelAndView mv = null;
-		mv = new ModelAndView("mobile/gonghui/home");
-		return mv;
-	}
+	
 	@RequestMapping(value = "/video/upload/index")
 	public ModelAndView videoIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
