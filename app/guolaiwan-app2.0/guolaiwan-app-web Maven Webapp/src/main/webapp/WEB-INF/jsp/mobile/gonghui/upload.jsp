@@ -64,7 +64,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>申请分销</title>
+<title>上传作品</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -439,17 +439,20 @@ html, body {
 	top: 0;
 	text-align: center;
 }
+.weui-cells{
+    background:none;
+}
 </style>
 
 </head>
 
 <body>
 <!-- enctype="multipart/form-data" -->
-<form id="distributor-form" action="<%=basePath%>video/upload" method="POST">
-	<div id="page">
-		<image src="lib/images/videoback.jpg" style="position:absolute;margin-top:0;margin-left:0"/>
-		<div class="content">
-            <div style="padding-bottom:50px;">
+<form id="video-form" action="<%=basePath%>gonghui/upload.do" method="POST">
+        <image src="lib/images/videoback.jpg" 
+		    style="position:absolute;width:100%;height:800px"/>
+		<div class="content" style="height:800px">
+		    
 			<div class="weui-cells__title">上传作品</div>
 			<div class="weui-cells weui-cells_form">
 				<div class="weui-cell">
@@ -518,24 +521,23 @@ html, body {
 				</div>
 				</div>
 				
-				<a id="apply" style="position:fixed;bottom:0;z-index:1000;width:96%;margin-left:2%;background-color:#18b4ed;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">申请</a>
+				<a id="upload" style="width:96%;margin-top:50px;margin-left:2%;background-color:#FF2B33;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">提交</a>
+			
 			</div>
-		</div>
-	</div>
+			
+
 	<!-- 订单提交表单 -->
-	</form>
+</form>
 </body>
 
 <!-- 公共脚本引入 -->
-<jsp:include page="../../../mobile/commons/jsp/script.jsp"></jsp:include>
+<jsp:include page="../../../mobile/commons/jsp/scriptgonghui.jsp"></jsp:include>
 
 <script type="text/javascript">
 	$(function() {
-	
 
-	    
 	
-	    $(document).on('click','#apply',function(){
+	    $(document).on('click','#upload',function(){
 	        if($('#company').val() == ''){
 				 $.toast("请填所属单位", "forbidden"); 
 				 return false; 
@@ -560,8 +562,8 @@ html, body {
 			if($('#selPlay').val() == ''){
 				 $.toast("请上传视频", "forbidden");   
 				 return false; 
-			}			
-			$('#distributor-form').submit(); 
+			}		
+			$('#video-form').submit(); 
 			
 	    });
 	
@@ -593,7 +595,7 @@ html, body {
 	         
 		    var uploadFile = new FormData();
 		    uploadFile.append(file.files[0].name, file.files[0]);
-		    var _upQuery = window.BASEPATH + 'distributor/upload';
+		    var _upQuery = window.BASEPATH + 'gonghui/upload';
 		    if("undefined" != typeof(uploadFile) && uploadFile != null && uploadFile != ""){
 		    		$.ajax({			
 			    		url:_upQuery,		

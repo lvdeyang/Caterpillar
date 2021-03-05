@@ -1,28 +1,197 @@
 package com.guolaiwan.app.web.publicnum.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.guolaiwan.bussiness.admin.po.SysConfigPO;
+import com.guolaiwan.bussiness.gonghui.dao.VideoDao;
+import com.guolaiwan.bussiness.gonghui.po.VideoPo;
 import com.guolaiwan.bussiness.javacv.FishNewLiveService;
 
+import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
 @Controller
 @RequestMapping("/gonghui")
 public class GonghuiController {
+	@Autowired
+	SysConfigDAO conn_sys;
+	@Autowired
+	VideoDao conn_video;
 
 	@RequestMapping(value = "/video/index")
-	public ModelAndView merchantIndex(HttpServletRequest request) throws Exception {
+	public ModelAndView homeIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/gonghui/home");
 		return mv;
 	}
+	@RequestMapping(value = "/video/upload/index")
+	public ModelAndView videoIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/gonghui/upload");
+		return mv;
+	}
+	@RequestMapping(value = "/video/list/index")
+	public ModelAndView listIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/gonghui/list");
+		return mv;
+	}
+
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/upload.do", method = RequestMethod.POST)
+	public ModelAndView uploadVideo(HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/gonghui/video/list/index");
+		
+		String company=request.getParameter("company");
+		String name=request.getParameter("name");
+		String phone=request.getParameter("phone");
+		String videoName=request.getParameter("videoName");
+		String coverUrl=request.getParameter("coverUrl");
+		String playUrl=request.getParameter("playUrl");
+		VideoPo videoPo=new VideoPo();
+		videoPo.setaCount(0);
+		videoPo.setName(name);
+		videoPo.setPhone(phone);
+		videoPo.setCompany(company);
+		videoPo.setVideoName(videoName);
+		videoPo.setCoverUrl(coverUrl);
+		videoPo.setPlayUrl(playUrl);
+		conn_video.save(videoPo);
+		return mv;
+	}
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public Object upload(HttpServletRequest request) throws Exception {
+
+		String url = "";
+
+		if (!ServletFileUpload.isMultipartContent(request)) {
+
+		}
+
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		// 设置缓冲区大小，这里是4kb
+		factory.setSizeThreshold(40960);
+		// 设置缓冲区目录
+		factory.setRepository(null);
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		// 设置最大文件尺寸，这里是80MB
+		upload.setSizeMax(81943040);
+		// 得到所有的文件
+		List<FileItem> items = upload.parseRequest(request);
+		Iterator<FileItem> i = items.iterator();
+		File fileIt = null;
+		while (i.hasNext()) {
+			FileItem fi = (FileItem) i.next();
+			url = uploadFile(fi);
+		}
+
+		SysConfigPO sys = conn_sys.getSysConfig();
+		String webPath = sys.getWebUrl() + "/" + url;
+		JSONObject obj = new JSONObject();
+		obj.put("url", url);
+		obj.put("webPath", webPath);
+		return obj;
+	}
+
+	private String uploadFile(FileItem file) {
+
+		SysConfigPO sys = conn_sys.getSysConfig();
+
+		String url = "gonghui" + File.separator + file.getName();
+		File folder = new File(sys.getFolderUrl() + "gonghui");
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
+		try {
+			// 获取输出流
+			OutputStream os = new FileOutputStream(sys.getFolderUrl() + url);
+			// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+			InputStream is = file.getInputStream();
+			int temp;
+			// 一个一个字节的读取并写入
+			while ((temp = is.read()) != (-1)) {
+				os.write(temp);
+			}
+			os.flush();
+			os.close();
+			is.close();
+
+			File newFile = new File(sys.getFolderUrl() + url);
+			OSSUtils.createFolder("glw-old-file", "file/gonghui/");
+			OSSUtils.uploadObjectOSS("file/gonghui/", file.getName(), newFile, new FileInputStream(newFile));
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			return url;
+		}
+
+	}
 	
 	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/videoList", method = RequestMethod.GET)
+	public Object videoList(HttpServletRequest request) throws Exception{
+		List<VideoPo> videolist=conn_video.findAll();
+		if(videolist==null||videolist.isEmpty()){
+//			videolist=new ArrayList<VideoPo>();
+//			VideoPo videoPo=new VideoPo();
+//			videoPo.setaCount(0);
+//			videoPo.setCompany("北京数码视讯科技");
+//			videoPo.setVideoName("mr.直播带货");
+//			videoPo.setCoverUrl("http://");
+//			conn_video.save(videoPo);
+//			videolist.add(videoPo);
+		}
+		return videolist;
+	}
 	
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/acount", method = RequestMethod.POST)
+	public Object acount(HttpServletRequest request) throws Exception{
+        
+		String id=request.getParameter("id");
+		synchronized(id){
+			VideoPo videoPo=conn_video.get(Long.parseLong(id));
+			videoPo.setaCount(videoPo.getaCount()+1);
+			conn_video.save(videoPo);
+			return videoPo;
+		}
+		
+	}
 }

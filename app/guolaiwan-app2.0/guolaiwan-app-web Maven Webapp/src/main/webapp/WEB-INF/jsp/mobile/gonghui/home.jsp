@@ -66,7 +66,7 @@
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 
-<title>投票大赛</title>
+<title>首页</title>
 
 <!-- 公共样式引用 -->
 <jsp:include page="../../../mobile/commons/jsp/style.jsp"></jsp:include>
@@ -496,7 +496,26 @@ html, body {
 </style>
 
 </head>
-
+<body>
+    <div class="content">
+	<div>
+		<image src="lib/images/header.jpg" style="width:100%;"/>
+		<div style="width:100%;text-align:center;color:#933333;font-weight:500;line-height:30px">活动说明</div>
+		<p style="font-size:small;line-height: 30px;color: #94383B;width:94%;margin-left:3%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为大力营造纪念建党100周年的浓厚氛围，充分发挥“职工书屋”作用，丰富职工精神文化生活，提升职工综合素质，增强凝聚力，市总工会决定举办“奋斗百年路 启航新征程”职工网上诵读活动。欢迎职工朋友们积极参与！</p>
+	    <div style="width:100%;text-align:center;color:#933333;font-weight:500;line-height:30px">参与方式</div>
+   		<p style="font-size:small;line-height: 30px;color: #94383B;width:94%;margin-left:3%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;职工关注“遵化市总工会爱心总动员”微信公众号，点击“服务大厅”，点击“诵读活动”填写报名信息，即可参加。确认报名信息填写完整，进入活动页面，点击页面“上传”按钮，选择录制完成的视频上传，经审核通过后即可观看、点赞、分享。
+</p>
+   		<p style="font-size:small;line-height: 30px;color: #94383B;width:94%;margin-left:3%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;报名（含视频上传、点赞）时间：2021年3月1日至3月31日</p>
+   		<p style="font-size:small;line-height: 30px;color: #94383B;width:94%;margin-left:3%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综合评审时间：2021年4月1日至4月6日</p>
+	    <a id="upload" style="width:50%;margin-left:25%;margin-top:30px;background-color:#FF2B33;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">上传作品</a>
+	    <div style="width:100%;height:50px"></div>
+	</div>
+	
+	
+	
+	</div>
+	
+</body>
 <!-- 公共脚本引入 -->
 <jsp:include page="../../../mobile/commons/jsp/scriptgonghui.jsp"></jsp:include>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
@@ -504,20 +523,17 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
-		
+	    window.BASEPATH = '<%=basePath%>';
+		$('#upload').on('click',function(){
+		    location.href=window.BASEPATH +"gonghui/video/upload/index";
+		})
 		   
 	});
 </script>
 
 
 
-<body>
-	<div id="page">
-		<image src="lib/images/header.jpg" style="width:100%;"/>
-	
-	</div>
-	
-</body>
+
 
 
 </html>

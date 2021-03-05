@@ -8,8 +8,8 @@
 <style>
   .weui_bar__item_on{
   
-     background:#18b4ed;
-     color:#FFF;
+     background:none;
+     color:#E7030B;
   } 
 </style>
 <script type="text/javascript" src="<%=basePath %>mobile/lib/jQuery-weui-v1.2.0/lib/jquery-2.1.4.js"></script>
@@ -51,6 +51,57 @@
 				return data.data;		
 			}
 		};
+		
+		
+		function initMenu(num){
+    	   var menuHtml=[];
+		
+		   menuHtml.push('<div class="weui-navbar" style="font-size:small;position:fixed;bottom:0px;left:0px;top:auto;style="background:none">');
+		   menuHtml.push('<div id="index" class="bottomMenu weui-navbar__item '+(num==1?'weui_bar__item_on':'')+'">');
+		   menuHtml.push('<span class="icon-home"></span>活动介绍');
+		   menuHtml.push('</div>');
+		   menuHtml.push('<div id="upload" class="bottomMenu weui-navbar__item '+(num==2?'weui_bar__item_on':'')+'">');
+		   menuHtml.push('<span class="icon-upload"></span>上传视频');
+		   menuHtml.push('</div>');
+		   menuHtml.push('<div id="acount" class="bottomMenu weui-navbar__item '+(num==3?'weui_bar__item_on':'')+'">');
+		   menuHtml.push('<span class="icon-heart"></span>点赞');
+		   menuHtml.push('</div>');
+	       menuHtml.push('</div>');
+		
+		   $('.content').append(menuHtml.join(''));
+    	
+    	}
+    	
+    	$(document).on('click','.bottomMenu',function(){
+    	
+    	 
+    	  if(this.id=='index'){
+    	     location.href=window.BASEPATH + 'gonghui/video/index';
+    	  }else if(this.id=='upload'){
+    	     location.href=window.BASEPATH + 'gonghui/video/upload/index';
+    	  }else if(this.id=="acount"){
+    	     location.href=window.BASEPATH + 'gonghui/video/list/index';
+    	  }
+    	  
+    	
+    	});
+    	
+		var href=location.href;
+		if(href.indexOf('gonghui/video')!=-1){
+		   
+		   
+		   if(href.indexOf('upload')!=-1){
+		      initMenu(2);
+		   }else if(href.indexOf('list')!=-1){
+		      initMenu(3);
+		   }else{
+		      initMenu(1);
+		   }
+		   
+		}
+		
+		
+		
 		
 		
 		function openqq(qq){
