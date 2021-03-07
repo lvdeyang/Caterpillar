@@ -71,6 +71,14 @@
 	<div  style="width:100%;height:50px;margin-top:30px">
 	    <a id="upload" style="width:50%;margin-left:25%;background-color:#FF2B33;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">上传作品</a> 
 	</div>
+	<div class="weui-loadmore" hidden="hidden" style="position:fixed;bottom: 5%;left:18%;z-index: 10000">
+			  <i class="weui-loading"></i>
+			  <span class="weui-loadmore__tips">正在加载</span>
+	</div>
+	<div class="weui-loadmores" hidden="hidden" style="position:fixed;bottom: 7%;left:50%;margin-left:-40px;z-index: 10000">
+			  <span class="weui-loadmore__tips">没有内容了</span>
+	</div>		
+	<div style="height:50px;width:100%;"></div>	
 </div>
 </head>
 </body>
@@ -79,6 +87,7 @@
 <script type="text/javascript">
 	$(function(){
 	   window.BASEPATH = '<%=basePath%>';
+	   var pageNumber=1;
 	   getVideos();
 	
 	   $(document).on('click','.acount',function(){
@@ -91,15 +100,37 @@
 			    $('#acounttext-'+ids[1]).html(data.aCount+'赞');
 		   });
 	   });
+	   $('#upload').on('click',function(){
+		    location.href=window.BASEPATH +"gonghui/video/upload/index";
+	   });
+	   
+	   
+	   $(window).scroll(function(){
+　　			 //判断是否滑动到页面底部
+	         /*if($(window).scrollTop() === $(document).height() - $(window).height()){ */
+		     if($(window).scrollTop() + $(window).height() +10>= $(document).height()){
+				
+		        // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
+		        $('.weui-loadmore').fadeIn().addClass("show");
+				getVideos();
+				
+			 }		
+			
+		});
+	   
+	   
 	})
 	
 	function getVideos(){
-	     var _uriVideoList = window.BASEPATH + 'gonghui/videoList';
+	     var _uriVideoList = window.BASEPATH + 'gonghui/videoList?page='+pageNumber;
 		
 		 $.get(_uriVideoList, null, function(data){
 				data = parseAjaxResult(data);
 				
 			    var html=[];
+			    if(data.list.length>0){
+			        pageNumber+=1;
+			    }
 			    for(var i=0; i<data.list.length; i++){
 					html.push('<div style="width:100%;font-size:small;float:left"><span style="margin-left:10px">编号:'+data.list[i].id+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data.list[i].videoName+'</span></div>');
 					html.push('<div ><video poster="'+data.webPath+data.list[i].coverUrl+'" src="'+data.webPath+data.list[i].playUrl+'" x5-video-player-type="h5" controls="controls" width=100% height="200"></video></div>');
@@ -110,10 +141,9 @@
 
 				} 
 				$('.content').append(html.join(''));
+				$('.weui-loadmore').fadeOut().addClass("show")
 		 });
-		 $('#upload').on('click',function(){
-		    location.href=window.BASEPATH +"gonghui/video/upload/index";
-		 });
+		 
 	  }
 </script>
 
