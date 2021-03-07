@@ -169,7 +169,7 @@ public class GonghuiController {
 	@JsonBody
 	@RequestMapping(value = "/videoList", method = RequestMethod.GET)
 	public Object videoList(HttpServletRequest request) throws Exception{
-		int page=Integer.parseInt("page");
+		int page=Integer.parseInt(request.getParameter("page"));
 		List<VideoPo> videolist=conn_video.findPassByPage(page, 10);
 		Map<String, Object> ret=new HashMap<String, Object>();
 		ret.put("list", videolist);

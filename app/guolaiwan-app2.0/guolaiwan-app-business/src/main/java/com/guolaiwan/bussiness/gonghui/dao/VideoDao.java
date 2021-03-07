@@ -26,8 +26,9 @@ public class VideoDao extends AbstractBaseDao<VideoPo> {
 	
 	public List<VideoPo> findPassByPage(int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
-		hql.orderBy("updateTime", true);
+		
 		hql.andBy("passed",Condition.eq,1);
+		hql.orderBy("updateTime", true);
 		List<VideoPo> videos = findByHqlPage(hql, pageNum, pageSize);
 		if (videos == null || videos.size() <= 0)
 			return null;

@@ -117,18 +117,19 @@
 			 }		
 			
 		});
-	   
-	   
-	})
-	
-	function getVideos(){
+		
+		function getVideos(){
 	     var _uriVideoList = window.BASEPATH + 'gonghui/videoList?page='+pageNumber;
 		
 		 $.get(_uriVideoList, null, function(data){
 				data = parseAjaxResult(data);
-				
+				if(!data.list||data.list.length==0){
+				    $('.weui-loadmore').fadeOut().addClass("show")
+				    return;
+				}
 			    var html=[];
 			    if(data.list.length>0){
+			       
 			        pageNumber+=1;
 			    }
 			    for(var i=0; i<data.list.length; i++){
@@ -141,10 +142,15 @@
 
 				} 
 				$('.content').append(html.join(''));
-				$('.weui-loadmore').fadeOut().addClass("show")
+				$('.weui-loadmore').fadeOut().addClass("show");
 		 });
 		 
 	  }
+	   
+	   
+	})
+	
+	
 </script>
 
 
