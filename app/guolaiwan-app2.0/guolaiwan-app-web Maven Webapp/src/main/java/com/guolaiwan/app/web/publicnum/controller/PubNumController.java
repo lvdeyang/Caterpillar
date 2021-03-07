@@ -3783,11 +3783,6 @@ public class PubNumController extends WebBaseControll {
 		ModelAndView mv = new ModelAndView("daolan/home", strMap);
 		return mv;
 	}
-	@RequestMapping(value = "/gonghui/video/index")
-	public ModelAndView homeIndex(HttpServletRequest request) throws Exception {
-		ModelAndView mv = null;
-		mv = new ModelAndView("mobile/gonghui/home");
-		return mv;
-	}
+	
 
 }

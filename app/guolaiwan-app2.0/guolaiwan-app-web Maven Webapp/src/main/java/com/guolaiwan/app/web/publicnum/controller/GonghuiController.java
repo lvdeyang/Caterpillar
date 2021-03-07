@@ -7,11 +7,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +47,12 @@ public class GonghuiController {
 	@Autowired
 	VideoDao conn_video;
 
+	@RequestMapping(value = "/video/index")
+	public ModelAndView homeIndex(HttpServletRequest request) throws Exception {
+		ModelAndView mv = null;
+		mv = new ModelAndView("mobile/gonghui/home");
+		return mv;
+	}
 	
 	@RequestMapping(value = "/video/upload/index")
 	public ModelAndView videoIndex(HttpServletRequest request) throws Exception {
@@ -76,6 +84,7 @@ public class GonghuiController {
 		videoPo.setName(name);
 		videoPo.setPhone(phone);
 		videoPo.setCompany(company);
+		videoPo.setPassed(0);
 		videoPo.setVideoName(videoName);
 		videoPo.setCoverUrl(coverUrl);
 		videoPo.setPlayUrl(playUrl);
@@ -160,18 +169,12 @@ public class GonghuiController {
 	@JsonBody
 	@RequestMapping(value = "/videoList", method = RequestMethod.GET)
 	public Object videoList(HttpServletRequest request) throws Exception{
-		List<VideoPo> videolist=conn_video.findAll();
-		if(videolist==null||videolist.isEmpty()){
-//			videolist=new ArrayList<VideoPo>();
-//			VideoPo videoPo=new VideoPo();
-//			videoPo.setaCount(0);
-//			videoPo.setCompany("北京数码视讯科技");
-//			videoPo.setVideoName("mr.直播带货");
-//			videoPo.setCoverUrl("http://");
-//			conn_video.save(videoPo);
-//			videolist.add(videoPo);
-		}
-		return videolist;
+		List<VideoPo> videolist=conn_video.findByField("passed", 1);
+		Map<String, Object> ret=new HashMap<String, Object>();
+		ret.put("list", videolist);
+		ret.put("webPath", conn_sys.getSysConfig().getWebUrl());
+		
+		return ret;
 	}
 	
 	

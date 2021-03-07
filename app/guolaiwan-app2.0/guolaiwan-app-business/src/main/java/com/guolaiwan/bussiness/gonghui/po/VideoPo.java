@@ -19,6 +19,7 @@ public class VideoPo extends AbstractBasePO {
 	private String coverUrl;
 	private String playUrl;
 	private int aCount;//点赞个数
+	private int passed;//0未通过 1通过
 	public String getCompany() {
 		return company;
 	}
@@ -61,5 +62,12 @@ public class VideoPo extends AbstractBasePO {
 	public void setaCount(int aCount) {
 		this.aCount = aCount;
 	}
+	public int getPassed() {
+		return passed;
+	}
+	public void setPassed(int passed) {
+		this.passed = passed;
+	}
+	
 	
 }
