@@ -42,7 +42,7 @@
 	<script src="<%=path%>/layui/lib/layui/layui.js" charset="utf-8"></script>
 	<script src="<%=path%>/layui/js/x-layui.js" charset="utf-8"></script>
 	<script>
-		function distributor_check(title, url, id, w, h) {
+		function video_check(title, url, id, w, h) {
 			x_admin_show(title, url + "?id=" + id, w, h);
 		}
 	
@@ -106,22 +106,29 @@
 					, {
 						field : 'videoName',
 						title : '视频名称',
-						sort : true
+						sort : true,
+						width : 200
 					}
 					, {
 						field : 'phone',
 						title : '手机号',
-						sort : true
+						sort : true,
+						width : 200
 					}
 					, {
 						field : 'company',
 						title : '工作单位',
 						sort : true,
-						width : 80
+						width : 200
 					}
 					, {
 						field : 'name',
 						title : '姓名',
+						width : 160,
+						sort : true
+					}, {
+						field : 'passed',
+						title : '审核结果',
 						width : 160,
 						sort : true
 					}

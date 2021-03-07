@@ -98,14 +98,15 @@
 		
 		 $.get(_uriVideoList, null, function(data){
 				data = parseAjaxResult(data);
+				
 			    var html=[];
-			    for(var i=0; i<data.length; i++){
-					html.push('<div style="width:100%;font-size:small;float:left"><span style="margin-left:10px">编号:'+data[i].id+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data[i].videoName+'</span></div>');
-					html.push('<div ><video poster="'+data[i].coverUrl+'" src="'+data[i].playUrl+'" x5-video-player-type="h5" controls="controls" width=100% height="200"></video></div>');
-					html.push('<div style="font-size:small;line-height:30px;"><span style="margin-left:10px;">'+data[i].name+'</span>');
-					html.push('<div style="font-size:small;line-height:30px;float:right"><span id="acounttext-'+data[i].id+'" style="margin-right:10px;">'+data[i].aCount+'赞</span>');
-					html.push('<a id="acount-'+data[i].id+'" style="margin-right:10px;width:80px;float:right;background-color:#FF2B33;height:30px;line-height:30px;" href="javascript:;" class="weui-btn weui-btn_primary acount">点赞</a></div>');
-					html.push('<div style="font-size:small;width:50%;line-height:30px;float:left"><span style="margin-left:10px">'+data[i].company+'</span></div>');
+			    for(var i=0; i<data.list.length; i++){
+					html.push('<div style="width:100%;font-size:small;float:left"><span style="margin-left:10px">编号:'+data.list[i].id+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data.list[i].videoName+'</span></div>');
+					html.push('<div ><video poster="'+data.webPath+data.list[i].coverUrl+'" src="'+data.webPath+data.list[i].playUrl+'" x5-video-player-type="h5" controls="controls" width=100% height="200"></video></div>');
+					html.push('<div style="font-size:small;line-height:30px;"><span style="margin-left:10px;">'+data.list[i].name+'</span>');
+					html.push('<div style="font-size:small;line-height:30px;float:right"><span id="acounttext-'+data.list[i].id+'" style="margin-right:10px;">'+data.list[i].aCount+'赞</span>');
+					html.push('<a id="acount-'+data.list[i].id+'" style="margin-right:10px;width:80px;float:right;background-color:#FF2B33;height:30px;line-height:30px;" href="javascript:;" class="weui-btn weui-btn_primary acount">点赞</a></div>');
+					html.push('<div style="font-size:small;width:50%;line-height:30px;float:left"><span style="margin-left:10px">'+data.list[i].company+'</span></div>');
 
 				} 
 				$('.content').append(html.join(''));
