@@ -142,9 +142,9 @@ public class GonghuiController {
 			for (int i=0;i<fileUrls.length-1;i++) {
 				String urlStr=fileUrls[i];
 				if(imageUrl.equals("")){
-					imageUrl+=imageUrl;
+					imageUrl+=urlStr;
 				}else{
-					imageUrl+="."+imageUrl;
+					imageUrl+="."+urlStr;
 				}
 			}
 			imageUrl+=".jpg";
@@ -175,8 +175,8 @@ public class GonghuiController {
 		// 设置缓冲区目录
 		factory.setRepository(null);
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		// 设置最大文件尺寸，这里是800MB
-		upload.setSizeMax(819430400);
+		// 设置最大文件尺寸，这里是180MB
+		upload.setSizeMax(181943040);
 		// 得到所有的文件
 		List<FileItem> items = upload.parseRequest(request);
 		Iterator<FileItem> i = items.iterator();
@@ -230,6 +230,10 @@ public class GonghuiController {
 			is.close();
 
 			File newFile = new File(sys.getFolderUrl() + url);
+			OSSUtils.createFolder("glw-old-file", "file/gonghui/");
+			OSSUtils.uploadObjectOSS("file/gonghui/", file.getName(), newFile, new FileInputStream(newFile));
+			
+			
 			File newImageFile = new File(sys.getFolderUrl() +iamgeurl);
 			FFmpegFrameGrabber grabber=new FFmpegFrameGrabber(newFile);
 			grabber.start();
@@ -253,8 +257,7 @@ public class GonghuiController {
             ImageIO.write(fecthedImage, "jpg", newImageFile);
             grabber.stop();
 			
-			OSSUtils.createFolder("glw-old-file", "file/gonghui/");
-			OSSUtils.uploadObjectOSS("file/gonghui/", file.getName(), newFile, new FileInputStream(newFile));
+            OSSUtils.createFolder("glw-old-file", "file/gonghui/");
 			OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
 
 		} catch (FileNotFoundException e) {

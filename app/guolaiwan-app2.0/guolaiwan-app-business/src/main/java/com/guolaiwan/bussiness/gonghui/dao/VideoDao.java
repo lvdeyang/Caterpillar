@@ -29,7 +29,7 @@ public class VideoDao extends AbstractBaseDao<VideoPo> {
 		
 		hql.andBy("passed",Condition.eq,1);
 		//hql.orderBy("updateTime", true);
-		hql.orderBy("aCount", false);
+		hql.orderBy("aCount", true);
 		List<VideoPo> videos = findByHqlPage(hql, pageNum, pageSize);
 		if (videos == null || videos.size() <= 0)
 			return null;

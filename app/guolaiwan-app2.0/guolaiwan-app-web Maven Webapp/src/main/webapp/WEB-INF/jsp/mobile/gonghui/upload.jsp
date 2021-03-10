@@ -758,6 +758,10 @@ html, body {
               $('#companyCell').show();
             }
             $('#selCompany').append(html.join(''));
+            if(comType!='其他'){
+               $('#company').val($('#selCompany').val());
+            }
+            
         }
         $(document).on('change','#companyType',function(){
            initSelCompany();
