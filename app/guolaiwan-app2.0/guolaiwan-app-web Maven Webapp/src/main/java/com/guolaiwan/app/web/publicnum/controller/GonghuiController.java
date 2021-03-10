@@ -1,5 +1,6 @@
 package com.guolaiwan.app.web.publicnum.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,11 +17,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.bytedeco.javacpp.RealSense.intrinsics;
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.Java2DFrameConverter;
 
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 
@@ -129,6 +135,22 @@ public class GonghuiController {
 		videoPo.setPassed(0);
 		videoPo.setPassedStr("审核中");
 		videoPo.setVideoName(videoName);
+		if(coverUrl==null||"".equals(coverUrl)){
+			
+			String[] fileUrls=playUrl.split("\\.");
+			String imageUrl="";
+			for (int i=0;i<fileUrls.length-1;i++) {
+				String urlStr=fileUrls[i];
+				if(imageUrl.equals("")){
+					imageUrl+=imageUrl;
+				}else{
+					imageUrl+="."+imageUrl;
+				}
+			}
+			imageUrl+=".jpg";
+		
+			videoPo.setCoverUrl(imageUrl);
+		}
 		videoPo.setCoverUrl(coverUrl);
 		videoPo.setPlayUrl(playUrl);
 		videoPo.setUserId(userId);
@@ -177,6 +199,18 @@ public class GonghuiController {
 		SysConfigPO sys = conn_sys.getSysConfig();
 
 		String url = "gonghui" + File.separator + file.getName();
+		String[] fileNames=file.getName().split("\\.");
+		String imageName="";
+		for (int i=0;i<fileNames.length-1;i++) {
+			String nameStr=fileNames[i];
+			if(imageName.equals("")){
+				imageName+=nameStr;
+			}else{
+				imageName+="."+nameStr;
+			}
+		}
+		imageName+=".jpg";
+		String iamgeurl = "gonghui" + File.separator + file.getName();
 		File folder = new File(sys.getFolderUrl() + "gonghui");
 		if (!folder.exists()) {
 			folder.mkdir();
@@ -196,8 +230,32 @@ public class GonghuiController {
 			is.close();
 
 			File newFile = new File(sys.getFolderUrl() + url);
+			File newImageFile = new File(sys.getFolderUrl() +iamgeurl);
+			FFmpegFrameGrabber grabber=new FFmpegFrameGrabber(newFile);
+			grabber.start();
+            int lenght = grabber.getLengthInFrames();
+            int i = 0;
+            Frame f = null;
+            while (i < lenght) {
+                // 过滤前5帧，避免出现全黑的图片，依自己情况而定
+                f = grabber.grabFrame();
+                if ((i > 5) && (f.image != null)) {
+                    break;
+                }
+                i++;
+            }
+            Java2DFrameConverter converter =new Java2DFrameConverter();
+            BufferedImage fecthedImage =converter.getBufferedImage(f);
+            //下边是缩放
+            //BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+            //bi.getGraphics().drawImage(fecthedImage.getScaledInstance(width, height, Image.SCALE_SMOOTH),0, 0, null);
+            //ff.flush();
+            ImageIO.write(fecthedImage, "jpg", newImageFile);
+            grabber.stop();
+			
 			OSSUtils.createFolder("glw-old-file", "file/gonghui/");
 			OSSUtils.uploadObjectOSS("file/gonghui/", file.getName(), newFile, new FileInputStream(newFile));
+			OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

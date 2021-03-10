@@ -66,7 +66,7 @@
 	
 <body style="margin:0">
 
-<div class="content" style="height:1500px;">
+<div class="content" style="padding-bottom:50px">
 	<image src="<%=basePath%>lib/images/header.jpg" style="width:100%;"/>
 	<div  style="width:100%;height:50px;margin-top:30px">
 	    <a id="upload" style="width:50%;margin-left:25%;background-color:#FF2B33;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">上传作品</a> 
@@ -78,7 +78,7 @@
 	<div class="weui-loadmores" hidden="hidden" style="position:fixed;bottom: 7%;left:50%;margin-left:-40px;z-index: 10000">
 			  <span class="weui-loadmore__tips">没有内容了</span>
 	</div>		
-	<div style="height:50px;width:100%;"></div>	
+	
 </div>
 </head>
 </body>
@@ -145,11 +145,13 @@
 			    for(var i=0; i<data.list.length; i++){
 					html.push('<div style="width:100%;font-size:small;float:left"><span style="margin-left:10px">编号:'+data.list[i].id+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data.list[i].videoName+'</span></div>');
 					html.push('<div ><video poster="'+data.webPath+'/'+data.list[i].coverUrl+'" src="'+data.webPath+'/'+data.list[i].playUrl+'" x5-video-player-type="h5" controls="controls" width=100% height="200"></video></div>');
+					//html.push('<div ><video poster="https://glw-old-file.oss-cn-beijing.aliyuncs.com/file/gonghui/6A42CCC8-3976-4DE6-9AA3-FB7CBFC00058.png" src="https://glw-old-file.oss-cn-beijing.aliyuncs.com/file/gonghui/IMG_3391.MP4" x5-video-player-type="h5" controls="controls" width=100% height="200"></video></div>');
+					
+					
 					html.push('<div style="font-size:small;line-height:30px;"><span style="margin-left:10px;">'+data.list[i].name+'</span>');
 					html.push('<div style="font-size:small;line-height:30px;float:right"><span id="acounttext-'+data.list[i].id+'" style="margin-right:10px;">'+data.list[i].aCount+'赞</span>');
 					html.push('<a id="acount-'+data.list[i].id+'" style="margin-right:10px;width:80px;float:right;background-color:#FF2B33;height:30px;line-height:30px;" href="javascript:;" class="weui-btn weui-btn_primary acount">点赞</a></div>');
 					html.push('<div style="font-size:small;width:50%;line-height:30px;float:left"><span style="margin-left:10px">'+data.list[i].company+'</span></div>');
-
 				} 
 				$('.content').append(html.join(''));
 				$('.weui-loadmore').fadeOut().addClass("show");
