@@ -150,8 +150,10 @@ public class GonghuiController {
 			imageUrl+=".jpg";
 		
 			videoPo.setCoverUrl(imageUrl);
+		}else{
+			videoPo.setCoverUrl(coverUrl);
 		}
-		videoPo.setCoverUrl(coverUrl);
+		
 		videoPo.setPlayUrl(playUrl);
 		videoPo.setUserId(userId);
 		conn_video.save(videoPo);
