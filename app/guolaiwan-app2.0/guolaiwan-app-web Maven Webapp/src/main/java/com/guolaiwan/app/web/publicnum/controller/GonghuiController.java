@@ -212,7 +212,7 @@ public class GonghuiController {
 			}
 		}
 		imageName+=".jpg";
-		String iamgeurl = "gonghui" + File.separator + file.getName();
+		String iamgeurl = "gonghui" + File.separator + imageName;
 		File folder = new File(sys.getFolderUrl() + "gonghui");
 		if (!folder.exists()) {
 			folder.mkdir();
