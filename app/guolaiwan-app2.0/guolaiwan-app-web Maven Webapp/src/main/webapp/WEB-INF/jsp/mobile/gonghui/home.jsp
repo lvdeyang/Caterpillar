@@ -523,6 +523,10 @@ html, body {
 <script type="text/javascript">
 
 	$(function() {
+	    var msg='${msg}';
+	    if(msg){
+	       alert(msg);
+	    }
 	    window.BASEPATH = '<%=basePath%>';
 		$('#upload').on('click',function(){
 		    location.href=window.BASEPATH +"gonghui/video/upload/index";

@@ -96,8 +96,13 @@ public class GonghuiVideoController extends BaseController {
 		public String checkResult(HttpServletRequest request) throws Exception {
 			String id = request.getParameter("id");
 			int result=Integer.parseInt(request.getParameter("result"));
-			
 			VideoPo videoPo=conn_Video.get(Long.parseLong(id));
+			if(result==1){
+				videoPo.setPassedStr("审核通过");
+			}else{
+				videoPo.setPassedStr("审核拒绝");
+			}
+			videoPo.setSend(0);
 			videoPo.setPassed(result);
 			conn_Video.save(videoPo);
 			return "success";

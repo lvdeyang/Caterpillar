@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -33,7 +34,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONObject;
 import com.guolaiwan.bussiness.admin.po.SysConfigPO;
 import com.guolaiwan.bussiness.gonghui.dao.VideoDao;
+import com.guolaiwan.bussiness.gonghui.dao.VideoSurpportDao;
 import com.guolaiwan.bussiness.gonghui.po.VideoPo;
+import com.guolaiwan.bussiness.gonghui.po.VideoSurpportPo;
 import com.guolaiwan.bussiness.javacv.FishNewLiveService;
 
 import pub.caterpillar.commons.file.oss.OSSUtils;
@@ -46,11 +49,25 @@ public class GonghuiController {
 	SysConfigDAO conn_sys;
 	@Autowired
 	VideoDao conn_video;
+	@Autowired
+	private VideoSurpportDao conn_videoSurpport;
 
 	@RequestMapping(value = "/video/index")
 	public ModelAndView homeIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/gonghui/home");
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		List<VideoPo> videoPos=conn_video.findSendByUserId(userId);
+		if(videoPos!=null&&videoPos.size()>0){
+			VideoPo videoPo=videoPos.get(0);
+			String msg="";
+			if(videoPo.getPassed()==1){
+				mv.addObject("msg", "视频《"+videoPo.getVideoName()+"》,审核通过");
+			}else if(videoPo.getPassed()==2){
+				mv.addObject("msg", "视频《"+videoPo.getVideoName()+"》,审核未通过");
+			}
+			videoPo.setSend(1);
+		}
 		return mv;
 	}
 	
@@ -58,12 +75,36 @@ public class GonghuiController {
 	public ModelAndView videoIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/gonghui/upload");
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		List<VideoPo> videoPos=conn_video.findSendByUserId(userId);
+		if(videoPos!=null&&videoPos.size()>0){
+			VideoPo videoPo=videoPos.get(0);
+			String msg="";
+			if(videoPo.getPassed()==1){
+				mv.addObject("msg", "视频《"+videoPo.getVideoName()+"》,审核通过");
+			}else if(videoPo.getPassed()==2){
+				mv.addObject("msg", "视频《"+videoPo.getVideoName()+"》,审核未通过");
+			}
+			videoPo.setSend(1);
+		}
 		return mv;
 	}
 	@RequestMapping(value = "/video/list/index")
 	public ModelAndView listIndex(HttpServletRequest request) throws Exception {
 		ModelAndView mv = null;
 		mv = new ModelAndView("mobile/gonghui/list");
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		List<VideoPo> videoPos=conn_video.findSendByUserId(userId);
+		if(videoPos!=null&&videoPos.size()>0){
+			VideoPo videoPo=videoPos.get(0);
+			String msg="";
+			if(videoPo.getPassed()==1){
+				mv.addObject("msg", "视频《"+videoPo.getVideoName()+"》,审核通过");
+			}else if(videoPo.getPassed()==2){
+				mv.addObject("msg", "视频《"+videoPo.getVideoName()+"》,审核未通过");
+			}
+			videoPo.setSend(1);
+		}
 		return mv;
 	}
 
@@ -79,15 +120,18 @@ public class GonghuiController {
 		String videoName=request.getParameter("videoName");
 		String coverUrl=request.getParameter("coverUrl");
 		String playUrl=request.getParameter("playUrl");
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		VideoPo videoPo=new VideoPo();
 		videoPo.setaCount(0);
 		videoPo.setName(name);
 		videoPo.setPhone(phone);
 		videoPo.setCompany(company);
 		videoPo.setPassed(0);
+		videoPo.setPassedStr("审核中");
 		videoPo.setVideoName(videoName);
 		videoPo.setCoverUrl(coverUrl);
 		videoPo.setPlayUrl(playUrl);
+		videoPo.setUserId(userId);
 		conn_video.save(videoPo);
 		return mv;
 	}
@@ -109,8 +153,8 @@ public class GonghuiController {
 		// 设置缓冲区目录
 		factory.setRepository(null);
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		// 设置最大文件尺寸，这里是80MB
-		upload.setSizeMax(81943040);
+		// 设置最大文件尺寸，这里是800MB
+		upload.setSizeMax(819430400);
 		// 得到所有的文件
 		List<FileItem> items = upload.parseRequest(request);
 		Iterator<FileItem> i = items.iterator();
@@ -183,12 +227,23 @@ public class GonghuiController {
 	@JsonBody
 	@RequestMapping(value = "/acount", method = RequestMethod.POST)
 	public Object acount(HttpServletRequest request) throws Exception{
-        
+		Map<String, Object> ret=new HashMap<String, Object>();
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+        long count=conn_videoSurpport.countTodayByUser(userId);
+        if(count>=5){
+        	ret.put("msg", "一人一天最多投五票");
+        	return ret;
+        }
 		String id=request.getParameter("id");
 		synchronized(id){
 			VideoPo videoPo=conn_video.get(Long.parseLong(id));
 			videoPo.setaCount(videoPo.getaCount()+1);
 			conn_video.save(videoPo);
+			VideoSurpportPo videoSurpportPo=new VideoSurpportPo();
+			videoSurpportPo.setUserId(userId);
+			videoSurpportPo.setVideoId(videoPo.getId());
+			videoSurpportPo.setUpdateTime(new Date());
+			conn_videoSurpport.save(videoSurpportPo);
 			return videoPo;
 		}
 		

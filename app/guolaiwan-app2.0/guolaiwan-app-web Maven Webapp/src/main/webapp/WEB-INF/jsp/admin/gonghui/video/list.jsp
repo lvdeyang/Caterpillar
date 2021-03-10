@@ -127,7 +127,7 @@
 						width : 160,
 						sort : true
 					}, {
-						field : 'passed',
+						field : 'passedStr',
 						title : '审核结果',
 						width : 160,
 						sort : true

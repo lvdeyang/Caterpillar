@@ -104,7 +104,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               
                 form.on('submit(reject)', function(data){
                  var obj=data.field;
-                obj.result=0;
+                obj.result=2;
                 $.ajax({
                 	  type:"post",
            			  url:"checkResult.do",

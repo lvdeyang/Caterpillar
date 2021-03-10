@@ -86,6 +86,10 @@
 <jsp:include page="../../../mobile/commons/jsp/scriptgonghui.jsp"></jsp:include>
 <script type="text/javascript">
 	$(function(){
+	   var msg='${msg}';
+	   if(msg){
+	       alert(msg);
+	   }
 	   window.BASEPATH = '<%=basePath%>';
 	   var pageNumber=1;
 	   getVideos();
@@ -96,8 +100,14 @@
 		
 		   $.post(_uriAcount, null, function(data){
 				data = parseAjaxResult(data);
-			    $.toast("点赞完成");
-			    $('#acounttext-'+ids[1]).html(data.aCount+'赞');
+				if(data.msg){
+				   $.toast(data.msg);
+				   return false;
+				}else{
+				   $.toast("点赞完成");
+				   $('#acounttext-'+ids[1]).html(data.aCount+'赞');
+				}
+			    
 		   });
 	   });
 	   $('#upload').on('click',function(){

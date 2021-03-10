@@ -34,5 +34,16 @@ public class VideoDao extends AbstractBaseDao<VideoPo> {
 			return null;
 		return videos;
 	}
+	
+	public List<VideoPo> findSendByUserId(Long userId) {
+		QueryHql hql = this.newQueryHql();
+		
+		hql.andBy("send",Condition.eq,0);
+		hql.andBy("userId",Condition.eq,userId);
+		List<VideoPo> videos = findByHql(hql);
+		if (videos == null || videos.size() <= 0)
+			return null;
+		return videos;
+	}
 
 }

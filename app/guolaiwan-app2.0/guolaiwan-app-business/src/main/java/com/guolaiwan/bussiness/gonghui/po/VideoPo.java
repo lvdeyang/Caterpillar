@@ -20,6 +20,9 @@ public class VideoPo extends AbstractBasePO {
 	private String playUrl;
 	private int aCount;//点赞个数
 	private int passed;//0未通过 1通过
+	private String passedStr;
+	private int send;//0未通知，1已通知
+	private long userId;
 	public String getCompany() {
 		return company;
 	}
@@ -67,6 +70,24 @@ public class VideoPo extends AbstractBasePO {
 	}
 	public void setPassed(int passed) {
 		this.passed = passed;
+	} 
+	public String getPassedStr() {
+		return passedStr;
+	}
+	public void setPassedStr(String passedStr) {
+		this.passedStr = passedStr;
+	}
+	public int getSend() {
+		return send;
+	}
+	public void setSend(int send) {
+		this.send = send;
+	}
+	public long getUserId() {
+		return userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 	
 	

@@ -454,8 +454,38 @@ html, body {
 		<div class="content" style="height:800px">
 		    
 			<div class="weui-cells__title">上传作品</div>
+			
+		   
+			
 			<div class="weui-cells weui-cells_form">
-				<div class="weui-cell">
+			    <div class="weui-cell">
+					<div class="weui-cell__hd">
+						<label class="weui-label">所属工会</label>
+					</div>
+					<div class="weui-cell__bd">
+						<select class="weui-select" name="companyType" id="companyType">
+				            <option value="遵化市总工会">遵化市总工会</option> 
+				            <option value="乡镇（街道）总工会">乡镇（街道）总工会</option>
+				            <option value="系统工会">系统工会</option>
+				            <option value="对口单位工会">对口单位工会</option>
+				            <option value="其他">其他</option>       
+		            	</select>	
+					</div>
+				</div>
+			    <div class="weui-cell" id="selCompanyCell">
+					<div class="weui-cell__hd">
+						<label class="weui-label">所属单位</label>
+					</div>
+					<div class="weui-cell__bd">
+						<select class="weui-select" name="selCompany" id="selCompany">
+				           
+		            	</select>	
+					</div>
+				</div>
+			
+			
+			
+				<div class="weui-cell" id="companyCell">
 					<div class="weui-cell__hd">
 						<label class="weui-label">所属单位</label>
 					</div>
@@ -494,7 +524,7 @@ html, body {
 				</div>
 				
 				
-				<div class="weui-cells__title">上传视频封面:<input type="hidden" name="coverUrl" id="selCover" /></div>
+				<div class="weui-cells__title">上传视频封面(不上传则使用视频第一帧图像):<input type="hidden" name="coverUrl" id="selCover" /></div>
 				<div style="width:100%;height:100px;">
 					<div style="margin-left:15px;width:100px;height:100px;"
 						class="weui-uploader__input-box">
@@ -503,9 +533,6 @@ html, body {
 					</div>
 					
 					<image class="myImage" id="showCover" style="margin-left:15px;width:100px;height:100px;"/>
-						
-					
-					
 				</div>
 				
 				
@@ -535,7 +562,10 @@ html, body {
 
 <script type="text/javascript">
 	$(function() {
-
+	   var msg='${msg}';
+	   if(msg){
+	       alert(msg);
+	   }
 	
 	    $(document).on('click','#upload',function(){
 	        if($('#company').val() == ''){
@@ -555,10 +585,6 @@ html, body {
 				 return false; 
 			}
 		
-	        if($('#selCover').val() == ''){
-				 $.toast("请上传海报", "forbidden"); 
-				 return false; 
-			}
 			if($('#selPlay').val() == ''){
 				 $.toast("请上传视频", "forbidden");   
 				 return false; 
@@ -608,6 +634,7 @@ html, body {
 			    		success:function(data){							
 				    		showObj.attr('src',data.data.webPath);
 				    		submitObj.val(data.data.url);
+				    		alert("上传成功，待审核");
 				    		$.hideLoading();		
 			    		},			
 		    			error:function(){
@@ -623,6 +650,120 @@ html, body {
 
         $(document).on('error','.myImage',function(){
             $(this).removeAttr('src');
+        });
+        
+        initSelCompany();
+        function initSelCompany(){
+            $('#selCompany').children().remove();
+            $('#company').val('');
+            var comType=$('#companyType').val();
+            var html=[];
+            if(comType=='遵化市总工会'){
+               html.push('<option value="遵化市总工会">遵化市总工会</option>');
+               $('#selCompanyCell').show();
+               $('#companyCell').hide();
+            }else if(comType=='乡镇（街道）总工会'){
+               $('#selCompanyCell').show();
+               $('#companyCell').hide();
+               html.push('<option value="遵化镇总工会">遵化镇总工会</option>');
+               html.push('<option value="西留村乡总工会">西留村乡总工会</option>');
+               html.push('<option value="崔家庄乡总工会">崔家庄乡总工会</option>');
+               html.push('<option value="西三里乡总工会">西三里乡总工会</option>');
+               html.push('<option value="堡子店镇总工会">堡子店镇总工会</option>');
+               html.push('<option value="汤泉乡总工会">汤泉乡总工会</option>');
+               html.push('<option value="西下营乡总工会">西下营乡总工会</option>');
+               html.push('<option value="兴旺寨乡总工会">兴旺寨乡总工会</option>');
+               html.push('<option value="马兰峪镇总工会">马兰峪镇总工会</option>');
+               html.push('<option value="东陵乡总工会">东陵乡总工会</option>');
+               html.push('<option value="石门镇总工会">石门镇总工会</option>');
+               html.push('<option value="平安城镇总工会">平安城镇总工会</option>');
+               html.push('<option value="东新庄镇总工会">东新庄镇总工会</option>');
+               html.push('<option value="刘备寨乡总工会">刘备寨乡总工会</option>');
+               html.push('<option value="新店子镇总工会">新店子镇总工会</option>');
+               html.push('<option value="团瓢庄乡总工会">团瓢庄乡总工会</option>');
+               html.push('<option value="党峪镇总工会">党峪镇总工会</option>');
+               html.push('<option value="地北头镇总工会">地北头镇总工会</option>');
+               html.push('<option value="娘娘庄乡总工会">娘娘庄乡总工会</option>');
+               html.push('<option value="东旧寨镇总工会">东旧寨镇总工会</option>');
+               html.push('<option value="铁厂镇总工会">铁厂镇总工会</option>');
+               html.push('<option value="苏家洼镇总工会">苏家洼镇总工会</option>');
+               html.push('<option value="侯家寨乡总工会">侯家寨乡总工会</option>');
+               html.push('<option value="建明镇总工会">建明镇总工会</option>');
+               html.push('<option value="小厂乡总工会">小厂乡总工会</option>');
+               html.push('<option value="华明路街道办总工会">华明路街道办总工会</option>');
+               html.push('<option value="文化路街道办总工会">文化路街道办总工会</option>');
+               
+            }else if(comType=='系统工会'){
+               $('#selCompanyCell').show();
+               $('#companyCell').hide();
+               html.push('<option value="教育局系统工会">教育局系统工会</option>');
+               html.push('<option value="卫健局系统工会">卫健局系统工会</option>');
+               html.push('<option value="工信局系统工会">工信局系统工会</option>');
+               html.push('<option value="交通局系统工会">交通局系统工会</option>');
+               html.push('<option value="水利局系统工会">水利局系统工会</option>');
+               html.push('<option value="住建局系统工会">住建局系统工会</option>');
+               html.push('<option value="民政局系统工会">民政局系统工会</option>');
+               html.push('<option value="税务局系统工会">税务局系统工会</option>');
+               html.push('<option value="公安局系统工会">公安局系统工会</option>');
+               html.push('<option value="发展改革局系统工会">发展改革局系统工会</option>');
+               html.push('<option value="农业农村局系统工会">农业农村局系统工会</option>');
+               html.push('<option value="市直机关工会">市直机关工会</option>');
+               html.push('<option value="经济开发区工会">经济开发区工会</option>');
+               html.push('<option value="手工业联社工会">手工业联社工会</option>');
+               html.push('<option value="市供销社工会">市供销社工会</option>');
+               html.push('<option value="商业资产管理处工会">商业资产管理处工会</option>');
+            }else if(comType=='对口单位工会'){
+               $('#selCompanyCell').show();
+               $('#companyCell').hide();
+               html.push('<option value=" 应急局工会"> 应急局工会</option>');
+               html.push('<option value="医保局工会">医保局工会</option>');
+               html.push('<option value="市场监督管理局工会">市场监督管理局工会</option>');
+               html.push('<option value="城管执法局工会">城管执法局工会</option>');
+               html.push('<option value="财政局工会">财政局工会</option>');
+               html.push('<option value="邮政局工会">邮政局工会</option>');
+               html.push('<option value="电力局工会">电力局工会</option>');
+               html.push('<option value="广播电视台工会">广播电视台工会</option>');
+               html.push('<option value="广电网络工会">广电网络工会</option>');
+               html.push('<option value="清东陵文管处工会">清东陵文管处工会</option>');
+               html.push('<option value="国际饭店工会">国际饭店工会</option>');
+               html.push('<option value="人民保险公司工会">人民保险公司工会</option>');
+               html.push('<option value="烟草公司工会">烟草公司工会</option>');
+               html.push('<option value="联通公司工会">联通公司工会</option>');
+               html.push('<option value="人寿保险公司工会">人寿保险公司工会</option>');
+               html.push('<option value="人民银行工会">人民银行工会</option>');
+               html.push('<option value="建设银行工会">建设银行工会</option>');
+               html.push('<option value="中国银行工会">中国银行工会</option>');
+               html.push('<option value="发展银行工会">发展银行工会</option>');
+               html.push('<option value="农村信用社工会">农村信用社工会</option>');
+               html.push('<option value="工商银行工会">工商银行工会</option>');
+               html.push('<option value="农业银行工会">农业银行工会</option>');
+               html.push('<option value="栗源公司工会">栗源公司工会</option>');
+               html.push('<option value="港陆公司工会">港陆公司工会</option>');
+               html.push('<option value="广野公司工会">广野公司工会</option>');
+               html.push('<option value="尚禾源工会">尚禾源工会</option>');
+               html.push('<option value="唐百工会">唐百工会</option>');
+               html.push('<option value="建投热电厂工会">建投热电厂工会</option>');
+               html.push('<option value="亚太工会">亚太工会</option>');
+               html.push('<option value="永兴建安工会">永兴建安工会</option>');
+               html.push('<option value="金卓工会">金卓工会</option>');
+               html.push('<option value="宝兑通工会">宝兑通工会</option>');
+               html.push('<option value="圣龙水泥厂工会">圣龙水泥厂工会</option>');
+               html.push('<option value="德嘉铝业工会">德嘉铝业工会</option>');
+               html.push('<option value="亿通团建工会">亿通团建工会</option>');
+               html.push('<option value="勇辉健身工会">勇辉健身工会</option>');
+               html.push('<option value="龙宇建筑工会">龙宇建筑工会</option>');
+               
+            }else{
+              $('#selCompanyCell').hide();
+              $('#companyCell').show();
+            }
+            $('#selCompany').append(html.join(''));
+        }
+        $(document).on('change','#companyType',function(){
+           initSelCompany();
+        });
+        $(document).on('change','#selCompany',function(){
+            $('#company').val($('#selCompany').val());
         });
 	});
 </script>
