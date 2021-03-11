@@ -23,6 +23,7 @@ public class VideoPo extends AbstractBasePO {
 	private String passedStr;
 	private int send;//0未通知，1已通知
 	private long userId;
+	private String companyType;
 	public String getCompany() {
 		return company;
 	}
@@ -88,6 +89,12 @@ public class VideoPo extends AbstractBasePO {
 	}
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+	public String getCompanyType() {
+		return companyType;
+	}
+	public void setCompanyType(String companyType) {
+		this.companyType = companyType;
 	}
 	
 	

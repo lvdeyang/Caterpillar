@@ -1,5 +1,6 @@
 package com.guolaiwan.app.web.admin.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +56,21 @@ public class GonghuiVideoController extends BaseController {
 	// 查询分销商
 	@ResponseBody
 	@RequestMapping(value = "/videoList.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	public Map<String, Object> getVideoList(int page, int limit) throws Exception {
+	public Map<String, Object> getVideoList(int page, int limit,HttpServletRequest request) throws Exception {
 		int count = conn_Video.countAll();
-		List<VideoPo> listpo = conn_Video.findByPage( page, limit);
+		String companyType=request.getParameter("companyType");
+		String company=request.getParameter("company");
+		List<VideoPo> listpo =new ArrayList<VideoPo>();
+		if(companyType.equals("未选择")){
+			listpo = conn_Video.findByPage( page, limit);
+		}else if(companyType.equals("其他")){
+			listpo = conn_Video.findByCompanyTypePage( companyType,page, limit);
+		}else{
+			listpo = conn_Video.findByCompanyPage( company,page, limit);
+		}
+        if(listpo==null){
+        	listpo=new ArrayList<VideoPo>();
+        }
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("data", listpo);

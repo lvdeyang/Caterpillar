@@ -126,12 +126,14 @@ public class GonghuiController {
 		String videoName=request.getParameter("videoName");
 		String coverUrl=request.getParameter("coverUrl");
 		String playUrl=request.getParameter("playUrl");
+		String companyType=request.getParameter("companyType");
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
 		VideoPo videoPo=new VideoPo();
 		videoPo.setaCount(0);
 		videoPo.setName(name);
 		videoPo.setPhone(phone);
 		videoPo.setCompany(company);
+		videoPo.setCompanyType(companyType);
 		videoPo.setPassed(0);
 		videoPo.setPassedStr("审核中");
 		videoPo.setVideoName(videoName);
