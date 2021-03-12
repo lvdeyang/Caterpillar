@@ -464,6 +464,7 @@ html, body {
 					</div>
 					<div class="weui-cell__bd">
 						<select class="weui-select" name="companyType" id="companyType">
+				            <option value="未选择">未选择</option> 
 				            <option value="遵化市总工会">遵化市总工会</option> 
 				            <option value="乡镇（街道）总工会">乡镇（街道）总工会</option>
 				            <option value="系统工会">系统工会</option>
@@ -659,12 +660,14 @@ html, body {
             var comType=$('#companyType').val();
             var html=[];
             if(comType=='遵化市总工会'){
+               html.push('<option value="未选择">未选择</option>');
                html.push('<option value="遵化市总工会">遵化市总工会</option>');
                $('#selCompanyCell').show();
                $('#companyCell').hide();
             }else if(comType=='乡镇（街道）总工会'){
                $('#selCompanyCell').show();
                $('#companyCell').hide();
+               html.push('<option value="未选择">未选择</option>');
                html.push('<option value="遵化镇总工会">遵化镇总工会</option>');
                html.push('<option value="西留村乡总工会">西留村乡总工会</option>');
                html.push('<option value="崔家庄乡总工会">崔家庄乡总工会</option>');
@@ -696,6 +699,7 @@ html, body {
             }else if(comType=='系统工会'){
                $('#selCompanyCell').show();
                $('#companyCell').hide();
+               html.push('<option value="未选择">未选择</option>');
                html.push('<option value="教育局系统工会">教育局系统工会</option>');
                html.push('<option value="卫健局系统工会">卫健局系统工会</option>');
                html.push('<option value="工信局系统工会">工信局系统工会</option>');
@@ -715,6 +719,7 @@ html, body {
             }else if(comType=='对口单位工会'){
                $('#selCompanyCell').show();
                $('#companyCell').hide();
+               html.push('<option value="未选择">未选择</option>');
                html.push('<option value=" 应急局工会"> 应急局工会</option>');
                html.push('<option value="医保局工会">医保局工会</option>');
                html.push('<option value="市场监督管理局工会">市场监督管理局工会</option>');
@@ -758,7 +763,7 @@ html, body {
               $('#companyCell').show();
             }
             $('#selCompany').append(html.join(''));
-            if(comType!='其他'){
+            if(comType!='其他'&&$('#selCompany').val()!='未选择'){
                $('#company').val($('#selCompany').val());
             }
             
@@ -767,7 +772,10 @@ html, body {
            initSelCompany();
         });
         $(document).on('change','#selCompany',function(){
-            $('#company').val($('#selCompany').val());
+            if($('#selCompany').val()!='未选择'){
+                $('#company').val($('#selCompany').val());
+            }
+            
         });
 	});
 </script>
