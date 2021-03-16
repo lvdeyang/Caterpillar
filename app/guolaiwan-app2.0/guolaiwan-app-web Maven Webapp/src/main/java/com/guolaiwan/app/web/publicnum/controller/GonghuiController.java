@@ -294,11 +294,11 @@ public class GonghuiController {
 	public Object acount(HttpServletRequest request) throws Exception{
 		Map<String, Object> ret=new HashMap<String, Object>();
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
-        long count=conn_videoSurpport.countTodayByUser(userId);
+        /*long count=conn_videoSurpport.countTodayByUser(userId);
         if(count>=5){
         	ret.put("msg", "一人一天最多投五票");
         	return ret;
-        }
+        }*/
 		String id=request.getParameter("id");
 		synchronized(id){
 			VideoPo videoPo=conn_video.get(Long.parseLong(id));
