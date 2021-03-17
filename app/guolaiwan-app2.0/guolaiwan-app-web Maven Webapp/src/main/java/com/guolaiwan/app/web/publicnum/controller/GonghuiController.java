@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
+import com.guolaiwan.app.web.publicnum.vo.VideoUploadVo;
 import com.guolaiwan.bussiness.admin.dao.SysConfigDAO;
 
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -57,6 +61,7 @@ public class GonghuiController {
 	VideoDao conn_video;
 	@Autowired
 	private VideoSurpportDao conn_videoSurpport;
+	private HashMap<String, VideoUploadVo> videoUploadMap=new HashMap<String, VideoUploadVo>();
 
 	@RequestMapping(value = "/video/index")
 	public ModelAndView homeIndex(HttpServletRequest request) throws Exception {
@@ -137,6 +142,7 @@ public class GonghuiController {
 		videoPo.setPassed(0);
 		videoPo.setPassedStr("审核中");
 		videoPo.setVideoName(videoName);
+		videoPo.setTooss(0);
 		if(coverUrl==null||"".equals(coverUrl)){
 			
 			String[] fileUrls=playUrl.split("\\.");
@@ -161,6 +167,23 @@ public class GonghuiController {
 		conn_video.save(videoPo);
 		return mv;
 	}
+
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/getUploadPercent", method = RequestMethod.GET)
+	public Object getPercent(HttpServletRequest request) throws Exception{
+		String fileName=request.getParameter("fileName");
+		VideoUploadVo videoUploadvo=videoUploadMap.get(fileName);
+
+		Map<String, Object> ret=new HashMap<String, Object>();
+		if(videoUploadvo!=null){
+			ret.put("data", videoUploadvo);
+		}else{
+			ret.put("data", "error");
+		}
+		return ret;
+	}
 	
 	@ResponseBody
 	@JsonBody
@@ -168,38 +191,50 @@ public class GonghuiController {
 	public Object upload(HttpServletRequest request) throws Exception {
 
 		String url = "";
-
+        System.out.println("Mr1:******************************"+new Date());
 		if (!ServletFileUpload.isMultipartContent(request)) {
 
 		}
-
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		// 设置缓冲区大小，这里是4kb
-		factory.setSizeThreshold(40960);
+		factory.setSizeThreshold(409600);
 		// 设置缓冲区目录
 		factory.setRepository(null);
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		// 设置最大文件尺寸，这里是180MB
-		upload.setSizeMax(181943040);
+		upload.setSizeMax(1000000000);
 		// 得到所有的文件
+		System.out.println("Mr2:******************************"+new Date());
 		List<FileItem> items = upload.parseRequest(request);
+		System.out.println("Mr3:******************************"+new Date());
 		Iterator<FileItem> i = items.iterator();
 		File fileIt = null;
 		while (i.hasNext()) {
 			FileItem fi = (FileItem) i.next();
+			VideoUploadVo videoUploadvo=new VideoUploadVo();
+			videoUploadvo.setFileName(fi.getName());
+			videoUploadvo.setFileSize(fi.getSize());
+			videoUploadvo.setUploadSize(0);
+			videoUploadvo.setUploadPercent(70);
+			videoUploadMap.put(fi.getName(), videoUploadvo);
 			url = uploadFile(fi);
 		}
-
+		System.out.println("Mr8:******************************"+new Date());
 		SysConfigPO sys = conn_sys.getSysConfig();
-		String webPath = sys.getWebUrl() + "/" + url;
+		String webPath =  "http://www.guolaiwan.net/file/" + url;
 		JSONObject obj = new JSONObject();
 		obj.put("url", url);
 		obj.put("webPath", webPath);
 		return obj;
 	}
+	public static void writeFile(String fileAbsolutePath, byte[] content) throws IOException {
+        FileOutputStream fos = new FileOutputStream(fileAbsolutePath);
+        fos.write(content);
+        fos.close();
+    }
 
 	private String uploadFile(FileItem file) {
-
+		System.out.println("Mr4:******************************"+file.getName()+new Date());
 		SysConfigPO sys = conn_sys.getSysConfig();
 
 		String url = "gonghui" + File.separator + file.getName();
@@ -220,54 +255,78 @@ public class GonghuiController {
 			folder.mkdir();
 		}
 		try {
+			
 			// 获取输出流
 			OutputStream os = new FileOutputStream(sys.getFolderUrl() + url);
 			// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
 			InputStream is = file.getInputStream();
 			int temp;
 			// 一个一个字节的读取并写入
-			while ((temp = is.read()) != (-1)) {
-				os.write(temp);
+			int tempsize=0;
+			byte[] bytes = new byte[1024];//存储读取到的多个字节
+		    int len = 0;//记录每次读取的有效字节个数
+			//while ((temp = is.read()) != (-1)) {
+		    while ((len = is.read(bytes)) != -1) {
+				os.write(bytes);
+				tempsize+=bytes.length;
+				if(tempsize==1000){
+					tempsize=0;
+					VideoUploadVo videoUploadvo=videoUploadMap.get(file.getName());
+					if(videoUploadvo!=null){
+						videoUploadvo.setUploadSize(videoUploadvo.getUploadSize()+1000);
+						int percent=(int) (70+(videoUploadvo.getUploadSize()*30)/(videoUploadvo.getFileSize()));
+						videoUploadvo.setUploadPercent(percent);
+					}
+				}
 			}
 			os.flush();
 			os.close();
 			is.close();
-
-			File newFile = new File(sys.getFolderUrl() + url);
-			OSSUtils.createFolder("glw-old-file", "file/gonghui/");
-			OSSUtils.uploadObjectOSS("file/gonghui/", file.getName(), newFile, new FileInputStream(newFile));
 			
+			System.out.println("Mr5:******************************"+file.getName()+new Date());
+			File newFile=new File(sys.getFolderUrl() + url);
+			//OSSUtils.createFolder("glw-old-file", "file/gonghui/");
+			//OSSUtils.uploadObjectOSS1("file/gonghui/", file.getName(), file.getSize(), file.getInputStream());
 			
-			File newImageFile = new File(sys.getFolderUrl() +iamgeurl);
-			FFmpegFrameGrabber grabber=new FFmpegFrameGrabber(newFile);
-			grabber.start();
-            int lenght = grabber.getLengthInFrames();
-            int i = 0;
-            Frame f = null;
-            while (i < lenght) {
-                // 过滤前5帧，避免出现全黑的图片，依自己情况而定
-                f = grabber.grabFrame();
-                if ((i > 5) && (f.image != null)) {
-                    break;
-                }
-                i++;
-            }
-            Java2DFrameConverter converter =new Java2DFrameConverter();
-            BufferedImage fecthedImage =converter.getBufferedImage(f);
-            //下边是缩放
-            //BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-            //bi.getGraphics().drawImage(fecthedImage.getScaledInstance(width, height, Image.SCALE_SMOOTH),0, 0, null);
-            //ff.flush();
-            ImageIO.write(fecthedImage, "jpg", newImageFile);
-            grabber.stop();
-			
-            OSSUtils.createFolder("glw-old-file", "file/gonghui/");
-			OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
+		
+			System.out.println("Mr6:******************************"+file.getName()+new Date());
+			if(url.indexOf(".mp4")!=-1){
+				File newImageFile = new File(sys.getFolderUrl() +iamgeurl);
+				FFmpegFrameGrabber grabber=new FFmpegFrameGrabber(newFile);
+				grabber.start();
+	            int lenght = grabber.getLengthInFrames();
+	            int i = 0;
+	            Frame f = null;
+	            while (i < lenght) {
+	                // 过滤前5帧，避免出现全黑的图片，依自己情况而定
+	                f = grabber.grabFrame();
+	                if ((i > 5) && (f.image != null)) {
+	                    break;
+	                }
+	                i++;
+	            }
+	            Java2DFrameConverter converter =new Java2DFrameConverter();
+	            BufferedImage fecthedImage =converter.getBufferedImage(f);
+	            //下边是缩放
+	            //BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+	            //bi.getGraphics().drawImage(fecthedImage.getScaledInstance(width, height, Image.SCALE_SMOOTH),0, 0, null);
+	            //ff.flush();
+	            ImageIO.write(fecthedImage, "jpg", newImageFile);
+	            grabber.stop();
+				
+	            //OSSUtils.createFolder("glw-old-file", "file/gonghui/");
+				//OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
+				System.out.println("Mr7:******************************"+file.getName()+new Date());
+			}
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
+		} catch(Exception e){
+			e.printStackTrace();
+			
+		}finally {
+			videoUploadMap.remove(file.getName());
 			return url;
 		}
 
@@ -280,9 +339,17 @@ public class GonghuiController {
 	public Object videoList(HttpServletRequest request) throws Exception{
 		int page=Integer.parseInt(request.getParameter("page"));
 		List<VideoPo> videolist=conn_video.findPassByPage(page, 10);
+		for (VideoPo videoPo : videolist) {
+			if(videoPo.getTooss()==0){
+				videoPo.setRealCoverUrl("http://www.guolaiwan.net/file/"+videoPo.getCoverUrl());
+				videoPo.setRealPlayUrl("http://www.guolaiwan.net/file/"+videoPo.getPlayUrl());
+			}else{
+				videoPo.setRealCoverUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getCoverUrl());
+				videoPo.setRealPlayUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getPlayUrl());
+			}
+		}
 		Map<String, Object> ret=new HashMap<String, Object>();
 		ret.put("list", videolist);
-		ret.put("webPath", conn_sys.getSysConfig().getWebUrl());
 		
 		return ret;
 	}

@@ -24,6 +24,9 @@ public class VideoPo extends AbstractBasePO {
 	private int send;//0未通知，1已通知
 	private long userId;
 	private String companyType;
+	private int tooss;
+	private String realPlayUrl;
+	private String realCoverUrl;
 	public String getCompany() {
 		return company;
 	}
@@ -95,6 +98,26 @@ public class VideoPo extends AbstractBasePO {
 	}
 	public void setCompanyType(String companyType) {
 		this.companyType = companyType;
+	}
+	public int getTooss() {
+		return tooss;
+	}
+	public void setTooss(int tooss) {
+		this.tooss = tooss;
+	}
+	@Transient 
+	public String getRealPlayUrl() {
+		return realPlayUrl;
+	}
+	public void setRealPlayUrl(String realPlayUrl) {
+		this.realPlayUrl = realPlayUrl;
+	}
+	@Transient 
+	public String getRealCoverUrl() {
+		return realCoverUrl;
+	}
+	public void setRealCoverUrl(String realCoverUrl) {
+		this.realCoverUrl = realCoverUrl;
 	}
 	
 	

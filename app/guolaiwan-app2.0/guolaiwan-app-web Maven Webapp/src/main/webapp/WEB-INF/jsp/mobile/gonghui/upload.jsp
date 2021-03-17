@@ -450,15 +450,15 @@ html, body {
 <!-- enctype="multipart/form-data" -->
 <form id="video-form" action="<%=basePath%>gonghui/upload.do" method="POST">
         <image src="lib/images/videoback.jpg" 
-		    style="position:absolute;width:100%;height:800px"/>
+		    style="position:absolute;width:100%;height:800px;display:none;"/>
 		<div class="content" style="height:800px">
 		    
-			<div class="weui-cells__title">上传作品</div>
+			<!-- <div class="weui-cells__title">上传作品</div> -->
 			
 		   
 			
 			<div class="weui-cells weui-cells_form">
-			    <div class="weui-cell">
+			    <div class="weui-cell" style="display:none;">
 					<div class="weui-cell__hd">
 						<label class="weui-label">所属工会</label>
 					</div>
@@ -473,7 +473,7 @@ html, body {
 		            	</select>	
 					</div>
 				</div>
-			    <div class="weui-cell" id="selCompanyCell">
+			    <div class="weui-cell" id="selCompanyCell" style="display:none;">
 					<div class="weui-cell__hd">
 						<label class="weui-label">所属单位</label>
 					</div>
@@ -486,7 +486,7 @@ html, body {
 			
 			
 			
-				<div class="weui-cell" id="companyCell">
+				<div class="weui-cell" id="companyCell" style="display:none;">
 					<div class="weui-cell__hd">
 						<label class="weui-label">所属单位</label>
 					</div>
@@ -494,7 +494,7 @@ html, body {
 						<input name="company" id="company" class="weui-input" type="text" placeholder="">
 					</div>
 				</div>
-				<div class="weui-cell">
+				<div class="weui-cell" style="display:none;">
 					<div class="weui-cell__hd">
 						<label class="weui-label">姓名</label>
 					</div>
@@ -504,7 +504,7 @@ html, body {
 					</div>
 				</div>
 
-				<div class="weui-cell">
+				<div class="weui-cell" style="display:none;">
 					<div class="weui-cell__hd">
 						<label class="weui-label">电话</label>
 					</div>
@@ -514,7 +514,7 @@ html, body {
 					</div>
 				</div>
 				
-		       <div class="weui-cell">
+		       <div class="weui-cell" style="display:none;">
 					<div class="weui-cell__hd">
 						<label class="weui-label">作品名称</label>
 					</div>
@@ -525,8 +525,8 @@ html, body {
 				</div>
 				
 				
-				<div class="weui-cells__title">上传视频封面(不上传则使用视频第一帧图像):<input type="hidden" name="coverUrl" id="selCover" /></div>
-				<div style="width:100%;height:100px;">
+				<div style="display:none;" class="weui-cells__title">上传视频封面(不上传则使用视频第一帧图像):<input type="hidden" name="coverUrl" id="selCover" /></div>
+				<div style="width:100%;height:100px;display:none;">
 					<div style="margin-left:15px;width:100px;height:100px;"
 						class="weui-uploader__input-box">
 						<input name="cover" id="cover" class="weui-uploader__input" type="file"
@@ -549,7 +549,7 @@ html, body {
 				</div>
 				</div>
 				
-				<a id="upload" style="width:96%;margin-top:50px;margin-left:2%;background-color:#FF2B33;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">提交</a>
+				<a id="upload" style="width:96%;display:none;margin-top:50px;margin-left:2%;background-color:#FF2B33;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">提交</a>
 			
 			</div>
 			
@@ -619,7 +619,37 @@ html, body {
 	    
 	    
 	    function uploadFiles(file,submitObj,showObj){
-	         
+	        
+	        var fileType = file.files[0].name.substring(file.files[0].name.lastIndexOf(".") + 1).toLowerCase();
+			if(fileType != "mp4"){
+              	alert("请选择mp4格式视频");	
+              	$.hideLoading();					
+				return false;
+			}
+			//判断文件大小
+			var size = file.files[0].size;
+			if (size>1048576000) {
+				alert("上传文件不能大于100M");
+				$.hideLoading();		
+				return false;				
+			}
+
+	        var percent=0;
+	        var interId=setInterval(function(){ 
+                 var _urigetpercent = window.BASEPATH + 'gonghui/getUploadPercent?fileName='+file.files[0].name;
+		
+				 $.get(_urigetpercent, null, function(data){
+				    if(data.data.data=='error'){
+				        if(percent<30){
+				           percent++;
+				        }
+				        $.showLoading("正在上传:"+percent+"%");	
+				    }else{
+				    	$.showLoading("正在上传:"+data.data.data.uploadPercent+"%");	
+				    }
+					
+				 });
+	        }, 2000);
 		    var uploadFile = new FormData();
 		    uploadFile.append(file.files[0].name, file.files[0]);
 		    var _upQuery = window.BASEPATH + 'gonghui/upload';
@@ -628,7 +658,7 @@ html, body {
 			    		url:_upQuery,		
 			    		type:'POST',	
 			    		data:uploadFile,		
-			    		async: false,  			
+			    		//async: false,  			
 			    		cache: false, 			
 			    		contentType: false, //不设置内容类型			
 			    		processData: false, //不处理数据			
@@ -636,11 +666,18 @@ html, body {
 				    		showObj.attr('src',data.data.webPath);
 				    		submitObj.val(data.data.url);
 				    		alert("上传成功，待审核");
+				    		clearInterval(interId);
 				    		$.hideLoading();		
 			    		},			
-		    			error:function(){
+		    			error:function(jqXHR, textStatus, errorThrown){
 		    				alert("上传失败！");
-		    									
+		    				alert(jqXHR.responseText);
+		    				alert(jqXHR.status);
+				            alert(jqXHR.readyState);
+				            alert(jqXHR.statusText);
+				            alert(textStatus);
+				            alert(errorThrown);
+		    				clearInterval(interId);					
 		    			}		
 		    		});
 		    	

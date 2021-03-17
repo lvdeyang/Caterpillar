@@ -502,7 +502,7 @@ html, body {
 		<image src="lib/images/header.jpg" style="width:100%;"/>
 		<div style="width:100%;text-align:center;color:#933333;font-weight:500;line-height:30px">活动说明</div>
 		<p style="font-size:small;line-height: 30px;color: #94383B;width:94%;margin-left:3%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为大力营造纪念建党100周年的浓厚氛围，充分发挥“职工书屋”作用，丰富职工精神文化生活，提升职工综合素质，增强凝聚力，市总工会决定举办“奋斗百年路 启航新征程”职工网上诵读活动。欢迎职工朋友们积极参与！</p>
-        <p style="font-size:small;line-height: 30px;color: #94383B;width:94%;margin-left:3%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;活动时间：2021年3月1 7日至5月7日</p>
+        <p style="font-size:small;line-height: 30px;color: #94383B;width:94%;margin-left:3%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;活动时间：2021年3月17日至5月7日</p>
 	    <div style="width:100%;text-align:center;color:#933333;font-weight:500;line-height:30px">参与方式</div>
    		<p style="font-size:small;line-height: 30px;color: #94383B;width:94%;margin-left:3%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;职工关注“遵化市总工会爱心总动员”微信公众号，点击页面底部“诵读活动”进入活动页面。点击“上传作品”，完整填写报名信息后上传录制完成的诵读视频提交即可。职工上传作品数量不限，每次只可上传一条视频，时长不超过5分钟，大小不超过100M。视频经市总审核通过后即可观看、点赞、分享，点赞次数不限。
 </p>
