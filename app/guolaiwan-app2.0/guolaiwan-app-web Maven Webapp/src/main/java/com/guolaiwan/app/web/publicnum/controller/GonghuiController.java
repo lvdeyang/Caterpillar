@@ -210,8 +210,27 @@ public class GonghuiController {
 		System.out.println("Mr3:******************************"+new Date());
 		Iterator<FileItem> i = items.iterator();
 		File fileIt = null;
+		SysConfigPO sys = conn_sys.getSysConfig();
 		while (i.hasNext()) {
 			FileItem fi = (FileItem) i.next();
+			
+			//判断已有文件则直接返回
+			List<VideoPo> haveVideos=conn_video.findByField("playUrl", "gonghui/"+fi.getName());
+			if(haveVideos!=null&&haveVideos.size()>0){
+				VideoPo haveVideo=haveVideos.get(0);
+				String webPath =  sys.getWebUrl()+"/" + haveVideo.getPlayUrl();
+				if(haveVideo.getTooss()==0){
+					webPath =  "http://www.guolaiwan.net/file/" + haveVideo.getPlayUrl();
+				}
+				
+				JSONObject obj = new JSONObject();
+				obj.put("url", haveVideo.getPlayUrl());
+				obj.put("webPath", webPath);
+				return obj;
+			}
+			
+			
+			
 			VideoUploadVo videoUploadvo=new VideoUploadVo();
 			videoUploadvo.setFileName(fi.getName());
 			videoUploadvo.setFileSize(fi.getSize());
@@ -221,7 +240,6 @@ public class GonghuiController {
 			url = uploadFile(fi);
 		}
 		System.out.println("Mr8:******************************"+new Date());
-		SysConfigPO sys = conn_sys.getSysConfig();
 		String webPath =  "http://www.guolaiwan.net/file/" + url;
 		JSONObject obj = new JSONObject();
 		obj.put("url", url);

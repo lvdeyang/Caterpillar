@@ -57,17 +57,23 @@ public class GonghuiScheduledTask {
 			synchronized(videoPo){
 				try{
 					File file=new File(sysConfigPO.getFolderUrl()+videoPo.getPlayUrl());
-					File newImageFile=new File(sysConfigPO.getFolderUrl()+videoPo.getCoverUrl());
 					OSSUtils.createFolder("glw-old-file", "file/gonghui/");
 					OSSUtils.uploadObjectOSS("file/gonghui/", file.getName(), file, new FileInputStream(file));
-					OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
-				    videoPo.setTooss(1);
-				    conn_video.save(videoPo);
 				    file.delete();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				try{
+					File newImageFile=new File(sysConfigPO.getFolderUrl()+videoPo.getCoverUrl());
+					OSSUtils.createFolder("glw-old-file", "file/gonghui/");
+					OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
 				    newImageFile.delete();
 				}catch(Exception e){
-					
+					e.printStackTrace();
 				}
+			    videoPo.setTooss(1);
+				conn_video.update(videoPo);
+			    
 				
 			}
 		}

@@ -48,7 +48,7 @@ public class HaokangScheduledTask {
 	 */
 	@Scheduled(cron = "0 0/30 * * * ?")
 	public void getFaces() throws JSONException, ParseException {
-		int Number=0;
+		/*int Number=0;
 		JSONObject jsonObject=new JSONObject();
 	
 		//查询的起始日期（IOS8601格式yyyy-MM-dd’T’HH:mm:ss.SSSzzz）
@@ -68,13 +68,13 @@ public class HaokangScheduledTask {
 		}
 		
 		com.alibaba.fastjson.JSONObject json=com.alibaba.fastjson.JSONObject.parseObject(response);
-		com.alibaba.fastjson.JSONObject countJson=json.getJSONObject("data");
+		com.alibaba.fastjson.JSONObject countJson=json.getJSONObject("data");*/
 		/**
 		 * 提交NUMBER
 		 */
 		//此处录入人脸数据
 		//先判断是不是已经录入过今天数据（一天可能要不断的查询，因为要显示一天的实时数据）
-		try {
+		/*try {
 			List<CameraFacePO> cameraFacePOs = cameraFaceDAO.findTodydata(newDate);
 			if(cameraFacePOs!=null&&!cameraFacePOs.isEmpty()){
 				//设置取到的数量
@@ -90,7 +90,7 @@ public class HaokangScheduledTask {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 	/**
@@ -99,7 +99,7 @@ public class HaokangScheduledTask {
 	@Scheduled(cron = "0 0/30 * * * ?")
 	//@Scheduled(cron = "0 */1 * * * ?")
 	public void getCars() {
-		int Number=0;
+		/*int Number=0;
 		JSONObject jsonObject=new JSONObject();
 		//查询结果的页码数(不能小于1，cameraIndexcodes为TOTAL时不生效)
 		jsonObject.put("pageNo", 1);
@@ -110,7 +110,7 @@ public class HaokangScheduledTask {
 		//查询的终止日期（IOS8601格式yyyy-MM-dd’T’HH:mm:ss.SSSzzz）
 		jsonObject.put("endTime", getISO8601Timestamp(new Date()));
 		//String response=request(CAR, jsonObject);
-		String response="";
+		String response="";*/
 		/**
 		 * 提交NUMBER
 		 */
@@ -118,7 +118,7 @@ public class HaokangScheduledTask {
 		//此处录入车辆数据
 		//先判断是不是已经录入过今天数据（一天可能要不断的查询，因为要显示一天的实时数据）
 	
-		com.alibaba.fastjson.JSONObject json=com.alibaba.fastjson.JSONObject.parseObject(response);
+		/*com.alibaba.fastjson.JSONObject json=com.alibaba.fastjson.JSONObject.parseObject(response);
 		com.alibaba.fastjson.JSONObject countJson=json.getJSONObject("data");
 		com.alibaba.fastjson.JSONArray array=countJson.getJSONArray("list");
 		
@@ -141,7 +141,7 @@ public class HaokangScheduledTask {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	private  String getAddressByCarCard(String no) {

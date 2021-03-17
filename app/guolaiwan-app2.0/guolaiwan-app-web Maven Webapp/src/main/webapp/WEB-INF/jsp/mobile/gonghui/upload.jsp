@@ -662,14 +662,16 @@ html, body {
 			    		cache: false, 			
 			    		contentType: false, //不设置内容类型			
 			    		processData: false, //不处理数据			
-			    		success:function(data){							
+			    		success:function(data){	
+			    		    $.hideLoading();						
 				    		showObj.attr('src',data.data.webPath);
 				    		submitObj.val(data.data.url);
 				    		alert("上传成功，待审核");
 				    		clearInterval(interId);
-				    		$.hideLoading();		
+				    				
 			    		},			
 		    			error:function(jqXHR, textStatus, errorThrown){
+		    			    $.hideLoading();
 		    				alert("上传失败！");
 		    				alert(jqXHR.responseText);
 		    				alert(jqXHR.status);
@@ -681,7 +683,9 @@ html, body {
 		    			}		
 		    		});
 		    	
-              }else {		
+              }else {	
+                    $.hideLoading();
+                    clearInterval(interId);		
 		    		alert("选择的文件无效！请重新选择");
 		      }
 		  }   
