@@ -309,7 +309,8 @@ public class GonghuiController {
 			
 		
 			System.out.println("Mr6:******************************"+file.getName()+new Date());
-			if(url.indexOf(".mp4")!=-1){
+			if(url.indexOf(".mp4")!=-1||url.indexOf(".MP4")!=-1){
+			
 				File newImageFile = new File(sys.getFolderUrl() +iamgeurl);
 				FFmpegFrameGrabber grabber=new FFmpegFrameGrabber(newFile);
 				grabber.start();
@@ -336,6 +337,8 @@ public class GonghuiController {
 	            //OSSUtils.createFolder("glw-old-file", "file/gonghui/");
 				//OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
 				System.out.println("Mr7:******************************"+file.getName()+new Date());
+				
+				
 			}
 
 		} catch (FileNotFoundException e) {

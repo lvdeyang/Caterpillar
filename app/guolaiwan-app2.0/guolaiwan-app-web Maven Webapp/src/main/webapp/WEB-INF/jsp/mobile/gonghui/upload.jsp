@@ -628,7 +628,7 @@ html, body {
 			}
 			//判断文件大小
 			var size = file.files[0].size;
-			if (size>1048576000) {
+			if (size>104857600) {
 				alert("上传文件不能大于100M");
 				$.hideLoading();		
 				return false;				
