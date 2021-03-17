@@ -450,7 +450,7 @@ html, body {
 <!-- enctype="multipart/form-data" -->
 <form id="video-form" action="<%=basePath%>gonghui/upload.do" method="POST">
         <image src="lib/images/videoback.jpg" 
-		    style="position:absolute;width:100%;height:800px;display:none;"/>
+		    style="position:absolute;width:100%;height:800px;"/>
 		<div class="content" style="height:800px">
 		    
 			<!-- <div class="weui-cells__title">上传作品</div> -->
@@ -458,7 +458,7 @@ html, body {
 		   
 			
 			<div class="weui-cells weui-cells_form">
-			    <div class="weui-cell" style="display:none;">
+			    <div class="weui-cell">
 					<div class="weui-cell__hd">
 						<label class="weui-label">所属工会</label>
 					</div>
@@ -473,7 +473,7 @@ html, body {
 		            	</select>	
 					</div>
 				</div>
-			    <div class="weui-cell" id="selCompanyCell" style="display:none;">
+			    <div class="weui-cell" id="selCompanyCell">
 					<div class="weui-cell__hd">
 						<label class="weui-label">所属单位</label>
 					</div>
@@ -494,7 +494,7 @@ html, body {
 						<input name="company" id="company" class="weui-input" type="text" placeholder="">
 					</div>
 				</div>
-				<div class="weui-cell" style="display:none;">
+				<div class="weui-cell">
 					<div class="weui-cell__hd">
 						<label class="weui-label">姓名</label>
 					</div>
@@ -504,7 +504,7 @@ html, body {
 					</div>
 				</div>
 
-				<div class="weui-cell" style="display:none;">
+				<div class="weui-cell">
 					<div class="weui-cell__hd">
 						<label class="weui-label">电话</label>
 					</div>
@@ -514,7 +514,7 @@ html, body {
 					</div>
 				</div>
 				
-		       <div class="weui-cell" style="display:none;">
+		       <div class="weui-cell">
 					<div class="weui-cell__hd">
 						<label class="weui-label">作品名称</label>
 					</div>
@@ -525,8 +525,8 @@ html, body {
 				</div>
 				
 				
-				<div style="display:none;" class="weui-cells__title">上传视频封面(不上传则使用视频第一帧图像):<input type="hidden" name="coverUrl" id="selCover" /></div>
-				<div style="width:100%;height:100px;display:none;">
+				<div class="weui-cells__title">上传视频封面(不上传则使用视频第一帧图像):<input type="hidden" name="coverUrl" id="selCover" /></div>
+				<div style="width:100%;height:100px;">
 					<div style="margin-left:15px;width:100px;height:100px;"
 						class="weui-uploader__input-box">
 						<input name="cover" id="cover" class="weui-uploader__input" type="file"
@@ -549,7 +549,7 @@ html, body {
 				</div>
 				</div>
 				
-				<a id="upload" style="width:96%;display:none;margin-top:50px;margin-left:2%;background-color:#FF2B33;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">提交</a>
+				<a id="upload" style="width:96%;margin-top:50px;margin-left:2%;background-color:#FF2B33;height:40px;line-height:40px;" href="javascript:;" class="weui-btn weui-btn_primary">提交</a>
 			
 			</div>
 			
@@ -598,7 +598,7 @@ html, body {
 	    
 	       $.showLoading();
 	       setTimeout(function(){
-	           uploadFiles($('#cover')[0],$('#selCover'),$('#showCover'));
+	           uploadFiles($('#cover')[0],$('#selCover'),$('#showCover'),"image");
 	       
 	       },1000);
 	      
@@ -612,16 +612,16 @@ html, body {
 	       
 	      $.showLoading();
 	       setTimeout(function(){
-	           uploadFiles($('#play')[0],$('#selPlay'),$('#showPlay'));
+	           uploadFiles($('#play')[0],$('#selPlay'),$('#showPlay'),"video");
 	       
 	       },1000);
 	    });
 	    
 	    
-	    function uploadFiles(file,submitObj,showObj){
+	    function uploadFiles(file,submitObj,showObj,type){
 	        
 	        var fileType = file.files[0].name.substring(file.files[0].name.lastIndexOf(".") + 1).toLowerCase();
-			if(fileType != "mp4"){
+			if(type=="video"&&fileType != "mp4"){
               	alert("请选择mp4格式视频");	
               	$.hideLoading();					
 				return false;

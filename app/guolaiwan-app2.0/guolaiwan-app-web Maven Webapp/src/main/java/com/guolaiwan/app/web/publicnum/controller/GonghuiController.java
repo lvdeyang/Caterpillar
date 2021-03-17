@@ -49,6 +49,7 @@ import com.guolaiwan.bussiness.gonghui.po.VideoPo;
 import com.guolaiwan.bussiness.gonghui.po.VideoSurpportPo;
 import com.guolaiwan.bussiness.javacv.FishNewLiveService;
 
+import javassist.expr.NewArray;
 import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
@@ -339,17 +340,20 @@ public class GonghuiController {
 	public Object videoList(HttpServletRequest request) throws Exception{
 		int page=Integer.parseInt(request.getParameter("page"));
 		List<VideoPo> videolist=conn_video.findPassByPage(page, 10);
-		for (VideoPo videoPo : videolist) {
-			if(videoPo.getTooss()==0){
-				videoPo.setRealCoverUrl("http://www.guolaiwan.net/file/"+videoPo.getCoverUrl());
-				videoPo.setRealPlayUrl("http://www.guolaiwan.net/file/"+videoPo.getPlayUrl());
-			}else{
-				videoPo.setRealCoverUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getCoverUrl());
-				videoPo.setRealPlayUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getPlayUrl());
+		if(videolist!=null){
+			for (VideoPo videoPo : videolist) {
+				if(videoPo.getTooss()==0){
+					videoPo.setRealCoverUrl("http://www.guolaiwan.net/file/"+videoPo.getCoverUrl());
+					videoPo.setRealPlayUrl("http://www.guolaiwan.net/file/"+videoPo.getPlayUrl());
+				}else{
+					videoPo.setRealCoverUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getCoverUrl());
+					videoPo.setRealPlayUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getPlayUrl());
+				}
 			}
 		}
+		
 		Map<String, Object> ret=new HashMap<String, Object>();
-		ret.put("list", videolist);
+		ret.put("list", videolist==null?new ArrayList<VideoPo>():videolist);
 		
 		return ret;
 	}
