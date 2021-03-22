@@ -26,8 +26,8 @@ public class OSSUtils {
     // Endpoint以杭州为例，其它Region请按实际情况填写。
     private static String endpoint="oss-cn-beijing.aliyuncs.com";
     // 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
-    private static String accessKeyId="LTAI4G478x58BAygsS2jC6qn";
-    private static String accessKeySecret="lr4WmEyCJWkayMIMTVUZTy2ADfc1Sq";
+    private static String accessKeyId="xsysdfs";
+    private static String accessKeySecret="sadfsdf";
     public static String bucketName="glw-old-file";
     private static OSS ossclient = null;
 
