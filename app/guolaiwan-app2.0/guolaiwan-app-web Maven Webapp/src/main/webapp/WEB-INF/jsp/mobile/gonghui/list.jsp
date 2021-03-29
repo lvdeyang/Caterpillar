@@ -114,12 +114,13 @@
 		    location.href=window.BASEPATH +"gonghui/video/upload/index";
 	   });
 	   
+	   var loadingData=false;
 	   
 	   $(window).scroll(function(){
 　　			 //判断是否滑动到页面底部
 	         /*if($(window).scrollTop() === $(document).height() - $(window).height()){ */
 		     if($(window).scrollTop() + $(window).height() +10>= $(document).height()){
-				
+				if(loadingData) return false;
 		        // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
 		        $('.weui-loadmore').fadeIn().addClass("show");
 				getVideos();
@@ -129,6 +130,7 @@
 		});
 		
 		function getVideos(){
+		 loadingData=true;
 	     var _uriVideoList = window.BASEPATH + 'gonghui/videoList?page='+pageNumber;
 		
 		 $.get(_uriVideoList, null, function(data){
@@ -155,6 +157,7 @@
 				} 
 				$('.content').append(html.join(''));
 				$('.weui-loadmore').fadeOut().addClass("show");
+				loadingData=false;
 		 });
 		 
 	  }
