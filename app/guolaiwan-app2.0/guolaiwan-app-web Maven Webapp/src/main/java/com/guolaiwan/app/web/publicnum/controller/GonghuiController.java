@@ -140,7 +140,7 @@ public class GonghuiController {
 		videoPo.setPhone(phone);
 		videoPo.setCompany(company);
 		videoPo.setCompanyType(companyType);
-		videoPo.setPassed(2);
+		videoPo.setPassed(0);
 		videoPo.setPassedStr("审核中");
 		videoPo.setVideoName(videoName);
 		videoPo.setTooss(0);
@@ -348,7 +348,7 @@ public class GonghuiController {
 	            //ff.flush();
 	            ImageIO.write(fecthedImage, "jpg", newImageFile);
 	            grabber.stop();
-				
+	            grabber.close();
 	            //OSSUtils.createFolder("glw-old-file", "file/gonghui/");
 				//OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
 				System.out.println("Mr7:******************************"+file.getName()+new Date());

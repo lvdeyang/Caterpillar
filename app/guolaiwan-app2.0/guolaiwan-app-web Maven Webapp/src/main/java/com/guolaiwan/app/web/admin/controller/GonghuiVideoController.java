@@ -1,12 +1,20 @@
 package com.guolaiwan.app.web.admin.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.Java2DFrameConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +36,7 @@ import com.guolaiwan.bussiness.distribute.po.DistributorPo;
 import com.guolaiwan.bussiness.gonghui.dao.VideoDao;
 import com.guolaiwan.bussiness.gonghui.po.VideoPo;
 
+import pub.caterpillar.commons.file.oss.OSSUtils;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
@@ -129,5 +138,41 @@ public class GonghuiVideoController extends BaseController {
 			conn_Video.save(videoPo);
 			return "success";
 		}
+		
+	@Autowired
+	private SysConfigDAO conn_sysconfig;
+	@ResponseBody
+	@RequestMapping(value = "/cutImage.do", method = RequestMethod.POST)
+	public String cutImage(HttpServletRequest request) throws Exception {
+		String id = request.getParameter("id");
+		VideoPo videoPo=conn_Video.get(Long.parseLong(id));
+		SysConfigPO sys=conn_sysconfig.getSysConfig();
+		File newFile = new File(sys.getFolderUrl() +videoPo.getPlayUrl());
+
+		File newImageFile = new File(sys.getFolderUrl() +videoPo.getCoverUrl());
+		FFmpegFrameGrabber grabber=new FFmpegFrameGrabber(newFile);
+		grabber.start();
+	    int lenght = grabber.getLengthInFrames();
+	    int i = 0;
+	    Frame f = null;
+	    while (i < lenght) {
+	        // 过滤前5帧，避免出现全黑的图片，依自己情况而定
+	        f = grabber.grabFrame();
+	        if ((i > 5) && (f.image != null)) {
+	            break;
+	        }
+	        i++;
+	    }
+	    Java2DFrameConverter converter =new Java2DFrameConverter();
+	    BufferedImage fecthedImage =converter.getBufferedImage(f);
+	   
+	    ImageIO.write(fecthedImage, "jpg", newImageFile);
+	    grabber.stop();
+	    grabber.close();
+	    OSSUtils.createFolder("glw-old-file", "file/gonghui/");
+		OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
+		
+		return "success";
+	}
 
 }

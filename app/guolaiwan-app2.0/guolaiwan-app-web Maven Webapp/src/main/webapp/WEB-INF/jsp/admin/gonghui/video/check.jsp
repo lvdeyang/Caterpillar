@@ -57,6 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="layui-form-item">
 				<button class="layui-btn" lay-filter="agree" lay-submit>同意</button>
 				<button class="layui-btn" lay-filter="reject" lay-submit>拒绝</button>
+				<button class="layui-btn" lay-filter="cutImage" lay-submit>生成海报</button>
 			</div>
 		</form>
 	</div>
@@ -74,6 +75,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               ,layer = layui.layer;
                
               //监听提交
+              form.on('submit(cutImage)', function(data){
+              layer.load();
+                var obj=data.field;
+                $.ajax({
+                	  type:"post",
+           			  url:"cutImage.do",
+                      data:obj,
+                      success:function(msg){
+                        if(msg=="success"){
+                          layer.alert("截屏成功", {icon: 6},function () {
+                				window.location.reload();
+                           });
+                        }
+                       }
+                }) 
+                
+
+                return false;
+              });
+              
+              
               form.on('submit(agree)', function(data){
                 var obj=data.field;
                 obj.result=1;

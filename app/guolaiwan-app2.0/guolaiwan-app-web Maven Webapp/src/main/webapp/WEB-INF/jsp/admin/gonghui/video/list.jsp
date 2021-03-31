@@ -294,7 +294,7 @@
 	</script>
 	<script type="text/html" id="handle">  
  
- <a title="审核" href="javascript:;" onclick="video_check('审核','toCheck.do','{{ d.id }}','','510')"
+ <a title="审核" href="javascript:;" onclick="video_check('审核','toCheck.do','{{ d.id }}','','580')"
                             class="ml-5" style="text-decoration:none">
      <i class="layui-icon">审核</i>
  </a>

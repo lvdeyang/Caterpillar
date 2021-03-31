@@ -199,7 +199,7 @@ public class PubNumController extends WebBaseControll {
 
 		ModelAndView mv = null;
 		if (!istest) {
-			String gState = new Date().getTime() + "";
+			String gState = new Date().getTime() + request.getSession().getId();
 			if (rUrl != null && rUrl.indexOf("favicon.ico") == -1) {
 
 				SystenCachePo cachePo = new SystenCachePo();
@@ -237,8 +237,8 @@ public class PubNumController extends WebBaseControll {
 		String rUrl = "";
 		if (!cachePos.isEmpty()) {
 			rUrl = cachePos.get(0).getWxVal();
+			conn_systemcache.delete(cachePos.get(0));
 		}
-		conn_systemcache.delete(cachePos.get(0));
 		ModelAndView mv = null;
 		String openid = "";
 		String nickname = "";
@@ -261,7 +261,7 @@ public class PubNumController extends WebBaseControll {
             if(openid==null){
             	openid=session.getAttribute("openid").toString();
             }
-			String uu = "https://api.weixin.qq.com/cgi-bin/token?appid=" + WxConfig.appId + "&secret=" + WxConfig.appsrcret  + "&grant_type=client_credential";
+			/*String uu = "https://api.weixin.qq.com/cgi-bin/token?appid=" + WxConfig.appId + "&secret=" + WxConfig.appsrcret  + "&grant_type=client_credential";
             String dd = HttpClient.get(uu);
             JSONObject jj = JSON.parseObject(dd);
             String token = String.valueOf(jj.get("access_token"));
@@ -272,15 +272,16 @@ public class PubNumController extends WebBaseControll {
 			userInfo = JSON.parseObject(result);
             System.out.println(result);
             
-            //关闭强制关注
-            isfans=true;
+            
             //关闭强制关注
             
             
             if(userInfo.getInteger("subscribe").equals(1)){ //已关注
             	isfans=true;
             	
-            }
+            }*/
+            //关闭强制关注
+            isfans=true;
             if(isfans||rUrl.indexOf("supersell")!=-1||rUrl.indexOf("luckdraw")!=-1){
             	session.setAttribute("type", "PHONENUM");
             }else{

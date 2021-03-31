@@ -59,7 +59,7 @@ public class GonghuiScheduledTask {
 					File file=new File(sysConfigPO.getFolderUrl()+videoPo.getPlayUrl());
 					OSSUtils.createFolder("glw-old-file", "file/gonghui/");
 					OSSUtils.uploadObjectOSS("file/gonghui/", file.getName(), file, new FileInputStream(file));
-				    file.delete();
+				    //file.delete();
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -67,7 +67,7 @@ public class GonghuiScheduledTask {
 					File newImageFile=new File(sysConfigPO.getFolderUrl()+videoPo.getCoverUrl());
 					OSSUtils.createFolder("glw-old-file", "file/gonghui/");
 					OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
-				    newImageFile.delete();
+				    //newImageFile.delete();
 				}catch(Exception e){
 					e.printStackTrace();
 				}
