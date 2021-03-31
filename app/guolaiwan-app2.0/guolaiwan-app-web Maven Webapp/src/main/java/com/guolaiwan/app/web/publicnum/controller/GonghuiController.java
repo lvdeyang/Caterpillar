@@ -140,7 +140,7 @@ public class GonghuiController {
 		videoPo.setPhone(phone);
 		videoPo.setCompany(company);
 		videoPo.setCompanyType(companyType);
-		videoPo.setPassed(0);
+		videoPo.setPassed(2);
 		videoPo.setPassedStr("审核中");
 		videoPo.setVideoName(videoName);
 		videoPo.setTooss(0);
@@ -180,6 +180,21 @@ public class GonghuiController {
 		Map<String, Object> ret=new HashMap<String, Object>();
 		if(videoUploadvo!=null){
 			ret.put("data", videoUploadvo);
+		}else{
+			ret.put("data", "error");
+		}
+		return ret;
+	}
+	
+	@ResponseBody
+	@JsonBody
+	@RequestMapping(value = "/getUploadStatus", method = RequestMethod.GET)
+	public Object getUploadStatus(HttpServletRequest request) throws Exception{
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+        List<VideoPo> videoList=conn_video.findCheckingByUserId(userId);
+		Map<String, Object> ret=new HashMap<String, Object>();
+		if(videoList!=null){
+			ret.put("data", "您有一个视频《"+videoList.get(0).getVideoName()+"》正在审核中，请等待管理审核");
 		}else{
 			ret.put("data", "error");
 		}

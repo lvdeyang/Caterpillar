@@ -589,7 +589,7 @@ html, body {
 			if($('#selPlay').val() == ''){
 				 $.toast("请上传视频", "forbidden");   
 				 return false; 
-			}		
+			}	
 			$('#video-form').submit(); 
 			
 	    });

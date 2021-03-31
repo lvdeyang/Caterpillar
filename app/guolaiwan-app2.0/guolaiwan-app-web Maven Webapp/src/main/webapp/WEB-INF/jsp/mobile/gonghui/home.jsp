@@ -530,7 +530,17 @@ html, body {
 	    }
 	    window.BASEPATH = '<%=basePath%>';
 		$('#upload').on('click',function(){
-		    location.href=window.BASEPATH +"gonghui/video/upload/index";
+		     var _urigetuploadStatus = window.BASEPATH + 'gonghui/getUploadStatus';
+		
+			 $.get(_urigetuploadStatus, null, function(data){
+			    if(data.data.data=='error'){
+			        location.href=window.BASEPATH +"gonghui/video/upload/index";	
+			    }else{
+			    	alert(data.data.data)
+			    }
+				
+			 });
+		    
 		})
 		   
 	});

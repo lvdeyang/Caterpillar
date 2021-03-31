@@ -19,7 +19,7 @@ public class VideoPo extends AbstractBasePO {
 	private String coverUrl;
 	private String playUrl;
 	private int aCount;//点赞个数
-	private int passed;//0未通过 1通过
+	private int passed;//0未通过 1通过 2审核中
 	private String passedStr;
 	private int send;//0未通知，1已通知
 	private long userId;
