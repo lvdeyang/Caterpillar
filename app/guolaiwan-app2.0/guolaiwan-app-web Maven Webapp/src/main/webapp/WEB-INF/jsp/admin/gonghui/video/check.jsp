@@ -109,7 +109,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            try{
                                var index = parent.layer.getFrameIndex(window.name);
                                //关闭当前frame
-                               parent.window.location.reload();
+                               parent.getvideoList();
                                parent.layer.close(index);
                              }catch(exception)
                              {
@@ -137,7 +137,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            try{
                                var index = parent.layer.getFrameIndex(window.name);
                                //关闭当前frame
-                               parent.window.location.reload();
+                               parent.getvideoList();
                                parent.layer.close(index);
                              }catch(exception)
                              {

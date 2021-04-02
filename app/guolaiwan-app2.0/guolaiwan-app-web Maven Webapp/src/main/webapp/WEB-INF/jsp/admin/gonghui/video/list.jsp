@@ -51,6 +51,14 @@
 	     
 	    </select>
 	  </div>
+	  <div class="layui-input-inline">
+	    <select name="status"  id="status">
+	       <option value="3">全部</option>
+	       <option value="0">审核中</option>
+	       <option value="1">审核通过</option>
+	       <option value="2">审核拒绝</option>
+	    </select>
+	  </div>
 	<div align="right" class="layui-input-inline">
 	 <button  type="reset"  class="layui-btn layui-btn-primary">重置</button>
 	 <button class="layui-btn" lay-filter="getPro" lay-submit>搜索</button>
@@ -235,7 +243,7 @@
 				elem : '#videoList',
 				method : 'post',
 				url : 'videoList.do',
-                where:{companyType:$('#companyType').val(),company:$('#company').val()},
+                where:{companyType:$('#companyType').val(),company:$('#company').val(),status:$('#status').val()},
 				page : true,
 				limits : [ 10, 30, 50, 100 ],
 				limit : 10,

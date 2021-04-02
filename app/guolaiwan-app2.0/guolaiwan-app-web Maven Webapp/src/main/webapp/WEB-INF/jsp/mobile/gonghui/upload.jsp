@@ -595,12 +595,20 @@ html, body {
 	    });
 	
 	    $(document).on('change','#cover',function(){
-	    
-	       $.showLoading();
-	       setTimeout(function(){
-	           uploadFiles($('#cover')[0],$('#selCover'),$('#showCover'),"image");
+	         var _urigetuploadStatus = window.BASEPATH + 'gonghui/getUploadStatus';
+		
+			 $.get(_urigetuploadStatus, null, function(data){
+			    if(data.data.data=='error'){
+			        $.showLoading();
+				    setTimeout(function(){
+				        uploadFiles($('#cover')[0],$('#selCover'),$('#showCover'),"image");
+				    },1000);
+			    }else{
+			    	alert(data.data.data)
+			    }
+				
+			 });
 	       
-	       },1000);
 	      
 	
 
@@ -610,11 +618,22 @@ html, body {
 	    
 	    $(document).on('change','#play',function(){
 	       
-	      $.showLoading();
-	       setTimeout(function(){
-	           uploadFiles($('#play')[0],$('#selPlay'),$('#showPlay'),"video");
+	       var _urigetuploadStatus = window.BASEPATH + 'gonghui/getUploadStatus';
+		
+			 $.get(_urigetuploadStatus, null, function(data){
+			    if(data.data.data=='error'){
+			           $.showLoading();
+				       setTimeout(function(){
+				           uploadFiles($('#play')[0],$('#selPlay'),$('#showPlay'),"video");
+				       
+				       },1000);
+			    }else{
+			    	alert(data.data.data)
+			    }
+				
+			 });
 	       
-	       },1000);
+	      
 	    });
 	    
 	    

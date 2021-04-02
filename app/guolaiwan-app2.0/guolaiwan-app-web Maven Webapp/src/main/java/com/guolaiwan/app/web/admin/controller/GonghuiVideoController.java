@@ -69,13 +69,14 @@ public class GonghuiVideoController extends BaseController {
 		int count = conn_Video.countAll();
 		String companyType=request.getParameter("companyType");
 		String company=request.getParameter("company");
+		String status=request.getParameter("status");
 		List<VideoPo> listpo =new ArrayList<VideoPo>();
 		if(companyType.equals("未选择")){
-			listpo = conn_Video.findByPage( page, limit);
+			listpo = conn_Video.findByStatusAndPage(Integer.parseInt(status),page, limit);
 		}else if(companyType.equals("其他")){
-			listpo = conn_Video.findByCompanyTypePage( companyType,page, limit);
+			listpo = conn_Video.findByCompanyTypeAndStatusPage(Integer.parseInt(status), companyType,page, limit);
 		}else{
-			listpo = conn_Video.findByCompanyPage( company,page, limit);
+			listpo = conn_Video.findByCompanyAndStatusPage(Integer.parseInt(status), company,page, limit);
 		}
         if(listpo==null){
         	listpo=new ArrayList<VideoPo>();

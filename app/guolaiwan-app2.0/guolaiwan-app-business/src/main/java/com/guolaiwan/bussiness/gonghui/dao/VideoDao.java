@@ -24,6 +24,20 @@ public class VideoDao extends AbstractBaseDao<VideoPo> {
 		return videos;
 	}
 	
+	public List<VideoPo> findByStatusAndPage(int status,int pageNum, int pageSize) {
+		QueryHql hql = this.newQueryHql();
+		if(status!=3){
+			hql.andBy("passed",Condition.eq,status);
+		}
+		
+		hql.orderBy("updateTime", true);
+		
+		List<VideoPo> videos = findByHqlPage(hql, pageNum, pageSize);
+		if (videos == null || videos.size() <= 0)
+			return null;
+		return videos;
+	}
+	
 	public List<VideoPo> findByCompanyTypePage(String companyType,int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("companyType",Condition.eq,companyType);
@@ -33,6 +47,20 @@ public class VideoDao extends AbstractBaseDao<VideoPo> {
 			return null;
 		return videos;
 	}
+	
+	public List<VideoPo> findByCompanyTypeAndStatusPage(int status,String companyType,int pageNum, int pageSize) {
+		QueryHql hql = this.newQueryHql();
+		if(status!=3){
+			hql.andBy("passed",Condition.eq,status);
+		}
+		hql.andBy("companyType",Condition.eq,companyType);
+		hql.orderBy("company", true);
+		List<VideoPo> videos = findByHqlPage(hql, pageNum, pageSize);
+		if (videos == null || videos.size() <= 0)
+			return null;
+		return videos;
+	}
+	
 	public List<VideoPo> findByCompanyPage(String company,int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("company",Condition.eq,company);
@@ -42,6 +70,20 @@ public class VideoDao extends AbstractBaseDao<VideoPo> {
 			return null;
 		return videos;
 	}
+	
+	public List<VideoPo> findByCompanyAndStatusPage(int status,String company,int pageNum, int pageSize) {
+		QueryHql hql = this.newQueryHql();
+		if(status!=3){
+			hql.andBy("passed",Condition.eq,status);
+		}
+		hql.andBy("company",Condition.eq,company);
+		hql.orderBy("company", true);
+		List<VideoPo> videos = findByHqlPage(hql, pageNum, pageSize);
+		if (videos == null || videos.size() <= 0)
+			return null;
+		return videos;
+	}
+	
 	
 	public List<VideoPo> findPassByPage(int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
