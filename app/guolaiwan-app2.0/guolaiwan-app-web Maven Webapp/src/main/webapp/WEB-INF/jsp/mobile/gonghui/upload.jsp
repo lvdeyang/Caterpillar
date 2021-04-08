@@ -569,28 +569,46 @@ html, body {
 	   }
 	
 	    $(document).on('click','#upload',function(){
-	        if($('#company').val() == ''){
-				 $.toast("请填所属单位", "forbidden"); 
-				 return false; 
-			}
-	        if($('#name').val() == ''){
-				 $.toast("请填写姓名", "forbidden"); 
-				 return false; 
-			}			
-	        if($('#phone').val() == ''){
-				 $.toast("请填写手机号", "forbidden"); 
-				 return false; 
-			}			
-	        if($('#videoName').val() == ''){
-				 $.toast("请填作品名称", "forbidden"); 
-				 return false; 
-			}
+	        $.showLoading();
+	    	var _urigetuploadStatus = window.BASEPATH + 'gonghui/getUploadStatus';
 		
-			if($('#selPlay').val() == ''){
-				 $.toast("请上传视频", "forbidden");   
-				 return false; 
-			}	
-			$('#video-form').submit(); 
+			$.get(_urigetuploadStatus, null, function(data){
+			    if(data.data.data=='error'){
+				    if($('#company').val() == ''){
+					 $.toast("请填所属单位", "forbidden"); 
+					 $.hideLoading();	
+					 return false; 
+					}
+			        if($('#name').val() == ''){
+						 $.toast("请填写姓名", "forbidden"); 
+						 $.hideLoading();	
+						 return false; 
+					}			
+			        if($('#phone').val() == ''){
+						 $.toast("请填写手机号", "forbidden"); 
+						 $.hideLoading();	
+						 return false; 
+					}			
+			        if($('#videoName').val() == ''){
+						 $.toast("请填作品名称", "forbidden"); 
+						 $.hideLoading();	
+						 return false; 
+					}
+				
+					if($('#selPlay').val() == ''){
+						 $.toast("请上传视频", "forbidden");  
+						 $.hideLoading();	 
+						 return false; 
+					}	
+					$('#video-form').submit(); 
+			    }else{
+			    	alert(data.data.data)
+			    	$.hideLoading();
+			    }
+				
+			});
+	        
+	        
 			
 	    });
 	

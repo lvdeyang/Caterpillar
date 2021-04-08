@@ -216,7 +216,6 @@ public class PubNumController extends WebBaseControll {
 					.append("&redirect_uri=").append(redirect)
 					.append("&response_type=code&scope=snsapi_userinfo&state=" + gState + "#wechat_redirect");
 			mv = new ModelAndView("redirect:" + weixinLogin.toString());
-			System.out.println(weixinLogin.toString());
 		} else {
 			String gState = new Date().getTime() + "";
 			SystenCachePo cachePo = new SystenCachePo();

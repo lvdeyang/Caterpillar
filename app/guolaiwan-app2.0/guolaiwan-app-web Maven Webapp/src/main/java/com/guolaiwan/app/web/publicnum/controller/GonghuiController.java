@@ -51,6 +51,7 @@ import com.guolaiwan.bussiness.javacv.FishNewLiveService;
 
 import javassist.expr.NewArray;
 import pub.caterpillar.commons.file.oss.OSSUtils;
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.ext.response.json.aop.annotation.JsonBody;
 
 @Controller
@@ -228,9 +229,9 @@ public class GonghuiController {
 		SysConfigPO sys = conn_sys.getSysConfig();
 		while (i.hasNext()) {
 			FileItem fi = (FileItem) i.next();
-			
+			String finalfileName=fi.getName()+DateUtil.format(new Date(), "yyyyMMddHHmmss");
 			//判断已有文件则直接返回
-			List<VideoPo> haveVideos=conn_video.findByField("playUrl", "gonghui/"+fi.getName());
+			List<VideoPo> haveVideos=conn_video.findByField("playUrl", "gonghui/"+finalfileName);
 			if(haveVideos!=null&&haveVideos.size()>0){
 				VideoPo haveVideo=haveVideos.get(0);
 				String webPath =  sys.getWebUrl()+"/" + haveVideo.getPlayUrl();
@@ -247,12 +248,12 @@ public class GonghuiController {
 			
 			
 			VideoUploadVo videoUploadvo=new VideoUploadVo();
-			videoUploadvo.setFileName(fi.getName());
+			videoUploadvo.setFileName(finalfileName);
 			videoUploadvo.setFileSize(fi.getSize());
 			videoUploadvo.setUploadSize(0);
 			videoUploadvo.setUploadPercent(70);
 			videoUploadMap.put(fi.getName(), videoUploadvo);
-			url = uploadFile(fi);
+			url = uploadFile(fi,finalfileName);
 		}
 		System.out.println("Mr8:******************************"+new Date());
 		String webPath =  "http://www.guolaiwan.net/file/" + url;
@@ -267,12 +268,12 @@ public class GonghuiController {
         fos.close();
     }
 
-	private String uploadFile(FileItem file) {
+	private String uploadFile(FileItem file,String finalfileName) {
 		System.out.println("Mr4:******************************"+file.getName()+new Date());
 		SysConfigPO sys = conn_sys.getSysConfig();
 
-		String url = "gonghui" + File.separator + file.getName();
-		String[] fileNames=file.getName().split("\\.");
+		String url = "gonghui" + File.separator + finalfileName;
+		String[] fileNames=finalfileName.split("\\.");
 		String imageName="";
 		for (int i=0;i<fileNames.length-1;i++) {
 			String nameStr=fileNames[i];

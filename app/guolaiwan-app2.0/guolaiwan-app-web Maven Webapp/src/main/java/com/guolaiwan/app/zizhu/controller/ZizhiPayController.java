@@ -331,8 +331,19 @@ public class ZizhiPayController {
 				object.put("option_type","02");
 				object.put("memo","");
 			}else{
-				object.put("code", "FAIL");
-				object.put("msg", "支付中");
+				object.put("code", "SUCCESS");
+				object.put("msg", "支付成功");
+				object.put("mchid", orderInfoPO.getRoomId()+"");
+				object.put("appid", WXContants.AppId);
+				object.put("amount", orderInfoPO.getOrderAllMoney());
+				object.put("trans_no", orderInfoPO.getId());
+				object.put("trans_status", "TRADING");
+				object.put("trans_type", "00");
+				object.put("trans_time", DateUtil.format(new Date(),DateUtil.dateTimePattern));
+				object.put("trade_no", orderInfoPO.getId()+"");
+				object.put("refer_no",orderInfoPO.getId()+"");
+				object.put("option_type","02");
+				object.put("memo","");
 			}
 		}
 		return object.toJSONString();
@@ -391,10 +402,21 @@ public class ZizhiPayController {
 				response.put("error", error);
 				response.put("data", data);
 			}else{
-				error.put("code", 1);
-				error.put("message", "fail");
-				response.put("data", null);
+				data.put("mchid", orderInfoPO.getRoomId()+"");
+				data.put("appid", WXContants.AppId);
+				data.put("amount", allMoney);
+				data.put("trans_no",orderIdString);
+				data.put("trans_status", "TRADING");
+				data.put("trans_type", "00");
+				data.put("trans_time", DateUtil.format(new Date(),DateUtil.dateTimePattern));
+				data.put("trade_no", orderInfoPO.getId()+"");
+				data.put("refer_no",orderInfoPO.getId()+"");
+				data.put("option_type","02");
+				data.put("memo","");
+				error.put("code", 0);
+				error.put("message", "success");
 				response.put("error", error);
+				response.put("data", data);
 			}
 		}
 		return JSONObject.toJSONString(response,SerializerFeature.WriteMapNullValue);  
