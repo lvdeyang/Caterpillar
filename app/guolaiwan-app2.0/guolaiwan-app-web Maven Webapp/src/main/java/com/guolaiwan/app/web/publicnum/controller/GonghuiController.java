@@ -230,8 +230,8 @@ public class GonghuiController {
 		while (i.hasNext()) {
 			FileItem fi = (FileItem) i.next();
 			String finalfileName="";
-			String[] finalFileNames=fi.getName().split(".");
-			for(int k=0;k<finalFileNames.length;k++){
+			String[] finalFileNames=fi.getName().split("\\.");
+			for(int k=0;k<finalFileNames.length-1;k++){
 				if(k==0){
 					finalfileName+=finalFileNames[k];
 				}else{
@@ -245,7 +245,7 @@ public class GonghuiController {
 				VideoPo haveVideo=haveVideos.get(0);
 				String webPath =  sys.getWebUrl()+"/" + haveVideo.getPlayUrl();
 				if(haveVideo.getTooss()==0){
-					webPath =  "http://www.guolaiwan.net/file/" + haveVideo.getPlayUrl();
+					webPath =  "http://pc.guolaiwan.net/file/" + haveVideo.getPlayUrl();
 				}
 				
 				JSONObject obj = new JSONObject();
@@ -265,7 +265,7 @@ public class GonghuiController {
 			url = uploadFile(fi,finalfileName);
 		}
 		System.out.println("Mr8:******************************"+new Date());
-		String webPath =  "http://www.guolaiwan.net/file/" + url;
+		String webPath =  "http://pc.guolaiwan.net/file/" + url;
 		JSONObject obj = new JSONObject();
 		obj.put("url", url);
 		obj.put("webPath", webPath);
@@ -389,8 +389,8 @@ public class GonghuiController {
 		if(videolist!=null){
 			for (VideoPo videoPo : videolist) {
 				if(videoPo.getTooss()==0){
-					videoPo.setRealCoverUrl("http://www.guolaiwan.net/file/"+videoPo.getCoverUrl());
-					videoPo.setRealPlayUrl("http://www.guolaiwan.net/file/"+videoPo.getPlayUrl());
+					videoPo.setRealCoverUrl("http://pc.guolaiwan.net/file/"+videoPo.getCoverUrl());
+					videoPo.setRealPlayUrl("http://pc.guolaiwan.net/file/"+videoPo.getPlayUrl());
 				}else{
 					videoPo.setRealCoverUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getCoverUrl());
 					videoPo.setRealPlayUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getPlayUrl());

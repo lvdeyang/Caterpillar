@@ -105,8 +105,8 @@ public class GonghuiVideoController extends BaseController {
 		SysConfigPO sysConfigPO=conn_sys.getSysConfig();
 	
 		if(videoPo.getTooss()==0){
-			videoPo.setRealCoverUrl("http://www.guolaiwan.net/file/"+videoPo.getCoverUrl());
-			videoPo.setRealPlayUrl("http://www.guolaiwan.net/file/"+videoPo.getPlayUrl());
+			videoPo.setRealCoverUrl("http://pc.guolaiwan.net/file/"+videoPo.getCoverUrl());
+			videoPo.setRealPlayUrl("http://pc.guolaiwan.net/file/"+videoPo.getPlayUrl());
 		}else{
 			videoPo.setRealCoverUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getCoverUrl());
 			videoPo.setRealPlayUrl(conn_sys.getSysConfig().getWebUrl()+"/"+videoPo.getPlayUrl());
