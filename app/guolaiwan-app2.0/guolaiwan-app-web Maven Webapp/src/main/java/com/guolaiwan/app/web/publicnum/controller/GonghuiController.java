@@ -229,7 +229,16 @@ public class GonghuiController {
 		SysConfigPO sys = conn_sys.getSysConfig();
 		while (i.hasNext()) {
 			FileItem fi = (FileItem) i.next();
-			String finalfileName=fi.getName()+DateUtil.format(new Date(), "yyyyMMddHHmmss");
+			String finalfileName="";
+			String[] finalFileNames=fi.getName().split(".");
+			for(int k=0;k<finalFileNames.length;k++){
+				if(k==0){
+					finalfileName+=finalFileNames[k];
+				}else{
+					finalfileName+="."+finalFileNames[k];
+				}
+			}
+			finalfileName+=DateUtil.format(new Date(), "yyyyMMddHHmmss")+"."+finalFileNames[finalFileNames.length-1];
 			//判断已有文件则直接返回
 			List<VideoPo> haveVideos=conn_video.findByField("playUrl", "gonghui/"+finalfileName);
 			if(haveVideos!=null&&haveVideos.size()>0){

@@ -575,35 +575,37 @@ html, body {
 			$.get(_urigetuploadStatus, null, function(data){
 			    if(data.data.data=='error'){
 				    if($('#company').val() == ''){
-					 $.toast("请填所属单位", "forbidden"); 
-					 $.hideLoading();	
-					 return false; 
+					     $.hideLoading();	
+						 $.toast("请填所属单位", "forbidden"); 
+						 return false; 
 					}
 			        if($('#name').val() == ''){
+			        	 $.hideLoading();	
 						 $.toast("请填写姓名", "forbidden"); 
-						 $.hideLoading();	
 						 return false; 
 					}			
 			        if($('#phone').val() == ''){
+			        	 $.hideLoading();	
 						 $.toast("请填写手机号", "forbidden"); 
-						 $.hideLoading();	
 						 return false; 
 					}			
 			        if($('#videoName').val() == ''){
+			        	 $.hideLoading();	
 						 $.toast("请填作品名称", "forbidden"); 
-						 $.hideLoading();	
 						 return false; 
 					}
 				
 					if($('#selPlay').val() == ''){
+					     $.hideLoading();	 
 						 $.toast("请上传视频", "forbidden");  
-						 $.hideLoading();	 
+						 
 						 return false; 
 					}	
 					$('#video-form').submit(); 
 			    }else{
-			    	alert(data.data.data)
 			    	$.hideLoading();
+			    	alert(data.data.data)
+			    	
 			    }
 				
 			});
