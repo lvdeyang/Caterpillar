@@ -263,6 +263,7 @@ public class GonghuiController {
 			videoUploadvo.setUploadPercent(70);
 			videoUploadMap.put(fi.getName(), videoUploadvo);
 			url = uploadFile(fi,finalfileName);
+			fi.delete();
 		}
 		System.out.println("Mr8:******************************"+new Date());
 		String webPath =  "http://pc.guolaiwan.net/file/" + url;
@@ -357,6 +358,8 @@ public class GonghuiController {
 	            //bi.getGraphics().drawImage(fecthedImage.getScaledInstance(width, height, Image.SCALE_SMOOTH),0, 0, null);
 	            //ff.flush();
 	            ImageIO.write(fecthedImage, "jpg", newImageFile);
+	            fecthedImage.flush();
+	            grabber.flush();
 	            grabber.stop();
 	            grabber.close();
 	            //OSSUtils.createFolder("glw-old-file", "file/gonghui/");

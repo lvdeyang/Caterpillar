@@ -168,8 +168,10 @@ public class GonghuiVideoController extends BaseController {
 	    BufferedImage fecthedImage =converter.getBufferedImage(f);
 	   
 	    ImageIO.write(fecthedImage, "jpg", newImageFile);
-	    grabber.stop();
-	    grabber.close();
+	    fecthedImage.flush();
+        grabber.flush();
+        grabber.stop();
+        grabber.close();
 	    OSSUtils.createFolder("glw-old-file", "file/gonghui/");
 		OSSUtils.uploadObjectOSS("file/gonghui/", newImageFile.getName(), newImageFile, new FileInputStream(newImageFile));
 		
