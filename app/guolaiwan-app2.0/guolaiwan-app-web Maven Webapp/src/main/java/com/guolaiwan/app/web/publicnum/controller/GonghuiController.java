@@ -424,11 +424,11 @@ public class GonghuiController {
 			VideoPo videoPo=conn_video.get(Long.parseLong(id));
 			videoPo.setaCount(videoPo.getaCount()+1);
 			conn_video.save(videoPo);
-			VideoSurpportPo videoSurpportPo=new VideoSurpportPo();
+			/*VideoSurpportPo videoSurpportPo=new VideoSurpportPo();
 			videoSurpportPo.setUserId(userId);
 			videoSurpportPo.setVideoId(videoPo.getId());
 			videoSurpportPo.setUpdateTime(new Date());
-			conn_videoSurpport.save(videoSurpportPo);
+			conn_videoSurpport.save(videoSurpportPo);*/
 			return videoPo;
 		}
 		

@@ -62,10 +62,10 @@ public class SessionFilter implements Filter {
 		}
 		
 		if (hrequest.getRequestURI().contains("pubnum") || hrequest.getRequestURI().contains("phoneApp")) {
-			WebsiteRecord record = new WebsiteRecord();
+			/*WebsiteRecord record = new WebsiteRecord();
 			record.setUrl(hrequest.getRequestURI());
 			record.setUpdateTime(new Date());
-			conn_websiterecord.save(record);
+			conn_websiterecord.save(record);*/
 		}
 
 		Object type = hrequest.getSession().getAttribute("type");// 判断用户是否登录
