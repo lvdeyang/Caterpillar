@@ -227,11 +227,14 @@ public class IndexController extends BaseController{
 		JSONArray recordArr=(JSONArray) JSONArray.toJSON(recordList);
 		List<String> recordTitles=new ArrayList<String>();
 		List<Integer> recordCounts=new ArrayList<Integer>();
-		for (Object object : recordArr) {
-			JSONArray objec=(JSONArray) JSONArray.toJSON(object);
-			recordTitles.add(objec.getString(1));
-			recordCounts.add(objec.getInteger(0));
+		if(recordArr!=null){
+			for (Object object : recordArr) {
+				JSONArray objec=(JSONArray) JSONArray.toJSON(object);
+				recordTitles.add(objec.getString(1));
+				recordCounts.add(objec.getInteger(0));
+			}
 		}
+		
 		mv.addObject("recordTitles", JSONArray.toJSON(recordTitles));
 		mv.addObject("recordCounts", recordCounts);
 		mv.addObject("user",getLoginInfo().getAdminName());
