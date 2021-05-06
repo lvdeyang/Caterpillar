@@ -194,8 +194,11 @@ public class GonghuiController {
 		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
         List<VideoPo> videoList=conn_video.findCheckingByUserId(userId);
 		Map<String, Object> ret=new HashMap<String, Object>();
+		Date now=new Date();
 		if(videoList!=null){
 			ret.put("data", "您有一个视频《"+videoList.get(0).getVideoName()+"》正在审核中，请等待管理审核");
+		}else if(now.after(DateUtil.parse("2021-05-07 23:59:59","yyyy-MM-dd HH:mm:ss"))){
+			ret.put("data", "活动已结束");
 		}else{
 			ret.put("data", "error");
 		}
