@@ -259,7 +259,15 @@ public class ZizhuController {
 					int productId=array.getJSONObject(i).getInteger("productId");
 					int productNum=array.getJSONObject(i).getInteger("quantity");
 					OrderInfoPO order=new OrderInfoPO();
-					order = addOrder(productId,productNum,Paytype,array.getJSONObject(i).getString("idCard"));
+					String[] idCards=array.getJSONObject(i).getString("idCard").split("|");
+					for (String idcard : idCards) {
+						order = addOrder(productId,1,Paytype,idcard);
+						if(!orderlistStr.isEmpty()){
+							orderlistStr+="A"+order.getId();
+						}else {
+							orderlistStr+=order.getId();
+						}
+					}
 					CreateVoucherVo.Data.Details details=new CreateVoucherVo.Data.Details();
 					details.setProductId(array.getJSONObject(i).getIntValue("productId"));
 					details.setTicketNo(order.getId()+"");
@@ -282,11 +290,7 @@ public class ZizhuController {
 					details.setFace("");
 					details.setAmount(order.getPayMoney());
 					vo.getData().getDetails().add(details);
-					if(!orderlistStr.isEmpty()){
-						orderlistStr+="A"+order.getId();
-					}else {
-						orderlistStr+=order.getId();
-					}
+					
 				}
 				bundleOrder.setOrderStr(orderlistStr);
 				conn_bundleorder.save(bundleOrder);
