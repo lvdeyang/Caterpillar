@@ -207,6 +207,21 @@ public class GonghuiController {
 	
 	@ResponseBody
 	@JsonBody
+	@RequestMapping(value = "/getActStatus", method = RequestMethod.GET)
+	public Object getActiveStatus(HttpServletRequest request) throws Exception{
+		Long userId = Long.parseLong(request.getSession().getAttribute("userId").toString());
+		Map<String, Object> ret=new HashMap<String, Object>();
+		Date now=new Date();
+		if(now.after(DateUtil.parse("2021-05-07 23:59:59","yyyy-MM-dd HH:mm:ss"))){
+			ret.put("data", "活动已结束");
+		}else{
+			ret.put("data", "error");
+		}
+		return ret;
+	}
+	
+	@ResponseBody
+	@JsonBody
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public Object upload(HttpServletRequest request) throws Exception {
 

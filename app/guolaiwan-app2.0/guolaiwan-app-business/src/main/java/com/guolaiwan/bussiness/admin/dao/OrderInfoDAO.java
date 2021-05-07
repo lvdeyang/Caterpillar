@@ -87,6 +87,18 @@ public class OrderInfoDAO extends AbstractBaseDao<OrderInfoPO> {
 		return countByHql(hql);
 
 	}
+	
+	public List<OrderInfoPO> getOrderByIdCardToday(String idNum) throws ParseException {
+		QueryHql hql = this.newQueryHql();
+		Date date = new Date();
+		hql.andBy("idNum", Condition.eq, idNum);
+		hql.andBy("settleDate", Condition.gt, DateUtil.parse(DateUtil.format(date, "yyyy-MM-dd") + " 00:00:00"));
+		hql.andBy("settleDate", Condition.lt, DateUtil.parse(DateUtil.format(date, "yyyy-MM-dd") + " 23:59:59"));
+		List<OrderInfoPO> orders = findByHql(hql);
+		if (orders == null || orders.size() <= 0)
+			return new ArrayList<OrderInfoPO>();
+		return orders;
+	}
 
 	public int countTodayByActpro(long actproId) throws ParseException {
 		Date date = new Date();

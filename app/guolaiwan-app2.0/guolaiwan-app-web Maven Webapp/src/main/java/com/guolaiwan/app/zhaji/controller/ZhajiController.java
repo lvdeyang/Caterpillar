@@ -256,13 +256,19 @@ public class ZhajiController {
 			return null;
 		}
 		// 获取订单
-		List<OrderInfoPO> orderInfoPOs=conn_order.findByField("idNum", idcard);
-	    
+		//List<OrderInfoPO> orderInfoPOs=conn_order.findByField("idNum", idcard);
+		List<OrderInfoPO> orderInfoPOs=conn_order.getOrderByIdCardToday(idcard);
 		List<MessagePO> messagePOs=conn_message.findByField("number", idcard);
 		for (MessagePO messagePO : messagePOs) {
 			List<MessageMiddleClientPO> messageMiddleClientPOs=conn_messageClient.findByField("messageId",messagePO.getId());
 			for (MessageMiddleClientPO messageMiddleClientPO : messageMiddleClientPOs) {
-				 orderInfoPOs.add(conn_order.get(messageMiddleClientPO.getOrderId()));
+				 OrderInfoPO messageOrder=conn_order.get(messageMiddleClientPO.getOrderId());
+				 Date start=DateUtil.parse(DateUtil.format(new Date(), "yyyy-MM-dd") + " 00:00:00");
+				 Date end=DateUtil.parse(DateUtil.format(new Date(), "yyyy-MM-dd") + " 23:59:59");
+				 if(messageOrder.getSettleDate().before(end)&&messageOrder.getSettleDate().after(start)){
+					 orderInfoPOs.add(messageOrder);
+				 }
+				 
 			}
 		}
 		

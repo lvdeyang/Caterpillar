@@ -96,19 +96,31 @@
 	
 	   $(document).on('click','.acount',function(){
 	       var ids=this.id.split('-');
-	       var _uriAcount = window.BASEPATH + 'gonghui/acount?id='+ids[1];
+	       var _urigetactStatus = window.BASEPATH + 'gonghui/getActStatus';
 		
-		   $.post(_uriAcount, null, function(data){
-				data = parseAjaxResult(data);
-				if(data.msg){
-				   $.toast(data.msg);
-				   return false;
-				}else{
-				   $.toast("点赞完成");
-				   $('#acounttext-'+ids[1]).html(data.aCount+'赞');
-				}
-			    
-		   });
+			 $.get(_urigetactStatus, null, function(data){
+			    if(data.data.data=='error'){
+			        var _uriAcount = window.BASEPATH + 'gonghui/acount?id='+ids[1];
+		
+				   $.post(_uriAcount, null, function(data){
+						data = parseAjaxResult(data);
+						if(data.msg){
+						   $.toast(data.msg);
+						   return false;
+						}else{
+						   $.toast("点赞完成");
+						   $('#acounttext-'+ids[1]).html(data.aCount+'赞');
+						}
+					    
+				   });
+			    }else{
+			    	alert(data.data.data)
+			    }
+				
+			 });
+	       
+	       
+	       
 	   });
 	   $('#upload').on('click',function(){
 	        var _urigetuploadStatus = window.BASEPATH + 'gonghui/getUploadStatus';
