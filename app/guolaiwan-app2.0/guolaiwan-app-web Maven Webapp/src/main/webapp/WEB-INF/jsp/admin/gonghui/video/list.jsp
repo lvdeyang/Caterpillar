@@ -62,6 +62,8 @@
 	<div align="right" class="layui-input-inline">
 	 <button  type="reset"  class="layui-btn layui-btn-primary">重置</button>
 	 <button class="layui-btn" lay-filter="getPro" lay-submit>搜索</button>
+	 <button type="button" class="layui-btn" id="exportall"
+			onclick="exportall()">导出</button>
 	</div>
 	</form>
 	</div>
@@ -299,6 +301,12 @@
 				] ]
 			});
 		}
+		
+		
+		function exoprtall() {
+			var url = "http://pc.guolaiwan.net/admin/gonghui/video/export";
+			window.open(url);
+		}	
 	</script>
 	<script type="text/html" id="handle">  
  

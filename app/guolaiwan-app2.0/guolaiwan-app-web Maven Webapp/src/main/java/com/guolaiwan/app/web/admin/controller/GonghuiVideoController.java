@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.guolaiwan.app.web.admin.Utils.ExportExcelSeedBack;
 import com.guolaiwan.app.web.distribute.vo.DistributorVo;
 import com.guolaiwan.bussiness.admin.dao.ModularClassDAO;
 import com.guolaiwan.bussiness.admin.dao.ModularDAO;
@@ -37,6 +40,7 @@ import com.guolaiwan.bussiness.gonghui.dao.VideoDao;
 import com.guolaiwan.bussiness.gonghui.po.VideoPo;
 
 import pub.caterpillar.commons.file.oss.OSSUtils;
+import pub.caterpillar.commons.util.date.DateUtil;
 import pub.caterpillar.mvc.controller.BaseController;
 
 @Controller
@@ -88,6 +92,45 @@ public class GonghuiVideoController extends BaseController {
 		map.put("msg", "");
 		map.put("count", count);
 		return map;
+	}
+	
+	@RequestMapping(value = "/export")
+	public String derive(HttpServletRequest request,HttpServletResponse response) throws Exception{
+
+		List<VideoPo> listpo =new ArrayList<VideoPo>();
+		
+		listpo = conn_Video.findAllPassed();
+		
+		String title = "阅读活动" + DateUtil.format(new Date(), "yyyyMMddhhmmss") + ".xls";
+		// 设置表格标题行
+		String[] headers = new String[] { "序号", "视频名称", "工作单位", "姓名", "手机号", "票数" };
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		if (listpo!=null) {
+			for (int i = 0; i < listpo.size(); i++) {
+				Object[] obj = new Object[headers.length];
+				obj[0] = i+1;
+				obj[1] = listpo.get(i).getVideoName();
+				obj[2] = listpo.get(i).getCompany();
+				obj[3] = listpo.get(i).getName();
+				obj[4] = listpo.get(i).getPhone();
+				obj[5] = listpo.get(i).getaCount();
+				dataList.add(obj);	
+			} 
+		}
+		outputList(title, headers, dataList, response);
+		return "success";
+		
+	}
+	public void outputList(String title,String headers[],List<Object[]> dataList,HttpServletResponse response) throws Exception
+	{
+		String headStr = "attachment; filename=\"" + new String(title.getBytes("gb2312"), "utf-8") + "\"";
+		response.setContentType("octets/stream");
+		response.setContentType("APPLICATION/OCTET-STREAM");
+		response.setHeader("Content-Disposition", headStr);
+		ServletOutputStream out = response.getOutputStream();
+		// ExportExcel ex = new ExportExcel(title, headers, dataList);//有标题
+		ExportExcelSeedBack ex = new ExportExcelSeedBack(title, headers, dataList);// 没有标题
+		ex.export(out);
 	}
 
 	// 跳转到分销商审核页面

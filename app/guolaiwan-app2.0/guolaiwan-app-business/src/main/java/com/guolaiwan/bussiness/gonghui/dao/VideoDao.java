@@ -38,6 +38,17 @@ public class VideoDao extends AbstractBaseDao<VideoPo> {
 		return videos;
 	}
 	
+	public List<VideoPo> findAllPassed() {
+		QueryHql hql = this.newQueryHql();
+		hql.andBy("passed",Condition.eq,1);
+		hql.orderBy("aCount", true);
+		
+		List<VideoPo> videos = findByHql(hql);
+		if (videos == null || videos.size() <= 0)
+			return null;
+		return videos;
+	}
+	
 	public List<VideoPo> findByCompanyTypePage(String companyType,int pageNum, int pageSize) {
 		QueryHql hql = this.newQueryHql();
 		hql.andBy("companyType",Condition.eq,companyType);
