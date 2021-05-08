@@ -63,7 +63,7 @@
 	 <button  type="reset"  class="layui-btn layui-btn-primary">重置</button>
 	 <button class="layui-btn" lay-filter="getPro" lay-submit>搜索</button>
 	 <button type="button" class="layui-btn" id="exportall"
-			onclick="exportall()">导出</button>
+			onclick="deriveall()">导出</button>
 	</div>
 	</form>
 	</div>
@@ -94,7 +94,7 @@
 			table = layui.table;
 			form = layui.form;
 			//以上模块根据需要引入
-
+			
 	       form.on('select(companyType)', function(data){  
 	            initSelCompany();
 	            form.render();
@@ -302,11 +302,11 @@
 			});
 		}
 		
-		
-		function exoprtall() {
+		function deriveall() {
 			var url = "http://pc.guolaiwan.net/admin/gonghui/video/export";
 			window.open(url);
 		}	
+		
 	</script>
 	<script type="text/html" id="handle">  
  
