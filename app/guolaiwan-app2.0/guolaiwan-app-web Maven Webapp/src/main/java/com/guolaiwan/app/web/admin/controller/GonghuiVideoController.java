@@ -121,6 +121,35 @@ public class GonghuiVideoController extends BaseController {
 		return "success";
 		
 	}
+	
+	@RequestMapping(value = "/exportAll")
+	public String deriveAll(HttpServletRequest request,HttpServletResponse response) throws Exception{
+
+		List<VideoPo> listpo =new ArrayList<VideoPo>();
+		
+		listpo = conn_Video.findAll();
+		
+		String title = "阅读活动" + DateUtil.format(new Date(), "yyyyMMddhhmmss") + ".xls";
+		// 设置表格标题行
+		String[] headers = new String[] { "序号", "视频名称", "工作单位", "姓名", "手机号", "票数" };
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		if (listpo!=null) {
+			for (int i = 0; i < listpo.size(); i++) {
+				Object[] obj = new Object[headers.length];
+				obj[0] = i+1;
+				obj[1] = listpo.get(i).getVideoName();
+				obj[2] = listpo.get(i).getCompany();
+				obj[3] = listpo.get(i).getName();
+				obj[4] = listpo.get(i).getPhone();
+				obj[5] = listpo.get(i).getaCount();
+				dataList.add(obj);	
+			} 
+		}
+		outputList(title, headers, dataList, response);
+		return "success";
+		
+	}
+	
 	public void outputList(String title,String headers[],List<Object[]> dataList,HttpServletResponse response) throws Exception
 	{
 		String headStr = "attachment; filename=\"" + new String(title.getBytes("gb2312"), "utf-8") + "\"";
