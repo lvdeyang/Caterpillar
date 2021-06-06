@@ -259,7 +259,7 @@ public class ZizhuController {
 					int productId=array.getJSONObject(i).getInteger("productId");
 					int productNum=array.getJSONObject(i).getInteger("quantity");
 					OrderInfoPO order=new OrderInfoPO();
-					String[] idCards=array.getJSONObject(i).getString("idCard").split("|");
+					String[] idCards=array.getJSONObject(i).getString("idCard").split("\\|");
 					for (String idcard : idCards) {
 						order = addOrder(productId,1,Paytype,idcard);
 						if(!orderlistStr.isEmpty()){
